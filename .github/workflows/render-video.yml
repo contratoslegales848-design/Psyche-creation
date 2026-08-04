@@ -1,0 +1,42 @@
+name: Renderizar Video LegalMente
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'guion-actual.json'
+      - 'src/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - '.github/workflows/render-video.yml'
+
+jobs:
+  render:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 15
+
+    steps:
+      - name: Descargar código
+        uses: actions/checkout@v5
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: 22
+
+      - name: Instalar dependencias
+        run: npm install
+
+      - name: Preparar navegador de Remotion
+        run: npx remotion browser ensure
+
+      - name: Validar y renderizar video
+        run: npm run build
+
+      - name: Guardar video renderizado
+        uses: actions/upload-artifact@v4
+        with:
+          name: video-legalmente-mp4
+          path: out/video.mp4
+          if-no-files-found: error
+          retention-days: 7
