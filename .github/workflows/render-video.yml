@@ -8,13 +8,20 @@ on:
         required: false
         type: string
   push:
+    branches: [main]
     paths:
       - 'content/**'
+
+concurrency:
+  group: render-video-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   render:
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    permissions:
+      contents: read
 
     steps:
       - name: Descargar código
@@ -47,7 +54,7 @@ jobs:
             libxdamage1 \
             libxfixes3 \
             libxrandr2 \
-            libgbm-dev \
+            libgbm1 \
             "$AUDIO_PACKAGE" \
             libpango-1.0-0 \
             libpangocairo-1.0-0 \
