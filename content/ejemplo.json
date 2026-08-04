@@ -1,0 +1,10 @@
+{
+  "id": "ejemplo",
+  "titulo": "Dormientibus non succurrit ius",
+  "frase": "El derecho no favorece a quien duerme sobre sus derechos",
+  "remate": "Máxima del Derecho Romano",
+  "marca": "LegalMente",
+  "imagen": "assets/images/ejemplo.jpg",
+  "audio": null,
+  "duracionSegundos": 10
+}

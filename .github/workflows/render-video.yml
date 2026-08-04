@@ -1,42 +1,82 @@
-name: Renderizar Video LegalMente
+name: Renderizar videos LegalMente
 
 on:
   workflow_dispatch:
+    inputs:
+      composition_id:
+        description: 'ID de composición; vacío renderiza todas'
+        required: false
+        type: string
   push:
     paths:
-      - 'guion-actual.json'
-      - 'src/**'
-      - 'package.json'
-      - 'package-lock.json'
-      - '.github/workflows/render-video.yml'
+      - 'content/**'
 
 jobs:
   render:
-    runs-on: ubuntu-22.04
-    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
 
     steps:
       - name: Descargar código
-        uses: actions/checkout@v5
+        uses: actions/checkout@v4
 
-      - name: Configurar Node.js
-        uses: actions/setup-node@v5
+      - name: Configurar Node.js 20
+        uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 20
+          cache: npm
 
-      - name: Instalar dependencias
-        run: npm install
+      - name: Instalar librerías de Chromium
+        env:
+          DEBIAN_FRONTEND: noninteractive
+        run: |
+          sudo apt-get update
+          if apt-cache show libasound2t64 >/dev/null 2>&1; then
+            AUDIO_PACKAGE=libasound2t64
+          else
+            AUDIO_PACKAGE=libasound2
+          fi
+          sudo apt-get install -y --no-install-recommends \
+            libnss3 \
+            libatk1.0-0 \
+            libatk-bridge2.0-0 \
+            libcups2 \
+            libdrm2 \
+            libxkbcommon0 \
+            libxcomposite1 \
+            libxdamage1 \
+            libxfixes3 \
+            libxrandr2 \
+            libgbm-dev \
+            "$AUDIO_PACKAGE" \
+            libpango-1.0-0 \
+            libpangocairo-1.0-0 \
+            libgtk-3-0 \
+            libx11-xcb1
 
-      - name: Preparar navegador de Remotion
-        run: npx remotion browser ensure
+      - name: Instalar dependencias Node
+        run: npm ci
 
-      - name: Validar y renderizar video
-        run: npm run build
+      - name: Validar TypeScript
+        run: npm run typecheck
 
-      - name: Guardar video renderizado
+      - name: Renderizar composición solicitada
+        if: ${{ inputs.composition_id != '' }}
+        env:
+          COMPOSITION_ID: ${{ inputs.composition_id }}
+        run: |
+          mkdir -p out
+          npx remotion render src/index.ts "$COMPOSITION_ID" "out/$COMPOSITION_ID.mp4" \
+            --chromium-options="--no-sandbox --disable-setuid-sandbox"
+
+      - name: Renderizar todas las composiciones
+        if: ${{ inputs.composition_id == '' }}
+        run: npm run render:all
+
+      - name: Subir videos
         uses: actions/upload-artifact@v4
         with:
-          name: video-legalmente-mp4
-          path: out/video.mp4
+          name: videos-legalmente
+          path: out/*.mp4
           if-no-files-found: error
-          retention-days: 7
+          retention-days: 14
