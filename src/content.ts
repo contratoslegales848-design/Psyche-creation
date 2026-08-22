@@ -32,6 +32,15 @@ const validatePiece = (value: unknown, source: string): LegalMentePiece => {
     throw new Error(`${source}: "audio" debe ser una ruta válida, null u omitirse.`);
   }
 
+  // Regla de redacción del manual de marca (docs/legalmente-marca-y-estilo.md, §1.3):
+  // por encima de 18 palabras la tipografía se comprime y la pieza pierde jerarquía.
+  const fraseWordCount = (piece.frase as string).trim().split(/\s+/).length;
+  if (fraseWordCount > 18) {
+    throw new Error(
+      `${source}: "frase" tiene ${fraseWordCount} palabras; el máximo de marca es 18.`,
+    );
+  }
+
   return piece as LegalMentePiece;
 };
 

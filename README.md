@@ -2,6 +2,8 @@
 
 Genera videos verticales 1080×1920 con Remotion 4, React y TypeScript. Cada JSON de `content/` registra una composición independiente con el mismo `id`.
 
+La línea editorial, dirección de arte y reglas de redacción están definidas en [`docs/legalmente-marca-y-estilo.md`](docs/legalmente-marca-y-estilo.md). El pipeline valida automáticamente la regla de máximo 18 palabras por `frase` (§1.3 del manual); las demás reglas (tono, pilares temáticos, atribución) son editoriales y no se validan por código.
+
 Las tipografías EB Garamond y UnifrakturCook están autoalojadas mediante paquetes npm para que el render no dependa de Google Fonts ni de una conexión externa.
 
 ## Requisitos locales
