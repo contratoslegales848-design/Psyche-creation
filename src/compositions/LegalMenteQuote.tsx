@@ -89,7 +89,8 @@ export const LegalMenteQuote: React.FC<LegalMentePiece> = ({
               fontSize: 62,
               fontWeight: 600,
               lineHeight: 1.08,
-              letterSpacing: 0.3,
+              letterSpacing: 0.8,
+              fontVariant: 'small-caps',
             }}
           >
             {titulo}
@@ -110,38 +111,52 @@ export const LegalMenteQuote: React.FC<LegalMentePiece> = ({
 
         <div
           style={{
-            display: 'flex',
-            alignItems: 'flex-end',
-            justifyContent: 'space-between',
-            gap: 36,
             opacity: textOpacity,
             transform: `translateY(${-translateY * 0.55}px)`,
           }}
         >
+          {/* Regla epigráfica: remite a la línea tallada de una inscripción romana. */}
           <div
             style={{
-              maxWidth: 620,
-              paddingBottom: 10,
-              fontSize: 25,
-              fontWeight: 600,
-              letterSpacing: 5.5,
-              lineHeight: 1.3,
-              textTransform: 'uppercase',
+              height: 1,
+              marginBottom: 22,
+              background:
+                'linear-gradient(90deg, rgba(230,200,121,0) 0%, rgba(230,200,121,0.55) 50%, rgba(230,200,121,0) 100%)',
             }}
-          >
-            {remate}
-          </div>
+          />
           <div
             style={{
-              color: '#E6C879',
-              fontFamily: `${wordmarkFont}, Georgia, serif`,
-              fontSize: 50,
-              fontWeight: 700,
-              lineHeight: 1,
-              whiteSpace: 'nowrap',
+              display: 'flex',
+              alignItems: 'flex-end',
+              justifyContent: 'space-between',
+              gap: 36,
             }}
           >
-            {marca}
+            <div
+              style={{
+                maxWidth: 620,
+                paddingBottom: 10,
+                fontSize: 25,
+                fontWeight: 600,
+                letterSpacing: 5.5,
+                lineHeight: 1.3,
+                textTransform: 'uppercase',
+              }}
+            >
+              {remate}
+            </div>
+            <div
+              style={{
+                color: '#E6C879',
+                fontFamily: `${wordmarkFont}, Georgia, serif`,
+                fontSize: 50,
+                fontWeight: 700,
+                lineHeight: 1,
+                whiteSpace: 'nowrap',
+              }}
+            >
+              {marca}
+            </div>
           </div>
         </div>
       </AbsoluteFill>
