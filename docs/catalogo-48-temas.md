@@ -1,15 +1,19 @@
 # LegalMente — Propuesta de 48 temas para catálogo editorial
 
-> **Estado: verificado contra el "Catálogo de Contenido Visual — Facebook LegalMente"**
-> (Drive, preparado 24-ago-2026, revisión manual de la galería completa de
-> facebook.com/juridicoeinmobiliarioespecializado/photos). 3 de las 48 piezas
-> originales coincidían con contenido ya publicado y se reemplazaron (ver notas
-> "☑ reemplazada" en las tablas). El resto no aparece en ese catálogo.
+> **Estado: verificado contra el "Informe de Contenido LegalMente — Catálogo y
+> Vacíos (para Claude)"** (Drive, preparado 24-ago-2026, revisión manual completa
+> de la galería de facebook.com/juridicoeinmobiliarioespecializado/photos) — la
+> versión consolidada que reemplaza al catálogo visual suelto usado en la primera
+> pasada. 3 de las 48 piezas originales coincidían con contenido ya publicado y se
+> reemplazaron (ver notas "Reemplazo por duplicado" en las tablas de los pilares A
+> y D). El Pilar E completo se rediseñó siguiendo la Parte 2 de ese informe
+> (diagnóstico de vacíos temáticos) — ver nota al inicio de esa sección.
 >
 > El propio documento fuente advierte que es representativo pero no una extracción
 > automatizada pieza por pieza — para un tema puntual conviene además buscarlo
-> directamente en Facebook antes de publicar. Tampoco cubre la "Matriz de contenido"
-> interna (piloto/en producción), que sigue sin poder cruzarse desde esta sesión.
+> directamente en Facebook antes de publicar. Tampoco cubre la "Matriz de
+> contenido" interna (piloto/en producción, distinta de este informe), que sigue
+> sin poder cruzarse desde esta sesión.
 >
 > Generado siguiendo `legalmente-marca-y-estilo.md` — 5 pilares temáticos (§1.4),
 > regla de mezcla (1 pieza de alcance masivo por cada pieza de autoridad), límite de
@@ -104,34 +108,53 @@ infografía temática, sección 5 del catálogo visual).
 
 ## Pilar E — Derecho cotidiano (alcance masivo)
 
-| # | Tema | Enfoque | Capa | Tipo |
-|---|---|---|---|---|
-| E1 | Finiquito | Qué es y qué debe incluir al terminar una relación laboral | B | Concepto |
-| E2 | Aguinaldo | El concepto detrás del pago anual y por qué varía por país | B | Concepto |
-| E3 | Renuncia firmada en blanco | El riesgo de dejar espacios sin llenar | A | Concepto |
-| E4 | Horas extra | Cuándo el tiempo adicional debe pagarse distinto | B | Concepto |
-| E5 | Trabajo sin seguridad social | Qué protección real se pierde | B | Concepto |
-| E6 | Cobranza abusiva | Dónde termina el cobro legítimo y empieza el acoso | B | Concepto |
-| E7 | Pagaré en blanco | Por qué firmarlo es firmar un cheque sin monto | A | Tecnicismo |
-| E8 | Ser aval | La obligación que se hereda sin haber pedido el préstamo | A | Concepto |
-| E9 | Bienes inembargables | Lo que la ley protege incluso frente a una deuda | B | Tecnicismo |
-| E10 | Robo de identidad | El primer paso legal cuando usan tu nombre sin permiso | B | Concepto |
-| E11 | Extorsión telefónica | Por qué colgar es la única respuesta correcta | A | Concepto |
-| E12 | Testamento | La diferencia entre decidir y dejar que decidan por ti | B | Concepto |
-| E13 | Herencia sin testamento | Cómo reparte la ley lo que tú no repartiste | B | Concepto |
-| E14 | Concubinato | Qué derechos genera una unión sin papeles, según el país | B | Concepto |
-| E15 | Divorcio | Lo que realmente se negocia no es el amor, es el patrimonio | B | Concepto |
-| E16 | Medidas de protección | El recurso legal antes de que la violencia escale | B | Concepto |
-| E17 | Corrección de acta | Cuándo un error de registro civil tiene solución | B | Tecnicismo |
-| E18 | Desalojo | Los pasos legales que un propietario no puede saltarse | B | Concepto |
-| E19 | Aumento de renta | Qué límites existen y cuáles son solo costumbre | B | Concepto |
-| E20 | Contrato privado vs. escritura pública | La diferencia que decide si un inmueble es realmente tuyo | A | Diferencia |
-| E21 | Ruido vecinal | Hasta dónde llega tu derecho a la tranquilidad | A | Concepto |
-| E22 | Garantías de producto | Qué cubre realmente la ley, más allá del ticket | B | Concepto |
-| E23 | Cláusulas abusivas | Las letras pequeñas que un contrato no puede imponerte | A | Concepto |
-| E24 | Derecho a leer antes de firmar | El paso que nadie exige y todos necesitan | A | Concepto |
+> **Rebalanceado** según la Parte 2 del "Informe de Contenido LegalMente — Catálogo
+> y Vacíos" (Drive, 24-ago-2026): la página está sobrerrepresentada en retratos de
+> filósofos generales y muy poco en derecho aplicado. El informe identifica 7 vacíos
+> por orden de prioridad — laboral, familia, inmobiliario específico, digital,
+> migratorio, contenido práctico "cómo hacer", mercantil — y pide redirigir la
+> producción hacia ellos. La versión anterior de este pilar era genérica; esta la
+> reemplaza, distribuida explícitamente sobre esos 7 vacíos, con 5 piezas en formato
+> accionable ("cómo hacer") marcadas `★`.
 
-**Nota Capa B (13 de 24 piezas):** el enfoque planteado es el núcleo transversal;
+| # | Vacío | Tema | Enfoque | Capa | Tipo |
+|---|---|---|---|---|---|
+| E1 | Laboral | Finiquito | Qué es y qué debe incluir al terminar una relación laboral | B | Concepto |
+| E2 | Laboral ★ | Despido sin causa | Los pasos legales antes de firmar cualquier documento de salida | B | Cómo hacer |
+| E3 | Laboral ★ | Acoso laboral | Cómo se documenta antes de presentar una queja formal | B | Cómo hacer |
+| E4 | Laboral | Renuncia firmada en blanco | El riesgo de dejar espacios sin llenar | A | Concepto |
+| E5 | Familia | Pensión alimenticia | Qué la determina y qué no es negociable | B | Concepto |
+| E6 | Familia ★ | Divorcio de mutuo acuerdo | Qué documentos reunir antes de iniciar el trámite | B | Cómo hacer |
+| E7 | Familia | Custodia y régimen de visitas | La diferencia entre decidir con quién vive y cuándo ve al otro padre | B | Diferencia |
+| E8 | Familia | Herencia sin testamento | Cómo reparte la ley lo que tú no repartiste | B | Concepto |
+| E9 | Inmobiliario ★ | Contrato de arrendamiento | Cinco puntos que casi nadie lee antes de firmar | A | Cómo hacer |
+| E10 | Inmobiliario | Fraude inmobiliario | Las señales de alerta antes de entregar un anticipo | A | Concepto |
+| E11 | Inmobiliario | Contrato privado vs. escritura pública | La diferencia que decide si un inmueble es realmente tuyo | A | Diferencia |
+| E12 | Inmobiliario | Conflictos entre vecinos | Hasta dónde llega tu derecho a la tranquilidad | A | Concepto |
+| E13 | Digital | Firma electrónica | Cuándo tiene el mismo valor legal que firmar a mano | B | Tecnicismo |
+| E14 | Digital | Robo de identidad | El primer paso legal cuando usan tu nombre sin permiso | B | Concepto |
+| E15 | Digital ★ | Fraude en compras en línea | Qué hacer antes de disputar el cargo con el banco | B | Cómo hacer |
+| E16 | Digital | Contratos digitales | Por qué aceptar los términos también es firmar | A | Concepto |
+| E17 | Migratorio | Regularización migratoria | La diferencia entre estar de paso y estar en regla | C | Concepto |
+| E18 | Migratorio | Doble nacionalidad | Qué derechos gana y cuáles no cambian | C | Concepto |
+| E19 | Migratorio | Trabajar legalmente en otro país | Qué documento resuelve realmente esa pregunta | C | Concepto |
+| E20 | Mercantil | Constitución de una empresa | La decisión que se toma antes de tener el primer cliente | B | Concepto |
+| E21 | Mercantil | Contratos comerciales | La cláusula que la mayoría no negocia y debería | A | Concepto |
+| E22 | Mercantil | Sociedad entre socios sin contrato | El riesgo de operar solo de palabra | A | Concepto |
+| E23 | — | Cláusulas abusivas | Las letras pequeñas que un contrato no puede imponerte | A | Concepto |
+| E24 | — | Bienes inembargables | Lo que la ley protege incluso frente a una deuda | B | Tecnicismo |
+
+Distribución por vacío: Laboral 4 · Familia 4 · Inmobiliario 4 · Digital 4 ·
+Migratorio 3 · Mercantil 3 · genéricos de cierre 2. Sigue el orden de prioridad
+del informe (1–7); los dos genéricos de cierre (E23–E24) se conservan de la
+versión anterior por ser transversales y no competir con ningún vacío.
+
+**Nota Capa C (E17–E19, migratorio):** a diferencia del resto, estos tres no tienen
+un núcleo verdaderamente transversal — la regularización migratoria depende por
+completo de la legislación de cada país de destino. Declarar el país desde el
+título antes de producir cualquiera de estas tres piezas (§8).
+
+**Nota Capa B:** el enfoque planteado es el núcleo transversal;
 la pieza final debe incluir el aviso "puede variar según el país" y verificarse
 localmente antes de publicar (§8), sin presentar la regla de un país como universal.
 Ninguna cifra, plazo o porcentaje se incluyó aquí precisamente porque son datos que
