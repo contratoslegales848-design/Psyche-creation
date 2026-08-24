@@ -1,10 +1,15 @@
 # LegalMente — Propuesta de 48 temas para catálogo editorial
 
-> **Estado: borrador, NO verificado contra Drive.** Esta sesión no tiene acceso al
-> "Inventario de publicaciones — LegalMente (Facebook)" ni a la "Matriz de contenido"
-> (ambos en Drive). Antes de publicar o renderizar cualquiera de estas piezas, alguien
-> con acceso a Drive debe cruzarlas y descartar duplicados, según exige
-> `legalmente-visual-system` §7.
+> **Estado: verificado contra el "Catálogo de Contenido Visual — Facebook LegalMente"**
+> (Drive, preparado 24-ago-2026, revisión manual de la galería completa de
+> facebook.com/juridicoeinmobiliarioespecializado/photos). 3 de las 48 piezas
+> originales coincidían con contenido ya publicado y se reemplazaron (ver notas
+> "☑ reemplazada" en las tablas). El resto no aparece en ese catálogo.
+>
+> El propio documento fuente advierte que es representativo pero no una extracción
+> automatizada pieza por pieza — para un tema puntual conviene además buscarlo
+> directamente en Facebook antes de publicar. Tampoco cubre la "Matriz de contenido"
+> interna (piloto/en producción), que sigue sin poder cruzarse desde esta sesión.
 >
 > Generado siguiendo `legalmente-marca-y-estilo.md` — 5 pilares temáticos (§1.4),
 > regla de mezcla (1 pieza de alcance masivo por cada pieza de autoridad), límite de
@@ -37,17 +42,22 @@ de publicación debe intercalarlas, no publicarlas en bloque.
 |---|---|---|---|
 | A1 | Dura lex, sed lex | La ley es dura, pero es la ley | 8 |
 | A2 | In dubio pro reo | En la duda, a favor del reo | 7 |
-| A3 | Nemo iudex in causa sua | Nadie puede ser juez en su propia causa | 8 |
+| A3 | Ubi lex non distinguit, nec nos distinguere debemus | Donde la ley no distingue, no debemos distinguir nosotros | 9 |
 | A4 | Audi alteram partem | Que se escuche también a la otra parte | 8 |
 | A5 | Pacta sunt servanda | Los pactos deben cumplirse | 4 |
 | A6 | Ignorantia legis neminem excusat | La ignorancia de la ley no excusa su cumplimiento | 9 |
 | A7 | Nullum crimen, nulla poena sine lege | No hay delito ni pena sin ley previa | 8 |
 | A8 | Res judicata pro veritate habetur | Lo juzgado se tiene por verdad | 6 |
 | A9 | Summum ius, summa iniuria | El exceso de derecho es la máxima injusticia | 8 |
-| A10 | Non bis in idem | Nadie puede ser juzgado dos veces por lo mismo | 9 |
+| A10 | Lex posterior derogat priori | La ley posterior deroga a la anterior | 7 |
 
 Todas patrimonio del derecho romano/canónico, de uso libre — cumple §1.3 regla 5
 (no se atribuyen a un jurista o filósofo real inventado).
+
+**Reemplazos por duplicado:** A3 sustituye a "Nemo iudex in causa sua" (ya publicada
+como tarjeta de escritorio: "Nadie debe ser juez en su propia causa"). A10 sustituye
+a "Non bis in idem" (ya publicada en la serie de óleo cinematográfico, sección 2 del
+catálogo visual).
 
 ---
 
@@ -83,9 +93,12 @@ tercero real (§1.3 regla 5).
 | # | Concepto | Definición corta | Capa |
 |---|---|---|---|
 | D1 | Velo corporativo | Cuándo la sociedad deja de proteger a quien la controla | A |
-| D2 | Cosa juzgada | Por qué un caso resuelto no puede reabrirse indefinidamente | A |
+| D2 | Debido proceso | El estándar mínimo que toda autoridad debe respetar antes de afectar un derecho | A |
 | D3 | Buena fe objetiva | El estándar que se exige aunque nadie lo pacte | A |
 | D4 | Abuso del derecho | Ejercer un derecho propio con el único fin de dañar a otro | A |
+
+**Reemplazo por duplicado:** D2 sustituye a "Cosa juzgada" (ya publicada como
+infografía temática, sección 5 del catálogo visual).
 
 ---
 
@@ -128,11 +141,12 @@ varían por jurisdicción y requieren verificación previa.
 
 ## Siguiente paso
 
-1. Cruzar las 48 contra el Inventario de Facebook y la Matriz de contenido (Drive) —
-   pendiente, requiere la sesión con acceso a Drive.
-2. De las que sobrevivan el filtro: para el **catálogo web** (`legalmente-web`,
-   página `/catalogo`), esto ya es contenido usable tal cual (título + definición).
-3. Para el **pipeline de video**, cada pieza sobreviviente necesita además: imagen
-   generada bajo el sistema Realismo Cinematográfico Editorial (Camino A del skill
+1. ~~Cruzar las 48 contra el Inventario de Facebook~~ — hecho, 3 reemplazos (A3,
+   A10, D2). Pendiente: cruzarlas también contra la "Matriz de contenido" interna
+   (piloto/en producción), no accesible desde esta sesión.
+2. Para el **catálogo web** (`legalmente-web`, página `/catalogo`), esto ya es
+   contenido usable tal cual (título + definición).
+3. Para el **pipeline de video**, cada pieza necesita además: imagen generada bajo
+   el sistema Realismo Cinematográfico Editorial (Camino A del skill
    `legalmente-visual-system`) y, opcionalmente, audio — recién entonces se arma el
    `content/*.json` correspondiente en `Psyche-creation`.
