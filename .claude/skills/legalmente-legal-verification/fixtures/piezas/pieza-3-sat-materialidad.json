@@ -1,0 +1,46 @@
+{
+  "schema_version": "2.0",
+  "piece_id": "pieza-3-sat-materialidad",
+  "claims": [
+    {
+      "claim_id": "pieza-3-claim-1",
+      "texto_exacto": "Un contrato firmado no basta para demostrar materialidad ante el SAT.",
+      "ubicacion": "titulo",
+      "tipo": "regla",
+      "alcance": "CAPA_C_NACIONAL",
+      "jurisdiccion": "México",
+      "nucleo_transversal": null,
+      "variaciones_materiales": null,
+      "jurisdicciones_revisadas": null,
+      "diferencias_buscadas": null,
+      "contraejemplos_encontrados": null,
+      "justificacion_suficiencia_comparada": null,
+      "fuentes": [],
+      "confianza": "baja",
+      "riesgo_falsa_universalizacion": "bajo",
+      "riesgo_asesoria": "medio",
+      "platform_review_required": false,
+      "confidentiality_review_required": false,
+      "estado": "REQUIERE_INVESTIGACION",
+      "revision_humana": {
+        "estado": "PENDIENTE",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "gate_arte": "CERRADO",
+      "reformulacion_propuesta": {
+        "texto": "México: un contrato firmado no basta para demostrar materialidad ante el SAT — hace falta evidencia adicional. (Pendiente de fuente oficial vigente antes de publicar requisitos concretos.)",
+        "verificada": false,
+        "nuevo_claim_id": null
+      },
+      "redaccion_prohibida": null,
+      "notas": "No se confirmó una fuente oficial vigente del SAT/DOF (texto normativo o criterio actualizado) en este entorno. Sin esa fuente, el estado no puede subir de REQUIERE_INVESTIGACION, aunque México ya sea visible en el propio texto."
+    }
+  ],
+  "estado_agregado": "REQUIERE_INVESTIGACION",
+  "revisiones_pendientes": [
+    "pieza-3-claim-1"
+  ],
+  "gate_global_arte": "CERRADO"
+}

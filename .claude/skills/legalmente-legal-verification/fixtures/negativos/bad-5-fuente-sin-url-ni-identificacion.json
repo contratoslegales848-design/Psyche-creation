@@ -1,0 +1,77 @@
+{
+  "schema_version": "2.0",
+  "piece_id": "bad-5-fuente-sin-url-ni-identificacion",
+  "claims": [
+    {
+      "claim_id": "bad5-claim",
+      "texto_exacto": "Afirmación con una fuente que no tiene ni URL ni identificación bibliográfica.",
+      "ubicacion": "titulo",
+      "tipo": "regla",
+      "alcance": "CAPA_A_TRANSVERSAL",
+      "jurisdiccion": null,
+      "nucleo_transversal": null,
+      "variaciones_materiales": null,
+      "jurisdicciones_revisadas": [
+        {
+          "pais": "España",
+          "fuente_ids": [
+            "f-sinurl"
+          ]
+        },
+        {
+          "pais": "México",
+          "fuente_ids": [
+            "f-sinurl"
+          ]
+        },
+        {
+          "pais": "Argentina",
+          "fuente_ids": [
+            "f-sinurl"
+          ]
+        }
+      ],
+      "diferencias_buscadas": "algo",
+      "contraejemplos_encontrados": "ninguno",
+      "justificacion_suficiencia_comparada": "algo",
+      "fuentes": [
+        {
+          "id": "f-sinurl",
+          "tipo_fuente": "SECUNDARIA_ESPECIALIZADA",
+          "titulo": null,
+          "organismo_autor": null,
+          "url": null,
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-08-25",
+          "localizador": "algo",
+          "dominio_oficial_confirmado": false
+        }
+      ],
+      "confianza": "media",
+      "riesgo_falsa_universalizacion": "bajo",
+      "riesgo_asesoria": "ninguno",
+      "platform_review_required": false,
+      "confidentiality_review_required": false,
+      "estado": "APTO_CON_MATICES",
+      "revision_humana": {
+        "estado": "PENDIENTE",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "gate_arte": "CERRADO",
+      "reformulacion_propuesta": {
+        "texto": null,
+        "verificada": false,
+        "nuevo_claim_id": null
+      },
+      "redaccion_prohibida": null,
+      "notas": "NEGATIVO: fuente sin url y sin identificador_bibliografico ni titulo/organismo_autor."
+    }
+  ],
+  "estado_agregado": "APTO_CON_MATICES",
+  "revisiones_pendientes": [
+    "bad5-claim"
+  ],
+  "gate_global_arte": "CERRADO"
+}

@@ -1,49 +1,47 @@
 ---
 name: legalmente-legal-verification
-description: "Verificación jurídica de LegalMente (marca panhispánica de educación jurídica). ACTÍVALA SIEMPRE antes de redactar, revisar, comparar, ilustrar, convertir en carrusel/reel o añadir a un banco cualquier título, hook, cita, máxima, definición, tecnicismo, consejo, consecuencia o afirmación jurídica de LegalMente — incluidos los títulos y hooks cortos, que también pueden contener una afirmación falsa. Debe correr ANTES de la producción visual (antes de invocar legalmente-visual-system para esa pieza), nunca después. No aprueba definitivamente nada: produce un paquete de verificación JSON que clasifica capa jurisdiccional, exige fuentes reales y evidencia comparada suficiente, y deja la pieza en un estado (apta, con matices, bloqueada o pendiente de humano) para que un humano decida."
+description: "Verificación jurídica de LegalMente (marca panhispánica de educación jurídica). ACTÍVALA SIEMPRE antes de redactar, revisar, comparar, ilustrar, convertir en carrusel/reel o añadir a un banco cualquier título, hook, cita, máxima, definición, tecnicismo, consejo, consecuencia o afirmación jurídica de LegalMente — incluidos los títulos y hooks cortos, que también pueden contener una afirmación falsa. Debe correr ANTES de la producción visual (antes de invocar legalmente-visual-system para esa pieza), nunca después. No aprueba definitivamente nada: produce una PIEZA JSON (esquema v2) con una o varias afirmaciones/claims, cada una con fuentes de nivel verificado, evidencia comparada suficiente cuando aplica, y un gate de arte que solo un humano puede abrir — nunca el modelo."
 ---
 
 # LegalMente — Verificación jurídica
 
 Esta skill existe porque el arte y la publicación de LegalMente nunca deben adelantarse al rigor jurídico. Antes de esta skill, no había ningún control real que impidiera producir arte para un tema jurídicamente no verificado.
 
-No eres tú quien decide si una afirmación jurídica es correcta con solo "sonar razonable". Decides investigando fuentes reales y clasificando el riesgo. **Google Drive es la fuente viva de decisiones jurisdiccionales, citas bloqueadas y fuentes aprobadas** — esta skill y sus `references/` documentan el *procedimiento* y ejemplos históricos fechados, nunca una lista que se pueda tratar como vigente por sí sola. La aprobación final siempre es humana — ver `references/jurisdiction-policy.md` sección "Quién decide".
+No eres tú quien decide si una afirmación jurídica es correcta con solo "sonar razonable". Decides investigando fuentes reales y clasificando el riesgo. **Google Drive es la fuente viva de decisiones jurisdiccionales, citas bloqueadas y fuentes aprobadas** — esta skill y sus `references/` documentan el *procedimiento* y ejemplos históricos fechados, nunca una lista que se pueda tratar como vigente por sí sola. **La aprobación final siempre es humana, y el gate de arte nunca lo abre el modelo** — ver Etapa 6 y `references/claim-packet-schema.md`.
 
 ## Cuándo se activa
 
 Cualquier tarea de LegalMente que toque texto con carga jurídica: redactar copy, revisar un hook, comparar dos versiones de un título, preparar el texto que va sobre una imagen, convertir contenido en carrusel o reel, o añadir piezas a un banco de temas/prompts. Un título de 6 palabras ("Al divorciarse, la casa se divide a la mitad") es tan verificable como un párrafo largo — no te limites al copy extenso.
 
-## Flujo obligatorio (6 etapas)
+## Vocabulario: pieza vs. claim
+
+Una **pieza** (una publicación real, con título/hook/imagen/caption) puede contener **varias afirmaciones verificables independientes** — a esto le llamamos **claims**. Una lista de "10 cosas que..." son 10 claims dentro de una pieza, no una. Cada claim recorre las 6 etapas por separado, con sus propias fuentes y su propio estado; la pieza agrega el resultado de todos sus claims (ver Etapa 6).
+
+## Flujo obligatorio (6 etapas, por cada claim)
 
 ### Etapa 1 — Extraer afirmaciones
 
-Lee todo el material de la pieza (título, hook, texto de imagen, caption, lista, CTA, prompt visual, descripción del tema) y separa cada afirmación verificable en una unidad independiente. Una lista de "10 cosas que..." son hasta 10 afirmaciones distintas, no una. Una afirmación es verificable si describe una regla, efecto, plazo, procedimiento, atribución de autoría o consecuencia jurídica — no lo es una opinión editorial pura ("el Derecho es fascinante").
+Lee todo el material de la pieza (título, hook, texto de imagen, caption, lista, CTA, prompt visual, descripción del tema) y separa cada afirmación verificable en un claim independiente. Una afirmación es verificable si describe una regla, efecto, plazo, procedimiento, atribución de autoría o consecuencia jurídica — no lo es una opinión editorial pura ("el Derecho es fascinante"). **Si una cita mezcla autoría con una proposición jurídica de fondo, sepárala en dos claims** (uno de `tipo: atribucion`, otro de `tipo: regla`/`consecuencia`/etc. con su propio alcance jurisdiccional) — el segundo nunca hereda las fuentes ni el estado del primero.
 
 ### Etapa 2 — Clasificar alcance
 
-Para cada afirmación, asigna una capa (ver `references/jurisdiction-policy.md` para la definición completa y ejemplos):
+Para cada claim, asigna un `alcance` (ver `references/jurisdiction-policy.md`):
 
-- `CAPA_A_TRANSVERSAL` — misma lógica y mismo nombre en el derecho hispánico comparado. **No se declara con 1-2 jurisdicciones.** Requiere haber revisado al menos 3 jurisdicciones distintas, buscado activamente diferencias materiales entre ellas, registrado cualquier contraejemplo encontrado (o confirmado explícitamente que no hay ninguno), y justificado por qué esa evidencia es suficiente para llamarlo transversal. El validador exige los cuatro campos correspondientes (`jurisdicciones_revisadas`, `diferencias_buscadas`, `contraejemplos_encontrados`, `justificacion_suficiencia_comparada`) y rechaza el paquete si faltan.
-- `CAPA_B_VARIABLE` — misma lógica de fondo, pero formalidades/plazos/requisitos/nombres cambian por país.
-- `CAPA_C_NACIONAL` — no tiene sentido fingir universalidad (materia fiscal, procedimientos administrativos, artículos concretos, sentencias nacionales).
-- `NO_DETERMINADO` — no se pudo clasificar con la investigación disponible; nunca fuerces una capa por defecto, y si usas esta, el estado del paquete debe ser `REQUIERE_INVESTIGACION`.
+- `CAPA_A_TRANSVERSAL` — misma lógica y mismo nombre en el derecho hispánico comparado. **No se declara con 1-2 jurisdicciones ni solo por alcanzar un número.** Requiere `jurisdicciones_revisadas` con al menos 3 países distintos y normalizados, cada uno con `fuente_ids` propios (evidencia identificable para cada jurisdicción declarada, no solo para las dos primeras), más `diferencias_buscadas`, `contraejemplos_encontrados` y `justificacion_suficiencia_comparada` explícitos. El conteo de países nunca sustituye la justificación — el validador exige ambas cosas a la vez.
+- `CAPA_B_VARIABLE` — misma lógica de fondo, pero formalidades/plazos/requisitos/nombres cambian por país. Requiere `variaciones_materiales`.
+- `CAPA_C_NACIONAL` — no tiene sentido fingir universalidad (materia fiscal, procedimientos administrativos, artículos concretos, sentencias nacionales). Requiere `jurisdiccion` visible.
+- `NO_DETERMINADO` — falta de investigación. Solo válido con `estado: REQUIERE_INVESTIGACION`.
+- `NO_APLICA` — la afirmación no tiene dimensión jurisdiccional (p. ej. autoría de una cita, un hecho histórico). Puede combinarse con cualquier estado, incluido `BLOQUEADO` (una atribución refutada con conclusión firme es `NO_APLICA + BLOQUEADO`, nunca `NO_DETERMINADO + BLOQUEADO`).
 
 ### Etapa 3 — Investigar fuentes
 
-Jerarquía de fuentes, de mayor a menor autoridad (detalle completo en `references/source-policy.md`):
+Cada fuente necesita un `tipo_fuente` del enum cerrado (`NORMA_OFICIAL`, `JURISPRUDENCIA_OFICIAL`, `AUTORIDAD_PUBLICA_OFICIAL`, `ACADEMICA_IDENTIFICABLE`, `SECUNDARIA_ESPECIALIZADA`, `DRIVE_INTERNO` — ver `references/source-policy.md` para la jerarquía completa), un `localizador` concreto (artículo, página, sentencia, sección — nunca "la ley en general"), y `url` o `identificador_bibliografico`. Para los tres tipos oficiales, marca `dominio_oficial_confirmado: true` **solo si de verdad confirmaste** que el dominio pertenece al organismo — nunca lo marques por comodidad: una compilación privada (Justia, blogs, wikis jurídicas) etiquetada como "oficial" sin esa confirmación nunca sostiene `APTO_PARA_NARRATIVA`, por muy bien que reproduzca el texto legal.
 
-1. Constitución, ley o reglamento oficial vigente.
-2. Sentencia o fuente judicial oficial.
-3. Autoridad pública o institución oficial.
-4. Tratado, obra o publicación académica identificable.
-5. Fuente secundaria especializada.
-6. Material interno de Drive — únicamente como antecedente, nunca como fuente final.
-
-Nunca aceptes como fuente: tu propia memoria como modelo, otro contenido generado por IA, publicaciones sin origen identificable, imágenes con texto sin fuente citable, o una cita viral sin obra identificable. Si no encuentras una fuente de nivel 1-5 real, el campo `fuentes` queda vacío y el estado no puede ser apto — pasa a `REQUIERE_INVESTIGACION`. Citar una fuente sin confirmar que sigue vigente (p. ej. una ley que pudo reformarse) no basta para subir la confianza a `alta`: si no verificaste vigencia real, dilo explícitamente y deja `confianza: baja` o `media`.
+Nunca aceptes como fuente: tu propia memoria como modelo, otro contenido generado por IA, publicaciones sin origen identificable, imágenes con texto sin fuente citable, o una cita viral sin obra identificable. Sin fuentes de nivel 1-5 reales, el claim queda en `REQUIERE_INVESTIGACION`. **Drive nunca sostiene, por sí solo, ningún estado apto** — es antecedente, no respaldo final.
 
 ### Etapa 4 — Evaluar falsa universalización
 
-Para cada afirmación Capa B o C (o dudosa), responde explícitamente:
+Para cada claim Capa B o C (o dudoso), responde explícitamente:
 
 1. ¿La afirmación depende del país?
 2. ¿Cambian requisitos, efectos, plazos, nombres o procedimientos entre países?
@@ -52,76 +50,36 @@ Para cada afirmación Capa B o C (o dudosa), responde explícitamente:
 5. ¿Hay una diferencia material ya conocida? (consulta Drive, no solo `references/`)
 6. ¿Se está usando una legislación nacional concreta como si fuera regla panhispánica?
 
-Cualquier "sí" en 2, 3 o 6 sube el riesgo de falsa universalización y normalmente exige declarar el país desde el título (Capa C) o una fórmula explícita de variación (Capa B) — nunca un disclaimer añadido al final como ocurrencia tardía.
+Cualquier "sí" en 2, 3 o 6 sube el riesgo de falsa universalización.
 
 ### Etapa 5 — Evaluar seguridad editorial
 
-Determina, para la pieza completa:
+Determina, para cada claim: si parece asesoría individual, si promete un resultado jurídico, si recomienda una conducta país-dependiente sin decirlo, si el tema es sensible y necesita Platform Risk Check (`platform_review_required: true` — esta skill no lo ejecuta, solo lo señala), si podría filtrar información confidencial (`confidentiality_review_required: true` — mismo caso), y si necesita aprobación humana especial.
 
-- ¿Parece asesoría individual dirigida a "tú, en tu caso concreto"?
-- ¿Promete un resultado jurídico específico?
-- ¿Recomienda una conducta que depende del país sin decirlo (p. ej. "firma bajo protesta")?
-- ¿Contiene datos, artículos, cifras o procedimientos no verificados en la Etapa 3?
-- ¿El tema es sensible (violencia, muerte, autolesión, amenazas, delitos, salud mental) y por tanto necesita Platform Risk Check antes de publicar? Márcalo como pendiente — esta skill no ejecuta ese check, solo lo señala (`platform_review_required: true`).
-- ¿Podría filtrar información confidencial o un caso identificable de experiencia profesional privada? Márcalo (`confidentiality_review_required: true`) — esta skill no tiene control de confidencialidad propio todavía (gap conocido, ver `CLAUDE.md`).
-- ¿Necesita aprobación humana especial más allá de la revisión estándar?
+### Etapa 6 — Emitir la pieza (JSON, esquema v2)
 
-### Etapa 6 — Emitir el paquete de verificación
+Construye una **pieza** con `schema_version: "2.0"`, `piece_id`, y la lista de `claims` (esquema completo campo por campo en `references/claim-packet-schema.md`). El estado agregado de la pieza y el gate de arte **no se escriben a mano — el validador los calcula y rechaza el archivo si lo declarado no coincide**:
 
-Emite un paquete **JSON** por afirmación (esquema completo en `references/claim-packet-schema.md`). Puedes mostrárselo al humano como YAML o tabla legible si ayuda a la conversación, pero el artefacto que se guarda y se valida con `scripts/validate-claim-packet.py` es siempre `.json`:
+- `estado_agregado`: si algún claim está `BLOQUEADO`, la pieza está `BLOQUEADO`. Si alguno `REQUIERE_INVESTIGACION`, la pieza no avanza. Si alguno tiene matices pendientes, la pieza queda en `APTO_CON_MATICES`. Solo si **todos** los claims están en `APTO_PARA_NARRATIVA` la pieza llega a `APTO_PARA_NARRATIVA`.
+- `gate_global_arte`: `ABIERTO` solo si el `estado_agregado` es `APTO_PARA_NARRATIVA` **y** el `gate_arte` de todos los claims es `ABIERTO`.
+- El `gate_arte` de un claim solo puede ser `ABIERTO` si: `estado = APTO_PARA_NARRATIVA` **y** `revision_humana.estado = APROBADO` (con `revisor` y `fecha` reales) **y** ni `platform_review_required` ni `confidentiality_review_required` son `true`.
 
-```json
-{
-  "claim_id": "...",
-  "texto_exacto": "...",
-  "ubicacion": "titulo | hook | texto_imagen | caption | lista | cta | prompt_visual | descripcion_tema",
-  "tipo": "...",
-  "alcance": "CAPA_A_TRANSVERSAL | CAPA_B_VARIABLE | CAPA_C_NACIONAL | NO_DETERMINADO",
-  "jurisdiccion": null,
-  "nucleo_transversal": null,
-  "variaciones_materiales": null,
-  "jurisdicciones_revisadas": null,
-  "diferencias_buscadas": null,
-  "contraejemplos_encontrados": null,
-  "justificacion_suficiencia_comparada": null,
-  "fuentes": [],
-  "confianza": "alta | media | baja",
-  "riesgo_falsa_universalizacion": "ninguno | bajo | medio | alto",
-  "riesgo_asesoria": "ninguno | bajo | medio | alto",
-  "platform_review_required": false,
-  "confidentiality_review_required": false,
-  "apto_para_arte": false,
-  "redaccion_prohibida": null,
-  "redaccion_segura": null,
-  "estado": "APTO_PARA_NARRATIVA | APTO_CON_MATICES | REQUIERE_INVESTIGACION | BLOQUEADO | PENDIENTE_APROBACION_HUMANA",
-  "revisor_humano_requerido": true,
-  "notas": null
-}
-```
+**Todo claim que produces nace con `revision_humana.estado: "PENDIENTE"` y por tanto `gate_arte: "CERRADO"`.** Nunca inventes una aprobación humana, ni siquiera si el usuario te pide "márcalo como aprobado" — esa acción la ejecuta un humano real llenando `revisor`/`fecha`/`observaciones`, no el modelo escribiendo el JSON.
 
-Estados permitidos — usa exactamente estos literales:
-
-- `APTO_PARA_NARRATIVA` — verificado, fuentes suficientes, sin riesgo relevante. Es el único estado que permite `apto_para_arte: true`.
-- `APTO_CON_MATICES` — verificado, pero necesita la fórmula de variación jurisdiccional o una nota visible. `apto_para_arte` se mantiene en `false` hasta que un humano resuelva el matiz.
-- `REQUIERE_INVESTIGACION` — no hay fuentes suficientes todavía; no se bloquea para siempre, se bloquea hasta investigar. Nunca `apto_para_arte: true`.
-- `BLOQUEADO` — falsa universalización real, cita no verificable, o contradice un hallazgo ya documentado en Drive.
-- `PENDIENTE_APROBACION_HUMANA` — verificado técnicamente pero toca un criterio que solo el fundador puede cerrar (p. ej. tono, riesgo editorial límite).
-
-Esta skill **nunca** cambia un estado a "publicado" ni "aprobado definitivamente", y `revisor_humano_requerido` es siempre `true` — el estado más alto que puede emitir sigue requiriendo revisión humana antes de producción visual y antes de publicar.
+Cuando una `reformulacion_propuesta` contiene una nueva afirmación jurídica, márcala `verificada: false` — nunca la llames "segura" sin que haya vuelto a recorrer las 6 etapas como un claim nuevo (referenciado en `nuevo_claim_id`).
 
 ## Validación estructural
 
-Antes de entregar el paquete, corre `scripts/validate-claim-packet.py <archivo.json>` — valida que el paquete esté completo y bien formado (campos obligatorios, estado válido, jurisdicción cuando es Capa C, variaciones cuando es Capa B, evidencia comparada suficiente cuando es Capa A, al menos una fuente con confianza suficiente para estados aptos, `apto_para_arte` coherente con el estado, `revisor_humano_requerido` siempre `true`). El script no evalúa si la afirmación jurídica es correcta — eso lo decides tú en las etapas 1-5; el script solo bloquea paquetes incompletos, mal formados o incoherentes. Ver `references/claim-packet-schema.md` para el detalle campo por campo.
+Antes de entregar la pieza, corre `scripts/validate-claim-packet.py <archivo.json>`. Valida: campos y tipos JSON, enums, fechas ISO, URLs http/https, niveles de fuente vs. estado declarado, jurisdicciones Capa A distintas/normalizadas con evidencia propia, reglas de alcance, coherencia de `revision_humana`, cálculo de `estado_agregado` y `gate_global_arte`. Diferencia `[ERROR ESTRUCTURAL]` (rechaza), `[ADVERTENCIA DE FUENTE]` (informativa, nunca concede aprobación por sí sola), `[OK ESTRUCTURAL — PENDIENTE HUMANO]`, `[GATE CERRADO]` y `[GATE ABIERTO]`. El script no evalúa si la afirmación jurídica es correcta ni si una fuente es realmente oficial más allá de lo que tú confirmaste — esas decisiones son tuyas y del revisor humano.
 
 ## Qué no hace esta skill
 
-- No aprueba ni publica nada — el estado más alto que emite deja la decisión final a un humano.
+- No aprueba ni publica nada, y no puede abrir el gate de arte por sí misma — solo un humano, llenando `revision_humana`, lo hace.
 - No mantiene un registro vivo propio de citas bloqueadas ni de decisiones jurisdiccionales — esa fuente es Drive; `references/` solo documenta procedimiento y ejemplos históricos fechados.
-- No ejecuta el Platform Risk Check de Meta — solo señala cuándo hace falta (`platform_review_required`).
-- No tiene control de confidencialidad propio — solo señala cuándo hace falta revisión (`confidentiality_review_required`).
-- No decide dirección visual — eso es `legalmente-visual-system`, y solo debe invocarse después de que esta skill deje la pieza en `APTO_PARA_NARRATIVA` con `apto_para_arte: true`.
-- No sustituye la revisión de un abogado humano sobre el fondo — reduce el riesgo de publicar algo verificablemente falso, no lo elimina.
+- No ejecuta el Platform Risk Check de Meta ni tiene control de confidencialidad propio — solo señala cuándo hacen falta.
+- No decide dirección visual — eso es `legalmente-visual-system`, y solo debe invocarse después de que el `gate_global_arte` de la pieza esté `ABIERTO`.
+- No sustituye la revisión de un abogado humano sobre el fondo, ni confirma por sí sola que una fuente etiquetada como oficial lo sea realmente — reduce el riesgo de publicar algo verificablemente falso, no lo elimina.
 
 ## Nota para la siguiente fase (no aplicada todavía)
 
-La revisión Fase 1A de este sistema identificó una contradicción crítica en la skill global `legalmente-visual-system`: pide simultáneamente "ninguna letra en la imagen" e "integrar la palabra LegalMente" grabada/legible en un objeto real de la escena. La corrección recomendada está documentada en `docs/decision-visual-marca-sin-texto.md` (raíz del repositorio) como una decisión formal pendiente de aplicar — **no se modificó `legalmente-visual-system` en esta fase**, por estar fuera del alcance autorizado.
+La revisión Fase 1A/1B de este sistema identificó una contradicción en la skill global `legalmente-visual-system`: pide simultáneamente "ninguna letra en la imagen" e "integrar la palabra LegalMente" grabada/legible en un objeto real de la escena. Existe una **propuesta** de corrección (no una decisión aprobada) en `docs/decision-visual-marca-sin-texto.md` (raíz del repositorio, marcada explícitamente como `ADR propuesto` hasta que el fundador la apruebe). **No se modificó `legalmente-visual-system` en esta fase.**

@@ -1,0 +1,77 @@
+{
+  "schema_version": "2.0",
+  "piece_id": "bad-2-tipo-fuente-invalido",
+  "claims": [
+    {
+      "claim_id": "bad2-claim",
+      "texto_exacto": "Afirmación con tipo_fuente que no existe en el enum.",
+      "ubicacion": "titulo",
+      "tipo": "regla",
+      "alcance": "CAPA_A_TRANSVERSAL",
+      "jurisdiccion": null,
+      "nucleo_transversal": null,
+      "variaciones_materiales": null,
+      "jurisdicciones_revisadas": [
+        {
+          "pais": "España",
+          "fuente_ids": [
+            "f-inv"
+          ]
+        },
+        {
+          "pais": "México",
+          "fuente_ids": [
+            "f-inv"
+          ]
+        },
+        {
+          "pais": "Perú",
+          "fuente_ids": [
+            "f-inv"
+          ]
+        }
+      ],
+      "diferencias_buscadas": "algo",
+      "contraejemplos_encontrados": "ninguno",
+      "justificacion_suficiencia_comparada": "algo",
+      "fuentes": [
+        {
+          "id": "f-inv",
+          "tipo_fuente": "FUENTE_SUPER_CONFIABLE",
+          "titulo": "Algo",
+          "organismo_autor": "Alguien",
+          "url": "https://example.com",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-08-25",
+          "localizador": "algo",
+          "dominio_oficial_confirmado": false
+        }
+      ],
+      "confianza": "alta",
+      "riesgo_falsa_universalizacion": "bajo",
+      "riesgo_asesoria": "ninguno",
+      "platform_review_required": false,
+      "confidentiality_review_required": false,
+      "estado": "APTO_PARA_NARRATIVA",
+      "revision_humana": {
+        "estado": "PENDIENTE",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "gate_arte": "CERRADO",
+      "reformulacion_propuesta": {
+        "texto": null,
+        "verificada": false,
+        "nuevo_claim_id": null
+      },
+      "redaccion_prohibida": null,
+      "notas": "NEGATIVO: tipo_fuente inventado, fuera del enum cerrado."
+    }
+  ],
+  "estado_agregado": "APTO_PARA_NARRATIVA",
+  "revisiones_pendientes": [
+    "bad2-claim"
+  ],
+  "gate_global_arte": "CERRADO"
+}

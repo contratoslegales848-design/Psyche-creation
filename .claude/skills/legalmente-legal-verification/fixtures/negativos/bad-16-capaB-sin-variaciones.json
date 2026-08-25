@@ -1,0 +1,46 @@
+{
+  "schema_version": "2.0",
+  "piece_id": "bad-16-capaB-sin-variaciones",
+  "claims": [
+    {
+      "claim_id": "bad16-claim",
+      "texto_exacto": "Capa B sin variaciones materiales.",
+      "ubicacion": "titulo",
+      "tipo": "regla",
+      "alcance": "CAPA_B_VARIABLE",
+      "jurisdiccion": null,
+      "nucleo_transversal": null,
+      "variaciones_materiales": null,
+      "jurisdicciones_revisadas": null,
+      "diferencias_buscadas": null,
+      "contraejemplos_encontrados": null,
+      "justificacion_suficiencia_comparada": null,
+      "fuentes": [],
+      "confianza": "media",
+      "riesgo_falsa_universalizacion": "medio",
+      "riesgo_asesoria": "bajo",
+      "platform_review_required": false,
+      "confidentiality_review_required": false,
+      "estado": "REQUIERE_INVESTIGACION",
+      "revision_humana": {
+        "estado": "PENDIENTE",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "gate_arte": "CERRADO",
+      "reformulacion_propuesta": {
+        "texto": null,
+        "verificada": false,
+        "nuevo_claim_id": null
+      },
+      "redaccion_prohibida": null,
+      "notas": "NEGATIVO: Capa B sin 'variaciones_materiales'."
+    }
+  ],
+  "estado_agregado": "REQUIERE_INVESTIGACION",
+  "revisiones_pendientes": [
+    "bad16-claim"
+  ],
+  "gate_global_arte": "CERRADO"
+}

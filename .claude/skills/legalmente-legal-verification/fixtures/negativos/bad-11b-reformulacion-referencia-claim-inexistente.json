@@ -1,0 +1,46 @@
+{
+  "schema_version": "2.0",
+  "piece_id": "bad-11b-reformulacion-referencia-claim-inexistente",
+  "claims": [
+    {
+      "claim_id": "bad11b-claim",
+      "texto_exacto": "Reformulación que referencia un claim inexistente.",
+      "ubicacion": "titulo",
+      "tipo": "regla",
+      "alcance": "CAPA_B_VARIABLE",
+      "jurisdiccion": null,
+      "nucleo_transversal": null,
+      "variaciones_materiales": "varía por país",
+      "jurisdicciones_revisadas": null,
+      "diferencias_buscadas": null,
+      "contraejemplos_encontrados": null,
+      "justificacion_suficiencia_comparada": null,
+      "fuentes": [],
+      "confianza": "alta",
+      "riesgo_falsa_universalizacion": "alto",
+      "riesgo_asesoria": "alto",
+      "platform_review_required": false,
+      "confidentiality_review_required": false,
+      "estado": "BLOQUEADO",
+      "revision_humana": {
+        "estado": "PENDIENTE",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "gate_arte": "CERRADO",
+      "reformulacion_propuesta": {
+        "texto": "texto nuevo",
+        "verificada": true,
+        "nuevo_claim_id": "claim-que-no-existe"
+      },
+      "redaccion_prohibida": null,
+      "notas": "NEGATIVO: nuevo_claim_id referencia un claim_id que no existe en la pieza."
+    }
+  ],
+  "estado_agregado": "BLOQUEADO",
+  "revisiones_pendientes": [
+    "bad11b-claim"
+  ],
+  "gate_global_arte": "CERRADO"
+}

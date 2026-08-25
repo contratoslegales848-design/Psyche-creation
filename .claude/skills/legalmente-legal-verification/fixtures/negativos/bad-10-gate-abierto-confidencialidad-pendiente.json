@@ -1,0 +1,99 @@
+{
+  "schema_version": "2.0",
+  "piece_id": "bad-10-gate-abierto-confidencialidad-pendiente",
+  "claims": [
+    {
+      "claim_id": "bad10-claim",
+      "texto_exacto": "Afirmación aprobada por un humano pero con revisión de confidencialidad pendiente.",
+      "ubicacion": "titulo",
+      "tipo": "regla",
+      "alcance": "CAPA_A_TRANSVERSAL",
+      "jurisdiccion": null,
+      "nucleo_transversal": null,
+      "variaciones_materiales": null,
+      "jurisdicciones_revisadas": [
+        {
+          "pais": "España",
+          "fuente_ids": [
+            "f-a"
+          ]
+        },
+        {
+          "pais": "México",
+          "fuente_ids": [
+            "f-b"
+          ]
+        },
+        {
+          "pais": "Perú",
+          "fuente_ids": [
+            "f-c2"
+          ]
+        }
+      ],
+      "diferencias_buscadas": "algo",
+      "contraejemplos_encontrados": "ninguno",
+      "justificacion_suficiencia_comparada": "algo",
+      "fuentes": [
+        {
+          "id": "f-a",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Ley de España",
+          "organismo_autor": "BOE",
+          "url": "https://www.boe.es/x",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-08-25",
+          "localizador": "art. 1",
+          "dominio_oficial_confirmado": true
+        },
+        {
+          "id": "f-b",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Ley de México",
+          "organismo_autor": "Diputados",
+          "url": "https://www.diputados.gob.mx/x",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-08-25",
+          "localizador": "art. 2",
+          "dominio_oficial_confirmado": true
+        },
+        {
+          "id": "f-c2",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Ley de Perú",
+          "organismo_autor": "Minjus",
+          "url": "https://spij.minjus.gob.pe/x",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-08-25",
+          "localizador": "art. 4",
+          "dominio_oficial_confirmado": true
+        }
+      ],
+      "confianza": "alta",
+      "riesgo_falsa_universalizacion": "bajo",
+      "riesgo_asesoria": "ninguno",
+      "platform_review_required": false,
+      "confidentiality_review_required": true,
+      "estado": "APTO_PARA_NARRATIVA",
+      "revision_humana": {
+        "estado": "APROBADO",
+        "revisor": "Raymundo",
+        "fecha": "2026-08-25",
+        "observaciones": null
+      },
+      "gate_arte": "CERRADO",
+      "reformulacion_propuesta": {
+        "texto": null,
+        "verificada": false,
+        "nuevo_claim_id": null
+      },
+      "redaccion_prohibida": null,
+      "notas": "NEGATIVO: confidentiality_review_required=true debe mantener el gate CERRADO aunque haya aprobación humana y fuentes suficientes."
+    }
+  ],
+  "estado_agregado": "APTO_PARA_NARRATIVA",
+  "revisiones_pendientes": [
+    "bad10-claim"
+  ],
+  "gate_global_arte": "ABIERTO"
+}

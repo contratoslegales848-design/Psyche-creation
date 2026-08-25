@@ -1,0 +1,48 @@
+{
+  "schema_version": "2.0",
+  "piece_id": "bad-13-tipos-json-incorrectos",
+  "claims": [
+    {
+      "claim_id": "bad13-claim",
+      "texto_exacto": "Tipos JSON incorrectos a propósito.",
+      "ubicacion": "titulo",
+      "tipo": "regla",
+      "alcance": "CAPA_A_TRANSVERSAL",
+      "jurisdiccion": null,
+      "nucleo_transversal": null,
+      "variaciones_materiales": null,
+      "jurisdicciones_revisadas": null,
+      "diferencias_buscadas": null,
+      "contraejemplos_encontrados": null,
+      "justificacion_suficiencia_comparada": null,
+      "fuentes": {
+        "no": "deberia ser un objeto, no una lista"
+      },
+      "confianza": "alta",
+      "riesgo_falsa_universalizacion": "bajo",
+      "riesgo_asesoria": "ninguno",
+      "platform_review_required": "false",
+      "confidentiality_review_required": false,
+      "estado": "APTO_PARA_NARRATIVA",
+      "revision_humana": {
+        "estado": "PENDIENTE",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "gate_arte": "CERRADO",
+      "reformulacion_propuesta": {
+        "texto": null,
+        "verificada": false,
+        "nuevo_claim_id": null
+      },
+      "redaccion_prohibida": null,
+      "notas": "NEGATIVO: 'platform_review_required' es el string 'false' (no booleano) y 'fuentes' es un objeto, no una lista."
+    }
+  ],
+  "estado_agregado": "REQUIERE_INVESTIGACION",
+  "revisiones_pendientes": [
+    "bad13-claim"
+  ],
+  "gate_global_arte": "CERRADO"
+}

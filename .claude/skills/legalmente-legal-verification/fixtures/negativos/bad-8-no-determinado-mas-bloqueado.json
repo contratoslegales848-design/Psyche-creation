@@ -1,0 +1,46 @@
+{
+  "schema_version": "2.0",
+  "piece_id": "bad-8-no-determinado-mas-bloqueado",
+  "claims": [
+    {
+      "claim_id": "bad8-claim",
+      "texto_exacto": "Cita bloqueada pero con alcance NO_DETERMINADO en vez de NO_APLICA.",
+      "ubicacion": "caption",
+      "tipo": "atribucion",
+      "alcance": "NO_DETERMINADO",
+      "jurisdiccion": null,
+      "nucleo_transversal": null,
+      "variaciones_materiales": null,
+      "jurisdicciones_revisadas": null,
+      "diferencias_buscadas": null,
+      "contraejemplos_encontrados": null,
+      "justificacion_suficiencia_comparada": null,
+      "fuentes": [],
+      "confianza": "media",
+      "riesgo_falsa_universalizacion": "ninguno",
+      "riesgo_asesoria": "ninguno",
+      "platform_review_required": false,
+      "confidentiality_review_required": false,
+      "estado": "BLOQUEADO",
+      "revision_humana": {
+        "estado": "PENDIENTE",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "gate_arte": "CERRADO",
+      "reformulacion_propuesta": {
+        "texto": null,
+        "verificada": false,
+        "nuevo_claim_id": null
+      },
+      "redaccion_prohibida": null,
+      "notas": "NEGATIVO: NO_DETERMINADO solo puede combinarse con REQUIERE_INVESTIGACION; una conclusión firme (bloqueado) debe usar NO_APLICA."
+    }
+  ],
+  "estado_agregado": "BLOQUEADO",
+  "revisiones_pendientes": [
+    "bad8-claim"
+  ],
+  "gate_global_arte": "CERRADO"
+}

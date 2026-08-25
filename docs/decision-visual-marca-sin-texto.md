@@ -1,6 +1,6 @@
-# Decisión formal — arte base sin texto, marca y tipografía se montan después
+# ADR propuesto — arte base sin texto, marca y tipografía se montan después
 
-Estado: **recomendación registrada en la revisión Fase 1A (2026-08-25), pendiente de aplicar a `legalmente-visual-system`.** Este documento no modifica esa skill global — solo deja la decisión por escrito para que la siguiente fase la implemente.
+**Estado: PROPUESTA, no decisión aprobada.** Registrada por el modelo en la revisión Fase 1A (2026-08-25) y renombrada explícitamente como "ADR propuesto" en la revisión Fase 1B (corrección de que no se presente como si ya estuviera aprobada por el fundador). Ningún cambio a `legalmente-visual-system` se ha aplicado ni se aplicará a partir de este documento hasta que Raymundo la apruebe expresamente. Este documento no modifica esa skill global — solo deja la propuesta por escrito para que una fase futura, ya autorizada, la implemente si se aprueba.
 
 ## El hallazgo que motiva esto
 
@@ -11,7 +11,7 @@ La auditoría de `legalmente-visual-system` (Fase 1) encontró una contradicció
 
 Pedirle a un generador de imágenes "ninguna letra" y "la palabra LegalMente legible" en el mismo prompt es una instrucción ambigua: los generadores de imagen son notoriamente inconsistentes al renderizar texto, y esta contradicción aumenta el riesgo de que la marca salga ilegible, deformada o mal ubicada — o que el generador ignore una de las dos instrucciones sin avisar.
 
-## La decisión
+## La propuesta
 
 **El generador de imágenes no escribe ninguna letra — ni "LegalMente", ni títulos, ni citas, ni firmas, ni artículos, ni numeración.** El arte base se genera completamente limpio, siempre.
 

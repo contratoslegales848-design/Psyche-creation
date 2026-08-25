@@ -1,0 +1,94 @@
+{
+  "schema_version": "2.0",
+  "piece_id": "pieza-4-cita-goldman",
+  "claims": [
+    {
+      "claim_id": "pieza-4-claim-1-atribucion",
+      "texto_exacto": "\"Los delincuentes son producto de las circunstancias sociales\" — atribuida a Emma Goldman.",
+      "ubicacion": "caption",
+      "tipo": "atribucion",
+      "alcance": "NO_APLICA",
+      "jurisdiccion": null,
+      "nucleo_transversal": null,
+      "variaciones_materiales": null,
+      "jurisdicciones_revisadas": null,
+      "diferencias_buscadas": null,
+      "contraejemplos_encontrados": null,
+      "justificacion_suficiencia_comparada": null,
+      "fuentes": [
+        {
+          "id": "f-goldman-ensayo",
+          "tipo_fuente": "ACADEMICA_IDENTIFICABLE",
+          "titulo": "Prisiones: El crimen social y su fracaso (ensayo)",
+          "organismo_autor": "Emma Goldman",
+          "url": "https://www.portaloaca.com/pensamientolibertario/textosanarquismo/prisiones-el-crimen-social-y-su-fracaso-emma-goldman/",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-08-25",
+          "localizador": "Sección donde Goldman atribuye la idea al criminólogo Lacassagne",
+          "dominio_oficial_confirmado": false
+        }
+      ],
+      "confianza": "media",
+      "riesgo_falsa_universalizacion": "ninguno",
+      "riesgo_asesoria": "ninguno",
+      "platform_review_required": false,
+      "confidentiality_review_required": false,
+      "estado": "BLOQUEADO",
+      "revision_humana": {
+        "estado": "PENDIENTE",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "gate_arte": "CERRADO",
+      "reformulacion_propuesta": {
+        "texto": "Si se quiere usar la idea: atribuirla a Lacassagne solo tras confirmar obra y edición exactas, o presentarla sin atribución personal como tesis de la criminología social del siglo XIX.",
+        "verificada": false,
+        "nuevo_claim_id": null
+      },
+      "redaccion_prohibida": "Cualquier variante que atribuya esta cita a Emma Goldman como autora original.",
+      "notas": "NO_APLICA (no NO_DETERMINADO) porque la investigación SÍ concluyó algo firme: en su propio ensayo, Goldman atribuye la idea al criminólogo Lacassagne, no la presenta como propia. Coincide con un antecedente ya documentado en references/blocked-content.md. Este claim cubre solo la ATRIBUCIÓN/autoría; no contiene una proposición jurídica de fondo, por lo que no requiere un segundo claim de alcance jurisdiccional — ver pieza-4-claim-2 para un ejemplo de cuándo SÍ haría falta separar."
+    },
+    {
+      "claim_id": "pieza-4-claim-2-hipotetico-legal",
+      "texto_exacto": "(Ejemplo de separación de claims) Si la pieza además afirmara: 'las circunstancias sociales eximen de responsabilidad penal' — eso sería una proposición jurídica aparte, no una cuestión de atribución.",
+      "ubicacion": "descripcion_tema",
+      "tipo": "regla",
+      "alcance": "CAPA_B_VARIABLE",
+      "jurisdiccion": null,
+      "nucleo_transversal": null,
+      "variaciones_materiales": "Los criterios de imputabilidad, atenuantes y eximentes por circunstancias sociales varían radicalmente por país y por código penal — no es una regla panhispánica.",
+      "jurisdicciones_revisadas": null,
+      "diferencias_buscadas": null,
+      "contraejemplos_encontrados": null,
+      "justificacion_suficiencia_comparada": null,
+      "fuentes": [],
+      "confianza": "media",
+      "riesgo_falsa_universalizacion": "alto",
+      "riesgo_asesoria": "medio",
+      "platform_review_required": false,
+      "confidentiality_review_required": false,
+      "estado": "BLOQUEADO",
+      "revision_humana": {
+        "estado": "PENDIENTE",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "gate_arte": "CERRADO",
+      "reformulacion_propuesta": {
+        "texto": null,
+        "verificada": false,
+        "nuevo_claim_id": null
+      },
+      "redaccion_prohibida": null,
+      "notas": "Claim ilustrativo (no proviene de la afirmación original de la pieza): demuestra el requisito de la Etapa 4 — cuando una cita mezcla autoría con una proposición jurídica de fondo, se separan en dos claims independientes, cada uno con su propio recorrido de las 6 etapas. Este claim NO hereda las fuentes ni el estado del claim de atribución."
+    }
+  ],
+  "estado_agregado": "BLOQUEADO",
+  "revisiones_pendientes": [
+    "pieza-4-claim-1-atribucion",
+    "pieza-4-claim-2-hipotetico-legal"
+  ],
+  "gate_global_arte": "CERRADO"
+}

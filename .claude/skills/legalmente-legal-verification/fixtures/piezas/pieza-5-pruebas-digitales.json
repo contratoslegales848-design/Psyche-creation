@@ -1,0 +1,46 @@
+{
+  "schema_version": "2.0",
+  "piece_id": "pieza-5-pruebas-digitales",
+  "claims": [
+    {
+      "claim_id": "pieza-5-claim-1",
+      "texto_exacto": "Diez pruebas digitales que sí se aceptan en juicio.",
+      "ubicacion": "titulo",
+      "tipo": "regla",
+      "alcance": "CAPA_B_VARIABLE",
+      "jurisdiccion": null,
+      "nucleo_transversal": "Que ciertos tipos de evidencia digital pueden usarse en juicio, sujeta a admisibilidad, autenticidad, integridad y pertinencia, es transversal.",
+      "variaciones_materiales": "Qué se admite en concreto, con qué formalidades y bajo qué código (civil/penal/laboral), cambia por país y tipo de proceso.",
+      "jurisdicciones_revisadas": null,
+      "diferencias_buscadas": null,
+      "contraejemplos_encontrados": null,
+      "justificacion_suficiencia_comparada": null,
+      "fuentes": [],
+      "confianza": "baja",
+      "riesgo_falsa_universalizacion": "alto",
+      "riesgo_asesoria": "medio",
+      "platform_review_required": false,
+      "confidentiality_review_required": false,
+      "estado": "REQUIERE_INVESTIGACION",
+      "revision_humana": {
+        "estado": "PENDIENTE",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "gate_arte": "CERRADO",
+      "reformulacion_propuesta": {
+        "texto": "Diez tipos de evidencia digital que los tribunales suelen admitir — y lo que cambia según el país y el tipo de proceso.",
+        "verificada": false,
+        "nuevo_claim_id": null
+      },
+      "redaccion_prohibida": null,
+      "notas": "Solo se entregó el título; cada una de las diez pruebas necesitaría su propio claim verificado. En esta pieza solo se modela el claim del título/promesa general."
+    }
+  ],
+  "estado_agregado": "REQUIERE_INVESTIGACION",
+  "revisiones_pendientes": [
+    "pieza-5-claim-1"
+  ],
+  "gate_global_arte": "CERRADO"
+}

@@ -1,0 +1,467 @@
+{
+  "schema_version": "2.0",
+  "piece_id": "bad-12-nueve-aptos-uno-pendiente-declarada-abierta",
+  "claims": [
+    {
+      "claim_id": "bad12-claim-1",
+      "texto_exacto": "Afirmación de relleno bad12-claim-1, verificada y aprobada.",
+      "ubicacion": "titulo",
+      "tipo": "definicion",
+      "alcance": "NO_APLICA",
+      "jurisdiccion": null,
+      "nucleo_transversal": null,
+      "variaciones_materiales": null,
+      "jurisdicciones_revisadas": null,
+      "diferencias_buscadas": null,
+      "contraejemplos_encontrados": null,
+      "justificacion_suficiencia_comparada": null,
+      "fuentes": [
+        {
+          "id": "f-bad12-claim-1",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Fuente oficial",
+          "organismo_autor": "Organismo",
+          "url": "https://www.boe.es/x",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-08-25",
+          "localizador": "art. X",
+          "dominio_oficial_confirmado": true
+        }
+      ],
+      "confianza": "alta",
+      "riesgo_falsa_universalizacion": "ninguno",
+      "riesgo_asesoria": "ninguno",
+      "platform_review_required": false,
+      "confidentiality_review_required": false,
+      "estado": "APTO_PARA_NARRATIVA",
+      "revision_humana": {
+        "estado": "APROBADO",
+        "revisor": "Raymundo",
+        "fecha": "2026-08-25",
+        "observaciones": null
+      },
+      "gate_arte": "ABIERTO",
+      "reformulacion_propuesta": {
+        "texto": null,
+        "verificada": false,
+        "nuevo_claim_id": null
+      },
+      "redaccion_prohibida": null,
+      "notas": null
+    },
+    {
+      "claim_id": "bad12-claim-2",
+      "texto_exacto": "Afirmación de relleno bad12-claim-2, verificada y aprobada.",
+      "ubicacion": "titulo",
+      "tipo": "definicion",
+      "alcance": "NO_APLICA",
+      "jurisdiccion": null,
+      "nucleo_transversal": null,
+      "variaciones_materiales": null,
+      "jurisdicciones_revisadas": null,
+      "diferencias_buscadas": null,
+      "contraejemplos_encontrados": null,
+      "justificacion_suficiencia_comparada": null,
+      "fuentes": [
+        {
+          "id": "f-bad12-claim-2",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Fuente oficial",
+          "organismo_autor": "Organismo",
+          "url": "https://www.boe.es/x",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-08-25",
+          "localizador": "art. X",
+          "dominio_oficial_confirmado": true
+        }
+      ],
+      "confianza": "alta",
+      "riesgo_falsa_universalizacion": "ninguno",
+      "riesgo_asesoria": "ninguno",
+      "platform_review_required": false,
+      "confidentiality_review_required": false,
+      "estado": "APTO_PARA_NARRATIVA",
+      "revision_humana": {
+        "estado": "APROBADO",
+        "revisor": "Raymundo",
+        "fecha": "2026-08-25",
+        "observaciones": null
+      },
+      "gate_arte": "ABIERTO",
+      "reformulacion_propuesta": {
+        "texto": null,
+        "verificada": false,
+        "nuevo_claim_id": null
+      },
+      "redaccion_prohibida": null,
+      "notas": null
+    },
+    {
+      "claim_id": "bad12-claim-3",
+      "texto_exacto": "Afirmación de relleno bad12-claim-3, verificada y aprobada.",
+      "ubicacion": "titulo",
+      "tipo": "definicion",
+      "alcance": "NO_APLICA",
+      "jurisdiccion": null,
+      "nucleo_transversal": null,
+      "variaciones_materiales": null,
+      "jurisdicciones_revisadas": null,
+      "diferencias_buscadas": null,
+      "contraejemplos_encontrados": null,
+      "justificacion_suficiencia_comparada": null,
+      "fuentes": [
+        {
+          "id": "f-bad12-claim-3",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Fuente oficial",
+          "organismo_autor": "Organismo",
+          "url": "https://www.boe.es/x",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-08-25",
+          "localizador": "art. X",
+          "dominio_oficial_confirmado": true
+        }
+      ],
+      "confianza": "alta",
+      "riesgo_falsa_universalizacion": "ninguno",
+      "riesgo_asesoria": "ninguno",
+      "platform_review_required": false,
+      "confidentiality_review_required": false,
+      "estado": "APTO_PARA_NARRATIVA",
+      "revision_humana": {
+        "estado": "APROBADO",
+        "revisor": "Raymundo",
+        "fecha": "2026-08-25",
+        "observaciones": null
+      },
+      "gate_arte": "ABIERTO",
+      "reformulacion_propuesta": {
+        "texto": null,
+        "verificada": false,
+        "nuevo_claim_id": null
+      },
+      "redaccion_prohibida": null,
+      "notas": null
+    },
+    {
+      "claim_id": "bad12-claim-4",
+      "texto_exacto": "Afirmación de relleno bad12-claim-4, verificada y aprobada.",
+      "ubicacion": "titulo",
+      "tipo": "definicion",
+      "alcance": "NO_APLICA",
+      "jurisdiccion": null,
+      "nucleo_transversal": null,
+      "variaciones_materiales": null,
+      "jurisdicciones_revisadas": null,
+      "diferencias_buscadas": null,
+      "contraejemplos_encontrados": null,
+      "justificacion_suficiencia_comparada": null,
+      "fuentes": [
+        {
+          "id": "f-bad12-claim-4",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Fuente oficial",
+          "organismo_autor": "Organismo",
+          "url": "https://www.boe.es/x",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-08-25",
+          "localizador": "art. X",
+          "dominio_oficial_confirmado": true
+        }
+      ],
+      "confianza": "alta",
+      "riesgo_falsa_universalizacion": "ninguno",
+      "riesgo_asesoria": "ninguno",
+      "platform_review_required": false,
+      "confidentiality_review_required": false,
+      "estado": "APTO_PARA_NARRATIVA",
+      "revision_humana": {
+        "estado": "APROBADO",
+        "revisor": "Raymundo",
+        "fecha": "2026-08-25",
+        "observaciones": null
+      },
+      "gate_arte": "ABIERTO",
+      "reformulacion_propuesta": {
+        "texto": null,
+        "verificada": false,
+        "nuevo_claim_id": null
+      },
+      "redaccion_prohibida": null,
+      "notas": null
+    },
+    {
+      "claim_id": "bad12-claim-5",
+      "texto_exacto": "Afirmación de relleno bad12-claim-5, verificada y aprobada.",
+      "ubicacion": "titulo",
+      "tipo": "definicion",
+      "alcance": "NO_APLICA",
+      "jurisdiccion": null,
+      "nucleo_transversal": null,
+      "variaciones_materiales": null,
+      "jurisdicciones_revisadas": null,
+      "diferencias_buscadas": null,
+      "contraejemplos_encontrados": null,
+      "justificacion_suficiencia_comparada": null,
+      "fuentes": [
+        {
+          "id": "f-bad12-claim-5",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Fuente oficial",
+          "organismo_autor": "Organismo",
+          "url": "https://www.boe.es/x",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-08-25",
+          "localizador": "art. X",
+          "dominio_oficial_confirmado": true
+        }
+      ],
+      "confianza": "alta",
+      "riesgo_falsa_universalizacion": "ninguno",
+      "riesgo_asesoria": "ninguno",
+      "platform_review_required": false,
+      "confidentiality_review_required": false,
+      "estado": "APTO_PARA_NARRATIVA",
+      "revision_humana": {
+        "estado": "APROBADO",
+        "revisor": "Raymundo",
+        "fecha": "2026-08-25",
+        "observaciones": null
+      },
+      "gate_arte": "ABIERTO",
+      "reformulacion_propuesta": {
+        "texto": null,
+        "verificada": false,
+        "nuevo_claim_id": null
+      },
+      "redaccion_prohibida": null,
+      "notas": null
+    },
+    {
+      "claim_id": "bad12-claim-6",
+      "texto_exacto": "Afirmación de relleno bad12-claim-6, verificada y aprobada.",
+      "ubicacion": "titulo",
+      "tipo": "definicion",
+      "alcance": "NO_APLICA",
+      "jurisdiccion": null,
+      "nucleo_transversal": null,
+      "variaciones_materiales": null,
+      "jurisdicciones_revisadas": null,
+      "diferencias_buscadas": null,
+      "contraejemplos_encontrados": null,
+      "justificacion_suficiencia_comparada": null,
+      "fuentes": [
+        {
+          "id": "f-bad12-claim-6",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Fuente oficial",
+          "organismo_autor": "Organismo",
+          "url": "https://www.boe.es/x",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-08-25",
+          "localizador": "art. X",
+          "dominio_oficial_confirmado": true
+        }
+      ],
+      "confianza": "alta",
+      "riesgo_falsa_universalizacion": "ninguno",
+      "riesgo_asesoria": "ninguno",
+      "platform_review_required": false,
+      "confidentiality_review_required": false,
+      "estado": "APTO_PARA_NARRATIVA",
+      "revision_humana": {
+        "estado": "APROBADO",
+        "revisor": "Raymundo",
+        "fecha": "2026-08-25",
+        "observaciones": null
+      },
+      "gate_arte": "ABIERTO",
+      "reformulacion_propuesta": {
+        "texto": null,
+        "verificada": false,
+        "nuevo_claim_id": null
+      },
+      "redaccion_prohibida": null,
+      "notas": null
+    },
+    {
+      "claim_id": "bad12-claim-7",
+      "texto_exacto": "Afirmación de relleno bad12-claim-7, verificada y aprobada.",
+      "ubicacion": "titulo",
+      "tipo": "definicion",
+      "alcance": "NO_APLICA",
+      "jurisdiccion": null,
+      "nucleo_transversal": null,
+      "variaciones_materiales": null,
+      "jurisdicciones_revisadas": null,
+      "diferencias_buscadas": null,
+      "contraejemplos_encontrados": null,
+      "justificacion_suficiencia_comparada": null,
+      "fuentes": [
+        {
+          "id": "f-bad12-claim-7",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Fuente oficial",
+          "organismo_autor": "Organismo",
+          "url": "https://www.boe.es/x",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-08-25",
+          "localizador": "art. X",
+          "dominio_oficial_confirmado": true
+        }
+      ],
+      "confianza": "alta",
+      "riesgo_falsa_universalizacion": "ninguno",
+      "riesgo_asesoria": "ninguno",
+      "platform_review_required": false,
+      "confidentiality_review_required": false,
+      "estado": "APTO_PARA_NARRATIVA",
+      "revision_humana": {
+        "estado": "APROBADO",
+        "revisor": "Raymundo",
+        "fecha": "2026-08-25",
+        "observaciones": null
+      },
+      "gate_arte": "ABIERTO",
+      "reformulacion_propuesta": {
+        "texto": null,
+        "verificada": false,
+        "nuevo_claim_id": null
+      },
+      "redaccion_prohibida": null,
+      "notas": null
+    },
+    {
+      "claim_id": "bad12-claim-8",
+      "texto_exacto": "Afirmación de relleno bad12-claim-8, verificada y aprobada.",
+      "ubicacion": "titulo",
+      "tipo": "definicion",
+      "alcance": "NO_APLICA",
+      "jurisdiccion": null,
+      "nucleo_transversal": null,
+      "variaciones_materiales": null,
+      "jurisdicciones_revisadas": null,
+      "diferencias_buscadas": null,
+      "contraejemplos_encontrados": null,
+      "justificacion_suficiencia_comparada": null,
+      "fuentes": [
+        {
+          "id": "f-bad12-claim-8",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Fuente oficial",
+          "organismo_autor": "Organismo",
+          "url": "https://www.boe.es/x",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-08-25",
+          "localizador": "art. X",
+          "dominio_oficial_confirmado": true
+        }
+      ],
+      "confianza": "alta",
+      "riesgo_falsa_universalizacion": "ninguno",
+      "riesgo_asesoria": "ninguno",
+      "platform_review_required": false,
+      "confidentiality_review_required": false,
+      "estado": "APTO_PARA_NARRATIVA",
+      "revision_humana": {
+        "estado": "APROBADO",
+        "revisor": "Raymundo",
+        "fecha": "2026-08-25",
+        "observaciones": null
+      },
+      "gate_arte": "ABIERTO",
+      "reformulacion_propuesta": {
+        "texto": null,
+        "verificada": false,
+        "nuevo_claim_id": null
+      },
+      "redaccion_prohibida": null,
+      "notas": null
+    },
+    {
+      "claim_id": "bad12-claim-9",
+      "texto_exacto": "Afirmación de relleno bad12-claim-9, verificada y aprobada.",
+      "ubicacion": "titulo",
+      "tipo": "definicion",
+      "alcance": "NO_APLICA",
+      "jurisdiccion": null,
+      "nucleo_transversal": null,
+      "variaciones_materiales": null,
+      "jurisdicciones_revisadas": null,
+      "diferencias_buscadas": null,
+      "contraejemplos_encontrados": null,
+      "justificacion_suficiencia_comparada": null,
+      "fuentes": [
+        {
+          "id": "f-bad12-claim-9",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Fuente oficial",
+          "organismo_autor": "Organismo",
+          "url": "https://www.boe.es/x",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-08-25",
+          "localizador": "art. X",
+          "dominio_oficial_confirmado": true
+        }
+      ],
+      "confianza": "alta",
+      "riesgo_falsa_universalizacion": "ninguno",
+      "riesgo_asesoria": "ninguno",
+      "platform_review_required": false,
+      "confidentiality_review_required": false,
+      "estado": "APTO_PARA_NARRATIVA",
+      "revision_humana": {
+        "estado": "APROBADO",
+        "revisor": "Raymundo",
+        "fecha": "2026-08-25",
+        "observaciones": null
+      },
+      "gate_arte": "ABIERTO",
+      "reformulacion_propuesta": {
+        "texto": null,
+        "verificada": false,
+        "nuevo_claim_id": null
+      },
+      "redaccion_prohibida": null,
+      "notas": null
+    },
+    {
+      "claim_id": "bad12-claim-10",
+      "texto_exacto": "Décima afirmación, todavía sin investigación suficiente.",
+      "ubicacion": "titulo",
+      "tipo": "regla",
+      "alcance": "CAPA_B_VARIABLE",
+      "jurisdiccion": null,
+      "nucleo_transversal": null,
+      "variaciones_materiales": "varía por país",
+      "jurisdicciones_revisadas": null,
+      "diferencias_buscadas": null,
+      "contraejemplos_encontrados": null,
+      "justificacion_suficiencia_comparada": null,
+      "fuentes": [],
+      "confianza": "baja",
+      "riesgo_falsa_universalizacion": "medio",
+      "riesgo_asesoria": "bajo",
+      "platform_review_required": false,
+      "confidentiality_review_required": false,
+      "estado": "REQUIERE_INVESTIGACION",
+      "revision_humana": {
+        "estado": "PENDIENTE",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "gate_arte": "CERRADO",
+      "reformulacion_propuesta": {
+        "texto": null,
+        "verificada": false,
+        "nuevo_claim_id": null
+      },
+      "redaccion_prohibida": null,
+      "notas": null
+    }
+  ],
+  "estado_agregado": "APTO_PARA_NARRATIVA",
+  "revisiones_pendientes": [],
+  "gate_global_arte": "ABIERTO"
+}

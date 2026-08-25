@@ -1,5 +1,0 @@
-{
-  "claim_id": "bad-12",
-  "texto_exacto": "JSON deliberadamente mal formado (coma colgante) para probar que el validador rechaza el parseo, no solo el esquema.",
-  "estado": "BLOQUEADO",
-}

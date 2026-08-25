@@ -1,0 +1,58 @@
+{
+  "schema_version": "2.0",
+  "piece_id": "bad-17-estado-invalido",
+  "claims": [
+    {
+      "claim_id": "bad15-claim",
+      "texto_exacto": "Capa C sin jurisdicción declarada.",
+      "ubicacion": "titulo",
+      "tipo": "regla",
+      "alcance": "CAPA_C_NACIONAL",
+      "jurisdiccion": null,
+      "nucleo_transversal": null,
+      "variaciones_materiales": null,
+      "jurisdicciones_revisadas": null,
+      "diferencias_buscadas": null,
+      "contraejemplos_encontrados": null,
+      "justificacion_suficiencia_comparada": null,
+      "fuentes": [
+        {
+          "id": "f-15",
+          "tipo_fuente": "SECUNDARIA_ESPECIALIZADA",
+          "titulo": "Fuente",
+          "organismo_autor": "Autor",
+          "url": "https://example.gov/x",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-08-25",
+          "localizador": "algo",
+          "dominio_oficial_confirmado": false
+        }
+      ],
+      "confianza": "media",
+      "riesgo_falsa_universalizacion": "medio",
+      "riesgo_asesoria": "bajo",
+      "platform_review_required": false,
+      "confidentiality_review_required": false,
+      "estado": "PUBLICADO_SIN_REVISION",
+      "revision_humana": {
+        "estado": "PENDIENTE",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "gate_arte": "CERRADO",
+      "reformulacion_propuesta": {
+        "texto": null,
+        "verificada": false,
+        "nuevo_claim_id": null
+      },
+      "redaccion_prohibida": null,
+      "notas": "NEGATIVO: Capa C sin 'jurisdiccion'."
+    }
+  ],
+  "estado_agregado": "APTO_CON_MATICES",
+  "revisiones_pendientes": [
+    "bad15-claim"
+  ],
+  "gate_global_arte": "CERRADO"
+}

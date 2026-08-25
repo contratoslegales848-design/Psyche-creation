@@ -1,0 +1,77 @@
+{
+  "schema_version": "2.0",
+  "piece_id": "bad-3-drive-unico-respaldo-apto",
+  "claims": [
+    {
+      "claim_id": "bad3-claim",
+      "texto_exacto": "Afirmación cuyo único respaldo es un documento interno de Drive.",
+      "ubicacion": "titulo",
+      "tipo": "regla",
+      "alcance": "CAPA_A_TRANSVERSAL",
+      "jurisdiccion": null,
+      "nucleo_transversal": null,
+      "variaciones_materiales": null,
+      "jurisdicciones_revisadas": [
+        {
+          "pais": "España",
+          "fuente_ids": [
+            "f-drive"
+          ]
+        },
+        {
+          "pais": "México",
+          "fuente_ids": [
+            "f-drive"
+          ]
+        },
+        {
+          "pais": "Argentina",
+          "fuente_ids": [
+            "f-drive"
+          ]
+        }
+      ],
+      "diferencias_buscadas": "algo",
+      "contraejemplos_encontrados": "ninguno",
+      "justificacion_suficiencia_comparada": "algo",
+      "fuentes": [
+        {
+          "id": "f-drive",
+          "tipo_fuente": "DRIVE_INTERNO",
+          "titulo": "Matriz de contenido (Drive)",
+          "organismo_autor": "Equipo LegalMente",
+          "url": "https://docs.google.com/spreadsheets/d/xxxx",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-08-25",
+          "localizador": "fila 12",
+          "dominio_oficial_confirmado": false
+        }
+      ],
+      "confianza": "media",
+      "riesgo_falsa_universalizacion": "bajo",
+      "riesgo_asesoria": "ninguno",
+      "platform_review_required": false,
+      "confidentiality_review_required": false,
+      "estado": "APTO_CON_MATICES",
+      "revision_humana": {
+        "estado": "PENDIENTE",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "gate_arte": "CERRADO",
+      "reformulacion_propuesta": {
+        "texto": null,
+        "verificada": false,
+        "nuevo_claim_id": null
+      },
+      "redaccion_prohibida": null,
+      "notas": "NEGATIVO: Drive nunca puede sostener, por sí solo, ningún estado apto (ni con matices ni para narrativa)."
+    }
+  ],
+  "estado_agregado": "APTO_CON_MATICES",
+  "revisiones_pendientes": [
+    "bad3-claim"
+  ],
+  "gate_global_arte": "CERRADO"
+}

@@ -1,0 +1,36 @@
+{
+  "schema_version": "2.0",
+  "piece_id": "bad-18-campo-faltante",
+  "claims": [
+    {
+      "claim_id": "bad18-claim",
+      "texto_exacto": "Falta 'alcance' por completo.",
+      "ubicacion": "titulo",
+      "tipo": "regla",
+      "fuentes": [],
+      "confianza": "alta",
+      "riesgo_falsa_universalizacion": "bajo",
+      "riesgo_asesoria": "ninguno",
+      "platform_review_required": false,
+      "confidentiality_review_required": false,
+      "estado": "BLOQUEADO",
+      "revision_humana": {
+        "estado": "PENDIENTE",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "gate_arte": "CERRADO",
+      "reformulacion_propuesta": {
+        "texto": null,
+        "verificada": false,
+        "nuevo_claim_id": null
+      }
+    }
+  ],
+  "estado_agregado": "BLOQUEADO",
+  "revisiones_pendientes": [
+    "bad18-claim"
+  ],
+  "gate_global_arte": "CERRADO"
+}

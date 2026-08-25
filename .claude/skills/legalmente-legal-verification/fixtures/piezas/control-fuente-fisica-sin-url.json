@@ -1,0 +1,58 @@
+{
+  "schema_version": "2.0",
+  "piece_id": "control-fuente-fisica-sin-url",
+  "claims": [
+    {
+      "claim_id": "control-libro-claim-1",
+      "texto_exacto": "Afirmación doctrinal respaldada por un libro físico sin URL, identificado bibliográficamente.",
+      "ubicacion": "descripcion_tema",
+      "tipo": "definicion",
+      "alcance": "NO_APLICA",
+      "jurisdiccion": null,
+      "nucleo_transversal": null,
+      "variaciones_materiales": null,
+      "jurisdicciones_revisadas": null,
+      "diferencias_buscadas": null,
+      "contraejemplos_encontrados": null,
+      "justificacion_suficiencia_comparada": null,
+      "fuentes": [
+        {
+          "id": "f-libro-1",
+          "tipo_fuente": "ACADEMICA_IDENTIFICABLE",
+          "titulo": "Instituciones de Derecho Civil",
+          "organismo_autor": "Autor académico identificable",
+          "url": null,
+          "identificador_bibliografico": "ISBN 978-84-XXXXXX-X-X, Editorial X, 3ª ed., 2019",
+          "fecha_consulta": "2026-08-25",
+          "localizador": "p. 214, 3ª edición",
+          "dominio_oficial_confirmado": false
+        }
+      ],
+      "confianza": "media",
+      "riesgo_falsa_universalizacion": "bajo",
+      "riesgo_asesoria": "ninguno",
+      "platform_review_required": false,
+      "confidentiality_review_required": false,
+      "estado": "APTO_CON_MATICES",
+      "revision_humana": {
+        "estado": "PENDIENTE",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "gate_arte": "CERRADO",
+      "reformulacion_propuesta": {
+        "texto": null,
+        "verificada": false,
+        "nuevo_claim_id": null
+      },
+      "redaccion_prohibida": null,
+      "notas": "CONTROL — no es un fallo esperado: demuestra que una fuente sin URL pero con identificador bibliográfico completo (ISBN + editorial + edición + año) es válida per Paso 2.2 del encargo, y sostiene como máximo APTO_CON_MATICES (fuente académica, no oficial)."
+    }
+  ],
+  "estado_agregado": "APTO_CON_MATICES",
+  "revisiones_pendientes": [
+    "control-libro-claim-1"
+  ],
+  "gate_global_arte": "CERRADO"
+}
