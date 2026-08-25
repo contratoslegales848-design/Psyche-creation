@@ -1,0 +1,24 @@
+claim_id: bad-3
+texto_exacto: "Afirmación con fuente inválida."
+ubicacion: caption
+tipo: dato
+alcance: CAPA_A_TRANSVERSAL
+jurisdiccion:
+nucleo_transversal: "algo"
+variaciones_materiales:
+fuentes:
+  - titulo:
+    organismo_autor:
+    url:
+    fecha_consulta: "2026-08-25"
+    tipo_fuente: "fuente_secundaria"
+confianza: baja
+riesgo_falsa_universalizacion: bajo
+riesgo_asesoria: ninguno
+platform_review_required: false
+confidentiality_review_required: false
+redaccion_prohibida:
+redaccion_segura: "algo"
+estado: APTO_PARA_NARRATIVA
+revisor_humano_requerido: true
+notas:
