@@ -35,7 +35,7 @@ Separa cada afirmación verificable en un claim independiente. **Si una cita mez
 
 - `CAPA_A_TRANSVERSAL` — requiere `jurisdicciones_revisadas` con ≥3 países distintos y normalizados, cada uno con `fuente_ids` propios **cuya `jurisdicciones_cubiertas` incluya realmente ese país** (una fuente española nunca cubre automáticamente a México), más `diferencias_buscadas`, `contraejemplos_encontrados` y `justificacion_suficiencia_comparada`. El techo de estado para Capa A es el **mínimo** entre los techos de cada país por separado — una fuente Nivel 1 en un país no compensa fuentes débiles en los otros tres.
 - `CAPA_B_VARIABLE` — requiere `variaciones_materiales`.
-- `CAPA_C_NACIONAL` — requiere `jurisdiccion` (string o lista de strings, nunca un número) visible.
+- `CAPA_C_NACIONAL` — requiere `jurisdiccion` (string o lista de strings, nunca un número) visible. Cuando `jurisdiccion` es una lista (comparación explícita entre varios países), el techo también es el **mínimo entre el techo de cada país declarado** — un país sin fuente propia que realmente lo cubra frena todo el claim a `REQUIERE_INVESTIGACION`, nunca "alguna fuente en algún país declarado ya basta".
 - `NO_DETERMINADO` — falta de investigación. Solo válido con `estado: REQUIERE_INVESTIGACION`.
 - `NO_APLICA` — sin dimensión jurisdiccional (p. ej. autoría de una cita). Puede combinarse con `BLOQUEADO` cuando la investigación concluyó algo firme (una atribución refutada es `NO_APLICA + BLOQUEADO`, nunca `NO_DETERMINADO + BLOQUEADO`).
 
@@ -44,6 +44,8 @@ Separa cada afirmación verificable en un claim independiente. **Si una cita mez
 Cada fuente necesita `tipo_fuente` (enum cerrado), `localizador` concreto, `jurisdicciones_cubiertas` (qué países respalda de verdad — decláralo explícitamente, no lo des por hecho), y `verificacion_fuente` con tres booleanos separados: `origen_oficial_confirmado`, `texto_exacto_consultado`, `vigencia_comprobada` — cada uno con su propia base real, nunca marcado `true` por comodidad.
 
 **Ninguno de esos tres booleanos, ni siquiera los tres juntos, basta para que una fuente oficial alcance Nivel 1 si el hostname real de la URL no coincide con la lista cerrada de dominios oficiales del validador** (coincidencia exacta o de subdominio real, nunca por subcadena: `boe.es.evil.com` y `notboe.es` NO cuentan como `boe.es`). Si no pudiste acceder al texto oficial (p. ej. `WebFetch` bloqueado en el entorno), dilo en `observaciones` y deja `texto_exacto_consultado: false` — esa fuente entonces no puede sostener `APTO_PARA_NARRATIVA`, como máximo `APTO_CON_MATICES`.
+
+**Tampoco basta que el hostname sea oficial para que esa fuente cubra el país que tú quieras declarar.** Un hostname oficial solo puede respaldar el/los país(es) reales de su propio organismo (p. ej. `boe.es` solo España, `diputados.gob.mx` solo México) — declarar en `jurisdicciones_cubiertas` un país ajeno a ese organismo es un error estructural, no una advertencia.
 
 Nunca aceptes como fuente: tu propia memoria como modelo, otro contenido generado por IA, publicaciones sin origen identificable, o una cita viral sin obra identificable. **Drive nunca sostiene, por sí solo, ningún estado apto.**
 

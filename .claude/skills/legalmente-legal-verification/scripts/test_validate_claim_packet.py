@@ -169,9 +169,9 @@ class TestCapaAJurisdiccionFuente(unittest.TestCase):
 
     def test_fuente_con_jurisdiccion_correcta_por_pais_es_valida(self):
         fuentes = [
-            base_fuente(id="f-es", jurisdicciones_cubiertas=["España"]),
-            base_fuente(id="f-mx", jurisdicciones_cubiertas=["México"]),
-            base_fuente(id="f-ar", jurisdicciones_cubiertas=["Argentina"]),
+            base_fuente(id="f-es", url="https://www.boe.es/x", jurisdicciones_cubiertas=["España"]),
+            base_fuente(id="f-mx", url="https://www.diputados.gob.mx/x", jurisdicciones_cubiertas=["México"]),
+            base_fuente(id="f-ar", url="https://servicios.infoleg.gob.ar/x", jurisdicciones_cubiertas=["Argentina"]),
         ]
         c = base_claim(
             alcance="CAPA_A_TRANSVERSAL", fuentes=fuentes,
@@ -208,7 +208,11 @@ class TestCapaAJurisdiccionFuente(unittest.TestCase):
         self.assertEqual(ceiling, "APTO_CON_MATICES")
 
     def test_tres_fuente_ids_del_mismo_pais_no_cubren_los_otros(self):
-        f = base_fuente(id="f-mx", jurisdicciones_cubiertas=["México"])
+        # tipo secundaria: no aplica el cruce hostname<->jurisdicción (eso se
+        # prueba aparte en TestHostnameJurisdiccion); aquí lo que se prueba es
+        # que jurisdicciones_revisadas no acepta una fuente de otro país.
+        f = base_fuente(id="f-mx", tipo_fuente="SECUNDARIA_ESPECIALIZADA", url="https://blog-mx.example.com/x",
+                         jurisdicciones_cubiertas=["México"], verificacion_fuente=base_verificacion(False, False, False))
         c = base_claim(
             alcance="CAPA_A_TRANSVERSAL", fuentes=[f],
             jurisdicciones_revisadas=[
@@ -234,7 +238,10 @@ class TestTiposEstrictos(unittest.TestCase):
         self.assertTrue(any("'variaciones_materiales' debe ser string" in e for e in errors))
 
     def test_jurisdiccion_lista_de_strings_es_valida(self):
-        fuentes = [base_fuente(id="f1", jurisdicciones_cubiertas=["México"]), base_fuente(id="f2", jurisdicciones_cubiertas=["Colombia"])]
+        fuentes = [
+            base_fuente(id="f1", url="https://www.diputados.gob.mx/x", jurisdicciones_cubiertas=["México"]),
+            base_fuente(id="f2", tipo_fuente="AUTORIDAD_PUBLICA_OFICIAL", url="https://www.funcionpublica.gov.co/x", jurisdicciones_cubiertas=["Colombia"]),
+        ]
         c = base_claim(alcance="CAPA_C_NACIONAL", jurisdiccion=["México", "Colombia"], estado="APTO_CON_MATICES", fuentes=fuentes)
         errors, _, _, _ = vcp.validate_claim(c, "c")
         self.assertEqual(errors, [])
@@ -390,6 +397,188 @@ class TestHigieneRepositorio(unittest.TestCase):
             text = path.read_text(encoding="utf-8", errors="replace")
             for name in FORBIDDEN_REAL_NAMES:
                 self.assertNotIn(name, text, f"Nombre real {name!r} encontrado en {path}")
+
+
+class TestHostnameJurisdiccion(unittest.TestCase):
+    """Fase 1D, Paso 3: una fuente oficial nacional no puede autoafirmar
+    cobertura de países ajenos a su hostname."""
+
+    def test_boe_declarando_mexico_es_error(self):
+        f = base_fuente(url="https://www.boe.es/x", jurisdicciones_cubiertas=["México"])
+        errors, _ = vcp.validate_fuente(f, "f")
+        self.assertTrue(any("país(es) ajenos a su organismo" in e for e in errors))
+
+    def test_boe_declarando_cuatro_paises_es_error(self):
+        f = base_fuente(url="https://www.boe.es/x", jurisdicciones_cubiertas=["España", "México", "Argentina", "Perú"])
+        errors, _ = vcp.validate_fuente(f, "f")
+        self.assertTrue(any("país(es) ajenos a su organismo" in e for e in errors))
+
+    def test_diputados_mx_declarando_colombia_es_error(self):
+        f = base_fuente(url="https://www.diputados.gob.mx/x", jurisdicciones_cubiertas=["Colombia"])
+        errors, _ = vcp.validate_fuente(f, "f")
+        self.assertTrue(any("país(es) ajenos a su organismo" in e for e in errors))
+
+    def test_boe_declarando_solo_espana_es_valido(self):
+        f = base_fuente(url="https://www.boe.es/x", jurisdicciones_cubiertas=["España"])
+        errors, _ = vcp.validate_fuente(f, "f")
+        self.assertEqual(errors, [])
+
+    def test_academica_comparada_varios_paises_no_eleva_a_nivel_1(self):
+        """Una fuente académica/secundaria SÍ puede declarar varios países
+        (Paso 3, regla 4) — la validación de hostname solo aplica a fuentes
+        oficiales — pero nunca puede alcanzar Nivel 1."""
+        f = base_fuente(tipo_fuente="ACADEMICA_IDENTIFICABLE", url="https://revista-academica.edu/x",
+                         jurisdicciones_cubiertas=["España", "México", "Argentina"],
+                         verificacion_fuente=base_verificacion(False, False, False))
+        errors, _ = vcp.validate_fuente(f, "f")
+        self.assertEqual(errors, [])
+        self.assertNotEqual(vcp.compute_fuente_nivel(f), vcp.NIVEL_1_CONFIRMADO)
+        self.assertEqual(vcp.compute_fuente_nivel(f), vcp.NIVEL_3_ACADEMICA_SECUNDARIA)
+
+    def test_supranacional_ambito_valido(self):
+        f = base_fuente(url="https://eur-lex.europa.eu/x", jurisdicciones_cubiertas=["Unión Europea"])
+        errors, _ = vcp.validate_fuente(f, "f")
+        self.assertEqual(errors, [])
+
+    def test_supranacional_ambito_invalido(self):
+        f = base_fuente(url="https://eur-lex.europa.eu/x", jurisdicciones_cubiertas=["México"])
+        errors, _ = vcp.validate_fuente(f, "f")
+        self.assertTrue(any("país(es) ajenos a su organismo" in e for e in errors))
+
+    def test_hostname_desconocido_no_se_cruza(self):
+        """Un hostname oficial no incluido en la configuración falla cerrado
+        por la vía del nivel (Nivel 2), no por el cruce de jurisdicción
+        (que no puede aplicarse sin configuración)."""
+        f = base_fuente(url="https://www.algun-ministerio-no-listado.gob.uy/x", jurisdicciones_cubiertas=["Uruguay"])
+        errors, warnings = vcp.validate_fuente(f, "f")
+        self.assertEqual(errors, [])  # no se puede cruzar, no es un error estructural
+        self.assertTrue(warnings)     # pero sí genera advertencia de dominio no reconocido
+        self.assertNotEqual(vcp.compute_fuente_nivel(f), vcp.NIVEL_1_CONFIRMADO)
+
+
+class TestCapaCComparadaCobertura(unittest.TestCase):
+    """Fase 1D, Paso 4: cobertura COMPLETA por país en Capa C con varias
+    jurisdicciones — no 'alguna fuente cubre alguno de los países'."""
+
+    def _fuente_mx(self):
+        return base_fuente(id="f-mx", url="https://www.diputados.gob.mx/x", jurisdicciones_cubiertas=["México"])
+
+    def _fuente_co(self):
+        return base_fuente(id="f-co", tipo_fuente="AUTORIDAD_PUBLICA_OFICIAL",
+                            url="https://www.funcionpublica.gov.co/x", jurisdicciones_cubiertas=["Colombia"])
+
+    def test_dos_paises_solo_fuente_mexicana_estado_alto_es_error(self):
+        c = base_claim(alcance="CAPA_C_NACIONAL", jurisdiccion=["México", "Colombia"],
+                        estado="APTO_PARA_NARRATIVA", fuentes=[self._fuente_mx()])
+        errors, _, max_estado, _ = vcp.validate_claim(c, "c")
+        self.assertTrue(any("excede lo que las fuentes permiten" in e for e in errors))
+        self.assertEqual(max_estado, "REQUIERE_INVESTIGACION")
+
+    def test_dos_paises_solo_fuente_colombiana_estado_alto_es_error(self):
+        c = base_claim(alcance="CAPA_C_NACIONAL", jurisdiccion=["México", "Colombia"],
+                        estado="APTO_PARA_NARRATIVA", fuentes=[self._fuente_co()])
+        errors, _, max_estado, _ = vcp.validate_claim(c, "c")
+        self.assertTrue(any("excede lo que las fuentes permiten" in e for e in errors))
+        self.assertEqual(max_estado, "REQUIERE_INVESTIGACION")
+
+    def test_una_valida_una_no_verificada_estado_alto_es_error(self):
+        f_co_no_verificada = self._fuente_co()
+        f_co_no_verificada["verificacion_fuente"] = base_verificacion(False, False, False)
+        c = base_claim(alcance="CAPA_C_NACIONAL", jurisdiccion=["México", "Colombia"],
+                        estado="APTO_PARA_NARRATIVA", fuentes=[self._fuente_mx(), f_co_no_verificada])
+        errors, _, max_estado, _ = vcp.validate_claim(c, "c")
+        self.assertTrue(any("excede lo que las fuentes permiten" in e for e in errors))
+        self.assertEqual(max_estado, "APTO_CON_MATICES")
+
+    def test_una_valida_una_no_verificada_estado_matices_es_valido(self):
+        f_co_no_verificada = self._fuente_co()
+        f_co_no_verificada["verificacion_fuente"] = base_verificacion(False, False, False)
+        c = base_claim(alcance="CAPA_C_NACIONAL", jurisdiccion=["México", "Colombia"],
+                        estado="APTO_CON_MATICES", confianza="media", fuentes=[self._fuente_mx(), f_co_no_verificada])
+        errors, _, max_estado, _ = vcp.validate_claim(c, "c")
+        self.assertEqual(errors, [])
+
+    def test_ambas_fuentes_nivel_1_es_apto_para_narrativa(self):
+        c = base_claim(alcance="CAPA_C_NACIONAL", jurisdiccion=["México", "Colombia"],
+                        estado="APTO_PARA_NARRATIVA", fuentes=[self._fuente_mx(), self._fuente_co()])
+        errors, _, max_estado, _ = vcp.validate_claim(c, "c")
+        self.assertEqual(errors, [])
+        self.assertEqual(max_estado, "APTO_PARA_NARRATIVA")
+
+    def test_jurisdicciones_duplicadas_es_error(self):
+        c = base_claim(alcance="CAPA_C_NACIONAL", jurisdiccion=["México", "México"],
+                        estado="REQUIERE_INVESTIGACION", fuentes=[])
+        errors, _, _, _ = vcp.validate_claim(c, "c")
+        self.assertTrue(any("duplicado" in e for e in errors))
+
+    def test_jurisdiccion_lista_vacia_es_error(self):
+        c = base_claim(alcance="CAPA_C_NACIONAL", jurisdiccion=[], estado="REQUIERE_INVESTIGACION", fuentes=[])
+        errors, _, _, _ = vcp.validate_claim(c, "c")
+        self.assertTrue(any("no puede estar vacía" in e or "'jurisdiccion' debe ser string" in e for e in errors))
+
+    def test_sin_fuentes_todavia_requiere_investigacion_es_valido(self):
+        """No es un error declarar honestamente REQUIERE_INVESTIGACION para
+        una Capa C con países sin fuentes todavía — el error es solo cuando
+        el estado declarado excede lo que las fuentes permiten."""
+        c = base_claim(alcance="CAPA_C_NACIONAL", jurisdiccion=["México", "Colombia"],
+                        estado="REQUIERE_INVESTIGACION", confianza="baja", fuentes=[])
+        errors, _, max_estado, _ = vcp.validate_claim(c, "c")
+        self.assertEqual(errors, [])
+        self.assertEqual(max_estado, "REQUIERE_INVESTIGACION")
+
+
+class TestHashCompleto(unittest.TestCase):
+    """Fase 1D, Paso 5: el hash de aprobación cubre TODO el claim excepto
+    revision_humana y gate_arte — cualquier otro cambio lo invalida."""
+
+    def _cambio_invalida(self, mutate_fn):
+        c = approved_claim()
+        mutate_fn(c)
+        errors, _, _, gate = vcp.validate_claim(c, "c")
+        self.assertTrue(any("no coincide con el hash recalculado" in e for e in errors), f"no detectó el cambio: {errors}")
+        self.assertEqual(gate, "CERRADO")
+
+    def test_cambiar_titulo_de_fuente_invalida(self):
+        self._cambio_invalida(lambda c: c["fuentes"][0].__setitem__("titulo", "Título cambiado tras aprobar"))
+
+    def test_cambiar_organismo_autor_invalida(self):
+        self._cambio_invalida(lambda c: c["fuentes"][0].__setitem__("organismo_autor", "Otro organismo"))
+
+    def test_cambiar_fecha_consulta_invalida(self):
+        self._cambio_invalida(lambda c: c["fuentes"][0].__setitem__("fecha_consulta", "2020-01-01"))
+
+    def test_cambiar_tipo_de_claim_invalida(self):
+        self._cambio_invalida(lambda c: c.__setitem__("tipo", "cita"))
+
+    def test_cambiar_ubicacion_invalida(self):
+        self._cambio_invalida(lambda c: c.__setitem__("ubicacion", "caption"))
+
+    def test_cambiar_confianza_invalida(self):
+        self._cambio_invalida(lambda c: c.__setitem__("confianza", "media"))
+
+    def test_cambiar_riesgo_asesoria_invalida(self):
+        self._cambio_invalida(lambda c: c.__setitem__("riesgo_asesoria", "alto"))
+
+    def test_cambiar_platform_review_status_invalida(self):
+        # Este cambio dispara además review_allows_gate()=False, así que el
+        # motivo reportado es la incoherencia de gate, no el mensaje de hash
+        # — igual de válido: el punto es que la aprobación deja de sostenerse.
+        c = approved_claim()
+        c["platform_review"] = base_review(required=True, status="PENDIENTE")
+        errors, _, _, gate = vcp.validate_claim(c, "c")
+        self.assertTrue(errors)
+        self.assertEqual(gate, "CERRADO")
+
+    def test_cambiar_reformulacion_propuesta_invalida(self):
+        self._cambio_invalida(lambda c: c.__setitem__("reformulacion_propuesta", {"texto": "algo nuevo tras aprobar", "verificada": False, "nuevo_claim_id": None}))
+
+    def test_url_y_localizador_sin_cambios_hash_estable(self):
+        """Control: si NADA cambia, el hash sigue coincidiendo y el gate
+        permanece abierto."""
+        c = approved_claim()
+        errors, _, _, gate = vcp.validate_claim(c, "c")
+        self.assertEqual(errors, [])
+        self.assertEqual(gate, "ABIERTO")
 
 
 if __name__ == "__main__":

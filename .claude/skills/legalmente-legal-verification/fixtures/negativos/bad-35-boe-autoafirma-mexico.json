@@ -1,0 +1,101 @@
+{
+  "schema_version": "3.0",
+  "piece_id": "neg",
+  "claims": [
+    {
+      "claim_id": "c1",
+      "texto_exacto": "Fuente BOE autoafirmando cobertura de México además de España.",
+      "ubicacion": "titulo",
+      "tipo": "definicion",
+      "alcance": "CAPA_A_TRANSVERSAL",
+      "jurisdiccion": null,
+      "nucleo_transversal": null,
+      "variaciones_materiales": null,
+      "jurisdicciones_revisadas": [
+        {
+          "pais": "España",
+          "fuente_ids": [
+            "f35"
+          ]
+        },
+        {
+          "pais": "México",
+          "fuente_ids": [
+            "f35"
+          ]
+        },
+        {
+          "pais": "Argentina",
+          "fuente_ids": [
+            "f35"
+          ]
+        }
+      ],
+      "diferencias_buscadas": "x",
+      "contraejemplos_encontrados": "ninguno",
+      "justificacion_suficiencia_comparada": "x",
+      "fuentes": [
+        {
+          "id": "f35",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Código Civil español",
+          "organismo_autor": "BOE",
+          "url": "https://www.boe.es/x",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-08-25",
+          "localizador": "art. 1740",
+          "jurisdicciones_cubiertas": [
+            "España",
+            "México"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": true,
+            "texto_exacto_consultado": true,
+            "vigencia_comprobada": true,
+            "fecha_comprobacion": "2026-08-25",
+            "metodo_o_evidencia": "Lectura directa del texto oficial vigente",
+            "observaciones": null
+          }
+        }
+      ],
+      "confianza": "alta",
+      "riesgo_falsa_universalizacion": "bajo",
+      "riesgo_asesoria": "ninguno",
+      "platform_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "confidentiality_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "estado": "APTO_PARA_NARRATIVA",
+      "revision_humana": {
+        "estado": "PENDIENTE",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null,
+        "contenido_hash_sha256": null
+      },
+      "gate_arte": "CERRADO",
+      "reformulacion_propuesta": {
+        "texto": null,
+        "verificada": false,
+        "nuevo_claim_id": null
+      },
+      "redaccion_prohibida": null,
+      "notas": "NEGATIVO (Fase 1D, Bypass E): una fuente de boe.es no puede autoafirmar que cubre México."
+    }
+  ],
+  "estado_agregado": "APTO_PARA_NARRATIVA",
+  "revisiones_pendientes": [
+    "c1"
+  ],
+  "gate_global_arte": "CERRADO"
+}

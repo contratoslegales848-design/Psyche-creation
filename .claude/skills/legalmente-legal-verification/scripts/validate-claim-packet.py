@@ -108,6 +108,40 @@ OFFICIAL_HOSTNAMES = {
     "eur-lex.europa.eu",
 }
 
+# Qué jurisdicción(es) puede respaldar CADA hostname oficial — configuración
+# determinista, cerrada y explícita (Fase 1D, Paso 3). Una fuente oficial
+# nacional NUNCA puede autoafirmar en 'jurisdicciones_cubiertas' un país
+# ajeno al organismo real de su hostname: 'boe.es' no puede declarar que
+# cubre México. Los ámbitos supranacionales (eur-lex.europa.eu) se declaran
+# explícitamente, nunca se asumen como "cubre a toda la audiencia".
+# Un hostname oficial no incluido aquí simplemente no se cruza (ya cae en
+# Nivel 2 por hostname_matches_official, que falla cerrado por separado).
+OFFICIAL_HOSTNAME_JURISDICTIONS = {
+    "boe.es": ["España"], "poderjudicial.es": ["España"], "congreso.es": ["España"], "senado.es": ["España"],
+    "diputados.gob.mx": ["México"], "senado.gob.mx": ["México"], "dof.gob.mx": ["México"],
+    "scjn.gob.mx": ["México"], "gob.mx": ["México"],
+    "infoleg.gob.ar": ["Argentina"], "servicios.infoleg.gob.ar": ["Argentina"],
+    "csjn.gov.ar": ["Argentina"], "boletinoficial.gob.ar": ["Argentina"],
+    "minjus.gob.pe": ["Perú"], "spij.minjus.gob.pe": ["Perú"], "tc.gob.pe": ["Perú"], "pj.gob.pe": ["Perú"],
+    "bcn.cl": ["Chile"], "www.bcn.cl": ["Chile"],
+    "funcionpublica.gov.co": ["Colombia"], "corteconstitucional.gov.co": ["Colombia"],
+    "eur-lex.europa.eu": ["Unión Europea"],
+}
+
+
+def official_hostname_allowed_jurisdictions(url):
+    """Jurisdicciones normalizadas que el hostname de esta URL puede
+    respaldar, según OFFICIAL_HOSTNAME_JURISDICTIONS (match exacto o de
+    subdominio real, igual que hostname_matches_official). None si el
+    hostname no está en la configuración (no se puede cruzar)."""
+    host = extract_hostname(url)
+    if not host:
+        return None
+    for allowed_host, jurisdicciones in OFFICIAL_HOSTNAME_JURISDICTIONS.items():
+        if host == allowed_host or host.endswith("." + allowed_host):
+            return [normalize_country(j) for j in jurisdicciones]
+    return None
+
 
 class Tag:
     ERROR = "[ERROR ESTRUCTURAL]"
@@ -195,34 +229,27 @@ def as_list(value):
     return [value]
 
 
+# Campos EXCLUIDOS del hash de aprobación, y por qué:
+#   - 'revision_humana': es el objeto que CONTIENE el hash — incluirlo sería
+#     circular (el hash tendría que incluirse a sí mismo).
+#   - 'gate_arte': es un veredicto CALCULADO por el validador a partir de todo
+#     lo demás, no contenido que alguien pueda aprobar; recalcularlo tras
+#     cambiar cualquier otro campo es correcto y no debe invalidar el hash.
+# TODO lo demás del claim (texto, ubicación, tipo, alcance, jurisdicción,
+# variaciones, evidencia comparada, confianza, riesgos, estado, la lista
+# COMPLETA de fuentes con cada uno de sus campos — título, organismo/autor,
+# url/identificador, fecha de consulta, localizador, jurisdicciones
+# cubiertas, verificación completa —, platform_review, confidentiality_review,
+# reformulacion_propuesta y redaccion_prohibida) SÍ forma parte del hash: es
+# la opción más segura (Fase 1D, Paso 5) — cualquier cambio en cualquiera de
+# esos campos después de aprobar invalida la aprobación.
+HASH_EXCLUDED_FIELDS = {"revision_humana", "gate_arte"}
+
+
 def canonical_claim_content(claim):
-    """Subconjunto determinista del claim que una aprobación humana debe
-    ligar por hash: si cualquiera de estos campos cambia después de aprobar,
-    la aprobación queda invalidada. Incluye texto, alcance, jurisdicción y
-    el contenido verificable de cada fuente (id, tipo, url/identificador,
-    localizador, jurisdicciones cubiertas, verificación)."""
-    fuentes = []
-    for f in claim.get("fuentes") or []:
-        if not isinstance(f, dict):
-            continue
-        fuentes.append({
-            "id": f.get("id"),
-            "tipo_fuente": f.get("tipo_fuente"),
-            "url": f.get("url"),
-            "identificador_bibliografico": f.get("identificador_bibliografico"),
-            "localizador": f.get("localizador"),
-            "jurisdicciones_cubiertas": f.get("jurisdicciones_cubiertas"),
-            "verificacion_fuente": f.get("verificacion_fuente"),
-        })
-    return {
-        "claim_id": claim.get("claim_id"),
-        "texto_exacto": claim.get("texto_exacto"),
-        "alcance": claim.get("alcance"),
-        "jurisdiccion": claim.get("jurisdiccion"),
-        "variaciones_materiales": claim.get("variaciones_materiales"),
-        "jurisdicciones_revisadas": claim.get("jurisdicciones_revisadas"),
-        "fuentes": fuentes,
-    }
+    """Todo el claim excepto HASH_EXCLUDED_FIELDS — ver arriba por qué esos
+    dos, y solo esos dos, quedan fuera del hash de aprobación."""
+    return {k: v for k, v in claim.items() if k not in HASH_EXCLUDED_FIELDS}
 
 
 def compute_content_hash(claim):
@@ -335,6 +362,25 @@ def validate_fuente(fuente, path):
             "cerrada del validador."
         )
 
+    # Una fuente oficial NACIONAL no puede autoafirmar en 'jurisdicciones_cubiertas'
+    # un país ajeno al organismo real de su hostname (Fase 1D, Paso 3): 'boe.es'
+    # no puede declarar que cubre México. Solo se cruza cuando el hostname SÍ
+    # está en la configuración cerrada — si no está, ya cae a Nivel 2 por
+    # hostname_matches_official, y no se puede cruzar contra nada (falla cerrado
+    # por ese otro camino).
+    if has_url and tipo_fuente in TIPOS_FUENTE_OFICIAL:
+        allowed = official_hostname_allowed_jurisdictions(url)
+        if allowed is not None:
+            declaradas = normalize_countries_list(jurisdicciones_cubiertas)
+            ajenas = [j for j in declaradas if j not in allowed]
+            if ajenas:
+                errors.append(
+                    f"{path}: fuente oficial nacional ({extract_hostname(url)!r}) declara en "
+                    f"'jurisdicciones_cubiertas' país(es) ajenos a su organismo: {ajenas!r} — "
+                    f"este hostname solo puede respaldar {sorted(allowed)!r}. Una fuente de un país "
+                    "no puede autoatribuirse cobertura de otro."
+                )
+
     return errors, warnings
 
 
@@ -386,6 +432,35 @@ def compute_max_estado_por_fuentes(fuentes):
 
 def estado_rank(estado):
     return ESTADO_LADDER.index(estado) if estado in ESTADO_LADDER else -1
+
+
+def compute_ceiling_by_countries(paises_normalizados, fuentes):
+    """Función compartida (Fase 1D, Paso 4) para Capa A y Capa C comparada:
+    para cada país en 'paises_normalizados', calcula el techo con SOLO las
+    fuentes cuyo 'jurisdicciones_cubiertas' realmente incluye ese país —
+    nunca 'existe alguna fuente Nivel 1 en cualquier parte'. El techo final
+    es el MÍNIMO entre todos los países: una fuente Nivel 1 en un país no
+    compensa la falta de evidencia en otro."""
+    ceilings = []
+    for pais in paises_normalizados:
+        niveles = [
+            compute_fuente_nivel(f) for f in fuentes
+            if isinstance(f, dict) and pais in normalize_countries_list(f.get("jurisdicciones_cubiertas"))
+        ]
+        ceilings.append(nivel_to_estado_ceiling(niveles))
+    if not ceilings:
+        return "REQUIERE_INVESTIGACION"
+    return min(ceilings, key=estado_rank)
+
+
+def compute_capa_c_ceiling(jurisdiccion_field, fuentes):
+    """Techo de Capa C cuando 'jurisdiccion' es uno o varios países: reutiliza
+    compute_ceiling_by_countries en vez de 'alguna fuente cubre alguno de los
+    países' (esa era la falla — Bypass D de la Fase 1D)."""
+    paises = normalize_countries_list(jurisdiccion_field) if isinstance(jurisdiccion_field, list) else (
+        [normalize_country(jurisdiccion_field)] if is_nonempty_str(jurisdiccion_field) else []
+    )
+    return compute_ceiling_by_countries(paises, fuentes)
 
 
 def compute_capa_a_ceiling(claim, fuentes_by_id):
@@ -591,13 +666,26 @@ def validate_claim(claim, path):
     if alcance == "CAPA_C_NACIONAL" and not jurisdiccion:
         errors.append(f"{path}: Capa C (CAPA_C_NACIONAL) requiere 'jurisdiccion' con al menos un país.")
     if alcance == "CAPA_C_NACIONAL" and jurisdiccion:
-        paises_c = normalize_countries_list(jurisdiccion) if isinstance(jurisdiccion, list) else [normalize_country(jurisdiccion)]
-        cubiertas_alguna = any(
-            any(pc in normalize_countries_list(f.get("jurisdicciones_cubiertas")) for pc in paises_c)
-            for f in fuentes if isinstance(f, dict)
-        )
-        if fuentes and not cubiertas_alguna:
-            errors.append(f"{path}: Capa C declara jurisdicción {jurisdiccion!r} pero ninguna fuente tiene esa jurisdicción en 'jurisdicciones_cubiertas'.")
+        # Fase 1D, Paso 4: 'jurisdiccion' no puede estar vacía ni tener países
+        # duplicados. La cobertura COMPLETA por país (no "alguna fuente cubre
+        # alguno de los países declarados", el Bypass D) se aplica más abajo
+        # a través de compute_capa_c_ceiling: un país sin fuente que lo cubra
+        # topa el techo en REQUIERE_INVESTIGACION para TODA la Capa C, sin
+        # bloquear con un error duro el caso legítimo de "todavía sin fuentes,
+        # correctamente declarado REQUIERE_INVESTIGACION".
+        paises_c_raw = jurisdiccion if isinstance(jurisdiccion, list) else [jurisdiccion]
+        if not paises_c_raw:
+            errors.append(f"{path}: Capa C con 'jurisdiccion' como lista no puede estar vacía.")
+        else:
+            seen_c = set()
+            for p in paises_c_raw:
+                norm = normalize_country(p) if is_nonempty_str(p) else None
+                if norm is None:
+                    continue
+                if norm in seen_c:
+                    errors.append(f"{path}: país duplicado (normalizado) en 'jurisdiccion': {p!r}.")
+                    continue
+                seen_c.add(norm)
 
     if alcance == "CAPA_B_VARIABLE" and not variaciones:
         errors.append(f"{path}: Capa B (CAPA_B_VARIABLE) requiere 'variaciones_materiales'.")
@@ -658,13 +746,21 @@ def validate_claim(claim, path):
         return errors, warnings, None, None
 
     # --- reglas de suficiencia de fuentes vs. estado declarado ---
-    max_estado = compute_capa_a_ceiling(claim, fuentes_by_id) if alcance == "CAPA_A_TRANSVERSAL" else compute_max_estado_por_fuentes(fuentes)
+    if alcance == "CAPA_A_TRANSVERSAL":
+        max_estado = compute_capa_a_ceiling(claim, fuentes_by_id)
+    elif alcance == "CAPA_C_NACIONAL" and jurisdiccion:
+        max_estado = compute_capa_c_ceiling(jurisdiccion, fuentes)
+    else:
+        max_estado = compute_max_estado_por_fuentes(fuentes)
     if estado in ESTADO_LADDER:
         if estado_rank(estado) > estado_rank(max_estado):
             extra = (
                 " Para Capa A, el techo es el mínimo entre todas las jurisdicciones declaradas, "
                 "no el máximo de cualquier fuente suelta."
-                if alcance == "CAPA_A_TRANSVERSAL" else ""
+                if alcance == "CAPA_A_TRANSVERSAL" else (
+                    " Para Capa C con varios países, el techo es el mínimo entre todos ellos."
+                    if alcance == "CAPA_C_NACIONAL" and isinstance(jurisdiccion, list) and len(jurisdiccion) > 1 else ""
+                )
             )
             errors.append(
                 f"{path}: estado declarado '{estado}' excede lo que las fuentes permiten "

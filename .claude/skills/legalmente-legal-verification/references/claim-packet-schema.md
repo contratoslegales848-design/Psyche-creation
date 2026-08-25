@@ -45,6 +45,10 @@
 
 Si falta cualquiera de las 4 → la fuente cae a **Nivel 2**, techo `APTO_CON_MATICES`. El campo `origen_oficial_confirmado` autoafirmado, por sí solo, nunca es prueba suficiente — es exactamente el bypass que esta versión cierra (ver `docs/` o el informe de la Fase 1C).
 
+### `jurisdicciones_cubiertas` de una fuente oficial nacional: no es autoafirmable (Fase 1D)
+
+Una fuente `NORMA_OFICIAL`/`JURISPRUDENCIA_OFICIAL`/`AUTORIDAD_PUBLICA_OFICIAL` cuya URL coincide con un hostname oficial conocido **no puede declarar en `jurisdicciones_cubiertas` un país ajeno al organismo real de ese hostname**. El validador mantiene una tabla cerrada `OFFICIAL_HOSTNAME_JURISDICTIONS` (p. ej. `boe.es` → España; `diputados.gob.mx`/`dof.gob.mx`/`scjn.gob.mx` → México; `infoleg.gob.ar`/`csjn.gov.ar` → Argentina; `spij.minjus.gob.pe`/`tc.gob.pe` → Perú; `funcionpublica.gov.co`/`corteconstitucional.gov.co` → Colombia; `bcn.cl` → Chile; `eur-lex.europa.eu` → un ámbito explícito `"Unión Europea"`, nunca un país concreto). Si una fuente con ese hostname declara cualquier país fuera de la lista permitida para ese dominio → `[ERROR ESTRUCTURAL]` explícito (cierra el Bypass E: el BOE ya no puede autoatribuirse cobertura de México, Argentina o Perú solo porque lo escriba en el JSON). Un hostname oficial que no está en la tabla no falla — genera advertencia, no bloquea — pero tampoco puede alcanzar Nivel 1 por la condición 3 de arriba. Las fuentes `ACADEMICA_IDENTIFICABLE`/`SECUNDARIA_ESPECIALIZADA` no tienen esta restricción: pueden declarar cobertura de varios países libremente, pero nunca pasan de Nivel 3 (techo `APTO_CON_MATICES`), así que esa cobertura amplia nunca por sí sola habilita `APTO_PARA_NARRATIVA`.
+
 | Nivel | Condición | Techo |
 |---|---|---|
 | 1 — Confirmado (las 4 condiciones) | | `APTO_PARA_NARRATIVA` |
@@ -60,6 +64,10 @@ Para `alcance: CAPA_A_TRANSVERSAL`, `jurisdicciones_revisadas` es una lista de `
 2. Para cada país, cada `fuente_id` referenciado debe existir **y** su `jurisdicciones_cubiertas` debe incluir ese país — si no, error explícito ("la fuente X no cubre esta jurisdicción").
 3. Calcula el **techo de cada país por separado** (el mejor nivel entre sus propias fuentes) y el techo final de la Capa A es el **mínimo** entre todos los países — no el máximo de cualquier fuente suelta. Una fuente Nivel 1 en España más tres fuentes sin verificar en México/Argentina/Perú da como techo `APTO_CON_MATICES`, el de los países más débiles, nunca `APTO_PARA_NARRATIVA`.
 
+## Capa C nacional comparada: cobertura completa exigida, no "alguna fuente cubre algún país" (Fase 1D)
+
+Cuando `alcance: CAPA_C_NACIONAL` y `jurisdiccion` es una **lista** de países (comparación explícita entre varios países concretos, no un solo país), el validador ya no acepta que "alguna fuente cubra algún país declarado". Usa la misma lógica de techo-por-país-y-mínimo que Capa A (función compartida `compute_ceiling_by_countries`, reutilizada también por `compute_capa_a_ceiling` y `compute_capa_c_ceiling` — sin duplicar la lógica de verificación de fuentes): para cada país declarado calcula el mejor nivel entre las fuentes cuya `jurisdicciones_cubiertas` realmente lo incluye, y el techo final es el **mínimo** entre todos los países declarados. Un país declarado sin ninguna fuente propia da techo `REQUIERE_INVESTIGACION` para ese país — y por tanto para toda la comparación, salvo que el `estado` declarado ya sea honestamente `REQUIERE_INVESTIGACION` (eso sigue siendo válido: declarar la verdad nunca es un error). Duplicar el mismo país en la lista, o declarar la lista vacía, es rechazado directamente como error estructural.
+
 ## Objeto REVISION_HUMANA (reemplaza el `apto_para_arte` booleano de v2)
 
 | Campo | Notas |
@@ -67,7 +75,9 @@ Para `alcance: CAPA_A_TRANSVERSAL`, `jurisdicciones_revisadas` es una lista de `
 | `estado` | `PENDIENTE` / `APROBADO` / `RECHAZADO`. Todo claim producido por el modelo nace `PENDIENTE`. |
 | `revisor`, `fecha` | Obligatorios (no vacíos) si `estado = APROBADO`. **Nunca un nombre real en fixtures.** |
 | `observaciones` | string o null. |
-| `contenido_hash_sha256` | **Obligatorio si `estado = APROBADO`.** 64 caracteres hexadecimales — SHA-256 de un JSON canónico determinista de `{claim_id, texto_exacto, alcance, jurisdiccion, variaciones_materiales, jurisdicciones_revisadas, fuentes[id/tipo_fuente/url/identificador_bibliografico/localizador/jurisdicciones_cubiertas/verificacion_fuente]}` (ver `compute_content_hash` en el script). Si el texto, alcance, jurisdicción, fuentes o localizadores cambian después de aprobar, el hash recalculado ya no coincide y **la aprobación queda invalidada automáticamente** — el gate vuelve a `CERRADO` y el validador lo marca como error. |
+| `contenido_hash_sha256` | **Obligatorio si `estado = APROBADO`.** 64 caracteres hexadecimales — SHA-256 de un JSON canónico determinista. |
+
+**Cobertura del hash (Fase 1D — cierra el Bypass F):** el hash ya no cubre solo un subconjunto de campos. Cubre **todo el claim excepto `revision_humana` y `gate_arte`** (`HASH_EXCLUDED_FIELDS` en el script) — se excluyen justo esos dos porque son el objeto que registra la aprobación misma y el resultado calculado, no contenido aprobado; todo lo demás, incluidos `titulo`, `organismo_autor` y `fecha_consulta` de **cada** fuente, la `confianza`, los riesgos, el `estado` declarado, `platform_review`/`confidentiality_review`, `reformulacion_propuesta` y `redaccion_prohibida`, entra en el hash. Antes de la Fase 1D el hash omitía `titulo`/`organismo_autor`/`fecha_consulta` de las fuentes — eso permitía cambiar la fuente citada (p. ej. de una norma vigente a una derogada, o de un organismo a otro) sin invalidar una aprobación ya dada; ese hueco quedó cerrado. Si cualquier campo cubierto cambia después de aprobar, el hash recalculado ya no coincide y **la aprobación queda invalidada automáticamente** — el gate vuelve a `CERRADO` y el validador lo marca como error.
 
 ## Objetos PLATFORM_REVIEW / CONFIDENTIALITY_REVIEW (reemplazan los booleanos de v2)
 
