@@ -1,0 +1,98 @@
+name: LegalMente — Verificación jurídica
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - ".claude/skills/legalmente-legal-verification/**"
+      - ".github/workflows/legalmente-legal-verification.yml"
+  push:
+    branches: [main]
+    paths:
+      - ".claude/skills/legalmente-legal-verification/**"
+      - ".github/workflows/legalmente-legal-verification.yml"
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+concurrency:
+  group: legalmente-legal-verification-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: Validar skill jurídica (unittest + fixtures + higiene)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: .claude/skills/legalmente-legal-verification
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: compileall (detecta errores de sintaxis)
+        run: python3 -m compileall -q scripts/
+
+      - name: git diff --check (sin conflictos de espacio en blanco)
+        working-directory: .
+        run: git diff --check
+
+      - name: Sin bytecode rastreado (__pycache__, .pyc, .pyo)
+        working-directory: .
+        run: |
+          set -e
+          MATCHES="$(git ls-files -- '*.pyc' '*.pyo' '*__pycache__*')"
+          if [ -n "$MATCHES" ]; then
+            echo "Se encontró bytecode rastreado en el repositorio:"
+            echo "$MATCHES"
+            exit 1
+          fi
+          echo "Sin bytecode rastreado."
+
+      - name: Pruebas unitarias (unittest)
+        working-directory: .claude/skills/legalmente-legal-verification/scripts
+        run: python3 -m unittest test_validate_claim_packet -v
+
+      - name: Fixtures positivos deben validar (exit 0)
+        run: |
+          set -e
+          shopt -s nullglob
+          files=(fixtures/piezas/*.json)
+          if [ "${#files[@]}" -eq 0 ]; then
+            echo "No se encontraron fixtures positivos en fixtures/piezas/ — la skill no puede considerarse validada."
+            exit 1
+          fi
+          echo "Fixtures positivos encontrados: ${#files[@]}"
+          fail=0
+          for f in "${files[@]}"; do
+            if ! python3 scripts/validate-claim-packet.py "$f"; then
+              echo "FALLÓ (debía ser exit 0): $f"
+              fail=1
+            fi
+          done
+          exit $fail
+
+      - name: Fixtures negativos deben ser rechazados (exit distinto de 0)
+        run: |
+          set -e
+          shopt -s nullglob
+          files=(fixtures/negativos/*.json)
+          if [ "${#files[@]}" -eq 0 ]; then
+            echo "No se encontraron fixtures negativos en fixtures/negativos/ — la skill no puede considerarse validada."
+            exit 1
+          fi
+          echo "Fixtures negativos encontrados: ${#files[@]}"
+          fail=0
+          for f in "${files[@]}"; do
+            if python3 scripts/validate-claim-packet.py "$f" >/dev/null 2>&1; then
+              echo "FALLÓ (debía ser exit distinto de 0, fue aceptado): $f"
+              fail=1
+            fi
+          done
+          exit $fail
