@@ -40,12 +40,19 @@ def base_verificacion(origen=True, texto=True, vigencia=True):
 
 
 def base_fuente(**overrides):
+    """Por defecto es una fuente Nivel 1 VÁLIDA contra el registro único
+    (boe-es / España): organismo canónico y 'registro_oficial_id' coherentes
+    con el hostname por defecto. Cualquier prueba que cambie 'url', 'tipo_fuente'
+    o 'jurisdicciones_cubiertas' a algo que ya no sea boe.es/NORMA_OFICIAL/España
+    debe también pasar 'registro_oficial_id' (y a menudo 'organismo_autor')
+    coherentes, o dejar explícito que se está probando una incoherencia."""
     f = {
         "id": "f1", "tipo_fuente": "NORMA_OFICIAL", "titulo": "Ley X",
-        "organismo_autor": "Autoridad X", "url": "https://www.boe.es/algo",
+        "organismo_autor": "Agencia Estatal BOE", "url": "https://www.boe.es/algo",
         "identificador_bibliografico": None, "fecha_consulta": TODAY,
         "localizador": "art. 1", "jurisdicciones_cubiertas": ["España"],
         "verificacion_fuente": base_verificacion(),
+        "registro_oficial_id": "boe-es",
     }
     f.update(overrides)
     return f
@@ -92,7 +99,7 @@ def approved_claim(**overrides):
 def base_piece(claims, **overrides):
     estados = [c["estado"] for c in claims]
     p = {
-        "schema_version": "3.0", "piece_id": "p1", "claims": claims,
+        "schema_version": "4.0", "piece_id": "p1", "claims": claims,
         "estado_agregado": vcp.compute_estado_agregado(estados),
         "revisiones_pendientes": sorted(vcp.compute_revisiones_pendientes(claims)),
         "gate_global_arte": "CERRADO",
@@ -129,7 +136,7 @@ class TestFuenteNivelFailClosed(unittest.TestCase):
     def test_origen_confirmado_true_pero_hostname_falso_no_es_nivel_1(self):
         """Bypass A: el booleano autoafirmado NUNCA basta solo — hace falta
         que el hostname real coincida con la lista cerrada."""
-        f = base_fuente(url="https://mexico.justia.com/x")
+        f = base_fuente(url="https://mexico.justia.com/x", registro_oficial_id=None)
         self.assertNotEqual(vcp.compute_fuente_nivel(f), vcp.NIVEL_1_CONFIRMADO)
         self.assertEqual(vcp.compute_fuente_nivel(f), vcp.NIVEL_2_DECLARADO_NO_VERIFICADO)
 
@@ -142,11 +149,13 @@ class TestFuenteNivelFailClosed(unittest.TestCase):
         self.assertNotEqual(vcp.compute_fuente_nivel(f), vcp.NIVEL_1_CONFIRMADO)
 
     def test_secundaria_es_nivel_3(self):
-        f = base_fuente(tipo_fuente="SECUNDARIA_ESPECIALIZADA", verificacion_fuente=base_verificacion(False, False, False))
+        f = base_fuente(tipo_fuente="SECUNDARIA_ESPECIALIZADA", registro_oficial_id=None,
+                         verificacion_fuente=base_verificacion(False, False, False))
         self.assertEqual(vcp.compute_fuente_nivel(f), vcp.NIVEL_3_ACADEMICA_SECUNDARIA)
 
     def test_drive_es_nivel_4(self):
-        f = base_fuente(tipo_fuente="DRIVE_INTERNO", verificacion_fuente=base_verificacion(False, False, False))
+        f = base_fuente(tipo_fuente="DRIVE_INTERNO", registro_oficial_id=None,
+                         verificacion_fuente=base_verificacion(False, False, False))
         self.assertEqual(vcp.compute_fuente_nivel(f), vcp.NIVEL_4_DRIVE)
 
 
@@ -170,8 +179,10 @@ class TestCapaAJurisdiccionFuente(unittest.TestCase):
     def test_fuente_con_jurisdiccion_correcta_por_pais_es_valida(self):
         fuentes = [
             base_fuente(id="f-es", url="https://www.boe.es/x", jurisdicciones_cubiertas=["España"]),
-            base_fuente(id="f-mx", url="https://www.diputados.gob.mx/x", jurisdicciones_cubiertas=["México"]),
-            base_fuente(id="f-ar", url="https://servicios.infoleg.gob.ar/x", jurisdicciones_cubiertas=["Argentina"]),
+            base_fuente(id="f-mx", url="https://www.diputados.gob.mx/x", jurisdicciones_cubiertas=["México"],
+                        organismo_autor="Congreso de la Unión (México)", registro_oficial_id="diputados-gob-mx"),
+            base_fuente(id="f-ar", url="https://servicios.infoleg.gob.ar/x", jurisdicciones_cubiertas=["Argentina"],
+                        organismo_autor="InfoLEG", registro_oficial_id="infoleg-gob-ar"),
         ]
         c = base_claim(
             alcance="CAPA_A_TRANSVERSAL", fuentes=fuentes,
@@ -212,6 +223,7 @@ class TestCapaAJurisdiccionFuente(unittest.TestCase):
         # prueba aparte en TestHostnameJurisdiccion); aquí lo que se prueba es
         # que jurisdicciones_revisadas no acepta una fuente de otro país.
         f = base_fuente(id="f-mx", tipo_fuente="SECUNDARIA_ESPECIALIZADA", url="https://blog-mx.example.com/x",
+                         registro_oficial_id=None,
                          jurisdicciones_cubiertas=["México"], verificacion_fuente=base_verificacion(False, False, False))
         c = base_claim(
             alcance="CAPA_A_TRANSVERSAL", fuentes=[f],
@@ -239,8 +251,11 @@ class TestTiposEstrictos(unittest.TestCase):
 
     def test_jurisdiccion_lista_de_strings_es_valida(self):
         fuentes = [
-            base_fuente(id="f1", url="https://www.diputados.gob.mx/x", jurisdicciones_cubiertas=["México"]),
-            base_fuente(id="f2", tipo_fuente="AUTORIDAD_PUBLICA_OFICIAL", url="https://www.funcionpublica.gov.co/x", jurisdicciones_cubiertas=["Colombia"]),
+            base_fuente(id="f1", url="https://www.diputados.gob.mx/x", jurisdicciones_cubiertas=["México"],
+                        organismo_autor="Congreso de la Unión (México)", registro_oficial_id="diputados-gob-mx"),
+            base_fuente(id="f2", tipo_fuente="NORMA_OFICIAL", url="https://www.funcionpublica.gov.co/x",
+                        jurisdicciones_cubiertas=["Colombia"], organismo_autor="Función Pública Colombia",
+                        registro_oficial_id="funcionpublica-gov-co"),
         ]
         c = base_claim(alcance="CAPA_C_NACIONAL", jurisdiccion=["México", "Colombia"], estado="APTO_CON_MATICES", fuentes=fuentes)
         errors, _, _, _ = vcp.validate_claim(c, "c")
@@ -400,23 +415,27 @@ class TestHigieneRepositorio(unittest.TestCase):
 
 
 class TestHostnameJurisdiccion(unittest.TestCase):
-    """Fase 1D, Paso 3: una fuente oficial nacional no puede autoafirmar
-    cobertura de países ajenos a su hostname."""
+    """Fase 1D (Paso 3) + Fase 1D.1 (Paso 6): una fuente oficial nacional no
+    puede autoafirmar cobertura de países ajenos a su organismo — ahora
+    verificado contra el registro único (references/official-source-registry.json)
+    vía 'registro_oficial_id', no contra una jurisdicción suelta."""
 
     def test_boe_declarando_mexico_es_error(self):
-        f = base_fuente(url="https://www.boe.es/x", jurisdicciones_cubiertas=["México"])
+        f = base_fuente(url="https://www.boe.es/x", jurisdicciones_cubiertas=["México"], registro_oficial_id="boe-es")
         errors, _ = vcp.validate_fuente(f, "f")
-        self.assertTrue(any("país(es) ajenos a su organismo" in e for e in errors))
+        self.assertTrue(any("país/ámbito ajeno a lo autorizado" in e for e in errors))
 
     def test_boe_declarando_cuatro_paises_es_error(self):
-        f = base_fuente(url="https://www.boe.es/x", jurisdicciones_cubiertas=["España", "México", "Argentina", "Perú"])
+        f = base_fuente(url="https://www.boe.es/x", jurisdicciones_cubiertas=["España", "México", "Argentina", "Perú"],
+                         registro_oficial_id="boe-es")
         errors, _ = vcp.validate_fuente(f, "f")
-        self.assertTrue(any("país(es) ajenos a su organismo" in e for e in errors))
+        self.assertTrue(any("país/ámbito ajeno a lo autorizado" in e for e in errors))
 
     def test_diputados_mx_declarando_colombia_es_error(self):
-        f = base_fuente(url="https://www.diputados.gob.mx/x", jurisdicciones_cubiertas=["Colombia"])
+        f = base_fuente(url="https://www.diputados.gob.mx/x", jurisdicciones_cubiertas=["Colombia"],
+                         organismo_autor="Congreso de la Unión (México)", registro_oficial_id="diputados-gob-mx")
         errors, _ = vcp.validate_fuente(f, "f")
-        self.assertTrue(any("país(es) ajenos a su organismo" in e for e in errors))
+        self.assertTrue(any("país/ámbito ajeno a lo autorizado" in e for e in errors))
 
     def test_boe_declarando_solo_espana_es_valido(self):
         f = base_fuente(url="https://www.boe.es/x", jurisdicciones_cubiertas=["España"])
@@ -424,10 +443,11 @@ class TestHostnameJurisdiccion(unittest.TestCase):
         self.assertEqual(errors, [])
 
     def test_academica_comparada_varios_paises_no_eleva_a_nivel_1(self):
-        """Una fuente académica/secundaria SÍ puede declarar varios países
-        (Paso 3, regla 4) — la validación de hostname solo aplica a fuentes
-        oficiales — pero nunca puede alcanzar Nivel 1."""
+        """Una fuente académica/secundaria SÍ puede declarar varios países —
+        el registro único solo restringe fuentes OFICIALES — pero nunca
+        puede alcanzar Nivel 1."""
         f = base_fuente(tipo_fuente="ACADEMICA_IDENTIFICABLE", url="https://revista-academica.edu/x",
+                         registro_oficial_id=None,
                          jurisdicciones_cubiertas=["España", "México", "Argentina"],
                          verificacion_fuente=base_verificacion(False, False, False))
         errors, _ = vcp.validate_fuente(f, "f")
@@ -436,23 +456,28 @@ class TestHostnameJurisdiccion(unittest.TestCase):
         self.assertEqual(vcp.compute_fuente_nivel(f), vcp.NIVEL_3_ACADEMICA_SECUNDARIA)
 
     def test_supranacional_ambito_valido(self):
-        f = base_fuente(url="https://eur-lex.europa.eu/x", jurisdicciones_cubiertas=["Unión Europea"])
+        f = base_fuente(url="https://eur-lex.europa.eu/x", jurisdicciones_cubiertas=["Unión Europea"],
+                         organismo_autor="EUR-Lex", registro_oficial_id="eur-lex-europa-eu")
         errors, _ = vcp.validate_fuente(f, "f")
         self.assertEqual(errors, [])
 
     def test_supranacional_ambito_invalido(self):
-        f = base_fuente(url="https://eur-lex.europa.eu/x", jurisdicciones_cubiertas=["México"])
+        f = base_fuente(url="https://eur-lex.europa.eu/x", jurisdicciones_cubiertas=["México"],
+                         organismo_autor="EUR-Lex", registro_oficial_id="eur-lex-europa-eu")
         errors, _ = vcp.validate_fuente(f, "f")
-        self.assertTrue(any("país(es) ajenos a su organismo" in e for e in errors))
+        self.assertTrue(any("país/ámbito ajeno a lo autorizado" in e for e in errors))
 
     def test_hostname_desconocido_no_se_cruza(self):
-        """Un hostname oficial no incluido en la configuración falla cerrado
-        por la vía del nivel (Nivel 2), no por el cruce de jurisdicción
-        (que no puede aplicarse sin configuración)."""
-        f = base_fuente(url="https://www.algun-ministerio-no-listado.gob.uy/x", jurisdicciones_cubiertas=["Uruguay"])
+        """Un hostname que no está en el registro único, y una fuente que no
+        declara 'registro_oficial_id', falla cerrado por la vía del nivel
+        (Nivel 2) con una ADVERTENCIA — no un error estructural duro,
+        preservando el comportamiento fail-closed ya establecido en la
+        Fase 1D para dominios genuinamente desconocidos."""
+        f = base_fuente(url="https://www.algun-ministerio-no-listado.gob.uy/x", jurisdicciones_cubiertas=["Uruguay"],
+                         organismo_autor="Ministerio no listado", registro_oficial_id=None)
         errors, warnings = vcp.validate_fuente(f, "f")
-        self.assertEqual(errors, [])  # no se puede cruzar, no es un error estructural
-        self.assertTrue(warnings)     # pero sí genera advertencia de dominio no reconocido
+        self.assertEqual(errors, [])  # dominio desconocido -> advertencia, no error
+        self.assertTrue(warnings)
         self.assertNotEqual(vcp.compute_fuente_nivel(f), vcp.NIVEL_1_CONFIRMADO)
 
 
@@ -461,11 +486,13 @@ class TestCapaCComparadaCobertura(unittest.TestCase):
     jurisdicciones — no 'alguna fuente cubre alguno de los países'."""
 
     def _fuente_mx(self):
-        return base_fuente(id="f-mx", url="https://www.diputados.gob.mx/x", jurisdicciones_cubiertas=["México"])
+        return base_fuente(id="f-mx", url="https://www.diputados.gob.mx/x", jurisdicciones_cubiertas=["México"],
+                            organismo_autor="Congreso de la Unión (México)", registro_oficial_id="diputados-gob-mx")
 
     def _fuente_co(self):
-        return base_fuente(id="f-co", tipo_fuente="AUTORIDAD_PUBLICA_OFICIAL",
-                            url="https://www.funcionpublica.gov.co/x", jurisdicciones_cubiertas=["Colombia"])
+        return base_fuente(id="f-co", tipo_fuente="NORMA_OFICIAL",
+                            url="https://www.funcionpublica.gov.co/x", jurisdicciones_cubiertas=["Colombia"],
+                            organismo_autor="Función Pública Colombia", registro_oficial_id="funcionpublica-gov-co")
 
     def test_dos_paises_solo_fuente_mexicana_estado_alto_es_error(self):
         c = base_claim(alcance="CAPA_C_NACIONAL", jurisdiccion=["México", "Colombia"],
@@ -542,7 +569,25 @@ class TestHashCompleto(unittest.TestCase):
         self._cambio_invalida(lambda c: c["fuentes"][0].__setitem__("titulo", "Título cambiado tras aprobar"))
 
     def test_cambiar_organismo_autor_invalida(self):
-        self._cambio_invalida(lambda c: c["fuentes"][0].__setitem__("organismo_autor", "Otro organismo"))
+        # Con el registro único, cambiar 'organismo_autor' a un valor que ya
+        # no coincide con ningún alias de 'boe-es' dispara PRIMERO el error
+        # de coherencia de registro (más específico) — el hash ya ni se
+        # llega a comparar porque validate_fuente corta antes. Sigue siendo
+        # una detección correcta de la manipulación post-aprobación, solo
+        # que por un motivo más preciso que "el hash no coincide".
+        c = approved_claim()
+        c["fuentes"][0]["organismo_autor"] = "Otro organismo que no está en el registro"
+        errors, _, _, gate = vcp.validate_claim(c, "c")
+        self.assertTrue(errors)
+        self.assertNotEqual(gate, "ABIERTO")
+
+    def test_cambiar_organismo_autor_a_otro_alias_del_mismo_registro_invalida_hash(self):
+        """Si el nuevo 'organismo_autor' SÍ es un alias válido del mismo
+        'registro_oficial_id' (no dispara el error de coherencia de
+        registro), el cambio todavía debe invalidar la aprobación por la vía
+        del hash — el contenido aprobado fue uno específico, no 'cualquier
+        alias equivalente'."""
+        self._cambio_invalida(lambda c: c["fuentes"][0].__setitem__("organismo_autor", "BOE"))
 
     def test_cambiar_fecha_consulta_invalida(self):
         self._cambio_invalida(lambda c: c["fuentes"][0].__setitem__("fecha_consulta", "2020-01-01"))
@@ -579,6 +624,168 @@ class TestHashCompleto(unittest.TestCase):
         errors, _, _, gate = vcp.validate_claim(c, "c")
         self.assertEqual(errors, [])
         self.assertEqual(gate, "ABIERTO")
+
+    def test_cambiar_registro_oficial_id_invalida_hash(self):
+        """Fase 1D.1, Paso 5: 'registro_oficial_id' es un campo más de la
+        fuente y por tanto forma parte del hash igual que 'titulo' u
+        'organismo_autor' — sustituir el organismo aprobado por otro
+        (aunque ambos existan en el registro) invalida la aprobación."""
+        c = approved_claim()
+        c["fuentes"][0]["registro_oficial_id"] = "poderjudicial-es"
+        errors, _, _, gate = vcp.validate_claim(c, "c")
+        self.assertTrue(errors)
+        self.assertNotEqual(gate, "ABIERTO")
+
+
+class TestRegistroOficialUnico(unittest.TestCase):
+    """Fase 1D.1: toda validación de hostname↔organismo↔tipo_fuente↔
+    jurisdicción para fuentes oficiales se deriva de UN ÚNICO registro
+    (references/official-source-registry.json vía REGISTRY/REGISTRY_BY_ID),
+    nunca de listas manuales paralelas. Cubre el checklist completo del
+    Paso 7 del encargo de Fase 1D.1."""
+
+    # 1-2. Migración de schema_version a v4.0 -----------------------------
+
+    def test_schema_v4_es_aceptada(self):
+        c = base_claim(estado="APTO_PARA_NARRATIVA")
+        piece = base_piece([c])
+        errors, _ = vcp.validate_piece(piece, "p")
+        self.assertEqual(errors, [])
+
+    def test_schema_v3_es_rechazada_con_mensaje_de_migracion(self):
+        c = base_claim(estado="APTO_PARA_NARRATIVA")
+        piece = base_piece([c], schema_version="3.0")
+        errors, _ = vcp.validate_piece(piece, "p")
+        self.assertTrue(any("ya NO es una versión vigente" in e and "\"4.0\"" in e for e in errors))
+
+    # 3-6. BOE / Diputados MX: organismo y tipo permitido -----------------
+
+    def test_boe_organismo_mexicano_rechazado(self):
+        f = base_fuente(tipo_fuente="JURISPRUDENCIA_OFICIAL", organismo_autor="Suprema Corte de Justicia de México",
+                         registro_oficial_id="boe-es")
+        errors, _ = vcp.validate_fuente(f, "f")
+        self.assertTrue(any("no coincide, tras normalizar, con el organismo canónico" in e for e in errors))
+
+    def test_boe_tipo_incorrecto_rechazado(self):
+        f = base_fuente(tipo_fuente="JURISPRUDENCIA_OFICIAL")  # organismo/registro por defecto SÍ son BOE
+        errors, _ = vcp.validate_fuente(f, "f")
+        self.assertTrue(any("no tiene permitido el tipo de fuente" in e for e in errors))
+
+    def test_boe_todo_correcto_aceptado(self):
+        f = base_fuente()  # NORMA_OFICIAL + boe-es + Agencia Estatal BOE + España, todo coherente por defecto
+        errors, _ = vcp.validate_fuente(f, "f")
+        self.assertEqual(errors, [])
+        self.assertEqual(vcp.compute_fuente_nivel(f), vcp.NIVEL_1_CONFIRMADO)
+
+    def test_diputados_mx_organismo_colombiano_rechazado(self):
+        f = base_fuente(url="https://www.diputados.gob.mx/x", organismo_autor="Función Pública Colombia",
+                         jurisdicciones_cubiertas=["México"], registro_oficial_id="diputados-gob-mx")
+        errors, _ = vcp.validate_fuente(f, "f")
+        self.assertTrue(any("no coincide, tras normalizar, con el organismo canónico" in e for e in errors))
+
+    # 7-8. registro_oficial_id inexistente / hostname que no coincide -----
+
+    def test_registro_oficial_id_inexistente_rechazado(self):
+        f = base_fuente(registro_oficial_id="organismo-que-no-existe")
+        errors, _ = vcp.validate_fuente(f, "f")
+        self.assertTrue(any("no existe en el registro oficial" in e for e in errors))
+
+    def test_registro_oficial_id_hostname_no_coincide_rechazado(self):
+        """registro_oficial_id existe de verdad (diputados-gob-mx), pero la
+        URL de la fuente es boe.es — el hostname no resuelve a esa misma
+        entrada."""
+        f = base_fuente(url="https://www.boe.es/x", registro_oficial_id="diputados-gob-mx",
+                         organismo_autor="Congreso de la Unión (México)")
+        errors, _ = vcp.validate_fuente(f, "f")
+        self.assertTrue(any("no corresponde al hostname real de la URL" in e for e in errors))
+
+    # 9. Alias oficial válido ----------------------------------------------
+
+    def test_alias_oficial_valido_aceptado(self):
+        f = base_fuente(organismo_autor="BOE")  # alias, no el nombre canónico
+        errors, _ = vcp.validate_fuente(f, "f")
+        self.assertEqual(errors, [])
+
+    # 10. Organismo coincidente solo por subcadena ---------------------------
+
+    def test_organismo_subcadena_rechazado(self):
+        f = base_fuente(
+            tipo_fuente="JURISPRUDENCIA_OFICIAL", url="https://www.scjn.gob.mx/x",
+            organismo_autor="Suprema Corte de Justicia de la Nación (México) — Sala Segunda",
+            jurisdicciones_cubiertas=["México"], registro_oficial_id="scjn-gob-mx",
+        )
+        errors, _ = vcp.validate_fuente(f, "f")
+        self.assertTrue(any("no coincide, tras normalizar, con el organismo canónico" in e for e in errors))
+
+    # 11. Dominio desconocido no alcanza Nivel 1 ---------------------------
+
+    def test_dominio_desconocido_no_alcanza_nivel_1(self):
+        f = base_fuente(url="https://ministerio-no-listado.example/x", registro_oficial_id=None,
+                         organismo_autor="Ministerio no listado")
+        errors, warnings = vcp.validate_fuente(f, "f")
+        self.assertEqual(errors, [])
+        self.assertTrue(warnings)
+        self.assertNotEqual(vcp.compute_fuente_nivel(f), vcp.NIVEL_1_CONFIRMADO)
+
+    # 12. Hostname específico gana sobre el genérico gob.mx -----------------
+
+    def test_hostname_especifico_gana_sobre_generico(self):
+        entry = vcp.match_registry_entry_for_url("https://www.dof.gob.mx/algo", vcp.REGISTRY)
+        self.assertIsNotNone(entry)
+        self.assertEqual(entry["id"], "dof-gob-mx")
+
+    # 13-14. gob.mx genérico: AUTORIDAD_PUBLICA_OFICIAL sí, NORMA/JURISPRUDENCIA no --
+
+    def test_gobmx_generico_autoridad_publica_aceptado(self):
+        f = base_fuente(
+            tipo_fuente="AUTORIDAD_PUBLICA_OFICIAL", url="https://www.gob.mx/sat",
+            organismo_autor="Gobierno de México", jurisdicciones_cubiertas=["México"],
+            registro_oficial_id="gob-mx-generico",
+        )
+        errors, _ = vcp.validate_fuente(f, "f")
+        self.assertEqual(errors, [])
+
+    def test_gobmx_generico_como_norma_rechazado(self):
+        f = base_fuente(
+            tipo_fuente="NORMA_OFICIAL", url="https://www.gob.mx/sat",
+            organismo_autor="Gobierno de México", jurisdicciones_cubiertas=["México"],
+            registro_oficial_id="gob-mx-generico",
+        )
+        errors, _ = vcp.validate_fuente(f, "f")
+        self.assertTrue(any("no tiene permitido el tipo de fuente" in e for e in errors))
+
+    # 15. Registro ausente/inválido/duplicado falla cerrado -----------------
+
+    def test_registro_ausente_o_invalido_falla_cerrado(self):
+        vacio = vcp.load_official_source_registry(Path("/ruta/que/no/existe/registry.json"))
+        self.assertEqual(vacio, {"registry_version": None, "sources": []})
+
+    def test_registro_ids_duplicados_falla_cerrado(self):
+        registro_corrupto = {
+            "registry_version": "corrupto",
+            "sources": [
+                {"id": "dup", "hostnames": ["a.example"], "organismo_canonico": "A",
+                 "organismo_aliases": [], "jurisdicciones": ["X"],
+                 "tipos_fuente_permitidos": ["NORMA_OFICIAL"], "ambito": "NACIONAL"},
+                {"id": "dup", "hostnames": ["b.example"], "organismo_canonico": "B",
+                 "organismo_aliases": [], "jurisdicciones": ["Y"],
+                 "tipos_fuente_permitidos": ["NORMA_OFICIAL"], "ambito": "NACIONAL"},
+            ],
+        }
+        by_id = vcp._build_registry_by_id(registro_corrupto)
+        self.assertNotIn("dup", by_id)  # ninguna de las dos entradas duplicadas queda usable
+
+    # 18. Los cierres de Capa C y hash de la Fase 1D siguen funcionando -----
+
+    def test_capa_c_ceiling_sigue_siendo_minimo_entre_paises(self):
+        """Confirma que compute_ceiling_by_countries/compute_capa_c_ceiling
+        (cierre del Bypass D, Fase 1D) no se rompieron con la migración al
+        registro único: un país sin fuente propia sigue topando el techo en
+        REQUIERE_INVESTIGACION aunque el otro país tenga una fuente Nivel 1."""
+        fuentes = [base_fuente(id="f-mx", url="https://www.diputados.gob.mx/x", jurisdicciones_cubiertas=["México"],
+                                organismo_autor="Congreso de la Unión (México)", registro_oficial_id="diputados-gob-mx")]
+        ceiling = vcp.compute_capa_c_ceiling(["México", "Colombia"], fuentes)
+        self.assertEqual(ceiling, "REQUIERE_INVESTIGACION")
 
 
 if __name__ == "__main__":

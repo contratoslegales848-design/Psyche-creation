@@ -1,6 +1,8 @@
-# Esquema v3 — pieza, claims, fuentes con verificación real, gate ligado a hash
+# Esquema v4 — pieza, claims, fuentes con verificación real y registro oficial único, gate ligado a hash
 
-**Formato del artefacto validado por máquina: JSON.** Validado con `scripts/validate-claim-packet.py` (solo biblioteca estándar). Una **pieza** (`schema_version: "3.0"`) contiene una o varias **afirmaciones/claims**, cada una con sus propias fuentes, cada fuente con su propia jurisdicción cubierta y su propia verificación de origen/contenido/vigencia. El estado agregado de la pieza y el gate de arte **se calculan, nunca se escriben a mano**.
+**Formato del artefacto validado por máquina: JSON.** Validado con `scripts/validate-claim-packet.py` (solo biblioteca estándar). Una **pieza** (`schema_version: "4.0"`) contiene una o varias **afirmaciones/claims**, cada una con sus propias fuentes, cada fuente con su propia jurisdicción cubierta y su propia verificación de origen/contenido/vigencia. El estado agregado de la pieza y el gate de arte **se calculan, nunca se escriben a mano**.
+
+**Migración desde v3 (Fase 1D.1):** `"3.0"` ya no es una versión vigente — el validador la rechaza con un mensaje explícito de migración. La diferencia central es el campo `registro_oficial_id` en cada fuente (ver abajo): antes (Fase 1D) el validador cruzaba hostname↔jurisdicción con dos listas manuales paralelas (`OFFICIAL_HOSTNAMES`, `OFFICIAL_HOSTNAME_JURISDICTIONS`); ahora ambas se sustituyen por un **único** registro externo (`references/official-source-registry.json`) que además cruza organismo y tipo de fuente permitido — no solo jurisdicción.
 
 ## Límite honesto (léelo antes de usar `revision_humana`)
 
@@ -31,23 +33,36 @@
 | `url` / `identificador_bibliografico` | uno de los dos | string http/https o identificador bibliográfico | |
 | `fecha_consulta` | sí | fecha ISO | |
 | `localizador` | sí | string no vacío | Artículo, página, sentencia o sección concreta. |
-| `jurisdicciones_cubiertas` | sí | lista no vacía de países | **Nuevo en v3.** Qué países respalda de verdad esta fuente. Una norma nacional oficial normalmente cubre un solo país; una fuente académica/comparada puede cubrir varios **solo si lo declara explícitamente**. Una fuente española nunca cubre automáticamente a México. |
+| `jurisdicciones_cubiertas` | sí | lista no vacía de países | Qué países respalda de verdad esta fuente. Una norma nacional oficial normalmente cubre un solo país; una fuente académica/comparada puede cubrir varios **solo si lo declara explícitamente**. Una fuente española nunca cubre automáticamente a México. Para fuentes oficiales, debe ser subconjunto de lo autorizado por su entrada del registro (ver `registro_oficial_id`). |
+| `registro_oficial_id` | sí (puede ser `null`) | string o `null` | **Nuevo en v4 (Fase 1D.1).** Para `NORMA_OFICIAL`/`JURISPRUDENCIA_OFICIAL`/`AUTORIDAD_PUBLICA_OFICIAL`: el `id` de la entrada correspondiente en `references/official-source-registry.json` — declararlo es obligatorio en cuanto el hostname de `url` resuelve a una entrada conocida; si el dominio es genuinamente desconocido puede quedar `null` (advertencia, nunca Nivel 1). Para `ACADEMICA_IDENTIFICABLE`/`SECUNDARIA_ESPECIALIZADA`/`DRIVE_INTERNO`: siempre `null` — solo las fuentes oficiales tienen registro. |
 | `verificacion_fuente` | sí | objeto | Ver arriba. |
 
 ### Niveles de confianza de fuente — fail-closed, calculados, nunca autoafirmados
 
-**Nivel 1 (puede sostener `APTO_PARA_NARRATIVA`) exige las CUATRO condiciones a la vez:**
+**Nivel 1 (puede sostener `APTO_PARA_NARRATIVA`) exige, a la vez:**
 
 1. `tipo_fuente` es oficial (`NORMA_OFICIAL`, `JURISPRUDENCIA_OFICIAL`, `AUTORIDAD_PUBLICA_OFICIAL`).
 2. `verificacion_fuente.origen_oficial_confirmado: true`.
-3. El **hostname real** de `url` coincide, por igualdad exacta o por límite real de subdominio, con una **lista cerrada** de dominios oficiales conocidos (`OFFICIAL_HOSTNAMES` en el script) — **nunca por subcadena**. `boe.es` y `www.boe.es` coinciden; `boe.es.evil.com` y `notboe.es` NO coinciden aunque contengan la subcadena "boe.es". Un dominio oficial legítimo que falte en la lista falla cerrado — un humano debe añadirlo explícitamente al script, no forzarlo con el booleano.
+3. `registro_oficial_id` referencia una entrada real del **registro oficial único** (`references/official-source-registry.json`, ver abajo) — cuyo hostname, organismo y tipo de fuente permitido son TODOS coherentes con la fuente declarada.
 4. `verificacion_fuente.texto_exacto_consultado: true` **y** `vigencia_comprobada: true`.
 
-Si falta cualquiera de las 4 → la fuente cae a **Nivel 2**, techo `APTO_CON_MATICES`. El campo `origen_oficial_confirmado` autoafirmado, por sí solo, nunca es prueba suficiente — es exactamente el bypass que esta versión cierra (ver `docs/` o el informe de la Fase 1C).
+Si falta cualquiera de las 4 → la fuente cae a **Nivel 2**, techo `APTO_CON_MATICES`. El campo `origen_oficial_confirmado` autoafirmado, por sí solo, nunca es prueba suficiente — ese fue el bypass cerrado en la Fase 1C.
 
-### `jurisdicciones_cubiertas` de una fuente oficial nacional: no es autoafirmable (Fase 1D)
+### Registro oficial único: hostname↔organismo↔tipo_fuente↔jurisdicción (Fase 1D.1)
 
-Una fuente `NORMA_OFICIAL`/`JURISPRUDENCIA_OFICIAL`/`AUTORIDAD_PUBLICA_OFICIAL` cuya URL coincide con un hostname oficial conocido **no puede declarar en `jurisdicciones_cubiertas` un país ajeno al organismo real de ese hostname**. El validador mantiene una tabla cerrada `OFFICIAL_HOSTNAME_JURISDICTIONS` (p. ej. `boe.es` → España; `diputados.gob.mx`/`dof.gob.mx`/`scjn.gob.mx` → México; `infoleg.gob.ar`/`csjn.gov.ar` → Argentina; `spij.minjus.gob.pe`/`tc.gob.pe` → Perú; `funcionpublica.gov.co`/`corteconstitucional.gov.co` → Colombia; `bcn.cl` → Chile; `eur-lex.europa.eu` → un ámbito explícito `"Unión Europea"`, nunca un país concreto). Si una fuente con ese hostname declara cualquier país fuera de la lista permitida para ese dominio → `[ERROR ESTRUCTURAL]` explícito (cierra el Bypass E: el BOE ya no puede autoatribuirse cobertura de México, Argentina o Perú solo porque lo escriba en el JSON). Un hostname oficial que no está en la tabla no falla — genera advertencia, no bloquea — pero tampoco puede alcanzar Nivel 1 por la condición 3 de arriba. Las fuentes `ACADEMICA_IDENTIFICABLE`/`SECUNDARIA_ESPECIALIZADA` no tienen esta restricción: pueden declarar cobertura de varios países libremente, pero nunca pasan de Nivel 3 (techo `APTO_CON_MATICES`), así que esa cobertura amplia nunca por sí sola habilita `APTO_PARA_NARRATIVA`.
+Antes (Fase 1D) el validador mantenía DOS listas manuales paralelas en el propio script (`OFFICIAL_HOSTNAMES` para el hostname, `OFFICIAL_HOSTNAME_JURISDICTIONS` para la jurisdicción) — eso cerraba el Bypass E (una fuente española autoatribuyéndose cobertura de México) pero dejaba abierto un bypass distinto: nada impedía que esa misma fuente boe.es se declarara `tipo_fuente: "JURISPRUDENCIA_OFICIAL"` con `organismo_autor: "Suprema Corte de Justicia de México"`, porque el validador nunca comprobaba organismo ni tipo permitido, solo jurisdicción.
+
+La Fase 1D.1 sustituye ambas listas por un **único archivo externo cerrado**: `references/official-source-registry.json`. Cada entrada fija, para un organismo real: sus hostnames, su nombre canónico y alias aceptados, la(s) jurisdicción(es) o ámbito que puede respaldar, y el conjunto (deliberadamente conservador) de `tipo_fuente` que puede emitir — p. ej. el BOE publica normas pero no dicta sentencias, así que `boe-es` solo permite `NORMA_OFICIAL`; la SCJN mexicana solo `JURISPRUDENCIA_OFICIAL`. Para toda fuente con `tipo_fuente` oficial, el validador cruza:
+
+- **Hostname → entrada**: coincidencia exacta o de subdominio real (nunca por subcadena), y cuando varios hostnames del registro coinciden por subdominio, gana el **más específico** — `dof.gob.mx` resuelve antes que la entrada genérica `gob.mx` (que existe solo como respaldo conservador para subdominios `*.gob.mx` sin entrada propia, y por eso solo permite `AUTORIDAD_PUBLICA_OFICIAL`, nunca `NORMA_OFICIAL` ni `JURISPRUDENCIA_OFICIAL`).
+- **`registro_oficial_id` declarado == entrada que resuelve el hostname real de `url`**: declarar un id de un organismo distinto al que realmente aloja la URL es un error explícito, aunque el id declarado exista de verdad en el registro.
+- **`organismo_autor`**: comparación exacta tras normalizar (minúsculas, espacios colapsados) contra el nombre canónico o alguno de los alias registrados — **nunca por subcadena** (`"Suprema Corte de Justicia de la Nación (México) — Sala Segunda"` no coincide con el nombre canónico exacto).
+- **`tipo_fuente` ∈ `tipos_fuente_permitidos`** de esa entrada.
+- **`jurisdicciones_cubiertas` ⊆ jurisdicciones/ámbito** autorizados de esa entrada (esto reemplaza, con la misma severidad, el cierre del Bypass E de la Fase 1D: el BOE sigue sin poder autoatribuirse México, Argentina o Perú).
+
+Cualquier incoherencia en los cinco puntos anteriores es `[ERROR ESTRUCTURAL]`. Un hostname/organismo que el registro no conoce en absoluto no produce un error duro — genera advertencia y cae a Nivel 2 (fail-closed, igual que en la Fase 1D) hasta que un humano añada la entrada real. Las fuentes `ACADEMICA_IDENTIFICABLE`/`SECUNDARIA_ESPECIALIZADA` no tienen ninguna de estas restricciones (`registro_oficial_id` siempre `null` para ellas) y pueden declarar cobertura de varios países libremente, pero nunca pasan de Nivel 3 (techo `APTO_CON_MATICES`).
+
+Un registro corrupto (archivo ausente/ilegible, o con `id`s duplicados) **falla cerrado**: el validador no lanza una excepción, simplemente trata esas entradas como inexistentes — ninguna fuente puede alcanzar Nivel 1 a través de un registro roto.
 
 | Nivel | Condición | Techo |
 |---|---|---|
@@ -98,7 +113,7 @@ El gate de un claim solo puede abrirse si ambos objetos tienen `status` en `{NO_
 
 ## Objeto PIEZA
 
-`schema_version` (`"3.0"` exacto), `piece_id`, `claims[]` (≥1, `claim_id` únicos), `estado_agregado` (calculado: `BLOQUEADO` > `REQUIERE_INVESTIGACION` > `PENDIENTE_APROBACION_HUMANA` > `APTO_CON_MATICES` > `APTO_PARA_NARRATIVA` solo si todos los claims lo están), `revisiones_pendientes` (calculado), `gate_global_arte` (calculado: `ABIERTO` solo si todos los claims tienen su propio `gate_arte: ABIERTO`).
+`schema_version` (`"4.0"` exacto), `piece_id`, `claims[]` (≥1, `claim_id` únicos), `estado_agregado` (calculado: `BLOQUEADO` > `REQUIERE_INVESTIGACION` > `PENDIENTE_APROBACION_HUMANA` > `APTO_CON_MATICES` > `APTO_PARA_NARRATIVA` solo si todos los claims lo están), `revisiones_pendientes` (calculado), `gate_global_arte` (calculado: `ABIERTO` solo si todos los claims tienen su propio `gate_arte: ABIERTO`).
 
 ## Verdicto del validador
 

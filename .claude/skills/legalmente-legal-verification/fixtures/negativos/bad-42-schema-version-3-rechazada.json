@@ -1,71 +1,30 @@
 {
-  "schema_version": "4.0",
+  "schema_version": "3.0",
   "piece_id": "neg",
   "claims": [
     {
       "claim_id": "c1",
-      "texto_exacto": "México dos veces normalizado como si fueran 3 jurisdicciones.",
+      "texto_exacto": "Paquete v3 completo pero con schema_version desactualizada.",
       "ubicacion": "titulo",
       "tipo": "regla",
-      "alcance": "CAPA_A_TRANSVERSAL",
-      "jurisdiccion": null,
+      "alcance": "CAPA_C_NACIONAL",
+      "jurisdiccion": "España",
       "nucleo_transversal": null,
       "variaciones_materiales": null,
-      "jurisdicciones_revisadas": [
-        {
-          "pais": "México",
-          "fuente_ids": [
-            "fa"
-          ]
-        },
-        {
-          "pais": "  méxico ",
-          "fuente_ids": [
-            "fa"
-          ]
-        },
-        {
-          "pais": "España",
-          "fuente_ids": [
-            "fb"
-          ]
-        }
-      ],
-      "diferencias_buscadas": "algo",
-      "contraejemplos_encontrados": "ninguno",
-      "justificacion_suficiencia_comparada": "algo",
+      "jurisdicciones_revisadas": null,
+      "diferencias_buscadas": null,
+      "contraejemplos_encontrados": null,
+      "justificacion_suficiencia_comparada": null,
       "fuentes": [
         {
-          "id": "fa",
+          "id": "f42",
           "tipo_fuente": "NORMA_OFICIAL",
-          "titulo": "x",
-          "organismo_autor": "x",
-          "url": "https://www.diputados.gob.mx/x",
-          "identificador_bibliografico": null,
-          "fecha_consulta": "2026-08-25",
-          "localizador": "x",
-          "jurisdicciones_cubiertas": [
-            "México"
-          ],
-          "verificacion_fuente": {
-            "origen_oficial_confirmado": true,
-            "texto_exacto_consultado": true,
-            "vigencia_comprobada": true,
-            "fecha_comprobacion": "2026-08-25",
-            "metodo_o_evidencia": "Lectura directa del texto oficial vigente",
-            "observaciones": null
-          },
-          "registro_oficial_id": "diputados-gob-mx"
-        },
-        {
-          "id": "fb",
-          "tipo_fuente": "NORMA_OFICIAL",
-          "titulo": "x",
-          "organismo_autor": "x",
+          "titulo": "Ley de prueba",
+          "organismo_autor": "Agencia Estatal BOE",
           "url": "https://www.boe.es/x",
           "identificador_bibliografico": null,
           "fecha_consulta": "2026-08-25",
-          "localizador": "x",
+          "localizador": "art. 1",
           "jurisdicciones_cubiertas": [
             "España"
           ],
@@ -80,7 +39,7 @@
           "registro_oficial_id": "boe-es"
         }
       ],
-      "confianza": "alta",
+      "confianza": "media",
       "riesgo_falsa_universalizacion": "bajo",
       "riesgo_asesoria": "ninguno",
       "platform_review": {
@@ -97,7 +56,7 @@
         "fecha": null,
         "observaciones": null
       },
-      "estado": "APTO_PARA_NARRATIVA",
+      "estado": "APTO_CON_MATICES",
       "revision_humana": {
         "estado": "PENDIENTE",
         "revisor": null,
@@ -112,10 +71,10 @@
         "nuevo_claim_id": null
       },
       "redaccion_prohibida": null,
-      "notas": null
+      "notas": "NEGATIVO (Fase 1D.1): schema_version='3.0' ya no es una versión vigente, exige mensaje claro de migración."
     }
   ],
-  "estado_agregado": "APTO_PARA_NARRATIVA",
+  "estado_agregado": "APTO_CON_MATICES",
   "revisiones_pendientes": [
     "c1"
   ],

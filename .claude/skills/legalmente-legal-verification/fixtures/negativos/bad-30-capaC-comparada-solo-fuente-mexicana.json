@@ -1,5 +1,5 @@
 {
-  "schema_version": "3.0",
+  "schema_version": "4.0",
   "piece_id": "neg",
   "claims": [
     {
@@ -23,7 +23,7 @@
           "id": "f-mx",
           "tipo_fuente": "NORMA_OFICIAL",
           "titulo": "CFF",
-          "organismo_autor": "SAT/Diputados MX",
+          "organismo_autor": "Congreso de la Unión (México)",
           "url": "https://www.diputados.gob.mx/x",
           "identificador_bibliografico": null,
           "fecha_consulta": "2026-08-25",
@@ -38,7 +38,8 @@
             "fecha_comprobacion": "2026-08-25",
             "metodo_o_evidencia": "Lectura directa del texto oficial vigente",
             "observaciones": null
-          }
+          },
+          "registro_oficial_id": "diputados-gob-mx"
         }
       ],
       "confianza": "alta",

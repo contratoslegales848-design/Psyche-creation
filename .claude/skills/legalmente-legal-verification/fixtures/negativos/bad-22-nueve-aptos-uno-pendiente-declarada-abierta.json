@@ -1,5 +1,5 @@
 {
-  "schema_version": "3.0",
+  "schema_version": "4.0",
   "piece_id": "neg",
   "claims": [
     {
@@ -35,7 +35,8 @@
             "fecha_comprobacion": "2026-08-25",
             "metodo_o_evidencia": "Lectura directa del texto oficial vigente",
             "observaciones": null
-          }
+          },
+          "registro_oficial_id": "boe-es"
         }
       ],
       "confianza": "alta",
@@ -105,7 +106,8 @@
             "fecha_comprobacion": "2026-08-25",
             "metodo_o_evidencia": "Lectura directa del texto oficial vigente",
             "observaciones": null
-          }
+          },
+          "registro_oficial_id": "boe-es"
         }
       ],
       "confianza": "alta",
@@ -175,7 +177,8 @@
             "fecha_comprobacion": "2026-08-25",
             "metodo_o_evidencia": "Lectura directa del texto oficial vigente",
             "observaciones": null
-          }
+          },
+          "registro_oficial_id": "boe-es"
         }
       ],
       "confianza": "alta",
@@ -245,7 +248,8 @@
             "fecha_comprobacion": "2026-08-25",
             "metodo_o_evidencia": "Lectura directa del texto oficial vigente",
             "observaciones": null
-          }
+          },
+          "registro_oficial_id": "boe-es"
         }
       ],
       "confianza": "alta",
@@ -315,7 +319,8 @@
             "fecha_comprobacion": "2026-08-25",
             "metodo_o_evidencia": "Lectura directa del texto oficial vigente",
             "observaciones": null
-          }
+          },
+          "registro_oficial_id": "boe-es"
         }
       ],
       "confianza": "alta",
@@ -385,7 +390,8 @@
             "fecha_comprobacion": "2026-08-25",
             "metodo_o_evidencia": "Lectura directa del texto oficial vigente",
             "observaciones": null
-          }
+          },
+          "registro_oficial_id": "boe-es"
         }
       ],
       "confianza": "alta",
@@ -455,7 +461,8 @@
             "fecha_comprobacion": "2026-08-25",
             "metodo_o_evidencia": "Lectura directa del texto oficial vigente",
             "observaciones": null
-          }
+          },
+          "registro_oficial_id": "boe-es"
         }
       ],
       "confianza": "alta",
@@ -525,7 +532,8 @@
             "fecha_comprobacion": "2026-08-25",
             "metodo_o_evidencia": "Lectura directa del texto oficial vigente",
             "observaciones": null
-          }
+          },
+          "registro_oficial_id": "boe-es"
         }
       ],
       "confianza": "alta",
@@ -595,7 +603,8 @@
             "fecha_comprobacion": "2026-08-25",
             "metodo_o_evidencia": "Lectura directa del texto oficial vigente",
             "observaciones": null
-          }
+          },
+          "registro_oficial_id": "boe-es"
         }
       ],
       "confianza": "alta",

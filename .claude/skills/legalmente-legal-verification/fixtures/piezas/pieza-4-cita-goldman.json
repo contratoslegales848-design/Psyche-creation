@@ -1,5 +1,5 @@
 {
-  "schema_version": "3.0",
+  "schema_version": "4.0",
   "piece_id": "pieza-4-cita-goldman",
   "claims": [
     {
@@ -35,7 +35,8 @@
             "fecha_comprobacion": null,
             "metodo_o_evidencia": null,
             "observaciones": "No se pudo confirmar origen ni consultar el texto en este entorno."
-          }
+          },
+          "registro_oficial_id": null
         }
       ],
       "confianza": "media",

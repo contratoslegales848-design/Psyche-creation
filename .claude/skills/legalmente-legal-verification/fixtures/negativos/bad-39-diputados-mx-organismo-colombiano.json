@@ -4,46 +4,27 @@
   "claims": [
     {
       "claim_id": "c1",
-      "texto_exacto": "México dos veces normalizado como si fueran 3 jurisdicciones.",
+      "texto_exacto": "Fuente diputados.gob.mx autoatribuyéndose ser Función Pública Colombia.",
       "ubicacion": "titulo",
       "tipo": "regla",
-      "alcance": "CAPA_A_TRANSVERSAL",
-      "jurisdiccion": null,
+      "alcance": "CAPA_C_NACIONAL",
+      "jurisdiccion": "México",
       "nucleo_transversal": null,
       "variaciones_materiales": null,
-      "jurisdicciones_revisadas": [
-        {
-          "pais": "México",
-          "fuente_ids": [
-            "fa"
-          ]
-        },
-        {
-          "pais": "  méxico ",
-          "fuente_ids": [
-            "fa"
-          ]
-        },
-        {
-          "pais": "España",
-          "fuente_ids": [
-            "fb"
-          ]
-        }
-      ],
-      "diferencias_buscadas": "algo",
-      "contraejemplos_encontrados": "ninguno",
-      "justificacion_suficiencia_comparada": "algo",
+      "jurisdicciones_revisadas": null,
+      "diferencias_buscadas": null,
+      "contraejemplos_encontrados": null,
+      "justificacion_suficiencia_comparada": null,
       "fuentes": [
         {
-          "id": "fa",
+          "id": "f39",
           "tipo_fuente": "NORMA_OFICIAL",
-          "titulo": "x",
-          "organismo_autor": "x",
+          "titulo": "Código de Comercio (México)",
+          "organismo_autor": "Función Pública Colombia",
           "url": "https://www.diputados.gob.mx/x",
           "identificador_bibliografico": null,
           "fecha_consulta": "2026-08-25",
-          "localizador": "x",
+          "localizador": "art. 1",
           "jurisdicciones_cubiertas": [
             "México"
           ],
@@ -56,31 +37,9 @@
             "observaciones": null
           },
           "registro_oficial_id": "diputados-gob-mx"
-        },
-        {
-          "id": "fb",
-          "tipo_fuente": "NORMA_OFICIAL",
-          "titulo": "x",
-          "organismo_autor": "x",
-          "url": "https://www.boe.es/x",
-          "identificador_bibliografico": null,
-          "fecha_consulta": "2026-08-25",
-          "localizador": "x",
-          "jurisdicciones_cubiertas": [
-            "España"
-          ],
-          "verificacion_fuente": {
-            "origen_oficial_confirmado": true,
-            "texto_exacto_consultado": true,
-            "vigencia_comprobada": true,
-            "fecha_comprobacion": "2026-08-25",
-            "metodo_o_evidencia": "Lectura directa del texto oficial vigente",
-            "observaciones": null
-          },
-          "registro_oficial_id": "boe-es"
         }
       ],
-      "confianza": "alta",
+      "confianza": "media",
       "riesgo_falsa_universalizacion": "bajo",
       "riesgo_asesoria": "ninguno",
       "platform_review": {
@@ -97,7 +56,7 @@
         "fecha": null,
         "observaciones": null
       },
-      "estado": "APTO_PARA_NARRATIVA",
+      "estado": "APTO_CON_MATICES",
       "revision_humana": {
         "estado": "PENDIENTE",
         "revisor": null,
@@ -112,10 +71,10 @@
         "nuevo_claim_id": null
       },
       "redaccion_prohibida": null,
-      "notas": null
+      "notas": "NEGATIVO (Fase 1D.1): el hostname mexicano no puede llevar el nombre de un organismo colombiano."
     }
   ],
-  "estado_agregado": "APTO_PARA_NARRATIVA",
+  "estado_agregado": "APTO_CON_MATICES",
   "revisiones_pendientes": [
     "c1"
   ],

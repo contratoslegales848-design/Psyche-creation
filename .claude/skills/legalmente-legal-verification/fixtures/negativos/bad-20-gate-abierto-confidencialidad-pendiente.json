@@ -1,5 +1,5 @@
 {
-  "schema_version": "3.0",
+  "schema_version": "4.0",
   "piece_id": "neg",
   "claims": [
     {
@@ -54,7 +54,8 @@
             "fecha_comprobacion": "2026-08-25",
             "metodo_o_evidencia": "Lectura directa del texto oficial vigente",
             "observaciones": null
-          }
+          },
+          "registro_oficial_id": "boe-es"
         },
         {
           "id": "fb",
@@ -75,7 +76,8 @@
             "fecha_comprobacion": "2026-08-25",
             "metodo_o_evidencia": "Lectura directa del texto oficial vigente",
             "observaciones": null
-          }
+          },
+          "registro_oficial_id": "diputados-gob-mx"
         },
         {
           "id": "fc",
@@ -96,7 +98,8 @@
             "fecha_comprobacion": "2026-08-25",
             "metodo_o_evidencia": "Lectura directa del texto oficial vigente",
             "observaciones": null
-          }
+          },
+          "registro_oficial_id": "infoleg-gob-ar"
         }
       ],
       "confianza": "alta",

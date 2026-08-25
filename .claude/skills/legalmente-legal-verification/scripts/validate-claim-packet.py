@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 """Valida la ESTRUCTURA de una PIEZA de verificación jurídica de LegalMente
-(esquema v3: pieza -> claims -> fuentes con verificación de origen/contenido/
-vigencia y jurisdicción propia; revisión humana ligada por hash al contenido
-exacto que aprobó; revisiones de plataforma/confidencialidad como objetos).
+(esquema v4: pieza -> claims -> fuentes con verificación de origen/contenido/
+vigencia y jurisdicción propia, cada fuente oficial referenciando un registro
+oficial único (hostname<->organismo<->tipo_fuente<->jurisdiccion, Fase 1D.1);
+revisión humana ligada por hash al contenido exacto que aprobó; revisiones de
+plataforma/confidencialidad como objetos).
 
 Límite honesto: este script SOLO valida JSON. No autentica personas. Que un
 campo 'revisor' contenga un nombre no prueba que esa persona escribió ese
@@ -42,7 +44,7 @@ from datetime import date
 from pathlib import Path
 from urllib.parse import urlparse
 
-SCHEMA_VERSION = "3.0"
+SCHEMA_VERSION = "4.0"
 
 # ---------------------------------------------------------------------------
 # Enums
@@ -93,54 +95,175 @@ VALID_GATE = {"CERRADO", "ABIERTO"}
 ISO_DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
 
-# Lista CERRADA de hostnames oficiales conocidos. Coincidencia exacta o por
-# subdominio real (host == allowed o host.endswith("." + allowed)) — NUNCA
-# por subcadena. Un dominio legítimo que falte aquí falla cerrado (Paso 3.4
-# del encargo) hasta que un humano lo añada explícitamente a esta lista.
-OFFICIAL_HOSTNAMES = {
-    "boe.es", "poderjudicial.es", "congreso.es", "senado.es",
-    "diputados.gob.mx", "senado.gob.mx", "dof.gob.mx", "scjn.gob.mx",
-    "gob.mx",
-    "infoleg.gob.ar", "servicios.infoleg.gob.ar", "csjn.gov.ar", "boletinoficial.gob.ar",
-    "minjus.gob.pe", "spij.minjus.gob.pe", "tc.gob.pe", "pj.gob.pe",
-    "bcn.cl", "www.bcn.cl",
-    "funcionpublica.gov.co", "corteconstitucional.gov.co",
-    "eur-lex.europa.eu",
-}
-
-# Qué jurisdicción(es) puede respaldar CADA hostname oficial — configuración
-# determinista, cerrada y explícita (Fase 1D, Paso 3). Una fuente oficial
-# nacional NUNCA puede autoafirmar en 'jurisdicciones_cubiertas' un país
-# ajeno al organismo real de su hostname: 'boe.es' no puede declarar que
-# cubre México. Los ámbitos supranacionales (eur-lex.europa.eu) se declaran
-# explícitamente, nunca se asumen como "cubre a toda la audiencia".
-# Un hostname oficial no incluido aquí simplemente no se cruza (ya cae en
-# Nivel 2 por hostname_matches_official, que falla cerrado por separado).
-OFFICIAL_HOSTNAME_JURISDICTIONS = {
-    "boe.es": ["España"], "poderjudicial.es": ["España"], "congreso.es": ["España"], "senado.es": ["España"],
-    "diputados.gob.mx": ["México"], "senado.gob.mx": ["México"], "dof.gob.mx": ["México"],
-    "scjn.gob.mx": ["México"], "gob.mx": ["México"],
-    "infoleg.gob.ar": ["Argentina"], "servicios.infoleg.gob.ar": ["Argentina"],
-    "csjn.gov.ar": ["Argentina"], "boletinoficial.gob.ar": ["Argentina"],
-    "minjus.gob.pe": ["Perú"], "spij.minjus.gob.pe": ["Perú"], "tc.gob.pe": ["Perú"], "pj.gob.pe": ["Perú"],
-    "bcn.cl": ["Chile"], "www.bcn.cl": ["Chile"],
-    "funcionpublica.gov.co": ["Colombia"], "corteconstitucional.gov.co": ["Colombia"],
-    "eur-lex.europa.eu": ["Unión Europea"],
-}
+# REGISTRO ÚNICO de organismos oficiales conocidos (Fase 1D.1). Ya no hay dos
+# listas manuales paralelas (OFFICIAL_HOSTNAMES / OFFICIAL_HOSTNAME_JURISDICTIONS
+# de la Fase 1D) — toda validación de hostname, organismo, tipo de fuente
+# permitido y jurisdicción/ámbito se deriva de un único archivo cerrado:
+# references/official-source-registry.json. Un hostname/organismo legítimo
+# que falte ahí falla cerrado (no alcanza Nivel 1) hasta que un humano añada
+# la entrada explícitamente.
+REGISTRY_PATH = Path(__file__).resolve().parent.parent / "references" / "official-source-registry.json"
 
 
-def official_hostname_allowed_jurisdictions(url):
-    """Jurisdicciones normalizadas que el hostname de esta URL puede
-    respaldar, según OFFICIAL_HOSTNAME_JURISDICTIONS (match exacto o de
-    subdominio real, igual que hostname_matches_official). None si el
-    hostname no está en la configuración (no se puede cruzar)."""
+def load_official_source_registry(path=REGISTRY_PATH):
+    """Carga el registro oficial. Fail-closed: un archivo ausente, ilegible o
+    con forma inesperada produce un registro VACÍO (ninguna fuente oficial
+    puede alcanzar Nivel 1), nunca una excepción que tumbe el validador."""
+    try:
+        raw = path.read_text(encoding="utf-8")
+        data = json.loads(raw)
+    except (OSError, json.JSONDecodeError):
+        return {"registry_version": None, "sources": []}
+    if not isinstance(data, dict) or not isinstance(data.get("sources"), list):
+        return {"registry_version": None, "sources": []}
+    return data
+
+
+def _build_registry_by_id(registry):
+    """Índice id -> entrada. Un id duplicado en el registro falla cerrado:
+    AMBAS entradas con ese id se descartan del índice (ninguna fuente puede
+    referenciarlo válidamente) — un registro corrupto nunca abre un gate."""
+    by_id = {}
+    duplicated_ids = set()
+    for entry in registry.get("sources", []):
+        if not isinstance(entry, dict):
+            continue
+        eid = entry.get("id")
+        if not isinstance(eid, str) or not eid:
+            continue
+        if eid in by_id:
+            duplicated_ids.add(eid)
+            continue
+        by_id[eid] = entry
+    for dup in duplicated_ids:
+        by_id.pop(dup, None)
+    return by_id
+
+
+REGISTRY = load_official_source_registry()
+REGISTRY_BY_ID = _build_registry_by_id(REGISTRY)
+
+
+def match_registry_entry_for_url(url, registry):
+    """Entrada del registro cuyo hostname coincide con la URL — exacto o por
+    límite real de subdominio, nunca por subcadena. Cuando varias entradas
+    coinciden (p. ej. 'dof.gob.mx' y la entrada genérica 'gob.mx'), gana la
+    MÁS ESPECÍFICA: la de mayor longitud de hostname declarado."""
     host = extract_hostname(url)
     if not host:
         return None
-    for allowed_host, jurisdicciones in OFFICIAL_HOSTNAME_JURISDICTIONS.items():
-        if host == allowed_host or host.endswith("." + allowed_host):
-            return [normalize_country(j) for j in jurisdicciones]
-    return None
+    best = None
+    best_len = -1
+    for entry in registry.get("sources", []):
+        if not isinstance(entry, dict):
+            continue
+        for allowed_host in entry.get("hostnames", []) or []:
+            if not isinstance(allowed_host, str) or not allowed_host:
+                continue
+            if host == allowed_host or host.endswith("." + allowed_host):
+                if len(allowed_host) > best_len:
+                    best = entry
+                    best_len = len(allowed_host)
+    return best
+
+
+def normalize_org(name):
+    return " ".join((name or "").strip().casefold().split())
+
+
+def evaluate_fuente_registry(fuente):
+    """Comprobaciones de registro oficial para UNA fuente cuyo tipo_fuente
+    está en TIPOS_FUENTE_OFICIAL. Devuelve (nivel1_posible, errors, warnings):
+
+    - Sin 'registro_oficial_id' (null): si el hostname de la URL SÍ resuelve
+      a un organismo conocido, omitir el campo es un ERROR (evitable — hay
+      que declararlo). Si el hostname es genuinamente desconocido (o no hay
+      URL), es solo ADVERTENCIA — preserva el comportamiento fail-closed ya
+      existente desde la Fase 1D: un dominio desconocido nunca alcanza
+      Nivel 1, pero tampoco bloquea la pieza con un error duro por sí solo.
+    - Con 'registro_oficial_id' declarado: TODO tiene que ser coherente —
+      que el id exista en el registro, que el hostname de la URL resuelva a
+      ESA misma entrada (nunca a otra, nunca por subcadena), que
+      'organismo_autor' coincida (normalizado, exacto, nunca por subcadena)
+      con el nombre canónico o un alias, que 'tipo_fuente' esté en
+      'tipos_fuente_permitidos' de esa entrada, y que 'jurisdicciones_cubiertas'
+      sea subconjunto de las jurisdicciones/ámbito autorizados. Cualquier
+      incoherencia aquí es un ERROR — declarar un registro_oficial_id falso
+      es una afirmación activa, no un silencio."""
+    tipo_fuente = fuente.get("tipo_fuente")
+    url = fuente.get("url")
+    has_url = url not in (None, "")
+    registro_oficial_id = fuente.get("registro_oficial_id")
+    jurisdicciones_cubiertas = fuente.get("jurisdicciones_cubiertas") or []
+    errors = []
+    warnings = []
+
+    if registro_oficial_id is None:
+        resolved = match_registry_entry_for_url(url, REGISTRY) if has_url else None
+        if resolved is not None:
+            errors.append(
+                f"el hostname {extract_hostname(url)!r} corresponde al organismo registrado "
+                f"{resolved.get('id')!r} ({resolved.get('organismo_canonico')}), pero la fuente no declaró su "
+                "'registro_oficial_id' — decláralo explícitamente en vez de dejarlo en null."
+            )
+        else:
+            detalle = (
+                f"con hostname {extract_hostname(url)!r} que NO está en el registro oficial cerrado "
+                "(references/official-source-registry.json)"
+                if has_url else "sin URL para resolver contra el registro"
+            )
+            warnings.append(
+                f"fuente oficial sin 'registro_oficial_id', {detalle}. Esta fuente NO puede sostener "
+                "APTO_PARA_NARRATIVA — como máximo Nivel 2 — hasta que un humano confirme y registre el "
+                "organismo real, o añada la entrada al registro si es legítima."
+            )
+        return False, errors, warnings
+
+    entry = REGISTRY_BY_ID.get(registro_oficial_id)
+    if entry is None:
+        errors.append(
+            f"'registro_oficial_id' {registro_oficial_id!r} no existe en el registro oficial "
+            "(references/official-source-registry.json)."
+        )
+        return False, errors, warnings
+
+    if has_url:
+        resolved = match_registry_entry_for_url(url, REGISTRY)
+        if resolved is None or resolved.get("id") != entry.get("id"):
+            otro = f"{resolved.get('id')!r} ({resolved.get('organismo_canonico')})" if resolved else "ningún organismo registrado"
+            errors.append(
+                f"'registro_oficial_id' ({registro_oficial_id!r}) no corresponde al hostname real de la URL "
+                f"({extract_hostname(url)!r}) — el hostname resuelve a {otro}."
+            )
+
+    organismo_declarado = normalize_org(fuente.get("organismo_autor"))
+    permitidos_org = {normalize_org(entry.get("organismo_canonico"))} | {
+        normalize_org(a) for a in (entry.get("organismo_aliases") or [])
+    }
+    if organismo_declarado not in permitidos_org:
+        errors.append(
+            f"'organismo_autor' ({fuente.get('organismo_autor')!r}) no coincide, tras normalizar, con el "
+            f"organismo canónico ni con ningún alias registrado para {registro_oficial_id!r} "
+            f"({entry.get('organismo_canonico')!r}). La comparación es exacta tras normalización, nunca por "
+            "subcadena."
+        )
+
+    if tipo_fuente not in (entry.get("tipos_fuente_permitidos") or []):
+        errors.append(
+            f"el organismo {registro_oficial_id!r} ({entry.get('organismo_canonico')}) no tiene permitido el "
+            f"tipo de fuente {tipo_fuente!r} — solo permite {entry.get('tipos_fuente_permitidos')!r}."
+        )
+
+    declaradas = normalize_countries_list(jurisdicciones_cubiertas)
+    permitidas = [normalize_country(j) for j in (entry.get("jurisdicciones") or [])]
+    ajenas = [j for j in declaradas if j not in permitidas]
+    if ajenas:
+        errors.append(
+            f"fuente oficial ({registro_oficial_id!r}) declara en 'jurisdicciones_cubiertas' país/ámbito ajeno "
+            f"a lo autorizado: {ajenas!r} — solo puede respaldar {sorted(permitidas)!r}."
+        )
+
+    return (not errors), errors, warnings
 
 
 class Tag:
@@ -201,16 +324,12 @@ def extract_hostname(url):
 
 
 def hostname_matches_official(url):
-    """Coincidencia EXACTA o por límite real de subdominio contra la lista
-    cerrada OFFICIAL_HOSTNAMES. Nunca por subcadena: 'boe.es.evil.com' y
-    'notboe.es' deben devolver False; 'www.boe.es' debe devolver True."""
-    host = extract_hostname(url)
-    if not host:
-        return False
-    for allowed in OFFICIAL_HOSTNAMES:
-        if host == allowed or host.endswith("." + allowed):
-            return True
-    return False
+    """Compatibilidad: True si el hostname de la URL coincide (exacto o por
+    subdominio real, nunca por subcadena) con ALGUNA entrada del registro
+    único — usado solo para mensajes informativos, no para gating de
+    Nivel 1 (eso lo decide evaluate_fuente_registry, que exige además
+    'registro_oficial_id', organismo, tipo permitido y jurisdicción)."""
+    return match_registry_entry_for_url(url, REGISTRY) is not None
 
 
 def normalize_country(name):
@@ -302,6 +421,7 @@ def validate_verificacion_fuente(v, path):
 FUENTE_REQUIRED_FIELDS = [
     "id", "tipo_fuente", "titulo", "organismo_autor", "fecha_consulta",
     "localizador", "jurisdicciones_cubiertas", "verificacion_fuente",
+    "registro_oficial_id",
 ]
 
 
@@ -350,36 +470,27 @@ def validate_fuente(fuente, path):
     if has_url and not is_valid_http_url(url):
         errors.append(f"{path}: 'url' presente pero no es una URL http/https válida: {url!r}.")
 
+    registro_oficial_id = fuente.get("registro_oficial_id")
+    if registro_oficial_id is not None and not is_nonempty_str(registro_oficial_id):
+        errors.append(f"{path}: 'registro_oficial_id' debe ser un string no vacío o null, no {registro_oficial_id!r}.")
+
     if errors:
         return errors, warnings
 
-    if has_url and tipo_fuente in TIPOS_FUENTE_OFICIAL and not hostname_matches_official(url):
-        warnings.append(
-            f"{path}: el hostname {extract_hostname(url)!r} NO está en la lista cerrada de dominios oficiales "
-            "conocidos (coincidencia exacta o de subdominio, nunca por subcadena). Esta fuente NO puede sostener "
-            "APTO_PARA_NARRATIVA aunque 'verificacion_fuente.origen_oficial_confirmado' sea true — el hostname es "
-            "el gate real, fail-closed; si es un dominio oficial legítimo, un humano debe añadirlo a la lista "
-            "cerrada del validador."
+    # Registro oficial único (Fase 1D.1): toda la validación de
+    # hostname↔organismo↔tipo_fuente↔jurisdicción para fuentes oficiales se
+    # deriva de references/official-source-registry.json — ver
+    # evaluate_fuente_registry para el detalle de cada comprobación.
+    if tipo_fuente in TIPOS_FUENTE_OFICIAL:
+        _nivel1_posible, reg_errors, reg_warnings = evaluate_fuente_registry(fuente)
+        errors.extend(f"{path}: {e}" for e in reg_errors)
+        warnings.extend(f"{path}: {w}" for w in reg_warnings)
+    elif registro_oficial_id is not None:
+        errors.append(
+            f"{path}: 'registro_oficial_id' debe ser null para fuentes no oficiales (tipo_fuente={tipo_fuente!r}) "
+            "— solo NORMA_OFICIAL/JURISPRUDENCIA_OFICIAL/AUTORIDAD_PUBLICA_OFICIAL pueden declarar un registro "
+            "oficial."
         )
-
-    # Una fuente oficial NACIONAL no puede autoafirmar en 'jurisdicciones_cubiertas'
-    # un país ajeno al organismo real de su hostname (Fase 1D, Paso 3): 'boe.es'
-    # no puede declarar que cubre México. Solo se cruza cuando el hostname SÍ
-    # está en la configuración cerrada — si no está, ya cae a Nivel 2 por
-    # hostname_matches_official, y no se puede cruzar contra nada (falla cerrado
-    # por ese otro camino).
-    if has_url and tipo_fuente in TIPOS_FUENTE_OFICIAL:
-        allowed = official_hostname_allowed_jurisdictions(url)
-        if allowed is not None:
-            declaradas = normalize_countries_list(jurisdicciones_cubiertas)
-            ajenas = [j for j in declaradas if j not in allowed]
-            if ajenas:
-                errors.append(
-                    f"{path}: fuente oficial nacional ({extract_hostname(url)!r}) declara en "
-                    f"'jurisdicciones_cubiertas' país(es) ajenos a su organismo: {ajenas!r} — "
-                    f"este hostname solo puede respaldar {sorted(allowed)!r}. Una fuente de un país "
-                    "no puede autoatribuirse cobertura de otro."
-                )
 
     return errors, warnings
 
@@ -396,15 +507,17 @@ def compute_fuente_nivel(fuente):
         return NIVEL_4_DRIVE
     if tipo_fuente in TIPOS_FUENTE_OFICIAL:
         v = fuente.get("verificacion_fuente") or {}
-        url = fuente.get("url")
         # Fail-closed: TODAS las condiciones deben cumplirse para Nivel 1.
         # El booleano autoafirmado 'origen_oficial_confirmado' NUNCA basta
-        # por sí solo — hace falta además que el hostname real coincida con
-        # la lista cerrada, y que el propio JSON declare texto y vigencia
-        # verificados (no solo "hay URL" o "hay fecha de consulta").
+        # por sí solo — hace falta además que 'registro_oficial_id' apunte a
+        # una entrada real del registro único, cuyo hostname, organismo,
+        # tipo de fuente permitido y jurisdicción sean TODOS coherentes
+        # (evaluate_fuente_registry), y que el propio JSON declare texto y
+        # vigencia verificados (no solo "hay URL" o "hay fecha de consulta").
+        nivel1_posible, _errors, _warnings = evaluate_fuente_registry(fuente)
         if (
             v.get("origen_oficial_confirmado") is True
-            and hostname_matches_official(url)
+            and nivel1_posible
             and v.get("texto_exacto_consultado") is True
             and v.get("vigencia_comprobada") is True
         ):
@@ -852,8 +965,18 @@ def validate_piece(data, source_name):
     if errors:
         return errors, warnings
 
-    if data.get("schema_version") != SCHEMA_VERSION:
-        errors.append(f"'schema_version' debe ser {SCHEMA_VERSION!r}, no {data.get('schema_version')!r}.")
+    declared_version = data.get("schema_version")
+    if declared_version != SCHEMA_VERSION:
+        if declared_version == "3.0":
+            errors.append(
+                "'schema_version' declara \"3.0\", pero el validador exige \"4.0\" desde la Fase 1D.1: cada fuente "
+                "oficial ahora necesita 'registro_oficial_id' referenciando el registro único "
+                "(references/official-source-registry.json), que cruza hostname, organismo, tipo de fuente "
+                "permitido y jurisdicción. \"3.0\" ya NO es una versión vigente — migra el paquete añadiendo "
+                "'registro_oficial_id' a cada fuente y actualizando 'schema_version' a \"4.0\"."
+            )
+        else:
+            errors.append(f"'schema_version' debe ser {SCHEMA_VERSION!r}, no {declared_version!r}.")
     if not is_nonempty_str(data.get("piece_id")):
         errors.append("'piece_id' debe ser un string no vacío.")
 

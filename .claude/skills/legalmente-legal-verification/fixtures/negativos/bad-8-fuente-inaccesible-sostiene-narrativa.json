@@ -1,5 +1,5 @@
 {
-  "schema_version": "3.0",
+  "schema_version": "4.0",
   "piece_id": "neg",
   "claims": [
     {
@@ -35,7 +35,8 @@
             "fecha_comprobacion": null,
             "metodo_o_evidencia": null,
             "observaciones": "WebFetch bloqueado por el proxy de salida de este entorno; no se pudo confirmar el texto."
-          }
+          },
+          "registro_oficial_id": "boe-es"
         }
       ],
       "confianza": "alta",

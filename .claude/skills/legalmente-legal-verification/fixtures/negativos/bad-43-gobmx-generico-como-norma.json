@@ -4,22 +4,42 @@
   "claims": [
     {
       "claim_id": "c1",
-      "texto_exacto": "Capa C con jurisdiccion=[México, México] (duplicado).",
+      "texto_exacto": "gob.mx genérico presentado como NORMA_OFICIAL.",
       "ubicacion": "titulo",
       "tipo": "regla",
       "alcance": "CAPA_C_NACIONAL",
-      "jurisdiccion": [
-        "México",
-        "México"
-      ],
+      "jurisdiccion": "México",
       "nucleo_transversal": null,
       "variaciones_materiales": null,
       "jurisdicciones_revisadas": null,
       "diferencias_buscadas": null,
       "contraejemplos_encontrados": null,
       "justificacion_suficiencia_comparada": null,
-      "fuentes": [],
-      "confianza": "baja",
+      "fuentes": [
+        {
+          "id": "f43",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Norma de prueba",
+          "organismo_autor": "Gobierno de México",
+          "url": "https://www.gob.mx/sat",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-08-25",
+          "localizador": "art. 1",
+          "jurisdicciones_cubiertas": [
+            "México"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": true,
+            "texto_exacto_consultado": true,
+            "vigencia_comprobada": true,
+            "fecha_comprobacion": "2026-08-25",
+            "metodo_o_evidencia": "Lectura directa del texto oficial vigente",
+            "observaciones": null
+          },
+          "registro_oficial_id": "gob-mx-generico"
+        }
+      ],
+      "confianza": "media",
       "riesgo_falsa_universalizacion": "bajo",
       "riesgo_asesoria": "ninguno",
       "platform_review": {
@@ -36,7 +56,7 @@
         "fecha": null,
         "observaciones": null
       },
-      "estado": "REQUIERE_INVESTIGACION",
+      "estado": "APTO_CON_MATICES",
       "revision_humana": {
         "estado": "PENDIENTE",
         "revisor": null,
@@ -51,10 +71,10 @@
         "nuevo_claim_id": null
       },
       "redaccion_prohibida": null,
-      "notas": "NEGATIVO (Fase 1D): país duplicado en la lista de jurisdicción."
+      "notas": "NEGATIVO (Fase 1D.1): la entrada genérica gob-mx-generico solo permite AUTORIDAD_PUBLICA_OFICIAL."
     }
   ],
-  "estado_agregado": "REQUIERE_INVESTIGACION",
+  "estado_agregado": "APTO_CON_MATICES",
   "revisiones_pendientes": [
     "c1"
   ],
