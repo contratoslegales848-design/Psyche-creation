@@ -1,76 +1,49 @@
 {
   "schema_version": "3.0",
-  "piece_id": "edge-2-multilinea-unicode",
+  "piece_id": "neg",
   "claims": [
     {
-      "claim_id": "edge-2-claim-1",
-      "texto_exacto": "Línea uno: la posesión no es lo mismo que la propiedad.\nLínea dos: quién tiene la cosa no siempre tiene el título.\nLínea tres: la usucapión puede cambiar esto con el paso del tiempo.",
-      "ubicacion": "lista",
+      "claim_id": "c1",
+      "texto_exacto": "Capa A donde la jurisdicción revisada (Argentina) usa una fuente mexicana.",
+      "ubicacion": "titulo",
       "tipo": "definicion",
       "alcance": "CAPA_A_TRANSVERSAL",
       "jurisdiccion": null,
-      "nucleo_transversal": "La distinción entre posesión y propiedad, y la existencia de la usucapión, es común en el derecho civil hispánico.",
+      "nucleo_transversal": null,
       "variaciones_materiales": null,
       "jurisdicciones_revisadas": [
         {
           "pais": "España",
           "fuente_ids": [
-            "f-edge2a"
-          ]
-        },
-        {
-          "pais": "México",
-          "fuente_ids": [
-            "f-edge2b"
+            "f-es2"
           ]
         },
         {
           "pais": "Argentina",
           "fuente_ids": [
-            "f-edge2c"
+            "f-mx"
           ]
         },
         {
           "pais": "Perú",
           "fuente_ids": [
-            "f-edge2d"
+            "f-pe2"
           ]
         }
       ],
-      "diferencias_buscadas": "Si la distinción posesión/propiedad y la usucapión cambian entre los cuatro países.",
-      "contraejemplos_encontrados": "Ninguno sobre la distinción conceptual en sí.",
-      "justificacion_suficiencia_comparada": "Cuatro códigos civiles independientes mantienen la misma distinción y el mismo mecanismo, cada uno con fuente y localizador propios.",
+      "diferencias_buscadas": "x",
+      "contraejemplos_encontrados": "ninguno",
+      "justificacion_suficiencia_comparada": "x",
       "fuentes": [
         {
-          "id": "f-edge2a",
+          "id": "f-mx",
           "tipo_fuente": "NORMA_OFICIAL",
-          "titulo": "Código Civil español — posesión y prescripción adquisitiva",
-          "organismo_autor": "Agencia Estatal BOE",
-          "url": "https://www.boe.es/eli/es/rd/1889/07/24/(1)/con",
+          "titulo": "Código Civil Federal (México)",
+          "organismo_autor": "Diputados MX",
+          "url": "https://www.diputados.gob.mx/x",
           "identificador_bibliografico": null,
           "fecha_consulta": "2026-08-25",
-          "localizador": "arts. 430 y 1940",
-          "jurisdicciones_cubiertas": [
-            "España"
-          ],
-          "verificacion_fuente": {
-            "origen_oficial_confirmado": true,
-            "texto_exacto_consultado": true,
-            "vigencia_comprobada": true,
-            "fecha_comprobacion": "2026-08-25",
-            "metodo_o_evidencia": "Lectura directa del texto oficial vigente",
-            "observaciones": null
-          }
-        },
-        {
-          "id": "f-edge2b",
-          "tipo_fuente": "NORMA_OFICIAL",
-          "titulo": "Código Civil Federal (México) — posesión y prescripción",
-          "organismo_autor": "Congreso de la Unión (México)",
-          "url": "https://www.diputados.gob.mx/LeyesBiblio/pdf/CCF.pdf",
-          "identificador_bibliografico": null,
-          "fecha_consulta": "2026-08-25",
-          "localizador": "arts. 790 y 1151",
+          "localizador": "art. 2384",
           "jurisdicciones_cubiertas": [
             "México"
           ],
@@ -84,16 +57,16 @@
           }
         },
         {
-          "id": "f-edge2c",
+          "id": "f-es2",
           "tipo_fuente": "NORMA_OFICIAL",
-          "titulo": "Código Civil y Comercial (Argentina) — posesión y prescripción",
-          "organismo_autor": "InfoLEG — Ministerio de Justicia (Argentina)",
-          "url": "https://servicios.infoleg.gob.ar/infolegInternet/anexos/235000-239999/235975/texact.htm",
+          "titulo": "CC España",
+          "organismo_autor": "BOE",
+          "url": "https://www.boe.es/x",
           "identificador_bibliografico": null,
           "fecha_consulta": "2026-08-25",
-          "localizador": "arts. 1909 y 1897",
+          "localizador": "art. 1740",
           "jurisdicciones_cubiertas": [
-            "Argentina"
+            "España"
           ],
           "verificacion_fuente": {
             "origen_oficial_confirmado": true,
@@ -105,14 +78,14 @@
           }
         },
         {
-          "id": "f-edge2d",
+          "id": "f-pe2",
           "tipo_fuente": "NORMA_OFICIAL",
-          "titulo": "Código Civil (Perú) — posesión y prescripción adquisitiva",
-          "organismo_autor": "Sistema Peruano de Información Jurídica — Minjus",
-          "url": "https://spij.minjus.gob.pe/spij-ext-web/#/detallenorma/H1000921",
+          "titulo": "CC Perú",
+          "organismo_autor": "Minjus",
+          "url": "https://spij.minjus.gob.pe/x",
           "identificador_bibliografico": null,
           "fecha_consulta": "2026-08-25",
-          "localizador": "arts. 896 y 950",
+          "localizador": "art. 1728",
           "jurisdicciones_cubiertas": [
             "Perú"
           ],
@@ -157,13 +130,13 @@
         "verificada": false,
         "nuevo_claim_id": null
       },
-      "redaccion_prohibida": "Cualquier versión que mencione un plazo concreto de años sin declarar el país.",
-      "notas": "Fixture de formato: texto_exacto multilínea con acentos/ñ."
+      "redaccion_prohibida": null,
+      "notas": null
     }
   ],
   "estado_agregado": "APTO_PARA_NARRATIVA",
   "revisiones_pendientes": [
-    "edge-2-claim-1"
+    "c1"
   ],
   "gate_global_arte": "CERRADO"
 }

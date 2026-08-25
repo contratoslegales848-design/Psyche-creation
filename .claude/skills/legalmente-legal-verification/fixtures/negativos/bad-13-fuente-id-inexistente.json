@@ -1,63 +1,64 @@
 {
-  "schema_version": "2.0",
-  "piece_id": "bad-5-fuente-sin-url-ni-identificacion",
+  "schema_version": "3.0",
+  "piece_id": "bad-13",
   "claims": [
     {
-      "claim_id": "bad5-claim",
-      "texto_exacto": "Afirmación con una fuente que no tiene ni URL ni identificación bibliográfica.",
+      "claim_id": "c1",
+      "texto_exacto": "Afirmación aprobada sin ninguna fuente real.",
       "ubicacion": "titulo",
       "tipo": "regla",
       "alcance": "CAPA_A_TRANSVERSAL",
       "jurisdiccion": null,
-      "nucleo_transversal": null,
+      "nucleo_transversal": "algo",
       "variaciones_materiales": null,
       "jurisdicciones_revisadas": [
         {
           "pais": "España",
           "fuente_ids": [
-            "f-sinurl"
+            "fx"
           ]
         },
         {
           "pais": "México",
           "fuente_ids": [
-            "f-sinurl"
+            "fx"
           ]
         },
         {
           "pais": "Argentina",
           "fuente_ids": [
-            "f-sinurl"
+            "fx"
           ]
         }
       ],
       "diferencias_buscadas": "algo",
       "contraejemplos_encontrados": "ninguno",
       "justificacion_suficiencia_comparada": "algo",
-      "fuentes": [
-        {
-          "id": "f-sinurl",
-          "tipo_fuente": "SECUNDARIA_ESPECIALIZADA",
-          "titulo": null,
-          "organismo_autor": null,
-          "url": null,
-          "identificador_bibliografico": null,
-          "fecha_consulta": "2026-08-25",
-          "localizador": "algo",
-          "dominio_oficial_confirmado": false
-        }
-      ],
-      "confianza": "media",
+      "fuentes": [],
+      "confianza": "alta",
       "riesgo_falsa_universalizacion": "bajo",
       "riesgo_asesoria": "ninguno",
-      "platform_review_required": false,
-      "confidentiality_review_required": false,
-      "estado": "APTO_CON_MATICES",
+      "platform_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "confidentiality_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "estado": "APTO_PARA_NARRATIVA",
       "revision_humana": {
         "estado": "PENDIENTE",
         "revisor": null,
         "fecha": null,
-        "observaciones": null
+        "observaciones": null,
+        "contenido_hash_sha256": null
       },
       "gate_arte": "CERRADO",
       "reformulacion_propuesta": {
@@ -66,12 +67,12 @@
         "nuevo_claim_id": null
       },
       "redaccion_prohibida": null,
-      "notas": "NEGATIVO: fuente sin url y sin identificador_bibliografico ni titulo/organismo_autor."
+      "notas": "NEGATIVO: fuente_ids referencia una fuente que no existe."
     }
   ],
-  "estado_agregado": "APTO_CON_MATICES",
+  "estado_agregado": "APTO_PARA_NARRATIVA",
   "revisiones_pendientes": [
-    "bad5-claim"
+    "c1"
   ],
   "gate_global_arte": "CERRADO"
 }

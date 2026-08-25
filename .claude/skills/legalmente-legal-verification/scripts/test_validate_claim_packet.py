@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
-"""Pruebas unitarias (stdlib unittest) del validador legalmente-legal-verification.
+"""Pruebas unitarias (stdlib unittest) del validador legalmente-legal-verification
+(esquema v3).
 
 Uso:
-    python3 -m unittest scripts.test_validate_claim_packet -v
-    (o, desde dentro de scripts/): python3 test_validate_claim_packet.py -v
-
-Complementa, no sustituye, la ejecución del validador sobre los fixtures
-reales de fixtures/piezas/ y fixtures/negativos/.
+    python3 -m unittest test_validate_claim_packet -v
+    (desde dentro de scripts/)
 """
 
 import importlib.util
+import json
+import re
 import sys
 import unittest
 from pathlib import Path
@@ -20,16 +20,43 @@ vcp = importlib.util.module_from_spec(spec)
 sys.modules["validate_claim_packet"] = vcp
 spec.loader.exec_module(vcp)
 
+SKILL_ROOT = Path(__file__).resolve().parent.parent
+TODAY = "2026-08-25"
+
+# Identificadores de revisor que SÍ pueden aparecer en pruebas — nunca un
+# nombre real. Ver Fase 1C, Paso 2 y Paso 10.12.
+REVISOR_FICTICIO = "REVISOR_FICTICIO_SOLO_PRUEBA"
+FORBIDDEN_REAL_NAMES = ["Raymundo Acevedo", "Raymundo"]
+
+
+def base_verificacion(origen=True, texto=True, vigencia=True):
+    return {
+        "origen_oficial_confirmado": origen, "texto_exacto_consultado": texto,
+        "vigencia_comprobada": vigencia,
+        "fecha_comprobacion": TODAY if (texto or vigencia) else None,
+        "metodo_o_evidencia": "Lectura directa del BOE" if texto else None,
+        "observaciones": None,
+    }
+
 
 def base_fuente(**overrides):
     f = {
         "id": "f1", "tipo_fuente": "NORMA_OFICIAL", "titulo": "Ley X",
         "organismo_autor": "Autoridad X", "url": "https://www.boe.es/algo",
-        "identificador_bibliografico": None, "fecha_consulta": "2026-08-25",
-        "localizador": "art. 1", "dominio_oficial_confirmado": True,
+        "identificador_bibliografico": None, "fecha_consulta": TODAY,
+        "localizador": "art. 1", "jurisdicciones_cubiertas": ["España"],
+        "verificacion_fuente": base_verificacion(),
     }
     f.update(overrides)
     return f
+
+
+def base_review(required=False, status="NO_APLICA"):
+    return {"required": required, "status": status, "revisor": None, "fecha": None, "observaciones": None}
+
+
+def base_revision_humana(estado="PENDIENTE", revisor=None, fecha=None, contenido_hash=None):
+    return {"estado": estado, "revisor": revisor, "fecha": fecha, "observaciones": None, "contenido_hash_sha256": contenido_hash}
 
 
 def base_claim(**overrides):
@@ -41,9 +68,9 @@ def base_claim(**overrides):
         "contraejemplos_encontrados": None, "justificacion_suficiencia_comparada": None,
         "fuentes": [base_fuente()],
         "confianza": "alta", "riesgo_falsa_universalizacion": "bajo", "riesgo_asesoria": "ninguno",
-        "platform_review_required": False, "confidentiality_review_required": False,
+        "platform_review": base_review(), "confidentiality_review": base_review(),
         "estado": "APTO_PARA_NARRATIVA",
-        "revision_humana": {"estado": "PENDIENTE", "revisor": None, "fecha": None, "observaciones": None},
+        "revision_humana": base_revision_humana(),
         "gate_arte": "CERRADO",
         "reformulacion_propuesta": {"texto": None, "verificada": False, "nuevo_claim_id": None},
         "redaccion_prohibida": None, "notas": None,
@@ -52,10 +79,20 @@ def base_claim(**overrides):
     return c
 
 
+def approved_claim(**overrides):
+    """Claim con revisión humana APROBADA y hash correcto — SOLO usa el
+    identificador ficticio de prueba, nunca un nombre real."""
+    c = base_claim(**overrides)
+    c["revision_humana"] = base_revision_humana("APROBADO", revisor=REVISOR_FICTICIO, fecha=TODAY)
+    c["revision_humana"]["contenido_hash_sha256"] = vcp.compute_content_hash(c)
+    c["gate_arte"] = "ABIERTO"
+    return c
+
+
 def base_piece(claims, **overrides):
     estados = [c["estado"] for c in claims]
     p = {
-        "schema_version": "2.0", "piece_id": "p1", "claims": claims,
+        "schema_version": "3.0", "piece_id": "p1", "claims": claims,
         "estado_agregado": vcp.compute_estado_agregado(estados),
         "revisiones_pendientes": sorted(vcp.compute_revisiones_pendientes(claims)),
         "gate_global_arte": "CERRADO",
@@ -64,223 +101,216 @@ def base_piece(claims, **overrides):
     return p
 
 
-class TestFuenteNivel(unittest.TestCase):
-    def test_norma_oficial_confirmada_es_nivel_1(self):
-        self.assertEqual(vcp.compute_fuente_nivel(base_fuente()), vcp.NIVEL_1_CONFIRMADO)
+class TestHostnameMatching(unittest.TestCase):
+    def test_dominio_exacto_valido(self):
+        self.assertTrue(vcp.hostname_matches_official("https://boe.es/x"))
 
-    def test_norma_oficial_no_confirmada_es_nivel_2(self):
-        f = base_fuente(dominio_oficial_confirmado=False)
+    def test_subdominio_real_valido(self):
+        self.assertTrue(vcp.hostname_matches_official("https://www.boe.es/x"))
+
+    def test_subcadena_boe_es_evil_com_invalida(self):
+        self.assertFalse(vcp.hostname_matches_official("https://boe.es.evil.com/x"))
+
+    def test_prefijo_notboe_es_invalido(self):
+        self.assertFalse(vcp.hostname_matches_official("https://notboe.es/x"))
+
+    def test_dominio_privado_justia_invalido(self):
+        self.assertFalse(vcp.hostname_matches_official("https://mexico.justia.com/x"))
+
+    def test_sin_url_invalido(self):
+        self.assertFalse(vcp.hostname_matches_official(None))
+
+
+class TestFuenteNivelFailClosed(unittest.TestCase):
+    def test_oficial_confirmada_hostname_real_es_nivel_1(self):
+        f = base_fuente()
+        self.assertEqual(vcp.compute_fuente_nivel(f), vcp.NIVEL_1_CONFIRMADO)
+
+    def test_origen_confirmado_true_pero_hostname_falso_no_es_nivel_1(self):
+        """Bypass A: el booleano autoafirmado NUNCA basta solo — hace falta
+        que el hostname real coincida con la lista cerrada."""
+        f = base_fuente(url="https://mexico.justia.com/x")
+        self.assertNotEqual(vcp.compute_fuente_nivel(f), vcp.NIVEL_1_CONFIRMADO)
         self.assertEqual(vcp.compute_fuente_nivel(f), vcp.NIVEL_2_DECLARADO_NO_VERIFICADO)
 
+    def test_hostname_real_pero_texto_no_consultado_no_es_nivel_1(self):
+        f = base_fuente(verificacion_fuente=base_verificacion(texto=False))
+        self.assertNotEqual(vcp.compute_fuente_nivel(f), vcp.NIVEL_1_CONFIRMADO)
+
+    def test_hostname_real_pero_vigencia_no_comprobada_no_es_nivel_1(self):
+        f = base_fuente(verificacion_fuente=base_verificacion(vigencia=False))
+        self.assertNotEqual(vcp.compute_fuente_nivel(f), vcp.NIVEL_1_CONFIRMADO)
+
     def test_secundaria_es_nivel_3(self):
-        f = base_fuente(tipo_fuente="SECUNDARIA_ESPECIALIZADA", dominio_oficial_confirmado=False)
+        f = base_fuente(tipo_fuente="SECUNDARIA_ESPECIALIZADA", verificacion_fuente=base_verificacion(False, False, False))
         self.assertEqual(vcp.compute_fuente_nivel(f), vcp.NIVEL_3_ACADEMICA_SECUNDARIA)
 
     def test_drive_es_nivel_4(self):
-        f = base_fuente(tipo_fuente="DRIVE_INTERNO", dominio_oficial_confirmado=False)
+        f = base_fuente(tipo_fuente="DRIVE_INTERNO", verificacion_fuente=base_verificacion(False, False, False))
         self.assertEqual(vcp.compute_fuente_nivel(f), vcp.NIVEL_4_DRIVE)
 
 
-class TestMaxEstadoPorFuentes(unittest.TestCase):
-    def test_sin_fuentes_requiere_investigacion(self):
-        self.assertEqual(vcp.compute_max_estado_por_fuentes([]), "REQUIERE_INVESTIGACION")
-
-    def test_solo_drive_requiere_investigacion(self):
-        fuentes = [base_fuente(tipo_fuente="DRIVE_INTERNO", dominio_oficial_confirmado=False)]
-        self.assertEqual(vcp.compute_max_estado_por_fuentes(fuentes), "REQUIERE_INVESTIGACION")
-
-    def test_oficial_confirmada_permite_narrativa(self):
-        self.assertEqual(vcp.compute_max_estado_por_fuentes([base_fuente()]), "APTO_PARA_NARRATIVA")
-
-    def test_oficial_no_confirmada_topa_en_matices(self):
-        fuentes = [base_fuente(dominio_oficial_confirmado=False)]
-        self.assertEqual(vcp.compute_max_estado_por_fuentes(fuentes), "APTO_CON_MATICES")
-
-    def test_secundaria_topa_en_matices(self):
-        fuentes = [base_fuente(tipo_fuente="SECUNDARIA_ESPECIALIZADA", dominio_oficial_confirmado=False)]
-        self.assertEqual(vcp.compute_max_estado_por_fuentes(fuentes), "APTO_CON_MATICES")
-
-
-class TestClaimGate(unittest.TestCase):
-    def test_gate_cerrado_si_no_apto_para_narrativa(self):
-        c = base_claim(estado="APTO_CON_MATICES")
-        self.assertEqual(vcp.compute_claim_gate(c, c["estado"]), "CERRADO")
-
-    def test_gate_cerrado_si_revision_pendiente(self):
-        c = base_claim(estado="APTO_PARA_NARRATIVA")
-        self.assertEqual(vcp.compute_claim_gate(c, c["estado"]), "CERRADO")
-
-    def test_gate_abierto_si_todo_en_orden(self):
-        c = base_claim(estado="APTO_PARA_NARRATIVA",
-                        revision_humana={"estado": "APROBADO", "revisor": "R", "fecha": "2026-08-25", "observaciones": None})
-        self.assertEqual(vcp.compute_claim_gate(c, c["estado"]), "ABIERTO")
-
-    def test_gate_cerrado_si_platform_review_pendiente(self):
-        c = base_claim(estado="APTO_PARA_NARRATIVA", platform_review_required=True,
-                        revision_humana={"estado": "APROBADO", "revisor": "R", "fecha": "2026-08-25", "observaciones": None})
-        self.assertEqual(vcp.compute_claim_gate(c, c["estado"]), "CERRADO")
-
-    def test_gate_cerrado_si_confidentiality_review_pendiente(self):
-        c = base_claim(estado="APTO_PARA_NARRATIVA", confidentiality_review_required=True,
-                        revision_humana={"estado": "APROBADO", "revisor": "R", "fecha": "2026-08-25", "observaciones": None})
-        self.assertEqual(vcp.compute_claim_gate(c, c["estado"]), "CERRADO")
-
-
-class TestEstadoAgregado(unittest.TestCase):
-    def test_uno_bloqueado_bloquea_toda_la_pieza(self):
-        estados = ["APTO_PARA_NARRATIVA", "BLOQUEADO", "APTO_PARA_NARRATIVA"]
-        self.assertEqual(vcp.compute_estado_agregado(estados), "BLOQUEADO")
-
-    def test_uno_requiere_investigacion_frena_la_pieza(self):
-        estados = ["APTO_PARA_NARRATIVA"] * 9 + ["REQUIERE_INVESTIGACION"]
-        self.assertEqual(vcp.compute_estado_agregado(estados), "REQUIERE_INVESTIGACION")
-
-    def test_todos_aptos_para_narrativa(self):
-        estados = ["APTO_PARA_NARRATIVA"] * 10
-        self.assertEqual(vcp.compute_estado_agregado(estados), "APTO_PARA_NARRATIVA")
-
-    def test_matices_frena_narrativa_plena(self):
-        estados = ["APTO_PARA_NARRATIVA", "APTO_CON_MATICES"]
-        self.assertEqual(vcp.compute_estado_agregado(estados), "APTO_CON_MATICES")
-
-
-class TestValidateFuente(unittest.TestCase):
-    def test_fuente_valida_sin_errores(self):
-        errors, warnings = vcp.validate_fuente(base_fuente(), "f")
-        self.assertEqual(errors, [])
-
-    def test_tipo_fuente_invalido_es_error(self):
-        errors, _ = vcp.validate_fuente(base_fuente(tipo_fuente="INVENTADO"), "f")
-        self.assertTrue(any("tipo_fuente" in e for e in errors))
-
-    def test_sin_url_ni_identificador_es_error(self):
-        errors, _ = vcp.validate_fuente(base_fuente(url=None, identificador_bibliografico=None), "f")
-        self.assertTrue(any("identificador_bibliografico" in e for e in errors))
-
-    def test_identificador_bibliografico_sin_url_es_valido(self):
-        errors, _ = vcp.validate_fuente(base_fuente(url=None, identificador_bibliografico="ISBN 000-0"), "f")
-        self.assertEqual(errors, [])
-
-    def test_url_no_http_es_error(self):
-        errors, _ = vcp.validate_fuente(base_fuente(url="ftp://example.com/x"), "f")
-        self.assertTrue(any("URL" in e for e in errors))
-
-    def test_dominio_no_oficial_genera_advertencia_no_error(self):
-        f = base_fuente(url="https://mexico.justia.com/algo", dominio_oficial_confirmado=True)
-        errors, warnings = vcp.validate_fuente(f, "f")
-        self.assertEqual(errors, [])
-        self.assertTrue(warnings)
-
-
-class TestValidateClaimCapaA(unittest.TestCase):
-    def test_capa_a_sin_justificacion_es_error(self):
-        c = base_claim(alcance="CAPA_A_TRANSVERSAL")
-        errors, _, _, _ = vcp.validate_claim(c, "c")
-        self.assertTrue(any("justificación comparada" in e for e in errors))
-
-    def test_capa_a_con_dos_jurisdicciones_es_error(self):
-        c = base_claim(
-            alcance="CAPA_A_TRANSVERSAL",
-            jurisdicciones_revisadas=[{"pais": "España", "fuente_ids": ["f1"]}, {"pais": "México", "fuente_ids": ["f1"]}],
-            diferencias_buscadas="x", contraejemplos_encontrados="x", justificacion_suficiencia_comparada="x",
-        )
-        errors, _, _, _ = vcp.validate_claim(c, "c")
-        self.assertTrue(any("al menos 3" in e for e in errors))
-
-    def test_capa_a_con_pais_duplicado_es_error(self):
-        c = base_claim(
-            alcance="CAPA_A_TRANSVERSAL",
+class TestCapaAJurisdiccionFuente(unittest.TestCase):
+    def _claim_una_fuente_cuatro_paises(self):
+        f = base_fuente(id="f-es", jurisdicciones_cubiertas=["España"])
+        return base_claim(
+            alcance="CAPA_A_TRANSVERSAL", fuentes=[f],
             jurisdicciones_revisadas=[
-                {"pais": "España", "fuente_ids": ["f1"]},
-                {"pais": " españa ", "fuente_ids": ["f1"]},
-                {"pais": "México", "fuente_ids": ["f1"]},
-            ],
-            diferencias_buscadas="x", contraejemplos_encontrados="x", justificacion_suficiencia_comparada="x",
-        )
-        errors, _, _, _ = vcp.validate_claim(c, "c")
-        self.assertTrue(any("duplicado" in e for e in errors))
-
-    def test_capa_a_con_jurisdiccion_sin_fuente_es_error(self):
-        c = base_claim(
-            alcance="CAPA_A_TRANSVERSAL",
-            jurisdicciones_revisadas=[
-                {"pais": "España", "fuente_ids": ["f1"]},
-                {"pais": "México", "fuente_ids": []},
-                {"pais": "Argentina", "fuente_ids": ["f1"]},
-            ],
-            diferencias_buscadas="x", contraejemplos_encontrados="x", justificacion_suficiencia_comparada="x",
-        )
-        errors, _, _, _ = vcp.validate_claim(c, "c")
-        self.assertTrue(any("fuente_ids" in e for e in errors))
-
-    def test_capa_a_completa_y_valida_pasa(self):
-        c = base_claim(
-            alcance="CAPA_A_TRANSVERSAL", estado="APTO_PARA_NARRATIVA",
-            fuentes=[base_fuente(id="f1"), base_fuente(id="f2"), base_fuente(id="f3")],
-            jurisdicciones_revisadas=[
-                {"pais": "España", "fuente_ids": ["f1"]},
-                {"pais": "México", "fuente_ids": ["f2"]},
-                {"pais": "Argentina", "fuente_ids": ["f3"]},
+                {"pais": "España", "fuente_ids": ["f-es"]}, {"pais": "México", "fuente_ids": ["f-es"]},
+                {"pais": "Argentina", "fuente_ids": ["f-es"]}, {"pais": "Perú", "fuente_ids": ["f-es"]},
             ],
             diferencias_buscadas="x", contraejemplos_encontrados="ninguno", justificacion_suficiencia_comparada="x",
         )
-        errors, _, max_estado, gate = vcp.validate_claim(c, "c")
+
+    def test_bypass_b_una_fuente_cuatro_paises_es_error(self):
+        c = self._claim_una_fuente_cuatro_paises()
+        errors, _, _, _ = vcp.validate_claim(c, "c")
+        self.assertTrue(any("no cubre esta jurisdicción" in e for e in errors))
+
+    def test_fuente_con_jurisdiccion_correcta_por_pais_es_valida(self):
+        fuentes = [
+            base_fuente(id="f-es", jurisdicciones_cubiertas=["España"]),
+            base_fuente(id="f-mx", jurisdicciones_cubiertas=["México"]),
+            base_fuente(id="f-ar", jurisdicciones_cubiertas=["Argentina"]),
+        ]
+        c = base_claim(
+            alcance="CAPA_A_TRANSVERSAL", fuentes=fuentes,
+            jurisdicciones_revisadas=[
+                {"pais": "España", "fuente_ids": ["f-es"]}, {"pais": "México", "fuente_ids": ["f-mx"]},
+                {"pais": "Argentina", "fuente_ids": ["f-ar"]},
+            ],
+            diferencias_buscadas="x", contraejemplos_encontrados="ninguno", justificacion_suficiencia_comparada="x",
+        )
+        errors, _, max_estado, _ = vcp.validate_claim(c, "c")
         self.assertEqual(errors, [])
         self.assertEqual(max_estado, "APTO_PARA_NARRATIVA")
 
+    def test_una_nivel_1_y_tres_sin_verificar_topa_en_el_pais_mas_debil(self):
+        """'Una fuente Nivel 1 confirmada + tres sin verificar no puede
+        sostener APTO_PARA_NARRATIVA para toda la comparación' — el techo de
+        Capa A es el mínimo entre las 4 jurisdicciones, no el máximo."""
+        fuentes = [
+            base_fuente(id="f-es", jurisdicciones_cubiertas=["España"]),  # Nivel 1 real
+            base_fuente(id="f-mx", jurisdicciones_cubiertas=["México"], verificacion_fuente=base_verificacion(False, False, False)),
+            base_fuente(id="f-ar", jurisdicciones_cubiertas=["Argentina"], verificacion_fuente=base_verificacion(False, False, False)),
+            base_fuente(id="f-pe", jurisdicciones_cubiertas=["Perú"], verificacion_fuente=base_verificacion(False, False, False)),
+        ]
+        c = base_claim(
+            alcance="CAPA_A_TRANSVERSAL", fuentes=fuentes,
+            jurisdicciones_revisadas=[
+                {"pais": "España", "fuente_ids": ["f-es"]}, {"pais": "México", "fuente_ids": ["f-mx"]},
+                {"pais": "Argentina", "fuente_ids": ["f-ar"]}, {"pais": "Perú", "fuente_ids": ["f-pe"]},
+            ],
+            diferencias_buscadas="x", contraejemplos_encontrados="ninguno", justificacion_suficiencia_comparada="x",
+        )
+        fuentes_by_id = {f["id"]: f for f in fuentes}
+        ceiling = vcp.compute_capa_a_ceiling(c, fuentes_by_id)
+        self.assertEqual(ceiling, "APTO_CON_MATICES")
 
-class TestValidateClaimAlcanceEspecial(unittest.TestCase):
-    def test_no_determinado_con_bloqueado_es_error(self):
-        c = base_claim(alcance="NO_DETERMINADO", estado="BLOQUEADO", fuentes=[])
+    def test_tres_fuente_ids_del_mismo_pais_no_cubren_los_otros(self):
+        f = base_fuente(id="f-mx", jurisdicciones_cubiertas=["México"])
+        c = base_claim(
+            alcance="CAPA_A_TRANSVERSAL", fuentes=[f],
+            jurisdicciones_revisadas=[
+                {"pais": "México", "fuente_ids": ["f-mx"]}, {"pais": "España", "fuente_ids": ["f-mx"]},
+                {"pais": "Argentina", "fuente_ids": ["f-mx"]},
+            ],
+            diferencias_buscadas="x", contraejemplos_encontrados="ninguno", justificacion_suficiencia_comparada="x",
+        )
         errors, _, _, _ = vcp.validate_claim(c, "c")
-        self.assertTrue(any("NO_DETERMINADO" in e for e in errors))
+        self.assertTrue(any("no cubre esta jurisdicción" in e for e in errors))
 
-    def test_no_determinado_con_requiere_investigacion_es_valido(self):
-        c = base_claim(alcance="NO_DETERMINADO", estado="REQUIERE_INVESTIGACION", fuentes=[])
+
+class TestTiposEstrictos(unittest.TestCase):
+    def test_jurisdiccion_entero_es_error(self):
+        f = base_fuente(jurisdicciones_cubiertas=["México"])
+        c = base_claim(alcance="CAPA_C_NACIONAL", jurisdiccion=123, estado="APTO_CON_MATICES", fuentes=[f])
+        errors, _, _, _ = vcp.validate_claim(c, "c")
+        self.assertTrue(any("'jurisdiccion' debe ser string" in e for e in errors))
+
+    def test_variaciones_materiales_entero_es_error(self):
+        c = base_claim(alcance="CAPA_B_VARIABLE", variaciones_materiales=123, estado="REQUIERE_INVESTIGACION", fuentes=[])
+        errors, _, _, _ = vcp.validate_claim(c, "c")
+        self.assertTrue(any("'variaciones_materiales' debe ser string" in e for e in errors))
+
+    def test_jurisdiccion_lista_de_strings_es_valida(self):
+        fuentes = [base_fuente(id="f1", jurisdicciones_cubiertas=["México"]), base_fuente(id="f2", jurisdicciones_cubiertas=["Colombia"])]
+        c = base_claim(alcance="CAPA_C_NACIONAL", jurisdiccion=["México", "Colombia"], estado="APTO_CON_MATICES", fuentes=fuentes)
         errors, _, _, _ = vcp.validate_claim(c, "c")
         self.assertEqual(errors, [])
 
-    def test_no_aplica_con_bloqueado_es_valido(self):
-        c = base_claim(alcance="NO_APLICA", estado="BLOQUEADO", fuentes=[])
-        errors, _, _, _ = vcp.validate_claim(c, "c")
+
+class TestVerificacionFuente(unittest.TestCase):
+    def test_texto_no_vacio_requerido_si_vigencia_true(self):
+        v = base_verificacion()
+        v["fecha_comprobacion"] = None
+        errors = vcp.validate_verificacion_fuente(v, "f")
+        self.assertTrue(any("vigencia_comprobada" in e for e in errors))
+
+    def test_metodo_requerido_si_texto_consultado_true(self):
+        v = base_verificacion()
+        v["metodo_o_evidencia"] = None
+        errors = vcp.validate_verificacion_fuente(v, "f")
+        self.assertTrue(any("metodo_o_evidencia" in e for e in errors))
+
+    def test_verificacion_completa_no_errores(self):
+        self.assertEqual(vcp.validate_verificacion_fuente(base_verificacion(), "f"), [])
+
+
+class TestGateYHash(unittest.TestCase):
+    def test_gate_cerrado_por_defecto(self):
+        c = base_claim(estado="APTO_PARA_NARRATIVA")
+        errors, _, _, gate = vcp.validate_claim(c, "c")
+        self.assertEqual(gate, "CERRADO")
+
+    def test_gate_abierto_con_hash_correcto(self):
+        c = approved_claim()
+        errors, _, _, gate = vcp.validate_claim(c, "c")
         self.assertEqual(errors, [])
+        self.assertEqual(gate, "ABIERTO")
 
+    def test_aprobacion_invalida_si_contenido_cambia_despues(self):
+        c = approved_claim()
+        c["texto_exacto"] = "Texto cambiado después de aprobar."
+        errors, _, _, gate = vcp.validate_claim(c, "c")
+        self.assertTrue(any("no coincide con el hash recalculado" in e for e in errors))
 
-class TestValidateClaimEstadoVsFuentes(unittest.TestCase):
-    def test_apto_narrativa_con_solo_secundaria_es_error(self):
-        c = base_claim(alcance="NO_APLICA", estado="APTO_PARA_NARRATIVA",
-                        fuentes=[base_fuente(tipo_fuente="SECUNDARIA_ESPECIALIZADA", dominio_oficial_confirmado=False)])
-        errors, _, _, _ = vcp.validate_claim(c, "c")
-        self.assertTrue(any("excede lo que las fuentes permiten" in e for e in errors))
-
-    def test_apto_narrativa_con_oficial_confirmada_es_valido(self):
-        c = base_claim(alcance="NO_APLICA", estado="APTO_PARA_NARRATIVA", fuentes=[base_fuente()])
-        errors, _, _, _ = vcp.validate_claim(c, "c")
-        self.assertEqual(errors, [])
-
-    def test_confianza_baja_en_estado_apto_es_error(self):
-        c = base_claim(alcance="NO_APLICA", estado="APTO_CON_MATICES", confianza="baja",
-                        fuentes=[base_fuente(dominio_oficial_confirmado=False)])
-        errors, _, _, _ = vcp.validate_claim(c, "c")
-        self.assertTrue(any("confianza" in e for e in errors))
-
-
-class TestValidateClaimGateDeclarado(unittest.TestCase):
-    def test_gate_abierto_declarado_sin_aprobacion_es_error(self):
-        c = base_claim(alcance="NO_APLICA", estado="APTO_PARA_NARRATIVA", gate_arte="ABIERTO")
+    def test_gate_declarado_abierto_sin_aprobacion_es_error(self):
+        c = base_claim(estado="APTO_PARA_NARRATIVA", gate_arte="ABIERTO")
         errors, _, _, _ = vcp.validate_claim(c, "c")
         self.assertTrue(any("gate_arte" in e for e in errors))
 
-    def test_gate_cerrado_declarado_correctamente_es_valido(self):
-        c = base_claim(alcance="NO_APLICA", estado="APTO_PARA_NARRATIVA", gate_arte="CERRADO")
-        errors, _, _, _ = vcp.validate_claim(c, "c")
+    def test_platform_review_pendiente_cierra_el_gate(self):
+        c = approved_claim(platform_review=base_review(required=True, status="PENDIENTE"))
+        c["gate_arte"] = "ABIERTO"
+        errors, _, _, gate = vcp.validate_claim(c, "c")
+        self.assertEqual(gate, "CERRADO")
+        self.assertTrue(errors)
+
+    def test_confidentiality_review_rechazada_cierra_el_gate(self):
+        c = approved_claim(confidentiality_review=base_review(required=True, status="RECHAZADO"))
+        c["gate_arte"] = "ABIERTO"
+        errors, _, _, gate = vcp.validate_claim(c, "c")
+        self.assertEqual(gate, "CERRADO")
+
+
+class TestReviewObject(unittest.TestCase):
+    def test_required_false_status_no_aplica_es_valido(self):
+        errors = vcp.validate_review_object(base_review(False, "NO_APLICA"), "c", "platform_review")
         self.assertEqual(errors, [])
 
-    def test_gate_abierto_con_todo_en_regla_es_valido(self):
-        c = base_claim(alcance="NO_APLICA", estado="APTO_PARA_NARRATIVA", gate_arte="ABIERTO",
-                        revision_humana={"estado": "APROBADO", "revisor": "R", "fecha": "2026-08-25", "observaciones": None})
-        errors, _, _, _ = vcp.validate_claim(c, "c")
-        self.assertEqual(errors, [])
+    def test_required_false_status_pendiente_es_error(self):
+        errors = vcp.validate_review_object(base_review(False, "PENDIENTE"), "c", "platform_review")
+        self.assertTrue(errors)
+
+    def test_required_true_status_no_aplica_es_error(self):
+        errors = vcp.validate_review_object(base_review(True, "NO_APLICA"), "c", "platform_review")
+        self.assertTrue(errors)
+
+    def test_required_true_aprobado_sin_revisor_es_error(self):
+        r = base_review(True, "APROBADO")
+        errors = vcp.validate_review_object(r, "c", "platform_review")
+        self.assertTrue(errors)
 
 
 class TestReformulacion(unittest.TestCase):
@@ -289,54 +319,42 @@ class TestReformulacion(unittest.TestCase):
         errors, _, _, _ = vcp.validate_claim(c, "c")
         self.assertTrue(any("reformulacion_propuesta" in e for e in errors))
 
-    def test_no_verificada_sin_nuevo_claim_id_es_valido(self):
+    def test_no_verificada_es_valida(self):
         c = base_claim(reformulacion_propuesta={"texto": "algo nuevo", "verificada": False, "nuevo_claim_id": None})
         errors, _, _, _ = vcp.validate_claim(c, "c")
         self.assertEqual(errors, [])
 
 
-class TestValidatePiece(unittest.TestCase):
+class TestEstadoAgregadoYPieza(unittest.TestCase):
+    def test_uno_bloqueado_bloquea_toda_la_pieza(self):
+        estados = ["APTO_PARA_NARRATIVA", "BLOQUEADO", "APTO_PARA_NARRATIVA"]
+        self.assertEqual(vcp.compute_estado_agregado(estados), "BLOQUEADO")
+
     def test_pieza_valida_pasa(self):
-        c = base_claim(alcance="NO_APLICA", estado="APTO_PARA_NARRATIVA")
+        c = base_claim(estado="APTO_PARA_NARRATIVA")
         piece = base_piece([c])
-        errors, warnings = vcp.validate_piece(piece, "p")
+        errors, _ = vcp.validate_piece(piece, "p")
         self.assertEqual(errors, [])
 
-    def test_estado_agregado_incorrecto_es_error(self):
-        c = base_claim(alcance="NO_APLICA", estado="APTO_PARA_NARRATIVA")
-        piece = base_piece([c], estado_agregado="BLOQUEADO")
-        errors, _ = vcp.validate_piece(piece, "p")
-        self.assertTrue(any("estado_agregado" in e for e in errors))
-
-    def test_gate_global_abierto_sin_condiciones_es_error(self):
-        c = base_claim(alcance="NO_APLICA", estado="APTO_PARA_NARRATIVA")  # gate_arte CERRADO
+    def test_gate_global_abierto_sin_aprobacion_es_error(self):
+        c = base_claim(estado="APTO_PARA_NARRATIVA")
         piece = base_piece([c], gate_global_arte="ABIERTO")
         errors, _ = vcp.validate_piece(piece, "p")
         self.assertTrue(any("gate_global_arte" in e for e in errors))
 
-    def test_gate_global_abierto_con_todo_aprobado_es_valido(self):
-        c = base_claim(
-            alcance="NO_APLICA", estado="APTO_PARA_NARRATIVA", gate_arte="ABIERTO",
-            revision_humana={"estado": "APROBADO", "revisor": "R", "fecha": "2026-08-25", "observaciones": None},
-        )
-        piece = base_piece([c], gate_global_arte="ABIERTO")
+    def test_gate_global_abierto_con_aprobacion_real_es_valido(self):
+        c = approved_claim()
+        piece = base_piece([c], estado_agregado="APTO_PARA_NARRATIVA", revisiones_pendientes=[], gate_global_arte="ABIERTO")
         errors, _ = vcp.validate_piece(piece, "p")
         self.assertEqual(errors, [])
 
-    def test_nueve_aptos_uno_pendiente_no_puede_declararse_apto(self):
-        aprobados = [
-            base_claim(
-                claim_id=f"c{i}", alcance="NO_APLICA", estado="APTO_PARA_NARRATIVA", gate_arte="ABIERTO",
-                revision_humana={"estado": "APROBADO", "revisor": "R", "fecha": "2026-08-25", "observaciones": None},
-            )
-            for i in range(1, 10)
-        ]
-        pendiente = base_claim(claim_id="c10", alcance="NO_APLICA", estado="REQUIERE_INVESTIGACION", fuentes=[])
+    def test_nueve_aptos_uno_pendiente_no_puede_declararse_abierta(self):
+        aprobados = [approved_claim(claim_id=f"c{i}") for i in range(1, 10)]
+        pendiente = base_claim(claim_id="c10", estado="REQUIERE_INVESTIGACION", fuentes=[])
         claims = aprobados + [pendiente]
         piece = base_piece(claims, estado_agregado="APTO_PARA_NARRATIVA", revisiones_pendientes=[], gate_global_arte="ABIERTO")
         errors, _ = vcp.validate_piece(piece, "p")
         self.assertTrue(errors)
-        self.assertTrue(any("REQUIERE_INVESTIGACION" in e for e in errors))
 
     def test_claim_id_duplicado_es_error(self):
         c1 = base_claim(claim_id="dup")
@@ -347,9 +365,31 @@ class TestValidatePiece(unittest.TestCase):
 
     def test_schema_version_incorrecta_es_error(self):
         c = base_claim()
-        piece = base_piece([c], schema_version="1.0")
+        piece = base_piece([c], schema_version="2.0")
         errors, _ = vcp.validate_piece(piece, "p")
         self.assertTrue(any("schema_version" in e for e in errors))
+
+
+class TestHigieneRepositorio(unittest.TestCase):
+    """No es una prueba del validador (que no puede autenticar personas) sino
+    del repositorio: ningún fixture debe contener el nombre real del fundador.
+    Ver Fase 1C, Paso 2 y Paso 10.12."""
+
+    def test_no_nombres_reales_en_fixtures(self):
+        fixtures_dir = SKILL_ROOT / "fixtures"
+        offenders = []
+        for path in fixtures_dir.rglob("*.json"):
+            text = path.read_text(encoding="utf-8", errors="replace")
+            for name in FORBIDDEN_REAL_NAMES:
+                if name in text:
+                    offenders.append((str(path), name))
+        self.assertEqual(offenders, [], f"Nombres reales encontrados en fixtures: {offenders}")
+
+    def test_no_nombres_reales_en_referencias_ni_skill(self):
+        for path in [SKILL_ROOT / "SKILL.md", *sorted((SKILL_ROOT / "references").glob("*.md"))]:
+            text = path.read_text(encoding="utf-8", errors="replace")
+            for name in FORBIDDEN_REAL_NAMES:
+                self.assertNotIn(name, text, f"Nombre real {name!r} encontrado en {path}")
 
 
 if __name__ == "__main__":

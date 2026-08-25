@@ -1,24 +1,46 @@
 {
   "schema_version": "3.0",
-  "piece_id": "pieza-3-sat-materialidad",
+  "piece_id": "neg",
   "claims": [
     {
-      "claim_id": "pieza-3-claim-1",
-      "texto_exacto": "Un contrato firmado no basta para demostrar materialidad ante el SAT.",
+      "claim_id": "c1",
+      "texto_exacto": "Afirmación de prueba.",
       "ubicacion": "titulo",
       "tipo": "regla",
       "alcance": "CAPA_C_NACIONAL",
-      "jurisdiccion": "México",
+      "jurisdiccion": "España",
       "nucleo_transversal": null,
       "variaciones_materiales": null,
       "jurisdicciones_revisadas": null,
       "diferencias_buscadas": null,
       "contraejemplos_encontrados": null,
       "justificacion_suficiencia_comparada": null,
-      "fuentes": [],
-      "confianza": "baja",
+      "fuentes": [
+        {
+          "id": "f1",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Fuente",
+          "organismo_autor": "Organismo",
+          "url": "https://www.boe.es/x",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-08-25",
+          "localizador": "art. 1",
+          "jurisdicciones_cubiertas": [
+            "España"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": true,
+            "texto_exacto_consultado": true,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": "2026-08-25",
+            "metodo_o_evidencia": "Lectura directa del texto oficial vigente",
+            "observaciones": null
+          }
+        }
+      ],
+      "confianza": "alta",
       "riesgo_falsa_universalizacion": "bajo",
-      "riesgo_asesoria": "medio",
+      "riesgo_asesoria": "ninguno",
       "platform_review": {
         "required": false,
         "status": "NO_APLICA",
@@ -33,7 +55,7 @@
         "fecha": null,
         "observaciones": null
       },
-      "estado": "REQUIERE_INVESTIGACION",
+      "estado": "APTO_PARA_NARRATIVA",
       "revision_humana": {
         "estado": "PENDIENTE",
         "revisor": null,
@@ -43,17 +65,17 @@
       },
       "gate_arte": "CERRADO",
       "reformulacion_propuesta": {
-        "texto": "México: un contrato firmado no basta para demostrar materialidad ante el SAT — hace falta evidencia adicional.",
+        "texto": null,
         "verificada": false,
         "nuevo_claim_id": null
       },
       "redaccion_prohibida": null,
-      "notas": "No se confirmó una fuente oficial vigente del SAT/DOF en este entorno."
+      "notas": null
     }
   ],
-  "estado_agregado": "REQUIERE_INVESTIGACION",
+  "estado_agregado": "APTO_PARA_NARRATIVA",
   "revisiones_pendientes": [
-    "pieza-3-claim-1"
+    "c1"
   ],
   "gate_global_arte": "CERRADO"
 }

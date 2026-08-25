@@ -1,24 +1,26 @@
 {
   "schema_version": "3.0",
-  "piece_id": "pieza-5-pruebas-digitales",
+  "piece_id": "bad-23",
   "claims": [
     {
-      "claim_id": "pieza-5-claim-1",
-      "texto_exacto": "Diez pruebas digitales que sí se aceptan en juicio.",
+      "claim_id": "c1",
+      "texto_exacto": "Tipos JSON incorrectos.",
       "ubicacion": "titulo",
       "tipo": "regla",
-      "alcance": "CAPA_B_VARIABLE",
+      "alcance": "NO_APLICA",
       "jurisdiccion": null,
-      "nucleo_transversal": "Que ciertos tipos de evidencia digital pueden usarse en juicio es transversal.",
-      "variaciones_materiales": "Qué se admite en concreto, con qué formalidades y bajo qué código, cambia por país y tipo de proceso.",
+      "nucleo_transversal": null,
+      "variaciones_materiales": null,
       "jurisdicciones_revisadas": null,
       "diferencias_buscadas": null,
       "contraejemplos_encontrados": null,
       "justificacion_suficiencia_comparada": null,
-      "fuentes": [],
-      "confianza": "baja",
-      "riesgo_falsa_universalizacion": "alto",
-      "riesgo_asesoria": "medio",
+      "fuentes": {
+        "no": "debería ser lista"
+      },
+      "confianza": "alta",
+      "riesgo_falsa_universalizacion": "bajo",
+      "riesgo_asesoria": "ninguno",
       "platform_review": {
         "required": false,
         "status": "NO_APLICA",
@@ -33,7 +35,7 @@
         "fecha": null,
         "observaciones": null
       },
-      "estado": "REQUIERE_INVESTIGACION",
+      "estado": "APTO_PARA_NARRATIVA",
       "revision_humana": {
         "estado": "PENDIENTE",
         "revisor": null,
@@ -43,17 +45,17 @@
       },
       "gate_arte": "CERRADO",
       "reformulacion_propuesta": {
-        "texto": "Diez tipos de evidencia digital que los tribunales suelen admitir — y lo que cambia según el país.",
+        "texto": null,
         "verificada": false,
         "nuevo_claim_id": null
       },
       "redaccion_prohibida": null,
-      "notas": "Solo se entregó el título; cada una de las diez pruebas necesitaría su propio claim verificado."
+      "notas": "NEGATIVO: 'fuentes' es un objeto, no una lista."
     }
   ],
   "estado_agregado": "REQUIERE_INVESTIGACION",
   "revisiones_pendientes": [
-    "pieza-5-claim-1"
+    "c1"
   ],
   "gate_global_arte": "CERRADO"
 }

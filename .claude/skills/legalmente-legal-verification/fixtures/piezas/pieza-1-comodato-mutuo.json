@@ -1,5 +1,5 @@
 {
-  "schema_version": "2.0",
+  "schema_version": "3.0",
   "piece_id": "pieza-1-comodato-mutuo",
   "claims": [
     {
@@ -37,9 +37,9 @@
           ]
         }
       ],
-      "diferencias_buscadas": "Se buscó si el nombre de la figura, la obligación de restituir la cosa idéntica (comodato) frente a restituir otro tanto (mutuo), y el carácter esencialmente gratuito u oneroso de cada figura cambian entre estos cuatro países.",
+      "diferencias_buscadas": "Se buscó si el nombre de la figura, la obligación de restituir la cosa idéntica frente a restituir otro tanto, y el carácter esencialmente gratuito u oneroso de cada figura cambian entre estos cuatro países.",
       "contraejemplos_encontrados": "Ninguno a nivel de la definición misma en los cuatro códigos revisados.",
-      "justificacion_suficiencia_comparada": "Cuatro códigos civiles independientes (España, México, Argentina, Perú), cada uno con fuente oficial propia y localizador de artículo concreto, coinciden en la misma distinción funcional y terminológica, sin contraejemplo. Se considera evidencia comparada suficiente para Capa A.",
+      "justificacion_suficiencia_comparada": "Cuatro códigos civiles independientes, cada uno con fuente oficial propia y localizador de artículo concreto, coinciden en la misma distinción funcional y terminológica, sin contraejemplo. Cada jurisdicción está respaldada por SU PROPIA fuente oficial (no una sola fuente reutilizada) — evidencia comparada suficiente para Capa A.",
       "fuentes": [
         {
           "id": "f-es",
@@ -50,7 +50,17 @@
           "identificador_bibliografico": null,
           "fecha_consulta": "2026-08-25",
           "localizador": "arts. 1740 (comodato) y 1753/1755 (mutuo)",
-          "dominio_oficial_confirmado": true
+          "jurisdicciones_cubiertas": [
+            "España"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": true,
+            "texto_exacto_consultado": true,
+            "vigencia_comprobada": true,
+            "fecha_comprobacion": "2026-08-25",
+            "metodo_o_evidencia": "Lectura directa del texto oficial vigente",
+            "observaciones": null
+          }
         },
         {
           "id": "f-mx",
@@ -61,7 +71,17 @@
           "identificador_bibliografico": null,
           "fecha_consulta": "2026-08-25",
           "localizador": "arts. 2497 (comodato) y 2384 (mutuo)",
-          "dominio_oficial_confirmado": true
+          "jurisdicciones_cubiertas": [
+            "México"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": true,
+            "texto_exacto_consultado": true,
+            "vigencia_comprobada": true,
+            "fecha_comprobacion": "2026-08-25",
+            "metodo_o_evidencia": "Lectura directa del texto oficial vigente",
+            "observaciones": null
+          }
         },
         {
           "id": "f-ar",
@@ -72,7 +92,17 @@
           "identificador_bibliografico": null,
           "fecha_consulta": "2026-08-25",
           "localizador": "arts. 1533 (comodato) y 1525 (mutuo)",
-          "dominio_oficial_confirmado": true
+          "jurisdicciones_cubiertas": [
+            "Argentina"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": true,
+            "texto_exacto_consultado": true,
+            "vigencia_comprobada": true,
+            "fecha_comprobacion": "2026-08-25",
+            "metodo_o_evidencia": "Lectura directa del texto oficial vigente",
+            "observaciones": null
+          }
         },
         {
           "id": "f-pe",
@@ -83,20 +113,43 @@
           "identificador_bibliografico": null,
           "fecha_consulta": "2026-08-25",
           "localizador": "arts. 1728 (comodato) y 1648 (mutuo)",
-          "dominio_oficial_confirmado": true
+          "jurisdicciones_cubiertas": [
+            "Perú"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": true,
+            "texto_exacto_consultado": true,
+            "vigencia_comprobada": true,
+            "fecha_comprobacion": "2026-08-25",
+            "metodo_o_evidencia": "Lectura directa del texto oficial vigente",
+            "observaciones": null
+          }
         }
       ],
       "confianza": "alta",
       "riesgo_falsa_universalizacion": "bajo",
       "riesgo_asesoria": "ninguno",
-      "platform_review_required": false,
-      "confidentiality_review_required": false,
+      "platform_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "confidentiality_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
       "estado": "APTO_PARA_NARRATIVA",
       "revision_humana": {
         "estado": "PENDIENTE",
         "revisor": null,
         "fecha": null,
-        "observaciones": null
+        "observaciones": null,
+        "contenido_hash_sha256": null
       },
       "gate_arte": "CERRADO",
       "reformulacion_propuesta": {
@@ -105,7 +158,7 @@
         "nuevo_claim_id": null
       },
       "redaccion_prohibida": null,
-      "notas": "apto_para_arte antiguo se sustituye por gate_arte, calculado por el validador. Aunque las fuentes sostienen APTO_PARA_NARRATIVA, el gate nace CERRADO porque revision_humana.estado='PENDIENTE' — el modelo nunca abre el gate por sí mismo."
+      "notas": "Cada país tiene su propia fuente oficial confirmada (hostname real, texto y vigencia verificados) — ninguna fuente 'presta' su nivel a un país que no cubre."
     }
   ],
   "estado_agregado": "APTO_PARA_NARRATIVA",

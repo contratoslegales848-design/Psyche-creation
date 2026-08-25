@@ -1,10 +1,10 @@
 {
-  "schema_version": "2.0",
-  "piece_id": "bad-4-fuente-secundaria-unico-respaldo-narrativa",
+  "schema_version": "3.0",
+  "piece_id": "neg",
   "claims": [
     {
-      "claim_id": "bad4-claim",
-      "texto_exacto": "Afirmación que declara el estado máximo apoyándose solo en una fuente secundaria.",
+      "claim_id": "c1",
+      "texto_exacto": "Fuente secundaria única sosteniendo narrativa plena.",
       "ubicacion": "titulo",
       "tipo": "regla",
       "alcance": "CAPA_C_NACIONAL",
@@ -17,28 +17,51 @@
       "justificacion_suficiencia_comparada": null,
       "fuentes": [
         {
-          "id": "f-sec",
+          "id": "f15",
           "tipo_fuente": "SECUNDARIA_ESPECIALIZADA",
-          "titulo": "Blog jurídico especializado",
+          "titulo": "Blog jurídico",
           "organismo_autor": "Despacho X",
-          "url": "https://despachox.com/blog/articulo",
+          "url": "https://despachox.com/blog/x",
           "identificador_bibliografico": null,
           "fecha_consulta": "2026-08-25",
-          "localizador": "entrada del blog",
-          "dominio_oficial_confirmado": false
+          "localizador": "entrada",
+          "jurisdicciones_cubiertas": [
+            "México"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": false,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": null,
+            "metodo_o_evidencia": null,
+            "observaciones": "No se pudo confirmar origen ni consultar el texto en este entorno."
+          }
         }
       ],
       "confianza": "alta",
       "riesgo_falsa_universalizacion": "bajo",
       "riesgo_asesoria": "ninguno",
-      "platform_review_required": false,
-      "confidentiality_review_required": false,
+      "platform_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "confidentiality_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
       "estado": "APTO_PARA_NARRATIVA",
       "revision_humana": {
         "estado": "PENDIENTE",
         "revisor": null,
         "fecha": null,
-        "observaciones": null
+        "observaciones": null,
+        "contenido_hash_sha256": null
       },
       "gate_arte": "CERRADO",
       "reformulacion_propuesta": {
@@ -47,12 +70,12 @@
         "nuevo_claim_id": null
       },
       "redaccion_prohibida": null,
-      "notas": "NEGATIVO: una fuente SECUNDARIA_ESPECIALIZADA (o ACADEMICA_IDENTIFICABLE) nunca sostiene, por sí sola, APTO_PARA_NARRATIVA — techo APTO_CON_MATICES."
+      "notas": null
     }
   ],
   "estado_agregado": "APTO_PARA_NARRATIVA",
   "revisiones_pendientes": [
-    "bad4-claim"
+    "c1"
   ],
   "gate_global_arte": "CERRADO"
 }

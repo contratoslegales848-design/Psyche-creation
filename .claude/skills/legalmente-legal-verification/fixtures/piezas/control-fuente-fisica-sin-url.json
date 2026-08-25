@@ -1,5 +1,5 @@
 {
-  "schema_version": "2.0",
+  "schema_version": "3.0",
   "piece_id": "control-fuente-fisica-sin-url",
   "claims": [
     {
@@ -25,20 +25,43 @@
           "identificador_bibliografico": "ISBN 978-84-XXXXXX-X-X, Editorial X, 3ª ed., 2019",
           "fecha_consulta": "2026-08-25",
           "localizador": "p. 214, 3ª edición",
-          "dominio_oficial_confirmado": false
+          "jurisdicciones_cubiertas": [
+            "General"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": false,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": null,
+            "metodo_o_evidencia": null,
+            "observaciones": "No se pudo confirmar origen ni consultar el texto en este entorno."
+          }
         }
       ],
       "confianza": "media",
       "riesgo_falsa_universalizacion": "bajo",
       "riesgo_asesoria": "ninguno",
-      "platform_review_required": false,
-      "confidentiality_review_required": false,
+      "platform_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "confidentiality_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
       "estado": "APTO_CON_MATICES",
       "revision_humana": {
         "estado": "PENDIENTE",
         "revisor": null,
         "fecha": null,
-        "observaciones": null
+        "observaciones": null,
+        "contenido_hash_sha256": null
       },
       "gate_arte": "CERRADO",
       "reformulacion_propuesta": {
@@ -47,7 +70,7 @@
         "nuevo_claim_id": null
       },
       "redaccion_prohibida": null,
-      "notas": "CONTROL — no es un fallo esperado: demuestra que una fuente sin URL pero con identificador bibliográfico completo (ISBN + editorial + edición + año) es válida per Paso 2.2 del encargo, y sostiene como máximo APTO_CON_MATICES (fuente académica, no oficial)."
+      "notas": "CONTROL — no es un fallo esperado: fuente sin URL pero con identificador bibliográfico completo es válida."
     }
   ],
   "estado_agregado": "APTO_CON_MATICES",

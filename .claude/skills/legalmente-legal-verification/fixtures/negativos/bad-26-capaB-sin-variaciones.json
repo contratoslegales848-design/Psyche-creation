@@ -1,13 +1,13 @@
 {
-  "schema_version": "2.0",
-  "piece_id": "bad-13-tipos-json-incorrectos",
+  "schema_version": "3.0",
+  "piece_id": "neg",
   "claims": [
     {
-      "claim_id": "bad13-claim",
-      "texto_exacto": "Tipos JSON incorrectos a propósito.",
+      "claim_id": "c1",
+      "texto_exacto": "Capa B sin variaciones.",
       "ubicacion": "titulo",
       "tipo": "regla",
-      "alcance": "CAPA_A_TRANSVERSAL",
+      "alcance": "CAPA_B_VARIABLE",
       "jurisdiccion": null,
       "nucleo_transversal": null,
       "variaciones_materiales": null,
@@ -15,20 +15,31 @@
       "diferencias_buscadas": null,
       "contraejemplos_encontrados": null,
       "justificacion_suficiencia_comparada": null,
-      "fuentes": {
-        "no": "deberia ser un objeto, no una lista"
+      "fuentes": [],
+      "confianza": "media",
+      "riesgo_falsa_universalizacion": "medio",
+      "riesgo_asesoria": "bajo",
+      "platform_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
       },
-      "confianza": "alta",
-      "riesgo_falsa_universalizacion": "bajo",
-      "riesgo_asesoria": "ninguno",
-      "platform_review_required": "false",
-      "confidentiality_review_required": false,
-      "estado": "APTO_PARA_NARRATIVA",
+      "confidentiality_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "estado": "REQUIERE_INVESTIGACION",
       "revision_humana": {
         "estado": "PENDIENTE",
         "revisor": null,
         "fecha": null,
-        "observaciones": null
+        "observaciones": null,
+        "contenido_hash_sha256": null
       },
       "gate_arte": "CERRADO",
       "reformulacion_propuesta": {
@@ -37,12 +48,12 @@
         "nuevo_claim_id": null
       },
       "redaccion_prohibida": null,
-      "notas": "NEGATIVO: 'platform_review_required' es el string 'false' (no booleano) y 'fuentes' es un objeto, no una lista."
+      "notas": null
     }
   ],
   "estado_agregado": "REQUIERE_INVESTIGACION",
   "revisiones_pendientes": [
-    "bad13-claim"
+    "c1"
   ],
   "gate_global_arte": "CERRADO"
 }

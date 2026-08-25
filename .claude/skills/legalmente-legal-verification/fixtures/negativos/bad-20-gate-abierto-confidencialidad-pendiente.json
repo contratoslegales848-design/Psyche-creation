@@ -1,49 +1,49 @@
 {
   "schema_version": "3.0",
-  "piece_id": "edge-1-url-parametros-comillas",
+  "piece_id": "neg",
   "claims": [
     {
-      "claim_id": "edge-1-claim-1",
-      "texto_exacto": "El demandado dijo: \"no firmé nada\" — pero la carga de la prueba puede no estar de su lado.",
-      "ubicacion": "caption",
+      "claim_id": "c1",
+      "texto_exacto": "Gate abierto sin aprobación humana real.",
+      "ubicacion": "titulo",
       "tipo": "regla",
       "alcance": "CAPA_A_TRANSVERSAL",
       "jurisdiccion": null,
-      "nucleo_transversal": "La distribución de la carga de la prueba es un principio transversal del derecho procesal hispánico.",
+      "nucleo_transversal": null,
       "variaciones_materiales": null,
       "jurisdicciones_revisadas": [
         {
           "pais": "España",
           "fuente_ids": [
-            "f-edge1"
+            "fa"
           ]
         },
         {
           "pais": "México",
           "fuente_ids": [
-            "f-edge1b"
+            "fb"
           ]
         },
         {
           "pais": "Argentina",
           "fuente_ids": [
-            "f-edge1c"
+            "fc"
           ]
         }
       ],
-      "diferencias_buscadas": "Si el principio general cambia de nombre o de lógica entre estos tres países.",
-      "contraejemplos_encontrados": "Ninguno a nivel de principio general.",
-      "justificacion_suficiencia_comparada": "Principio recogido con la misma lógica en la legislación procesal de los tres países revisados, cada uno con fuente y localizador propios.",
+      "diferencias_buscadas": "algo",
+      "contraejemplos_encontrados": "ninguno",
+      "justificacion_suficiencia_comparada": "algo",
       "fuentes": [
         {
-          "id": "f-edge1",
+          "id": "fa",
           "tipo_fuente": "NORMA_OFICIAL",
-          "titulo": "Ley de Enjuiciamiento Civil (España) — carga de la prueba",
-          "organismo_autor": "Agencia Estatal BOE",
-          "url": "https://www.boe.es/buscar/act.php?id=BOE-A-2000-323&p=20220101&tn=1#a217",
+          "titulo": "x",
+          "organismo_autor": "x",
+          "url": "https://www.boe.es/x",
           "identificador_bibliografico": null,
           "fecha_consulta": "2026-08-25",
-          "localizador": "art. 217, ancla #a217",
+          "localizador": "x",
           "jurisdicciones_cubiertas": [
             "España"
           ],
@@ -57,14 +57,14 @@
           }
         },
         {
-          "id": "f-edge1b",
+          "id": "fb",
           "tipo_fuente": "NORMA_OFICIAL",
-          "titulo": "Código Civil Federal (México) — carga de la prueba",
-          "organismo_autor": "Congreso de la Unión (México)",
-          "url": "https://www.diputados.gob.mx/LeyesBiblio/pdf/CFPC.pdf",
+          "titulo": "x",
+          "organismo_autor": "x",
+          "url": "https://www.diputados.gob.mx/x",
           "identificador_bibliografico": null,
           "fecha_consulta": "2026-08-25",
-          "localizador": "art. 1194 CFPC (referencia doctrinal)",
+          "localizador": "x",
           "jurisdicciones_cubiertas": [
             "México"
           ],
@@ -78,14 +78,14 @@
           }
         },
         {
-          "id": "f-edge1c",
+          "id": "fc",
           "tipo_fuente": "NORMA_OFICIAL",
-          "titulo": "Código Procesal Civil y Comercial (Argentina)",
-          "organismo_autor": "InfoLEG — Ministerio de Justicia (Argentina)",
-          "url": "https://servicios.infoleg.gob.ar/infolegInternet/anexos/15000-19999/16547/texact.htm",
+          "titulo": "x",
+          "organismo_autor": "x",
+          "url": "https://servicios.infoleg.gob.ar/x",
           "identificador_bibliografico": null,
           "fecha_consulta": "2026-08-25",
-          "localizador": "art. 377",
+          "localizador": "x",
           "jurisdicciones_cubiertas": [
             "Argentina"
           ],
@@ -101,7 +101,7 @@
       ],
       "confianza": "alta",
       "riesgo_falsa_universalizacion": "bajo",
-      "riesgo_asesoria": "bajo",
+      "riesgo_asesoria": "ninguno",
       "platform_review": {
         "required": false,
         "status": "NO_APLICA",
@@ -110,19 +110,19 @@
         "observaciones": null
       },
       "confidentiality_review": {
-        "required": false,
-        "status": "NO_APLICA",
+        "required": true,
+        "status": "PENDIENTE",
         "revisor": null,
         "fecha": null,
         "observaciones": null
       },
       "estado": "APTO_PARA_NARRATIVA",
       "revision_humana": {
-        "estado": "PENDIENTE",
-        "revisor": null,
-        "fecha": null,
+        "estado": "APROBADO",
+        "revisor": "REVISOR_FICTICIO_SOLO_PRUEBA",
+        "fecha": "2026-08-25",
         "observaciones": null,
-        "contenido_hash_sha256": null
+        "contenido_hash_sha256": "02e021236b18633c1c7d6897bb52a44b491ea52d53f001085a4e9563cf463fa3"
       },
       "gate_arte": "CERRADO",
       "reformulacion_propuesta": {
@@ -131,12 +131,12 @@
         "nuevo_claim_id": null
       },
       "redaccion_prohibida": null,
-      "notas": "Fixture de formato: URL con ':' (esquema y ancla '#a217') y parámetros de query, texto_exacto con comillas escapadas."
+      "notas": null
     }
   ],
   "estado_agregado": "APTO_PARA_NARRATIVA",
   "revisiones_pendientes": [
-    "edge-1-claim-1"
+    "c1"
   ],
-  "gate_global_arte": "CERRADO"
+  "gate_global_arte": "ABIERTO"
 }

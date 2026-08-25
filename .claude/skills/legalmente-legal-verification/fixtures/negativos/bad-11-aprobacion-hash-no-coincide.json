@@ -1,0 +1,79 @@
+{
+  "schema_version": "3.0",
+  "piece_id": "neg",
+  "claims": [
+    {
+      "claim_id": "c1",
+      "texto_exacto": "Texto MODIFICADO después de que un humano aprobó la versión original.",
+      "ubicacion": "titulo",
+      "tipo": "definicion",
+      "alcance": "NO_APLICA",
+      "jurisdiccion": null,
+      "nucleo_transversal": null,
+      "variaciones_materiales": null,
+      "jurisdicciones_revisadas": null,
+      "diferencias_buscadas": null,
+      "contraejemplos_encontrados": null,
+      "justificacion_suficiencia_comparada": null,
+      "fuentes": [
+        {
+          "id": "f11",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "CC España",
+          "organismo_autor": "BOE",
+          "url": "https://www.boe.es/x",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-08-25",
+          "localizador": "art. 1740",
+          "jurisdicciones_cubiertas": [
+            "España"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": true,
+            "texto_exacto_consultado": true,
+            "vigencia_comprobada": true,
+            "fecha_comprobacion": "2026-08-25",
+            "metodo_o_evidencia": "Lectura directa del texto oficial vigente",
+            "observaciones": null
+          }
+        }
+      ],
+      "confianza": "alta",
+      "riesgo_falsa_universalizacion": "bajo",
+      "riesgo_asesoria": "ninguno",
+      "platform_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "confidentiality_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "estado": "APTO_PARA_NARRATIVA",
+      "revision_humana": {
+        "estado": "APROBADO",
+        "revisor": "REVISOR_FICTICIO_SOLO_PRUEBA",
+        "fecha": "2026-08-25",
+        "observaciones": null,
+        "contenido_hash_sha256": "df0e7ce59fafa513ae629c2956a7da6c368ccaed8fd4679c93f6590b26484973"
+      },
+      "gate_arte": "CERRADO",
+      "reformulacion_propuesta": {
+        "texto": null,
+        "verificada": false,
+        "nuevo_claim_id": null
+      },
+      "redaccion_prohibida": null,
+      "notas": null
+    }
+  ],
+  "estado_agregado": "APTO_PARA_NARRATIVA",
+  "revisiones_pendientes": [],
+  "gate_global_arte": "ABIERTO"
+}

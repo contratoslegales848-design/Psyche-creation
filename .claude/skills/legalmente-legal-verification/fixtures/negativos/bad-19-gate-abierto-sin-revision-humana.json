@@ -1,33 +1,70 @@
 {
   "schema_version": "3.0",
-  "piece_id": "edge-3-lista-jurisdicciones",
+  "piece_id": "neg",
   "claims": [
     {
-      "claim_id": "edge-3-claim-1",
-      "texto_exacto": "En México y en Colombia, la comisión mercantil se rige por reglas del Código de Comercio, no del Código Civil.",
-      "ubicacion": "texto_imagen",
+      "claim_id": "c1",
+      "texto_exacto": "Gate abierto sin aprobación humana real.",
+      "ubicacion": "titulo",
       "tipo": "regla",
-      "alcance": "CAPA_C_NACIONAL",
-      "jurisdiccion": [
-        "México",
-        "Colombia"
-      ],
+      "alcance": "CAPA_A_TRANSVERSAL",
+      "jurisdiccion": null,
       "nucleo_transversal": null,
       "variaciones_materiales": null,
-      "jurisdicciones_revisadas": null,
-      "diferencias_buscadas": null,
-      "contraejemplos_encontrados": null,
-      "justificacion_suficiencia_comparada": null,
+      "jurisdicciones_revisadas": [
+        {
+          "pais": "España",
+          "fuente_ids": [
+            "fa"
+          ]
+        },
+        {
+          "pais": "México",
+          "fuente_ids": [
+            "fb"
+          ]
+        },
+        {
+          "pais": "Argentina",
+          "fuente_ids": [
+            "fc"
+          ]
+        }
+      ],
+      "diferencias_buscadas": "algo",
+      "contraejemplos_encontrados": "ninguno",
+      "justificacion_suficiencia_comparada": "algo",
       "fuentes": [
         {
-          "id": "f-edge3a",
+          "id": "fa",
           "tipo_fuente": "NORMA_OFICIAL",
-          "titulo": "Código de Comercio (México) — comisión mercantil",
-          "organismo_autor": "Congreso de la Unión (México)",
-          "url": "https://www.diputados.gob.mx/LeyesBiblio/pdf/CCom.pdf",
+          "titulo": "x",
+          "organismo_autor": "x",
+          "url": "https://www.boe.es/x",
           "identificador_bibliografico": null,
           "fecha_consulta": "2026-08-25",
-          "localizador": "arts. relativos a la comisión mercantil",
+          "localizador": "x",
+          "jurisdicciones_cubiertas": [
+            "España"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": true,
+            "texto_exacto_consultado": true,
+            "vigencia_comprobada": true,
+            "fecha_comprobacion": "2026-08-25",
+            "metodo_o_evidencia": "Lectura directa del texto oficial vigente",
+            "observaciones": null
+          }
+        },
+        {
+          "id": "fb",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "x",
+          "organismo_autor": "x",
+          "url": "https://www.diputados.gob.mx/x",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-08-25",
+          "localizador": "x",
           "jurisdicciones_cubiertas": [
             "México"
           ],
@@ -41,16 +78,16 @@
           }
         },
         {
-          "id": "f-edge3b",
+          "id": "fc",
           "tipo_fuente": "NORMA_OFICIAL",
-          "titulo": "Código de Comercio (Colombia) — comisión mercantil",
-          "organismo_autor": "Congreso de la República de Colombia",
-          "url": "https://www.funcionpublica.gov.co/eva/gestornormativo/norma.php?i=41102",
+          "titulo": "x",
+          "organismo_autor": "x",
+          "url": "https://servicios.infoleg.gob.ar/x",
           "identificador_bibliografico": null,
           "fecha_consulta": "2026-08-25",
-          "localizador": "art. 1287 y siguientes",
+          "localizador": "x",
           "jurisdicciones_cubiertas": [
-            "Colombia"
+            "Argentina"
           ],
           "verificacion_fuente": {
             "origen_oficial_confirmado": true,
@@ -94,12 +131,12 @@
         "nuevo_claim_id": null
       },
       "redaccion_prohibida": null,
-      "notas": "Fixture de formato: 'jurisdiccion' como lista de dos países."
+      "notas": null
     }
   ],
   "estado_agregado": "APTO_PARA_NARRATIVA",
   "revisiones_pendientes": [
-    "edge-3-claim-1"
+    "c1"
   ],
-  "gate_global_arte": "CERRADO"
+  "gate_global_arte": "ABIERTO"
 }

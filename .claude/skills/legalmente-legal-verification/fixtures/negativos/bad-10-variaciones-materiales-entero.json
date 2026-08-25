@@ -1,16 +1,16 @@
 {
-  "schema_version": "2.0",
-  "piece_id": "bad-16-capaB-sin-variaciones",
+  "schema_version": "3.0",
+  "piece_id": "neg",
   "claims": [
     {
-      "claim_id": "bad16-claim",
-      "texto_exacto": "Capa B sin variaciones materiales.",
+      "claim_id": "c1",
+      "texto_exacto": "Capa B con variaciones_materiales como entero.",
       "ubicacion": "titulo",
       "tipo": "regla",
       "alcance": "CAPA_B_VARIABLE",
       "jurisdiccion": null,
       "nucleo_transversal": null,
-      "variaciones_materiales": null,
+      "variaciones_materiales": 123,
       "jurisdicciones_revisadas": null,
       "diferencias_buscadas": null,
       "contraejemplos_encontrados": null,
@@ -19,14 +19,27 @@
       "confianza": "media",
       "riesgo_falsa_universalizacion": "medio",
       "riesgo_asesoria": "bajo",
-      "platform_review_required": false,
-      "confidentiality_review_required": false,
+      "platform_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "confidentiality_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
       "estado": "REQUIERE_INVESTIGACION",
       "revision_humana": {
         "estado": "PENDIENTE",
         "revisor": null,
         "fecha": null,
-        "observaciones": null
+        "observaciones": null,
+        "contenido_hash_sha256": null
       },
       "gate_arte": "CERRADO",
       "reformulacion_propuesta": {
@@ -35,12 +48,12 @@
         "nuevo_claim_id": null
       },
       "redaccion_prohibida": null,
-      "notas": "NEGATIVO: Capa B sin 'variaciones_materiales'."
+      "notas": null
     }
   ],
   "estado_agregado": "REQUIERE_INVESTIGACION",
   "revisiones_pendientes": [
-    "bad16-claim"
+    "c1"
   ],
   "gate_global_arte": "CERRADO"
 }

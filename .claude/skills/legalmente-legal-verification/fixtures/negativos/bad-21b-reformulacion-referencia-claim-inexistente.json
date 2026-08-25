@@ -1,10 +1,10 @@
 {
-  "schema_version": "2.0",
-  "piece_id": "bad-11-reformulacion-no-verificada",
+  "schema_version": "3.0",
+  "piece_id": "neg",
   "claims": [
     {
-      "claim_id": "bad11-claim",
-      "texto_exacto": "Afirmación bloqueada cuya reformulación se marca 'verificada' sin nuevo claim.",
+      "claim_id": "c1",
+      "texto_exacto": "Bloqueado con reformulación marcada verificada sin nuevo claim.",
       "ubicacion": "titulo",
       "tipo": "regla",
       "alcance": "CAPA_B_VARIABLE",
@@ -19,28 +19,41 @@
       "confianza": "alta",
       "riesgo_falsa_universalizacion": "alto",
       "riesgo_asesoria": "alto",
-      "platform_review_required": false,
-      "confidentiality_review_required": false,
+      "platform_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "confidentiality_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
       "estado": "BLOQUEADO",
       "revision_humana": {
         "estado": "PENDIENTE",
         "revisor": null,
         "fecha": null,
-        "observaciones": null
+        "observaciones": null,
+        "contenido_hash_sha256": null
       },
       "gate_arte": "CERRADO",
       "reformulacion_propuesta": {
-        "texto": "Una reformulación con una afirmación jurídica nueva.",
+        "texto": "texto",
         "verificada": true,
-        "nuevo_claim_id": null
+        "nuevo_claim_id": "claim-inexistente"
       },
       "redaccion_prohibida": null,
-      "notas": "NEGATIVO: reformulacion_propuesta.verificada=true sin nuevo_claim_id — una reformulación con contenido jurídico nuevo nunca hereda automáticamente verificación."
+      "notas": null
     }
   ],
   "estado_agregado": "BLOQUEADO",
   "revisiones_pendientes": [
-    "bad11-claim"
+    "c1"
   ],
   "gate_global_arte": "CERRADO"
 }

@@ -1,14 +1,14 @@
 {
   "schema_version": "3.0",
-  "piece_id": "pieza-6-firma-bajo-protesta",
+  "piece_id": "neg",
   "claims": [
     {
-      "claim_id": "pieza-6-claim-1",
-      "texto_exacto": "Si te despiden, firma bajo protesta.",
-      "ubicacion": "cta",
-      "tipo": "consejo",
+      "claim_id": "c1",
+      "texto_exacto": "Afirmación cuyo único respaldo es Drive.",
+      "ubicacion": "titulo",
+      "tipo": "regla",
       "alcance": "CAPA_C_NACIONAL",
-      "jurisdiccion": "México",
+      "jurisdiccion": "España",
       "nucleo_transversal": null,
       "variaciones_materiales": null,
       "jurisdicciones_revisadas": null,
@@ -17,16 +17,16 @@
       "justificacion_suficiencia_comparada": null,
       "fuentes": [
         {
-          "id": "f-bp1",
-          "tipo_fuente": "SECUNDARIA_ESPECIALIZADA",
-          "titulo": "Me quieren hacer firmar mi renuncia",
-          "organismo_autor": "Nexo Legal (bufete, blog jurídico)",
-          "url": "https://nexolegalmx.com.mx/me-quieren-hacer-firmar-mi-renuncia/",
+          "id": "f14",
+          "tipo_fuente": "DRIVE_INTERNO",
+          "titulo": "Matriz de contenido (Drive)",
+          "organismo_autor": "Equipo LegalMente",
+          "url": "https://docs.google.com/spreadsheets/d/xxxx",
           "identificador_bibliografico": null,
           "fecha_consulta": "2026-08-25",
-          "localizador": "Sección sobre firmar 'bajo protesta'/'no conforme'",
+          "localizador": "fila 12",
           "jurisdicciones_cubiertas": [
-            "México"
+            "España"
           ],
           "verificacion_fuente": {
             "origen_oficial_confirmado": false,
@@ -38,9 +38,9 @@
           }
         }
       ],
-      "confianza": "baja",
-      "riesgo_falsa_universalizacion": "alto",
-      "riesgo_asesoria": "alto",
+      "confianza": "media",
+      "riesgo_falsa_universalizacion": "bajo",
+      "riesgo_asesoria": "ninguno",
       "platform_review": {
         "required": false,
         "status": "NO_APLICA",
@@ -55,7 +55,7 @@
         "fecha": null,
         "observaciones": null
       },
-      "estado": "BLOQUEADO",
+      "estado": "APTO_CON_MATICES",
       "revision_humana": {
         "estado": "PENDIENTE",
         "revisor": null,
@@ -65,17 +65,17 @@
       },
       "gate_arte": "CERRADO",
       "reformulacion_propuesta": {
-        "texto": "En México: si no estás de acuerdo con lo que te ofrecen al despedirte, puedes anotar que firmas 'bajo protesta' antes de buscar asesoría de un abogado laboral.",
+        "texto": null,
         "verificada": false,
         "nuevo_claim_id": null
       },
-      "redaccion_prohibida": "Si te despiden, firma bajo protesta.",
-      "notas": "Imperativo en segunda persona + mecanismo no confirmado con fuente oficial + no declara país en el hook."
+      "redaccion_prohibida": null,
+      "notas": null
     }
   ],
-  "estado_agregado": "BLOQUEADO",
+  "estado_agregado": "APTO_CON_MATICES",
   "revisiones_pendientes": [
-    "pieza-6-claim-1"
+    "c1"
   ],
   "gate_global_arte": "CERRADO"
 }
