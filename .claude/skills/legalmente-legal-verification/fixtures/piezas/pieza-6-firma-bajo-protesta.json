@@ -1,0 +1,82 @@
+{
+  "schema_version": "4.0",
+  "piece_id": "pieza-6-firma-bajo-protesta",
+  "claims": [
+    {
+      "claim_id": "pieza-6-claim-1",
+      "texto_exacto": "Si te despiden, firma bajo protesta.",
+      "ubicacion": "cta",
+      "tipo": "consejo",
+      "alcance": "CAPA_C_NACIONAL",
+      "jurisdiccion": "México",
+      "nucleo_transversal": null,
+      "variaciones_materiales": null,
+      "jurisdicciones_revisadas": null,
+      "diferencias_buscadas": null,
+      "contraejemplos_encontrados": null,
+      "justificacion_suficiencia_comparada": null,
+      "fuentes": [
+        {
+          "id": "f-bp1",
+          "tipo_fuente": "SECUNDARIA_ESPECIALIZADA",
+          "titulo": "Me quieren hacer firmar mi renuncia",
+          "organismo_autor": "Nexo Legal (bufete, blog jurídico)",
+          "url": "https://nexolegalmx.com.mx/me-quieren-hacer-firmar-mi-renuncia/",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-08-25",
+          "localizador": "Sección sobre firmar 'bajo protesta'/'no conforme'",
+          "jurisdicciones_cubiertas": [
+            "México"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": false,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": null,
+            "metodo_o_evidencia": null,
+            "observaciones": "No se pudo confirmar origen ni consultar el texto en este entorno."
+          },
+          "registro_oficial_id": null
+        }
+      ],
+      "confianza": "baja",
+      "riesgo_falsa_universalizacion": "alto",
+      "riesgo_asesoria": "alto",
+      "platform_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "confidentiality_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "estado": "BLOQUEADO",
+      "revision_humana": {
+        "estado": "PENDIENTE",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null,
+        "contenido_hash_sha256": null
+      },
+      "gate_arte": "CERRADO",
+      "reformulacion_propuesta": {
+        "texto": "En México: si no estás de acuerdo con lo que te ofrecen al despedirte, puedes anotar que firmas 'bajo protesta' antes de buscar asesoría de un abogado laboral.",
+        "verificada": false,
+        "nuevo_claim_id": null
+      },
+      "redaccion_prohibida": "Si te despiden, firma bajo protesta.",
+      "notas": "Imperativo en segunda persona + mecanismo no confirmado con fuente oficial + no declara país en el hook."
+    }
+  ],
+  "estado_agregado": "BLOQUEADO",
+  "revisiones_pendientes": [
+    "pieza-6-claim-1"
+  ],
+  "gate_global_arte": "CERRADO"
+}

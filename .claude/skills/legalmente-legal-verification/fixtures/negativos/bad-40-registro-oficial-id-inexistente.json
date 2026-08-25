@@ -1,0 +1,89 @@
+{
+  "schema_version": "4.0",
+  "piece_id": "neg",
+  "claims": [
+    {
+      "claim_id": "c1",
+      "texto_exacto": "Fuente con registro_oficial_id que no existe en el registro.",
+      "ubicacion": "titulo",
+      "tipo": "regla",
+      "alcance": "CAPA_A_TRANSVERSAL",
+      "jurisdiccion": null,
+      "nucleo_transversal": null,
+      "variaciones_materiales": null,
+      "jurisdicciones_revisadas": [
+        {
+          "pais": "España",
+          "fuente_ids": [
+            "f40"
+          ]
+        }
+      ],
+      "diferencias_buscadas": "x",
+      "contraejemplos_encontrados": "ninguno",
+      "justificacion_suficiencia_comparada": "x",
+      "fuentes": [
+        {
+          "id": "f40",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Ley de prueba",
+          "organismo_autor": "Agencia Estatal BOE",
+          "url": "https://www.boe.es/x",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-08-25",
+          "localizador": "art. 1",
+          "jurisdicciones_cubiertas": [
+            "España"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": true,
+            "texto_exacto_consultado": true,
+            "vigencia_comprobada": true,
+            "fecha_comprobacion": "2026-08-25",
+            "metodo_o_evidencia": "Lectura directa del texto oficial vigente",
+            "observaciones": null
+          },
+          "registro_oficial_id": "organismo-inventado-que-no-existe"
+        }
+      ],
+      "confianza": "media",
+      "riesgo_falsa_universalizacion": "bajo",
+      "riesgo_asesoria": "ninguno",
+      "platform_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "confidentiality_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "estado": "APTO_CON_MATICES",
+      "revision_humana": {
+        "estado": "PENDIENTE",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null,
+        "contenido_hash_sha256": null
+      },
+      "gate_arte": "CERRADO",
+      "reformulacion_propuesta": {
+        "texto": null,
+        "verificada": false,
+        "nuevo_claim_id": null
+      },
+      "redaccion_prohibida": null,
+      "notas": "NEGATIVO (Fase 1D.1): 'registro_oficial_id' no existe en references/official-source-registry.json."
+    }
+  ],
+  "estado_agregado": "APTO_CON_MATICES",
+  "revisiones_pendientes": [
+    "c1"
+  ],
+  "gate_global_arte": "CERRADO"
+}

@@ -1,0 +1,82 @@
+{
+  "schema_version": "4.0",
+  "piece_id": "neg",
+  "claims": [
+    {
+      "claim_id": "c1",
+      "texto_exacto": "Afirmación cuyo único respaldo es Drive.",
+      "ubicacion": "titulo",
+      "tipo": "regla",
+      "alcance": "CAPA_C_NACIONAL",
+      "jurisdiccion": "España",
+      "nucleo_transversal": null,
+      "variaciones_materiales": null,
+      "jurisdicciones_revisadas": null,
+      "diferencias_buscadas": null,
+      "contraejemplos_encontrados": null,
+      "justificacion_suficiencia_comparada": null,
+      "fuentes": [
+        {
+          "id": "f14",
+          "tipo_fuente": "DRIVE_INTERNO",
+          "titulo": "Matriz de contenido (Drive)",
+          "organismo_autor": "Equipo LegalMente",
+          "url": "https://docs.google.com/spreadsheets/d/xxxx",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-08-25",
+          "localizador": "fila 12",
+          "jurisdicciones_cubiertas": [
+            "España"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": false,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": null,
+            "metodo_o_evidencia": null,
+            "observaciones": "No se pudo confirmar origen ni consultar el texto en este entorno."
+          },
+          "registro_oficial_id": null
+        }
+      ],
+      "confianza": "media",
+      "riesgo_falsa_universalizacion": "bajo",
+      "riesgo_asesoria": "ninguno",
+      "platform_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "confidentiality_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "estado": "APTO_CON_MATICES",
+      "revision_humana": {
+        "estado": "PENDIENTE",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null,
+        "contenido_hash_sha256": null
+      },
+      "gate_arte": "CERRADO",
+      "reformulacion_propuesta": {
+        "texto": null,
+        "verificada": false,
+        "nuevo_claim_id": null
+      },
+      "redaccion_prohibida": null,
+      "notas": null
+    }
+  ],
+  "estado_agregado": "APTO_CON_MATICES",
+  "revisiones_pendientes": [
+    "c1"
+  ],
+  "gate_global_arte": "CERRADO"
+}

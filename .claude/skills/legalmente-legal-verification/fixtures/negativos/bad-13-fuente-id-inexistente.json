@@ -1,0 +1,78 @@
+{
+  "schema_version": "4.0",
+  "piece_id": "bad-13",
+  "claims": [
+    {
+      "claim_id": "c1",
+      "texto_exacto": "Afirmación aprobada sin ninguna fuente real.",
+      "ubicacion": "titulo",
+      "tipo": "regla",
+      "alcance": "CAPA_A_TRANSVERSAL",
+      "jurisdiccion": null,
+      "nucleo_transversal": "algo",
+      "variaciones_materiales": null,
+      "jurisdicciones_revisadas": [
+        {
+          "pais": "España",
+          "fuente_ids": [
+            "fx"
+          ]
+        },
+        {
+          "pais": "México",
+          "fuente_ids": [
+            "fx"
+          ]
+        },
+        {
+          "pais": "Argentina",
+          "fuente_ids": [
+            "fx"
+          ]
+        }
+      ],
+      "diferencias_buscadas": "algo",
+      "contraejemplos_encontrados": "ninguno",
+      "justificacion_suficiencia_comparada": "algo",
+      "fuentes": [],
+      "confianza": "alta",
+      "riesgo_falsa_universalizacion": "bajo",
+      "riesgo_asesoria": "ninguno",
+      "platform_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "confidentiality_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "estado": "APTO_PARA_NARRATIVA",
+      "revision_humana": {
+        "estado": "PENDIENTE",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null,
+        "contenido_hash_sha256": null
+      },
+      "gate_arte": "CERRADO",
+      "reformulacion_propuesta": {
+        "texto": null,
+        "verificada": false,
+        "nuevo_claim_id": null
+      },
+      "redaccion_prohibida": null,
+      "notas": "NEGATIVO: fuente_ids referencia una fuente que no existe."
+    }
+  ],
+  "estado_agregado": "APTO_PARA_NARRATIVA",
+  "revisiones_pendientes": [
+    "c1"
+  ],
+  "gate_global_arte": "CERRADO"
+}

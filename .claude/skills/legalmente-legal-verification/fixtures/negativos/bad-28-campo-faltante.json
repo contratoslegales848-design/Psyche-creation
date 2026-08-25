@@ -1,0 +1,49 @@
+{
+  "schema_version": "4.0",
+  "piece_id": "bad-28",
+  "claims": [
+    {
+      "claim_id": "c1",
+      "texto_exacto": "Falta 'alcance'.",
+      "ubicacion": "titulo",
+      "tipo": "regla",
+      "fuentes": [],
+      "confianza": "alta",
+      "riesgo_falsa_universalizacion": "bajo",
+      "riesgo_asesoria": "ninguno",
+      "platform_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "confidentiality_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "estado": "BLOQUEADO",
+      "revision_humana": {
+        "estado": "PENDIENTE",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null,
+        "contenido_hash_sha256": null
+      },
+      "gate_arte": "CERRADO",
+      "reformulacion_propuesta": {
+        "texto": null,
+        "verificada": false,
+        "nuevo_claim_id": null
+      }
+    }
+  ],
+  "estado_agregado": "BLOQUEADO",
+  "revisiones_pendientes": [
+    "c1"
+  ],
+  "gate_global_arte": "CERRADO"
+}

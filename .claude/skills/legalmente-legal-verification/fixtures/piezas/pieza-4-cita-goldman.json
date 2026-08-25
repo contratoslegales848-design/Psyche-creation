@@ -1,0 +1,131 @@
+{
+  "schema_version": "4.0",
+  "piece_id": "pieza-4-cita-goldman",
+  "claims": [
+    {
+      "claim_id": "pieza-4-claim-1-atribucion",
+      "texto_exacto": "\"Los delincuentes son producto de las circunstancias sociales\" — atribuida a Emma Goldman.",
+      "ubicacion": "caption",
+      "tipo": "atribucion",
+      "alcance": "NO_APLICA",
+      "jurisdiccion": null,
+      "nucleo_transversal": null,
+      "variaciones_materiales": null,
+      "jurisdicciones_revisadas": null,
+      "diferencias_buscadas": null,
+      "contraejemplos_encontrados": null,
+      "justificacion_suficiencia_comparada": null,
+      "fuentes": [
+        {
+          "id": "f-goldman",
+          "tipo_fuente": "ACADEMICA_IDENTIFICABLE",
+          "titulo": "Prisiones: El crimen social y su fracaso (ensayo)",
+          "organismo_autor": "Emma Goldman",
+          "url": "https://www.portaloaca.com/pensamientolibertario/textosanarquismo/prisiones-el-crimen-social-y-su-fracaso-emma-goldman/",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-08-25",
+          "localizador": "Sección donde Goldman atribuye la idea al criminólogo Lacassagne",
+          "jurisdicciones_cubiertas": [
+            "General"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": false,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": null,
+            "metodo_o_evidencia": null,
+            "observaciones": "No se pudo confirmar origen ni consultar el texto en este entorno."
+          },
+          "registro_oficial_id": null
+        }
+      ],
+      "confianza": "media",
+      "riesgo_falsa_universalizacion": "ninguno",
+      "riesgo_asesoria": "ninguno",
+      "platform_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "confidentiality_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "estado": "BLOQUEADO",
+      "revision_humana": {
+        "estado": "PENDIENTE",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null,
+        "contenido_hash_sha256": null
+      },
+      "gate_arte": "CERRADO",
+      "reformulacion_propuesta": {
+        "texto": "Atribuirla a Lacassagne solo tras confirmar obra y edición exactas, o presentarla sin atribución personal.",
+        "verificada": false,
+        "nuevo_claim_id": null
+      },
+      "redaccion_prohibida": "Cualquier variante que atribuya esta cita a Emma Goldman como autora original.",
+      "notas": "NO_APLICA porque la investigación concluyó algo firme: Goldman atribuye la idea a Lacassagne en su propio ensayo."
+    },
+    {
+      "claim_id": "pieza-4-claim-2-hipotetico-legal",
+      "texto_exacto": "(Ejemplo de separación de claims) Si la pieza afirmara: 'las circunstancias sociales eximen de responsabilidad penal' — sería una proposición jurídica aparte.",
+      "ubicacion": "descripcion_tema",
+      "tipo": "regla",
+      "alcance": "CAPA_B_VARIABLE",
+      "jurisdiccion": null,
+      "nucleo_transversal": null,
+      "variaciones_materiales": "Los criterios de imputabilidad y eximentes por circunstancias sociales varían por país y código penal.",
+      "jurisdicciones_revisadas": null,
+      "diferencias_buscadas": null,
+      "contraejemplos_encontrados": null,
+      "justificacion_suficiencia_comparada": null,
+      "fuentes": [],
+      "confianza": "media",
+      "riesgo_falsa_universalizacion": "alto",
+      "riesgo_asesoria": "medio",
+      "platform_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "confidentiality_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "estado": "BLOQUEADO",
+      "revision_humana": {
+        "estado": "PENDIENTE",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null,
+        "contenido_hash_sha256": null
+      },
+      "gate_arte": "CERRADO",
+      "reformulacion_propuesta": {
+        "texto": null,
+        "verificada": false,
+        "nuevo_claim_id": null
+      },
+      "redaccion_prohibida": null,
+      "notas": "Claim ilustrativo: demuestra que una cita con proposición jurídica de fondo se separa en dos claims, sin heredar fuentes del claim de atribución."
+    }
+  ],
+  "estado_agregado": "BLOQUEADO",
+  "revisiones_pendientes": [
+    "pieza-4-claim-1-atribucion",
+    "pieza-4-claim-2-hipotetico-legal"
+  ],
+  "gate_global_arte": "CERRADO"
+}

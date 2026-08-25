@@ -1,0 +1,190 @@
+{
+  "registry_version": "1.0",
+  "_nota": "Registro ÚNICO y cerrado de organismos oficiales conocidos por el validador (Fase 1D.1). Toda validación de hostname, organismo, tipo de fuente permitido y jurisdicción/ámbito se deriva de aquí — el validador NO mantiene ninguna lista paralela. Un hostname oficial legítimo que falte aquí falla cerrado (genera advertencia, nunca alcanza Nivel 1) hasta que un humano añada la entrada explícitamente. 'tipos_fuente_permitidos' es deliberadamente conservador: ante la duda, se permite MENOS tipos, no más — cada entrada documenta por qué se restringió así, para revisión humana.",
+  "sources": [
+    {
+      "id": "boe-es",
+      "hostnames": ["boe.es"],
+      "organismo_canonico": "Agencia Estatal Boletín Oficial del Estado",
+      "organismo_aliases": ["Agencia Estatal BOE", "BOE", "Boletín Oficial del Estado"],
+      "jurisdicciones": ["España"],
+      "tipos_fuente_permitidos": ["NORMA_OFICIAL"],
+      "ambito": "NACIONAL",
+      "_nota": "El BOE publica normas (leyes, reales decretos), no resuelve litigios — JURISPRUDENCIA_OFICIAL corresponde al Poder Judicial (poderjudicial.es), no al BOE."
+    },
+    {
+      "id": "poderjudicial-es",
+      "hostnames": ["poderjudicial.es"],
+      "organismo_canonico": "Consejo General del Poder Judicial",
+      "organismo_aliases": ["CGPJ", "Poder Judicial de España"],
+      "jurisdicciones": ["España"],
+      "tipos_fuente_permitidos": ["JURISPRUDENCIA_OFICIAL"],
+      "ambito": "NACIONAL"
+    },
+    {
+      "id": "congreso-es",
+      "hostnames": ["congreso.es"],
+      "organismo_canonico": "Congreso de los Diputados (España)",
+      "organismo_aliases": ["Congreso de los Diputados"],
+      "jurisdicciones": ["España"],
+      "tipos_fuente_permitidos": ["NORMA_OFICIAL"],
+      "ambito": "NACIONAL"
+    },
+    {
+      "id": "senado-es",
+      "hostnames": ["senado.es"],
+      "organismo_canonico": "Senado de España",
+      "organismo_aliases": ["Senado (España)"],
+      "jurisdicciones": ["España"],
+      "tipos_fuente_permitidos": ["NORMA_OFICIAL"],
+      "ambito": "NACIONAL"
+    },
+    {
+      "id": "diputados-gob-mx",
+      "hostnames": ["diputados.gob.mx"],
+      "organismo_canonico": "Cámara de Diputados (México)",
+      "organismo_aliases": ["Congreso de la Unión (México)", "H. Cámara de Diputados", "Diputados MX"],
+      "jurisdicciones": ["México"],
+      "tipos_fuente_permitidos": ["NORMA_OFICIAL"],
+      "ambito": "NACIONAL"
+    },
+    {
+      "id": "senado-gob-mx",
+      "hostnames": ["senado.gob.mx"],
+      "organismo_canonico": "Senado de la República (México)",
+      "organismo_aliases": ["Senado de México"],
+      "jurisdicciones": ["México"],
+      "tipos_fuente_permitidos": ["NORMA_OFICIAL"],
+      "ambito": "NACIONAL"
+    },
+    {
+      "id": "dof-gob-mx",
+      "hostnames": ["dof.gob.mx"],
+      "organismo_canonico": "Diario Oficial de la Federación (México)",
+      "organismo_aliases": ["DOF"],
+      "jurisdicciones": ["México"],
+      "tipos_fuente_permitidos": ["NORMA_OFICIAL"],
+      "ambito": "NACIONAL"
+    },
+    {
+      "id": "scjn-gob-mx",
+      "hostnames": ["scjn.gob.mx"],
+      "organismo_canonico": "Suprema Corte de Justicia de la Nación (México)",
+      "organismo_aliases": ["SCJN"],
+      "jurisdicciones": ["México"],
+      "tipos_fuente_permitidos": ["JURISPRUDENCIA_OFICIAL"],
+      "ambito": "NACIONAL"
+    },
+    {
+      "id": "gob-mx-generico",
+      "hostnames": ["gob.mx"],
+      "organismo_canonico": "Gobierno de México (portal genérico gob.mx)",
+      "organismo_aliases": ["Gobierno de México", "Gobierno Federal (México)"],
+      "jurisdicciones": ["México"],
+      "tipos_fuente_permitidos": ["AUTORIDAD_PUBLICA_OFICIAL"],
+      "ambito": "NACIONAL",
+      "_nota": "Entrada GENÉRICA de respaldo para cualquier subdominio *.gob.mx sin entrada propia (p. ej. sat.gob.mx). Deliberadamente conservadora: solo AUTORIDAD_PUBLICA_OFICIAL, nunca NORMA_OFICIAL ni JURISPRUDENCIA_OFICIAL, porque un subdominio genérico de gob.mx no es por sí mismo el Diario Oficial ni la SCJN. Un hostname más específico (dof.gob.mx, scjn.gob.mx, diputados.gob.mx, senado.gob.mx) siempre gana sobre esta entrada genérica."
+    },
+    {
+      "id": "infoleg-gob-ar",
+      "hostnames": ["infoleg.gob.ar", "servicios.infoleg.gob.ar"],
+      "organismo_canonico": "Información Legislativa y Documental (InfoLEG, Argentina)",
+      "organismo_aliases": ["InfoLEG", "InfoLeg Argentina", "InfoLEG — Ministerio de Justicia (Argentina)"],
+      "jurisdicciones": ["Argentina"],
+      "tipos_fuente_permitidos": ["NORMA_OFICIAL"],
+      "ambito": "NACIONAL"
+    },
+    {
+      "id": "csjn-gov-ar",
+      "hostnames": ["csjn.gov.ar"],
+      "organismo_canonico": "Corte Suprema de Justicia de la Nación (Argentina)",
+      "organismo_aliases": ["CSJN"],
+      "jurisdicciones": ["Argentina"],
+      "tipos_fuente_permitidos": ["JURISPRUDENCIA_OFICIAL"],
+      "ambito": "NACIONAL"
+    },
+    {
+      "id": "boletinoficial-gob-ar",
+      "hostnames": ["boletinoficial.gob.ar"],
+      "organismo_canonico": "Boletín Oficial de la República Argentina",
+      "organismo_aliases": ["Boletín Oficial (Argentina)"],
+      "jurisdicciones": ["Argentina"],
+      "tipos_fuente_permitidos": ["NORMA_OFICIAL"],
+      "ambito": "NACIONAL"
+    },
+    {
+      "id": "minjus-gob-pe",
+      "hostnames": ["minjus.gob.pe"],
+      "organismo_canonico": "Ministerio de Justicia y Derechos Humanos (Perú)",
+      "organismo_aliases": ["Minjus Perú", "Ministerio de Justicia (Perú)"],
+      "jurisdicciones": ["Perú"],
+      "tipos_fuente_permitidos": ["AUTORIDAD_PUBLICA_OFICIAL"],
+      "ambito": "NACIONAL",
+      "_nota": "Entrada del ministerio en general (AUTORIDAD_PUBLICA_OFICIAL); el repositorio normativo específico es spij.minjus.gob.pe, con su propia entrada más específica que gana sobre esta."
+    },
+    {
+      "id": "spij-minjus-gob-pe",
+      "hostnames": ["spij.minjus.gob.pe"],
+      "organismo_canonico": "Sistema Peruano de Información Jurídica (SPIJ)",
+      "organismo_aliases": ["SPIJ", "SPIJ Perú", "Sistema Peruano de Información Jurídica — Minjus", "Minjus"],
+      "jurisdicciones": ["Perú"],
+      "tipos_fuente_permitidos": ["NORMA_OFICIAL"],
+      "ambito": "NACIONAL"
+    },
+    {
+      "id": "tc-gob-pe",
+      "hostnames": ["tc.gob.pe"],
+      "organismo_canonico": "Tribunal Constitucional del Perú",
+      "organismo_aliases": ["Tribunal Constitucional (Perú)"],
+      "jurisdicciones": ["Perú"],
+      "tipos_fuente_permitidos": ["JURISPRUDENCIA_OFICIAL"],
+      "ambito": "NACIONAL"
+    },
+    {
+      "id": "pj-gob-pe",
+      "hostnames": ["pj.gob.pe"],
+      "organismo_canonico": "Poder Judicial del Perú",
+      "organismo_aliases": ["Poder Judicial (Perú)"],
+      "jurisdicciones": ["Perú"],
+      "tipos_fuente_permitidos": ["JURISPRUDENCIA_OFICIAL"],
+      "ambito": "NACIONAL"
+    },
+    {
+      "id": "bcn-cl",
+      "hostnames": ["bcn.cl", "www.bcn.cl"],
+      "organismo_canonico": "Biblioteca del Congreso Nacional de Chile",
+      "organismo_aliases": ["BCN Chile", "Biblioteca del Congreso Nacional"],
+      "jurisdicciones": ["Chile"],
+      "tipos_fuente_permitidos": ["NORMA_OFICIAL"],
+      "ambito": "NACIONAL"
+    },
+    {
+      "id": "funcionpublica-gov-co",
+      "hostnames": ["funcionpublica.gov.co"],
+      "organismo_canonico": "Departamento Administrativo de la Función Pública (Colombia) — Gestor Normativo",
+      "organismo_aliases": ["Función Pública Colombia", "Función Pública"],
+      "jurisdicciones": ["Colombia"],
+      "tipos_fuente_permitidos": ["NORMA_OFICIAL"],
+      "ambito": "NACIONAL"
+    },
+    {
+      "id": "corteconstitucional-gov-co",
+      "hostnames": ["corteconstitucional.gov.co"],
+      "organismo_canonico": "Corte Constitucional de Colombia",
+      "organismo_aliases": ["Corte Constitucional (Colombia)"],
+      "jurisdicciones": ["Colombia"],
+      "tipos_fuente_permitidos": ["JURISPRUDENCIA_OFICIAL"],
+      "ambito": "NACIONAL"
+    },
+    {
+      "id": "eur-lex-europa-eu",
+      "hostnames": ["eur-lex.europa.eu"],
+      "organismo_canonico": "EUR-Lex — Oficina de Publicaciones de la Unión Europea",
+      "organismo_aliases": ["EUR-Lex"],
+      "jurisdicciones": ["Unión Europea"],
+      "tipos_fuente_permitidos": ["NORMA_OFICIAL"],
+      "ambito": "SUPRANACIONAL",
+      "_nota": "Ámbito supranacional explícito — nunca respalda un país concreto no declarado, ni se asume que 'cubre a toda la audiencia panhispánica'."
+    }
+  ]
+}

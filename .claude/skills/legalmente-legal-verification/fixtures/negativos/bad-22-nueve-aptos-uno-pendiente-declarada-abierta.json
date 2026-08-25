@@ -1,0 +1,696 @@
+{
+  "schema_version": "4.0",
+  "piece_id": "neg",
+  "claims": [
+    {
+      "claim_id": "c1",
+      "texto_exacto": "Afirmación de relleno c1.",
+      "ubicacion": "titulo",
+      "tipo": "definicion",
+      "alcance": "NO_APLICA",
+      "jurisdiccion": null,
+      "nucleo_transversal": null,
+      "variaciones_materiales": null,
+      "jurisdicciones_revisadas": null,
+      "diferencias_buscadas": null,
+      "contraejemplos_encontrados": null,
+      "justificacion_suficiencia_comparada": null,
+      "fuentes": [
+        {
+          "id": "f-c1",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Fuente oficial",
+          "organismo_autor": "BOE",
+          "url": "https://www.boe.es/x",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-08-25",
+          "localizador": "art. X",
+          "jurisdicciones_cubiertas": [
+            "España"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": true,
+            "texto_exacto_consultado": true,
+            "vigencia_comprobada": true,
+            "fecha_comprobacion": "2026-08-25",
+            "metodo_o_evidencia": "Lectura directa del texto oficial vigente",
+            "observaciones": null
+          },
+          "registro_oficial_id": "boe-es"
+        }
+      ],
+      "confianza": "alta",
+      "riesgo_falsa_universalizacion": "ninguno",
+      "riesgo_asesoria": "ninguno",
+      "platform_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "confidentiality_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "estado": "APTO_PARA_NARRATIVA",
+      "revision_humana": {
+        "estado": "APROBADO",
+        "revisor": "REVISOR_FICTICIO_SOLO_PRUEBA",
+        "fecha": "2026-08-25",
+        "observaciones": null,
+        "contenido_hash_sha256": "8eabddb4b4f6a727ea2a1f19054b4b416021ce16333c49cda10e67dbe3cbda70"
+      },
+      "gate_arte": "ABIERTO",
+      "reformulacion_propuesta": {
+        "texto": null,
+        "verificada": false,
+        "nuevo_claim_id": null
+      },
+      "redaccion_prohibida": null,
+      "notas": null
+    },
+    {
+      "claim_id": "c2",
+      "texto_exacto": "Afirmación de relleno c2.",
+      "ubicacion": "titulo",
+      "tipo": "definicion",
+      "alcance": "NO_APLICA",
+      "jurisdiccion": null,
+      "nucleo_transversal": null,
+      "variaciones_materiales": null,
+      "jurisdicciones_revisadas": null,
+      "diferencias_buscadas": null,
+      "contraejemplos_encontrados": null,
+      "justificacion_suficiencia_comparada": null,
+      "fuentes": [
+        {
+          "id": "f-c2",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Fuente oficial",
+          "organismo_autor": "BOE",
+          "url": "https://www.boe.es/x",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-08-25",
+          "localizador": "art. X",
+          "jurisdicciones_cubiertas": [
+            "España"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": true,
+            "texto_exacto_consultado": true,
+            "vigencia_comprobada": true,
+            "fecha_comprobacion": "2026-08-25",
+            "metodo_o_evidencia": "Lectura directa del texto oficial vigente",
+            "observaciones": null
+          },
+          "registro_oficial_id": "boe-es"
+        }
+      ],
+      "confianza": "alta",
+      "riesgo_falsa_universalizacion": "ninguno",
+      "riesgo_asesoria": "ninguno",
+      "platform_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "confidentiality_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "estado": "APTO_PARA_NARRATIVA",
+      "revision_humana": {
+        "estado": "APROBADO",
+        "revisor": "REVISOR_FICTICIO_SOLO_PRUEBA",
+        "fecha": "2026-08-25",
+        "observaciones": null,
+        "contenido_hash_sha256": "20181b1bc3369c76d69e8773d1c3f3192d785a5146af5e0034b1cd57465a5622"
+      },
+      "gate_arte": "ABIERTO",
+      "reformulacion_propuesta": {
+        "texto": null,
+        "verificada": false,
+        "nuevo_claim_id": null
+      },
+      "redaccion_prohibida": null,
+      "notas": null
+    },
+    {
+      "claim_id": "c3",
+      "texto_exacto": "Afirmación de relleno c3.",
+      "ubicacion": "titulo",
+      "tipo": "definicion",
+      "alcance": "NO_APLICA",
+      "jurisdiccion": null,
+      "nucleo_transversal": null,
+      "variaciones_materiales": null,
+      "jurisdicciones_revisadas": null,
+      "diferencias_buscadas": null,
+      "contraejemplos_encontrados": null,
+      "justificacion_suficiencia_comparada": null,
+      "fuentes": [
+        {
+          "id": "f-c3",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Fuente oficial",
+          "organismo_autor": "BOE",
+          "url": "https://www.boe.es/x",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-08-25",
+          "localizador": "art. X",
+          "jurisdicciones_cubiertas": [
+            "España"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": true,
+            "texto_exacto_consultado": true,
+            "vigencia_comprobada": true,
+            "fecha_comprobacion": "2026-08-25",
+            "metodo_o_evidencia": "Lectura directa del texto oficial vigente",
+            "observaciones": null
+          },
+          "registro_oficial_id": "boe-es"
+        }
+      ],
+      "confianza": "alta",
+      "riesgo_falsa_universalizacion": "ninguno",
+      "riesgo_asesoria": "ninguno",
+      "platform_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "confidentiality_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "estado": "APTO_PARA_NARRATIVA",
+      "revision_humana": {
+        "estado": "APROBADO",
+        "revisor": "REVISOR_FICTICIO_SOLO_PRUEBA",
+        "fecha": "2026-08-25",
+        "observaciones": null,
+        "contenido_hash_sha256": "b1d182ec1cac7ce72b97767c70a370addb5df8df3df7b108c4dc833c067c5047"
+      },
+      "gate_arte": "ABIERTO",
+      "reformulacion_propuesta": {
+        "texto": null,
+        "verificada": false,
+        "nuevo_claim_id": null
+      },
+      "redaccion_prohibida": null,
+      "notas": null
+    },
+    {
+      "claim_id": "c4",
+      "texto_exacto": "Afirmación de relleno c4.",
+      "ubicacion": "titulo",
+      "tipo": "definicion",
+      "alcance": "NO_APLICA",
+      "jurisdiccion": null,
+      "nucleo_transversal": null,
+      "variaciones_materiales": null,
+      "jurisdicciones_revisadas": null,
+      "diferencias_buscadas": null,
+      "contraejemplos_encontrados": null,
+      "justificacion_suficiencia_comparada": null,
+      "fuentes": [
+        {
+          "id": "f-c4",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Fuente oficial",
+          "organismo_autor": "BOE",
+          "url": "https://www.boe.es/x",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-08-25",
+          "localizador": "art. X",
+          "jurisdicciones_cubiertas": [
+            "España"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": true,
+            "texto_exacto_consultado": true,
+            "vigencia_comprobada": true,
+            "fecha_comprobacion": "2026-08-25",
+            "metodo_o_evidencia": "Lectura directa del texto oficial vigente",
+            "observaciones": null
+          },
+          "registro_oficial_id": "boe-es"
+        }
+      ],
+      "confianza": "alta",
+      "riesgo_falsa_universalizacion": "ninguno",
+      "riesgo_asesoria": "ninguno",
+      "platform_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "confidentiality_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "estado": "APTO_PARA_NARRATIVA",
+      "revision_humana": {
+        "estado": "APROBADO",
+        "revisor": "REVISOR_FICTICIO_SOLO_PRUEBA",
+        "fecha": "2026-08-25",
+        "observaciones": null,
+        "contenido_hash_sha256": "e59f635b4fa8c996b1e53ec0c65525035b14ce55bee4aa470609ab785390a522"
+      },
+      "gate_arte": "ABIERTO",
+      "reformulacion_propuesta": {
+        "texto": null,
+        "verificada": false,
+        "nuevo_claim_id": null
+      },
+      "redaccion_prohibida": null,
+      "notas": null
+    },
+    {
+      "claim_id": "c5",
+      "texto_exacto": "Afirmación de relleno c5.",
+      "ubicacion": "titulo",
+      "tipo": "definicion",
+      "alcance": "NO_APLICA",
+      "jurisdiccion": null,
+      "nucleo_transversal": null,
+      "variaciones_materiales": null,
+      "jurisdicciones_revisadas": null,
+      "diferencias_buscadas": null,
+      "contraejemplos_encontrados": null,
+      "justificacion_suficiencia_comparada": null,
+      "fuentes": [
+        {
+          "id": "f-c5",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Fuente oficial",
+          "organismo_autor": "BOE",
+          "url": "https://www.boe.es/x",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-08-25",
+          "localizador": "art. X",
+          "jurisdicciones_cubiertas": [
+            "España"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": true,
+            "texto_exacto_consultado": true,
+            "vigencia_comprobada": true,
+            "fecha_comprobacion": "2026-08-25",
+            "metodo_o_evidencia": "Lectura directa del texto oficial vigente",
+            "observaciones": null
+          },
+          "registro_oficial_id": "boe-es"
+        }
+      ],
+      "confianza": "alta",
+      "riesgo_falsa_universalizacion": "ninguno",
+      "riesgo_asesoria": "ninguno",
+      "platform_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "confidentiality_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "estado": "APTO_PARA_NARRATIVA",
+      "revision_humana": {
+        "estado": "APROBADO",
+        "revisor": "REVISOR_FICTICIO_SOLO_PRUEBA",
+        "fecha": "2026-08-25",
+        "observaciones": null,
+        "contenido_hash_sha256": "e327dfdd38869c024b333b6cddbfc8b7282e60f4fcf1a6c821185952d53a49c4"
+      },
+      "gate_arte": "ABIERTO",
+      "reformulacion_propuesta": {
+        "texto": null,
+        "verificada": false,
+        "nuevo_claim_id": null
+      },
+      "redaccion_prohibida": null,
+      "notas": null
+    },
+    {
+      "claim_id": "c6",
+      "texto_exacto": "Afirmación de relleno c6.",
+      "ubicacion": "titulo",
+      "tipo": "definicion",
+      "alcance": "NO_APLICA",
+      "jurisdiccion": null,
+      "nucleo_transversal": null,
+      "variaciones_materiales": null,
+      "jurisdicciones_revisadas": null,
+      "diferencias_buscadas": null,
+      "contraejemplos_encontrados": null,
+      "justificacion_suficiencia_comparada": null,
+      "fuentes": [
+        {
+          "id": "f-c6",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Fuente oficial",
+          "organismo_autor": "BOE",
+          "url": "https://www.boe.es/x",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-08-25",
+          "localizador": "art. X",
+          "jurisdicciones_cubiertas": [
+            "España"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": true,
+            "texto_exacto_consultado": true,
+            "vigencia_comprobada": true,
+            "fecha_comprobacion": "2026-08-25",
+            "metodo_o_evidencia": "Lectura directa del texto oficial vigente",
+            "observaciones": null
+          },
+          "registro_oficial_id": "boe-es"
+        }
+      ],
+      "confianza": "alta",
+      "riesgo_falsa_universalizacion": "ninguno",
+      "riesgo_asesoria": "ninguno",
+      "platform_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "confidentiality_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "estado": "APTO_PARA_NARRATIVA",
+      "revision_humana": {
+        "estado": "APROBADO",
+        "revisor": "REVISOR_FICTICIO_SOLO_PRUEBA",
+        "fecha": "2026-08-25",
+        "observaciones": null,
+        "contenido_hash_sha256": "b4d342cbde414e0ad9fa84da6853b4c14245e1189f41e5b11e246e0c8767760a"
+      },
+      "gate_arte": "ABIERTO",
+      "reformulacion_propuesta": {
+        "texto": null,
+        "verificada": false,
+        "nuevo_claim_id": null
+      },
+      "redaccion_prohibida": null,
+      "notas": null
+    },
+    {
+      "claim_id": "c7",
+      "texto_exacto": "Afirmación de relleno c7.",
+      "ubicacion": "titulo",
+      "tipo": "definicion",
+      "alcance": "NO_APLICA",
+      "jurisdiccion": null,
+      "nucleo_transversal": null,
+      "variaciones_materiales": null,
+      "jurisdicciones_revisadas": null,
+      "diferencias_buscadas": null,
+      "contraejemplos_encontrados": null,
+      "justificacion_suficiencia_comparada": null,
+      "fuentes": [
+        {
+          "id": "f-c7",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Fuente oficial",
+          "organismo_autor": "BOE",
+          "url": "https://www.boe.es/x",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-08-25",
+          "localizador": "art. X",
+          "jurisdicciones_cubiertas": [
+            "España"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": true,
+            "texto_exacto_consultado": true,
+            "vigencia_comprobada": true,
+            "fecha_comprobacion": "2026-08-25",
+            "metodo_o_evidencia": "Lectura directa del texto oficial vigente",
+            "observaciones": null
+          },
+          "registro_oficial_id": "boe-es"
+        }
+      ],
+      "confianza": "alta",
+      "riesgo_falsa_universalizacion": "ninguno",
+      "riesgo_asesoria": "ninguno",
+      "platform_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "confidentiality_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "estado": "APTO_PARA_NARRATIVA",
+      "revision_humana": {
+        "estado": "APROBADO",
+        "revisor": "REVISOR_FICTICIO_SOLO_PRUEBA",
+        "fecha": "2026-08-25",
+        "observaciones": null,
+        "contenido_hash_sha256": "b3210b7abfef8248f8cfbabc2333ffe0a79bb69f46c14836b1a841048bd8a00a"
+      },
+      "gate_arte": "ABIERTO",
+      "reformulacion_propuesta": {
+        "texto": null,
+        "verificada": false,
+        "nuevo_claim_id": null
+      },
+      "redaccion_prohibida": null,
+      "notas": null
+    },
+    {
+      "claim_id": "c8",
+      "texto_exacto": "Afirmación de relleno c8.",
+      "ubicacion": "titulo",
+      "tipo": "definicion",
+      "alcance": "NO_APLICA",
+      "jurisdiccion": null,
+      "nucleo_transversal": null,
+      "variaciones_materiales": null,
+      "jurisdicciones_revisadas": null,
+      "diferencias_buscadas": null,
+      "contraejemplos_encontrados": null,
+      "justificacion_suficiencia_comparada": null,
+      "fuentes": [
+        {
+          "id": "f-c8",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Fuente oficial",
+          "organismo_autor": "BOE",
+          "url": "https://www.boe.es/x",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-08-25",
+          "localizador": "art. X",
+          "jurisdicciones_cubiertas": [
+            "España"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": true,
+            "texto_exacto_consultado": true,
+            "vigencia_comprobada": true,
+            "fecha_comprobacion": "2026-08-25",
+            "metodo_o_evidencia": "Lectura directa del texto oficial vigente",
+            "observaciones": null
+          },
+          "registro_oficial_id": "boe-es"
+        }
+      ],
+      "confianza": "alta",
+      "riesgo_falsa_universalizacion": "ninguno",
+      "riesgo_asesoria": "ninguno",
+      "platform_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "confidentiality_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "estado": "APTO_PARA_NARRATIVA",
+      "revision_humana": {
+        "estado": "APROBADO",
+        "revisor": "REVISOR_FICTICIO_SOLO_PRUEBA",
+        "fecha": "2026-08-25",
+        "observaciones": null,
+        "contenido_hash_sha256": "8162407ef462332e0a54737e15e30aad4aae0442dfceb770516f7108a63191af"
+      },
+      "gate_arte": "ABIERTO",
+      "reformulacion_propuesta": {
+        "texto": null,
+        "verificada": false,
+        "nuevo_claim_id": null
+      },
+      "redaccion_prohibida": null,
+      "notas": null
+    },
+    {
+      "claim_id": "c9",
+      "texto_exacto": "Afirmación de relleno c9.",
+      "ubicacion": "titulo",
+      "tipo": "definicion",
+      "alcance": "NO_APLICA",
+      "jurisdiccion": null,
+      "nucleo_transversal": null,
+      "variaciones_materiales": null,
+      "jurisdicciones_revisadas": null,
+      "diferencias_buscadas": null,
+      "contraejemplos_encontrados": null,
+      "justificacion_suficiencia_comparada": null,
+      "fuentes": [
+        {
+          "id": "f-c9",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Fuente oficial",
+          "organismo_autor": "BOE",
+          "url": "https://www.boe.es/x",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-08-25",
+          "localizador": "art. X",
+          "jurisdicciones_cubiertas": [
+            "España"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": true,
+            "texto_exacto_consultado": true,
+            "vigencia_comprobada": true,
+            "fecha_comprobacion": "2026-08-25",
+            "metodo_o_evidencia": "Lectura directa del texto oficial vigente",
+            "observaciones": null
+          },
+          "registro_oficial_id": "boe-es"
+        }
+      ],
+      "confianza": "alta",
+      "riesgo_falsa_universalizacion": "ninguno",
+      "riesgo_asesoria": "ninguno",
+      "platform_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "confidentiality_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "estado": "APTO_PARA_NARRATIVA",
+      "revision_humana": {
+        "estado": "APROBADO",
+        "revisor": "REVISOR_FICTICIO_SOLO_PRUEBA",
+        "fecha": "2026-08-25",
+        "observaciones": null,
+        "contenido_hash_sha256": "6152b797a9851db00ec9322481fedd3275f14d15c71b7cd5f561d031b1aa3ac1"
+      },
+      "gate_arte": "ABIERTO",
+      "reformulacion_propuesta": {
+        "texto": null,
+        "verificada": false,
+        "nuevo_claim_id": null
+      },
+      "redaccion_prohibida": null,
+      "notas": null
+    },
+    {
+      "claim_id": "c10",
+      "texto_exacto": "Décima afirmación, sin investigación suficiente.",
+      "ubicacion": "titulo",
+      "tipo": "regla",
+      "alcance": "CAPA_B_VARIABLE",
+      "jurisdiccion": null,
+      "nucleo_transversal": null,
+      "variaciones_materiales": "varía por país",
+      "jurisdicciones_revisadas": null,
+      "diferencias_buscadas": null,
+      "contraejemplos_encontrados": null,
+      "justificacion_suficiencia_comparada": null,
+      "fuentes": [],
+      "confianza": "baja",
+      "riesgo_falsa_universalizacion": "medio",
+      "riesgo_asesoria": "bajo",
+      "platform_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "confidentiality_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "estado": "REQUIERE_INVESTIGACION",
+      "revision_humana": {
+        "estado": "PENDIENTE",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null,
+        "contenido_hash_sha256": null
+      },
+      "gate_arte": "CERRADO",
+      "reformulacion_propuesta": {
+        "texto": null,
+        "verificada": false,
+        "nuevo_claim_id": null
+      },
+      "redaccion_prohibida": null,
+      "notas": null
+    }
+  ],
+  "estado_agregado": "APTO_PARA_NARRATIVA",
+  "revisiones_pendientes": [],
+  "gate_global_arte": "ABIERTO"
+}

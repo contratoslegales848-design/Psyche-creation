@@ -1,0 +1,59 @@
+{
+  "schema_version": "4.0",
+  "piece_id": "pieza-2-divorcio-mitad",
+  "claims": [
+    {
+      "claim_id": "pieza-2-claim-1",
+      "texto_exacto": "Al divorciarse, la casa siempre se divide a la mitad.",
+      "ubicacion": "titulo",
+      "tipo": "regla",
+      "alcance": "CAPA_B_VARIABLE",
+      "jurisdiccion": null,
+      "nucleo_transversal": "Que el régimen patrimonial del matrimonio determina qué pasa con los bienes al divorciarse es una idea transversal.",
+      "variaciones_materiales": "El resultado depende del régimen matrimonial, de si el inmueble es bien propio o común, de si hubo capitulaciones, y del país (incluso dentro de España: Cataluña tiene régimen distinto al común). 'Siempre a la mitad' es falso incluso dentro de un mismo país si el régimen es de separación de bienes.",
+      "jurisdicciones_revisadas": null,
+      "diferencias_buscadas": null,
+      "contraejemplos_encontrados": null,
+      "justificacion_suficiencia_comparada": null,
+      "fuentes": [],
+      "confianza": "alta",
+      "riesgo_falsa_universalizacion": "alto",
+      "riesgo_asesoria": "alto",
+      "platform_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "confidentiality_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "estado": "BLOQUEADO",
+      "revision_humana": {
+        "estado": "PENDIENTE",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null,
+        "contenido_hash_sha256": null
+      },
+      "gate_arte": "CERRADO",
+      "reformulacion_propuesta": {
+        "texto": "¿La casa se divide a la mitad al divorciarte? Depende del régimen matrimonial, de si el inmueble es bien propio o común, y del país.",
+        "verificada": false,
+        "nuevo_claim_id": null
+      },
+      "redaccion_prohibida": "Al divorciarse, la casa siempre se divide a la mitad.",
+      "notas": "Bloqueado por la palabra 'siempre'."
+    }
+  ],
+  "estado_agregado": "BLOQUEADO",
+  "revisiones_pendientes": [
+    "pieza-2-claim-1"
+  ],
+  "gate_global_arte": "CERRADO"
+}

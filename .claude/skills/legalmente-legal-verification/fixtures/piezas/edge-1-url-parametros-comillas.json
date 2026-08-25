@@ -1,0 +1,145 @@
+{
+  "schema_version": "4.0",
+  "piece_id": "edge-1-url-parametros-comillas",
+  "claims": [
+    {
+      "claim_id": "edge-1-claim-1",
+      "texto_exacto": "El demandado dijo: \"no firmé nada\" — pero la carga de la prueba puede no estar de su lado.",
+      "ubicacion": "caption",
+      "tipo": "regla",
+      "alcance": "CAPA_A_TRANSVERSAL",
+      "jurisdiccion": null,
+      "nucleo_transversal": "La distribución de la carga de la prueba es un principio transversal del derecho procesal hispánico.",
+      "variaciones_materiales": null,
+      "jurisdicciones_revisadas": [
+        {
+          "pais": "España",
+          "fuente_ids": [
+            "f-edge1"
+          ]
+        },
+        {
+          "pais": "México",
+          "fuente_ids": [
+            "f-edge1b"
+          ]
+        },
+        {
+          "pais": "Argentina",
+          "fuente_ids": [
+            "f-edge1c"
+          ]
+        }
+      ],
+      "diferencias_buscadas": "Si el principio general cambia de nombre o de lógica entre estos tres países.",
+      "contraejemplos_encontrados": "Ninguno a nivel de principio general.",
+      "justificacion_suficiencia_comparada": "Principio recogido con la misma lógica en la legislación procesal de los tres países revisados, cada uno con fuente y localizador propios.",
+      "fuentes": [
+        {
+          "id": "f-edge1",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Ley de Enjuiciamiento Civil (España) — carga de la prueba",
+          "organismo_autor": "Agencia Estatal BOE",
+          "url": "https://www.boe.es/buscar/act.php?id=BOE-A-2000-323&p=20220101&tn=1#a217",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-08-25",
+          "localizador": "art. 217, ancla #a217",
+          "jurisdicciones_cubiertas": [
+            "España"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": true,
+            "texto_exacto_consultado": true,
+            "vigencia_comprobada": true,
+            "fecha_comprobacion": "2026-08-25",
+            "metodo_o_evidencia": "Lectura directa del texto oficial vigente",
+            "observaciones": null
+          },
+          "registro_oficial_id": "boe-es"
+        },
+        {
+          "id": "f-edge1b",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Código Civil Federal (México) — carga de la prueba",
+          "organismo_autor": "Congreso de la Unión (México)",
+          "url": "https://www.diputados.gob.mx/LeyesBiblio/pdf/CFPC.pdf",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-08-25",
+          "localizador": "art. 1194 CFPC (referencia doctrinal)",
+          "jurisdicciones_cubiertas": [
+            "México"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": true,
+            "texto_exacto_consultado": true,
+            "vigencia_comprobada": true,
+            "fecha_comprobacion": "2026-08-25",
+            "metodo_o_evidencia": "Lectura directa del texto oficial vigente",
+            "observaciones": null
+          },
+          "registro_oficial_id": "diputados-gob-mx"
+        },
+        {
+          "id": "f-edge1c",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Código Procesal Civil y Comercial (Argentina)",
+          "organismo_autor": "InfoLEG — Ministerio de Justicia (Argentina)",
+          "url": "https://servicios.infoleg.gob.ar/infolegInternet/anexos/15000-19999/16547/texact.htm",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-08-25",
+          "localizador": "art. 377",
+          "jurisdicciones_cubiertas": [
+            "Argentina"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": true,
+            "texto_exacto_consultado": true,
+            "vigencia_comprobada": true,
+            "fecha_comprobacion": "2026-08-25",
+            "metodo_o_evidencia": "Lectura directa del texto oficial vigente",
+            "observaciones": null
+          },
+          "registro_oficial_id": "infoleg-gob-ar"
+        }
+      ],
+      "confianza": "alta",
+      "riesgo_falsa_universalizacion": "bajo",
+      "riesgo_asesoria": "bajo",
+      "platform_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "confidentiality_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "estado": "APTO_PARA_NARRATIVA",
+      "revision_humana": {
+        "estado": "PENDIENTE",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null,
+        "contenido_hash_sha256": null
+      },
+      "gate_arte": "CERRADO",
+      "reformulacion_propuesta": {
+        "texto": null,
+        "verificada": false,
+        "nuevo_claim_id": null
+      },
+      "redaccion_prohibida": null,
+      "notas": "Fixture de formato: URL con ':' (esquema y ancla '#a217') y parámetros de query, texto_exacto con comillas escapadas."
+    }
+  ],
+  "estado_agregado": "APTO_PARA_NARRATIVA",
+  "revisiones_pendientes": [
+    "edge-1-claim-1"
+  ],
+  "gate_global_arte": "CERRADO"
+}

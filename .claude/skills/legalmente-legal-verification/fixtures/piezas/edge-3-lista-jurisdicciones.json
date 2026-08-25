@@ -1,0 +1,107 @@
+{
+  "schema_version": "4.0",
+  "piece_id": "edge-3-lista-jurisdicciones",
+  "claims": [
+    {
+      "claim_id": "edge-3-claim-1",
+      "texto_exacto": "En México y en Colombia, la comisión mercantil se rige por reglas del Código de Comercio, no del Código Civil.",
+      "ubicacion": "texto_imagen",
+      "tipo": "regla",
+      "alcance": "CAPA_C_NACIONAL",
+      "jurisdiccion": [
+        "México",
+        "Colombia"
+      ],
+      "nucleo_transversal": null,
+      "variaciones_materiales": null,
+      "jurisdicciones_revisadas": null,
+      "diferencias_buscadas": null,
+      "contraejemplos_encontrados": null,
+      "justificacion_suficiencia_comparada": null,
+      "fuentes": [
+        {
+          "id": "f-edge3a",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Código de Comercio (México) — comisión mercantil",
+          "organismo_autor": "Congreso de la Unión (México)",
+          "url": "https://www.diputados.gob.mx/LeyesBiblio/pdf/CCom.pdf",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-08-25",
+          "localizador": "arts. relativos a la comisión mercantil",
+          "jurisdicciones_cubiertas": [
+            "México"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": true,
+            "texto_exacto_consultado": true,
+            "vigencia_comprobada": true,
+            "fecha_comprobacion": "2026-08-25",
+            "metodo_o_evidencia": "Lectura directa del texto oficial vigente",
+            "observaciones": null
+          },
+          "registro_oficial_id": "diputados-gob-mx"
+        },
+        {
+          "id": "f-edge3b",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Código de Comercio (Colombia) — comisión mercantil",
+          "organismo_autor": "Función Pública Colombia",
+          "url": "https://www.funcionpublica.gov.co/eva/gestornormativo/norma.php?i=41102",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-08-25",
+          "localizador": "art. 1287 y siguientes",
+          "jurisdicciones_cubiertas": [
+            "Colombia"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": true,
+            "texto_exacto_consultado": true,
+            "vigencia_comprobada": true,
+            "fecha_comprobacion": "2026-08-25",
+            "metodo_o_evidencia": "Lectura directa del texto oficial vigente",
+            "observaciones": null
+          },
+          "registro_oficial_id": "funcionpublica-gov-co"
+        }
+      ],
+      "confianza": "alta",
+      "riesgo_falsa_universalizacion": "bajo",
+      "riesgo_asesoria": "ninguno",
+      "platform_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "confidentiality_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "estado": "APTO_PARA_NARRATIVA",
+      "revision_humana": {
+        "estado": "PENDIENTE",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null,
+        "contenido_hash_sha256": null
+      },
+      "gate_arte": "CERRADO",
+      "reformulacion_propuesta": {
+        "texto": null,
+        "verificada": false,
+        "nuevo_claim_id": null
+      },
+      "redaccion_prohibida": null,
+      "notas": "Fixture de formato: 'jurisdiccion' como lista de dos países."
+    }
+  ],
+  "estado_agregado": "APTO_PARA_NARRATIVA",
+  "revisiones_pendientes": [
+    "edge-3-claim-1"
+  ],
+  "gate_global_arte": "CERRADO"
+}
