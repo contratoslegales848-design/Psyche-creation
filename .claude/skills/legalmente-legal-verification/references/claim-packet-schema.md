@@ -30,7 +30,7 @@
 | `id` | sí | string único en el claim | |
 | `tipo_fuente` | sí | enum cerrado | `NORMA_OFICIAL`, `JURISPRUDENCIA_OFICIAL`, `AUTORIDAD_PUBLICA_OFICIAL`, `ACADEMICA_IDENTIFICABLE`, `SECUNDARIA_ESPECIALIZADA`, `DRIVE_INTERNO`. |
 | `titulo`, `organismo_autor` | sí | string no vacío | |
-| `url` / `identificador_bibliografico` | uno de los dos | string http/https o identificador bibliográfico | |
+| `url` / `identificador_bibliografico` | uno de los dos | string http/https o identificador bibliográfico | La URL se valida con una única función canónica (`parse_official_url`, Fase 1D.2) — ver "Validación canónica de URL" abajo. Una fuente oficial sin `url` (solo `identificador_bibliografico`) nunca alcanza Nivel 1, sin importar qué tan coherentes parezcan `registro_oficial_id`/`organismo_autor`/`verificacion_fuente` entre sí (Fase 1D.2, Paso 2) — no hay ningún hostname real que verificar. |
 | `fecha_consulta` | sí | fecha ISO | |
 | `localizador` | sí | string no vacío | Artículo, página, sentencia o sección concreta. |
 | `jurisdicciones_cubiertas` | sí | lista no vacía de países | Qué países respalda de verdad esta fuente. Una norma nacional oficial normalmente cubre un solo país; una fuente académica/comparada puede cubrir varios **solo si lo declara explícitamente**. Una fuente española nunca cubre automáticamente a México. Para fuentes oficiales, debe ser subconjunto de lo autorizado por su entrada del registro (ver `registro_oficial_id`). |
@@ -45,6 +45,7 @@
 2. `verificacion_fuente.origen_oficial_confirmado: true`.
 3. `registro_oficial_id` referencia una entrada real del **registro oficial único** (`references/official-source-registry.json`, ver abajo) — cuyo hostname, organismo y tipo de fuente permitido son TODOS coherentes con la fuente declarada.
 4. `verificacion_fuente.texto_exacto_consultado: true` **y** `vigencia_comprobada: true`.
+5. La fuente tiene una **`url` real** que la función canónica `parse_official_url` acepta (ver abajo). Sin `url` (solo `identificador_bibliografico`), Nivel 1 es imposible aunque las condiciones 1-4 parezcan cumplirse — no hay ningún hostname que verificar (Fase 1D.2, Paso 2).
 
 Si falta cualquiera de las 4 → la fuente cae a **Nivel 2**, techo `APTO_CON_MATICES`. El campo `origen_oficial_confirmado` autoafirmado, por sí solo, nunca es prueba suficiente — ese fue el bypass cerrado en la Fase 1C.
 
@@ -63,6 +64,21 @@ La Fase 1D.1 sustituye ambas listas por un **único archivo externo cerrado**: `
 Cualquier incoherencia en los cinco puntos anteriores es `[ERROR ESTRUCTURAL]`. Un hostname/organismo que el registro no conoce en absoluto no produce un error duro — genera advertencia y cae a Nivel 2 (fail-closed, igual que en la Fase 1D) hasta que un humano añada la entrada real. Las fuentes `ACADEMICA_IDENTIFICABLE`/`SECUNDARIA_ESPECIALIZADA` no tienen ninguna de estas restricciones (`registro_oficial_id` siempre `null` para ellas) y pueden declarar cobertura de varios países libremente, pero nunca pasan de Nivel 3 (techo `APTO_CON_MATICES`).
 
 Un registro corrupto (archivo ausente/ilegible, o con `id`s duplicados) **falla cerrado**: el validador no lanza una excepción, simplemente trata esas entradas como inexistentes — ninguna fuente puede alcanzar Nivel 1 a través de un registro roto.
+
+### Validación canónica de URL (Fase 1D.2)
+
+Toda comprobación de URL/hostname del validador pasa por una única función: `parse_official_url`. Antes de esta fase, `extract_hostname` calculaba el host dividiendo `netloc` a mano (`rsplit("@", 1)`), lo que dejaba una ambigüedad real de parseo: la URL `https://evil.example\@boe.es/falso` contiene una barra invertida antes del `@`, y `urllib.parse` de Python la deja tal cual dentro de `netloc`, así que el `rsplit("@")` calculaba el host como `boe.es` — mientras que un navegador conforme a WHATWG normaliza la barra invertida como `/` en esquemas especiales (http/https) *antes* de parsear, así que la misma cadena se convierte en `https://evil.example/@boe.es/falso` y el host real es `evil.example`. Dos parsers, dos hosts distintos para la misma cadena — exactamente el tipo de ambigüedad que un validador fail-closed no puede tolerar.
+
+`parse_official_url` cierra esto **rechazando la ambigüedad en sí misma**, en vez de intentar reimplementar la normalización WHATWG (con el riesgo de introducir un tercer desacuerdo):
+
+- Rechaza cualquier URL con **barra invertida**, en cualquier posición.
+- Rechaza **userinfo** (`usuario:contraseña@host`) — una fuente oficial nunca lo necesita, y es el vector colateral del bypass de arriba.
+- Rechaza **espacios y caracteres de control**.
+- Acepta únicamente esquema **http/https**.
+- Rechaza **puertos inválidos** (fuera de 0-65535, o no numéricos).
+- El hostname resultante se compara por **igualdad exacta o límite real de subdominio** (nunca por subcadena) contra el registro — sin cambios respecto a la Fase 1D/1D.1.
+
+`is_valid_http_url` y `extract_hostname` ahora son envoltorios delgados sobre esta única función — ya no hay una segunda lógica de parseo por separado.
 
 | Nivel | Condición | Techo |
 |---|---|---|

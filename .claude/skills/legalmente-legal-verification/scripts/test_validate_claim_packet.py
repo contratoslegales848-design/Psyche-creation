@@ -788,5 +788,181 @@ class TestRegistroOficialUnico(unittest.TestCase):
         self.assertEqual(ceiling, "REQUIERE_INVESTIGACION")
 
 
+class TestUrlCanonica(unittest.TestCase):
+    """Fase 1D.2, Paso 1: una única función canónica (parse_official_url)
+    valida y extrae el hostname de una URL — fail-closed ante cualquier
+    ambigüedad (barra invertida, userinfo, espacios/control, puerto
+    inválido), en vez de reimplementar la normalización WHATWG."""
+
+    # Regresión directa del bypass reportado por Codex ------------------
+
+    def test_bypass_userinfo_con_barra_invertida_rechazado(self):
+        """'https://evil.example\\@boe.es/falso': un parser ingenuo (o el
+        'urllib.parse' de Python sin este endurecimiento) calcula el host
+        como 'boe.es'; un navegador WHATWG lo interpreta como
+        'evil.example' (la barra invertida es separador de host en
+        esquemas especiales). La ambigüedad en sí misma se rechaza."""
+        ok, hostname, reason = vcp.parse_official_url("https://evil.example\\@boe.es/falso")
+        self.assertFalse(ok)
+        self.assertIsNone(hostname)
+        self.assertIn("barra invertida", reason)
+
+    def test_bypass_userinfo_con_barra_invertida_fuente_completa_rechazada(self):
+        f = base_fuente(url="https://evil.example\\@boe.es/falso")
+        errors, _ = vcp.validate_fuente(f, "f")
+        self.assertTrue(any("no es una URL http/https válida" in e for e in errors))
+
+    # Barra invertida en cualquier otra posición -------------------------
+
+    def test_barra_invertida_en_path_rechazada(self):
+        ok, hostname, reason = vcp.parse_official_url("https://boe.es/algo\\raro")
+        self.assertFalse(ok)
+        self.assertIn("barra invertida", reason)
+
+    # Userinfo (sin barra invertida) --------------------------------------
+
+    def test_userinfo_simple_rechazado(self):
+        ok, hostname, reason = vcp.parse_official_url("https://usuario:clave@boe.es/x")
+        self.assertFalse(ok)
+        self.assertIn("userinfo", reason)
+
+    # Puerto inválido -------------------------------------------------------
+
+    def test_puerto_fuera_de_rango_rechazado(self):
+        ok, hostname, reason = vcp.parse_official_url("https://boe.es:99999999/x")
+        self.assertFalse(ok)
+        self.assertIn("puerto", reason)
+
+    def test_puerto_no_numerico_rechazado(self):
+        ok, hostname, reason = vcp.parse_official_url("https://boe.es:abc/x")
+        self.assertFalse(ok)
+        self.assertIn("puerto", reason)
+
+    def test_puerto_valido_aceptado(self):
+        ok, hostname, reason = vcp.parse_official_url("https://boe.es:443/x")
+        self.assertTrue(ok)
+        self.assertEqual(hostname, "boe.es")
+
+    # Espacios y caracteres de control --------------------------------------
+
+    def test_espacio_en_url_rechazado(self):
+        ok, hostname, reason = vcp.parse_official_url("https://boe.es/algo con espacio")
+        self.assertFalse(ok)
+        self.assertIn("espacios", reason)
+
+    def test_caracter_de_control_rechazado(self):
+        ok, hostname, reason = vcp.parse_official_url("https://boe.es/algo\x00raro")
+        self.assertFalse(ok)
+        self.assertIn("espacios o caracteres de control", reason)
+
+    # Esquema --------------------------------------------------------------
+
+    def test_esquema_no_http_rechazado(self):
+        ok, hostname, reason = vcp.parse_official_url("ftp://boe.es/x")
+        self.assertFalse(ok)
+        self.assertIn("esquema", reason)
+
+    # Dominio falso (subcadena / subdominio spoofing) — regresión Fase 1C --
+
+    def test_dominio_falso_boe_es_evil_com_rechazado_por_extract_hostname(self):
+        self.assertNotEqual(vcp.extract_hostname("https://boe.es.evil.com/x"), "boe.es")
+
+    def test_dominio_falso_notboe_es_rechazado_por_extract_hostname(self):
+        self.assertNotEqual(vcp.extract_hostname("https://notboe.es/x"), "boe.es")
+
+    # URLs legítimas de boe.es — deben seguir aceptándose sin cambios -----
+
+    def test_boe_es_url_legitima_simple_aceptada(self):
+        ok, hostname, reason = vcp.parse_official_url("https://www.boe.es/buscar/act.php?id=BOE-A-1889-4763")
+        self.assertTrue(ok)
+        self.assertEqual(hostname, "www.boe.es")
+        self.assertTrue(vcp.hostname_matches_official("https://www.boe.es/buscar/act.php?id=BOE-A-1889-4763"))
+
+    def test_boe_es_url_con_fragmento_y_parametros_aceptada(self):
+        ok, hostname, reason = vcp.parse_official_url("https://www.boe.es/eli/es/rd/1889/07/24/(1)/con#a1740")
+        self.assertTrue(ok)
+        self.assertEqual(hostname, "www.boe.es")
+
+    def test_boe_es_sin_www_aceptada(self):
+        ok, hostname, reason = vcp.parse_official_url("https://boe.es/x")
+        self.assertTrue(ok)
+        self.assertEqual(hostname, "boe.es")
+
+    # Fuente completa con URL legítima sigue alcanzando Nivel 1 -------------
+
+    def test_fuente_boe_url_legitima_sigue_siendo_nivel_1(self):
+        f = base_fuente()  # boe.es real, organismo/registro coherentes por defecto
+        self.assertEqual(vcp.compute_fuente_nivel(f), vcp.NIVEL_1_CONFIRMADO)
+
+
+class TestFuenteOficialSinUrl(unittest.TestCase):
+    """Fase 1D.2, Paso 2: una fuente oficial sin 'url' (solo
+    'identificador_bibliografico') puede ser estructuralmente válida, pero
+    nunca alcanza Nivel 1, genera advertencia, y nunca abre el gate —
+    incluso si 'registro_oficial_id'/'organismo_autor'/verificación parecen
+    completamente coherentes entre sí (el bypass reportado por Codex:
+    autoafirmaciones sin ningún hostname real que verificar)."""
+
+    def _fuente_oficial_sin_url(self, **overrides):
+        f = base_fuente(
+            url=None, identificador_bibliografico="Editorial Aranzadi, edición 2024, ISBN 000-0-00-000000-0",
+        )
+        f.update(overrides)
+        return f
+
+    def test_oficial_sin_url_nunca_es_nivel_1(self):
+        f = self._fuente_oficial_sin_url()
+        self.assertNotEqual(vcp.compute_fuente_nivel(f), vcp.NIVEL_1_CONFIRMADO)
+        self.assertEqual(vcp.compute_fuente_nivel(f), vcp.NIVEL_2_DECLARADO_NO_VERIFICADO)
+
+    def test_oficial_sin_url_genera_advertencia_no_error(self):
+        f = self._fuente_oficial_sin_url()
+        errors, warnings = vcp.validate_fuente(f, "f")
+        self.assertEqual(errors, [])
+        self.assertTrue(any("sin 'url'" in w for w in warnings))
+
+    def test_oficial_sin_url_estructuralmente_valida_en_nivel_correspondiente(self):
+        """Declarada honestamente APTO_CON_MATICES (no APTO_PARA_NARRATIVA),
+        la pieza completa SÍ valida (exit lógico 0 vía validate_claim sin
+        errores) — 'estructuralmente válida' no significa 'nunca aceptada'."""
+        f = self._fuente_oficial_sin_url()
+        c = base_claim(alcance="CAPA_C_NACIONAL", jurisdiccion="España", estado="APTO_CON_MATICES",
+                        confianza="media", fuentes=[f])
+        errors, _, max_estado, _ = vcp.validate_claim(c, "c")
+        self.assertEqual(errors, [])
+        self.assertEqual(max_estado, "APTO_CON_MATICES")
+
+    def test_oficial_sin_url_no_puede_declararse_apto_para_narrativa(self):
+        f = self._fuente_oficial_sin_url()
+        c = base_claim(alcance="CAPA_C_NACIONAL", jurisdiccion="España", estado="APTO_PARA_NARRATIVA", fuentes=[f])
+        errors, _, max_estado, _ = vcp.validate_claim(c, "c")
+        self.assertTrue(any("excede lo que las fuentes permiten" in e for e in errors))
+        self.assertEqual(max_estado, "APTO_CON_MATICES")
+
+    def test_oficial_sin_url_nunca_abre_el_gate(self):
+        """Incluso con una 'aprobación' simulada (hash correcto, revisor
+        ficticio), el gate no puede abrirse porque el estado 'APTO_PARA_NARRATIVA'
+        ya es inalcanzable — se detiene antes de llegar siquiera a evaluar el hash."""
+        f = self._fuente_oficial_sin_url()
+        c = base_claim(alcance="CAPA_C_NACIONAL", jurisdiccion="España", estado="APTO_PARA_NARRATIVA",
+                        fuentes=[f], gate_arte="ABIERTO")
+        c["revision_humana"] = {
+            "estado": "APROBADO", "revisor": REVISOR_FICTICIO, "fecha": TODAY,
+            "observaciones": None, "contenido_hash_sha256": vcp.compute_content_hash(c),
+        }
+        errors, _, _, gate = vcp.validate_claim(c, "c")
+        self.assertTrue(errors)
+        self.assertNotEqual(gate, "ABIERTO")
+
+    def test_fuente_academica_fisica_sin_url_sigue_permitida(self):
+        """Control: las fuentes NO oficiales (académicas/secundarias/Drive)
+        nunca pasaron por 'evaluate_fuente_registry' — su techo (Nivel 3/4)
+        es independiente de tener o no 'url', y no cambia en esta fase."""
+        f = base_fuente(tipo_fuente="ACADEMICA_IDENTIFICABLE", registro_oficial_id=None,
+                         url=None, identificador_bibliografico="Editorial X, 2020, ISBN 111-1-11-111111-1",
+                         verificacion_fuente=base_verificacion(False, False, False))
+        self.assertEqual(vcp.compute_fuente_nivel(f), vcp.NIVEL_3_ACADEMICA_SECUNDARIA)
+
+
 if __name__ == "__main__":
     unittest.main()

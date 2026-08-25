@@ -189,7 +189,13 @@ def evaluate_fuente_registry(fuente):
       'tipos_fuente_permitidos' de esa entrada, y que 'jurisdicciones_cubiertas'
       sea subconjunto de las jurisdicciones/ámbito autorizados. Cualquier
       incoherencia aquí es un ERROR — declarar un registro_oficial_id falso
-      es una afirmación activa, no un silencio."""
+      es una afirmación activa, no un silencio.
+    - Sin 'url' (Fase 1D.2, Paso 2): aunque todo lo anterior sea coherente,
+      Nivel 1 queda fuera de alcance — no hay ningún hostname real que
+      verificar, así que 'registro_oficial_id'/'organismo_autor'/los tres
+      booleanos de verificación son autoafirmaciones sin evidencia de
+      dominio. Genera ADVERTENCIA (no error — sigue siendo estructuralmente
+      válida, capada en Nivel 2), nunca abre el gate de arte."""
     tipo_fuente = fuente.get("tipo_fuente")
     url = fuente.get("url")
     has_url = url not in (None, "")
@@ -235,6 +241,22 @@ def evaluate_fuente_registry(fuente):
                 f"'registro_oficial_id' ({registro_oficial_id!r}) no corresponde al hostname real de la URL "
                 f"({extract_hostname(url)!r}) — el hostname resuelve a {otro}."
             )
+    else:
+        # Fase 1D.2, Paso 2: sin URL no hay ningún hostname real que cruzar
+        # contra el registro — 'registro_oficial_id', 'organismo_autor' y los
+        # tres booleanos de 'verificacion_fuente' son en este caso
+        # autoafirmaciones sin evidencia verificable de dominio, así que
+        # Nivel 1 queda fuera de alcance sin importar qué tan coherentes
+        # parezcan entre sí. Sigue siendo estructuralmente válida (puede
+        # sostener como máximo Nivel 2 / APTO_CON_MATICES) — coherente con
+        # que las fuentes físicas (identificador_bibliografico) son legítimas
+        # para tipos académicos/secundarios.
+        warnings.append(
+            f"fuente oficial ({registro_oficial_id!r}) sin 'url' — no hay hostname real que verificar contra el "
+            "registro. 'registro_oficial_id', 'organismo_autor' y 'verificacion_fuente' no verificables por "
+            "dominio, por más coherentes que parezcan entre sí. Esta fuente NO puede sostener APTO_PARA_NARRATIVA "
+            "— como máximo Nivel 2 — ni abrir el gate de arte."
+        )
 
     organismo_declarado = normalize_org(fuente.get("organismo_autor"))
     permitidos_org = {normalize_org(entry.get("organismo_canonico"))} | {
@@ -263,7 +285,8 @@ def evaluate_fuente_registry(fuente):
             f"a lo autorizado: {ajenas!r} — solo puede respaldar {sorted(permitidas)!r}."
         )
 
-    return (not errors), errors, warnings
+    nivel1_posible = (not errors) and has_url
+    return nivel1_posible, errors, warnings
 
 
 class Tag:
@@ -306,21 +329,74 @@ def is_valid_iso_date(value):
         return False
 
 
-def is_valid_http_url(value):
+# Espacios (0x20) y caracteres de control (0x00-0x1f, 0x7f) — nunca válidos
+# dentro de una URL bien formada; aceptarlos abre ambigüedad de parseo.
+CONTROL_OR_SPACE_RE = re.compile(r"[\x00-\x20\x7f]")
+
+
+def parse_official_url(value):
+    """Única función CANÓNICA de validación + extracción de hostname de una
+    URL (Fase 1D.2, Paso 1). Toda comprobación de URL/hostname del validador
+    pasa por aquí — no hay una segunda función que parsee por su cuenta.
+
+    Fail-closed ante cualquier ambigüedad, en vez de intentar normalizar:
+
+    - Rechaza barra invertida en cualquier posición. Es el vector real del
+      bypass reproducido en esta fase: 'https://evil.example\\@boe.es/falso'
+      — un parser ingenuo (incluido `urllib.parse` de Python) dispone la
+      barra invertida dentro de netloc/userinfo sin más, y termina
+      calculando el host como 'boe.es'; un navegador conforme a WHATWG trata
+      la barra invertida como equivalente a '/' en esquemas especiales
+      (http/https) ANTES de parsear, así que la misma cadena se convierte en
+      'https://evil.example/@boe.es/falso' y el host real es 'evil.example'.
+      En vez de reimplementar esa normalización (con el riesgo de introducir
+      un desacuerdo distinto con algún otro parser), se rechaza directamente
+      cualquier URL con barra invertida: la ambigüedad entre parsers es en
+      sí misma la señal de fallo.
+    - Rechaza userinfo (cualquier '@' dentro del netloc) — una fuente
+      oficial nunca necesita usuario/contraseña en la URL, y el propio
+      userinfo es collateral del vector de arriba.
+    - Rechaza espacios y caracteres de control.
+    - Rechaza cualquier esquema que no sea http/https.
+    - Rechaza puertos inválidos (fuera de 0-65535, o no numéricos) — vía
+      'parsed.port', que ya lanza ValueError en esos casos.
+
+    Devuelve (ok: bool, hostname: str o None, motivo: str o None).
+    'hostname' viene ya en minúsculas (propiedad .hostname de urlparse)."""
     if not isinstance(value, str) or not value:
-        return False
-    parsed = urlparse(value)
-    return parsed.scheme in ("http", "https") and bool(parsed.netloc)
+        return False, None, "no es un string no vacío"
+    if "\\" in value:
+        return False, None, "contiene una barra invertida — ambigua entre parsers (WHATWG la trata como separador de host en esquemas http/https)"
+    if CONTROL_OR_SPACE_RE.search(value):
+        return False, None, "contiene espacios o caracteres de control"
+    try:
+        parsed = urlparse(value)
+    except ValueError:
+        return False, None, "no se pudo interpretar como URL"
+    if parsed.scheme not in ("http", "https"):
+        return False, None, "el esquema debe ser http o https"
+    if not parsed.netloc:
+        return False, None, "falta el netloc (host)"
+    if "@" in parsed.netloc:
+        return False, None, "contiene userinfo (usuario/contraseña antes del host) — no permitido"
+    try:
+        hostname = parsed.hostname
+        _port = parsed.port  # dispara ValueError si el puerto es inválido
+    except ValueError:
+        return False, None, "hostname o puerto inválido"
+    if not hostname:
+        return False, None, "hostname vacío"
+    return True, hostname, None
+
+
+def is_valid_http_url(value):
+    ok, _hostname, _reason = parse_official_url(value)
+    return ok
 
 
 def extract_hostname(url):
-    if not isinstance(url, str):
-        return ""
-    netloc = urlparse(url).netloc.lower()
-    # quita userinfo (user:pass@) y puerto
-    host = netloc.rsplit("@", 1)[-1]
-    host = host.rsplit(":", 1)[0]
-    return host
+    ok, hostname, _reason = parse_official_url(url)
+    return hostname if ok else ""
 
 
 def hostname_matches_official(url):
@@ -883,12 +959,23 @@ def validate_claim(claim, path):
             errors.append(f"{path}: estado '{estado}' no puede tener confianza='baja'.")
 
     # --- gate a nivel de claim ---
+    # Nota (Fase 1D.2): si ya hay un error previo en este claim (p. ej. el
+    # 'estado' declarado excede lo que las fuentes permiten sostener), el
+    # gate NUNCA puede computarse como ABIERTO — sin importar que
+    # revision_humana/hash/reviews parezcan coherentes con ese 'estado'
+    # inflado. Detectado durante las pruebas de esta fase: antes, una fuente
+    # oficial sin URL con revisión "aprobada" (hash calculado sobre el
+    # propio contenido inflado) podía hacer que este bloque calculara
+    # 'ABIERTO' internamente, aunque el pipeline completo igual rechazaba el
+    # paquete por el error de 'excede lo que las fuentes permiten' — un
+    # valor interno engañoso que ya no se produce.
     revision = claim.get("revision_humana") or {}
     platform = claim.get("platform_review") or {}
     confidentiality = claim.get("confidentiality_review") or {}
     computed_gate = "CERRADO"
     if (
-        estado == "APTO_PARA_NARRATIVA"
+        not errors
+        and estado == "APTO_PARA_NARRATIVA"
         and revision.get("estado") == "APROBADO"
         and review_allows_gate(platform)
         and review_allows_gate(confidentiality)
