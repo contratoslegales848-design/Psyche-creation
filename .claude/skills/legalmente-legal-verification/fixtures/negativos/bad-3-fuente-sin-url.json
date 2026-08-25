@@ -1,0 +1,34 @@
+{
+  "claim_id": "bad-3",
+  "texto_exacto": "Afirmación con fuente inválida.",
+  "ubicacion": "caption",
+  "tipo": "dato",
+  "alcance": "CAPA_A_TRANSVERSAL",
+  "jurisdiccion": null,
+  "nucleo_transversal": "algo",
+  "variaciones_materiales": null,
+  "jurisdicciones_revisadas": ["España", "México", "Argentina"],
+  "diferencias_buscadas": "algo",
+  "contraejemplos_encontrados": "ninguno",
+  "justificacion_suficiencia_comparada": "algo",
+  "fuentes": [
+    {
+      "titulo": null,
+      "organismo_autor": null,
+      "url": null,
+      "fecha_consulta": "2026-08-25",
+      "tipo_fuente": "fuente_secundaria"
+    }
+  ],
+  "confianza": "baja",
+  "riesgo_falsa_universalizacion": "bajo",
+  "riesgo_asesoria": "ninguno",
+  "platform_review_required": false,
+  "confidentiality_review_required": false,
+  "apto_para_arte": false,
+  "redaccion_prohibida": null,
+  "redaccion_segura": "algo",
+  "estado": "APTO_PARA_NARRATIVA",
+  "revisor_humano_requerido": true,
+  "notas": "Negativo esperado: fuente sin titulo ni url, además de confianza baja en estado apto (doble fallo esperado)."
+}

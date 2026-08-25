@@ -1,0 +1,34 @@
+{
+  "claim_id": "bad-7",
+  "texto_exacto": "Afirmación declarada Capa A sin ninguna justificación comparada.",
+  "ubicacion": "titulo",
+  "tipo": "regla",
+  "alcance": "CAPA_A_TRANSVERSAL",
+  "jurisdiccion": null,
+  "nucleo_transversal": null,
+  "variaciones_materiales": null,
+  "jurisdicciones_revisadas": null,
+  "diferencias_buscadas": null,
+  "contraejemplos_encontrados": null,
+  "justificacion_suficiencia_comparada": null,
+  "fuentes": [
+    {
+      "titulo": "Fuente",
+      "organismo_autor": "Autor",
+      "url": "https://example.com",
+      "fecha_consulta": "2026-08-25",
+      "tipo_fuente": "ley_oficial"
+    }
+  ],
+  "confianza": "alta",
+  "riesgo_falsa_universalizacion": "bajo",
+  "riesgo_asesoria": "ninguno",
+  "platform_review_required": false,
+  "confidentiality_review_required": false,
+  "apto_para_arte": false,
+  "redaccion_prohibida": null,
+  "redaccion_segura": "algo",
+  "estado": "APTO_PARA_NARRATIVA",
+  "revisor_humano_requerido": true,
+  "notas": "Negativo esperado: Capa A sin jurisdicciones_revisadas/diferencias_buscadas/contraejemplos_encontrados/justificacion_suficiencia_comparada — exactamente el error que este fixture existe para prevenir (Capa A asumida por comodidad con 0 países revisados)."
+}

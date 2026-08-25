@@ -1,31 +1,32 @@
-# Contenido ya bloqueado o de riesgo conocido
+# Procedimiento de contenido bloqueado
 
-Este archivo registra hallazgos reales de investigación ya hecha en el proyecto LegalMente, para no repetir el mismo error dos veces. No es exhaustivo — es lo que ya se investigó. La ausencia de una cita o tema aquí no significa que esté verificada; significa que todavía no se ha investigado en este proyecto.
+**Este archivo NO es el registro vivo de citas bloqueadas, decisiones jurisdiccionales ni fuentes aprobadas de LegalMente.** Esa fuente de verdad vive en Google Drive y puede cambiar entre sesiones. Este archivo describe el *procedimiento* para consultarla y las *categorías* de bloqueo — no sustituye consultar el documento vigente antes de publicar.
 
-## Citas bloqueadas por atribución no confirmada
+## Dónde vive la lista vigente
 
-No publicar ninguna de estas sin fuente primaria nueva que resuelva la atribución:
+Antes de dar una cita, atribución o afirmación por verificada, cruzarla contra los documentos canónicos de Drive del proyecto (nombres exactos, a buscar por título en el conector de Drive):
 
-- **Erin Brockovich** — cita sin fuente primaria identificada.
-- **"La pena como secuestro"**, atribuida a Ihering — atribución no confirmada.
-- **"La lentitud de la justicia..."**, atribuida a Ihering — la investigación apunta a que en realidad es de Séneca, no de Ihering.
-- **Agatha Christie** — cita sin fuente primaria identificada.
-- **Emma Goldman** — la cita que circula atribuida a ella es en realidad de Lacassagne.
-- **Édouard Laboulaye** — cita sin fuente primaria identificada.
+- **"LegalMente — Matriz de contenido (Addendum procesado + capas jurisdiccionales + Angle Engine)"** — estado de capa jurisdiccional por tema, incluida la columna de riesgo de falsa universalización.
+- **"Inventario de publicaciones — LegalMente (Facebook)"** — qué ya se publicó, para no repetir ni contradecir.
+- **"LegalMente — Estado del proyecto y continuación (leer primero)"** — decisiones y bloqueos más recientes del fundador.
+- Cualquier documento de Drive con "citas" o "bloqueadas" en el título (p. ej. reacciones críticas a bancos de citas de terceros) — buscar por título exacto en el momento de verificar, no asumir que la lista de abajo sigue vigente.
 
-Cualquier variante, traducción o paráfrasis de estas cinco entradas hereda el mismo bloqueo hasta que exista fuente primaria verificable.
+Si esta skill y Drive no coinciden, Drive gana siempre (jerarquía de autoridad, `CLAUDE.md`).
 
-## Casos donde una figura "obviamente Capa A" resultó ser Capa B/C
+## Categorías de bloqueo (procedimiento, estable)
 
-Ver `jurisdiction-policy.md` para el detalle completo. Resumen:
+1. **Atribución no confirmada.** Una cita atribuida a una persona sin obra, discurso o entrevista identificable donde se pronunció. No basta con que "circule" atribuida a esa persona.
+2. **Falsa universalización conocida.** Una figura o regla que parece transversal pero tiene una diferencia material ya documentada en algún país (ver `jurisdiction-policy.md` para el procedimiento de investigación).
+3. **Contenido sensible sin Platform Risk Check.** Violencia, muerte, amenazas, suicidio/autolesión, sexualidad, drogas, delitos, salud mental — necesita `platform_review_required: true` en el paquete (ver "ACTUALIZACIÓN OPERATIVA — Platform Risk Check para Meta y contenido sensible" en Drive; esa skill/hook no existe todavía en el repositorio, ver `CLAUDE.md`).
+4. **Posible información confidencial.** Cualquier detalle que pueda reconstruir un caso real de experiencia profesional privada — necesita `confidentiality_review_required: true` (control formal todavía no implementado, ver `CLAUDE.md`).
 
-- "Promesa de compraventa" ≠ figura panhispánica universal (Argentina: "boleto de compraventa", régimen distinto).
-- Comisión mercantil sí es Capa A confirmada en México/Colombia/Perú, pero se llegó a esa conclusión por verificación explícita país por país, no por asunción.
+## Ejemplos históricos de metodología (fechados — no son la lista vigente)
 
-## Recursos visuales saturados (referencia cruzada con legalmente-visual-system)
+Estos son ejemplos de *cómo se investigó* un bloqueo en el pasado, para calibrar el nivel de rigor esperado. **No los trates como la lista actual de citas bloqueadas** — confirma siempre contra Drive antes de publicar.
 
-Esta skill no decide dirección visual, pero si una afirmación jurídica se está redactando específicamente para encajar con uno de estos recursos ya sobreexplotados, señálalo en `notas` del paquete para que quien monte el arte lo sepa: balanza de la justicia, mazo de juez, persona sola frente a un edificio de columnas, libros o pergaminos apilados sobre escritorio oscuro, objeto forense sobre pergamino.
+- *(Registrado antes de 2026-08-20, según el documento de Drive "LegalMente — Reacción crítica al banco de citas @perillo_ius")*: varias citas circulando con atribución a figuras reconocibles (entre ellas una atribuida a Erin Brockovich, dos frases distintas atribuidas a Ihering — una de las cuales apunta en realidad a Séneca —, una atribuida a Agatha Christie, una atribuida a Emma Goldman que en realidad es de Lacassagne, y una atribuida a Édouard Laboulaye) se investigaron y no tenían fuente primaria confirmada en ese momento.
+- *(Registrado antes de 2026-08-20)*: el hook "Le dijo a su psicólogo: 'Voy a matarlo'. ¿Sigue siendo un secreto?" se identificó como innecesariamente agresivo para distribución en Meta y se reformuló a una versión que conserva la tensión jurídica con menor riesgo — ejemplo de metodología para el punto 3 de arriba.
 
-## Temas que requieren Platform Risk Check antes de arte/publicación
+## Qué NO pertenece a esta skill
 
-Cualquier pieza que toque violencia, muerte, amenazas, suicidio/autolesión, sexualidad, drogas, delitos o salud mental necesita `platform_review_required: true` en el paquete. Ejemplo ya resuelto en el proyecto: el hook "Le dijo a su psicólogo: 'Voy a matarlo'. ¿Sigue siendo un secreto?" se reformuló a "Le dijo a su psicólogo que podía poner una vida en riesgo. ¿Hasta dónde llega el secreto profesional?" — misma tensión jurídica, menor riesgo de distribución. Esta skill no ejecuta el Platform Risk Check (vive fuera de su alcance), solo lo señala.
+Los recursos visuales sobreexplotados (balanza de la justicia, mazo de juez, columnas judiciales, libros/pergaminos apilados, escritorios oscuros, objeto forense sobre pergamino) son un asunto de dirección de arte, no de verificación jurídica. Esta skill puede señalar en `notas` que una afirmación parece diseñada para encajar con uno de esos recursos, pero la lista y su cumplimiento son responsabilidad de `legalmente-visual-system` — consultar esa skill directamente, no este archivo.

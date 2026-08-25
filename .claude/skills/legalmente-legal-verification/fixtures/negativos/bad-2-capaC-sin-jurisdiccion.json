@@ -1,0 +1,34 @@
+{
+  "claim_id": "bad-2",
+  "texto_exacto": "Un procedimiento fiscal específico de un país, sin decir cuál.",
+  "ubicacion": "titulo",
+  "tipo": "regla",
+  "alcance": "CAPA_C_NACIONAL",
+  "jurisdiccion": null,
+  "nucleo_transversal": null,
+  "variaciones_materiales": null,
+  "jurisdicciones_revisadas": null,
+  "diferencias_buscadas": null,
+  "contraejemplos_encontrados": null,
+  "justificacion_suficiencia_comparada": null,
+  "fuentes": [
+    {
+      "titulo": "Ley X",
+      "organismo_autor": "Autoridad Y",
+      "url": "https://example.gov/ley-x",
+      "fecha_consulta": "2026-08-25",
+      "tipo_fuente": "ley_oficial"
+    }
+  ],
+  "confianza": "media",
+  "riesgo_falsa_universalizacion": "medio",
+  "riesgo_asesoria": "bajo",
+  "platform_review_required": false,
+  "confidentiality_review_required": false,
+  "apto_para_arte": false,
+  "redaccion_prohibida": null,
+  "redaccion_segura": "algo",
+  "estado": "APTO_CON_MATICES",
+  "revisor_humano_requerido": true,
+  "notas": "Negativo esperado: Capa C sin campo 'jurisdiccion'."
+}

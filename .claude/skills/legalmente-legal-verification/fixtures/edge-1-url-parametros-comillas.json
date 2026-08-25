@@ -1,0 +1,34 @@
+{
+  "claim_id": "edge-1-url-parametros-comillas",
+  "texto_exacto": "El demandado dijo: \"no firmé nada\" — pero la carga de la prueba puede no estar de su lado.",
+  "ubicacion": "caption",
+  "tipo": "regla",
+  "alcance": "CAPA_A_TRANSVERSAL",
+  "jurisdiccion": null,
+  "nucleo_transversal": "La distribución de la carga de la prueba entre quien afirma y quien niega es un principio transversal del derecho procesal hispánico.",
+  "variaciones_materiales": null,
+  "jurisdicciones_revisadas": ["España", "México", "Argentina"],
+  "diferencias_buscadas": "Se buscó si el principio general 'quien afirma debe probar' cambia de nombre o de lógica entre estos países.",
+  "contraejemplos_encontrados": "Ninguno a nivel de principio general; sí hay variación en reglas probatorias específicas por tipo de proceso, fuera del alcance de esta afirmación.",
+  "justificacion_suficiencia_comparada": "Principio recogido con la misma lógica en la legislación procesal civil de los tres países revisados; sin contraejemplo de fondo.",
+  "fuentes": [
+    {
+      "titulo": "Buscador BOE — legislación procesal civil española",
+      "organismo_autor": "Agencia Estatal Boletín Oficial del Estado",
+      "url": "https://www.boe.es/buscar/act.php?id=BOE-A-2000-323&p=20220101&tn=1#a217",
+      "fecha_consulta": "2026-08-25",
+      "tipo_fuente": "ley_oficial"
+    }
+  ],
+  "confianza": "media",
+  "riesgo_falsa_universalizacion": "bajo",
+  "riesgo_asesoria": "bajo",
+  "platform_review_required": false,
+  "confidentiality_review_required": false,
+  "apto_para_arte": false,
+  "redaccion_prohibida": null,
+  "redaccion_segura": null,
+  "estado": "APTO_CON_MATICES",
+  "revisor_humano_requerido": true,
+  "notas": "Fixture de prueba del validador: confirma que una URL con ':' (esquema y ancla '#a217') y parámetros de query ('?p=...&tn=1'), y un texto_exacto con comillas dobles escapadas, se procesan correctamente como JSON válido."
+}

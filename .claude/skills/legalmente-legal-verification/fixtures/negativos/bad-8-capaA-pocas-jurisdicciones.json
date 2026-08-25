@@ -1,0 +1,34 @@
+{
+  "claim_id": "bad-8",
+  "texto_exacto": "Afirmación declarada Capa A revisando solo dos países.",
+  "ubicacion": "titulo",
+  "tipo": "regla",
+  "alcance": "CAPA_A_TRANSVERSAL",
+  "jurisdiccion": null,
+  "nucleo_transversal": "algo",
+  "variaciones_materiales": null,
+  "jurisdicciones_revisadas": ["México", "España"],
+  "diferencias_buscadas": "algo",
+  "contraejemplos_encontrados": "ninguno",
+  "justificacion_suficiencia_comparada": "algo",
+  "fuentes": [
+    {
+      "titulo": "Fuente",
+      "organismo_autor": "Autor",
+      "url": "https://example.com",
+      "fecha_consulta": "2026-08-25",
+      "tipo_fuente": "ley_oficial"
+    }
+  ],
+  "confianza": "alta",
+  "riesgo_falsa_universalizacion": "bajo",
+  "riesgo_asesoria": "ninguno",
+  "platform_review_required": false,
+  "confidentiality_review_required": false,
+  "apto_para_arte": false,
+  "redaccion_prohibida": null,
+  "redaccion_segura": "algo",
+  "estado": "APTO_PARA_NARRATIVA",
+  "revisor_humano_requerido": true,
+  "notas": "Negativo esperado: 'No clasifiques una afirmación como CAPA_A_TRANSVERSAL basándote únicamente en una o dos jurisdicciones' — aquí hay exactamente 2, por debajo del mínimo de 3 exigido por el validador."
+}

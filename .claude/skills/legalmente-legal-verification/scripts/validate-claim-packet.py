@@ -2,25 +2,28 @@
 """Valida la ESTRUCTURA de un paquete de verificación jurídica de LegalMente.
 
 No decide si una afirmación jurídica es correcta. Solo confirma que el
-paquete YAML está completo, bien formado y es coherente consigo mismo,
+paquete JSON está completo, bien formado y es coherente consigo mismo,
 según el esquema descrito en references/claim-packet-schema.md.
 
-Sin dependencias externas (no requiere PyYAML): implementa un parser
-mínimo suficiente para el subconjunto de YAML que usan estos paquetes
-(mapas simples, listas de escalares, listas de mapas con "- clave: valor").
+El artefacto validado por máquina es JSON (biblioteca estándar `json`,
+sin dependencias externas y sin parser YAML propio). Un paquete puede
+mostrarse a un humano como YAML o como texto legible en otra parte del
+flujo, pero lo que este script valida es siempre el .json.
 
 Uso:
-    python3 validate-claim-packet.py archivo1.yaml [archivo2.yaml ...]
+    python3 validate-claim-packet.py archivo1.json [archivo2.json ...]
 
 Código de salida:
     0 si TODOS los paquetes son válidos.
-    1 si al menos un paquete tiene errores estructurales.
+    1 si al menos un paquete tiene errores estructurales o el JSON
+      está mal formado.
 """
 
+import json
 import sys
 from pathlib import Path
 
-REQUIRED_SCALAR_FIELDS = [
+REQUIRED_FIELDS = [
     "claim_id",
     "texto_exacto",
     "ubicacion",
@@ -31,6 +34,7 @@ REQUIRED_SCALAR_FIELDS = [
     "riesgo_asesoria",
     "platform_review_required",
     "confidentiality_review_required",
+    "apto_para_arte",
     "estado",
     "revisor_humano_requerido",
 ]
@@ -50,126 +54,72 @@ VALID_ESTADO = {
     "PENDIENTE_APROBACION_HUMANA",
 }
 
+VALID_UBICACION = {
+    "titulo",
+    "hook",
+    "texto_imagen",
+    "caption",
+    "lista",
+    "cta",
+    "prompt_visual",
+    "descripcion_tema",
+}
+
 VALID_CONFIANZA = {"alta", "media", "baja"}
 VALID_RIESGO = {"ninguno", "bajo", "medio", "alto"}
-VALID_BOOL = {"true", "false"}
 
 APTO_ESTADOS = {"APTO_PARA_NARRATIVA", "APTO_CON_MATICES"}
+# Confianza insuficiente para dejar una pieza en estado apto.
+INSUFFICIENT_CONFIANZA_FOR_APTO = {"baja"}
 
 FUENTE_REQUIRED = {"titulo", "organismo_autor", "url", "fecha_consulta", "tipo_fuente"}
 
+# Campos que Capa A debe justificar explícitamente (Paso 5 de la revisión):
+# no basta con 1-2 jurisdicciones, hace falta evidencia comparada real.
+CAPA_A_JUSTIFICATION_FIELDS = [
+    "jurisdicciones_revisadas",
+    "diferencias_buscadas",
+    "contraejemplos_encontrados",
+    "justificacion_suficiencia_comparada",
+]
 
-class ParseError(Exception):
-    pass
-
-
-def strip_quotes(value):
-    value = value.strip()
-    if len(value) >= 2 and value[0] == value[-1] and value[0] in ("'", '"'):
-        return value[1:-1]
-    return value
-
-
-def parse_claim_packet(text):
-    """Parser mínimo para el subconjunto de YAML usado por estos paquetes.
-
-    Soporta:
-      clave: valor
-      clave:
-        - valor escalar
-      clave:
-        - subclave: valor
-          subclave2: valor
-    No soporta YAML arbitrario a propósito: el objetivo es un formato
-    predecible y fácil de auditar, no un parser YAML de propósito general.
-    """
-    data = {}
-    lines = text.splitlines()
-    i = 0
-    n = len(lines)
-
-    def indent_of(line):
-        return len(line) - len(line.lstrip(" "))
-
-    while i < n:
-        raw = lines[i]
-        line = raw.rstrip()
-        if not line.strip() or line.strip().startswith("#"):
-            i += 1
-            continue
-        if indent_of(line) != 0:
-            raise ParseError(f"Línea {i + 1}: indentación inesperada en nivel raíz: {raw!r}")
-        if ":" not in line:
-            raise ParseError(f"Línea {i + 1}: se esperaba 'clave: valor' o 'clave:': {raw!r}")
-        key, _, rest = line.partition(":")
-        key = key.strip()
-        rest = rest.strip()
-        i += 1
-        if rest:
-            data[key] = strip_quotes(rest)
-            continue
-
-        # Bloque: puede ser lista de escalares o lista de mapas.
-        items = []
-        while i < n:
-            nxt = lines[i]
-            if not nxt.strip():
-                i += 1
-                continue
-            if indent_of(nxt) == 0:
-                break
-            stripped = nxt.strip()
-            if not stripped.startswith("-"):
-                raise ParseError(f"Línea {i + 1}: se esperaba un elemento de lista ('- ...'): {nxt!r}")
-            after_dash = stripped[1:].strip()
-            if ":" in after_dash:
-                # Primer campo de un mapa dentro de la lista.
-                sub = {}
-                k0, _, v0 = after_dash.partition(":")
-                sub[k0.strip()] = strip_quotes(v0.strip())
-                base_indent = indent_of(nxt)
-                i += 1
-                while i < n:
-                    cont = lines[i]
-                    if not cont.strip():
-                        i += 1
-                        continue
-                    if indent_of(cont) <= base_indent:
-                        break
-                    ck, _, cv = cont.strip().partition(":")
-                    if ":" not in cont:
-                        raise ParseError(f"Línea {i + 1}: se esperaba 'clave: valor' dentro de la lista: {cont!r}")
-                    sub[ck.strip()] = strip_quotes(cv.strip())
-                    i += 1
-                items.append(sub)
-            else:
-                items.append(strip_quotes(after_dash))
-                i += 1
-        data[key] = items
-
-    return data
+MIN_JURISDICCIONES_REVISADAS_CAPA_A = 3
 
 
-def as_bool(value):
-    if isinstance(value, bool):
+def load_packet(path: Path):
+    text = path.read_text(encoding="utf-8")
+    return json.loads(text)  # puede lanzar json.JSONDecodeError
+
+
+def as_list(value):
+    if value is None:
+        return []
+    if isinstance(value, list):
         return value
-    return str(value).strip().lower() == "true"
+    return [value]
 
 
-def validate_packet(data, source_name):
+def validate_packet(data):
     errors = []
 
-    for field in REQUIRED_SCALAR_FIELDS:
+    if not isinstance(data, dict):
+        return ["El paquete no es un objeto JSON (debe ser un objeto con las claves del esquema)."]
+
+    for field in REQUIRED_FIELDS:
         if field not in data or data[field] in (None, "", []):
             errors.append(f"Campo obligatorio ausente o vacío: '{field}'")
 
     if errors:
-        # Sin los campos base no tiene sentido seguir validando dependencias.
+        # Sin los campos base no tiene sentido evaluar las dependencias.
         return errors
 
     alcance = data.get("alcance")
     if alcance not in VALID_ALCANCE:
         errors.append(f"'alcance' inválido: {alcance!r} (debe ser uno de {sorted(VALID_ALCANCE)})")
+
+    ubicacion = data.get("ubicacion")
+    if ubicacion not in VALID_UBICACION:
+        errors.append(f"'ubicacion' inválida: {ubicacion!r} (debe ser una de {sorted(VALID_UBICACION)})")
 
     estado = data.get("estado")
     if estado not in VALID_ESTADO:
@@ -184,10 +134,21 @@ def validate_packet(data, source_name):
     if data.get("riesgo_asesoria") not in VALID_RIESGO:
         errors.append(f"'riesgo_asesoria' inválido: {data.get('riesgo_asesoria')!r}")
 
-    for bool_field in ("platform_review_required", "confidentiality_review_required", "revisor_humano_requerido"):
-        raw = str(data.get(bool_field)).strip().lower()
-        if raw not in VALID_BOOL:
-            errors.append(f"'{bool_field}' debe ser 'true' o 'false', no {data.get(bool_field)!r}")
+    for bool_field in (
+        "platform_review_required",
+        "confidentiality_review_required",
+        "apto_para_arte",
+        "revisor_humano_requerido",
+    ):
+        if not isinstance(data.get(bool_field), bool):
+            errors.append(f"'{bool_field}' debe ser booleano (true/false), no {data.get(bool_field)!r}")
+
+    # Esta skill nunca es la última palabra: revisor humano siempre requerido.
+    if data.get("revisor_humano_requerido") is False:
+        errors.append(
+            "'revisor_humano_requerido' no puede ser false — esta skill nunca aprueba de forma definitiva, "
+            "todo paquete requiere revisión humana."
+        )
 
     # Capa C exige jurisdicción.
     if alcance == "CAPA_C_NACIONAL":
@@ -201,34 +162,68 @@ def validate_packet(data, source_name):
         if not variaciones:
             errors.append("Capa B (CAPA_B_VARIABLE) requiere el campo 'variaciones_materiales'.")
 
-    # Estados aptos exigen al menos una fuente válida.
+    # Capa A exige justificación comparada explícita — no basta con 1-2 países
+    # ni con la ausencia de contradicción conocida sin haberla buscado.
+    if alcance == "CAPA_A_TRANSVERSAL":
+        missing = [f for f in CAPA_A_JUSTIFICATION_FIELDS if not data.get(f)]
+        if missing:
+            errors.append(
+                "Capa A (CAPA_A_TRANSVERSAL) requiere justificación comparada explícita; "
+                f"faltan o están vacíos: {missing}"
+            )
+        else:
+            jurisdicciones = as_list(data.get("jurisdicciones_revisadas"))
+            if len(jurisdicciones) < MIN_JURISDICCIONES_REVISADAS_CAPA_A:
+                errors.append(
+                    "Capa A requiere evidencia comparada suficiente: "
+                    f"'jurisdicciones_revisadas' tiene {len(jurisdicciones)} entrada(s), "
+                    f"se esperan al menos {MIN_JURISDICCIONES_REVISADAS_CAPA_A}."
+                )
+
+    # Estados aptos exigen al menos una fuente válida y confianza suficiente.
     if estado in APTO_ESTADOS:
+        if data.get("confianza") in INSUFFICIENT_CONFIANZA_FOR_APTO:
+            errors.append(
+                f"Estado '{estado}' no puede tener confianza='{data.get('confianza')}' "
+                "(confianza insuficiente para un estado apto)."
+            )
+
         fuentes = data.get("fuentes")
         if not fuentes or not isinstance(fuentes, list):
             errors.append(f"Estado '{estado}' requiere al menos una fuente en 'fuentes'.")
         else:
             for idx, fuente in enumerate(fuentes):
                 if not isinstance(fuente, dict):
-                    errors.append(f"fuentes[{idx}] no es un registro con campos (titulo/organismo_autor/url/...).")
+                    errors.append(f"fuentes[{idx}] no es un objeto con campos (titulo/organismo_autor/url/...).")
                     continue
                 missing = FUENTE_REQUIRED - set(k for k, v in fuente.items() if v not in (None, ""))
                 if missing:
                     errors.append(f"fuentes[{idx}] incompleta, faltan: {sorted(missing)}")
-                url = fuente.get("url", "")
-                titulo = fuente.get("titulo", "")
+                url = fuente.get("url") or ""
+                titulo = fuente.get("titulo") or ""
                 if not url and not titulo:
-                    errors.append(f"fuentes[{idx}] no tiene 'url' ni 'titulo' suficiente para identificarla — fuente inválida.")
+                    errors.append(f"fuentes[{idx}] no tiene 'url' ni 'titulo' suficiente para identificarla.")
 
-    # PENDIENTE_APROBACION_HUMANA no puede tener revisor_humano_requerido=false.
-    if estado == "PENDIENTE_APROBACION_HUMANA" and not as_bool(data.get("revisor_humano_requerido")):
-        errors.append("estado='PENDIENTE_APROBACION_HUMANA' es incoherente con revisor_humano_requerido=false.")
+    # apto_para_arte solo puede ser true cuando el estado es plenamente apto
+    # para narrativa. Un paquete que aún requiere investigación, tiene
+    # matices, está bloqueado o pendiente de humano NO puede marcarse listo
+    # para producción visual.
+    if data.get("apto_para_arte") is True and estado != "APTO_PARA_NARRATIVA":
+        errors.append(
+            f"'apto_para_arte' no puede ser true cuando estado='{estado}' "
+            "(solo APTO_PARA_NARRATIVA puede pasar a producción visual)."
+        )
+
+    # PENDIENTE_APROBACION_HUMANA es, por definición, no apto para arte todavía.
+    if estado == "PENDIENTE_APROBACION_HUMANA" and data.get("apto_para_arte") is True:
+        errors.append("estado='PENDIENTE_APROBACION_HUMANA' es incoherente con apto_para_arte=true.")
 
     return errors
 
 
 def main(argv):
     if not argv:
-        print("Uso: validate-claim-packet.py archivo1.yaml [archivo2.yaml ...]", file=sys.stderr)
+        print("Uso: validate-claim-packet.py archivo1.json [archivo2.json ...]", file=sys.stderr)
         return 1
 
     overall_ok = True
@@ -239,15 +234,14 @@ def main(argv):
             overall_ok = False
             continue
 
-        text = path.read_text(encoding="utf-8")
         try:
-            data = parse_claim_packet(text)
-        except ParseError as exc:
-            print(f"[ERROR] {path_str}: paquete mal formado — {exc}")
+            data = load_packet(path)
+        except json.JSONDecodeError as exc:
+            print(f"[ERROR] {path_str}: JSON mal formado — {exc}")
             overall_ok = False
             continue
 
-        errors = validate_packet(data, path_str)
+        errors = validate_packet(data)
         if errors:
             overall_ok = False
             print(f"[BLOQUEADO ESTRUCTURALMENTE] {path_str}")
