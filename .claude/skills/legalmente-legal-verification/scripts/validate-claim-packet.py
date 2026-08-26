@@ -642,14 +642,27 @@ def compute_ceiling_by_countries(paises_normalizados, fuentes):
     return min(ceilings, key=estado_rank)
 
 
-def compute_capa_c_ceiling(jurisdiccion_field, fuentes):
-    """Techo de Capa C cuando 'jurisdiccion' es uno o varios países: reutiliza
-    compute_ceiling_by_countries en vez de 'alguna fuente cubre alguno de los
-    países' (esa era la falla — Bypass D de la Fase 1D)."""
+def compute_declared_countries_ceiling(jurisdiccion_field, fuentes):
+    """Techo por país declarado cuando 'jurisdiccion' es uno o varios países,
+    para CUALQUIER alcance que la declare (Capa C, Capa B y cualquier otro):
+    reutiliza compute_ceiling_by_countries en vez de 'alguna fuente cubre
+    alguno de los países' (esa era la falla — Bypass D de la Fase 1D, y su
+    reaparición en Capa B — Fase 1E, Bypass E). En todo claim multijurisdiccional,
+    incluido CAPA_B_VARIABLE, el techo jurídico se calcula como el mínimo de
+    cobertura entre todas las jurisdicciones declaradas — nunca el máximo de
+    cualquier fuente suelta."""
     paises = normalize_countries_list(jurisdiccion_field) if isinstance(jurisdiccion_field, list) else (
         [normalize_country(jurisdiccion_field)] if is_nonempty_str(jurisdiccion_field) else []
     )
     return compute_ceiling_by_countries(paises, fuentes)
+
+
+def compute_capa_c_ceiling(jurisdiccion_field, fuentes):
+    """Alias histórico de compute_declared_countries_ceiling, conservado por
+    compatibilidad de nombre/API para Capa C — desde la Fase 1E la misma
+    función de techo por país se usa también para Capa B (ver
+    compute_declared_countries_ceiling y su uso en validate_claim)."""
+    return compute_declared_countries_ceiling(jurisdiccion_field, fuentes)
 
 
 def compute_capa_a_ceiling(claim, fuentes_by_id):
@@ -937,8 +950,22 @@ def validate_claim(claim, path):
     # --- reglas de suficiencia de fuentes vs. estado declarado ---
     if alcance == "CAPA_A_TRANSVERSAL":
         max_estado = compute_capa_a_ceiling(claim, fuentes_by_id)
-    elif alcance == "CAPA_C_NACIONAL" and jurisdiccion:
-        max_estado = compute_capa_c_ceiling(jurisdiccion, fuentes)
+    elif jurisdiccion:
+        # Fase 1E: CUALQUIER alcance con 'jurisdiccion' declarada (país o
+        # lista de países) usa el techo POR PAÍS — nunca 'alguna fuente
+        # Nivel 1 en cualquier parte'. Antes solo CAPA_C_NACIONAL tenía esta
+        # protección; CAPA_B_VARIABLE (y cualquier otro alcance con
+        # 'jurisdiccion' declarada) caía en la rama de abajo
+        # (compute_max_estado_por_fuentes), que es un máximo plano sobre
+        # TODAS las fuentes del claim sin partir por país — una sola fuente
+        # Nivel 1 de México podía elevar a APTO_PARA_NARRATIVA un claim que
+        # también declaraba España y Argentina, aunque Argentina solo
+        # tuviera Nivel 2 o ninguna fuente propia. Ese bypass queda cerrado
+        # aquí: se reutiliza la misma función que ya usaba Capa C
+        # (compute_declared_countries_ceiling → compute_ceiling_by_countries),
+        # que exige Nivel 1 en CADA país declarado y toma el mínimo entre
+        # todos ellos.
+        max_estado = compute_declared_countries_ceiling(jurisdiccion, fuentes)
     else:
         max_estado = compute_max_estado_por_fuentes(fuentes)
     if estado in ESTADO_LADDER:
@@ -947,8 +974,10 @@ def validate_claim(claim, path):
                 " Para Capa A, el techo es el mínimo entre todas las jurisdicciones declaradas, "
                 "no el máximo de cualquier fuente suelta."
                 if alcance == "CAPA_A_TRANSVERSAL" else (
-                    " Para Capa C con varios países, el techo es el mínimo entre todos ellos."
-                    if alcance == "CAPA_C_NACIONAL" and isinstance(jurisdiccion, list) and len(jurisdiccion) > 1 else ""
+                    " Con varios países declarados en 'jurisdiccion' (incluida CAPA_B_VARIABLE), "
+                    "el techo es el mínimo entre todos ellos, no el máximo de cualquier fuente "
+                    "suelta — una fuente Nivel 1 de un país no compensa la falta de cobertura en otro."
+                    if isinstance(jurisdiccion, list) and len(jurisdiccion) > 1 else ""
                 )
             )
             errors.append(
