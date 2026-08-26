@@ -4,7 +4,7 @@
   "claims": [
     {
       "claim_id": "pieza-01-claim-1",
-      "texto_exacto": "La propiedad es el derecho a usar, gozar y disponer de una cosa dentro de los límites que fija la ley.",
+      "texto_exacto": "En los ordenamientos examinados, la propiedad o dominio atribuye facultades amplias de aprovechamiento, goce y disposición sobre una cosa, siempre dentro de los límites establecidos por la ley. La formulación técnica no es idéntica en México, España y Argentina.",
       "ubicacion": "hook",
       "tipo": "definicion",
       "alcance": "CAPA_B_VARIABLE",
@@ -119,11 +119,11 @@
         "nuevo_claim_id": null
       },
       "redaccion_prohibida": null,
-      "notas": "REQUIERE_INVESTIGACION. Localizador atómico por país (un artículo/documento por fuente, sin agrupar normas distintas). Ninguna fuente verificada de forma independiente en esta sesión."
+      "notas": "REQUIERE_INVESTIGACION. Corrección jurídica v1: texto_exacto ya no afirma que los tres artículos usan exactamente las palabras 'usar, gozar y disponer' — cada ordenamiento tiene su propia formulación técnica (Art. 830 CCF México, Art. 348 CC España, Art. 1941 CCyCN Argentina 'dominio perfecto'), comparables en función pero no en redacción literal. Ninguna fuente verificada de forma independiente en esta sesión."
     },
     {
       "claim_id": "pieza-01-claim-2",
-      "texto_exacto": "México federal no reconoce 'tenencia' como figura sustantiva autónoma: quien reconoce dominio ajeno es 'poseedor derivado' (Art. 791 CCF). España y Argentina sí tienen esa categoría autónoma explícita: 'tenedor' (Arts. 430/432 CC español) y 'tenencia' (Art. 1910 CCyCN argentino).",
+      "texto_exacto": "La terminología no es uniforme. El Código Civil Federal mexicano denomina 'posesión derivada' a la de quien recibe temporalmente una cosa mediante arrendamiento, depósito u otro título análogo. El Código Civil español utiliza 'tenencia' dentro de su regulación de la posesión y distingue entre poseer como dueño o como tenedor. Argentina diferencia expresamente posesión y tenencia como dos relaciones de poder. Son figuras funcionalmente comparables, pero no necesariamente equivalentes en todos sus efectos.",
       "ubicacion": "texto_imagen",
       "tipo": "definicion",
       "alcance": "CAPA_B_VARIABLE",
@@ -133,7 +133,7 @@
         "Argentina"
       ],
       "nucleo_transversal": null,
-      "variaciones_materiales": "'Poseedor derivado' (México) vs. 'tenedor' (España) vs. 'tenencia'/'tenedor representante del poseedor' (Argentina, Art. 1910 CCyCN) — mismo concepto funcional, tres nombres técnicos distintos.",
+      "variaciones_materiales": "Nombre técnico distinto por país para la misma función: 'poseedor derivado' (México, Art. 791 CCF) vs. 'tenedor' (España, Arts. 430/432 CC) vs. 'tenencia' como relación de poder autónoma (Argentina, Arts. 1908-1910 CCyCN). No se afirma que España reconozca la tenencia como categoría autónoma idéntica a la argentina — son figuras funcionalmente comparables, no necesariamente equivalentes en todos sus efectos.",
       "jurisdicciones_revisadas": null,
       "diferencias_buscadas": null,
       "contraejemplos_encontrados": null,
@@ -142,12 +142,12 @@
         {
           "id": "SRC-P01-MX-FED-01",
           "tipo_fuente": "NORMA_OFICIAL",
-          "titulo": "Código Civil Federal (México) — art. 1 (ámbito federal), arts. 790-791 (posesión originaria/derivada)",
+          "titulo": "Código Civil Federal (México) — arts. 790-791 (posesión originaria/derivada)",
           "organismo_autor": "H. Cámara de Diputados",
           "url": "https://www.diputados.gob.mx/LeyesBiblio/pdf/CCF.pdf",
           "identificador_bibliografico": null,
           "fecha_consulta": "2026-08-25",
-          "localizador": "arts. 1, 790 y 791",
+          "localizador": "arts. 790 y 791",
           "jurisdicciones_cubiertas": [
             "México"
           ],
@@ -186,12 +186,12 @@
         {
           "id": "SRC-P01-AR-CCYC-01",
           "tipo_fuente": "NORMA_OFICIAL",
-          "titulo": "Código Civil y Comercial de la Nación (Argentina) — arts. 1909, 1910 (posesión y tenencia)",
+          "titulo": "Código Civil y Comercial de la Nación (Argentina) — arts. 1908-1910 (relaciones de poder: posesión y tenencia)",
           "organismo_autor": "InfoLEG",
           "url": "https://servicios.infoleg.gob.ar/infolegInternet/anexos/235000-239999/235975/texact.htm",
           "identificador_bibliografico": null,
           "fecha_consulta": "2026-08-25",
-          "localizador": "arts. 1909 y 1910",
+          "localizador": "arts. 1908, 1909 y 1910",
           "jurisdicciones_cubiertas": [
             "Argentina"
           ],
@@ -238,11 +238,11 @@
         "nuevo_claim_id": null
       },
       "redaccion_prohibida": null,
-      "notas": "REQUIERE_INVESTIGACION. Terminología distinta por país documentada explícitamente para evitar falsa universalización."
+      "notas": "REQUIERE_INVESTIGACION. Corrección jurídica v1: se precisa que México no usa el art. 1 CCF como fuente de este claim (ese artículo sustenta el claim 3, sobre ámbito federal, no la terminología posesoria); se amplía la fuente argentina a los arts. 1908-1910. Ninguna fuente verificada de forma independiente."
     },
     {
       "claim_id": "pieza-01-claim-3",
-      "texto_exacto": "El Código Civil Federal rige en asuntos del orden federal; los contratos civiles entre particulares en los estados se rigen por los códigos civiles de cada entidad federativa.",
+      "texto_exacto": "En México, el Código Civil Federal rige los asuntos del orden federal. En las materias civiles de competencia local se aplica, por regla general, la legislación civil de la entidad federativa correspondiente, sin perjuicio de las reglas de competencia, conflicto de leyes y demás excepciones aplicables al caso.",
       "ubicacion": "caption",
       "tipo": "regla",
       "alcance": "CAPA_C_NACIONAL",
@@ -257,12 +257,12 @@
         {
           "id": "SRC-P01-MX-FED-01",
           "tipo_fuente": "NORMA_OFICIAL",
-          "titulo": "Código Civil Federal (México) — art. 1 (ámbito federal), arts. 790-791 (posesión originaria/derivada)",
+          "titulo": "Código Civil Federal (México) — art. 1 (ámbito federal)",
           "organismo_autor": "H. Cámara de Diputados",
           "url": "https://www.diputados.gob.mx/LeyesBiblio/pdf/CCF.pdf",
           "identificador_bibliografico": null,
           "fecha_consulta": "2026-08-25",
-          "localizador": "arts. 1, 790 y 791",
+          "localizador": "art. 1",
           "jurisdicciones_cubiertas": [
             "México"
           ],
@@ -273,6 +273,28 @@
             "fecha_comprobacion": null,
             "metodo_o_evidencia": null,
             "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Localizador y extracto de texto tomados del expediente externo auditado (legalmente-piloto-evidencia-primaria-v1.2.md + legalmente-piloto-fuentes-primarias-v1.zip, producido por otro modelo de IA). El manifest de ese expediente autoafirma origen_oficial_confirmado/texto_exacto_consultado/vigencia_comprobada = true y resultado SUFICIENTE — por regla de gobernanza de este repositorio (source-policy.md: 'nunca aceptar como fuente otro contenido generado por IA'; CLAUDE.md: 'ninguna IA es fuente jurídica') esa autoconfirmación NO se traslada aquí. Los extractos del ZIP (687-6215 bytes) son fragmentos de artículos concretos, no el documento legal completo, pese a que 44/45 entradas del manifest declaran documento_completo=true — inconsistencia detectada en auditoría y NO heredada."
+          },
+          "registro_oficial_id": "diputados-gob-mx"
+        },
+        {
+          "id": "SRC-P01-MX-CPEUM-01",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Constitución Política de los Estados Unidos Mexicanos — art. 124 (facultades reservadas a los Estados)",
+          "organismo_autor": "H. Cámara de Diputados",
+          "url": "https://www.diputados.gob.mx/LeyesBiblio/pdf/CPEUM.pdf",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-08-25",
+          "localizador": "art. 124",
+          "jurisdicciones_cubiertas": [
+            "México"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": false,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": null,
+            "metodo_o_evidencia": null,
+            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Fuente añadida en la corrección jurídica v1 para sustentar la reserva de competencias a las entidades federativas junto con el Art. 1 CCF."
           },
           "registro_oficial_id": "diputados-gob-mx"
         }
@@ -308,12 +330,12 @@
         "verificada": false,
         "nuevo_claim_id": null
       },
-      "redaccion_prohibida": "El Código Civil Federal de México rige cualquier contrato en cualquier estado / sustituye automáticamente los códigos civiles estatales.",
-      "notas": "REQUIERE_INVESTIGACION. Este claim existe específicamente para bloquear una afirmación FALSA identificada en la auditoría del expediente: que el Código Civil Federal 'sustituye automáticamente' los códigos civiles estatales — el propio Art. 1 CCF lo contradice. Se modela como redaccion_prohibida explícita."
+      "redaccion_prohibida": "El Código Civil Federal de México rige cualquier contrato en cualquier estado o sustituye automáticamente los códigos civiles estatales.",
+      "notas": "REQUIERE_INVESTIGACION. Corrección jurídica v1: se matiza que la aplicación de la legislación civil local es 'por regla general', sin perjuicio de reglas de competencia y conflicto de leyes, y se añade el Art. 124 CPEUM (reserva de facultades a los Estados) junto al Art. 1 CCF. redaccion_prohibida actualizada a la formulación exacta de la revisión jurídica. Ninguna fuente verificada de forma independiente."
     },
     {
       "claim_id": "pieza-01-claim-4",
-      "texto_exacto": "El poseedor derivado o tenedor no puede usucapir mientras conserve esa calidad, sin perjuicio de una eventual interversión jurídicamente válida y acreditada conforme a la legislación aplicable.",
+      "texto_exacto": "Quien detenta un bien reconociendo el dominio ajeno no adquiere la propiedad por el simple transcurso del tiempo mientras conserve esa calidad. Para que pueda comenzar una posesión apta para usucapir debe producirse y probarse un cambio jurídicamente relevante hacia la posesión en concepto de propietario, además de cumplirse los requisitos y plazos de la legislación aplicable.",
       "ubicacion": "lista",
       "tipo": "regla",
       "alcance": "CAPA_B_VARIABLE",
@@ -323,7 +345,7 @@
         "Argentina"
       ],
       "nucleo_transversal": null,
-      "variaciones_materiales": "Plazos y mecanismo de interversión distintos por país: México 5/10 años (Art. 1152 CCF) y Quintana Roo con tesis específica sobre el detentador; España 10/20/30 años (Arts. 1940-1941, 1957, 1959 CC); Argentina 10/20 años (Arts. 1897-1899 CCyCN) — ningún plazo puede generalizarse entre países.",
+      "variaciones_materiales": "Plazos y mecanismo de interversión distintos por país — ninguno se generaliza a los demás: México federal 5/10 años (Art. 1152 CCF), aplicable solo en el orden federal, NO a todos los estados (cada entidad federativa tiene su propio código civil con sus propios plazos, p. ej. Quintana Roo vía Arts. 1836-1839 de su Código Civil estatal); España 10/20/30 años (Arts. 1940-1942, 1948 CC); Argentina 10/20 años (Arts. 1897-1900 CCyCN), con la interversión regulada expresamente en el Art. 1915 CCyCN.",
       "jurisdicciones_revisadas": null,
       "diferencias_buscadas": null,
       "contraejemplos_encontrados": null,
@@ -332,12 +354,12 @@
         {
           "id": "SRC-P01-MX-FED-03",
           "tipo_fuente": "NORMA_OFICIAL",
-          "titulo": "Código Civil Federal (México) — arts. 1135-1136, 1151-1152 (prescripción positiva/usucapión)",
+          "titulo": "Código Civil Federal (México) — arts. 826-827 (interversión del título), 1139 y 1151-1152 (usucapión)",
           "organismo_autor": "H. Cámara de Diputados",
           "url": "https://www.diputados.gob.mx/LeyesBiblio/pdf/CCF.pdf",
           "identificador_bibliografico": null,
           "fecha_consulta": "2026-08-25",
-          "localizador": "arts. 1135, 1136, 1151 y 1152",
+          "localizador": "arts. 826, 827, 1139, 1151 y 1152",
           "jurisdicciones_cubiertas": [
             "México"
           ],
@@ -352,14 +374,14 @@
           "registro_oficial_id": "diputados-gob-mx"
         },
         {
-          "id": "SRC-P01-MX-QROO-01",
+          "id": "SRC-P01-MX-QROO-03",
           "tipo_fuente": "AUTORIDAD_PUBLICA_OFICIAL",
-          "titulo": "Código Civil para el Estado de Quintana Roo — arts. 1779, 1780, 1789, 1796, 1797 (posesión, posesión derivada, presunciones); portal congresoqroo.gob.mx resuelve solo a la entrada genérica del registro (AUTORIDAD_PUBLICA_OFICIAL), nunca a NORMA_OFICIAL",
+          "titulo": "Código Civil para el Estado de Quintana Roo — arts. 1781 (posesión derivada), 1836-1839 (requisitos y efectos de la usucapión); portal congresoqroo.gob.mx resuelve solo a la entrada genérica del registro (AUTORIDAD_PUBLICA_OFICIAL), nunca a NORMA_OFICIAL",
           "organismo_autor": "Gobierno de México (portal genérico gob.mx)",
-          "url": "http://documentos.congresoqroo.gob.mx/leyes/L1720230425-47.pdf",
+          "url": "https://documentos.congresoqroo.gob.mx/codigos/C2-XVIII-23062026-20260724T145357-C1820260616258.pdf",
           "identificador_bibliografico": null,
           "fecha_consulta": "2026-08-25",
-          "localizador": "arts. 1779, 1780, 1789, 1796 y 1797",
+          "localizador": "arts. 1781, 1836, 1837, 1838 y 1839",
           "jurisdicciones_cubiertas": [
             "México"
           ],
@@ -369,41 +391,19 @@
             "vigencia_comprobada": false,
             "fecha_comprobacion": null,
             "metodo_o_evidencia": null,
-            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Localizador y extracto de texto tomados del expediente externo auditado (legalmente-piloto-evidencia-primaria-v1.2.md + legalmente-piloto-fuentes-primarias-v1.zip, producido por otro modelo de IA). El manifest de ese expediente autoafirma origen_oficial_confirmado/texto_exacto_consultado/vigencia_comprobada = true y resultado SUFICIENTE — por regla de gobernanza de este repositorio (source-policy.md: 'nunca aceptar como fuente otro contenido generado por IA'; CLAUDE.md: 'ninguna IA es fuente jurídica') esa autoconfirmación NO se traslada aquí. Los extractos del ZIP (687-6215 bytes) son fragmentos de artículos concretos, no el documento legal completo, pese a que 44/45 entradas del manifest declaran documento_completo=true — inconsistencia detectada en auditoría y NO heredada. congresoqroo.gob.mx no tiene entrada propia en el registro oficial — resuelve por subdominio genérico *.gob.mx (gob-mx-generico), que solo permite AUTORIDAD_PUBLICA_OFICIAL, aunque el organismo real (H. Congreso del Estado de Quintana Roo) sea legislativo. Techo Nivel 2 aunque el resto se verificara."
+            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. congresoqroo.gob.mx no tiene entrada propia en el registro oficial — resuelve por subdominio genérico *.gob.mx (gob-mx-generico), que solo permite AUTORIDAD_PUBLICA_OFICIAL, aunque el organismo real (H. Congreso del Estado de Quintana Roo) sea legislativo. Techo Nivel 2 aunque el resto se verificara. Corrección jurídica v1: URL actualizada a la versión oficial vigente consultada (https://documentos.congresoqroo.gob.mx/codigos/C2-XVIII-23062026-20260724T145357-C1820260616258.pdf), referenciada desde la página oficial de códigos del Congreso de Quintana Roo (https://www.congresoqroo.gob.mx/codigos/2)."
           },
           "registro_oficial_id": "gob-mx-generico"
         },
         {
-          "id": "SRC-P01-MX-QROO-02",
-          "tipo_fuente": "JURISPRUDENCIA_OFICIAL",
-          "titulo": "Tesis Aislada XXVII.1o.4 C (10a.), Registro digital 2014491 — el poseedor derivado carece de justo título para usucapir (publicada en el Semanario Judicial de la Federación, pero EMITIDA por un Tribunal Colegiado de Circuito, no por la SCJN misma)",
-          "organismo_autor": "Primer Tribunal Colegiado del Vigésimo Séptimo Circuito",
-          "url": null,
-          "identificador_bibliografico": "Referencia de localización (deliberadamente NO declarada como 'url' del esquema): https://sjf2.scjn.gob.mx/detalle/tesis/2014491",
-          "fecha_consulta": "2026-08-25",
-          "localizador": "Tesis XXVII.1o.4 C (10a.), Registro 2014491",
-          "jurisdicciones_cubiertas": [
-            "México"
-          ],
-          "verificacion_fuente": {
-            "origen_oficial_confirmado": false,
-            "texto_exacto_consultado": false,
-            "vigencia_comprobada": false,
-            "fecha_comprobacion": null,
-            "metodo_o_evidencia": null,
-            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Localizador y extracto de texto tomados del expediente externo auditado (legalmente-piloto-evidencia-primaria-v1.2.md + legalmente-piloto-fuentes-primarias-v1.zip, producido por otro modelo de IA). El manifest de ese expediente autoafirma origen_oficial_confirmado/texto_exacto_consultado/vigencia_comprobada = true y resultado SUFICIENTE — por regla de gobernanza de este repositorio (source-policy.md: 'nunca aceptar como fuente otro contenido generado por IA'; CLAUDE.md: 'ninguna IA es fuente jurídica') esa autoconfirmación NO se traslada aquí. Los extractos del ZIP (687-6215 bytes) son fragmentos de artículos concretos, no el documento legal completo, pese a que 44/45 entradas del manifest declaran documento_completo=true — inconsistencia detectada en auditoría y NO heredada. HALLAZGO DE AUDITORÍA: sjf2.scjn.gob.mx resuelve, por subdominio, a la entrada 'scjn-gob-mx' del registro, pero cuyo único organismo reconocido es la SCJN — y el organismo real que EMITIÓ esta tesis es un Tribunal Colegiado de Circuito, un órgano distinto (aunque publicado en el mismo sistema SJF). Declarar registro_oficial_id='scjn-gob-mx' con este organismo real produciría un [ERROR ESTRUCTURAL] correcto por incoherencia; en vez de falsear el organismo a 'SCJN' para evitarlo, se deja la URL fuera del campo 'url' del esquema (solo como referencia en identificador_bibliografico) — la fuente nunca podrá alcanzar Nivel 1 así, que es exactamente el techo honesto que le corresponde."
-          },
-          "registro_oficial_id": null
-        },
-        {
           "id": "SRC-P01-ES-CC-03",
           "tipo_fuente": "NORMA_OFICIAL",
-          "titulo": "Código Civil español — arts. 1940, 1941 (requisitos de la usucapión ordinaria)",
+          "titulo": "Código Civil español — arts. 436, 447 (presunción de continuidad, interversión), 1940-1942 y 1948 (usucapión ordinaria)",
           "organismo_autor": "Agencia Estatal BOE",
           "url": "https://www.boe.es/buscar/pdf/1889/BOE-A-1889-4763-consolidado.pdf",
           "identificador_bibliografico": null,
           "fecha_consulta": "2026-08-25",
-          "localizador": "arts. 1940 y 1941",
+          "localizador": "arts. 436, 447, 1940, 1941, 1942 y 1948",
           "jurisdicciones_cubiertas": [
             "España"
           ],
@@ -420,12 +420,12 @@
         {
           "id": "SRC-P01-AR-CCYC-03",
           "tipo_fuente": "NORMA_OFICIAL",
-          "titulo": "Código Civil y Comercial de la Nación (Argentina) — arts. 1897-1899 (prescripción adquisitiva breve/larga)",
+          "titulo": "Código Civil y Comercial de la Nación (Argentina) — arts. 1897-1900 (prescripción adquisitiva) y 1915 (interversión del título)",
           "organismo_autor": "InfoLEG",
           "url": "https://servicios.infoleg.gob.ar/infolegInternet/anexos/235000-239999/235975/texact.htm",
           "identificador_bibliografico": null,
           "fecha_consulta": "2026-08-25",
-          "localizador": "arts. 1897, 1898 y 1899",
+          "localizador": "arts. 1897, 1898, 1899, 1900 y 1915",
           "jurisdicciones_cubiertas": [
             "Argentina"
           ],
@@ -472,11 +472,11 @@
         "nuevo_claim_id": null
       },
       "redaccion_prohibida": "El inquilino jamás puede adquirir la casa por prescripción.",
-      "notas": "REQUIERE_INVESTIGACION. texto_exacto preserva LITERALMENTE la fórmula dogmática obligatoria fijada por el expediente auditado (v1.2, sección 1.2), sustituyendo la formulación absoluta previa. riesgo_asesoria: medio — un lector podría evaluar si SU arrendamiento concreto usucape. Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente."
+      "notas": "REQUIERE_INVESTIGACION. Corrección jurídica v1: localizadores corregidos por país (México: interversión Arts. 826-827 + usucapión Arts. 1139, 1151-1152; España: Arts. 436, 447, 1940-1942, 1948; Argentina: Arts. 1897-1900 y 1915). La fuente de Quintana Roo se separó en un source_id propio (SRC-P01-MX-QROO-03, arts. 1781 y 1836-1839) distinto del usado en el claim 5 (SRC-P01-MX-QROO-01, posesión general) porque cubre un conjunto de artículos distinto — no se agrupan normas distintas bajo una misma fuente. Se retira la tesis 2014491 de este claim (queda exclusivamente en el claim 5, donde se trata con el detalle que requiere). riesgo_asesoria: medio — un lector podría evaluar si SU arrendamiento concreto usucape. Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente."
     },
     {
       "claim_id": "pieza-01-claim-5",
-      "texto_exacto": "En Quintana Roo, la posesión y la posesión derivada están reguladas expresamente en el Código Civil estatal (Libro Cuarto, Título III), y la jurisprudencia de circuito confirma que el detentador o poseedor derivado carece de justo título para usucapir.",
+      "texto_exacto": "En Quintana Roo, el Código Civil estatal regula la posesión originaria y derivada, exige poseer en concepto de propietario para usucapir y obliga a probar la causa del cambio cuando inicialmente se poseía a nombre ajeno. Una tesis aislada emitida en 2017 por el Primer Tribunal Colegiado del Vigésimo Séptimo Circuito sostuvo que el simple detentador o poseedor derivado no cuenta, por esa sola calidad, con justo título para adquirir mediante usucapión.",
       "ubicacion": "descripcion_tema",
       "tipo": "dato",
       "alcance": "CAPA_C_NACIONAL",
@@ -491,12 +491,12 @@
         {
           "id": "SRC-P01-MX-QROO-01",
           "tipo_fuente": "AUTORIDAD_PUBLICA_OFICIAL",
-          "titulo": "Código Civil para el Estado de Quintana Roo — arts. 1779, 1780, 1789, 1796, 1797 (posesión, posesión derivada, presunciones); portal congresoqroo.gob.mx resuelve solo a la entrada genérica del registro (AUTORIDAD_PUBLICA_OFICIAL), nunca a NORMA_OFICIAL",
+          "titulo": "Código Civil para el Estado de Quintana Roo — arts. 1779, 1781 (posesión originaria/derivada — corregido: la posesión derivada está en el art. 1781, no en el 1780), 1789, 1796, 1797 (presunciones posesorias) y 1836-1839 (requisitos de la usucapión); portal congresoqroo.gob.mx resuelve solo a la entrada genérica del registro (AUTORIDAD_PUBLICA_OFICIAL), nunca a NORMA_OFICIAL",
           "organismo_autor": "Gobierno de México (portal genérico gob.mx)",
-          "url": "http://documentos.congresoqroo.gob.mx/leyes/L1720230425-47.pdf",
+          "url": "https://documentos.congresoqroo.gob.mx/codigos/C2-XVIII-23062026-20260724T145357-C1820260616258.pdf",
           "identificador_bibliografico": null,
           "fecha_consulta": "2026-08-25",
-          "localizador": "arts. 1779, 1780, 1789, 1796 y 1797",
+          "localizador": "arts. 1779, 1781, 1789, 1796, 1797, 1836, 1837, 1838 y 1839",
           "jurisdicciones_cubiertas": [
             "México"
           ],
@@ -506,17 +506,17 @@
             "vigencia_comprobada": false,
             "fecha_comprobacion": null,
             "metodo_o_evidencia": null,
-            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Localizador y extracto de texto tomados del expediente externo auditado (legalmente-piloto-evidencia-primaria-v1.2.md + legalmente-piloto-fuentes-primarias-v1.zip, producido por otro modelo de IA). El manifest de ese expediente autoafirma origen_oficial_confirmado/texto_exacto_consultado/vigencia_comprobada = true y resultado SUFICIENTE — por regla de gobernanza de este repositorio (source-policy.md: 'nunca aceptar como fuente otro contenido generado por IA'; CLAUDE.md: 'ninguna IA es fuente jurídica') esa autoconfirmación NO se traslada aquí. Los extractos del ZIP (687-6215 bytes) son fragmentos de artículos concretos, no el documento legal completo, pese a que 44/45 entradas del manifest declaran documento_completo=true — inconsistencia detectada en auditoría y NO heredada. congresoqroo.gob.mx no tiene entrada propia en el registro oficial — resuelve por subdominio genérico *.gob.mx (gob-mx-generico), que solo permite AUTORIDAD_PUBLICA_OFICIAL, aunque el organismo real (H. Congreso del Estado de Quintana Roo) sea legislativo. Techo Nivel 2 aunque el resto se verificara."
+            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. congresoqroo.gob.mx no tiene entrada propia en el registro oficial — resuelve por subdominio genérico *.gob.mx (gob-mx-generico), que solo permite AUTORIDAD_PUBLICA_OFICIAL, aunque el organismo real (H. Congreso del Estado de Quintana Roo) sea legislativo. Techo Nivel 2 aunque el resto se verificara. Corrección jurídica v1: URL actualizada a la versión oficial vigente consultada (https://documentos.congresoqroo.gob.mx/codigos/C2-XVIII-23062026-20260724T145357-C1820260616258.pdf), referenciada desde la página oficial de códigos del Congreso de Quintana Roo (https://www.congresoqroo.gob.mx/codigos/2). Corrección jurídica v1: localizador corregido — la posesión derivada está en el art. 1781, no en el 1780 (que se retira de la lista); se añaden los arts. 1836-1839 sobre requisitos de la usucapión."
           },
           "registro_oficial_id": "gob-mx-generico"
         },
         {
           "id": "SRC-P01-MX-QROO-02",
           "tipo_fuente": "JURISPRUDENCIA_OFICIAL",
-          "titulo": "Tesis Aislada XXVII.1o.4 C (10a.), Registro digital 2014491 — el poseedor derivado carece de justo título para usucapir (publicada en el Semanario Judicial de la Federación, pero EMITIDA por un Tribunal Colegiado de Circuito, no por la SCJN misma)",
+          "titulo": "Tesis AISLADA XXVII.1o.4 C (10a.), Registro digital 2014491, emitida en 2017 — el simple detentador o poseedor derivado carece de justo título para usucapir por esa sola calidad. Órgano emisor: Primer Tribunal Colegiado del Vigésimo Séptimo Circuito. Plataforma oficial de publicación: Suprema Corte de Justicia de la Nación / Buscador Jurídico (bj.scjn.gob.mx) — NO se trata de jurisprudencia obligatoria, es una tesis aislada de un tribunal colegiado de circuito.",
           "organismo_autor": "Primer Tribunal Colegiado del Vigésimo Séptimo Circuito",
           "url": null,
-          "identificador_bibliografico": "Referencia de localización (deliberadamente NO declarada como 'url' del esquema): https://sjf2.scjn.gob.mx/detalle/tesis/2014491",
+          "identificador_bibliografico": "Referencia de localización (deliberadamente NO declarada como 'url' del esquema): https://bj.scjn.gob.mx/api/v1/bj/documento/tesis/2014491",
           "fecha_consulta": "2026-08-25",
           "localizador": "Tesis XXVII.1o.4 C (10a.), Registro 2014491",
           "jurisdicciones_cubiertas": [
@@ -528,7 +528,7 @@
             "vigencia_comprobada": false,
             "fecha_comprobacion": null,
             "metodo_o_evidencia": null,
-            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Localizador y extracto de texto tomados del expediente externo auditado (legalmente-piloto-evidencia-primaria-v1.2.md + legalmente-piloto-fuentes-primarias-v1.zip, producido por otro modelo de IA). El manifest de ese expediente autoafirma origen_oficial_confirmado/texto_exacto_consultado/vigencia_comprobada = true y resultado SUFICIENTE — por regla de gobernanza de este repositorio (source-policy.md: 'nunca aceptar como fuente otro contenido generado por IA'; CLAUDE.md: 'ninguna IA es fuente jurídica') esa autoconfirmación NO se traslada aquí. Los extractos del ZIP (687-6215 bytes) son fragmentos de artículos concretos, no el documento legal completo, pese a que 44/45 entradas del manifest declaran documento_completo=true — inconsistencia detectada en auditoría y NO heredada. HALLAZGO DE AUDITORÍA: sjf2.scjn.gob.mx resuelve, por subdominio, a la entrada 'scjn-gob-mx' del registro, pero cuyo único organismo reconocido es la SCJN — y el organismo real que EMITIÓ esta tesis es un Tribunal Colegiado de Circuito, un órgano distinto (aunque publicado en el mismo sistema SJF). Declarar registro_oficial_id='scjn-gob-mx' con este organismo real produciría un [ERROR ESTRUCTURAL] correcto por incoherencia; en vez de falsear el organismo a 'SCJN' para evitarlo, se deja la URL fuera del campo 'url' del esquema (solo como referencia en identificador_bibliografico) — la fuente nunca podrá alcanzar Nivel 1 así, que es exactamente el techo honesto que le corresponde."
+            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. HALLAZGO DE AUDITORÍA: bj.scjn.gob.mx (Buscador Jurídico de la SCJN, la PLATAFORMA que publica la tesis) resuelve por subdominio a la entrada 'scjn-gob-mx' del registro, cuyo único organismo reconocido es la SCJN — pero el ÓRGANO EMISOR real de esta tesis es un Tribunal Colegiado de Circuito, un órgano distinto de la SCJN (aunque la SCJN es quien publica/aloja la tesis en el sistema del Semanario Judicial de la Federación). Declarar registro_oficial_id='scjn-gob-mx' con este organismo real produciría un [ERROR ESTRUCTURAL] correcto por incoherencia; en vez de falsear el organismo a 'SCJN' para evitarlo, se deja la URL fuera del campo 'url' del esquema (solo como referencia en identificador_bibliografico) — la fuente nunca podrá alcanzar Nivel 1 así, que es exactamente el techo honesto que le corresponde. Corrección jurídica v1: identificada explícitamente como TESIS AISLADA (no jurisprudencia obligatoria), con año de emisión (2017) y distinción expresa entre órgano emisor y plataforma de publicación."
           },
           "registro_oficial_id": null
         }
@@ -565,7 +565,7 @@
         "nuevo_claim_id": null
       },
       "redaccion_prohibida": null,
-      "notas": "REQUIERE_INVESTIGACION. Aplica específicamente a Quintana Roo (un estado), no a México en general — se marca jurisdiccion='México' con esta aclaración explícita para no universalizar una regla estatal como si fuera nacional. Ambas fuentes con registro_oficial_id=null por auditoría (ver notas de cada fuente); ninguna verificada de forma independiente."
+      "notas": "REQUIERE_INVESTIGACION. Corrección jurídica v1: localizador de posesión derivada corregido (art. 1781, no 1780); se añaden los arts. 1836-1839 sobre usucapión; la tesis 2014491 se identifica explícitamente como TESIS AISLADA (no jurisprudencia obligatoria), con año 2017, distinguiendo el órgano emisor (Primer Tribunal Colegiado del Vigésimo Séptimo Circuito) de la plataforma oficial de publicación (SCJN / Buscador Jurídico). Aplica específicamente a Quintana Roo (un estado), no a México en general. Ambas fuentes con registro_oficial_id null o de techo Nivel 2 por auditoría (ver notas de cada fuente); ninguna verificada de forma independiente."
     }
   ],
   "estado_agregado": "REQUIERE_INVESTIGACION",
