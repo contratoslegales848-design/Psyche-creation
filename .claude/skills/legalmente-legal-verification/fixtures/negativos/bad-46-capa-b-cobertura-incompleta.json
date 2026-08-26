@@ -1,0 +1,124 @@
+{
+  "schema_version": "4.0",
+  "piece_id": "neg",
+  "claims": [
+    {
+      "claim_id": "c1",
+      "texto_exacto": "Capa B con México, España y Argentina — México y España tienen fuente Nivel 1, Argentina solo Nivel 2 (sin registro_oficial_id) — el claim declara APTO_PARA_NARRATIVA de todos modos.",
+      "ubicacion": "titulo",
+      "tipo": "definicion",
+      "alcance": "CAPA_B_VARIABLE",
+      "jurisdiccion": [
+        "México",
+        "España",
+        "Argentina"
+      ],
+      "nucleo_transversal": null,
+      "variaciones_materiales": "Variación sintética entre los tres países, solo para esta prueba negativa.",
+      "jurisdicciones_revisadas": null,
+      "diferencias_buscadas": null,
+      "contraejemplos_encontrados": null,
+      "justificacion_suficiencia_comparada": null,
+      "fuentes": [
+        {
+          "id": "f-mx",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Fuente sintética México — Nivel 1",
+          "organismo_autor": "Congreso de la Unión (México)",
+          "url": "https://www.diputados.gob.mx/x",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-08-25",
+          "localizador": "art. sintético 1",
+          "jurisdicciones_cubiertas": ["México"],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": true,
+            "texto_exacto_consultado": true,
+            "vigencia_comprobada": true,
+            "fecha_comprobacion": "2026-08-25",
+            "metodo_o_evidencia": "Fixture negativo — no es una verificación jurídica real.",
+            "observaciones": null
+          },
+          "registro_oficial_id": "diputados-gob-mx"
+        },
+        {
+          "id": "f-es",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Fuente sintética España — Nivel 1",
+          "organismo_autor": "Agencia Estatal BOE",
+          "url": "https://www.boe.es/x",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-08-25",
+          "localizador": "art. sintético 2",
+          "jurisdicciones_cubiertas": ["España"],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": true,
+            "texto_exacto_consultado": true,
+            "vigencia_comprobada": true,
+            "fecha_comprobacion": "2026-08-25",
+            "metodo_o_evidencia": "Fixture negativo — no es una verificación jurídica real.",
+            "observaciones": null
+          },
+          "registro_oficial_id": "boe-es"
+        },
+        {
+          "id": "f-ar",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Fuente sintética Argentina — consultada directamente pero sin registro oficial (Nivel 2)",
+          "organismo_autor": "InfoLEG",
+          "url": "https://www.argentina.gob.ar/normativa/x",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-08-25",
+          "localizador": "art. sintético 3",
+          "jurisdicciones_cubiertas": ["Argentina"],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": true,
+            "texto_exacto_consultado": true,
+            "vigencia_comprobada": true,
+            "fecha_comprobacion": "2026-08-25",
+            "metodo_o_evidencia": "Fixture negativo — no es una verificación jurídica real.",
+            "observaciones": "argentina.gob.ar NO tiene entrada propia en el registro oficial cerrado — 'registro_oficial_id' se deja intencionalmente en null. Esta fuente NUNCA debe poder alcanzar Nivel 1 pese a sus tres booleanos en true."
+          },
+          "registro_oficial_id": null
+        }
+      ],
+      "confianza": "media",
+      "riesgo_falsa_universalizacion": "alto",
+      "riesgo_asesoria": "ninguno",
+      "platform_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "confidentiality_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "estado": "APTO_PARA_NARRATIVA",
+      "revision_humana": {
+        "estado": "PENDIENTE",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null,
+        "contenido_hash_sha256": null
+      },
+      "gate_arte": "CERRADO",
+      "reformulacion_propuesta": {
+        "texto": null,
+        "verificada": false,
+        "nuevo_claim_id": null
+      },
+      "redaccion_prohibida": null,
+      "notas": "NEGATIVO (Fase 1E): CAPA_B_VARIABLE con tres países declarados — México y España alcanzan Nivel 1, Argentina solo Nivel 2 (sin registro_oficial_id, pese a booleanos en true). El claim declara igualmente 'APTO_PARA_NARRATIVA', que debe rechazarse: el techo real es 'APTO_CON_MATICES' (el mínimo entre los tres países, no el máximo de cualquier fuente suelta). Antes de la Fase 1E, este mismo paquete pasaba la validación — era el Bypass E (cobertura multijurisdiccional incompleta en Capa B)."
+    }
+  ],
+  "estado_agregado": "APTO_PARA_NARRATIVA",
+  "revisiones_pendientes": [
+    "c1"
+  ],
+  "gate_global_arte": "CERRADO"
+}
