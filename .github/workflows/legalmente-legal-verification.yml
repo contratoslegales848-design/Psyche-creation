@@ -59,6 +59,10 @@ jobs:
         working-directory: .claude/skills/legalmente-legal-verification/scripts
         run: python3 -m unittest test_validate_claim_packet -v
 
+      - name: Pruebas unitarias del control de gobernanza del piloto (unittest)
+        working-directory: .claude/skills/legalmente-legal-verification/scripts
+        run: python3 -m unittest test_check_pilot_governance -v
+
       - name: Fixtures positivos deben validar (exit 0)
         run: |
           set -e
@@ -92,6 +96,33 @@ jobs:
           for f in "${files[@]}"; do
             if python3 scripts/validate-claim-packet.py "$f" >/dev/null 2>&1; then
               echo "FALLÓ (debía ser exit distinto de 0, fue aceptado): $f"
+              fail=1
+            fi
+          done
+          exit $fail
+
+      - name: Paquetes reales del piloto deben existir, validar y mantener el gate cerrado
+        run: |
+          set -e
+          REQUIRED=("pilot/claim-packets/pieza-01-reales.json" "pilot/claim-packets/pieza-02-laboral.json" "pilot/claim-packets/pieza-03-honor.json")
+          fail=0
+          for f in "${REQUIRED[@]}"; do
+            if [ ! -f "$f" ]; then
+              echo "FALTA el paquete obligatorio del piloto: $f"
+              fail=1
+            fi
+          done
+          if [ "$fail" -ne 0 ]; then
+            exit 1
+          fi
+          echo "Los 3 paquetes obligatorios del piloto están presentes."
+          for f in "${REQUIRED[@]}"; do
+            echo "--- $f ---"
+            if ! python3 scripts/validate-claim-packet.py "$f"; then
+              echo "FALLÓ (error estructural, gate simulado o aprobación inválida): $f"
+              fail=1
+            fi
+            if ! python3 scripts/check_pilot_governance.py "$f"; then
               fail=1
             fi
           done
