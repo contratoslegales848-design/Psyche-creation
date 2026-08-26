@@ -56,6 +56,39 @@ class TestCheckPilotGovernance(unittest.TestCase):
         problems = check_pilot_governance(piece)
         self.assertTrue(any("gate_arte" in p for p in problems))
 
+    def test_revision_humana_aprobada_con_firma_completa_y_gates_cerrados_aceptada(self):
+        piece = copy.deepcopy(BASE_PIECE)
+        piece["claims"][0]["revision_humana"] = {
+            "estado": "APROBADO",
+            "revisor": "Raymundo Acevedo",
+            "fecha": "2026-08-26",
+            "contenido_hash_sha256": "a" * 64,
+        }
+        self.assertEqual(check_pilot_governance(piece), [])
+
+    def test_revision_humana_aprobada_con_gate_arte_abierto_rechazada(self):
+        piece = copy.deepcopy(BASE_PIECE)
+        piece["claims"][0]["revision_humana"] = {
+            "estado": "APROBADO",
+            "revisor": "Raymundo Acevedo",
+            "fecha": "2026-08-26",
+            "contenido_hash_sha256": "a" * 64,
+        }
+        piece["claims"][0]["gate_arte"] = "ABIERTO"
+        problems = check_pilot_governance(piece)
+        self.assertTrue(any("gate_arte" in p for p in problems))
+
+    def test_revision_humana_aprobada_sin_hash_valido_rechazada(self):
+        piece = copy.deepcopy(BASE_PIECE)
+        piece["claims"][0]["revision_humana"] = {
+            "estado": "APROBADO",
+            "revisor": "Raymundo Acevedo",
+            "fecha": "2026-08-26",
+            "contenido_hash_sha256": "no-es-un-hash-hex",
+        }
+        problems = check_pilot_governance(piece)
+        self.assertTrue(any("contenido_hash_sha256" in p for p in problems))
+
     def test_cli_exit_0_para_pieza_conforme(self):
         with tempfile.TemporaryDirectory() as tmp:
             path = Path(tmp) / "pieza.json"

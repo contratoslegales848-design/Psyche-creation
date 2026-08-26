@@ -106,11 +106,11 @@
       },
       "estado": "APTO_CON_MATICES",
       "revision_humana": {
-        "estado": "PENDIENTE",
-        "revisor": null,
-        "fecha": null,
-        "observaciones": null,
-        "contenido_hash_sha256": null
+        "estado": "APROBADO",
+        "revisor": "Raymundo Acevedo",
+        "fecha": "2026-08-26",
+        "observaciones": "Aprobado para NARRATIVA únicamente. No autoriza arte ni publicación. Decisión: Apruebo Pieza 1 claims 1, 2 y 4 para narrativa. El claim 3 no entra en esta pieza (Capa C México; pieza aparte si se usa). No abro arte ni publicación.",
+        "contenido_hash_sha256": "33bbd829bf42527a5d492838a568accb614829183f9f06dc9d52361d8ab5c8a5"
       },
       "gate_arte": "CERRADO",
       "reformulacion_propuesta": {
@@ -225,11 +225,11 @@
       },
       "estado": "APTO_CON_MATICES",
       "revision_humana": {
-        "estado": "PENDIENTE",
-        "revisor": null,
-        "fecha": null,
-        "observaciones": null,
-        "contenido_hash_sha256": null
+        "estado": "APROBADO",
+        "revisor": "Raymundo Acevedo",
+        "fecha": "2026-08-26",
+        "observaciones": "Aprobado para NARRATIVA únicamente. No autoriza arte ni publicación. Decisión: Apruebo Pieza 1 claims 1, 2 y 4 para narrativa. El claim 3 no entra en esta pieza (Capa C México; pieza aparte si se usa). No abro arte ni publicación.",
+        "contenido_hash_sha256": "91733c285bc1b7e41ae07592d9ce8fb2a5956e7305c0e085988fae459bfe7c5e"
       },
       "gate_arte": "CERRADO",
       "reformulacion_propuesta": {
@@ -239,99 +239,6 @@
       },
       "redaccion_prohibida": null,
       "notas": "REQUIERE_INVESTIGACION. Corrección jurídica v1: se precisa que México no usa el art. 1 CCF como fuente de este claim (ese artículo sustenta el claim 3, sobre ámbito federal, no la terminología posesoria); se amplía la fuente argentina a los arts. 1908-1910. Ninguna fuente verificada de forma independiente. Integración de evidencia externa v1 (auditoría Codex, 2026-08-26): tras actualizar los metadatos de verificación de las fuentes citadas, el techo real calculado por el validador para este claim es 'APTO_PARA_NARRATIVA' (antes 'REQUIERE_INVESTIGACION') — se declara ese techo exactamente, sin elevarlo ni suprimirlo manualmente. Esto NO constituye aprobación jurídica humana: revision_humana.estado permanece PENDIENTE y gate_arte permanece CERRADO. Informe externo: legalmente-pieza-01-verificacion-externa-codex-v1.md (SHA-256 cc37d295835701fd0dfa90fcc43c2aa571a77ce86574a6d033f455274c25e21f). Alineación con el validador corregido (Fase 1E, 2026-08-26): tras cerrar el bypass de cobertura multijurisdiccional en CAPA_B_VARIABLE (PR #8), el techo real de este claim es 'APTO_CON_MATICES', no 'APTO_PARA_NARRATIVA' — la fuente de Argentina sigue en Nivel 2 (sin registro_oficial_id), y el techo ahora es el mínimo entre los tres países declarados, no el máximo de cualquier fuente suelta. No se modificó ningún texto, artículo, localizador, URL ni booleano de verificación — solo el 'estado' declarado y los campos agregados derivados de él. Esto no constituye aprobación jurídica humana: revision_humana.estado permanece PENDIENTE y gate_arte permanece CERRADO."
-    },
-    {
-      "claim_id": "pieza-01-claim-3",
-      "texto_exacto": "En México, el Código Civil Federal rige los asuntos del orden federal. En las materias civiles de competencia local se aplica, por regla general, la legislación civil de la entidad federativa correspondiente, sin perjuicio de las reglas de competencia, conflicto de leyes y demás excepciones aplicables al caso.",
-      "ubicacion": "caption",
-      "tipo": "regla",
-      "alcance": "CAPA_C_NACIONAL",
-      "jurisdiccion": "México",
-      "nucleo_transversal": null,
-      "variaciones_materiales": null,
-      "jurisdicciones_revisadas": null,
-      "diferencias_buscadas": null,
-      "contraejemplos_encontrados": null,
-      "justificacion_suficiencia_comparada": null,
-      "fuentes": [
-        {
-          "id": "SRC-P01-MX-FED-01",
-          "tipo_fuente": "NORMA_OFICIAL",
-          "titulo": "Código Civil Federal (México) — art. 1 (ámbito federal)",
-          "organismo_autor": "H. Cámara de Diputados",
-          "url": "https://www.diputados.gob.mx/LeyesBiblio/pdf/CCF.pdf",
-          "identificador_bibliografico": null,
-          "fecha_consulta": "2026-08-25",
-          "localizador": "art. 1",
-          "jurisdicciones_cubiertas": [
-            "México"
-          ],
-          "verificacion_fuente": {
-            "origen_oficial_confirmado": false,
-            "texto_exacto_consultado": false,
-            "vigencia_comprobada": false,
-            "fecha_comprobacion": null,
-            "metodo_o_evidencia": null,
-            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Localizador y extracto de texto tomados del expediente externo auditado (legalmente-piloto-evidencia-primaria-v1.2.md + legalmente-piloto-fuentes-primarias-v1.zip, producido por otro modelo de IA). El manifest de ese expediente autoafirma origen_oficial_confirmado/texto_exacto_consultado/vigencia_comprobada = true y resultado SUFICIENTE — por regla de gobernanza de este repositorio (source-policy.md: 'nunca aceptar como fuente otro contenido generado por IA'; CLAUDE.md: 'ninguna IA es fuente jurídica') esa autoconfirmación NO se traslada aquí. Los extractos del ZIP (687-6215 bytes) son fragmentos de artículos concretos, no el documento legal completo, pese a que 44/45 entradas del manifest declaran documento_completo=true — inconsistencia detectada en auditoría y NO heredada."
-          },
-          "registro_oficial_id": "diputados-gob-mx"
-        },
-        {
-          "id": "SRC-P01-MX-CPEUM-01",
-          "tipo_fuente": "NORMA_OFICIAL",
-          "titulo": "Constitución Política de los Estados Unidos Mexicanos — art. 124 (facultades reservadas a los Estados)",
-          "organismo_autor": "H. Cámara de Diputados",
-          "url": "https://www.diputados.gob.mx/LeyesBiblio/pdf/CPEUM.pdf",
-          "identificador_bibliografico": null,
-          "fecha_consulta": "2026-08-25",
-          "localizador": "art. 124",
-          "jurisdicciones_cubiertas": [
-            "México"
-          ],
-          "verificacion_fuente": {
-            "origen_oficial_confirmado": true,
-            "texto_exacto_consultado": true,
-            "vigencia_comprobada": true,
-            "fecha_comprobacion": "2026-08-26",
-            "metodo_o_evidencia": "Consulta directa del documento oficial (PDF de diputados.gob.mx). Artículo 124 consultado. Informe externo: legalmente-pieza-01-verificacion-externa-codex-v1.md (SHA-256 cc37d295835701fd0dfa90fcc43c2aa571a77ce86574a6d033f455274c25e21f).",
-            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Fuente añadida en la corrección jurídica v1 para sustentar la reserva de competencias a las entidades federativas junto con el Art. 1 CCF. Integración de evidencia externa v1 (auditoría Codex, 2026-08-26): Fuente (art. 124 CPEUM) consultada directamente contra el PDF oficial de diputados.gob.mx. registro_oficial_id ('diputados-gob-mx') y organismo_autor ya coincidían con el registro cerrado. Informe externo de procedencia: legalmente-pieza-01-verificacion-externa-codex-v1.md (SHA-256 cc37d295835701fd0dfa90fcc43c2aa571a77ce86574a6d033f455274c25e21f), registrado en pilot/ como evidencia de auditoría — no sustituye a la norma o resolución oficial, que sigue siendo la fuente jurídica."
-          },
-          "registro_oficial_id": "diputados-gob-mx"
-        }
-      ],
-      "confianza": "media",
-      "riesgo_falsa_universalizacion": "alto",
-      "riesgo_asesoria": "medio",
-      "platform_review": {
-        "required": false,
-        "status": "NO_APLICA",
-        "revisor": null,
-        "fecha": null,
-        "observaciones": null
-      },
-      "confidentiality_review": {
-        "required": false,
-        "status": "NO_APLICA",
-        "revisor": null,
-        "fecha": null,
-        "observaciones": null
-      },
-      "estado": "APTO_PARA_NARRATIVA",
-      "revision_humana": {
-        "estado": "PENDIENTE",
-        "revisor": null,
-        "fecha": null,
-        "observaciones": null,
-        "contenido_hash_sha256": null
-      },
-      "gate_arte": "CERRADO",
-      "reformulacion_propuesta": {
-        "texto": null,
-        "verificada": false,
-        "nuevo_claim_id": null
-      },
-      "redaccion_prohibida": "El Código Civil Federal de México rige cualquier contrato en cualquier estado o sustituye automáticamente los códigos civiles estatales.",
-      "notas": "REQUIERE_INVESTIGACION. Corrección jurídica v1: se matiza que la aplicación de la legislación civil local es 'por regla general', sin perjuicio de reglas de competencia y conflicto de leyes, y se añade el Art. 124 CPEUM (reserva de facultades a los Estados) junto al Art. 1 CCF. redaccion_prohibida actualizada a la formulación exacta de la revisión jurídica. Ninguna fuente verificada de forma independiente. Integración de evidencia externa v1 (auditoría Codex, 2026-08-26): tras actualizar los metadatos de verificación de las fuentes citadas, el techo real calculado por el validador para este claim es 'APTO_PARA_NARRATIVA' (antes 'REQUIERE_INVESTIGACION') — se declara ese techo exactamente, sin elevarlo ni suprimirlo manualmente. Esto NO constituye aprobación jurídica humana: revision_humana.estado permanece PENDIENTE y gate_arte permanece CERRADO. Informe externo: legalmente-pieza-01-verificacion-externa-codex-v1.md (SHA-256 cc37d295835701fd0dfa90fcc43c2aa571a77ce86574a6d033f455274c25e21f)."
     },
     {
       "claim_id": "pieza-01-claim-4",
@@ -459,11 +366,11 @@
       },
       "estado": "APTO_CON_MATICES",
       "revision_humana": {
-        "estado": "PENDIENTE",
-        "revisor": null,
-        "fecha": null,
-        "observaciones": null,
-        "contenido_hash_sha256": null
+        "estado": "APROBADO",
+        "revisor": "Raymundo Acevedo",
+        "fecha": "2026-08-26",
+        "observaciones": "Aprobado para NARRATIVA únicamente. No autoriza arte ni publicación. Decisión: Apruebo Pieza 1 claims 1, 2 y 4 para narrativa. El claim 3 no entra en esta pieza (Capa C México; pieza aparte si se usa). No abro arte ni publicación.",
+        "contenido_hash_sha256": "9ab45a9fada3e6fd863d6dc80001c6f2089cb36b445959a2691073cfc10f1f09"
       },
       "gate_arte": "CERRADO",
       "reformulacion_propuesta": {
@@ -479,7 +386,6 @@
   "revisiones_pendientes": [
     "pieza-01-claim-1",
     "pieza-01-claim-2",
-    "pieza-01-claim-3",
     "pieza-01-claim-4"
   ],
   "gate_global_arte": "CERRADO"

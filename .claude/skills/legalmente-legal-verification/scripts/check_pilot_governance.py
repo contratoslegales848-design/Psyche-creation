@@ -2,19 +2,28 @@
 """Control de gobernanza para los paquetes reales del piloto (no fixtures).
 
 Verifica, sobre un claim packet ya estructuralmente válido, que ningún gate
-de arte esté abierto y que ninguna revisión humana esté ya aprobada — el
-piloto debe permanecer con aprobación humana pendiente hasta que un revisor
-real lo apruebe fuera de este script. No sustituye a validate-claim-packet.py
-(que ya calcula gate_arte/gate_global_arte de forma fail-closed): esta
-verificación es una salvaguarda adicional explícita para CI, para que un
-paquete del piloto con el gate abierto por error nunca pase inadvertido.
+de arte esté abierto. La revisión humana de un claim puede estar PENDIENTE
+(el estado por defecto del piloto) o APROBADA, pero una aprobación solo se
+acepta como legítima si está firmada de forma verificable: 'revisor' y
+'fecha' no vacíos y 'contenido_hash_sha256' con 64 caracteres hexadecimales
+— y, en cualquier caso, sin que eso abra ningún gate (gate_arte del claim y
+gate_global_arte de la pieza deben seguir 'CERRADO'; eso ya lo garantiza el
+chequeo incondicional de gates de esta misma función, no la rama de
+APROBADO). No sustituye a validate-claim-packet.py (que ya calcula
+gate_arte/gate_global_arte de forma fail-closed): esta verificación es una
+salvaguarda adicional explícita para CI, para que un paquete del piloto con
+el gate abierto por error, o con una "aprobación" sin firma verificable,
+nunca pase inadvertido.
 
 Uso: python3 check_pilot_governance.py <archivo.json> [<archivo2.json> ...]
 Sale con 0 si todos los archivos cumplen; con 1 si alguno no cumple o no es
 JSON válido.
 """
 import json
+import re
 import sys
+
+HASH_HEX_64 = re.compile(r"^[0-9a-fA-F]{64}$")
 
 
 def check_pilot_governance(piece):
@@ -30,10 +39,29 @@ def check_pilot_governance(piece):
         )
     for claim in piece.get("claims", []):
         claim_id = claim.get("claim_id")
-        estado = claim.get("revision_humana", {}).get("estado")
-        if estado != "PENDIENTE":
+        revision = claim.get("revision_humana") or {}
+        estado = revision.get("estado")
+        if estado == "PENDIENTE":
+            pass
+        elif estado == "APROBADO":
+            if not revision.get("revisor"):
+                problems.append(
+                    f"claim {claim_id!r}: revision_humana.estado='APROBADO' requiere 'revisor' no vacío."
+                )
+            if not revision.get("fecha"):
+                problems.append(
+                    f"claim {claim_id!r}: revision_humana.estado='APROBADO' requiere 'fecha' no vacía."
+                )
+            hash_val = revision.get("contenido_hash_sha256")
+            if not (isinstance(hash_val, str) and HASH_HEX_64.match(hash_val)):
+                problems.append(
+                    f"claim {claim_id!r}: revision_humana.estado='APROBADO' requiere "
+                    "'contenido_hash_sha256' como 64 caracteres hexadecimales."
+                )
+        else:
             problems.append(
-                f"claim {claim_id!r}: revision_humana.estado debe ser 'PENDIENTE' en el piloto, es {estado!r}"
+                f"claim {claim_id!r}: revision_humana.estado debe ser 'PENDIENTE' o 'APROBADO' "
+                f"en el piloto, es {estado!r}"
             )
         if claim.get("gate_arte") != "CERRADO":
             problems.append(
@@ -62,7 +90,7 @@ def main(argv):
                 print(f"  - {p}")
             overall_ok = False
         else:
-            print(f"OK: {path} — schema_version 4.0, revision_humana PENDIENTE y gate CERRADO en todos los claims.")
+            print(f"OK: {path} — schema_version 4.0, revision_humana PENDIENTE o APROBADA con firma verificable, y gate CERRADO en todos los claims.")
     return 0 if overall_ok else 1
 
 
