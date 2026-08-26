@@ -4,7 +4,7 @@
   "claims": [
     {
       "claim_id": "pieza-02-claim-1",
-      "texto_exacto": "'Rescisión' es, en México, un mecanismo específico de la ley laboral (arts. 47 y 51 LFT): cualquiera de las partes puede dar por terminada la relación de trabajo sin responsabilidad si la otra incurre en una causa grave prevista por la ley — no es un sinónimo genérico de 'renuncia' ni de 'despido'.",
+      "texto_exacto": "En México, 'rescisión sin responsabilidad para el patrón' (Art. 47 LFT) y 'rescisión sin responsabilidad para el trabajador' (Arts. 51-52 LFT) son dos mecanismos legales distintos y específicos — ninguno es sinónimo genérico de 'renuncia' ni de 'despido'.",
       "ubicacion": "hook",
       "tipo": "definicion",
       "alcance": "CAPA_C_NACIONAL",
@@ -17,14 +17,14 @@
       "justificacion_suficiencia_comparada": null,
       "fuentes": [
         {
-          "id": "SRC-P02-MX-LFT-01/02/03",
+          "id": "SRC-P02-MX-LFT-01",
           "tipo_fuente": "NORMA_OFICIAL",
-          "titulo": "Ley Federal del Trabajo (México) — rescisión, renuncia y prima de antigüedad",
-          "organismo_autor": "Congreso de la Unión (México)",
+          "titulo": "Ley Federal del Trabajo (México) — art. 47 (rescisión sin responsabilidad para el patrón)",
+          "organismo_autor": "H. Cámara de Diputados",
           "url": "https://www.diputados.gob.mx/LeyesBiblio/pdf/LFT.pdf",
           "identificador_bibliografico": null,
-          "fecha_consulta": "2026-08-26",
-          "localizador": "arts. 47, 48, 50, 51, 52, 53.I y 162.III (candidato de Gemini Spark, sin verificar por mí)",
+          "fecha_consulta": "2026-08-25",
+          "localizador": "art. 47",
           "jurisdicciones_cubiertas": [
             "México"
           ],
@@ -34,7 +34,29 @@
             "vigencia_comprobada": false,
             "fecha_comprobacion": null,
             "metodo_o_evidencia": null,
-            "observaciones": "WebFetch bloqueado por el proxy de red de este entorno (EGRESS_BLOCKED). Probado empíricamente el 2026-08-26 contra www.boe.es, www.diputados.gob.mx, servicios.infoleg.gob.ar, sjf2.scjn.gob.mx, www.corteidh.or.cr, www.funcionpublica.gov.co y www.ordenjuridico.gob.mx — los 7 devolvieron EGRESS_BLOCKED. No fue posible confirmar origen oficial, texto exacto ni vigencia de ninguna fuente de forma independiente en esta sesión. El expediente 'legalmente-piloto-evidencia-primaria-v1.md' (producido por otro modelo de IA, 'Gemini Spark') propuso este source_id, artículo y fragmento con la etiqueta 'CONFIRMADO' y 'vigencia comprobada: Sí' autoatribuidas. Por regla de gobernanza de este repositorio (references/source-policy.md, 'Nunca aceptar como fuente: otro contenido generado por IA'; CLAUDE.md, 'Ninguna IA es fuente jurídica'), esa autoconfirmación de OTRA IA no sustituye la verificación real que exige el esquema — se trata aquí solo como candidato/localizador más preciso que antes, pendiente de verificación humana o de una sesión con acceso de red no bloqueado."
+            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Localizador y extracto de texto tomados del expediente externo auditado (legalmente-piloto-evidencia-primaria-v1.2.md + legalmente-piloto-fuentes-primarias-v1.zip, producido por otro modelo de IA). El manifest de ese expediente autoafirma origen_oficial_confirmado/texto_exacto_consultado/vigencia_comprobada = true y resultado SUFICIENTE — por regla de gobernanza de este repositorio (source-policy.md: 'nunca aceptar como fuente otro contenido generado por IA'; CLAUDE.md: 'ninguna IA es fuente jurídica') esa autoconfirmación NO se traslada aquí. Los extractos del ZIP (687-6215 bytes) son fragmentos de artículos concretos, no el documento legal completo, pese a que 44/45 entradas del manifest declaran documento_completo=true — inconsistencia detectada en auditoría y NO heredada."
+          },
+          "registro_oficial_id": "diputados-gob-mx"
+        },
+        {
+          "id": "SRC-P02-MX-LFT-03",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Ley Federal del Trabajo (México) — arts. 51, 52 (rescisión imputable al patrón / 'despido indirecto')",
+          "organismo_autor": "H. Cámara de Diputados",
+          "url": "https://www.diputados.gob.mx/LeyesBiblio/pdf/LFT.pdf",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-08-25",
+          "localizador": "arts. 51 y 52",
+          "jurisdicciones_cubiertas": [
+            "México"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": false,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": null,
+            "metodo_o_evidencia": null,
+            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Localizador y extracto de texto tomados del expediente externo auditado (legalmente-piloto-evidencia-primaria-v1.2.md + legalmente-piloto-fuentes-primarias-v1.zip, producido por otro modelo de IA). El manifest de ese expediente autoafirma origen_oficial_confirmado/texto_exacto_consultado/vigencia_comprobada = true y resultado SUFICIENTE — por regla de gobernanza de este repositorio (source-policy.md: 'nunca aceptar como fuente otro contenido generado por IA'; CLAUDE.md: 'ninguna IA es fuente jurídica') esa autoconfirmación NO se traslada aquí. Los extractos del ZIP (687-6215 bytes) son fragmentos de artículos concretos, no el documento legal completo, pese a que 44/45 entradas del manifest declaran documento_completo=true — inconsistencia detectada en auditoría y NO heredada."
           },
           "registro_oficial_id": "diputados-gob-mx"
         }
@@ -71,11 +93,175 @@
         "nuevo_claim_id": null
       },
       "redaccion_prohibida": null,
-      "notas": "REQUIERE_INVESTIGACION. Localizador más preciso que la versión anterior (arts. 47 y 51, no solo uno de los dos), propuesto por el expediente de Gemini Spark, pero sin verificación independiente: WebFetch a diputados.gob.mx bloqueado. riesgo_asesoria: medio, igual que antes."
+      "notas": "REQUIERE_INVESTIGACION. Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. riesgo_asesoria: medio (un lector podría evaluar su propio caso de rescisión)."
     },
     {
       "claim_id": "pieza-02-claim-2",
-      "texto_exacto": "En España, la extinción del contrato por causa grave imputable al empleador (Art. 50 ET) exige, como regla general, una sentencia judicial previa antes de que el trabajador deje el puesto — pero el Tribunal Supremo reconoce excepciones consolidadas ante situaciones de extrema gravedad (acoso, impago salarial severo) que permiten el cese anticipado sin perder la indemnización.",
+      "texto_exacto": "Ante despido injustificado en México, el trabajador puede optar entre reinstalación o indemnización constitucional de 3 meses, más salarios vencidos (topados a 12 meses) y, en los supuestos del Art. 50 LFT, 20 días de salario por año de servicio.",
+      "ubicacion": "lista",
+      "tipo": "regla",
+      "alcance": "CAPA_C_NACIONAL",
+      "jurisdiccion": "México",
+      "nucleo_transversal": null,
+      "variaciones_materiales": null,
+      "jurisdicciones_revisadas": null,
+      "diferencias_buscadas": null,
+      "contraejemplos_encontrados": null,
+      "justificacion_suficiencia_comparada": null,
+      "fuentes": [
+        {
+          "id": "SRC-P02-MX-LFT-02",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Ley Federal del Trabajo (México) — arts. 48, 50 (reinstalación/indemnización por despido injustificado)",
+          "organismo_autor": "H. Cámara de Diputados",
+          "url": "https://www.diputados.gob.mx/LeyesBiblio/pdf/LFT.pdf",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-08-25",
+          "localizador": "arts. 48 y 50",
+          "jurisdicciones_cubiertas": [
+            "México"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": false,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": null,
+            "metodo_o_evidencia": null,
+            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Localizador y extracto de texto tomados del expediente externo auditado (legalmente-piloto-evidencia-primaria-v1.2.md + legalmente-piloto-fuentes-primarias-v1.zip, producido por otro modelo de IA). El manifest de ese expediente autoafirma origen_oficial_confirmado/texto_exacto_consultado/vigencia_comprobada = true y resultado SUFICIENTE — por regla de gobernanza de este repositorio (source-policy.md: 'nunca aceptar como fuente otro contenido generado por IA'; CLAUDE.md: 'ninguna IA es fuente jurídica') esa autoconfirmación NO se traslada aquí. Los extractos del ZIP (687-6215 bytes) son fragmentos de artículos concretos, no el documento legal completo, pese a que 44/45 entradas del manifest declaran documento_completo=true — inconsistencia detectada en auditoría y NO heredada."
+          },
+          "registro_oficial_id": "diputados-gob-mx"
+        },
+        {
+          "id": "SRC-P02-MX-LFT-05",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Ley Federal del Trabajo (México) — art. 162, fracción III (prima de antigüedad, 15 años en renuncia voluntaria)",
+          "organismo_autor": "H. Cámara de Diputados",
+          "url": "https://www.diputados.gob.mx/LeyesBiblio/pdf/LFT.pdf",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-08-25",
+          "localizador": "art. 162, fracción III",
+          "jurisdicciones_cubiertas": [
+            "México"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": false,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": null,
+            "metodo_o_evidencia": null,
+            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Localizador y extracto de texto tomados del expediente externo auditado (legalmente-piloto-evidencia-primaria-v1.2.md + legalmente-piloto-fuentes-primarias-v1.zip, producido por otro modelo de IA). El manifest de ese expediente autoafirma origen_oficial_confirmado/texto_exacto_consultado/vigencia_comprobada = true y resultado SUFICIENTE — por regla de gobernanza de este repositorio (source-policy.md: 'nunca aceptar como fuente otro contenido generado por IA'; CLAUDE.md: 'ninguna IA es fuente jurídica') esa autoconfirmación NO se traslada aquí. Los extractos del ZIP (687-6215 bytes) son fragmentos de artículos concretos, no el documento legal completo, pese a que 44/45 entradas del manifest declaran documento_completo=true — inconsistencia detectada en auditoría y NO heredada."
+          },
+          "registro_oficial_id": "diputados-gob-mx"
+        }
+      ],
+      "confianza": "media",
+      "riesgo_falsa_universalizacion": "medio",
+      "riesgo_asesoria": "medio",
+      "platform_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "confidentiality_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "estado": "REQUIERE_INVESTIGACION",
+      "revision_humana": {
+        "estado": "PENDIENTE",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null,
+        "contenido_hash_sha256": null
+      },
+      "gate_arte": "CERRADO",
+      "reformulacion_propuesta": {
+        "texto": null,
+        "verificada": false,
+        "nuevo_claim_id": null
+      },
+      "redaccion_prohibida": null,
+      "notas": "REQUIERE_INVESTIGACION. Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente."
+    },
+    {
+      "claim_id": "pieza-02-claim-3",
+      "texto_exacto": "El Art. 53, fracción I de la LFT regula el mutuo consentimiento entre las partes; no es el fundamento legal directo de la renuncia unilateral del trabajador, cuyo sustento está en la libertad de trabajo (Art. 5° CPEUM) — la renuncia solo converge con el 53.I cuando se formaliza como acuerdo liquidado entre ambas partes.",
+      "ubicacion": "caption",
+      "tipo": "regla",
+      "alcance": "CAPA_C_NACIONAL",
+      "jurisdiccion": "México",
+      "nucleo_transversal": null,
+      "variaciones_materiales": null,
+      "jurisdicciones_revisadas": null,
+      "diferencias_buscadas": null,
+      "contraejemplos_encontrados": null,
+      "justificacion_suficiencia_comparada": null,
+      "fuentes": [
+        {
+          "id": "SRC-P02-MX-LFT-04",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Ley Federal del Trabajo (México) — art. 53, fracción I (mutuo consentimiento como causa de terminación)",
+          "organismo_autor": "H. Cámara de Diputados",
+          "url": "https://www.diputados.gob.mx/LeyesBiblio/pdf/LFT.pdf",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-08-25",
+          "localizador": "art. 53, fracción I",
+          "jurisdicciones_cubiertas": [
+            "México"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": false,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": null,
+            "metodo_o_evidencia": null,
+            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Localizador y extracto de texto tomados del expediente externo auditado (legalmente-piloto-evidencia-primaria-v1.2.md + legalmente-piloto-fuentes-primarias-v1.zip, producido por otro modelo de IA). El manifest de ese expediente autoafirma origen_oficial_confirmado/texto_exacto_consultado/vigencia_comprobada = true y resultado SUFICIENTE — por regla de gobernanza de este repositorio (source-policy.md: 'nunca aceptar como fuente otro contenido generado por IA'; CLAUDE.md: 'ninguna IA es fuente jurídica') esa autoconfirmación NO se traslada aquí. Los extractos del ZIP (687-6215 bytes) son fragmentos de artículos concretos, no el documento legal completo, pese a que 44/45 entradas del manifest declaran documento_completo=true — inconsistencia detectada en auditoría y NO heredada."
+          },
+          "registro_oficial_id": "diputados-gob-mx"
+        }
+      ],
+      "confianza": "media",
+      "riesgo_falsa_universalizacion": "alto",
+      "riesgo_asesoria": "medio",
+      "platform_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "confidentiality_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "estado": "REQUIERE_INVESTIGACION",
+      "revision_humana": {
+        "estado": "PENDIENTE",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null,
+        "contenido_hash_sha256": null
+      },
+      "gate_arte": "CERRADO",
+      "reformulacion_propuesta": {
+        "texto": null,
+        "verificada": false,
+        "nuevo_claim_id": null
+      },
+      "redaccion_prohibida": "El Art. 53.I de la LFT es el fundamento legal directo de la renuncia unilateral del trabajador en México.",
+      "notas": "REQUIERE_INVESTIGACION — claim creado específicamente por la corrección obligatoria del encargo: 'no afirmar que el Art. 53.I LFT fundamenta directamente la renuncia unilateral'. Calificación del expediente: PARCIAL (no SUFICIENTE) — se respeta esa calificación más baja en vez de promoverla."
+    },
+    {
+      "claim_id": "pieza-02-claim-4",
+      "texto_exacto": "En España, la extinción del contrato por causa grave imputable al empresario (Art. 50 ET) exige, como regla general, sentencia judicial previa antes de que el trabajador deje el puesto — pero el Tribunal Supremo reconoce excepciones consolidadas (gravedad extrema, impago salarial severo y continuado) que permiten el cese anticipado sin perder la indemnización.",
       "ubicacion": "texto_imagen",
       "tipo": "regla",
       "alcance": "CAPA_C_NACIONAL",
@@ -88,14 +274,14 @@
       "justificacion_suficiencia_comparada": null,
       "fuentes": [
         {
-          "id": "SRC-P02-ES-ET-01/02",
+          "id": "SRC-P02-ES-ET-01",
           "tipo_fuente": "NORMA_OFICIAL",
-          "titulo": "Estatuto de los Trabajadores (España) — extinción del contrato",
+          "titulo": "Estatuto de los Trabajadores (España, RDL 2/2015) — arts. 49.1.d, 50 (dimisión y extinción por causa del empresario)",
           "organismo_autor": "Agencia Estatal BOE",
-          "url": "https://www.boe.es/buscar/act.php?id=BOE-A-2015-11430",
+          "url": "https://www.boe.es/buscar/pdf/2015/BOE-A-2015-11430-consolidado.pdf",
           "identificador_bibliografico": null,
-          "fecha_consulta": "2026-08-26",
-          "localizador": "arts. 49.1.d, 50, 54 y 56 (candidato de Gemini Spark, sin verificar por mí)",
+          "fecha_consulta": "2026-08-25",
+          "localizador": "arts. 49.1.d y 50",
           "jurisdicciones_cubiertas": [
             "España"
           ],
@@ -105,19 +291,19 @@
             "vigencia_comprobada": false,
             "fecha_comprobacion": null,
             "metodo_o_evidencia": null,
-            "observaciones": "WebFetch bloqueado por el proxy de red de este entorno (EGRESS_BLOCKED). Probado empíricamente el 2026-08-26 contra www.boe.es, www.diputados.gob.mx, servicios.infoleg.gob.ar, sjf2.scjn.gob.mx, www.corteidh.or.cr, www.funcionpublica.gov.co y www.ordenjuridico.gob.mx — los 7 devolvieron EGRESS_BLOCKED. No fue posible confirmar origen oficial, texto exacto ni vigencia de ninguna fuente de forma independiente en esta sesión. El expediente 'legalmente-piloto-evidencia-primaria-v1.md' (producido por otro modelo de IA, 'Gemini Spark') propuso este source_id, artículo y fragmento con la etiqueta 'CONFIRMADO' y 'vigencia comprobada: Sí' autoatribuidas. Por regla de gobernanza de este repositorio (references/source-policy.md, 'Nunca aceptar como fuente: otro contenido generado por IA'; CLAUDE.md, 'Ninguna IA es fuente jurídica'), esa autoconfirmación de OTRA IA no sustituye la verificación real que exige el esquema — se trata aquí solo como candidato/localizador más preciso que antes, pendiente de verificación humana o de una sesión con acceso de red no bloqueado."
+            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Localizador y extracto de texto tomados del expediente externo auditado (legalmente-piloto-evidencia-primaria-v1.2.md + legalmente-piloto-fuentes-primarias-v1.zip, producido por otro modelo de IA). El manifest de ese expediente autoafirma origen_oficial_confirmado/texto_exacto_consultado/vigencia_comprobada = true y resultado SUFICIENTE — por regla de gobernanza de este repositorio (source-policy.md: 'nunca aceptar como fuente otro contenido generado por IA'; CLAUDE.md: 'ninguna IA es fuente jurídica') esa autoconfirmación NO se traslada aquí. Los extractos del ZIP (687-6215 bytes) son fragmentos de artículos concretos, no el documento legal completo, pese a que 44/45 entradas del manifest declaran documento_completo=true — inconsistencia detectada en auditoría y NO heredada."
           },
           "registro_oficial_id": "boe-es"
         },
         {
           "id": "SRC-P02-ES-JUR-01",
           "tipo_fuente": "JURISPRUDENCIA_OFICIAL",
-          "titulo": "Tribunal Supremo de España (Sala de lo Social) — STS 20/07/2012 y STS 28/10/2020 sobre cese anticipado en Art. 50 ET",
-          "organismo_autor": "Consejo General del Poder Judicial",
-          "url": "https://www.poderjudicial.es/search/indexAN.jsp",
+          "titulo": "STS 3504/2011, 20 de julio de 2012 (ECLI:ES:TS:2012:6137) — excepciones al mantenimiento en el puesto bajo Art. 50 ET",
+          "organismo_autor": "Poder Judicial de España",
+          "url": "https://www.poderjudicial.es/search/openDocument/f8c0da1866ba8219/20120925",
           "identificador_bibliografico": null,
-          "fecha_consulta": "2026-08-26",
-          "localizador": "STS 20-07-2012 (rec. 3504/2011) y STS 28-10-2020 (rec. 2486/2018), candidato de Gemini Spark, sin verificar por mí",
+          "fecha_consulta": "2026-08-25",
+          "localizador": "STS 3504/2011, ECLI:ES:TS:2012:6137",
           "jurisdicciones_cubiertas": [
             "España"
           ],
@@ -127,7 +313,29 @@
             "vigencia_comprobada": false,
             "fecha_comprobacion": null,
             "metodo_o_evidencia": null,
-            "observaciones": "WebFetch bloqueado por el proxy de red de este entorno (EGRESS_BLOCKED). Probado empíricamente el 2026-08-26 contra www.boe.es, www.diputados.gob.mx, servicios.infoleg.gob.ar, sjf2.scjn.gob.mx, www.corteidh.or.cr, www.funcionpublica.gov.co y www.ordenjuridico.gob.mx — los 7 devolvieron EGRESS_BLOCKED. No fue posible confirmar origen oficial, texto exacto ni vigencia de ninguna fuente de forma independiente en esta sesión. El expediente 'legalmente-piloto-evidencia-primaria-v1.md' (producido por otro modelo de IA, 'Gemini Spark') propuso este source_id, artículo y fragmento con la etiqueta 'CONFIRMADO' y 'vigencia comprobada: Sí' autoatribuidas. Por regla de gobernanza de este repositorio (references/source-policy.md, 'Nunca aceptar como fuente: otro contenido generado por IA'; CLAUDE.md, 'Ninguna IA es fuente jurídica'), esa autoconfirmación de OTRA IA no sustituye la verificación real que exige el esquema — se trata aquí solo como candidato/localizador más preciso que antes, pendiente de verificación humana o de una sesión con acceso de red no bloqueado."
+            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Localizador y extracto de texto tomados del expediente externo auditado (legalmente-piloto-evidencia-primaria-v1.2.md + legalmente-piloto-fuentes-primarias-v1.zip, producido por otro modelo de IA). El manifest de ese expediente autoafirma origen_oficial_confirmado/texto_exacto_consultado/vigencia_comprobada = true y resultado SUFICIENTE — por regla de gobernanza de este repositorio (source-policy.md: 'nunca aceptar como fuente otro contenido generado por IA'; CLAUDE.md: 'ninguna IA es fuente jurídica') esa autoconfirmación NO se traslada aquí. Los extractos del ZIP (687-6215 bytes) son fragmentos de artículos concretos, no el documento legal completo, pese a que 44/45 entradas del manifest declaran documento_completo=true — inconsistencia detectada en auditoría y NO heredada."
+          },
+          "registro_oficial_id": "poderjudicial-es"
+        },
+        {
+          "id": "SRC-P02-ES-JUR-02",
+          "tipo_fuente": "JURISPRUDENCIA_OFICIAL",
+          "titulo": "STS 2486/2018, 28 de octubre de 2020 (ECLI:ES:TS:2020:3698) — reitera excepciones al mantenimiento en el puesto",
+          "organismo_autor": "Poder Judicial de España",
+          "url": "https://www.poderjudicial.es/search/openDocument/37c541c888d3f668/20201117",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-08-25",
+          "localizador": "STS 2486/2018, ECLI:ES:TS:2020:3698",
+          "jurisdicciones_cubiertas": [
+            "España"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": false,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": null,
+            "metodo_o_evidencia": null,
+            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Localizador y extracto de texto tomados del expediente externo auditado (legalmente-piloto-evidencia-primaria-v1.2.md + legalmente-piloto-fuentes-primarias-v1.zip, producido por otro modelo de IA). El manifest de ese expediente autoafirma origen_oficial_confirmado/texto_exacto_consultado/vigencia_comprobada = true y resultado SUFICIENTE — por regla de gobernanza de este repositorio (source-policy.md: 'nunca aceptar como fuente otro contenido generado por IA'; CLAUDE.md: 'ninguna IA es fuente jurídica') esa autoconfirmación NO se traslada aquí. Los extractos del ZIP (687-6215 bytes) son fragmentos de artículos concretos, no el documento legal completo, pese a que 44/45 entradas del manifest declaran documento_completo=true — inconsistencia detectada en auditoría y NO heredada."
           },
           "registro_oficial_id": "poderjudicial-es"
         }
@@ -163,12 +371,242 @@
         "verificada": false,
         "nuevo_claim_id": null
       },
-      "redaccion_prohibida": null,
-      "notas": "REQUIERE_INVESTIGACION. Esta afirmación (con su matiz jurisprudencial) es nueva respecto de la versión anterior de la pieza y proviene del expediente de Gemini Spark, que cita dos sentencias concretas del Tribunal Supremo — ninguna de las dos fue abierta ni confirmada por mí (poderjudicial.es también bloqueado en el patrón de bloqueo observado, aunque no se probó ese hostname exacto en esta sesión). No se puede tratar 'CONFIRMADO CON MATICES' (etiqueta que usa el expediente) como equivalente a verificación real."
+      "redaccion_prohibida": "En España el trabajador debe quedarse obligatoriamente en la empresa hasta la sentencia del Art. 50 ET.",
+      "notas": "REQUIERE_INVESTIGACION. Calificación del expediente para las 2 sentencias: PARCIAL (si se formulan como regla absoluta de permanencia) — motivo por el que el claim ya incorpora el matiz en vez de la regla absoluta. Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente."
     },
     {
-      "claim_id": "pieza-02-claim-3",
-      "texto_exacto": "La figura que el derecho comparado suele llamar 'despido indirecto' no tiene el mismo nombre legal en México, España, Argentina ni Colombia — cada país usa su propio término técnico ('rescisión sin responsabilidad para el trabajador' en México; 'extinción a instancia del trabajador'/Art. 50 ET en España; 'despido indirecto' explícito en el Art. 246 LCT argentino; 'terminación con justa causa del trabajador' en el Art. 62-B CST colombiano) — y cada uno exige un procedimiento distinto (sentencia previa en España, telegrama de intimación en Argentina, expresión inmediata de motivos en la carta de renuncia en Colombia, plazo de 30 días en México).",
+      "claim_id": "pieza-02-claim-5",
+      "texto_exacto": "En Argentina, la exigencia de cursar una intimación telegráfica previa bajo apercibimiento antes de considerarse despedido no surge literalmente de los Arts. 242/246 LCT — es una construcción judicial basada en el deber de buena fe (Art. 63 LCT) y el principio de conservación del contrato (Art. 10 LCT).",
+      "ubicacion": "texto_imagen",
+      "tipo": "regla",
+      "alcance": "CAPA_C_NACIONAL",
+      "jurisdiccion": "Argentina",
+      "nucleo_transversal": null,
+      "variaciones_materiales": null,
+      "jurisdicciones_revisadas": null,
+      "diferencias_buscadas": null,
+      "contraejemplos_encontrados": null,
+      "justificacion_suficiencia_comparada": null,
+      "fuentes": [
+        {
+          "id": "SRC-P02-AR-LCT-01",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Ley de Contrato de Trabajo N.º 20.744 (Argentina) — arts. 240, 242 (forma de la renuncia, justa causa)",
+          "organismo_autor": "InfoLEG",
+          "url": "https://servicios.infoleg.gob.ar/infolegInternet/anexos/25000-29999/25552/texact.htm",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-08-25",
+          "localizador": "arts. 240 y 242",
+          "jurisdicciones_cubiertas": [
+            "Argentina"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": false,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": null,
+            "metodo_o_evidencia": null,
+            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Localizador y extracto de texto tomados del expediente externo auditado (legalmente-piloto-evidencia-primaria-v1.2.md + legalmente-piloto-fuentes-primarias-v1.zip, producido por otro modelo de IA). El manifest de ese expediente autoafirma origen_oficial_confirmado/texto_exacto_consultado/vigencia_comprobada = true y resultado SUFICIENTE — por regla de gobernanza de este repositorio (source-policy.md: 'nunca aceptar como fuente otro contenido generado por IA'; CLAUDE.md: 'ninguna IA es fuente jurídica') esa autoconfirmación NO se traslada aquí. Los extractos del ZIP (687-6215 bytes) son fragmentos de artículos concretos, no el documento legal completo, pese a que 44/45 entradas del manifest declaran documento_completo=true — inconsistencia detectada en auditoría y NO heredada."
+          },
+          "registro_oficial_id": "infoleg-gob-ar"
+        },
+        {
+          "id": "SRC-P02-AR-LCT-02",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Ley de Contrato de Trabajo N.º 20.744 (Argentina) — arts. 245, 246 (indemnización, 'despido indirecto')",
+          "organismo_autor": "InfoLEG",
+          "url": "https://servicios.infoleg.gob.ar/infolegInternet/anexos/25000-29999/25552/texact.htm",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-08-25",
+          "localizador": "arts. 245 y 246",
+          "jurisdicciones_cubiertas": [
+            "Argentina"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": false,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": null,
+            "metodo_o_evidencia": null,
+            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Localizador y extracto de texto tomados del expediente externo auditado (legalmente-piloto-evidencia-primaria-v1.2.md + legalmente-piloto-fuentes-primarias-v1.zip, producido por otro modelo de IA). El manifest de ese expediente autoafirma origen_oficial_confirmado/texto_exacto_consultado/vigencia_comprobada = true y resultado SUFICIENTE — por regla de gobernanza de este repositorio (source-policy.md: 'nunca aceptar como fuente otro contenido generado por IA'; CLAUDE.md: 'ninguna IA es fuente jurídica') esa autoconfirmación NO se traslada aquí. Los extractos del ZIP (687-6215 bytes) son fragmentos de artículos concretos, no el documento legal completo, pese a que 44/45 entradas del manifest declaran documento_completo=true — inconsistencia detectada en auditoría y NO heredada."
+          },
+          "registro_oficial_id": "infoleg-gob-ar"
+        },
+        {
+          "id": "SRC-P02-AR-JUR-01",
+          "tipo_fuente": "SECUNDARIA_ESPECIALIZADA",
+          "titulo": "CNAT, Sala I, 'Torres, Pablo Ariel c/ Securitas Argentina S.A. s/ Despido' (13/12/2023) — doctrina sobre intimación previa",
+          "organismo_autor": "Nota de investigación preliminar — LegalMente (agregador privado de jurisprudencia)",
+          "url": "https://aldiaargentina.microjuris.com/2023/12/13/fallos-legitimidad-del-despido-indirecto-en-que-se-coloco-un-trabajador-a-quien-no-se-le-dejo-ingresar-a-su-lugar-de-trabajo-por-haberse-retirado-unos-minutos-para-atender-una-contingencia-familiar/",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-08-25",
+          "localizador": "Sentencia CNAT Sala I, 13/12/2023",
+          "jurisdicciones_cubiertas": [
+            "Argentina"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": false,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": null,
+            "metodo_o_evidencia": null,
+            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Localizador y extracto de texto tomados del expediente externo auditado (legalmente-piloto-evidencia-primaria-v1.2.md + legalmente-piloto-fuentes-primarias-v1.zip, producido por otro modelo de IA). El manifest de ese expediente autoafirma origen_oficial_confirmado/texto_exacto_consultado/vigencia_comprobada = true y resultado SUFICIENTE — por regla de gobernanza de este repositorio (source-policy.md: 'nunca aceptar como fuente otro contenido generado por IA'; CLAUDE.md: 'ninguna IA es fuente jurídica') esa autoconfirmación NO se traslada aquí. Los extractos del ZIP (687-6215 bytes) son fragmentos de artículos concretos, no el documento legal completo, pese a que 44/45 entradas del manifest declaran documento_completo=true — inconsistencia detectada en auditoría y NO heredada. HALLAZGO DE AUDITORÍA: el expediente presenta esta fuente como jurisprudencia oficial (PARCIAL), pero su url_oficial_directa es aldiaargentina.microjuris.com — un agregador PRIVADO de jurisprudencia, no un portal judicial oficial (source-policy.md: 'una compilación privada... no la convierte en oficial'). Se reclasifica tipo_fuente a SECUNDARIA_ESPECIALIZADA (techo Nivel 3, nunca Nivel 1) en vez de aceptar la etiqueta JURISPRUDENCIA_OFICIAL del expediente."
+          },
+          "registro_oficial_id": null
+        }
+      ],
+      "confianza": "media",
+      "riesgo_falsa_universalizacion": "alto",
+      "riesgo_asesoria": "medio",
+      "platform_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "confidentiality_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "estado": "REQUIERE_INVESTIGACION",
+      "revision_humana": {
+        "estado": "PENDIENTE",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null,
+        "contenido_hash_sha256": null
+      },
+      "gate_arte": "CERRADO",
+      "reformulacion_propuesta": {
+        "texto": null,
+        "verificada": false,
+        "nuevo_claim_id": null
+      },
+      "redaccion_prohibida": "La ley argentina dice expresamente en el Art. 246 que hay que enviar un telegrama antes de considerarse despedido.",
+      "notas": "REQUIERE_INVESTIGACION. La fuente jurisprudencial (CNAT Torres) fue reclasificada en auditoría a SECUNDARIA_ESPECIALIZADA (ver notas de esa fuente) porque su único URL es un agregador privado, no un portal judicial oficial — el expediente la calificaba PARCIAL asumiéndola oficial. Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente."
+    },
+    {
+      "claim_id": "pieza-02-claim-6",
+      "texto_exacto": "En Colombia, el trabajador que termina el contrato por justa causa imputable al empleador debe manifestar los motivos de forma inmediata y precisa en la carta de renuncia (parágrafo Art. 62 CST) para poder cobrar después la indemnización del Art. 64 CST — no puede alegar motivos distintos con posterioridad.",
+      "ubicacion": "lista",
+      "tipo": "regla",
+      "alcance": "CAPA_C_NACIONAL",
+      "jurisdiccion": "Colombia",
+      "nucleo_transversal": null,
+      "variaciones_materiales": null,
+      "jurisdicciones_revisadas": null,
+      "diferencias_buscadas": null,
+      "contraejemplos_encontrados": null,
+      "justificacion_suficiencia_comparada": null,
+      "fuentes": [
+        {
+          "id": "SRC-P02-CO-CST-01",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Código Sustantivo del Trabajo (Colombia) — arts. 61, 62 literal B (terminación, justas causas del trabajador)",
+          "organismo_autor": "Función Pública Colombia",
+          "url": "https://www.funcionpublica.gov.co/eva/gestornormativo/norma.php?i=199983",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-08-25",
+          "localizador": "arts. 61 y 62, literal B",
+          "jurisdicciones_cubiertas": [
+            "Colombia"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": false,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": null,
+            "metodo_o_evidencia": null,
+            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Localizador y extracto de texto tomados del expediente externo auditado (legalmente-piloto-evidencia-primaria-v1.2.md + legalmente-piloto-fuentes-primarias-v1.zip, producido por otro modelo de IA). El manifest de ese expediente autoafirma origen_oficial_confirmado/texto_exacto_consultado/vigencia_comprobada = true y resultado SUFICIENTE — por regla de gobernanza de este repositorio (source-policy.md: 'nunca aceptar como fuente otro contenido generado por IA'; CLAUDE.md: 'ninguna IA es fuente jurídica') esa autoconfirmación NO se traslada aquí. Los extractos del ZIP (687-6215 bytes) son fragmentos de artículos concretos, no el documento legal completo, pese a que 44/45 entradas del manifest declaran documento_completo=true — inconsistencia detectada en auditoría y NO heredada."
+          },
+          "registro_oficial_id": "funcionpublica-gov-co"
+        },
+        {
+          "id": "SRC-P02-CO-CST-02",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Código Sustantivo del Trabajo (Colombia) — art. 64 (indemnización por terminación unilateral sin justa causa)",
+          "organismo_autor": "Función Pública Colombia",
+          "url": "https://www.funcionpublica.gov.co/eva/gestornormativo/norma.php?i=199983",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-08-25",
+          "localizador": "art. 64 (modificado por Ley 789 de 2002)",
+          "jurisdicciones_cubiertas": [
+            "Colombia"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": false,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": null,
+            "metodo_o_evidencia": null,
+            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Localizador y extracto de texto tomados del expediente externo auditado (legalmente-piloto-evidencia-primaria-v1.2.md + legalmente-piloto-fuentes-primarias-v1.zip, producido por otro modelo de IA). El manifest de ese expediente autoafirma origen_oficial_confirmado/texto_exacto_consultado/vigencia_comprobada = true y resultado SUFICIENTE — por regla de gobernanza de este repositorio (source-policy.md: 'nunca aceptar como fuente otro contenido generado por IA'; CLAUDE.md: 'ninguna IA es fuente jurídica') esa autoconfirmación NO se traslada aquí. Los extractos del ZIP (687-6215 bytes) son fragmentos de artículos concretos, no el documento legal completo, pese a que 44/45 entradas del manifest declaran documento_completo=true — inconsistencia detectada en auditoría y NO heredada."
+          },
+          "registro_oficial_id": "funcionpublica-gov-co"
+        },
+        {
+          "id": "SRC-P02-CO-JUR-01",
+          "tipo_fuente": "JURISPRUDENCIA_OFICIAL",
+          "titulo": "CSJ Sala de Casación Laboral, Sentencia SL15507-2015 (Rad. 50930) — presupuestos del despido indirecto",
+          "organismo_autor": "Corte Suprema de Justicia de Colombia",
+          "url": "https://www.cortesuprema.gov.co/corte/wp-content/uploads/relatorias/la/bmar2016/Ficha%20SL15507-2015.pdf",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-08-25",
+          "localizador": "Sentencia SL15507-2015, Rad. 50930",
+          "jurisdicciones_cubiertas": [
+            "Colombia"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": false,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": null,
+            "metodo_o_evidencia": null,
+            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Localizador y extracto de texto tomados del expediente externo auditado (legalmente-piloto-evidencia-primaria-v1.2.md + legalmente-piloto-fuentes-primarias-v1.zip, producido por otro modelo de IA). El manifest de ese expediente autoafirma origen_oficial_confirmado/texto_exacto_consultado/vigencia_comprobada = true y resultado SUFICIENTE — por regla de gobernanza de este repositorio (source-policy.md: 'nunca aceptar como fuente otro contenido generado por IA'; CLAUDE.md: 'ninguna IA es fuente jurídica') esa autoconfirmación NO se traslada aquí. Los extractos del ZIP (687-6215 bytes) son fragmentos de artículos concretos, no el documento legal completo, pese a que 44/45 entradas del manifest declaran documento_completo=true — inconsistencia detectada en auditoría y NO heredada. cortesuprema.gov.co no tiene entrada en el registro oficial (distinta de funcionpublica.gov.co) — registro_oficial_id se deja en null en vez de forzarlo."
+          },
+          "registro_oficial_id": null
+        }
+      ],
+      "confianza": "media",
+      "riesgo_falsa_universalizacion": "medio",
+      "riesgo_asesoria": "medio",
+      "platform_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "confidentiality_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "estado": "REQUIERE_INVESTIGACION",
+      "revision_humana": {
+        "estado": "PENDIENTE",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null,
+        "contenido_hash_sha256": null
+      },
+      "gate_arte": "CERRADO",
+      "reformulacion_propuesta": {
+        "texto": null,
+        "verificada": false,
+        "nuevo_claim_id": null
+      },
+      "redaccion_prohibida": null,
+      "notas": "REQUIERE_INVESTIGACION. Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente."
+    },
+    {
+      "claim_id": "pieza-02-claim-7",
+      "texto_exacto": "La figura que el derecho comparado suele llamar 'despido indirecto' recibe un nombre técnico distinto en cada país (rescisión sin responsabilidad para el trabajador en México; extinción a instancia del trabajador vía Art. 50 ET en España; despido indirecto explícito en el Art. 246 LCT argentino; terminación con justa causa del trabajador en el Art. 62-B CST colombiano) y exige un procedimiento distinto en cada uno (plazo de 30 días en México, sentencia previa en España, intimación previa en Argentina, expresión inmediata de motivos en Colombia).",
       "ubicacion": "lista",
       "tipo": "regla",
       "alcance": "CAPA_C_NACIONAL",
@@ -179,21 +617,21 @@
         "Colombia"
       ],
       "nucleo_transversal": null,
-      "variaciones_materiales": "Nombre técnico, fundamento y procedimiento distintos por país (ver texto_exacto): México (rescisión, plazo de 30 días), España (extinción judicial Art. 50 ET), Argentina (despido indirecto vía telegrama de intimación), Colombia (terminación con justa causa expresada en la carta de renuncia).",
+      "variaciones_materiales": "Nombre técnico, fundamento y procedimiento distintos por país — ver texto_exacto.",
       "jurisdicciones_revisadas": null,
       "diferencias_buscadas": null,
       "contraejemplos_encontrados": null,
       "justificacion_suficiencia_comparada": null,
       "fuentes": [
         {
-          "id": "SRC-P02-MX-LFT-01/02/03",
+          "id": "SRC-P02-MX-LFT-03",
           "tipo_fuente": "NORMA_OFICIAL",
-          "titulo": "Ley Federal del Trabajo (México) — rescisión, renuncia y prima de antigüedad",
-          "organismo_autor": "Congreso de la Unión (México)",
+          "titulo": "Ley Federal del Trabajo (México) — arts. 51, 52 (rescisión imputable al patrón / 'despido indirecto')",
+          "organismo_autor": "H. Cámara de Diputados",
           "url": "https://www.diputados.gob.mx/LeyesBiblio/pdf/LFT.pdf",
           "identificador_bibliografico": null,
-          "fecha_consulta": "2026-08-26",
-          "localizador": "arts. 47, 48, 50, 51, 52, 53.I y 162.III (candidato de Gemini Spark, sin verificar por mí)",
+          "fecha_consulta": "2026-08-25",
+          "localizador": "arts. 51 y 52",
           "jurisdicciones_cubiertas": [
             "México"
           ],
@@ -203,19 +641,19 @@
             "vigencia_comprobada": false,
             "fecha_comprobacion": null,
             "metodo_o_evidencia": null,
-            "observaciones": "WebFetch bloqueado por el proxy de red de este entorno (EGRESS_BLOCKED). Probado empíricamente el 2026-08-26 contra www.boe.es, www.diputados.gob.mx, servicios.infoleg.gob.ar, sjf2.scjn.gob.mx, www.corteidh.or.cr, www.funcionpublica.gov.co y www.ordenjuridico.gob.mx — los 7 devolvieron EGRESS_BLOCKED. No fue posible confirmar origen oficial, texto exacto ni vigencia de ninguna fuente de forma independiente en esta sesión. El expediente 'legalmente-piloto-evidencia-primaria-v1.md' (producido por otro modelo de IA, 'Gemini Spark') propuso este source_id, artículo y fragmento con la etiqueta 'CONFIRMADO' y 'vigencia comprobada: Sí' autoatribuidas. Por regla de gobernanza de este repositorio (references/source-policy.md, 'Nunca aceptar como fuente: otro contenido generado por IA'; CLAUDE.md, 'Ninguna IA es fuente jurídica'), esa autoconfirmación de OTRA IA no sustituye la verificación real que exige el esquema — se trata aquí solo como candidato/localizador más preciso que antes, pendiente de verificación humana o de una sesión con acceso de red no bloqueado."
+            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Localizador y extracto de texto tomados del expediente externo auditado (legalmente-piloto-evidencia-primaria-v1.2.md + legalmente-piloto-fuentes-primarias-v1.zip, producido por otro modelo de IA). El manifest de ese expediente autoafirma origen_oficial_confirmado/texto_exacto_consultado/vigencia_comprobada = true y resultado SUFICIENTE — por regla de gobernanza de este repositorio (source-policy.md: 'nunca aceptar como fuente otro contenido generado por IA'; CLAUDE.md: 'ninguna IA es fuente jurídica') esa autoconfirmación NO se traslada aquí. Los extractos del ZIP (687-6215 bytes) son fragmentos de artículos concretos, no el documento legal completo, pese a que 44/45 entradas del manifest declaran documento_completo=true — inconsistencia detectada en auditoría y NO heredada."
           },
           "registro_oficial_id": "diputados-gob-mx"
         },
         {
-          "id": "SRC-P02-ES-ET-01/02",
+          "id": "SRC-P02-ES-ET-01",
           "tipo_fuente": "NORMA_OFICIAL",
-          "titulo": "Estatuto de los Trabajadores (España) — extinción del contrato",
+          "titulo": "Estatuto de los Trabajadores (España, RDL 2/2015) — arts. 49.1.d, 50 (dimisión y extinción por causa del empresario)",
           "organismo_autor": "Agencia Estatal BOE",
-          "url": "https://www.boe.es/buscar/act.php?id=BOE-A-2015-11430",
+          "url": "https://www.boe.es/buscar/pdf/2015/BOE-A-2015-11430-consolidado.pdf",
           "identificador_bibliografico": null,
-          "fecha_consulta": "2026-08-26",
-          "localizador": "arts. 49.1.d, 50, 54 y 56 (candidato de Gemini Spark, sin verificar por mí)",
+          "fecha_consulta": "2026-08-25",
+          "localizador": "arts. 49.1.d y 50",
           "jurisdicciones_cubiertas": [
             "España"
           ],
@@ -225,19 +663,19 @@
             "vigencia_comprobada": false,
             "fecha_comprobacion": null,
             "metodo_o_evidencia": null,
-            "observaciones": "WebFetch bloqueado por el proxy de red de este entorno (EGRESS_BLOCKED). Probado empíricamente el 2026-08-26 contra www.boe.es, www.diputados.gob.mx, servicios.infoleg.gob.ar, sjf2.scjn.gob.mx, www.corteidh.or.cr, www.funcionpublica.gov.co y www.ordenjuridico.gob.mx — los 7 devolvieron EGRESS_BLOCKED. No fue posible confirmar origen oficial, texto exacto ni vigencia de ninguna fuente de forma independiente en esta sesión. El expediente 'legalmente-piloto-evidencia-primaria-v1.md' (producido por otro modelo de IA, 'Gemini Spark') propuso este source_id, artículo y fragmento con la etiqueta 'CONFIRMADO' y 'vigencia comprobada: Sí' autoatribuidas. Por regla de gobernanza de este repositorio (references/source-policy.md, 'Nunca aceptar como fuente: otro contenido generado por IA'; CLAUDE.md, 'Ninguna IA es fuente jurídica'), esa autoconfirmación de OTRA IA no sustituye la verificación real que exige el esquema — se trata aquí solo como candidato/localizador más preciso que antes, pendiente de verificación humana o de una sesión con acceso de red no bloqueado."
+            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Localizador y extracto de texto tomados del expediente externo auditado (legalmente-piloto-evidencia-primaria-v1.2.md + legalmente-piloto-fuentes-primarias-v1.zip, producido por otro modelo de IA). El manifest de ese expediente autoafirma origen_oficial_confirmado/texto_exacto_consultado/vigencia_comprobada = true y resultado SUFICIENTE — por regla de gobernanza de este repositorio (source-policy.md: 'nunca aceptar como fuente otro contenido generado por IA'; CLAUDE.md: 'ninguna IA es fuente jurídica') esa autoconfirmación NO se traslada aquí. Los extractos del ZIP (687-6215 bytes) son fragmentos de artículos concretos, no el documento legal completo, pese a que 44/45 entradas del manifest declaran documento_completo=true — inconsistencia detectada en auditoría y NO heredada."
           },
           "registro_oficial_id": "boe-es"
         },
         {
-          "id": "SRC-P02-AR-LCT-01/02",
+          "id": "SRC-P02-AR-LCT-02",
           "tipo_fuente": "NORMA_OFICIAL",
-          "titulo": "Ley de Contrato de Trabajo N.º 20.744 (Argentina) — renuncia, injuria y despido indirecto",
+          "titulo": "Ley de Contrato de Trabajo N.º 20.744 (Argentina) — arts. 245, 246 (indemnización, 'despido indirecto')",
           "organismo_autor": "InfoLEG",
           "url": "https://servicios.infoleg.gob.ar/infolegInternet/anexos/25000-29999/25552/texact.htm",
           "identificador_bibliografico": null,
-          "fecha_consulta": "2026-08-26",
-          "localizador": "arts. 240, 242, 245 y 246 (candidato de Gemini Spark, sin verificar por mí)",
+          "fecha_consulta": "2026-08-25",
+          "localizador": "arts. 245 y 246",
           "jurisdicciones_cubiertas": [
             "Argentina"
           ],
@@ -247,19 +685,19 @@
             "vigencia_comprobada": false,
             "fecha_comprobacion": null,
             "metodo_o_evidencia": null,
-            "observaciones": "WebFetch bloqueado por el proxy de red de este entorno (EGRESS_BLOCKED). Probado empíricamente el 2026-08-26 contra www.boe.es, www.diputados.gob.mx, servicios.infoleg.gob.ar, sjf2.scjn.gob.mx, www.corteidh.or.cr, www.funcionpublica.gov.co y www.ordenjuridico.gob.mx — los 7 devolvieron EGRESS_BLOCKED. No fue posible confirmar origen oficial, texto exacto ni vigencia de ninguna fuente de forma independiente en esta sesión. El expediente 'legalmente-piloto-evidencia-primaria-v1.md' (producido por otro modelo de IA, 'Gemini Spark') propuso este source_id, artículo y fragmento con la etiqueta 'CONFIRMADO' y 'vigencia comprobada: Sí' autoatribuidas. Por regla de gobernanza de este repositorio (references/source-policy.md, 'Nunca aceptar como fuente: otro contenido generado por IA'; CLAUDE.md, 'Ninguna IA es fuente jurídica'), esa autoconfirmación de OTRA IA no sustituye la verificación real que exige el esquema — se trata aquí solo como candidato/localizador más preciso que antes, pendiente de verificación humana o de una sesión con acceso de red no bloqueado."
+            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Localizador y extracto de texto tomados del expediente externo auditado (legalmente-piloto-evidencia-primaria-v1.2.md + legalmente-piloto-fuentes-primarias-v1.zip, producido por otro modelo de IA). El manifest de ese expediente autoafirma origen_oficial_confirmado/texto_exacto_consultado/vigencia_comprobada = true y resultado SUFICIENTE — por regla de gobernanza de este repositorio (source-policy.md: 'nunca aceptar como fuente otro contenido generado por IA'; CLAUDE.md: 'ninguna IA es fuente jurídica') esa autoconfirmación NO se traslada aquí. Los extractos del ZIP (687-6215 bytes) son fragmentos de artículos concretos, no el documento legal completo, pese a que 44/45 entradas del manifest declaran documento_completo=true — inconsistencia detectada en auditoría y NO heredada."
           },
           "registro_oficial_id": "infoleg-gob-ar"
         },
         {
-          "id": "SRC-P02-CO-CST-01/02",
+          "id": "SRC-P02-CO-CST-01",
           "tipo_fuente": "NORMA_OFICIAL",
-          "titulo": "Código Sustantivo del Trabajo (Colombia) — terminación y justas causas",
+          "titulo": "Código Sustantivo del Trabajo (Colombia) — arts. 61, 62 literal B (terminación, justas causas del trabajador)",
           "organismo_autor": "Función Pública Colombia",
           "url": "https://www.funcionpublica.gov.co/eva/gestornormativo/norma.php?i=199983",
           "identificador_bibliografico": null,
-          "fecha_consulta": "2026-08-26",
-          "localizador": "arts. 61, 62 (literal B) y 64 (candidato de Gemini Spark, sin verificar por mí)",
+          "fecha_consulta": "2026-08-25",
+          "localizador": "arts. 61 y 62, literal B",
           "jurisdicciones_cubiertas": [
             "Colombia"
           ],
@@ -269,31 +707,9 @@
             "vigencia_comprobada": false,
             "fecha_comprobacion": null,
             "metodo_o_evidencia": null,
-            "observaciones": "WebFetch bloqueado por el proxy de red de este entorno (EGRESS_BLOCKED). Probado empíricamente el 2026-08-26 contra www.boe.es, www.diputados.gob.mx, servicios.infoleg.gob.ar, sjf2.scjn.gob.mx, www.corteidh.or.cr, www.funcionpublica.gov.co y www.ordenjuridico.gob.mx — los 7 devolvieron EGRESS_BLOCKED. No fue posible confirmar origen oficial, texto exacto ni vigencia de ninguna fuente de forma independiente en esta sesión. El expediente 'legalmente-piloto-evidencia-primaria-v1.md' (producido por otro modelo de IA, 'Gemini Spark') propuso este source_id, artículo y fragmento con la etiqueta 'CONFIRMADO' y 'vigencia comprobada: Sí' autoatribuidas. Por regla de gobernanza de este repositorio (references/source-policy.md, 'Nunca aceptar como fuente: otro contenido generado por IA'; CLAUDE.md, 'Ninguna IA es fuente jurídica'), esa autoconfirmación de OTRA IA no sustituye la verificación real que exige el esquema — se trata aquí solo como candidato/localizador más preciso que antes, pendiente de verificación humana o de una sesión con acceso de red no bloqueado."
+            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Localizador y extracto de texto tomados del expediente externo auditado (legalmente-piloto-evidencia-primaria-v1.2.md + legalmente-piloto-fuentes-primarias-v1.zip, producido por otro modelo de IA). El manifest de ese expediente autoafirma origen_oficial_confirmado/texto_exacto_consultado/vigencia_comprobada = true y resultado SUFICIENTE — por regla de gobernanza de este repositorio (source-policy.md: 'nunca aceptar como fuente otro contenido generado por IA'; CLAUDE.md: 'ninguna IA es fuente jurídica') esa autoconfirmación NO se traslada aquí. Los extractos del ZIP (687-6215 bytes) son fragmentos de artículos concretos, no el documento legal completo, pese a que 44/45 entradas del manifest declaran documento_completo=true — inconsistencia detectada en auditoría y NO heredada."
           },
           "registro_oficial_id": "funcionpublica-gov-co"
-        },
-        {
-          "id": "SRC-P02-CO-JUR-01",
-          "tipo_fuente": "JURISPRUDENCIA_OFICIAL",
-          "titulo": "Corte Suprema de Justicia de Colombia (Sala Laboral) — Sentencia SL15507-2015 sobre presupuestos del despido indirecto",
-          "organismo_autor": "Corte Suprema de Justicia de Colombia",
-          "url": "https://www.cortesuprema.gov.co/",
-          "identificador_bibliografico": null,
-          "fecha_consulta": "2026-08-26",
-          "localizador": "Sentencia SL15507-2015, Rad. 50930 (candidato de Gemini Spark, sin verificar por mí)",
-          "jurisdicciones_cubiertas": [
-            "Colombia"
-          ],
-          "verificacion_fuente": {
-            "origen_oficial_confirmado": false,
-            "texto_exacto_consultado": false,
-            "vigencia_comprobada": false,
-            "fecha_comprobacion": null,
-            "metodo_o_evidencia": null,
-            "observaciones": "WebFetch bloqueado por el proxy de red de este entorno (EGRESS_BLOCKED). Probado empíricamente el 2026-08-26 contra www.boe.es, www.diputados.gob.mx, servicios.infoleg.gob.ar, sjf2.scjn.gob.mx, www.corteidh.or.cr, www.funcionpublica.gov.co y www.ordenjuridico.gob.mx — los 7 devolvieron EGRESS_BLOCKED. No fue posible confirmar origen oficial, texto exacto ni vigencia de ninguna fuente de forma independiente en esta sesión. El expediente 'legalmente-piloto-evidencia-primaria-v1.md' (producido por otro modelo de IA, 'Gemini Spark') propuso este source_id, artículo y fragmento con la etiqueta 'CONFIRMADO' y 'vigencia comprobada: Sí' autoatribuidas. Por regla de gobernanza de este repositorio (references/source-policy.md, 'Nunca aceptar como fuente: otro contenido generado por IA'; CLAUDE.md, 'Ninguna IA es fuente jurídica'), esa autoconfirmación de OTRA IA no sustituye la verificación real que exige el esquema — se trata aquí solo como candidato/localizador más preciso que antes, pendiente de verificación humana o de una sesión con acceso de red no bloqueado. El registro oficial único no tiene todavía una entrada para cortesuprema.gov.co/Corte Suprema de Justicia de Colombia (Sala Laboral) — queda sin registro_oficial_id hasta que se añada esa entrada explícitamente, en vez de forzarla."
-          },
-          "registro_oficial_id": null
         }
       ],
       "confianza": "baja",
@@ -328,14 +744,18 @@
         "nuevo_claim_id": null
       },
       "redaccion_prohibida": null,
-      "notas": "REQUIERE_INVESTIGACION — deliberadamente formulada como comparación de 4 países concretos (Capa C nacional comparada), no como Capa A transversal: precisamente porque el nombre, el fundamento y el procedimiento difieren en cada país, no hay un núcleo común único que sostenga Capa A. El validador exige, para esta comparación, cobertura real por país y techo = el país más débil; aquí NINGÚN país tiene todavía una fuente verificada (los 4 están en el mismo bloqueo de red), así que el techo real es REQUIERE_INVESTIGACION, no APTO_PARA_NARRATIVA. Este es el ejemplo más claro de por qué no basta con que el expediente declare 'CONFIRMADO' — la pieza necesita 4 verificaciones reales e independientes, no una lista de afirmaciones de otra IA."
+      "notas": "REQUIERE_INVESTIGACION — comparación de 4 países, techo = el país más débil (ninguno verificado todavía). Este es el ejemplo más claro de por qué el expediente externo no basta por sí solo: necesita 4 verificaciones reales e independientes, no una tabla de 'CONFIRMADO'."
     }
   ],
   "estado_agregado": "REQUIERE_INVESTIGACION",
   "revisiones_pendientes": [
     "pieza-02-claim-1",
     "pieza-02-claim-2",
-    "pieza-02-claim-3"
+    "pieza-02-claim-3",
+    "pieza-02-claim-4",
+    "pieza-02-claim-5",
+    "pieza-02-claim-6",
+    "pieza-02-claim-7"
   ],
   "gate_global_arte": "CERRADO"
 }
