@@ -4,7 +4,7 @@
   "claims": [
     {
       "claim_id": "pieza-02-claim-1",
-      "texto_exacto": "'Rescisión' es, en México, un mecanismo específico de la ley laboral: cualquiera de las partes puede dar por terminada la relación de trabajo sin responsabilidad si la otra incurre en una causa grave prevista por la ley — no es un sinónimo genérico de 'renuncia' ni de 'despido'.",
+      "texto_exacto": "'Rescisión' es, en México, un mecanismo específico de la ley laboral (arts. 47 y 51 LFT): cualquiera de las partes puede dar por terminada la relación de trabajo sin responsabilidad si la otra incurre en una causa grave prevista por la ley — no es un sinónimo genérico de 'renuncia' ni de 'despido'.",
       "ubicacion": "hook",
       "tipo": "definicion",
       "alcance": "CAPA_C_NACIONAL",
@@ -17,14 +17,14 @@
       "justificacion_suficiencia_comparada": null,
       "fuentes": [
         {
-          "id": "f2-mx",
+          "id": "SRC-P02-MX-LFT-01/02/03",
           "tipo_fuente": "NORMA_OFICIAL",
-          "titulo": "Ley Federal del Trabajo (México) — rescisión de la relación de trabajo",
-          "organismo_autor": "Cámara de Diputados (México)",
+          "titulo": "Ley Federal del Trabajo (México) — rescisión, renuncia y prima de antigüedad",
+          "organismo_autor": "Congreso de la Unión (México)",
           "url": "https://www.diputados.gob.mx/LeyesBiblio/pdf/LFT.pdf",
           "identificador_bibliografico": null,
           "fecha_consulta": "2026-08-26",
-          "localizador": "arts. 47 (causas de rescisión sin responsabilidad para el patrón) y 51 (causas de rescisión sin responsabilidad para el trabajador) — localizador preliminar, PENDIENTE de confirmación exacta",
+          "localizador": "arts. 47, 48, 50, 51, 52, 53.I y 162.III (candidato de Gemini Spark, sin verificar por mí)",
           "jurisdicciones_cubiertas": [
             "México"
           ],
@@ -34,7 +34,7 @@
             "vigencia_comprobada": false,
             "fecha_comprobacion": null,
             "metodo_o_evidencia": null,
-            "observaciones": "WebFetch bloqueado por el proxy de red de este entorno (confirmado empíricamente contra www.boe.es el 2026-08-26); no fue posible confirmar el origen oficial, consultar el texto exacto ni comprobar la vigencia de esta fuente durante esta sesión."
+            "observaciones": "WebFetch bloqueado por el proxy de red de este entorno (EGRESS_BLOCKED). Probado empíricamente el 2026-08-26 contra www.boe.es, www.diputados.gob.mx, servicios.infoleg.gob.ar, sjf2.scjn.gob.mx, www.corteidh.or.cr, www.funcionpublica.gov.co y www.ordenjuridico.gob.mx — los 7 devolvieron EGRESS_BLOCKED. No fue posible confirmar origen oficial, texto exacto ni vigencia de ninguna fuente de forma independiente en esta sesión. El expediente 'legalmente-piloto-evidencia-primaria-v1.md' (producido por otro modelo de IA, 'Gemini Spark') propuso este source_id, artículo y fragmento con la etiqueta 'CONFIRMADO' y 'vigencia comprobada: Sí' autoatribuidas. Por regla de gobernanza de este repositorio (references/source-policy.md, 'Nunca aceptar como fuente: otro contenido generado por IA'; CLAUDE.md, 'Ninguna IA es fuente jurídica'), esa autoconfirmación de OTRA IA no sustituye la verificación real que exige el esquema — se trata aquí solo como candidato/localizador más preciso que antes, pendiente de verificación humana o de una sesión con acceso de red no bloqueado."
           },
           "registro_oficial_id": "diputados-gob-mx"
         }
@@ -71,34 +71,31 @@
         "nuevo_claim_id": null
       },
       "redaccion_prohibida": null,
-      "notas": "PRELIMINAR — NO VERIFICADO. Los números de artículo son un punto de partida basado en conocimiento general de la Ley Federal del Trabajo mexicana, no en consulta directa: WebFetch a diputados.gob.mx fue bloqueado por el proxy de red de este entorno. No se confirmó la redacción vigente ni si los artículos citados siguen siendo los correctos tras eventuales reformas. riesgo_asesoria: medio porque un lector podría usar esta afirmación para decidir si tiene una causa de rescisión en su propio caso — la pieza final deberá incluir una aclaración de que esto es educativo, no asesoría de un caso concreto. REQUIERE_INVESTIGACION."
+      "notas": "REQUIERE_INVESTIGACION. Localizador más preciso que la versión anterior (arts. 47 y 51, no solo uno de los dos), propuesto por el expediente de Gemini Spark, pero sin verificación independiente: WebFetch a diputados.gob.mx bloqueado. riesgo_asesoria: medio, igual que antes."
     },
     {
       "claim_id": "pieza-02-claim-2",
-      "texto_exacto": "La distinción entre 'despido' (decisión unilateral del empleador de terminar la relación laboral) y 'renuncia' (decisión unilateral del trabajador) existe, con esa misma lógica general, tanto en España como en México — pero el nombre y el efecto legal de una tercera figura equivalente a la 'rescisión' mexicana (terminación por causa grave de cualquiera de las partes) NO se ha confirmado que exista con el mismo nombre ni los mismos efectos en España.",
+      "texto_exacto": "En España, la extinción del contrato por causa grave imputable al empleador (Art. 50 ET) exige, como regla general, una sentencia judicial previa antes de que el trabajador deje el puesto — pero el Tribunal Supremo reconoce excepciones consolidadas ante situaciones de extrema gravedad (acoso, impago salarial severo) que permiten el cese anticipado sin perder la indemnización.",
       "ubicacion": "texto_imagen",
-      "tipo": "definicion",
-      "alcance": "CAPA_B_VARIABLE",
-      "jurisdiccion": [
-        "España",
-        "México"
-      ],
+      "tipo": "regla",
+      "alcance": "CAPA_C_NACIONAL",
+      "jurisdiccion": "España",
       "nucleo_transversal": null,
-      "variaciones_materiales": "Sin verificar todavía si el Estatuto de los Trabajadores español reconoce una figura equivalente a la 'rescisión' mexicana (terminación por causa grave a instancia de cualquiera de las partes, arts. 47/51 LFT) bajo cualquier nombre, o si esa terminación por causa grave se subsume íntegramente dentro de las figuras españolas de despido disciplinario/procedente y extinción por voluntad del trabajador — investigar antes de afirmar equivalencia o diferencia entre ambos sistemas.",
+      "variaciones_materiales": null,
       "jurisdicciones_revisadas": null,
       "diferencias_buscadas": null,
       "contraejemplos_encontrados": null,
       "justificacion_suficiencia_comparada": null,
       "fuentes": [
         {
-          "id": "f2-es",
+          "id": "SRC-P02-ES-ET-01/02",
           "tipo_fuente": "NORMA_OFICIAL",
-          "titulo": "Estatuto de los Trabajadores (España) — extinción del contrato de trabajo",
+          "titulo": "Estatuto de los Trabajadores (España) — extinción del contrato",
           "organismo_autor": "Agencia Estatal BOE",
           "url": "https://www.boe.es/buscar/act.php?id=BOE-A-2015-11430",
           "identificador_bibliografico": null,
           "fecha_consulta": "2026-08-26",
-          "localizador": "art. 49 (causas de extinción) — localizador preliminar, PENDIENTE de confirmación exacta",
+          "localizador": "arts. 49.1.d, 50, 54 y 56 (candidato de Gemini Spark, sin verificar por mí)",
           "jurisdicciones_cubiertas": [
             "España"
           ],
@@ -108,21 +105,21 @@
             "vigencia_comprobada": false,
             "fecha_comprobacion": null,
             "metodo_o_evidencia": null,
-            "observaciones": "WebFetch bloqueado por el proxy de red de este entorno (confirmado empíricamente contra www.boe.es el 2026-08-26); no fue posible confirmar el origen oficial, consultar el texto exacto ni comprobar la vigencia de esta fuente durante esta sesión."
+            "observaciones": "WebFetch bloqueado por el proxy de red de este entorno (EGRESS_BLOCKED). Probado empíricamente el 2026-08-26 contra www.boe.es, www.diputados.gob.mx, servicios.infoleg.gob.ar, sjf2.scjn.gob.mx, www.corteidh.or.cr, www.funcionpublica.gov.co y www.ordenjuridico.gob.mx — los 7 devolvieron EGRESS_BLOCKED. No fue posible confirmar origen oficial, texto exacto ni vigencia de ninguna fuente de forma independiente en esta sesión. El expediente 'legalmente-piloto-evidencia-primaria-v1.md' (producido por otro modelo de IA, 'Gemini Spark') propuso este source_id, artículo y fragmento con la etiqueta 'CONFIRMADO' y 'vigencia comprobada: Sí' autoatribuidas. Por regla de gobernanza de este repositorio (references/source-policy.md, 'Nunca aceptar como fuente: otro contenido generado por IA'; CLAUDE.md, 'Ninguna IA es fuente jurídica'), esa autoconfirmación de OTRA IA no sustituye la verificación real que exige el esquema — se trata aquí solo como candidato/localizador más preciso que antes, pendiente de verificación humana o de una sesión con acceso de red no bloqueado."
           },
           "registro_oficial_id": "boe-es"
         },
         {
-          "id": "f2-mx",
-          "tipo_fuente": "NORMA_OFICIAL",
-          "titulo": "Ley Federal del Trabajo (México) — rescisión de la relación de trabajo",
-          "organismo_autor": "Cámara de Diputados (México)",
-          "url": "https://www.diputados.gob.mx/LeyesBiblio/pdf/LFT.pdf",
+          "id": "SRC-P02-ES-JUR-01",
+          "tipo_fuente": "JURISPRUDENCIA_OFICIAL",
+          "titulo": "Tribunal Supremo de España (Sala de lo Social) — STS 20/07/2012 y STS 28/10/2020 sobre cese anticipado en Art. 50 ET",
+          "organismo_autor": "Consejo General del Poder Judicial",
+          "url": "https://www.poderjudicial.es/search/indexAN.jsp",
           "identificador_bibliografico": null,
           "fecha_consulta": "2026-08-26",
-          "localizador": "arts. 47 (causas de rescisión sin responsabilidad para el patrón) y 51 (causas de rescisión sin responsabilidad para el trabajador) — localizador preliminar, PENDIENTE de confirmación exacta",
+          "localizador": "STS 20-07-2012 (rec. 3504/2011) y STS 28-10-2020 (rec. 2486/2018), candidato de Gemini Spark, sin verificar por mí",
           "jurisdicciones_cubiertas": [
-            "México"
+            "España"
           ],
           "verificacion_fuente": {
             "origen_oficial_confirmado": false,
@@ -130,14 +127,14 @@
             "vigencia_comprobada": false,
             "fecha_comprobacion": null,
             "metodo_o_evidencia": null,
-            "observaciones": "WebFetch bloqueado por el proxy de red de este entorno (confirmado empíricamente contra www.boe.es el 2026-08-26); no fue posible confirmar el origen oficial, consultar el texto exacto ni comprobar la vigencia de esta fuente durante esta sesión."
+            "observaciones": "WebFetch bloqueado por el proxy de red de este entorno (EGRESS_BLOCKED). Probado empíricamente el 2026-08-26 contra www.boe.es, www.diputados.gob.mx, servicios.infoleg.gob.ar, sjf2.scjn.gob.mx, www.corteidh.or.cr, www.funcionpublica.gov.co y www.ordenjuridico.gob.mx — los 7 devolvieron EGRESS_BLOCKED. No fue posible confirmar origen oficial, texto exacto ni vigencia de ninguna fuente de forma independiente en esta sesión. El expediente 'legalmente-piloto-evidencia-primaria-v1.md' (producido por otro modelo de IA, 'Gemini Spark') propuso este source_id, artículo y fragmento con la etiqueta 'CONFIRMADO' y 'vigencia comprobada: Sí' autoatribuidas. Por regla de gobernanza de este repositorio (references/source-policy.md, 'Nunca aceptar como fuente: otro contenido generado por IA'; CLAUDE.md, 'Ninguna IA es fuente jurídica'), esa autoconfirmación de OTRA IA no sustituye la verificación real que exige el esquema — se trata aquí solo como candidato/localizador más preciso que antes, pendiente de verificación humana o de una sesión con acceso de red no bloqueado."
           },
-          "registro_oficial_id": "diputados-gob-mx"
+          "registro_oficial_id": "poderjudicial-es"
         }
       ],
-      "confianza": "baja",
-      "riesgo_falsa_universalizacion": "alto",
-      "riesgo_asesoria": "ninguno",
+      "confianza": "media",
+      "riesgo_falsa_universalizacion": "medio",
+      "riesgo_asesoria": "medio",
       "platform_review": {
         "required": false,
         "status": "NO_APLICA",
@@ -167,13 +164,178 @@
         "nuevo_claim_id": null
       },
       "redaccion_prohibida": null,
-      "notas": "PRELIMINAR — NO VERIFICADO. Igual que el resto de la pieza, ninguna fuente fue consultada directamente. Este claim documenta explícitamente una posible falsa universalización (asumir que 'rescisión' significa lo mismo en España que en México) y la deja señalada como riesgo alto en vez de resolverla por conjetura — conforme al principio de que es preferible bloquear que afirmar de más. REQUIERE_INVESTIGACION."
+      "notas": "REQUIERE_INVESTIGACION. Esta afirmación (con su matiz jurisprudencial) es nueva respecto de la versión anterior de la pieza y proviene del expediente de Gemini Spark, que cita dos sentencias concretas del Tribunal Supremo — ninguna de las dos fue abierta ni confirmada por mí (poderjudicial.es también bloqueado en el patrón de bloqueo observado, aunque no se probó ese hostname exacto en esta sesión). No se puede tratar 'CONFIRMADO CON MATICES' (etiqueta que usa el expediente) como equivalente a verificación real."
+    },
+    {
+      "claim_id": "pieza-02-claim-3",
+      "texto_exacto": "La figura que el derecho comparado suele llamar 'despido indirecto' no tiene el mismo nombre legal en México, España, Argentina ni Colombia — cada país usa su propio término técnico ('rescisión sin responsabilidad para el trabajador' en México; 'extinción a instancia del trabajador'/Art. 50 ET en España; 'despido indirecto' explícito en el Art. 246 LCT argentino; 'terminación con justa causa del trabajador' en el Art. 62-B CST colombiano) — y cada uno exige un procedimiento distinto (sentencia previa en España, telegrama de intimación en Argentina, expresión inmediata de motivos en la carta de renuncia en Colombia, plazo de 30 días en México).",
+      "ubicacion": "lista",
+      "tipo": "regla",
+      "alcance": "CAPA_C_NACIONAL",
+      "jurisdiccion": [
+        "México",
+        "España",
+        "Argentina",
+        "Colombia"
+      ],
+      "nucleo_transversal": null,
+      "variaciones_materiales": "Nombre técnico, fundamento y procedimiento distintos por país (ver texto_exacto): México (rescisión, plazo de 30 días), España (extinción judicial Art. 50 ET), Argentina (despido indirecto vía telegrama de intimación), Colombia (terminación con justa causa expresada en la carta de renuncia).",
+      "jurisdicciones_revisadas": null,
+      "diferencias_buscadas": null,
+      "contraejemplos_encontrados": null,
+      "justificacion_suficiencia_comparada": null,
+      "fuentes": [
+        {
+          "id": "SRC-P02-MX-LFT-01/02/03",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Ley Federal del Trabajo (México) — rescisión, renuncia y prima de antigüedad",
+          "organismo_autor": "Congreso de la Unión (México)",
+          "url": "https://www.diputados.gob.mx/LeyesBiblio/pdf/LFT.pdf",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-08-26",
+          "localizador": "arts. 47, 48, 50, 51, 52, 53.I y 162.III (candidato de Gemini Spark, sin verificar por mí)",
+          "jurisdicciones_cubiertas": [
+            "México"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": false,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": null,
+            "metodo_o_evidencia": null,
+            "observaciones": "WebFetch bloqueado por el proxy de red de este entorno (EGRESS_BLOCKED). Probado empíricamente el 2026-08-26 contra www.boe.es, www.diputados.gob.mx, servicios.infoleg.gob.ar, sjf2.scjn.gob.mx, www.corteidh.or.cr, www.funcionpublica.gov.co y www.ordenjuridico.gob.mx — los 7 devolvieron EGRESS_BLOCKED. No fue posible confirmar origen oficial, texto exacto ni vigencia de ninguna fuente de forma independiente en esta sesión. El expediente 'legalmente-piloto-evidencia-primaria-v1.md' (producido por otro modelo de IA, 'Gemini Spark') propuso este source_id, artículo y fragmento con la etiqueta 'CONFIRMADO' y 'vigencia comprobada: Sí' autoatribuidas. Por regla de gobernanza de este repositorio (references/source-policy.md, 'Nunca aceptar como fuente: otro contenido generado por IA'; CLAUDE.md, 'Ninguna IA es fuente jurídica'), esa autoconfirmación de OTRA IA no sustituye la verificación real que exige el esquema — se trata aquí solo como candidato/localizador más preciso que antes, pendiente de verificación humana o de una sesión con acceso de red no bloqueado."
+          },
+          "registro_oficial_id": "diputados-gob-mx"
+        },
+        {
+          "id": "SRC-P02-ES-ET-01/02",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Estatuto de los Trabajadores (España) — extinción del contrato",
+          "organismo_autor": "Agencia Estatal BOE",
+          "url": "https://www.boe.es/buscar/act.php?id=BOE-A-2015-11430",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-08-26",
+          "localizador": "arts. 49.1.d, 50, 54 y 56 (candidato de Gemini Spark, sin verificar por mí)",
+          "jurisdicciones_cubiertas": [
+            "España"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": false,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": null,
+            "metodo_o_evidencia": null,
+            "observaciones": "WebFetch bloqueado por el proxy de red de este entorno (EGRESS_BLOCKED). Probado empíricamente el 2026-08-26 contra www.boe.es, www.diputados.gob.mx, servicios.infoleg.gob.ar, sjf2.scjn.gob.mx, www.corteidh.or.cr, www.funcionpublica.gov.co y www.ordenjuridico.gob.mx — los 7 devolvieron EGRESS_BLOCKED. No fue posible confirmar origen oficial, texto exacto ni vigencia de ninguna fuente de forma independiente en esta sesión. El expediente 'legalmente-piloto-evidencia-primaria-v1.md' (producido por otro modelo de IA, 'Gemini Spark') propuso este source_id, artículo y fragmento con la etiqueta 'CONFIRMADO' y 'vigencia comprobada: Sí' autoatribuidas. Por regla de gobernanza de este repositorio (references/source-policy.md, 'Nunca aceptar como fuente: otro contenido generado por IA'; CLAUDE.md, 'Ninguna IA es fuente jurídica'), esa autoconfirmación de OTRA IA no sustituye la verificación real que exige el esquema — se trata aquí solo como candidato/localizador más preciso que antes, pendiente de verificación humana o de una sesión con acceso de red no bloqueado."
+          },
+          "registro_oficial_id": "boe-es"
+        },
+        {
+          "id": "SRC-P02-AR-LCT-01/02",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Ley de Contrato de Trabajo N.º 20.744 (Argentina) — renuncia, injuria y despido indirecto",
+          "organismo_autor": "InfoLEG",
+          "url": "https://servicios.infoleg.gob.ar/infolegInternet/anexos/25000-29999/25552/texact.htm",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-08-26",
+          "localizador": "arts. 240, 242, 245 y 246 (candidato de Gemini Spark, sin verificar por mí)",
+          "jurisdicciones_cubiertas": [
+            "Argentina"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": false,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": null,
+            "metodo_o_evidencia": null,
+            "observaciones": "WebFetch bloqueado por el proxy de red de este entorno (EGRESS_BLOCKED). Probado empíricamente el 2026-08-26 contra www.boe.es, www.diputados.gob.mx, servicios.infoleg.gob.ar, sjf2.scjn.gob.mx, www.corteidh.or.cr, www.funcionpublica.gov.co y www.ordenjuridico.gob.mx — los 7 devolvieron EGRESS_BLOCKED. No fue posible confirmar origen oficial, texto exacto ni vigencia de ninguna fuente de forma independiente en esta sesión. El expediente 'legalmente-piloto-evidencia-primaria-v1.md' (producido por otro modelo de IA, 'Gemini Spark') propuso este source_id, artículo y fragmento con la etiqueta 'CONFIRMADO' y 'vigencia comprobada: Sí' autoatribuidas. Por regla de gobernanza de este repositorio (references/source-policy.md, 'Nunca aceptar como fuente: otro contenido generado por IA'; CLAUDE.md, 'Ninguna IA es fuente jurídica'), esa autoconfirmación de OTRA IA no sustituye la verificación real que exige el esquema — se trata aquí solo como candidato/localizador más preciso que antes, pendiente de verificación humana o de una sesión con acceso de red no bloqueado."
+          },
+          "registro_oficial_id": "infoleg-gob-ar"
+        },
+        {
+          "id": "SRC-P02-CO-CST-01/02",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Código Sustantivo del Trabajo (Colombia) — terminación y justas causas",
+          "organismo_autor": "Función Pública Colombia",
+          "url": "https://www.funcionpublica.gov.co/eva/gestornormativo/norma.php?i=199983",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-08-26",
+          "localizador": "arts. 61, 62 (literal B) y 64 (candidato de Gemini Spark, sin verificar por mí)",
+          "jurisdicciones_cubiertas": [
+            "Colombia"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": false,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": null,
+            "metodo_o_evidencia": null,
+            "observaciones": "WebFetch bloqueado por el proxy de red de este entorno (EGRESS_BLOCKED). Probado empíricamente el 2026-08-26 contra www.boe.es, www.diputados.gob.mx, servicios.infoleg.gob.ar, sjf2.scjn.gob.mx, www.corteidh.or.cr, www.funcionpublica.gov.co y www.ordenjuridico.gob.mx — los 7 devolvieron EGRESS_BLOCKED. No fue posible confirmar origen oficial, texto exacto ni vigencia de ninguna fuente de forma independiente en esta sesión. El expediente 'legalmente-piloto-evidencia-primaria-v1.md' (producido por otro modelo de IA, 'Gemini Spark') propuso este source_id, artículo y fragmento con la etiqueta 'CONFIRMADO' y 'vigencia comprobada: Sí' autoatribuidas. Por regla de gobernanza de este repositorio (references/source-policy.md, 'Nunca aceptar como fuente: otro contenido generado por IA'; CLAUDE.md, 'Ninguna IA es fuente jurídica'), esa autoconfirmación de OTRA IA no sustituye la verificación real que exige el esquema — se trata aquí solo como candidato/localizador más preciso que antes, pendiente de verificación humana o de una sesión con acceso de red no bloqueado."
+          },
+          "registro_oficial_id": "funcionpublica-gov-co"
+        },
+        {
+          "id": "SRC-P02-CO-JUR-01",
+          "tipo_fuente": "JURISPRUDENCIA_OFICIAL",
+          "titulo": "Corte Suprema de Justicia de Colombia (Sala Laboral) — Sentencia SL15507-2015 sobre presupuestos del despido indirecto",
+          "organismo_autor": "Corte Suprema de Justicia de Colombia",
+          "url": "https://www.cortesuprema.gov.co/",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-08-26",
+          "localizador": "Sentencia SL15507-2015, Rad. 50930 (candidato de Gemini Spark, sin verificar por mí)",
+          "jurisdicciones_cubiertas": [
+            "Colombia"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": false,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": null,
+            "metodo_o_evidencia": null,
+            "observaciones": "WebFetch bloqueado por el proxy de red de este entorno (EGRESS_BLOCKED). Probado empíricamente el 2026-08-26 contra www.boe.es, www.diputados.gob.mx, servicios.infoleg.gob.ar, sjf2.scjn.gob.mx, www.corteidh.or.cr, www.funcionpublica.gov.co y www.ordenjuridico.gob.mx — los 7 devolvieron EGRESS_BLOCKED. No fue posible confirmar origen oficial, texto exacto ni vigencia de ninguna fuente de forma independiente en esta sesión. El expediente 'legalmente-piloto-evidencia-primaria-v1.md' (producido por otro modelo de IA, 'Gemini Spark') propuso este source_id, artículo y fragmento con la etiqueta 'CONFIRMADO' y 'vigencia comprobada: Sí' autoatribuidas. Por regla de gobernanza de este repositorio (references/source-policy.md, 'Nunca aceptar como fuente: otro contenido generado por IA'; CLAUDE.md, 'Ninguna IA es fuente jurídica'), esa autoconfirmación de OTRA IA no sustituye la verificación real que exige el esquema — se trata aquí solo como candidato/localizador más preciso que antes, pendiente de verificación humana o de una sesión con acceso de red no bloqueado. El registro oficial único no tiene todavía una entrada para cortesuprema.gov.co/Corte Suprema de Justicia de Colombia (Sala Laboral) — queda sin registro_oficial_id hasta que se añada esa entrada explícitamente, en vez de forzarla."
+          },
+          "registro_oficial_id": null
+        }
+      ],
+      "confianza": "baja",
+      "riesgo_falsa_universalizacion": "alto",
+      "riesgo_asesoria": "medio",
+      "platform_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "confidentiality_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "estado": "REQUIERE_INVESTIGACION",
+      "revision_humana": {
+        "estado": "PENDIENTE",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null,
+        "contenido_hash_sha256": null
+      },
+      "gate_arte": "CERRADO",
+      "reformulacion_propuesta": {
+        "texto": null,
+        "verificada": false,
+        "nuevo_claim_id": null
+      },
+      "redaccion_prohibida": null,
+      "notas": "REQUIERE_INVESTIGACION — deliberadamente formulada como comparación de 4 países concretos (Capa C nacional comparada), no como Capa A transversal: precisamente porque el nombre, el fundamento y el procedimiento difieren en cada país, no hay un núcleo común único que sostenga Capa A. El validador exige, para esta comparación, cobertura real por país y techo = el país más débil; aquí NINGÚN país tiene todavía una fuente verificada (los 4 están en el mismo bloqueo de red), así que el techo real es REQUIERE_INVESTIGACION, no APTO_PARA_NARRATIVA. Este es el ejemplo más claro de por qué no basta con que el expediente declare 'CONFIRMADO' — la pieza necesita 4 verificaciones reales e independientes, no una lista de afirmaciones de otra IA."
     }
   ],
   "estado_agregado": "REQUIERE_INVESTIGACION",
   "revisiones_pendientes": [
     "pieza-02-claim-1",
-    "pieza-02-claim-2"
+    "pieza-02-claim-2",
+    "pieza-02-claim-3"
   ],
   "gate_global_arte": "CERRADO"
 }

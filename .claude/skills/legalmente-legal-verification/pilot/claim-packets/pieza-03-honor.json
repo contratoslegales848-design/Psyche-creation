@@ -4,12 +4,132 @@
   "claims": [
     {
       "claim_id": "pieza-03-claim-1",
-      "texto_exacto": "Una reseña negativa puede dejar de estar protegida como libertad de expresión/crítica y convertirse en una afectación al honor cuando ya no describe una opinión o una experiencia, sino que afirma hechos falsos y concretos sobre una persona o negocio identificable.",
+      "texto_exacto": "Una reseña negativa puede dejar de estar protegida como libertad de expresión/crítica y convertirse en una afectación al honor cuando ya no describe una opinión subjetiva, sino que afirma hechos falsos y concretos sobre una persona o negocio identificable ('la comida estaba pésima' es opinión protegida; 'me robaron' sin pruebas es una afirmación fáctica que puede generar responsabilidad si es falsa).",
       "ubicacion": "hook",
       "tipo": "regla",
-      "alcance": "NO_DETERMINADO",
+      "alcance": "CAPA_B_VARIABLE",
+      "jurisdiccion": [
+        "México",
+        "España",
+        "Argentina"
+      ],
+      "nucleo_transversal": null,
+      "variaciones_materiales": "El mecanismo legal difiere por país: en México la exención de la crítica de buena fe está en una cláusula civil expresa (Art. 1916 Bis CCF); en España es una construcción jurisprudencial del Tribunal Constitucional (hechos veraces vs. opiniones libres, STC 107/1988 y 41/2011); en Argentina combina el Art. 1770 CCyCN con la excepción de conducta antijurídica del Art. 1718 inc. a. No puede presentarse como un único mecanismo panhispánico sin verificar cada base legal por separado.",
+      "jurisdicciones_revisadas": null,
+      "diferencias_buscadas": null,
+      "contraejemplos_encontrados": null,
+      "justificacion_suficiencia_comparada": null,
+      "fuentes": [
+        {
+          "id": "SRC-P03-MX-CCF-01",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Código Civil Federal (México) — daño moral y excepción de crítica legítima",
+          "organismo_autor": "Congreso de la Unión (México)",
+          "url": "https://www.diputados.gob.mx/LeyesBiblio/pdf/CCF.pdf",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-08-26",
+          "localizador": "arts. 1916 y 1916 Bis (candidato de Gemini Spark, sin verificar por mí)",
+          "jurisdicciones_cubiertas": [
+            "México"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": false,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": null,
+            "metodo_o_evidencia": null,
+            "observaciones": "WebFetch bloqueado por el proxy de red de este entorno (EGRESS_BLOCKED). Probado empíricamente el 2026-08-26 contra www.boe.es, www.diputados.gob.mx, servicios.infoleg.gob.ar, sjf2.scjn.gob.mx, www.corteidh.or.cr, www.funcionpublica.gov.co y www.ordenjuridico.gob.mx — los 7 devolvieron EGRESS_BLOCKED. No fue posible confirmar origen oficial, texto exacto ni vigencia de ninguna fuente de forma independiente en esta sesión. El expediente 'legalmente-piloto-evidencia-primaria-v1.md' (producido por otro modelo de IA, 'Gemini Spark') propuso este source_id, artículo y fragmento con la etiqueta 'CONFIRMADO' y 'vigencia comprobada: Sí' autoatribuidas. Por regla de gobernanza de este repositorio (references/source-policy.md, 'Nunca aceptar como fuente: otro contenido generado por IA'; CLAUDE.md, 'Ninguna IA es fuente jurídica'), esa autoconfirmación de OTRA IA no sustituye la verificación real que exige el esquema — se trata aquí solo como candidato/localizador más preciso que antes, pendiente de verificación humana o de una sesión con acceso de red no bloqueado."
+          },
+          "registro_oficial_id": "diputados-gob-mx"
+        },
+        {
+          "id": "SRC-P03-ES-TC-01",
+          "tipo_fuente": "JURISPRUDENCIA_OFICIAL",
+          "titulo": "Tribunal Constitucional de España — STC 107/1988 y STC 41/2011, hechos veraces vs. opiniones libres sin insulto",
+          "organismo_autor": "Tribunal Constitucional de España",
+          "url": "https://hj.tribunalconstitucional.es/",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-08-26",
+          "localizador": "STC 107/1988 y STC 41/2011 (candidato de Gemini Spark, sin verificar por mí)",
+          "jurisdicciones_cubiertas": [
+            "España"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": false,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": null,
+            "metodo_o_evidencia": null,
+            "observaciones": "WebFetch bloqueado por el proxy de red de este entorno (EGRESS_BLOCKED). Probado empíricamente el 2026-08-26 contra www.boe.es, www.diputados.gob.mx, servicios.infoleg.gob.ar, sjf2.scjn.gob.mx, www.corteidh.or.cr, www.funcionpublica.gov.co y www.ordenjuridico.gob.mx — los 7 devolvieron EGRESS_BLOCKED. No fue posible confirmar origen oficial, texto exacto ni vigencia de ninguna fuente de forma independiente en esta sesión. El expediente 'legalmente-piloto-evidencia-primaria-v1.md' (producido por otro modelo de IA, 'Gemini Spark') propuso este source_id, artículo y fragmento con la etiqueta 'CONFIRMADO' y 'vigencia comprobada: Sí' autoatribuidas. Por regla de gobernanza de este repositorio (references/source-policy.md, 'Nunca aceptar como fuente: otro contenido generado por IA'; CLAUDE.md, 'Ninguna IA es fuente jurídica'), esa autoconfirmación de OTRA IA no sustituye la verificación real que exige el esquema — se trata aquí solo como candidato/localizador más preciso que antes, pendiente de verificación humana o de una sesión con acceso de red no bloqueado. hj.tribunalconstitucional.es no figura en official-source-registry.json."
+          },
+          "registro_oficial_id": null
+        },
+        {
+          "id": "SRC-P03-AR-CCYC-01",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Código Civil y Comercial de la Nación (Argentina) — dignidad, honra y vida privada",
+          "organismo_autor": "InfoLEG",
+          "url": "https://servicios.infoleg.gob.ar/infolegInternet/anexos/235000-239999/235975/texact.htm",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-08-26",
+          "localizador": "arts. 52 y 1770 (candidato de Gemini Spark, sin verificar por mí)",
+          "jurisdicciones_cubiertas": [
+            "Argentina"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": false,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": null,
+            "metodo_o_evidencia": null,
+            "observaciones": "WebFetch bloqueado por el proxy de red de este entorno (EGRESS_BLOCKED). Probado empíricamente el 2026-08-26 contra www.boe.es, www.diputados.gob.mx, servicios.infoleg.gob.ar, sjf2.scjn.gob.mx, www.corteidh.or.cr, www.funcionpublica.gov.co y www.ordenjuridico.gob.mx — los 7 devolvieron EGRESS_BLOCKED. No fue posible confirmar origen oficial, texto exacto ni vigencia de ninguna fuente de forma independiente en esta sesión. El expediente 'legalmente-piloto-evidencia-primaria-v1.md' (producido por otro modelo de IA, 'Gemini Spark') propuso este source_id, artículo y fragmento con la etiqueta 'CONFIRMADO' y 'vigencia comprobada: Sí' autoatribuidas. Por regla de gobernanza de este repositorio (references/source-policy.md, 'Nunca aceptar como fuente: otro contenido generado por IA'; CLAUDE.md, 'Ninguna IA es fuente jurídica'), esa autoconfirmación de OTRA IA no sustituye la verificación real que exige el esquema — se trata aquí solo como candidato/localizador más preciso que antes, pendiente de verificación humana o de una sesión con acceso de red no bloqueado."
+          },
+          "registro_oficial_id": "infoleg-gob-ar"
+        }
+      ],
+      "confianza": "media",
+      "riesgo_falsa_universalizacion": "alto",
+      "riesgo_asesoria": "alto",
+      "platform_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "confidentiality_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "estado": "REQUIERE_INVESTIGACION",
+      "revision_humana": {
+        "estado": "PENDIENTE",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null,
+        "contenido_hash_sha256": null
+      },
+      "gate_arte": "CERRADO",
+      "reformulacion_propuesta": {
+        "texto": null,
+        "verificada": false,
+        "nuevo_claim_id": null
+      },
+      "redaccion_prohibida": null,
+      "notas": "REQUIERE_INVESTIGACION. El expediente de Gemini Spark aporta una base doctrinal mucho más precisa que la versión anterior (distinción hecho/opinión con arts. 1916 Bis CCF, doctrina STC 107/1988 y arts. 52/1770 CCyCN), pero sigue sin verificación independiente real — mismo bloqueo de red. riesgo_asesoria: alto, se mantiene: un lector podría usar esto para decidir si SU reseña concreta es legal."
+    },
+    {
+      "claim_id": "pieza-03-claim-2",
+      "texto_exacto": "Los delitos penales contra el honor (calumnia, injuria) NO tienen el mismo estatus en los países comparados: en España siguen vigentes en el Código Penal (arts. 205 y 208); en Argentina fueron despenalizados para asuntos de interés público (Ley 26.551, arts. 109-110 CP); en Quintana Roo, México, están derogados desde 2007 — mezclar estas tres situaciones en una sola afirmación panhispánica sería falsa universalización.",
+      "ubicacion": "lista",
+      "tipo": "dato",
+      "alcance": "CAPA_C_NACIONAL",
       "jurisdiccion": [
         "España",
+        "Argentina",
         "México"
       ],
       "nucleo_transversal": null,
@@ -20,14 +140,14 @@
       "justificacion_suficiencia_comparada": null,
       "fuentes": [
         {
-          "id": "f3-es",
+          "id": "SRC-P03-ES-CP-01",
           "tipo_fuente": "NORMA_OFICIAL",
-          "titulo": "Ley Orgánica 1/1982, de protección civil del derecho al honor (España) — hipótesis de norma aplicable, sin confirmar",
-          "organismo_autor": "Agencia Estatal Boletín Oficial del Estado",
-          "url": "https://www.boe.es/buscar/act.php?id=BOE-A-1982-11196",
+          "titulo": "Código Penal español (LO 10/1995) — calumnia (205) e injuria (208), vigentes",
+          "organismo_autor": "Agencia Estatal BOE",
+          "url": "https://www.boe.es/buscar/act.php?id=BOE-A-1995-25444",
           "identificador_bibliografico": null,
           "fecha_consulta": "2026-08-26",
-          "localizador": "artículo(s) no identificados todavía — pendiente de localizar la norma exacta y el artículo concreto",
+          "localizador": "arts. 205 y 208 (candidato de Gemini Spark, sin verificar por mí)",
           "jurisdicciones_cubiertas": [
             "España"
           ],
@@ -37,19 +157,41 @@
             "vigencia_comprobada": false,
             "fecha_comprobacion": null,
             "metodo_o_evidencia": null,
-            "observaciones": "WebFetch bloqueado por el proxy de red de este entorno (confirmado empíricamente contra www.boe.es el 2026-08-26); no fue posible confirmar el origen oficial, consultar el texto exacto ni comprobar la vigencia de esta fuente durante esta sesión."
+            "observaciones": "WebFetch bloqueado por el proxy de red de este entorno (EGRESS_BLOCKED). Probado empíricamente el 2026-08-26 contra www.boe.es, www.diputados.gob.mx, servicios.infoleg.gob.ar, sjf2.scjn.gob.mx, www.corteidh.or.cr, www.funcionpublica.gov.co y www.ordenjuridico.gob.mx — los 7 devolvieron EGRESS_BLOCKED. No fue posible confirmar origen oficial, texto exacto ni vigencia de ninguna fuente de forma independiente en esta sesión. El expediente 'legalmente-piloto-evidencia-primaria-v1.md' (producido por otro modelo de IA, 'Gemini Spark') propuso este source_id, artículo y fragmento con la etiqueta 'CONFIRMADO' y 'vigencia comprobada: Sí' autoatribuidas. Por regla de gobernanza de este repositorio (references/source-policy.md, 'Nunca aceptar como fuente: otro contenido generado por IA'; CLAUDE.md, 'Ninguna IA es fuente jurídica'), esa autoconfirmación de OTRA IA no sustituye la verificación real que exige el esquema — se trata aquí solo como candidato/localizador más preciso que antes, pendiente de verificación humana o de una sesión con acceso de red no bloqueado."
           },
           "registro_oficial_id": "boe-es"
         },
         {
-          "id": "f3-mx",
-          "tipo_fuente": "SECUNDARIA_ESPECIALIZADA",
-          "titulo": "Nota de investigación preliminar sobre difamación/injuria/calumnia y reseñas en línea en México (sin verificar, sin norma identificada)",
-          "organismo_autor": "Nota de investigación preliminar — LegalMente",
-          "url": null,
-          "identificador_bibliografico": "Sin publicación identificable todavía — solo hipótesis de trabajo, requiere investigación real",
+          "id": "SRC-P03-AR-LEY-01",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Ley 26.551 (Argentina) — despenalización de calumnias/injurias sobre interés público",
+          "organismo_autor": "InfoLEG",
+          "url": "https://servicios.infoleg.gob.ar/infolegInternet/anexos/160000-164999/160757/norma.htm",
+          "identificador_bibliografico": null,
           "fecha_consulta": "2026-08-26",
-          "localizador": "sin localizador — no se identificó todavía la norma ni el criterio judicial aplicable",
+          "localizador": "arts. 1-3, reformando arts. 109-110 CP (candidato de Gemini Spark, sin verificar por mí)",
+          "jurisdicciones_cubiertas": [
+            "Argentina"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": false,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": null,
+            "metodo_o_evidencia": null,
+            "observaciones": "WebFetch bloqueado por el proxy de red de este entorno (EGRESS_BLOCKED). Probado empíricamente el 2026-08-26 contra www.boe.es, www.diputados.gob.mx, servicios.infoleg.gob.ar, sjf2.scjn.gob.mx, www.corteidh.or.cr, www.funcionpublica.gov.co y www.ordenjuridico.gob.mx — los 7 devolvieron EGRESS_BLOCKED. No fue posible confirmar origen oficial, texto exacto ni vigencia de ninguna fuente de forma independiente en esta sesión. El expediente 'legalmente-piloto-evidencia-primaria-v1.md' (producido por otro modelo de IA, 'Gemini Spark') propuso este source_id, artículo y fragmento con la etiqueta 'CONFIRMADO' y 'vigencia comprobada: Sí' autoatribuidas. Por regla de gobernanza de este repositorio (references/source-policy.md, 'Nunca aceptar como fuente: otro contenido generado por IA'; CLAUDE.md, 'Ninguna IA es fuente jurídica'), esa autoconfirmación de OTRA IA no sustituye la verificación real que exige el esquema — se trata aquí solo como candidato/localizador más preciso que antes, pendiente de verificación humana o de una sesión con acceso de red no bloqueado."
+          },
+          "registro_oficial_id": "infoleg-gob-ar"
+        },
+        {
+          "id": "SRC-P03-MX-QROO-PEN-01",
+          "tipo_fuente": "AUTORIDAD_PUBLICA_OFICIAL",
+          "titulo": "Portal del Sistema de Administración Tributaria de Quintana Roo (SATQ) — repositorio del marco legal, incluido el Código Penal estatal (no es el Congreso de Quintana Roo, es un portal genérico *.gob.mx)",
+          "organismo_autor": "Gobierno de México (portal genérico gob.mx)",
+          "url": "https://satq.qroo.gob.mx/contenidos/dmarcolegal/33ab1ad0-39b3-11f1-b1f4-005056a29996",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-08-26",
+          "localizador": "arts. 133-137 derogados (candidato de Gemini Spark, sin verificar por mí)",
           "jurisdicciones_cubiertas": [
             "México"
           ],
@@ -59,7 +201,105 @@
             "vigencia_comprobada": false,
             "fecha_comprobacion": null,
             "metodo_o_evidencia": null,
-            "observaciones": "WebFetch bloqueado por el proxy de red de este entorno (confirmado empíricamente contra www.boe.es el 2026-08-26); no fue posible confirmar el origen oficial, consultar el texto exacto ni comprobar la vigencia de esta fuente durante esta sesión."
+            "observaciones": "WebFetch bloqueado por el proxy de red de este entorno (EGRESS_BLOCKED). Probado empíricamente el 2026-08-26 contra www.boe.es, www.diputados.gob.mx, servicios.infoleg.gob.ar, sjf2.scjn.gob.mx, www.corteidh.or.cr, www.funcionpublica.gov.co y www.ordenjuridico.gob.mx — los 7 devolvieron EGRESS_BLOCKED. No fue posible confirmar origen oficial, texto exacto ni vigencia de ninguna fuente de forma independiente en esta sesión. El expediente 'legalmente-piloto-evidencia-primaria-v1.md' (producido por otro modelo de IA, 'Gemini Spark') propuso este source_id, artículo y fragmento con la etiqueta 'CONFIRMADO' y 'vigencia comprobada: Sí' autoatribuidas. Por regla de gobernanza de este repositorio (references/source-policy.md, 'Nunca aceptar como fuente: otro contenido generado por IA'; CLAUDE.md, 'Ninguna IA es fuente jurídica'), esa autoconfirmación de OTRA IA no sustituye la verificación real que exige el esquema — se trata aquí solo como candidato/localizador más preciso que antes, pendiente de verificación humana o de una sesión con acceso de red no bloqueado. satq.qroo.gob.mx resuelve, por coincidencia de subdominio, a la entrada genérica 'gob-mx-generico' (solo AUTORIDAD_PUBLICA_OFICIAL) — no es la fuente directa del Periódico Oficial del Estado que publicó la derogación. Techo Nivel 2 incluso si se verificara el texto."
+          },
+          "registro_oficial_id": "gob-mx-generico"
+        }
+      ],
+      "confianza": "media",
+      "riesgo_falsa_universalizacion": "alto",
+      "riesgo_asesoria": "medio",
+      "platform_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "confidentiality_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "estado": "REQUIERE_INVESTIGACION",
+      "revision_humana": {
+        "estado": "PENDIENTE",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null,
+        "contenido_hash_sha256": null
+      },
+      "gate_arte": "CERRADO",
+      "reformulacion_propuesta": {
+        "texto": null,
+        "verificada": false,
+        "nuevo_claim_id": null
+      },
+      "redaccion_prohibida": null,
+      "notas": "REQUIERE_INVESTIGACION. Este es exactamente el tipo de claim que la pieza necesitaba para evitar falsa universalización, y el expediente de Gemini Spark lo documenta con precisión (vigencia penal en España, despenalización en Argentina, derogación local en Quintana Roo) — pero las 3 fuentes siguen sin verificación independiente real en esta sesión (mismo bloqueo). Nótese que Quintana Roo es una derogación ESTATAL, no nacional mexicana — no debe generalizarse a 'México' sin más."
+    },
+    {
+      "claim_id": "pieza-03-claim-3",
+      "texto_exacto": "Cuando una reseña o crítica se refiere a un negocio, figura pública o asunto de interés general, la jurisprudencia interamericana (Corte IDH, casos Kimel, Herrera Ulloa y Álvarez Ramos) y varias jurisprudencias nacionales (SCJN México, Patitó/Campillay en Argentina) exigen un estándar más exigente ('malicia efectiva' / 'real malicia') para poder sancionar civilmente al autor por una afirmación fáctica inexacta — no basta con que el hecho resulte falso.",
+      "ubicacion": "cta",
+      "tipo": "regla",
+      "alcance": "CAPA_B_VARIABLE",
+      "jurisdiccion": [
+        "México",
+        "Argentina"
+      ],
+      "nucleo_transversal": null,
+      "variaciones_materiales": "El estándar recibe nombre y fundamento distintos por sistema: 'malicia efectiva' (SCJN México, Tesis 2003643) vs. 'real malicia' (CSJN Argentina, caso Patitó) vs. el test de proporcionalidad de la Corte IDH (Kimel/Herrera Ulloa/Álvarez Ramos) — tratarlos como sinónimos intercambiables sin verificar cada uno sería falsa universalización.",
+      "jurisdicciones_revisadas": null,
+      "diferencias_buscadas": null,
+      "contraejemplos_encontrados": null,
+      "justificacion_suficiencia_comparada": null,
+      "fuentes": [
+        {
+          "id": "SRC-P03-MX-SCJN-01",
+          "tipo_fuente": "JURISPRUDENCIA_OFICIAL",
+          "titulo": "SCJN, Primera Sala — Amparo Directo 3/2011 (caso Lydia Cacho), Tesis 1a. CXXXVIII/2013 (10a.), Registro 2003643, sobre 'malicia efectiva'",
+          "organismo_autor": "SCJN",
+          "url": "https://sjf2.scjn.gob.mx/detalle/tesis/2003643",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-08-26",
+          "localizador": "Tesis 2003643 (candidato de Gemini Spark, sin verificar por mí)",
+          "jurisdicciones_cubiertas": [
+            "México"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": false,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": null,
+            "metodo_o_evidencia": null,
+            "observaciones": "WebFetch bloqueado por el proxy de red de este entorno (EGRESS_BLOCKED). Probado empíricamente el 2026-08-26 contra www.boe.es, www.diputados.gob.mx, servicios.infoleg.gob.ar, sjf2.scjn.gob.mx, www.corteidh.or.cr, www.funcionpublica.gov.co y www.ordenjuridico.gob.mx — los 7 devolvieron EGRESS_BLOCKED. No fue posible confirmar origen oficial, texto exacto ni vigencia de ninguna fuente de forma independiente en esta sesión. El expediente 'legalmente-piloto-evidencia-primaria-v1.md' (producido por otro modelo de IA, 'Gemini Spark') propuso este source_id, artículo y fragmento con la etiqueta 'CONFIRMADO' y 'vigencia comprobada: Sí' autoatribuidas. Por regla de gobernanza de este repositorio (references/source-policy.md, 'Nunca aceptar como fuente: otro contenido generado por IA'; CLAUDE.md, 'Ninguna IA es fuente jurídica'), esa autoconfirmación de OTRA IA no sustituye la verificación real que exige el esquema — se trata aquí solo como candidato/localizador más preciso que antes, pendiente de verificación humana o de una sesión con acceso de red no bloqueado."
+          },
+          "registro_oficial_id": "scjn-gob-mx"
+        },
+        {
+          "id": "SRC-P03-CIDH-KIMEL-01/HERRERA-01/ALVAREZ-01",
+          "tipo_fuente": "JURISPRUDENCIA_OFICIAL",
+          "titulo": "Corte IDH — Casos Kimel vs. Argentina (Serie C 177), Herrera Ulloa vs. Costa Rica (Serie C 107) y Álvarez Ramos vs. Venezuela (Serie C 380): proscripción de la vía penal para discursos de interés público",
+          "organismo_autor": "Corte Interamericana de Derechos Humanos",
+          "url": "https://www.corteidh.or.cr/docs/casos/articulos/seriec_177_esp.pdf",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-08-26",
+          "localizador": "Serie C n.º 177, 107 y 380 (candidato de Gemini Spark, sin verificar por mí)",
+          "jurisdicciones_cubiertas": [
+            "Argentina",
+            "Costa Rica",
+            "Venezuela"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": false,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": null,
+            "metodo_o_evidencia": null,
+            "observaciones": "WebFetch bloqueado por el proxy de red de este entorno (EGRESS_BLOCKED). Probado empíricamente el 2026-08-26 contra www.boe.es, www.diputados.gob.mx, servicios.infoleg.gob.ar, sjf2.scjn.gob.mx, www.corteidh.or.cr, www.funcionpublica.gov.co y www.ordenjuridico.gob.mx — los 7 devolvieron EGRESS_BLOCKED. No fue posible confirmar origen oficial, texto exacto ni vigencia de ninguna fuente de forma independiente en esta sesión. El expediente 'legalmente-piloto-evidencia-primaria-v1.md' (producido por otro modelo de IA, 'Gemini Spark') propuso este source_id, artículo y fragmento con la etiqueta 'CONFIRMADO' y 'vigencia comprobada: Sí' autoatribuidas. Por regla de gobernanza de este repositorio (references/source-policy.md, 'Nunca aceptar como fuente: otro contenido generado por IA'; CLAUDE.md, 'Ninguna IA es fuente jurídica'), esa autoconfirmación de OTRA IA no sustituye la verificación real que exige el esquema — se trata aquí solo como candidato/localizador más preciso que antes, pendiente de verificación humana o de una sesión con acceso de red no bloqueado. corteidh.or.cr no figura en official-source-registry.json — es un tribunal supranacional del Sistema Interamericano, análogo a eur-lex.europa.eu; añadir una entrada requiere decisión humana explícita, no se hace aquí solo para que esta fuente pase."
           },
           "registro_oficial_id": null
         }
@@ -96,12 +336,14 @@
         "nuevo_claim_id": null
       },
       "redaccion_prohibida": null,
-      "notas": "PRELIMINAR — NO VERIFICADO Y DE ALTO RIESGO. Ninguna fuente fue consultada directamente (WebFetch bloqueado por el proxy de red). La fuente mexicana ni siquiera tiene todavía una norma o sentencia identificada — es solo una nota de investigación, tipo_fuente SECUNDARIA_ESPECIALIZADA, techo Nivel 3 aun en el mejor caso. El límite exacto entre opinión protegida y difamación/calumnia/injuria depende fuertemente de la doctrina y jurisprudencia de cada país (dónde se ubica el estándar de veracidad, dolo, malicia, carga de la prueba) y NO puede tratarse como una regla panhispánica única sin ese trabajo. riesgo_asesoria: alto porque un lector podría interpretar esto como una guía para saber si SU reseña o SU caso concreto es ilegal, lo cual excede un contenido educativo. Esta pieza se recomienda BLOQUEADA en el veredicto final, no solo REQUIERE_INVESTIGACION."
+      "notas": "REQUIERE_INVESTIGACION. riesgo_asesoria alto: podría interpretarse como 'puedes decir lo que quieras de un negocio si crees que es verdad', lo cual excede contenido educativo y raya en incitar a un hecho ilícito si se redacta mal. El expediente de Gemini Spark identifica jurisprudencia muy específica (SCJN Tesis 2003643, CSJN Fallos 308:789 y 331:1530, Corte IDH Series C 107/177/380) pero NINGUNA sentencia fue abierta ni confirmada de forma independiente por mí. Esta pieza sigue siendo la de mayor riesgo de las 3 y se recomienda que permanezca bloqueada incluso después de que las otras avancen."
     }
   ],
   "estado_agregado": "REQUIERE_INVESTIGACION",
   "revisiones_pendientes": [
-    "pieza-03-claim-1"
+    "pieza-03-claim-1",
+    "pieza-03-claim-2",
+    "pieza-03-claim-3"
   ],
   "gate_global_arte": "CERRADO"
 }

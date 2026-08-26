@@ -4,52 +4,31 @@
   "claims": [
     {
       "claim_id": "pieza-01-claim-1",
-      "texto_exacto": "La propiedad es el derecho sobre la cosa misma; la posesión es el control de hecho sobre ella, con o sin derecho de propiedad.",
+      "texto_exacto": "La propiedad es el derecho de usar, gozar y disponer de una cosa; la posesión es el poder de hecho sobre ella (con o sin derecho de propiedad detrás).",
       "ubicacion": "hook",
       "tipo": "definicion",
       "alcance": "CAPA_B_VARIABLE",
       "jurisdiccion": [
+        "México",
         "España",
-        "México"
+        "Argentina"
       ],
       "nucleo_transversal": null,
-      "variaciones_materiales": "Sin verificar todavía si el requisito de 'animus' (intención de comportarse como dueño) para distinguir posesión de mera tenencia se formula igual en España y México, ni si los efectos prácticos de la posesión (usucapión, protección posesoria/interdictos) tienen los mismos plazos y requisitos — esto es precisamente lo que Capa B exige investigar antes de declarar la afirmación como transversal sin matices.",
+      "variaciones_materiales": "El expediente de Gemini Spark sugiere que México federal define propiedad en el art. 830 CCF y posesión en el 790; España en el art. 348 (propiedad) y 430/432 (posesión natural/civil); Argentina en el art. 1941 (dominio) y 1909 (posesión) del CCyCN. Estas correspondencias deben confirmarse artículo por artículo antes de tratarlas como equivalentes — el propio expediente advierte que México no reconoce 'tenencia' como categoría autónoma mientras España y Argentina sí, lo que ya descarta una redacción única.",
       "jurisdicciones_revisadas": null,
       "diferencias_buscadas": null,
       "contraejemplos_encontrados": null,
       "justificacion_suficiencia_comparada": null,
       "fuentes": [
         {
-          "id": "f1-es",
+          "id": "SRC-P01-MX-FED-01",
           "tipo_fuente": "NORMA_OFICIAL",
-          "titulo": "Código Civil español — posesión y propiedad",
-          "organismo_autor": "Agencia Estatal Boletín Oficial del Estado",
-          "url": "https://www.boe.es/buscar/act.php?id=BOE-A-1889-4763",
-          "identificador_bibliografico": null,
-          "fecha_consulta": "2026-08-26",
-          "localizador": "arts. 348 (propiedad) y 430 (posesión) — localizador preliminar, PENDIENTE de confirmación exacta",
-          "jurisdicciones_cubiertas": [
-            "España"
-          ],
-          "verificacion_fuente": {
-            "origen_oficial_confirmado": false,
-            "texto_exacto_consultado": false,
-            "vigencia_comprobada": false,
-            "fecha_comprobacion": null,
-            "metodo_o_evidencia": null,
-            "observaciones": "WebFetch bloqueado por el proxy de red de este entorno (confirmado empíricamente contra www.boe.es el 2026-08-26); no fue posible confirmar el origen oficial, consultar el texto exacto ni comprobar la vigencia de esta fuente durante esta sesión."
-          },
-          "registro_oficial_id": "boe-es"
-        },
-        {
-          "id": "f1-mx",
-          "tipo_fuente": "NORMA_OFICIAL",
-          "titulo": "Código Civil Federal (México) — posesión y propiedad",
+          "titulo": "Código Civil Federal (México) — posesión originaria/derivada",
           "organismo_autor": "Congreso de la Unión (México)",
           "url": "https://www.diputados.gob.mx/LeyesBiblio/pdf/CCF.pdf",
           "identificador_bibliografico": null,
           "fecha_consulta": "2026-08-26",
-          "localizador": "arts. 830 (propiedad) y 790 (posesión) — localizador preliminar, PENDIENTE de confirmación exacta",
+          "localizador": "arts. 1, 790 y 791 (candidato de Gemini Spark, sin verificar por mí)",
           "jurisdicciones_cubiertas": [
             "México"
           ],
@@ -59,9 +38,53 @@
             "vigencia_comprobada": false,
             "fecha_comprobacion": null,
             "metodo_o_evidencia": null,
-            "observaciones": "WebFetch bloqueado por el proxy de red de este entorno (confirmado empíricamente contra www.boe.es el 2026-08-26); no fue posible confirmar el origen oficial, consultar el texto exacto ni comprobar la vigencia de esta fuente durante esta sesión."
+            "observaciones": "WebFetch bloqueado por el proxy de red de este entorno (EGRESS_BLOCKED). Probado empíricamente el 2026-08-26 contra www.boe.es, www.diputados.gob.mx, servicios.infoleg.gob.ar, sjf2.scjn.gob.mx, www.corteidh.or.cr, www.funcionpublica.gov.co y www.ordenjuridico.gob.mx — los 7 devolvieron EGRESS_BLOCKED. No fue posible confirmar origen oficial, texto exacto ni vigencia de ninguna fuente de forma independiente en esta sesión. El expediente 'legalmente-piloto-evidencia-primaria-v1.md' (producido por otro modelo de IA, 'Gemini Spark') propuso este source_id, artículo y fragmento con la etiqueta 'CONFIRMADO' y 'vigencia comprobada: Sí' autoatribuidas. Por regla de gobernanza de este repositorio (references/source-policy.md, 'Nunca aceptar como fuente: otro contenido generado por IA'; CLAUDE.md, 'Ninguna IA es fuente jurídica'), esa autoconfirmación de OTRA IA no sustituye la verificación real que exige el esquema — se trata aquí solo como candidato/localizador más preciso que antes, pendiente de verificación humana o de una sesión con acceso de red no bloqueado."
           },
           "registro_oficial_id": "diputados-gob-mx"
+        },
+        {
+          "id": "SRC-P01-ES-CC-01/02/03",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Código Civil español — propiedad, posesión y usucapión",
+          "organismo_autor": "Agencia Estatal BOE",
+          "url": "https://www.boe.es/buscar/act.php?id=BOE-A-1889-4763",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-08-26",
+          "localizador": "arts. 348, 430, 432, 1940 y 1941 (candidato de Gemini Spark, sin verificar por mí)",
+          "jurisdicciones_cubiertas": [
+            "España"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": false,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": null,
+            "metodo_o_evidencia": null,
+            "observaciones": "WebFetch bloqueado por el proxy de red de este entorno (EGRESS_BLOCKED). Probado empíricamente el 2026-08-26 contra www.boe.es, www.diputados.gob.mx, servicios.infoleg.gob.ar, sjf2.scjn.gob.mx, www.corteidh.or.cr, www.funcionpublica.gov.co y www.ordenjuridico.gob.mx — los 7 devolvieron EGRESS_BLOCKED. No fue posible confirmar origen oficial, texto exacto ni vigencia de ninguna fuente de forma independiente en esta sesión. El expediente 'legalmente-piloto-evidencia-primaria-v1.md' (producido por otro modelo de IA, 'Gemini Spark') propuso este source_id, artículo y fragmento con la etiqueta 'CONFIRMADO' y 'vigencia comprobada: Sí' autoatribuidas. Por regla de gobernanza de este repositorio (references/source-policy.md, 'Nunca aceptar como fuente: otro contenido generado por IA'; CLAUDE.md, 'Ninguna IA es fuente jurídica'), esa autoconfirmación de OTRA IA no sustituye la verificación real que exige el esquema — se trata aquí solo como candidato/localizador más preciso que antes, pendiente de verificación humana o de una sesión con acceso de red no bloqueado."
+          },
+          "registro_oficial_id": "boe-es"
+        },
+        {
+          "id": "SRC-P01-AR-CCYC-01/02/03",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Código Civil y Comercial de la Nación (Argentina) — posesión, tenencia y dominio",
+          "organismo_autor": "InfoLEG",
+          "url": "https://servicios.infoleg.gob.ar/infolegInternet/anexos/235000-239999/235975/texact.htm",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-08-26",
+          "localizador": "arts. 1897, 1909, 1910 y 1941 (candidato de Gemini Spark, sin verificar por mí)",
+          "jurisdicciones_cubiertas": [
+            "Argentina"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": false,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": null,
+            "metodo_o_evidencia": null,
+            "observaciones": "WebFetch bloqueado por el proxy de red de este entorno (EGRESS_BLOCKED). Probado empíricamente el 2026-08-26 contra www.boe.es, www.diputados.gob.mx, servicios.infoleg.gob.ar, sjf2.scjn.gob.mx, www.corteidh.or.cr, www.funcionpublica.gov.co y www.ordenjuridico.gob.mx — los 7 devolvieron EGRESS_BLOCKED. No fue posible confirmar origen oficial, texto exacto ni vigencia de ninguna fuente de forma independiente en esta sesión. El expediente 'legalmente-piloto-evidencia-primaria-v1.md' (producido por otro modelo de IA, 'Gemini Spark') propuso este source_id, artículo y fragmento con la etiqueta 'CONFIRMADO' y 'vigencia comprobada: Sí' autoatribuidas. Por regla de gobernanza de este repositorio (references/source-policy.md, 'Nunca aceptar como fuente: otro contenido generado por IA'; CLAUDE.md, 'Ninguna IA es fuente jurídica'), esa autoconfirmación de OTRA IA no sustituye la verificación real que exige el esquema — se trata aquí solo como candidato/localizador más preciso que antes, pendiente de verificación humana o de una sesión con acceso de red no bloqueado."
+          },
+          "registro_oficial_id": "infoleg-gob-ar"
         }
       ],
       "confianza": "media",
@@ -96,38 +119,80 @@
         "nuevo_claim_id": null
       },
       "redaccion_prohibida": null,
-      "notas": "PRELIMINAR — NO VERIFICADO. Los artículos y URLs son un punto de partida basado en conocimiento general del derecho civil hispánico, no en consulta directa: WebFetch a boe.es y a diputados.gob.mx fue bloqueado por el proxy de red de este entorno (probado empíricamente el 2026-08-26). No se pudo confirmar el número exacto de artículo, la redacción vigente, ni si el artículo sigue vigente en cada país. Estado forzado a REQUIERE_INVESTIGACION: ninguna fuente alcanza Nivel 1 ni Nivel 2 con garantías reales — ambas fuentes quedan en el techo más bajo posible hasta verificación humana directa contra el texto oficial."
+      "notas": "REQUIERE_INVESTIGACION — candidatos de fuente más precisos que la versión anterior de esta pieza (localizador de artículo concreto por país), pero AÚN SIN verificación independiente real: los 3 intentos de WebFetch a boe.es, diputados.gob.mx e infoleg.gob.ar el 2026-08-26 devolvieron EGRESS_BLOCKED. El expediente 'legalmente-piloto-evidencia-primaria-v1.md' (producido por otro modelo de IA, 'Gemini Spark') propuso este source_id, artículo y fragmento con la etiqueta 'CONFIRMADO' y 'vigencia comprobada: Sí' autoatribuidas. Por regla de gobernanza de este repositorio (references/source-policy.md, 'Nunca aceptar como fuente: otro contenido generado por IA'; CLAUDE.md, 'Ninguna IA es fuente jurídica'), esa autoconfirmación de OTRA IA no sustituye la verificación real que exige el esquema — se trata aquí solo como candidato/localizador más preciso que antes, pendiente de verificación humana o de una sesión con acceso de red no bloqueado."
     },
     {
       "claim_id": "pieza-01-claim-2",
-      "texto_exacto": "'Tenencia' se usa a veces como sinónimo de posesión y a veces como una figura administrativa o penal distinta (p. ej. tenencia de un bien regulado), y ese uso varía por país.",
+      "texto_exacto": "'Tenencia' es una categoría técnica autónoma (poder de hecho reconociendo dominio ajeno) en España y Argentina, pero en México (Federal y Quintana Roo) no existe como figura sustantiva propia: el equivalente se llama 'posesión derivada'.",
       "ubicacion": "texto_imagen",
       "tipo": "definicion",
-      "alcance": "NO_DETERMINADO",
+      "alcance": "CAPA_B_VARIABLE",
       "jurisdiccion": [
-        "España",
         "México",
+        "España",
         "Argentina"
       ],
       "nucleo_transversal": null,
-      "variaciones_materiales": null,
+      "variaciones_materiales": "Terminología distinta por país: 'poseedor derivado' (México) vs. 'tenedor' (España, Argentina) — el expediente lo señala como riesgo explícito de no-universalización.",
       "jurisdicciones_revisadas": null,
       "diferencias_buscadas": null,
       "contraejemplos_encontrados": null,
       "justificacion_suficiencia_comparada": null,
       "fuentes": [
         {
-          "id": "f1-ten",
-          "tipo_fuente": "SECUNDARIA_ESPECIALIZADA",
-          "titulo": "Uso del término 'tenencia' en normativa administrativa y penal comparada (nota de investigación interna, sin verificar)",
-          "organismo_autor": "Nota de investigación preliminar — LegalMente",
-          "url": null,
-          "identificador_bibliografico": "Sin publicación identificable todavía — solo hipótesis de trabajo",
+          "id": "SRC-P01-MX-FED-01",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Código Civil Federal (México) — posesión originaria/derivada",
+          "organismo_autor": "Congreso de la Unión (México)",
+          "url": "https://www.diputados.gob.mx/LeyesBiblio/pdf/CCF.pdf",
+          "identificador_bibliografico": null,
           "fecha_consulta": "2026-08-26",
-          "localizador": "sin localizador específico — pendiente de identificar norma concreta",
+          "localizador": "arts. 1, 790 y 791 (candidato de Gemini Spark, sin verificar por mí)",
           "jurisdicciones_cubiertas": [
-            "España",
-            "México",
+            "México"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": false,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": null,
+            "metodo_o_evidencia": null,
+            "observaciones": "WebFetch bloqueado por el proxy de red de este entorno (EGRESS_BLOCKED). Probado empíricamente el 2026-08-26 contra www.boe.es, www.diputados.gob.mx, servicios.infoleg.gob.ar, sjf2.scjn.gob.mx, www.corteidh.or.cr, www.funcionpublica.gov.co y www.ordenjuridico.gob.mx — los 7 devolvieron EGRESS_BLOCKED. No fue posible confirmar origen oficial, texto exacto ni vigencia de ninguna fuente de forma independiente en esta sesión. El expediente 'legalmente-piloto-evidencia-primaria-v1.md' (producido por otro modelo de IA, 'Gemini Spark') propuso este source_id, artículo y fragmento con la etiqueta 'CONFIRMADO' y 'vigencia comprobada: Sí' autoatribuidas. Por regla de gobernanza de este repositorio (references/source-policy.md, 'Nunca aceptar como fuente: otro contenido generado por IA'; CLAUDE.md, 'Ninguna IA es fuente jurídica'), esa autoconfirmación de OTRA IA no sustituye la verificación real que exige el esquema — se trata aquí solo como candidato/localizador más preciso que antes, pendiente de verificación humana o de una sesión con acceso de red no bloqueado."
+          },
+          "registro_oficial_id": "diputados-gob-mx"
+        },
+        {
+          "id": "SRC-P01-ES-CC-01/02/03",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Código Civil español — propiedad, posesión y usucapión",
+          "organismo_autor": "Agencia Estatal BOE",
+          "url": "https://www.boe.es/buscar/act.php?id=BOE-A-1889-4763",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-08-26",
+          "localizador": "arts. 348, 430, 432, 1940 y 1941 (candidato de Gemini Spark, sin verificar por mí)",
+          "jurisdicciones_cubiertas": [
+            "España"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": false,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": null,
+            "metodo_o_evidencia": null,
+            "observaciones": "WebFetch bloqueado por el proxy de red de este entorno (EGRESS_BLOCKED). Probado empíricamente el 2026-08-26 contra www.boe.es, www.diputados.gob.mx, servicios.infoleg.gob.ar, sjf2.scjn.gob.mx, www.corteidh.or.cr, www.funcionpublica.gov.co y www.ordenjuridico.gob.mx — los 7 devolvieron EGRESS_BLOCKED. No fue posible confirmar origen oficial, texto exacto ni vigencia de ninguna fuente de forma independiente en esta sesión. El expediente 'legalmente-piloto-evidencia-primaria-v1.md' (producido por otro modelo de IA, 'Gemini Spark') propuso este source_id, artículo y fragmento con la etiqueta 'CONFIRMADO' y 'vigencia comprobada: Sí' autoatribuidas. Por regla de gobernanza de este repositorio (references/source-policy.md, 'Nunca aceptar como fuente: otro contenido generado por IA'; CLAUDE.md, 'Ninguna IA es fuente jurídica'), esa autoconfirmación de OTRA IA no sustituye la verificación real que exige el esquema — se trata aquí solo como candidato/localizador más preciso que antes, pendiente de verificación humana o de una sesión con acceso de red no bloqueado."
+          },
+          "registro_oficial_id": "boe-es"
+        },
+        {
+          "id": "SRC-P01-AR-CCYC-01/02/03",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Código Civil y Comercial de la Nación (Argentina) — posesión, tenencia y dominio",
+          "organismo_autor": "InfoLEG",
+          "url": "https://servicios.infoleg.gob.ar/infolegInternet/anexos/235000-239999/235975/texact.htm",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-08-26",
+          "localizador": "arts. 1897, 1909, 1910 y 1941 (candidato de Gemini Spark, sin verificar por mí)",
+          "jurisdicciones_cubiertas": [
             "Argentina"
           ],
           "verificacion_fuente": {
@@ -136,12 +201,12 @@
             "vigencia_comprobada": false,
             "fecha_comprobacion": null,
             "metodo_o_evidencia": null,
-            "observaciones": "WebFetch bloqueado por el proxy de red de este entorno (confirmado empíricamente contra www.boe.es el 2026-08-26); no fue posible confirmar el origen oficial, consultar el texto exacto ni comprobar la vigencia de esta fuente durante esta sesión."
+            "observaciones": "WebFetch bloqueado por el proxy de red de este entorno (EGRESS_BLOCKED). Probado empíricamente el 2026-08-26 contra www.boe.es, www.diputados.gob.mx, servicios.infoleg.gob.ar, sjf2.scjn.gob.mx, www.corteidh.or.cr, www.funcionpublica.gov.co y www.ordenjuridico.gob.mx — los 7 devolvieron EGRESS_BLOCKED. No fue posible confirmar origen oficial, texto exacto ni vigencia de ninguna fuente de forma independiente en esta sesión. El expediente 'legalmente-piloto-evidencia-primaria-v1.md' (producido por otro modelo de IA, 'Gemini Spark') propuso este source_id, artículo y fragmento con la etiqueta 'CONFIRMADO' y 'vigencia comprobada: Sí' autoatribuidas. Por regla de gobernanza de este repositorio (references/source-policy.md, 'Nunca aceptar como fuente: otro contenido generado por IA'; CLAUDE.md, 'Ninguna IA es fuente jurídica'), esa autoconfirmación de OTRA IA no sustituye la verificación real que exige el esquema — se trata aquí solo como candidato/localizador más preciso que antes, pendiente de verificación humana o de una sesión con acceso de red no bloqueado."
           },
-          "registro_oficial_id": null
+          "registro_oficial_id": "infoleg-gob-ar"
         }
       ],
-      "confianza": "baja",
+      "confianza": "media",
       "riesgo_falsa_universalizacion": "alto",
       "riesgo_asesoria": "ninguno",
       "platform_review": {
@@ -173,13 +238,155 @@
         "nuevo_claim_id": null
       },
       "redaccion_prohibida": null,
-      "notas": "PRELIMINAR — NO VERIFICADO. Esta afirmación describe una variación terminológica sospechada, no confirmada con fuente primaria alguna. Riesgo alto de falsa universalización: 'tenencia' puede tener sentidos completamente distintos entre España, México y Argentina (p. ej. tenencia de hijos en derecho de familia argentino frente a tenencia de posesión de bienes) y mezclar ambos sin distinguir el contexto sería una afirmación jurídica insuficientemente verificada. BLOQUEADO hasta investigación real."
+      "notas": "REQUIERE_INVESTIGACION. El expediente de Gemini Spark propone una respuesta puntual y específica (arts. 791 CCF, 430/432 CC español, 1910 CCyCN argentino) que es más verificable que la formulación genérica anterior, pero sigue sin verificación independiente real por mí — mismo bloqueo de red. Riesgo de falsa universalización: sigue siendo alto mezclar los tres sistemas en una sola pieza si no se verifica cada artículo; se mantiene explícita la variación en vez de resolverla por conjetura."
+    },
+    {
+      "claim_id": "pieza-01-claim-3",
+      "texto_exacto": "El arrendatario o comodatario (quien reconoce que el dueño es otra persona) no puede adquirir la propiedad por el simple paso del tiempo (usucapión/prescripción positiva) mientras no cambie realmente su título de posesión de forma probada.",
+      "ubicacion": "lista",
+      "tipo": "regla",
+      "alcance": "CAPA_B_VARIABLE",
+      "jurisdiccion": [
+        "México",
+        "España",
+        "Argentina"
+      ],
+      "nucleo_transversal": null,
+      "variaciones_materiales": "Los plazos de prescripción/usucapión que propone el expediente de Gemini Spark difieren por país (México: 5 años de buena fe / 10 de mala fe, art. 1152 CCF; España: 10/20 años ordinaria, 30 extraordinaria, arts. 1940-1941 CC; Argentina: 10 años breve con justo título / 20 larga, arts. 1898-1899 CCyCN) — ningún plazo puede presentarse como si fuera el mismo en los tres países sin verificarlo.",
+      "jurisdicciones_revisadas": null,
+      "diferencias_buscadas": null,
+      "contraejemplos_encontrados": null,
+      "justificacion_suficiencia_comparada": null,
+      "fuentes": [
+        {
+          "id": "SRC-P01-MX-FED-01",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Código Civil Federal (México) — posesión originaria/derivada",
+          "organismo_autor": "Congreso de la Unión (México)",
+          "url": "https://www.diputados.gob.mx/LeyesBiblio/pdf/CCF.pdf",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-08-26",
+          "localizador": "arts. 1, 790 y 791 (candidato de Gemini Spark, sin verificar por mí)",
+          "jurisdicciones_cubiertas": [
+            "México"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": false,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": null,
+            "metodo_o_evidencia": null,
+            "observaciones": "WebFetch bloqueado por el proxy de red de este entorno (EGRESS_BLOCKED). Probado empíricamente el 2026-08-26 contra www.boe.es, www.diputados.gob.mx, servicios.infoleg.gob.ar, sjf2.scjn.gob.mx, www.corteidh.or.cr, www.funcionpublica.gov.co y www.ordenjuridico.gob.mx — los 7 devolvieron EGRESS_BLOCKED. No fue posible confirmar origen oficial, texto exacto ni vigencia de ninguna fuente de forma independiente en esta sesión. El expediente 'legalmente-piloto-evidencia-primaria-v1.md' (producido por otro modelo de IA, 'Gemini Spark') propuso este source_id, artículo y fragmento con la etiqueta 'CONFIRMADO' y 'vigencia comprobada: Sí' autoatribuidas. Por regla de gobernanza de este repositorio (references/source-policy.md, 'Nunca aceptar como fuente: otro contenido generado por IA'; CLAUDE.md, 'Ninguna IA es fuente jurídica'), esa autoconfirmación de OTRA IA no sustituye la verificación real que exige el esquema — se trata aquí solo como candidato/localizador más preciso que antes, pendiente de verificación humana o de una sesión con acceso de red no bloqueado."
+          },
+          "registro_oficial_id": "diputados-gob-mx"
+        },
+        {
+          "id": "SRC-P01-ES-CC-01/02/03",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Código Civil español — propiedad, posesión y usucapión",
+          "organismo_autor": "Agencia Estatal BOE",
+          "url": "https://www.boe.es/buscar/act.php?id=BOE-A-1889-4763",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-08-26",
+          "localizador": "arts. 348, 430, 432, 1940 y 1941 (candidato de Gemini Spark, sin verificar por mí)",
+          "jurisdicciones_cubiertas": [
+            "España"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": false,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": null,
+            "metodo_o_evidencia": null,
+            "observaciones": "WebFetch bloqueado por el proxy de red de este entorno (EGRESS_BLOCKED). Probado empíricamente el 2026-08-26 contra www.boe.es, www.diputados.gob.mx, servicios.infoleg.gob.ar, sjf2.scjn.gob.mx, www.corteidh.or.cr, www.funcionpublica.gov.co y www.ordenjuridico.gob.mx — los 7 devolvieron EGRESS_BLOCKED. No fue posible confirmar origen oficial, texto exacto ni vigencia de ninguna fuente de forma independiente en esta sesión. El expediente 'legalmente-piloto-evidencia-primaria-v1.md' (producido por otro modelo de IA, 'Gemini Spark') propuso este source_id, artículo y fragmento con la etiqueta 'CONFIRMADO' y 'vigencia comprobada: Sí' autoatribuidas. Por regla de gobernanza de este repositorio (references/source-policy.md, 'Nunca aceptar como fuente: otro contenido generado por IA'; CLAUDE.md, 'Ninguna IA es fuente jurídica'), esa autoconfirmación de OTRA IA no sustituye la verificación real que exige el esquema — se trata aquí solo como candidato/localizador más preciso que antes, pendiente de verificación humana o de una sesión con acceso de red no bloqueado."
+          },
+          "registro_oficial_id": "boe-es"
+        },
+        {
+          "id": "SRC-P01-AR-CCYC-01/02/03",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Código Civil y Comercial de la Nación (Argentina) — posesión, tenencia y dominio",
+          "organismo_autor": "InfoLEG",
+          "url": "https://servicios.infoleg.gob.ar/infolegInternet/anexos/235000-239999/235975/texact.htm",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-08-26",
+          "localizador": "arts. 1897, 1909, 1910 y 1941 (candidato de Gemini Spark, sin verificar por mí)",
+          "jurisdicciones_cubiertas": [
+            "Argentina"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": false,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": null,
+            "metodo_o_evidencia": null,
+            "observaciones": "WebFetch bloqueado por el proxy de red de este entorno (EGRESS_BLOCKED). Probado empíricamente el 2026-08-26 contra www.boe.es, www.diputados.gob.mx, servicios.infoleg.gob.ar, sjf2.scjn.gob.mx, www.corteidh.or.cr, www.funcionpublica.gov.co y www.ordenjuridico.gob.mx — los 7 devolvieron EGRESS_BLOCKED. No fue posible confirmar origen oficial, texto exacto ni vigencia de ninguna fuente de forma independiente en esta sesión. El expediente 'legalmente-piloto-evidencia-primaria-v1.md' (producido por otro modelo de IA, 'Gemini Spark') propuso este source_id, artículo y fragmento con la etiqueta 'CONFIRMADO' y 'vigencia comprobada: Sí' autoatribuidas. Por regla de gobernanza de este repositorio (references/source-policy.md, 'Nunca aceptar como fuente: otro contenido generado por IA'; CLAUDE.md, 'Ninguna IA es fuente jurídica'), esa autoconfirmación de OTRA IA no sustituye la verificación real que exige el esquema — se trata aquí solo como candidato/localizador más preciso que antes, pendiente de verificación humana o de una sesión con acceso de red no bloqueado."
+          },
+          "registro_oficial_id": "infoleg-gob-ar"
+        },
+        {
+          "id": "SRC-P01-MX-QROO-01",
+          "tipo_fuente": "AUTORIDAD_PUBLICA_OFICIAL",
+          "titulo": "Portal Orden Jurídico Nacional — repositorio del Código Civil para el Estado de Quintana Roo (no es el Congreso de Quintana Roo, es un portal genérico *.gob.mx)",
+          "organismo_autor": "Gobierno de México (portal genérico gob.mx)",
+          "url": "https://www.ordenjuridico.gob.mx/despliegaedo2.php?ordenar=&edo=23&catTipo=5",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-08-26",
+          "localizador": "arts. 1779, 1780, 1789 y 1797 (candidato de Gemini Spark, sin verificar por mí)",
+          "jurisdicciones_cubiertas": [
+            "México"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": false,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": null,
+            "metodo_o_evidencia": null,
+            "observaciones": "WebFetch bloqueado por el proxy de red de este entorno (EGRESS_BLOCKED). Probado empíricamente el 2026-08-26 contra www.boe.es, www.diputados.gob.mx, servicios.infoleg.gob.ar, sjf2.scjn.gob.mx, www.corteidh.or.cr, www.funcionpublica.gov.co y www.ordenjuridico.gob.mx — los 7 devolvieron EGRESS_BLOCKED. No fue posible confirmar origen oficial, texto exacto ni vigencia de ninguna fuente de forma independiente en esta sesión. El expediente 'legalmente-piloto-evidencia-primaria-v1.md' (producido por otro modelo de IA, 'Gemini Spark') propuso este source_id, artículo y fragmento con la etiqueta 'CONFIRMADO' y 'vigencia comprobada: Sí' autoatribuidas. Por regla de gobernanza de este repositorio (references/source-policy.md, 'Nunca aceptar como fuente: otro contenido generado por IA'; CLAUDE.md, 'Ninguna IA es fuente jurídica'), esa autoconfirmación de OTRA IA no sustituye la verificación real que exige el esquema — se trata aquí solo como candidato/localizador más preciso que antes, pendiente de verificación humana o de una sesión con acceso de red no bloqueado. ADEMÁS: ordenjuridico.gob.mx resuelve, por coincidencia de subdominio, a la entrada genérica 'gob-mx-generico' del registro (Gobierno de México, portal genérico *.gob.mx) — esa entrada solo permite AUTORIDAD_PUBLICA_OFICIAL, nunca NORMA_OFICIAL, precisamente porque un portal repositorio no es el Congreso de Quintana Roo emitiendo la norma. Techo Nivel 2 incluso si se verificara el texto, salvo que se use en su lugar la fuente oficial directa del Congreso/Periódico Oficial de Quintana Roo."
+          },
+          "registro_oficial_id": "gob-mx-generico"
+        }
+      ],
+      "confianza": "media",
+      "riesgo_falsa_universalizacion": "alto",
+      "riesgo_asesoria": "medio",
+      "platform_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "confidentiality_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "estado": "REQUIERE_INVESTIGACION",
+      "revision_humana": {
+        "estado": "PENDIENTE",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null,
+        "contenido_hash_sha256": null
+      },
+      "gate_arte": "CERRADO",
+      "reformulacion_propuesta": {
+        "texto": null,
+        "verificada": false,
+        "nuevo_claim_id": null
+      },
+      "redaccion_prohibida": null,
+      "notas": "REQUIERE_INVESTIGACION. riesgo_asesoria: medio, porque un lector podría usar esta afirmación para evaluar si SU arrendamiento concreto puede convertirse en propiedad — la pieza final necesitará una aclaración educativa, no de caso. Sigue bloqueada por el mismo motivo que el resto de la pieza: ninguna fuente pudo consultarse de forma independiente en este entorno."
     }
   ],
   "estado_agregado": "REQUIERE_INVESTIGACION",
   "revisiones_pendientes": [
     "pieza-01-claim-1",
-    "pieza-01-claim-2"
+    "pieza-01-claim-2",
+    "pieza-01-claim-3"
   ],
   "gate_global_arte": "CERRADO"
 }
