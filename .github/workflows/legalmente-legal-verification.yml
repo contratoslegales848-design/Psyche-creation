@@ -96,3 +96,22 @@ jobs:
             fi
           done
           exit $fail
+
+      - name: Paquetes reales del piloto deben ser estructuralmente válidos (exit 0)
+        run: |
+          set -e
+          shopt -s nullglob
+          files=(pilot/claim-packets/*.json)
+          if [ "${#files[@]}" -eq 0 ]; then
+            echo "No hay paquetes reales en pilot/claim-packets/ todavía — paso omitido, no es un fallo."
+            exit 0
+          fi
+          echo "Paquetes reales del piloto encontrados: ${#files[@]}"
+          fail=0
+          for f in "${files[@]}"; do
+            if ! python3 scripts/validate-claim-packet.py "$f"; then
+              echo "FALLÓ (error estructural, gate simulado o aprobación inválida): $f"
+              fail=1
+            fi
+          done
+          exit $fail

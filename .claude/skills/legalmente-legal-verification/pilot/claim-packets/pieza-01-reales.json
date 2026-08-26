@@ -1,0 +1,185 @@
+{
+  "schema_version": "4.0",
+  "piece_id": "PIEZA-01-REALES",
+  "claims": [
+    {
+      "claim_id": "pieza-01-claim-1",
+      "texto_exacto": "La propiedad es el derecho sobre la cosa misma; la posesión es el control de hecho sobre ella, con o sin derecho de propiedad.",
+      "ubicacion": "hook",
+      "tipo": "definicion",
+      "alcance": "CAPA_B_VARIABLE",
+      "jurisdiccion": [
+        "España",
+        "México"
+      ],
+      "nucleo_transversal": null,
+      "variaciones_materiales": "Sin verificar todavía si el requisito de 'animus' (intención de comportarse como dueño) para distinguir posesión de mera tenencia se formula igual en España y México, ni si los efectos prácticos de la posesión (usucapión, protección posesoria/interdictos) tienen los mismos plazos y requisitos — esto es precisamente lo que Capa B exige investigar antes de declarar la afirmación como transversal sin matices.",
+      "jurisdicciones_revisadas": null,
+      "diferencias_buscadas": null,
+      "contraejemplos_encontrados": null,
+      "justificacion_suficiencia_comparada": null,
+      "fuentes": [
+        {
+          "id": "f1-es",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Código Civil español — posesión y propiedad",
+          "organismo_autor": "Agencia Estatal Boletín Oficial del Estado",
+          "url": "https://www.boe.es/buscar/act.php?id=BOE-A-1889-4763",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-08-26",
+          "localizador": "arts. 348 (propiedad) y 430 (posesión) — localizador preliminar, PENDIENTE de confirmación exacta",
+          "jurisdicciones_cubiertas": [
+            "España"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": false,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": null,
+            "metodo_o_evidencia": null,
+            "observaciones": "WebFetch bloqueado por el proxy de red de este entorno (confirmado empíricamente contra www.boe.es el 2026-08-26); no fue posible confirmar el origen oficial, consultar el texto exacto ni comprobar la vigencia de esta fuente durante esta sesión."
+          },
+          "registro_oficial_id": "boe-es"
+        },
+        {
+          "id": "f1-mx",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Código Civil Federal (México) — posesión y propiedad",
+          "organismo_autor": "Congreso de la Unión (México)",
+          "url": "https://www.diputados.gob.mx/LeyesBiblio/pdf/CCF.pdf",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-08-26",
+          "localizador": "arts. 830 (propiedad) y 790 (posesión) — localizador preliminar, PENDIENTE de confirmación exacta",
+          "jurisdicciones_cubiertas": [
+            "México"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": false,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": null,
+            "metodo_o_evidencia": null,
+            "observaciones": "WebFetch bloqueado por el proxy de red de este entorno (confirmado empíricamente contra www.boe.es el 2026-08-26); no fue posible confirmar el origen oficial, consultar el texto exacto ni comprobar la vigencia de esta fuente durante esta sesión."
+          },
+          "registro_oficial_id": "diputados-gob-mx"
+        }
+      ],
+      "confianza": "media",
+      "riesgo_falsa_universalizacion": "alto",
+      "riesgo_asesoria": "ninguno",
+      "platform_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "confidentiality_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "estado": "REQUIERE_INVESTIGACION",
+      "revision_humana": {
+        "estado": "PENDIENTE",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null,
+        "contenido_hash_sha256": null
+      },
+      "gate_arte": "CERRADO",
+      "reformulacion_propuesta": {
+        "texto": null,
+        "verificada": false,
+        "nuevo_claim_id": null
+      },
+      "redaccion_prohibida": null,
+      "notas": "PRELIMINAR — NO VERIFICADO. Los artículos y URLs son un punto de partida basado en conocimiento general del derecho civil hispánico, no en consulta directa: WebFetch a boe.es y a diputados.gob.mx fue bloqueado por el proxy de red de este entorno (probado empíricamente el 2026-08-26). No se pudo confirmar el número exacto de artículo, la redacción vigente, ni si el artículo sigue vigente en cada país. Estado forzado a REQUIERE_INVESTIGACION: ninguna fuente alcanza Nivel 1 ni Nivel 2 con garantías reales — ambas fuentes quedan en el techo más bajo posible hasta verificación humana directa contra el texto oficial."
+    },
+    {
+      "claim_id": "pieza-01-claim-2",
+      "texto_exacto": "'Tenencia' se usa a veces como sinónimo de posesión y a veces como una figura administrativa o penal distinta (p. ej. tenencia de un bien regulado), y ese uso varía por país.",
+      "ubicacion": "texto_imagen",
+      "tipo": "definicion",
+      "alcance": "NO_DETERMINADO",
+      "jurisdiccion": [
+        "España",
+        "México",
+        "Argentina"
+      ],
+      "nucleo_transversal": null,
+      "variaciones_materiales": null,
+      "jurisdicciones_revisadas": null,
+      "diferencias_buscadas": null,
+      "contraejemplos_encontrados": null,
+      "justificacion_suficiencia_comparada": null,
+      "fuentes": [
+        {
+          "id": "f1-ten",
+          "tipo_fuente": "SECUNDARIA_ESPECIALIZADA",
+          "titulo": "Uso del término 'tenencia' en normativa administrativa y penal comparada (nota de investigación interna, sin verificar)",
+          "organismo_autor": "Nota de investigación preliminar — LegalMente",
+          "url": null,
+          "identificador_bibliografico": "Sin publicación identificable todavía — solo hipótesis de trabajo",
+          "fecha_consulta": "2026-08-26",
+          "localizador": "sin localizador específico — pendiente de identificar norma concreta",
+          "jurisdicciones_cubiertas": [
+            "España",
+            "México",
+            "Argentina"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": false,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": null,
+            "metodo_o_evidencia": null,
+            "observaciones": "WebFetch bloqueado por el proxy de red de este entorno (confirmado empíricamente contra www.boe.es el 2026-08-26); no fue posible confirmar el origen oficial, consultar el texto exacto ni comprobar la vigencia de esta fuente durante esta sesión."
+          },
+          "registro_oficial_id": null
+        }
+      ],
+      "confianza": "baja",
+      "riesgo_falsa_universalizacion": "alto",
+      "riesgo_asesoria": "ninguno",
+      "platform_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "confidentiality_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "estado": "REQUIERE_INVESTIGACION",
+      "revision_humana": {
+        "estado": "PENDIENTE",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null,
+        "contenido_hash_sha256": null
+      },
+      "gate_arte": "CERRADO",
+      "reformulacion_propuesta": {
+        "texto": null,
+        "verificada": false,
+        "nuevo_claim_id": null
+      },
+      "redaccion_prohibida": null,
+      "notas": "PRELIMINAR — NO VERIFICADO. Esta afirmación describe una variación terminológica sospechada, no confirmada con fuente primaria alguna. Riesgo alto de falsa universalización: 'tenencia' puede tener sentidos completamente distintos entre España, México y Argentina (p. ej. tenencia de hijos en derecho de familia argentino frente a tenencia de posesión de bienes) y mezclar ambos sin distinguir el contexto sería una afirmación jurídica insuficientemente verificada. BLOQUEADO hasta investigación real."
+    }
+  ],
+  "estado_agregado": "REQUIERE_INVESTIGACION",
+  "revisiones_pendientes": [
+    "pieza-01-claim-1",
+    "pieza-01-claim-2"
+  ],
+  "gate_global_arte": "CERRADO"
+}

@@ -1,0 +1,179 @@
+{
+  "schema_version": "4.0",
+  "piece_id": "PIEZA-02-LABORAL",
+  "claims": [
+    {
+      "claim_id": "pieza-02-claim-1",
+      "texto_exacto": "'Rescisión' es, en México, un mecanismo específico de la ley laboral: cualquiera de las partes puede dar por terminada la relación de trabajo sin responsabilidad si la otra incurre en una causa grave prevista por la ley — no es un sinónimo genérico de 'renuncia' ni de 'despido'.",
+      "ubicacion": "hook",
+      "tipo": "definicion",
+      "alcance": "CAPA_C_NACIONAL",
+      "jurisdiccion": "México",
+      "nucleo_transversal": null,
+      "variaciones_materiales": null,
+      "jurisdicciones_revisadas": null,
+      "diferencias_buscadas": null,
+      "contraejemplos_encontrados": null,
+      "justificacion_suficiencia_comparada": null,
+      "fuentes": [
+        {
+          "id": "f2-mx",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Ley Federal del Trabajo (México) — rescisión de la relación de trabajo",
+          "organismo_autor": "Cámara de Diputados (México)",
+          "url": "https://www.diputados.gob.mx/LeyesBiblio/pdf/LFT.pdf",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-08-26",
+          "localizador": "arts. 47 (causas de rescisión sin responsabilidad para el patrón) y 51 (causas de rescisión sin responsabilidad para el trabajador) — localizador preliminar, PENDIENTE de confirmación exacta",
+          "jurisdicciones_cubiertas": [
+            "México"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": false,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": null,
+            "metodo_o_evidencia": null,
+            "observaciones": "WebFetch bloqueado por el proxy de red de este entorno (confirmado empíricamente contra www.boe.es el 2026-08-26); no fue posible confirmar el origen oficial, consultar el texto exacto ni comprobar la vigencia de esta fuente durante esta sesión."
+          },
+          "registro_oficial_id": "diputados-gob-mx"
+        }
+      ],
+      "confianza": "media",
+      "riesgo_falsa_universalizacion": "alto",
+      "riesgo_asesoria": "medio",
+      "platform_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "confidentiality_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "estado": "REQUIERE_INVESTIGACION",
+      "revision_humana": {
+        "estado": "PENDIENTE",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null,
+        "contenido_hash_sha256": null
+      },
+      "gate_arte": "CERRADO",
+      "reformulacion_propuesta": {
+        "texto": null,
+        "verificada": false,
+        "nuevo_claim_id": null
+      },
+      "redaccion_prohibida": null,
+      "notas": "PRELIMINAR — NO VERIFICADO. Los números de artículo son un punto de partida basado en conocimiento general de la Ley Federal del Trabajo mexicana, no en consulta directa: WebFetch a diputados.gob.mx fue bloqueado por el proxy de red de este entorno. No se confirmó la redacción vigente ni si los artículos citados siguen siendo los correctos tras eventuales reformas. riesgo_asesoria: medio porque un lector podría usar esta afirmación para decidir si tiene una causa de rescisión en su propio caso — la pieza final deberá incluir una aclaración de que esto es educativo, no asesoría de un caso concreto. REQUIERE_INVESTIGACION."
+    },
+    {
+      "claim_id": "pieza-02-claim-2",
+      "texto_exacto": "La distinción entre 'despido' (decisión unilateral del empleador de terminar la relación laboral) y 'renuncia' (decisión unilateral del trabajador) existe, con esa misma lógica general, tanto en España como en México — pero el nombre y el efecto legal de una tercera figura equivalente a la 'rescisión' mexicana (terminación por causa grave de cualquiera de las partes) NO se ha confirmado que exista con el mismo nombre ni los mismos efectos en España.",
+      "ubicacion": "texto_imagen",
+      "tipo": "definicion",
+      "alcance": "CAPA_B_VARIABLE",
+      "jurisdiccion": [
+        "España",
+        "México"
+      ],
+      "nucleo_transversal": null,
+      "variaciones_materiales": "Sin verificar todavía si el Estatuto de los Trabajadores español reconoce una figura equivalente a la 'rescisión' mexicana (terminación por causa grave a instancia de cualquiera de las partes, arts. 47/51 LFT) bajo cualquier nombre, o si esa terminación por causa grave se subsume íntegramente dentro de las figuras españolas de despido disciplinario/procedente y extinción por voluntad del trabajador — investigar antes de afirmar equivalencia o diferencia entre ambos sistemas.",
+      "jurisdicciones_revisadas": null,
+      "diferencias_buscadas": null,
+      "contraejemplos_encontrados": null,
+      "justificacion_suficiencia_comparada": null,
+      "fuentes": [
+        {
+          "id": "f2-es",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Estatuto de los Trabajadores (España) — extinción del contrato de trabajo",
+          "organismo_autor": "Agencia Estatal BOE",
+          "url": "https://www.boe.es/buscar/act.php?id=BOE-A-2015-11430",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-08-26",
+          "localizador": "art. 49 (causas de extinción) — localizador preliminar, PENDIENTE de confirmación exacta",
+          "jurisdicciones_cubiertas": [
+            "España"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": false,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": null,
+            "metodo_o_evidencia": null,
+            "observaciones": "WebFetch bloqueado por el proxy de red de este entorno (confirmado empíricamente contra www.boe.es el 2026-08-26); no fue posible confirmar el origen oficial, consultar el texto exacto ni comprobar la vigencia de esta fuente durante esta sesión."
+          },
+          "registro_oficial_id": "boe-es"
+        },
+        {
+          "id": "f2-mx",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Ley Federal del Trabajo (México) — rescisión de la relación de trabajo",
+          "organismo_autor": "Cámara de Diputados (México)",
+          "url": "https://www.diputados.gob.mx/LeyesBiblio/pdf/LFT.pdf",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-08-26",
+          "localizador": "arts. 47 (causas de rescisión sin responsabilidad para el patrón) y 51 (causas de rescisión sin responsabilidad para el trabajador) — localizador preliminar, PENDIENTE de confirmación exacta",
+          "jurisdicciones_cubiertas": [
+            "México"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": false,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": null,
+            "metodo_o_evidencia": null,
+            "observaciones": "WebFetch bloqueado por el proxy de red de este entorno (confirmado empíricamente contra www.boe.es el 2026-08-26); no fue posible confirmar el origen oficial, consultar el texto exacto ni comprobar la vigencia de esta fuente durante esta sesión."
+          },
+          "registro_oficial_id": "diputados-gob-mx"
+        }
+      ],
+      "confianza": "baja",
+      "riesgo_falsa_universalizacion": "alto",
+      "riesgo_asesoria": "ninguno",
+      "platform_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "confidentiality_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "estado": "REQUIERE_INVESTIGACION",
+      "revision_humana": {
+        "estado": "PENDIENTE",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null,
+        "contenido_hash_sha256": null
+      },
+      "gate_arte": "CERRADO",
+      "reformulacion_propuesta": {
+        "texto": null,
+        "verificada": false,
+        "nuevo_claim_id": null
+      },
+      "redaccion_prohibida": null,
+      "notas": "PRELIMINAR — NO VERIFICADO. Igual que el resto de la pieza, ninguna fuente fue consultada directamente. Este claim documenta explícitamente una posible falsa universalización (asumir que 'rescisión' significa lo mismo en España que en México) y la deja señalada como riesgo alto en vez de resolverla por conjetura — conforme al principio de que es preferible bloquear que afirmar de más. REQUIERE_INVESTIGACION."
+    }
+  ],
+  "estado_agregado": "REQUIERE_INVESTIGACION",
+  "revisiones_pendientes": [
+    "pieza-02-claim-1",
+    "pieza-02-claim-2"
+  ],
+  "gate_global_arte": "CERRADO"
+}

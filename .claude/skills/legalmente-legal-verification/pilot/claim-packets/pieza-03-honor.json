@@ -1,0 +1,107 @@
+{
+  "schema_version": "4.0",
+  "piece_id": "PIEZA-03-HONOR",
+  "claims": [
+    {
+      "claim_id": "pieza-03-claim-1",
+      "texto_exacto": "Una reseña negativa puede dejar de estar protegida como libertad de expresión/crítica y convertirse en una afectación al honor cuando ya no describe una opinión o una experiencia, sino que afirma hechos falsos y concretos sobre una persona o negocio identificable.",
+      "ubicacion": "hook",
+      "tipo": "regla",
+      "alcance": "NO_DETERMINADO",
+      "jurisdiccion": [
+        "España",
+        "México"
+      ],
+      "nucleo_transversal": null,
+      "variaciones_materiales": null,
+      "jurisdicciones_revisadas": null,
+      "diferencias_buscadas": null,
+      "contraejemplos_encontrados": null,
+      "justificacion_suficiencia_comparada": null,
+      "fuentes": [
+        {
+          "id": "f3-es",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Ley Orgánica 1/1982, de protección civil del derecho al honor (España) — hipótesis de norma aplicable, sin confirmar",
+          "organismo_autor": "Agencia Estatal Boletín Oficial del Estado",
+          "url": "https://www.boe.es/buscar/act.php?id=BOE-A-1982-11196",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-08-26",
+          "localizador": "artículo(s) no identificados todavía — pendiente de localizar la norma exacta y el artículo concreto",
+          "jurisdicciones_cubiertas": [
+            "España"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": false,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": null,
+            "metodo_o_evidencia": null,
+            "observaciones": "WebFetch bloqueado por el proxy de red de este entorno (confirmado empíricamente contra www.boe.es el 2026-08-26); no fue posible confirmar el origen oficial, consultar el texto exacto ni comprobar la vigencia de esta fuente durante esta sesión."
+          },
+          "registro_oficial_id": "boe-es"
+        },
+        {
+          "id": "f3-mx",
+          "tipo_fuente": "SECUNDARIA_ESPECIALIZADA",
+          "titulo": "Nota de investigación preliminar sobre difamación/injuria/calumnia y reseñas en línea en México (sin verificar, sin norma identificada)",
+          "organismo_autor": "Nota de investigación preliminar — LegalMente",
+          "url": null,
+          "identificador_bibliografico": "Sin publicación identificable todavía — solo hipótesis de trabajo, requiere investigación real",
+          "fecha_consulta": "2026-08-26",
+          "localizador": "sin localizador — no se identificó todavía la norma ni el criterio judicial aplicable",
+          "jurisdicciones_cubiertas": [
+            "México"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": false,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": null,
+            "metodo_o_evidencia": null,
+            "observaciones": "WebFetch bloqueado por el proxy de red de este entorno (confirmado empíricamente contra www.boe.es el 2026-08-26); no fue posible confirmar el origen oficial, consultar el texto exacto ni comprobar la vigencia de esta fuente durante esta sesión."
+          },
+          "registro_oficial_id": null
+        }
+      ],
+      "confianza": "baja",
+      "riesgo_falsa_universalizacion": "alto",
+      "riesgo_asesoria": "alto",
+      "platform_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "confidentiality_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "estado": "REQUIERE_INVESTIGACION",
+      "revision_humana": {
+        "estado": "PENDIENTE",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null,
+        "contenido_hash_sha256": null
+      },
+      "gate_arte": "CERRADO",
+      "reformulacion_propuesta": {
+        "texto": null,
+        "verificada": false,
+        "nuevo_claim_id": null
+      },
+      "redaccion_prohibida": null,
+      "notas": "PRELIMINAR — NO VERIFICADO Y DE ALTO RIESGO. Ninguna fuente fue consultada directamente (WebFetch bloqueado por el proxy de red). La fuente mexicana ni siquiera tiene todavía una norma o sentencia identificada — es solo una nota de investigación, tipo_fuente SECUNDARIA_ESPECIALIZADA, techo Nivel 3 aun en el mejor caso. El límite exacto entre opinión protegida y difamación/calumnia/injuria depende fuertemente de la doctrina y jurisprudencia de cada país (dónde se ubica el estándar de veracidad, dolo, malicia, carga de la prueba) y NO puede tratarse como una regla panhispánica única sin ese trabajo. riesgo_asesoria: alto porque un lector podría interpretar esto como una guía para saber si SU reseña o SU caso concreto es ilegal, lo cual excede un contenido educativo. Esta pieza se recomienda BLOQUEADA en el veredicto final, no solo REQUIERE_INVESTIGACION."
+    }
+  ],
+  "estado_agregado": "REQUIERE_INVESTIGACION",
+  "revisiones_pendientes": [
+    "pieza-03-claim-1"
+  ],
+  "gate_global_arte": "CERRADO"
+}
