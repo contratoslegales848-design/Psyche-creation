@@ -554,6 +554,188 @@ class TestCapaCComparadaCobertura(unittest.TestCase):
         self.assertEqual(max_estado, "REQUIERE_INVESTIGACION")
 
 
+class TestCapaBPaisCoverage(unittest.TestCase):
+    """Fase 1E: mismo techo POR PAÍS que ya protegía a Capa C (Fase 1D,
+    Paso 4) ahora también protege a CAPA_B_VARIABLE (y a cualquier otro
+    alcance con 'jurisdiccion' declarada). Antes, un claim CAPA_B_VARIABLE
+    con varios países solo necesitaba UNA fuente Nivel 1 en CUALQUIER país
+    para declararse APTO_PARA_NARRATIVA — una fuente mexicana Nivel 1 podía
+    'elevar' a España o Argentina sin que esos países tuvieran cobertura
+    propia. Reproducido con un paquete sintético fuera de este archivo antes
+    de la corrección (ver PR de la corrección); estas pruebas fijan el
+    comportamiento correcto de forma permanente."""
+
+    def _fuente_mx_nivel1(self):
+        return base_fuente(id="f-mx", url="https://www.diputados.gob.mx/x", jurisdicciones_cubiertas=["México"],
+                            organismo_autor="Congreso de la Unión (México)", registro_oficial_id="diputados-gob-mx")
+
+    def _fuente_es_nivel1(self):
+        return base_fuente(id="f-es", url="https://www.boe.es/x", jurisdicciones_cubiertas=["España"],
+                            organismo_autor="Agencia Estatal BOE", registro_oficial_id="boe-es")
+
+    def _fuente_ar_nivel2(self):
+        """Fuente argentina consultada directamente (booleanos en true) pero
+        SIN 'registro_oficial_id' — mismo patrón que argentina.gob.ar en los
+        claim packets reales: nunca alcanza Nivel 1 aunque sus tres
+        booleanos de verificación estén en true."""
+        return base_fuente(id="f-ar", url="https://www.argentina.gob.ar/normativa/x",
+                            jurisdicciones_cubiertas=["Argentina"], organismo_autor="InfoLEG",
+                            registro_oficial_id=None)
+
+    # --- 1. México Nivel 1 + España Nivel 1 + Argentina Nivel 2 --------------
+
+    def test_tres_paises_mexico_espana_nivel1_argentina_nivel2_no_puede_ser_apto_para_narrativa(self):
+        c = base_claim(
+            alcance="CAPA_B_VARIABLE", jurisdiccion=["México", "España", "Argentina"],
+            variaciones_materiales="Formulación distinta por país (prueba).",
+            estado="APTO_PARA_NARRATIVA",
+            fuentes=[self._fuente_mx_nivel1(), self._fuente_es_nivel1(), self._fuente_ar_nivel2()],
+        )
+        errors, _, max_estado, _ = vcp.validate_claim(c, "c")
+        self.assertTrue(any("excede lo que las fuentes permiten" in e for e in errors))
+        self.assertEqual(max_estado, "APTO_CON_MATICES")
+        self.assertNotEqual(max_estado, "APTO_PARA_NARRATIVA")
+
+    def test_tres_paises_mexico_espana_nivel1_argentina_nivel2_matices_es_valido(self):
+        """El mismo escenario, pero declarando el techo real (APTO_CON_MATICES)
+        en vez de forzar APTO_PARA_NARRATIVA, es válido sin errores."""
+        c = base_claim(
+            alcance="CAPA_B_VARIABLE", jurisdiccion=["México", "España", "Argentina"],
+            variaciones_materiales="Formulación distinta por país (prueba).",
+            estado="APTO_CON_MATICES", confianza="media",
+            fuentes=[self._fuente_mx_nivel1(), self._fuente_es_nivel1(), self._fuente_ar_nivel2()],
+        )
+        errors, _, max_estado, _ = vcp.validate_claim(c, "c")
+        self.assertEqual(errors, [])
+        self.assertEqual(max_estado, "APTO_CON_MATICES")
+
+    # --- 2. Jurisdicción declarada sin fuente propia -------------------------
+
+    def test_jurisdiccion_declarada_sin_fuente_propia_queda_requiere_investigacion(self):
+        c = base_claim(
+            alcance="CAPA_B_VARIABLE", jurisdiccion=["México", "España", "Argentina"],
+            variaciones_materiales="Formulación distinta por país (prueba).",
+            estado="REQUIERE_INVESTIGACION", confianza="baja",
+            # Argentina no tiene NINGUNA fuente que la cubra.
+            fuentes=[self._fuente_mx_nivel1(), self._fuente_es_nivel1()],
+        )
+        errors, _, max_estado, _ = vcp.validate_claim(c, "c")
+        self.assertEqual(errors, [])
+        self.assertEqual(max_estado, "REQUIERE_INVESTIGACION")
+
+    def test_jurisdiccion_declarada_sin_fuente_propia_estado_alto_es_error(self):
+        c = base_claim(
+            alcance="CAPA_B_VARIABLE", jurisdiccion=["México", "España", "Argentina"],
+            variaciones_materiales="Formulación distinta por país (prueba).",
+            estado="APTO_PARA_NARRATIVA",
+            fuentes=[self._fuente_mx_nivel1(), self._fuente_es_nivel1()],
+        )
+        errors, _, max_estado, _ = vcp.validate_claim(c, "c")
+        self.assertTrue(any("excede lo que las fuentes permiten" in e for e in errors))
+        self.assertEqual(max_estado, "REQUIERE_INVESTIGACION")
+
+    # --- 3. Una fuente NO puede cubrir un país que su registro no permite ----
+
+    def test_fuente_mexicana_no_puede_declarar_que_cubre_argentina(self):
+        """Una fuente con 'registro_oficial_id' de México (diputados-gob-mx,
+        que solo autoriza 'México' en 'jurisdicciones') no puede declarar en
+        'jurisdicciones_cubiertas' que también respalda a Argentina — el
+        registro hostname→jurisdicción lo rechaza como incoherencia."""
+        f_mx_que_dice_cubrir_argentina = base_fuente(
+            id="f-mx-falso", url="https://www.diputados.gob.mx/x",
+            jurisdicciones_cubiertas=["México", "Argentina"],
+            organismo_autor="Congreso de la Unión (México)", registro_oficial_id="diputados-gob-mx",
+        )
+        errors, _ = vcp.validate_fuente(f_mx_que_dice_cubrir_argentina, "f")
+        self.assertTrue(any("jurisdicciones_cubiertas" in e and "ajeno" in e for e in errors))
+
+    def test_fuente_mexicana_con_jurisdicciones_cubiertas_falsas_no_cuenta_para_argentina(self):
+        """Aunque una fuente mexicana declarara (incoherentemente)
+        'jurisdicciones_cubiertas' incluyendo Argentina, compute_ceiling_by_countries
+        de todos modos exige revisar esa incoherencia — el claim entero debe
+        fallar con error estructural antes de llegar siquiera a calcular el
+        techo, nunca aceptar la cobertura falsa."""
+        f_mx_que_dice_cubrir_argentina = base_fuente(
+            id="f-mx-falso", url="https://www.diputados.gob.mx/x",
+            jurisdicciones_cubiertas=["México", "Argentina"],
+            organismo_autor="Congreso de la Unión (México)", registro_oficial_id="diputados-gob-mx",
+        )
+        c = base_claim(
+            alcance="CAPA_B_VARIABLE", jurisdiccion=["México", "Argentina"],
+            variaciones_materiales="Formulación distinta por país (prueba).",
+            estado="APTO_PARA_NARRATIVA", fuentes=[f_mx_que_dice_cubrir_argentina],
+        )
+        errors, _, _, _ = vcp.validate_claim(c, "c")
+        self.assertTrue(any("ajeno" in e for e in errors))
+
+    # --- 4. Todas las jurisdicciones cubiertas conserva el techo ------------
+
+    def test_tres_paises_todos_nivel1_conserva_apto_para_narrativa(self):
+        # Fuente argentina genuinamente Nivel 1: infoleg-gob-ar SÍ tiene
+        # entrada propia en el registro oficial cerrado (a diferencia de
+        # argentina.gob.ar, que no la tiene) — no se toca el registro, solo
+        # se usa una entrada que ya existía antes de este cambio.
+        f_ar_nivel1 = base_fuente(id="f-ar-1", url="https://servicios.infoleg.gob.ar/x",
+                                   jurisdicciones_cubiertas=["Argentina"],
+                                   organismo_autor="InfoLEG",
+                                   registro_oficial_id="infoleg-gob-ar")
+        c = base_claim(
+            alcance="CAPA_B_VARIABLE", jurisdiccion=["México", "España", "Argentina"],
+            variaciones_materiales="Formulación distinta por país (prueba).",
+            estado="APTO_PARA_NARRATIVA",
+            fuentes=[self._fuente_mx_nivel1(), self._fuente_es_nivel1(), f_ar_nivel1],
+        )
+        errors, _, max_estado, _ = vcp.validate_claim(c, "c")
+        self.assertEqual(errors, [])
+        self.assertEqual(max_estado, "APTO_PARA_NARRATIVA")
+
+    # --- 5. Aprobación humana no abre el gate si falta cobertura ------------
+
+    def test_aprobacion_humana_no_abre_gate_si_falta_cobertura_de_pais(self):
+        c = approved_claim(
+            alcance="CAPA_B_VARIABLE", jurisdiccion=["México", "España", "Argentina"],
+            variaciones_materiales="Formulación distinta por país (prueba).",
+            fuentes=[self._fuente_mx_nivel1(), self._fuente_es_nivel1(), self._fuente_ar_nivel2()],
+        )
+        # approved_claim() ya deja estado=APTO_PARA_NARRATIVA (heredado de
+        # base_claim) y gate_arte=ABIERTO con hash correcto — pero Argentina
+        # solo alcanza Nivel 2, así que el techo real es APTO_CON_MATICES.
+        errors, _, max_estado, gate = vcp.validate_claim(c, "c")
+        self.assertEqual(max_estado, "APTO_CON_MATICES")
+        self.assertTrue(any("excede lo que las fuentes permiten" in e for e in errors))
+        self.assertEqual(gate, "CERRADO")
+
+    # --- 7 (de la tarea). Lista de tres países ya cubierta arriba -----------
+    # (test_tres_paises_mexico_espana_nivel1_argentina_nivel2_no_puede_ser_apto_para_narrativa
+    # y test_tres_paises_todos_nivel1_conserva_apto_para_narrativa usan tres
+    # países explícitamente.)
+
+    # --- 8. Una sola jurisdicción correctamente sustentada: sin regresión ---
+
+    def test_una_sola_jurisdiccion_capa_b_correctamente_sustentada_sin_regresion(self):
+        c = base_claim(
+            alcance="CAPA_B_VARIABLE", jurisdiccion="España",
+            variaciones_materiales="Variación interna de una sola jurisdicción (prueba).",
+            estado="APTO_PARA_NARRATIVA", fuentes=[self._fuente_es_nivel1()],
+        )
+        errors, _, max_estado, _ = vcp.validate_claim(c, "c")
+        self.assertEqual(errors, [])
+        self.assertEqual(max_estado, "APTO_PARA_NARRATIVA")
+
+    def test_capa_c_sigue_usando_el_mismo_techo_por_pais_sin_regresion(self):
+        """Capa C con dos países y ambos Nivel 1 debe seguir sosteniendo
+        APTO_PARA_NARRATIVA exactamente igual que antes de este cambio — la
+        protección de Capa C no se reduce."""
+        c = base_claim(
+            alcance="CAPA_C_NACIONAL", jurisdiccion=["México", "España"],
+            estado="APTO_PARA_NARRATIVA",
+            fuentes=[self._fuente_mx_nivel1(), self._fuente_es_nivel1()],
+        )
+        errors, _, max_estado, _ = vcp.validate_claim(c, "c")
+        self.assertEqual(errors, [])
+        self.assertEqual(max_estado, "APTO_PARA_NARRATIVA")
+
+
 class TestHashCompleto(unittest.TestCase):
     """Fase 1D, Paso 5: el hash de aprobación cubre TODO el claim excepto
     revision_humana y gate_arte — cualquier otro cambio lo invalida."""
