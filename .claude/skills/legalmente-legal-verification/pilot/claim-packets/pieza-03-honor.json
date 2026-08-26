@@ -4,7 +4,7 @@
   "claims": [
     {
       "claim_id": "pieza-03-claim-1",
-      "texto_exacto": "La libertad de expresión y de información en México no puede restringirse por censura previa; sus únicos límites constitucionales son el ataque a la moral, la vida privada, los derechos de terceros, la comisión de un delito o la perturbación del orden público.",
+      "texto_exacto": "En México, la libertad de expresión no puede restringirse mediante censura previa (Arts. 6 y 7 CPEUM). Esto no significa inmunidad frente a toda responsabilidad posterior: pueden existir responsabilidades ulteriores, sujetas a los límites constitucionales y legales aplicables según el caso concreto (ataque a la moral, la vida privada o los derechos de terceros, comisión de un delito, o perturbación del orden público, entre los previstos por la Constitución).",
       "ubicacion": "hook",
       "tipo": "regla",
       "alcance": "CAPA_C_NACIONAL",
@@ -71,11 +71,11 @@
         "nuevo_claim_id": null
       },
       "redaccion_prohibida": null,
-      "notas": "REQUIERE_INVESTIGACION. Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente."
+      "notas": "REQUIERE_INVESTIGACION. Corrección jurídica v1: se distingue expresamente prohibición de censura previa, posibilidad de responsabilidades ulteriores, y límites constitucionales/legales aplicables según el caso — ya no se presenta la lista de límites como cerrada/exhaustiva ni la libertad de expresión como inmunidad frente a responsabilidad posterior. Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente."
     },
     {
       "claim_id": "pieza-03-claim-2",
-      "texto_exacto": "En México, quien ejerce de buena fe sus derechos de opinión, crítica, expresión e información dentro de los límites constitucionales no está obligado a reparar el daño moral que esa opinión pudiera causar (Art. 1916 Bis CCF) — pero si la afirmación es sobre hechos concretos y falsos, sí puede generar responsabilidad civil.",
+      "texto_exacto": "En México, quien ejerce de buena fe sus derechos de opinión, crítica, expresión e información dentro de los límites constitucionales no está obligado a reparar el daño moral que esa opinión pudiera causar (Art. 1916 Bis CCF). Una afirmación fáctica falsa puede generar responsabilidad civil únicamente cuando se acreditan los elementos jurídicos aplicables, incluyendo la conducta antijurídica o estándar constitucional correspondiente, la atribución subjetiva exigible, el daño y la relación causal. La falsedad, por sí sola, no determina automáticamente responsabilidad.",
       "ubicacion": "caption",
       "tipo": "regla",
       "alcance": "CAPA_C_NACIONAL",
@@ -142,11 +142,11 @@
         "nuevo_claim_id": null
       },
       "redaccion_prohibida": null,
-      "notas": "REQUIERE_INVESTIGACION. riesgo_asesoria: alto — un lector podría usar esto para decidir si SU reseña concreta es legal. Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente."
+      "notas": "REQUIERE_INVESTIGACION. Corrección jurídica v1: se sustituye la afirmación 'si la afirmación es sobre hechos concretos y falsos, sí puede generar responsabilidad civil' (formulación no condicionada) por una formulación jurídicamente condicionada a la acreditación de todos los elementos de responsabilidad civil (antijuridicidad/estándar aplicable, atribución subjetiva, daño, causalidad) — la falsedad por sí sola no basta. riesgo_asesoria: alto — un lector podría usar esto para decidir si SU reseña concreta es legal. Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente."
     },
     {
       "claim_id": "pieza-03-claim-3",
-      "texto_exacto": "En México, cuando la afirmación concierne a una figura pública o un asunto de interés general, no basta con que resulte falsa: la SCJN exige probar 'malicia efectiva' (conocimiento de la falsedad o temerario desprecio de la verdad) para poder fincar responsabilidad civil (sistema dual de protección, Amparo Directo 3/2011).",
+      "texto_exacto": "En México, la protección de la libertad de expresión frente a la responsabilidad civil distingue al menos tres situaciones: (1) opiniones genéricas sobre asuntos públicos, protegidas sin exigencia de prueba de verdad; (2) afirmaciones de hechos, donde la SCJN exige, para figuras públicas o asuntos de interés general, que se pruebe que el emisor actuó 'a sabiendas de su falsedad o con total negligencia o despreocupación respecto de su verificación' (estándar de malicia efectiva, sistema dual de protección); y (3) opiniones sustentadas en hechos que la audiencia no puede comprobar directamente, donde el análisis exige distinguir el sustento fáctico de la valoración subjetiva. Este estándar reforzado corresponde a figuras públicas o asuntos de interés general — no se aplica automáticamente a cualquier particular o reseña estrictamente privada.",
       "ubicacion": "cta",
       "tipo": "regla",
       "alcance": "CAPA_C_NACIONAL",
@@ -159,9 +159,31 @@
       "justificacion_suficiencia_comparada": null,
       "fuentes": [
         {
+          "id": "SRC-P03-MX-SCJN-JUR-01",
+          "tipo_fuente": "JURISPRUDENCIA_OFICIAL",
+          "titulo": "JURISPRUDENCIA 1a./J. 38/2013 (10a.), Registro digital 2003303 — libertad de expresión, sistema dual de protección y malicia efectiva (fuente oficial principal, jurisprudencia obligatoria, a diferencia de la tesis aislada 2003643)",
+          "organismo_autor": "SCJN",
+          "url": "https://sjf2.scjn.gob.mx/detalle/tesis/2003303",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-08-25",
+          "localizador": "Jurisprudencia 1a./J. 38/2013 (10a.), Registro 2003303",
+          "jurisdicciones_cubiertas": [
+            "México"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": false,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": null,
+            "metodo_o_evidencia": null,
+            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Fuente añadida en la corrección jurídica v1 como fuente oficial principal (jurisprudencia obligatoria) sobre libertad de expresión, sistema dual de protección y malicia efectiva, distinta de la tesis aislada 2003643 ya citada."
+          },
+          "registro_oficial_id": "scjn-gob-mx"
+        },
+        {
           "id": "SRC-P03-MX-SCJN-02",
           "tipo_fuente": "JURISPRUDENCIA_OFICIAL",
-          "titulo": "Tesis Aislada 1a. CXXXVIII/2013 (10a.), Registro digital 2003643 — 'malicia efectiva' y sistema dual de protección",
+          "titulo": "TESIS AISLADA 1a. CXXXVIII/2013 (10a.), Registro digital 2003643 — 'malicia efectiva' y sistema dual de protección (Amparo Directo 3/2011). Es una tesis aislada de la Primera Sala, no jurisprudencia obligatoria por sí sola — ver SRC-P03-MX-SCJN-JUR-01 (jurisprudencia) como fuente principal.",
           "organismo_autor": "SCJN",
           "url": "https://sjf2.scjn.gob.mx/detalle/tesis/2003643",
           "identificador_bibliografico": null,
@@ -176,7 +198,29 @@
             "vigencia_comprobada": false,
             "fecha_comprobacion": null,
             "metodo_o_evidencia": null,
-            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Localizador y extracto de texto tomados del expediente externo auditado (legalmente-piloto-evidencia-primaria-v1.2.md + legalmente-piloto-fuentes-primarias-v1.zip, producido por otro modelo de IA). El manifest de ese expediente autoafirma origen_oficial_confirmado/texto_exacto_consultado/vigencia_comprobada = true y resultado SUFICIENTE — por regla de gobernanza de este repositorio (source-policy.md: 'nunca aceptar como fuente otro contenido generado por IA'; CLAUDE.md: 'ninguna IA es fuente jurídica') esa autoconfirmación NO se traslada aquí. Los extractos del ZIP (687-6215 bytes) son fragmentos de artículos concretos, no el documento legal completo, pese a que 44/45 entradas del manifest declaran documento_completo=true — inconsistencia detectada en auditoría y NO heredada. Nota: el expediente judicial íntegro del Amparo Directo 3/2011 (SRC-P03-MX-SCJN-01) está marcado NO_DESCARGABLE en el manifest auditado — no se fabricó ningún extracto para él y no se crea fuente estructurada propia; esta Tesis (SCJN-02) es la que sí tiene extracto real en el ZIP y sostiene este claim."
+            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Localizador y extracto de texto tomados del expediente externo auditado (legalmente-piloto-evidencia-primaria-v1.2.md + legalmente-piloto-fuentes-primarias-v1.zip, producido por otro modelo de IA). El manifest de ese expediente autoafirma origen_oficial_confirmado/texto_exacto_consultado/vigencia_comprobada = true y resultado SUFICIENTE — por regla de gobernanza de este repositorio (source-policy.md: 'nunca aceptar como fuente otro contenido generado por IA'; CLAUDE.md: 'ninguna IA es fuente jurídica') esa autoconfirmación NO se traslada aquí. Los extractos del ZIP (687-6215 bytes) son fragmentos de artículos concretos, no el documento legal completo, pese a que 44/45 entradas del manifest declaran documento_completo=true — inconsistencia detectada en auditoría y NO heredada. Nota: el expediente judicial íntegro del Amparo Directo 3/2011 (SRC-P03-MX-SCJN-01) está marcado NO_DESCARGABLE en el manifest auditado — no se fabricó ningún extracto para él y no se crea fuente estructurada propia; esta Tesis (SCJN-02) es la que sí tiene extracto real en el ZIP y sostiene este claim. Corrección jurídica v1: se identifica explícitamente como TESIS AISLADA, no jurisprudencia obligatoria por sí sola. Corrección jurídica v1: se identifica explícitamente como TESIS AISLADA, no jurisprudencia obligatoria por sí sola."
+          },
+          "registro_oficial_id": "scjn-gob-mx"
+        },
+        {
+          "id": "SRC-P03-MX-SCJN-COMP-01",
+          "tipo_fuente": "JURISPRUDENCIA_OFICIAL",
+          "titulo": "Registro digital 2030841 — fuente complementaria para precisión doctrinal sobre malicia efectiva/sistema dual (tesis/criterio sin identificar número exacto todavía)",
+          "organismo_autor": "SCJN",
+          "url": "https://sjf2.scjn.gob.mx/detalle/tesis/2030841",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-08-25",
+          "localizador": "Registro 2030841 (número de tesis/criterio pendiente de identificar)",
+          "jurisdicciones_cubiertas": [
+            "México"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": false,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": null,
+            "metodo_o_evidencia": null,
+            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Fuente complementaria añadida en la corrección jurídica v1 para precisión doctrinal. El número de tesis/criterio exacto (más allá del registro digital) queda pendiente de identificar y confirmar."
           },
           "registro_oficial_id": "scjn-gob-mx"
         }
@@ -213,11 +257,11 @@
         "nuevo_claim_id": null
       },
       "redaccion_prohibida": null,
-      "notas": "REQUIERE_INVESTIGACION. riesgo_asesoria: alto. Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente."
+      "notas": "REQUIERE_INVESTIGACION. Corrección jurídica v1: se añade como fuente oficial principal la Jurisprudencia 1a./J. 38/2013 (10a.), Registro 2003303 (jurisprudencia obligatoria, a diferencia de la tesis aislada 2003643 ya citada, ahora identificada expresamente como tal) y una fuente complementaria (Registro 2030841). El texto distingue (1) opiniones genéricas, (2) afirmaciones de hechos con el estándar textual mexicano de malicia efectiva ('a sabiendas de su falsedad o con total negligencia o despreocupación respecto de su verificación'), y (3) opiniones sustentadas en hechos no verificables directamente por la audiencia. Se aclara expresamente que el estándar reforzado no aplica automáticamente a cualquier particular o reseña privada. riesgo_asesoria: alto. Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente."
     },
     {
       "claim_id": "pieza-03-claim-4",
-      "texto_exacto": "En Quintana Roo, México, los delitos de calumnia e injuria/difamación están derogados del Código Penal estatal desde 2007; en España, la calumnia y la injuria grave continúan tipificadas en los Arts. 205 y 208 del Código Penal, aunque la vía penal se reserva como última ratio y las opiniones sobre servicios se ventilan civilmente bajo la LO 1/1982 — no debe universalizarse ninguna de las dos situaciones a todo el país ni a otros países.",
+      "texto_exacto": "En Quintana Roo, México, el Decreto 151 (aprobado el 17 de abril de 2007, publicado el 19 de abril de 2007) derogó los artículos 132 a 141 del Código Penal para el Estado de Quintana Roo, que regulaban los delitos de calumnia e injuria/difamación. España mantiene protección penal frente a la calumnia y determinadas injurias graves (Arts. 205 y 208 del Código Penal), y también contempla protección civil del honor mediante la Ley Orgánica 1/1982. La vía aplicable depende de los hechos, la naturaleza de la expresión y los requisitos jurídicos correspondientes — no debe universalizarse ninguna de las dos situaciones a todo el país ni a otros países.",
       "ubicacion": "lista",
       "tipo": "dato",
       "alcance": "CAPA_C_NACIONAL",
@@ -235,12 +279,12 @@
         {
           "id": "SRC-P03-MX-QROO-PEN-01",
           "tipo_fuente": "AUTORIDAD_PUBLICA_OFICIAL",
-          "titulo": "Código Penal para el Estado de Quintana Roo — arts. 133-137 derogados (calumnia e injuria/difamación, POE 18-04-2007)",
+          "titulo": "Decreto 151 (Congreso de Quintana Roo) — deroga los arts. 132 a 141 del Código Penal para el Estado de Quintana Roo (calumnia e injuria/difamación); aprobado 17-04-2007, publicado 19-04-2007",
           "organismo_autor": "Gobierno de México (portal genérico gob.mx)",
-          "url": "https://satq.qroo.gob.mx/contenidos/dmarcolegal/33ab1ad0-39b3-11f1-b1f4-005056a29996",
+          "url": "https://documentos.congresoqroo.gob.mx/historial/11_legislatura/decretos/index.htm",
           "identificador_bibliografico": null,
           "fecha_consulta": "2026-08-25",
-          "localizador": "arts. 133 a 137, derogados",
+          "localizador": "arts. 132 a 141, derogados por Decreto 151",
           "jurisdicciones_cubiertas": [
             "México"
           ],
@@ -250,7 +294,7 @@
             "vigencia_comprobada": false,
             "fecha_comprobacion": null,
             "metodo_o_evidencia": null,
-            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Localizador y extracto de texto tomados del expediente externo auditado (legalmente-piloto-evidencia-primaria-v1.2.md + legalmente-piloto-fuentes-primarias-v1.zip, producido por otro modelo de IA). El manifest de ese expediente autoafirma origen_oficial_confirmado/texto_exacto_consultado/vigencia_comprobada = true y resultado SUFICIENTE — por regla de gobernanza de este repositorio (source-policy.md: 'nunca aceptar como fuente otro contenido generado por IA'; CLAUDE.md: 'ninguna IA es fuente jurídica') esa autoconfirmación NO se traslada aquí. Los extractos del ZIP (687-6215 bytes) son fragmentos de artículos concretos, no el documento legal completo, pese a que 44/45 entradas del manifest declaran documento_completo=true — inconsistencia detectada en auditoría y NO heredada. satq.qroo.gob.mx resuelve solo a la entrada genérica gob-mx-generico (AUTORIDAD_PUBLICA_OFICIAL, no NORMA_OFICIAL) — no es el Periódico Oficial del Estado que publicó la derogación."
+            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Corrección jurídica v1: datos corregidos — Decreto 151, aprobado el 17-04-2007, publicado el 19-04-2007 (NO '18 de abril de 2007'), derogó los arts. 132 a 141 (NO 133-137) del Código Penal para el Estado de Quintana Roo. URL actualizada al historial legislativo oficial del Congreso de Quintana Roo (documentos.congresoqroo.gob.mx) — resuelve por subdominio genérico *.gob.mx a la entrada 'gob-mx-generico' del registro (AUTORIDAD_PUBLICA_OFICIAL, nunca NORMA_OFICIAL), declarada explícitamente; techo Nivel 2."
           },
           "registro_oficial_id": "gob-mx-generico"
         },
@@ -331,11 +375,11 @@
         "nuevo_claim_id": null
       },
       "redaccion_prohibida": "En España los delitos contra el honor están despenalizados.",
-      "notas": "REQUIERE_INVESTIGACION. La derogación de Quintana Roo es ESTATAL, no nacional mexicana — no se generaliza a 'México'. Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente."
+      "notas": "REQUIERE_INVESTIGACION. Corrección jurídica v1: corregidos el número de decreto, las fechas de aprobación y publicación, y el rango de artículos derogados en Quintana Roo (arts. 132-141, no 133-137; Decreto 151, no una fecha genérica de publicación 18-04-2007). Se sustituye la afirmación universal de que 'las opiniones sobre servicios se tramitan normalmente solo por la vía civil' en España por una formulación que no excluye automáticamente la vía penal ni presenta 'última ratio' como regla automática — la vía aplicable depende de los hechos y la naturaleza de la expresión. La derogación de Quintana Roo sigue siendo ESTATAL, no nacional mexicana. Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente."
     },
     {
       "claim_id": "pieza-03-claim-5",
-      "texto_exacto": "En España, la libertad de información protege hechos susceptibles de contraste con diligencia razonable (no verdad absoluta); la libertad de expresión protege opiniones y juicios de valor subjetivos que no requieren prueba de verdad, pero ninguna de las dos ampara expresiones formalmente injuriosas, ultrajantes o vejatorias innecesarias para transmitir la crítica.",
+      "texto_exacto": "En España, la libertad de información protege afirmaciones de hechos sujetas al estándar de veracidad entendido como diligencia razonable en su comprobación (no verdad absoluta); la libertad de expresión protege opiniones y juicios de valor subjetivos, no susceptibles de prueba de verdad. Las expresiones formalmente injuriosas, vejatorias o innecesarias para transmitir la crítica pueden quedar fuera de la protección constitucional — pero esto debe valorarse atendiendo al contexto y a la necesidad de la expresión para comunicar la crítica, no de forma automática por el simple hecho de que una expresión resulte molesta, exagerada o hiriente.",
       "ubicacion": "texto_imagen",
       "tipo": "regla",
       "alcance": "CAPA_C_NACIONAL",
@@ -352,7 +396,7 @@
           "tipo_fuente": "JURISPRUDENCIA_OFICIAL",
           "titulo": "STC 107/1988 (ECLI:ES:TC:1988:107) — hechos veraces (información) vs. opiniones libres (expresión)",
           "organismo_autor": "Tribunal Constitucional de España",
-          "url": "https://hj.tribunalconstitucional.es/es/Resolucion/Show/1078",
+          "url": "https://hj.tribunalconstitucional.es/es/Resolucion/Show/1048",
           "identificador_bibliografico": null,
           "fecha_consulta": "2026-08-25",
           "localizador": "STC 107/1988, ECLI:ES:TC:1988:107",
@@ -365,7 +409,7 @@
             "vigencia_comprobada": false,
             "fecha_comprobacion": null,
             "metodo_o_evidencia": null,
-            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Localizador y extracto de texto tomados del expediente externo auditado (legalmente-piloto-evidencia-primaria-v1.2.md + legalmente-piloto-fuentes-primarias-v1.zip, producido por otro modelo de IA). El manifest de ese expediente autoafirma origen_oficial_confirmado/texto_exacto_consultado/vigencia_comprobada = true y resultado SUFICIENTE — por regla de gobernanza de este repositorio (source-policy.md: 'nunca aceptar como fuente otro contenido generado por IA'; CLAUDE.md: 'ninguna IA es fuente jurídica') esa autoconfirmación NO se traslada aquí. Los extractos del ZIP (687-6215 bytes) son fragmentos de artículos concretos, no el documento legal completo, pese a que 44/45 entradas del manifest declaran documento_completo=true — inconsistencia detectada en auditoría y NO heredada. hj.tribunalconstitucional.es no está en el registro oficial."
+            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. hj.tribunalconstitucional.es no está en el registro oficial. Corrección jurídica v1: URL corregida a /Show/1048 (antes /Show/1078, incorrecta)."
           },
           "registro_oficial_id": null
         },
@@ -374,7 +418,7 @@
           "tipo_fuente": "JURISPRUDENCIA_OFICIAL",
           "titulo": "STC 41/2011 (ECLI:ES:TC:2011:41) — reitera el límite de expresiones formalmente injuriosas o vejatorias",
           "organismo_autor": "Tribunal Constitucional de España",
-          "url": "https://hj.tribunalconstitucional.es/es/Resolucion/Show/6822",
+          "url": "https://hj.tribunalconstitucional.es/es/Resolucion/Show/6823",
           "identificador_bibliografico": null,
           "fecha_consulta": "2026-08-25",
           "localizador": "STC 41/2011, ECLI:ES:TC:2011:41",
@@ -387,7 +431,7 @@
             "vigencia_comprobada": false,
             "fecha_comprobacion": null,
             "metodo_o_evidencia": null,
-            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Localizador y extracto de texto tomados del expediente externo auditado (legalmente-piloto-evidencia-primaria-v1.2.md + legalmente-piloto-fuentes-primarias-v1.zip, producido por otro modelo de IA). El manifest de ese expediente autoafirma origen_oficial_confirmado/texto_exacto_consultado/vigencia_comprobada = true y resultado SUFICIENTE — por regla de gobernanza de este repositorio (source-policy.md: 'nunca aceptar como fuente otro contenido generado por IA'; CLAUDE.md: 'ninguna IA es fuente jurídica') esa autoconfirmación NO se traslada aquí. Los extractos del ZIP (687-6215 bytes) son fragmentos de artículos concretos, no el documento legal completo, pese a que 44/45 entradas del manifest declaran documento_completo=true — inconsistencia detectada en auditoría y NO heredada. hj.tribunalconstitucional.es no está en el registro oficial."
+            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. hj.tribunalconstitucional.es no está en el registro oficial. Corrección jurídica v1: URL corregida a /Show/6823 (antes /Show/6822, incorrecta)."
           },
           "registro_oficial_id": null
         }
@@ -424,11 +468,11 @@
         "nuevo_claim_id": null
       },
       "redaccion_prohibida": null,
-      "notas": "REQUIERE_INVESTIGACION. riesgo_asesoria: alto. Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente."
+      "notas": "REQUIERE_INVESTIGACION. Corrección jurídica v1: URLs corregidas para STC 107/1988 (/Show/1048, antes /Show/1078) y STC 41/2011 (/Show/6823, antes /Show/6822). Se aclara que la desprotección de expresiones formalmente injuriosas/vejatorias/innecesarias debe valorarse según contexto y necesidad de la expresión para comunicar la crítica — no de forma automática por resultar molesta, exagerada o hiriente. riesgo_asesoria: alto. Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente."
     },
     {
       "claim_id": "pieza-03-claim-6",
-      "texto_exacto": "En Argentina, las expresiones referidas a asuntos de interés público o que no sean asertivas quedan excluidas de los tipos penales de calumnia e injuria (Arts. 109-110 CP, reformados por la Ley 26.551); y para responsabilidad civil sobre asuntos de interés general rige el estándar de 'real malicia' (Fallos 331:1530, 'Patitó'), mientras que el reporte neutral con fuente identificada y verbo potencial exime de responsabilidad civil (Fallos 308:789, 'Campillay').",
+      "texto_exacto": "En Argentina, las expresiones referidas a asuntos de interés público o que no sean asertivas quedan excluidas de los tipos penales de calumnia e injuria (Arts. 109-110 CP, reformados por la Ley 26.551); y para responsabilidad civil sobre asuntos de interés general rige el estándar de 'real malicia' (Fallos 331:1530, 'Patitó', pendiente de confirmación de texto íntegro). La doctrina Campillay (Fallos 308:789) puede excluir responsabilidad al reproducir información atribuida a terceros cuando se observan las salvaguardas desarrolladas por la Corte — como la atribución sustancialmente fiel a una fuente, el uso de formas no asertivas o potenciales, o la reserva de identidad — según las circunstancias concretas del caso; no es necesario que todas esas salvaguardas concurran simultáneamente, y no constituyen una inmunidad absoluta.",
       "ubicacion": "lista",
       "tipo": "regla",
       "alcance": "CAPA_C_NACIONAL",
@@ -445,7 +489,7 @@
           "tipo_fuente": "NORMA_OFICIAL",
           "titulo": "Código Penal argentino, arts. 109, 110 (reformados por Ley 26.551) — exclusión de asuntos de interés público",
           "organismo_autor": "InfoLEG",
-          "url": "https://servicios.infoleg.gob.ar/infolegInternet/anexos/15000-19999/16546/texact.htm",
+          "url": "https://www.argentina.gob.ar/normativa/nacional/ley-11179-16546/actualizacion",
           "identificador_bibliografico": null,
           "fecha_consulta": "2026-08-25",
           "localizador": "arts. 109 y 110",
@@ -458,9 +502,9 @@
             "vigencia_comprobada": false,
             "fecha_comprobacion": null,
             "metodo_o_evidencia": null,
-            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Localizador y extracto de texto tomados del expediente externo auditado (legalmente-piloto-evidencia-primaria-v1.2.md + legalmente-piloto-fuentes-primarias-v1.zip, producido por otro modelo de IA). El manifest de ese expediente autoafirma origen_oficial_confirmado/texto_exacto_consultado/vigencia_comprobada = true y resultado SUFICIENTE — por regla de gobernanza de este repositorio (source-policy.md: 'nunca aceptar como fuente otro contenido generado por IA'; CLAUDE.md: 'ninguna IA es fuente jurídica') esa autoconfirmación NO se traslada aquí. Los extractos del ZIP (687-6215 bytes) son fragmentos de artículos concretos, no el documento legal completo, pese a que 44/45 entradas del manifest declaran documento_completo=true — inconsistencia detectada en auditoría y NO heredada."
+            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Corrección jurídica v1: URL actualizada a la versión oficial consolidada del Código Penal argentino en argentina.gob.ar. Ese hostname no tiene entrada propia en el registro oficial cerrado (distinto de infoleg.gob.ar/servicios.infoleg.gob.ar, que sí la tiene) — registro_oficial_id se deja en null en vez de forzar la entrada 'infoleg-gob-ar', que correspondía al hostname anterior. Techo Nivel 2 hasta que se confirme y registre argentina.gob.ar, o se vuelva a citar vía infoleg.gob.ar."
           },
-          "registro_oficial_id": "infoleg-gob-ar"
+          "registro_oficial_id": null
         },
         {
           "id": "SRC-P03-AR-LEY-01",
@@ -487,7 +531,7 @@
         {
           "id": "SRC-P03-AR-CSJN-01",
           "tipo_fuente": "JURISPRUDENCIA_OFICIAL",
-          "titulo": "CSJN, Fallos 308:789, 'Campillay c/ La Razón y otros' (15/05/1986) — reporte neutral, verbo potencial, reserva de identidad",
+          "titulo": "CSJN, Fallos 308:789, 'Campillay c/ La Razón y otros' (15/05/1986) — puede excluir responsabilidad al reproducir información atribuida a terceros cuando se observan las salvaguardas desarrolladas por la Corte (atribución fiel a fuente, forma potencial/no asertiva, o reserva de identidad, según el caso) — NO es una exención automática ni una inmunidad absoluta",
           "organismo_autor": "CSJN",
           "url": "https://sjconsulta.csjn.gov.ar/sjconsulta/fallos/verFallo.html?id=23773",
           "identificador_bibliografico": null,
@@ -502,7 +546,7 @@
             "vigencia_comprobada": false,
             "fecha_comprobacion": null,
             "metodo_o_evidencia": null,
-            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Localizador y extracto de texto tomados del expediente externo auditado (legalmente-piloto-evidencia-primaria-v1.2.md + legalmente-piloto-fuentes-primarias-v1.zip, producido por otro modelo de IA). El manifest de ese expediente autoafirma origen_oficial_confirmado/texto_exacto_consultado/vigencia_comprobada = true y resultado SUFICIENTE — por regla de gobernanza de este repositorio (source-policy.md: 'nunca aceptar como fuente otro contenido generado por IA'; CLAUDE.md: 'ninguna IA es fuente jurídica') esa autoconfirmación NO se traslada aquí. Los extractos del ZIP (687-6215 bytes) son fragmentos de artículos concretos, no el documento legal completo, pese a que 44/45 entradas del manifest declaran documento_completo=true — inconsistencia detectada en auditoría y NO heredada."
+            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Localizador y extracto de texto tomados del expediente externo auditado (legalmente-piloto-evidencia-primaria-v1.2.md + legalmente-piloto-fuentes-primarias-v1.zip, producido por otro modelo de IA). El manifest de ese expediente autoafirma origen_oficial_confirmado/texto_exacto_consultado/vigencia_comprobada = true y resultado SUFICIENTE — por regla de gobernanza de este repositorio (source-policy.md: 'nunca aceptar como fuente otro contenido generado por IA'; CLAUDE.md: 'ninguna IA es fuente jurídica') esa autoconfirmación NO se traslada aquí. Los extractos del ZIP (687-6215 bytes) son fragmentos de artículos concretos, no el documento legal completo, pese a que 44/45 entradas del manifest declaran documento_completo=true — inconsistencia detectada en auditoría y NO heredada. Corrección jurídica v1: se corrige la descripción de la doctrina Campillay — no es una exención automática por identificar la fuente y usar el potencial; son salvaguardas que la Corte valora según las circunstancias del caso, sin que deban concurrir todas simultáneamente. El enlace oficial (sjconsulta.csjn.gov.ar) permanece pendiente de confirmación de acceso y contenido íntegro — no se marca texto exacto, vigencia ni origen como verificados. Corrección jurídica v1: se corrige la descripción de la doctrina Campillay — no es una exención automática por identificar la fuente y usar el potencial; son salvaguardas que la Corte valora según las circunstancias del caso, sin que deban concurrir todas simultáneamente. El enlace oficial (sjconsulta.csjn.gov.ar) permanece pendiente de confirmación de acceso y contenido íntegro — no se marca texto exacto, vigencia ni origen como verificados."
           },
           "registro_oficial_id": "csjn-gov-ar"
         },
@@ -524,7 +568,7 @@
             "vigencia_comprobada": false,
             "fecha_comprobacion": null,
             "metodo_o_evidencia": null,
-            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Localizador y extracto de texto tomados del expediente externo auditado (legalmente-piloto-evidencia-primaria-v1.2.md + legalmente-piloto-fuentes-primarias-v1.zip, producido por otro modelo de IA). El manifest de ese expediente autoafirma origen_oficial_confirmado/texto_exacto_consultado/vigencia_comprobada = true y resultado SUFICIENTE — por regla de gobernanza de este repositorio (source-policy.md: 'nunca aceptar como fuente otro contenido generado por IA'; CLAUDE.md: 'ninguna IA es fuente jurídica') esa autoconfirmación NO se traslada aquí. Los extractos del ZIP (687-6215 bytes) son fragmentos de artículos concretos, no el documento legal completo, pese a que 44/45 entradas del manifest declaran documento_completo=true — inconsistencia detectada en auditoría y NO heredada."
+            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Localizador y extracto de texto tomados del expediente externo auditado (legalmente-piloto-evidencia-primaria-v1.2.md + legalmente-piloto-fuentes-primarias-v1.zip, producido por otro modelo de IA). El manifest de ese expediente autoafirma origen_oficial_confirmado/texto_exacto_consultado/vigencia_comprobada = true y resultado SUFICIENTE — por regla de gobernanza de este repositorio (source-policy.md: 'nunca aceptar como fuente otro contenido generado por IA'; CLAUDE.md: 'ninguna IA es fuente jurídica') esa autoconfirmación NO se traslada aquí. Los extractos del ZIP (687-6215 bytes) son fragmentos de artículos concretos, no el documento legal completo, pese a que 44/45 entradas del manifest declaran documento_completo=true — inconsistencia detectada en auditoría y NO heredada. Corrección jurídica v1: se conserva como antecedente del estándar de real malicia en asuntos de interés público. El enlace oficial (sjconsulta.csjn.gov.ar) permanece pendiente de confirmación de acceso y contenido íntegro — no se marca texto exacto, vigencia ni origen como verificados; no se sustituye por blogs, agregadores privados ni memoria del modelo. Corrección jurídica v1: se conserva como antecedente del estándar de real malicia en asuntos de interés público. El enlace oficial (sjconsulta.csjn.gov.ar) permanece pendiente de confirmación de acceso y contenido íntegro — no se marca texto exacto, vigencia ni origen como verificados; no se sustituye por blogs, agregadores privados ni memoria del modelo."
           },
           "registro_oficial_id": "csjn-gov-ar"
         }
@@ -561,11 +605,11 @@
         "nuevo_claim_id": null
       },
       "redaccion_prohibida": null,
-      "notas": "REQUIERE_INVESTIGACION. riesgo_asesoria: alto. Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente."
+      "notas": "REQUIERE_INVESTIGACION. Corrección jurídica v1: URL del Código Penal argentino actualizada a argentina.gob.ar (techo Nivel 2, hostname no registrado). La doctrina Campillay ya no se describe como exención automática — se reformula como salvaguardas evaluadas según las circunstancias del caso, que no requieren concurrir todas simultáneamente ni constituyen inmunidad absoluta. Patitó se conserva como antecedente del estándar de real malicia; ambos enlaces oficiales de la CSJN (sjconsulta.csjn.gov.ar) permanecen pendientes de confirmación de acceso y contenido íntegro — no se sustituyen por fuentes no oficiales. riesgo_asesoria: alto. Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente."
     },
     {
       "claim_id": "pieza-03-claim-7",
-      "texto_exacto": "La Convención Americana sobre Derechos Humanos protege tanto la honra (Art. 11) como la libertad de expresión (Art. 13, sin censura previa); y la Corte Interamericana ha resuelto de forma reiterada (Kimel Vs. Argentina, Herrera Ulloa Vs. Costa Rica, Álvarez Ramos Vs. Venezuela) que usar la vía penal para sancionar discursos, opiniones o críticas sobre asuntos de interés público es una restricción desproporcionada — aunque esto no excluye la vía civil proporcionada ante imputaciones fácticas dolosas y falsas.",
+      "texto_exacto": "El sistema interamericano protege tanto el derecho al honor como la libertad de expresión. Las responsabilidades ulteriores deben estar previstas legalmente, perseguir una finalidad permitida y superar un examen de necesidad y proporcionalidad. Respecto de discursos especialmente protegidos sobre asuntos de interés público, en particular críticas relacionadas con la actuación de funcionarios públicos, la Corte Interamericana ha sometido las sanciones penales al máximo escrutinio y las ha considerado incompatibles o desproporcionadas en casos concretos como Kimel, Herrera Ulloa y Álvarez Ramos. Esto no genera inmunidad general para toda reseña ni elimina una posible responsabilidad civil proporcional cuando concurran sus requisitos.",
       "ubicacion": "cta",
       "tipo": "regla",
       "alcance": "CAPA_C_NACIONAL",
@@ -697,8 +741,8 @@
         "verificada": false,
         "nuevo_claim_id": null
       },
-      "redaccion_prohibida": "Cualquier reseña negativa es 100% legal porque existe libertad de expresión.",
-      "notas": "REQUIERE_INVESTIGACION — claim creado también para bloquear la afirmación opuesta y errónea ('cualquier reseña es 100% legal'). riesgo_asesoria: alto. Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente."
+      "redaccion_prohibida": "Cualquier reseña negativa es 100 % legal porque la libertad de expresión siempre protege al consumidor.",
+      "notas": "REQUIERE_INVESTIGACION — claim reformulado en la corrección jurídica v1 con el test de responsabilidades ulteriores (legalidad, finalidad permitida, necesidad y proporcionalidad) y el escrutinio estricto de la Corte IDH sobre sanciones penales para discursos de interés público, sin afirmar que toda sanción penal relacionada con cualquier opinión o asunto público sea automáticamente contraria a la Convención, y sin generar inmunidad general. redaccion_prohibida actualizada a la formulación exacta de la revisión jurídica. riesgo_asesoria: alto. Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente."
     }
   ],
   "estado_agregado": "REQUIERE_INVESTIGACION",
