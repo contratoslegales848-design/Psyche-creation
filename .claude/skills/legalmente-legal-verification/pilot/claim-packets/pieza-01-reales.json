@@ -33,12 +33,12 @@
             "México"
           ],
           "verificacion_fuente": {
-            "origen_oficial_confirmado": false,
-            "texto_exacto_consultado": false,
-            "vigencia_comprobada": false,
-            "fecha_comprobacion": null,
-            "metodo_o_evidencia": null,
-            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Localizador y extracto de texto tomados del expediente externo auditado (legalmente-piloto-evidencia-primaria-v1.2.md + legalmente-piloto-fuentes-primarias-v1.zip, producido por otro modelo de IA). El manifest de ese expediente autoafirma origen_oficial_confirmado/texto_exacto_consultado/vigencia_comprobada = true y resultado SUFICIENTE — por regla de gobernanza de este repositorio (source-policy.md: 'nunca aceptar como fuente otro contenido generado por IA'; CLAUDE.md: 'ninguna IA es fuente jurídica') esa autoconfirmación NO se traslada aquí. Los extractos del ZIP (687-6215 bytes) son fragmentos de artículos concretos, no el documento legal completo, pese a que 44/45 entradas del manifest declaran documento_completo=true — inconsistencia detectada en auditoría y NO heredada."
+            "origen_oficial_confirmado": true,
+            "texto_exacto_consultado": true,
+            "vigencia_comprobada": true,
+            "fecha_comprobacion": "2026-08-26",
+            "metodo_o_evidencia": "Consulta directa del documento oficial (PDF de diputados.gob.mx). Artículos consultados según el localizador de esta fuente. Última reforma identificada en el documento: DOF 14-11-2025. Informe externo: legalmente-pieza-01-verificacion-externa-codex-v1.md (SHA-256 cc37d295835701fd0dfa90fcc43c2aa571a77ce86574a6d033f455274c25e21f).",
+            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Localizador y extracto de texto tomados del expediente externo auditado (legalmente-piloto-evidencia-primaria-v1.2.md + legalmente-piloto-fuentes-primarias-v1.zip, producido por otro modelo de IA). El manifest de ese expediente autoafirma origen_oficial_confirmado/texto_exacto_consultado/vigencia_comprobada = true y resultado SUFICIENTE — por regla de gobernanza de este repositorio (source-policy.md: 'nunca aceptar como fuente otro contenido generado por IA'; CLAUDE.md: 'ninguna IA es fuente jurídica') esa autoconfirmación NO se traslada aquí. Los extractos del ZIP (687-6215 bytes) son fragmentos de artículos concretos, no el documento legal completo, pese a que 44/45 entradas del manifest declaran documento_completo=true — inconsistencia detectada en auditoría y NO heredada. Integración de evidencia externa v1 (auditoría Codex, 2026-08-26): Fuente consultada directamente contra el PDF oficial de diputados.gob.mx; el documento reporta 'Última Reforma DOF 14-11-2025'. registro_oficial_id ('diputados-gob-mx') y organismo_autor ya coincidían con el registro cerrado, así que la fuente alcanza Nivel 1 conforme a las reglas existentes del validador — el nivel final lo determina el validador real, no se fuerza aquí. Informe externo de procedencia: legalmente-pieza-01-verificacion-externa-codex-v1.md (SHA-256 cc37d295835701fd0dfa90fcc43c2aa571a77ce86574a6d033f455274c25e21f), registrado en pilot/ como evidencia de auditoría — no sustituye a la norma o resolución oficial, que sigue siendo la fuente jurídica."
           },
           "registro_oficial_id": "diputados-gob-mx"
         },
@@ -47,7 +47,7 @@
           "tipo_fuente": "NORMA_OFICIAL",
           "titulo": "Código Civil español — art. 348 (definición de propiedad y acción reivindicatoria)",
           "organismo_autor": "Agencia Estatal BOE",
-          "url": "https://www.boe.es/buscar/pdf/1889/BOE-A-1889-4763-consolidado.pdf",
+          "url": "https://www.boe.es/buscar/act.php?id=BOE-A-1889-4763",
           "identificador_bibliografico": null,
           "fecha_consulta": "2026-08-25",
           "localizador": "art. 348",
@@ -55,12 +55,12 @@
             "España"
           ],
           "verificacion_fuente": {
-            "origen_oficial_confirmado": false,
-            "texto_exacto_consultado": false,
-            "vigencia_comprobada": false,
-            "fecha_comprobacion": null,
-            "metodo_o_evidencia": null,
-            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Localizador y extracto de texto tomados del expediente externo auditado (legalmente-piloto-evidencia-primaria-v1.2.md + legalmente-piloto-fuentes-primarias-v1.zip, producido por otro modelo de IA). El manifest de ese expediente autoafirma origen_oficial_confirmado/texto_exacto_consultado/vigencia_comprobada = true y resultado SUFICIENTE — por regla de gobernanza de este repositorio (source-policy.md: 'nunca aceptar como fuente otro contenido generado por IA'; CLAUDE.md: 'ninguna IA es fuente jurídica') esa autoconfirmación NO se traslada aquí. Los extractos del ZIP (687-6215 bytes) son fragmentos de artículos concretos, no el documento legal completo, pese a que 44/45 entradas del manifest declaran documento_completo=true — inconsistencia detectada en auditoría y NO heredada."
+            "origen_oficial_confirmado": true,
+            "texto_exacto_consultado": true,
+            "vigencia_comprobada": true,
+            "fecha_comprobacion": "2026-08-26",
+            "metodo_o_evidencia": "Consulta directa del texto consolidado oficial (boe.es/buscar/act.php). Artículos consultados según el localizador de esta fuente. Informe externo: legalmente-pieza-01-verificacion-externa-codex-v1.md (SHA-256 cc37d295835701fd0dfa90fcc43c2aa571a77ce86574a6d033f455274c25e21f).",
+            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Localizador y extracto de texto tomados del expediente externo auditado (legalmente-piloto-evidencia-primaria-v1.2.md + legalmente-piloto-fuentes-primarias-v1.zip, producido por otro modelo de IA). El manifest de ese expediente autoafirma origen_oficial_confirmado/texto_exacto_consultado/vigencia_comprobada = true y resultado SUFICIENTE — por regla de gobernanza de este repositorio (source-policy.md: 'nunca aceptar como fuente otro contenido generado por IA'; CLAUDE.md: 'ninguna IA es fuente jurídica') esa autoconfirmación NO se traslada aquí. Los extractos del ZIP (687-6215 bytes) son fragmentos de artículos concretos, no el documento legal completo, pese a que 44/45 entradas del manifest declaran documento_completo=true — inconsistencia detectada en auditoría y NO heredada. Integración de evidencia externa v1 (auditoría Codex, 2026-08-26): URL actualizada a la versión consolidada oficial del BOE (boe.es/buscar/act.php?id=BOE-A-1889-4763), consultada directamente. registro_oficial_id ('boe-es') y organismo_autor ya coincidían con el registro cerrado, mismo hostname boe.es que la URL anterior. Informe externo de procedencia: legalmente-pieza-01-verificacion-externa-codex-v1.md (SHA-256 cc37d295835701fd0dfa90fcc43c2aa571a77ce86574a6d033f455274c25e21f), registrado en pilot/ como evidencia de auditoría — no sustituye a la norma o resolución oficial, que sigue siendo la fuente jurídica."
           },
           "registro_oficial_id": "boe-es"
         },
@@ -69,7 +69,7 @@
           "tipo_fuente": "NORMA_OFICIAL",
           "titulo": "Código Civil y Comercial de la Nación (Argentina) — art. 1941 (dominio perfecto)",
           "organismo_autor": "InfoLEG",
-          "url": "https://servicios.infoleg.gob.ar/infolegInternet/anexos/235000-239999/235975/texact.htm",
+          "url": "https://www.argentina.gob.ar/normativa/nacional/ley-26994-235975/actualizacion",
           "identificador_bibliografico": null,
           "fecha_consulta": "2026-08-25",
           "localizador": "art. 1941",
@@ -77,14 +77,14 @@
             "Argentina"
           ],
           "verificacion_fuente": {
-            "origen_oficial_confirmado": false,
-            "texto_exacto_consultado": false,
-            "vigencia_comprobada": false,
-            "fecha_comprobacion": null,
-            "metodo_o_evidencia": null,
-            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Localizador y extracto de texto tomados del expediente externo auditado (legalmente-piloto-evidencia-primaria-v1.2.md + legalmente-piloto-fuentes-primarias-v1.zip, producido por otro modelo de IA). El manifest de ese expediente autoafirma origen_oficial_confirmado/texto_exacto_consultado/vigencia_comprobada = true y resultado SUFICIENTE — por regla de gobernanza de este repositorio (source-policy.md: 'nunca aceptar como fuente otro contenido generado por IA'; CLAUDE.md: 'ninguna IA es fuente jurídica') esa autoconfirmación NO se traslada aquí. Los extractos del ZIP (687-6215 bytes) son fragmentos de artículos concretos, no el documento legal completo, pese a que 44/45 entradas del manifest declaran documento_completo=true — inconsistencia detectada en auditoría y NO heredada."
+            "origen_oficial_confirmado": true,
+            "texto_exacto_consultado": true,
+            "vigencia_comprobada": true,
+            "fecha_comprobacion": "2026-08-26",
+            "metodo_o_evidencia": "Consulta directa del texto oficial actualizado (argentina.gob.ar/normativa). Artículos consultados según el localizador de esta fuente. Informe externo: legalmente-pieza-01-verificacion-externa-codex-v1.md (SHA-256 cc37d295835701fd0dfa90fcc43c2aa571a77ce86574a6d033f455274c25e21f).",
+            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Localizador y extracto de texto tomados del expediente externo auditado (legalmente-piloto-evidencia-primaria-v1.2.md + legalmente-piloto-fuentes-primarias-v1.zip, producido por otro modelo de IA). El manifest de ese expediente autoafirma origen_oficial_confirmado/texto_exacto_consultado/vigencia_comprobada = true y resultado SUFICIENTE — por regla de gobernanza de este repositorio (source-policy.md: 'nunca aceptar como fuente otro contenido generado por IA'; CLAUDE.md: 'ninguna IA es fuente jurídica') esa autoconfirmación NO se traslada aquí. Los extractos del ZIP (687-6215 bytes) son fragmentos de artículos concretos, no el documento legal completo, pese a que 44/45 entradas del manifest declaran documento_completo=true — inconsistencia detectada en auditoría y NO heredada. Integración de evidencia externa v1 (auditoría Codex, 2026-08-26): URL actualizada de servicios.infoleg.gob.ar (devolvía 403 en la auditoría externa) a la versión oficial accesible en argentina.gob.ar/normativa, consultada directamente. Ese hostname NO tiene entrada propia en el registro oficial cerrado (distinto de infoleg.gob.ar/servicios.infoleg.gob.ar, que sí la tiene) — 'registro_oficial_id' se deja deliberadamente en null en vez de reutilizar 'infoleg-gob-ar' (que correspondía al hostname anterior) o inventar una entrada nueva. Los tres booleanos de verificación se registran en true porque el texto oficial fue consultado directamente, pero el nivel de la fuente lo determina el validador real a partir del registro — no se eleva manualmente. Techo estructural Nivel 2 hasta que argentina.gob.ar se registre formalmente o se vuelva a citar vía infoleg.gob.ar/servicios.infoleg.gob.ar. Informe externo de procedencia: legalmente-pieza-01-verificacion-externa-codex-v1.md (SHA-256 cc37d295835701fd0dfa90fcc43c2aa571a77ce86574a6d033f455274c25e21f), registrado en pilot/ como evidencia de auditoría — no sustituye a la norma o resolución oficial, que sigue siendo la fuente jurídica."
           },
-          "registro_oficial_id": "infoleg-gob-ar"
+          "registro_oficial_id": null
         }
       ],
       "confianza": "media",
@@ -104,7 +104,7 @@
         "fecha": null,
         "observaciones": null
       },
-      "estado": "REQUIERE_INVESTIGACION",
+      "estado": "APTO_CON_MATICES",
       "revision_humana": {
         "estado": "PENDIENTE",
         "revisor": null,
@@ -119,7 +119,7 @@
         "nuevo_claim_id": null
       },
       "redaccion_prohibida": null,
-      "notas": "REQUIERE_INVESTIGACION. Corrección jurídica v1: texto_exacto ya no afirma que los tres artículos usan exactamente las palabras 'usar, gozar y disponer' — cada ordenamiento tiene su propia formulación técnica (Art. 830 CCF México, Art. 348 CC España, Art. 1941 CCyCN Argentina 'dominio perfecto'), comparables en función pero no en redacción literal. Ninguna fuente verificada de forma independiente en esta sesión."
+      "notas": "REQUIERE_INVESTIGACION. Corrección jurídica v1: texto_exacto ya no afirma que los tres artículos usan exactamente las palabras 'usar, gozar y disponer' — cada ordenamiento tiene su propia formulación técnica (Art. 830 CCF México, Art. 348 CC España, Art. 1941 CCyCN Argentina 'dominio perfecto'), comparables en función pero no en redacción literal. Ninguna fuente verificada de forma independiente en esta sesión. Integración de evidencia externa v1 (auditoría Codex, 2026-08-26): tras actualizar los metadatos de verificación de las fuentes citadas, el techo real calculado por el validador para este claim es 'APTO_PARA_NARRATIVA' (antes 'REQUIERE_INVESTIGACION') — se declara ese techo exactamente, sin elevarlo ni suprimirlo manualmente. Esto NO constituye aprobación jurídica humana: revision_humana.estado permanece PENDIENTE y gate_arte permanece CERRADO. Informe externo: legalmente-pieza-01-verificacion-externa-codex-v1.md (SHA-256 cc37d295835701fd0dfa90fcc43c2aa571a77ce86574a6d033f455274c25e21f). Alineación con el validador corregido (Fase 1E, 2026-08-26): tras cerrar el bypass de cobertura multijurisdiccional en CAPA_B_VARIABLE (PR #8), el techo real de este claim es 'APTO_CON_MATICES', no 'APTO_PARA_NARRATIVA' — la fuente de Argentina sigue en Nivel 2 (sin registro_oficial_id), y el techo ahora es el mínimo entre los tres países declarados, no el máximo de cualquier fuente suelta. No se modificó ningún texto, artículo, localizador, URL ni booleano de verificación — solo el 'estado' declarado y los campos agregados derivados de él. Esto no constituye aprobación jurídica humana: revision_humana.estado permanece PENDIENTE y gate_arte permanece CERRADO."
     },
     {
       "claim_id": "pieza-01-claim-2",
@@ -152,12 +152,12 @@
             "México"
           ],
           "verificacion_fuente": {
-            "origen_oficial_confirmado": false,
-            "texto_exacto_consultado": false,
-            "vigencia_comprobada": false,
-            "fecha_comprobacion": null,
-            "metodo_o_evidencia": null,
-            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Localizador y extracto de texto tomados del expediente externo auditado (legalmente-piloto-evidencia-primaria-v1.2.md + legalmente-piloto-fuentes-primarias-v1.zip, producido por otro modelo de IA). El manifest de ese expediente autoafirma origen_oficial_confirmado/texto_exacto_consultado/vigencia_comprobada = true y resultado SUFICIENTE — por regla de gobernanza de este repositorio (source-policy.md: 'nunca aceptar como fuente otro contenido generado por IA'; CLAUDE.md: 'ninguna IA es fuente jurídica') esa autoconfirmación NO se traslada aquí. Los extractos del ZIP (687-6215 bytes) son fragmentos de artículos concretos, no el documento legal completo, pese a que 44/45 entradas del manifest declaran documento_completo=true — inconsistencia detectada en auditoría y NO heredada."
+            "origen_oficial_confirmado": true,
+            "texto_exacto_consultado": true,
+            "vigencia_comprobada": true,
+            "fecha_comprobacion": "2026-08-26",
+            "metodo_o_evidencia": "Consulta directa del documento oficial (PDF de diputados.gob.mx). Artículos consultados según el localizador de esta fuente. Última reforma identificada en el documento: DOF 14-11-2025. Informe externo: legalmente-pieza-01-verificacion-externa-codex-v1.md (SHA-256 cc37d295835701fd0dfa90fcc43c2aa571a77ce86574a6d033f455274c25e21f).",
+            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Localizador y extracto de texto tomados del expediente externo auditado (legalmente-piloto-evidencia-primaria-v1.2.md + legalmente-piloto-fuentes-primarias-v1.zip, producido por otro modelo de IA). El manifest de ese expediente autoafirma origen_oficial_confirmado/texto_exacto_consultado/vigencia_comprobada = true y resultado SUFICIENTE — por regla de gobernanza de este repositorio (source-policy.md: 'nunca aceptar como fuente otro contenido generado por IA'; CLAUDE.md: 'ninguna IA es fuente jurídica') esa autoconfirmación NO se traslada aquí. Los extractos del ZIP (687-6215 bytes) son fragmentos de artículos concretos, no el documento legal completo, pese a que 44/45 entradas del manifest declaran documento_completo=true — inconsistencia detectada en auditoría y NO heredada. Integración de evidencia externa v1 (auditoría Codex, 2026-08-26): Fuente consultada directamente contra el PDF oficial de diputados.gob.mx; el documento reporta 'Última Reforma DOF 14-11-2025'. registro_oficial_id ('diputados-gob-mx') y organismo_autor ya coincidían con el registro cerrado, así que la fuente alcanza Nivel 1 conforme a las reglas existentes del validador — el nivel final lo determina el validador real, no se fuerza aquí. Informe externo de procedencia: legalmente-pieza-01-verificacion-externa-codex-v1.md (SHA-256 cc37d295835701fd0dfa90fcc43c2aa571a77ce86574a6d033f455274c25e21f), registrado en pilot/ como evidencia de auditoría — no sustituye a la norma o resolución oficial, que sigue siendo la fuente jurídica."
           },
           "registro_oficial_id": "diputados-gob-mx"
         },
@@ -166,7 +166,7 @@
           "tipo_fuente": "NORMA_OFICIAL",
           "titulo": "Código Civil español — arts. 430, 432 (posesión natural/civil, concepto de dueño/tenedor)",
           "organismo_autor": "Agencia Estatal BOE",
-          "url": "https://www.boe.es/buscar/pdf/1889/BOE-A-1889-4763-consolidado.pdf",
+          "url": "https://www.boe.es/buscar/act.php?id=BOE-A-1889-4763",
           "identificador_bibliografico": null,
           "fecha_consulta": "2026-08-25",
           "localizador": "arts. 430 y 432",
@@ -174,12 +174,12 @@
             "España"
           ],
           "verificacion_fuente": {
-            "origen_oficial_confirmado": false,
-            "texto_exacto_consultado": false,
-            "vigencia_comprobada": false,
-            "fecha_comprobacion": null,
-            "metodo_o_evidencia": null,
-            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Localizador y extracto de texto tomados del expediente externo auditado (legalmente-piloto-evidencia-primaria-v1.2.md + legalmente-piloto-fuentes-primarias-v1.zip, producido por otro modelo de IA). El manifest de ese expediente autoafirma origen_oficial_confirmado/texto_exacto_consultado/vigencia_comprobada = true y resultado SUFICIENTE — por regla de gobernanza de este repositorio (source-policy.md: 'nunca aceptar como fuente otro contenido generado por IA'; CLAUDE.md: 'ninguna IA es fuente jurídica') esa autoconfirmación NO se traslada aquí. Los extractos del ZIP (687-6215 bytes) son fragmentos de artículos concretos, no el documento legal completo, pese a que 44/45 entradas del manifest declaran documento_completo=true — inconsistencia detectada en auditoría y NO heredada."
+            "origen_oficial_confirmado": true,
+            "texto_exacto_consultado": true,
+            "vigencia_comprobada": true,
+            "fecha_comprobacion": "2026-08-26",
+            "metodo_o_evidencia": "Consulta directa del texto consolidado oficial (boe.es/buscar/act.php). Artículos consultados según el localizador de esta fuente. Informe externo: legalmente-pieza-01-verificacion-externa-codex-v1.md (SHA-256 cc37d295835701fd0dfa90fcc43c2aa571a77ce86574a6d033f455274c25e21f).",
+            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Localizador y extracto de texto tomados del expediente externo auditado (legalmente-piloto-evidencia-primaria-v1.2.md + legalmente-piloto-fuentes-primarias-v1.zip, producido por otro modelo de IA). El manifest de ese expediente autoafirma origen_oficial_confirmado/texto_exacto_consultado/vigencia_comprobada = true y resultado SUFICIENTE — por regla de gobernanza de este repositorio (source-policy.md: 'nunca aceptar como fuente otro contenido generado por IA'; CLAUDE.md: 'ninguna IA es fuente jurídica') esa autoconfirmación NO se traslada aquí. Los extractos del ZIP (687-6215 bytes) son fragmentos de artículos concretos, no el documento legal completo, pese a que 44/45 entradas del manifest declaran documento_completo=true — inconsistencia detectada en auditoría y NO heredada. Integración de evidencia externa v1 (auditoría Codex, 2026-08-26): URL actualizada a la versión consolidada oficial del BOE (boe.es/buscar/act.php?id=BOE-A-1889-4763), consultada directamente. registro_oficial_id ('boe-es') y organismo_autor ya coincidían con el registro cerrado, mismo hostname boe.es que la URL anterior. Informe externo de procedencia: legalmente-pieza-01-verificacion-externa-codex-v1.md (SHA-256 cc37d295835701fd0dfa90fcc43c2aa571a77ce86574a6d033f455274c25e21f), registrado en pilot/ como evidencia de auditoría — no sustituye a la norma o resolución oficial, que sigue siendo la fuente jurídica."
           },
           "registro_oficial_id": "boe-es"
         },
@@ -188,7 +188,7 @@
           "tipo_fuente": "NORMA_OFICIAL",
           "titulo": "Código Civil y Comercial de la Nación (Argentina) — arts. 1908-1910 (relaciones de poder: posesión y tenencia)",
           "organismo_autor": "InfoLEG",
-          "url": "https://servicios.infoleg.gob.ar/infolegInternet/anexos/235000-239999/235975/texact.htm",
+          "url": "https://www.argentina.gob.ar/normativa/nacional/ley-26994-235975/actualizacion",
           "identificador_bibliografico": null,
           "fecha_consulta": "2026-08-25",
           "localizador": "arts. 1908, 1909 y 1910",
@@ -196,14 +196,14 @@
             "Argentina"
           ],
           "verificacion_fuente": {
-            "origen_oficial_confirmado": false,
-            "texto_exacto_consultado": false,
-            "vigencia_comprobada": false,
-            "fecha_comprobacion": null,
-            "metodo_o_evidencia": null,
-            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Localizador y extracto de texto tomados del expediente externo auditado (legalmente-piloto-evidencia-primaria-v1.2.md + legalmente-piloto-fuentes-primarias-v1.zip, producido por otro modelo de IA). El manifest de ese expediente autoafirma origen_oficial_confirmado/texto_exacto_consultado/vigencia_comprobada = true y resultado SUFICIENTE — por regla de gobernanza de este repositorio (source-policy.md: 'nunca aceptar como fuente otro contenido generado por IA'; CLAUDE.md: 'ninguna IA es fuente jurídica') esa autoconfirmación NO se traslada aquí. Los extractos del ZIP (687-6215 bytes) son fragmentos de artículos concretos, no el documento legal completo, pese a que 44/45 entradas del manifest declaran documento_completo=true — inconsistencia detectada en auditoría y NO heredada."
+            "origen_oficial_confirmado": true,
+            "texto_exacto_consultado": true,
+            "vigencia_comprobada": true,
+            "fecha_comprobacion": "2026-08-26",
+            "metodo_o_evidencia": "Consulta directa del texto oficial actualizado (argentina.gob.ar/normativa). Artículos consultados según el localizador de esta fuente. Informe externo: legalmente-pieza-01-verificacion-externa-codex-v1.md (SHA-256 cc37d295835701fd0dfa90fcc43c2aa571a77ce86574a6d033f455274c25e21f).",
+            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Localizador y extracto de texto tomados del expediente externo auditado (legalmente-piloto-evidencia-primaria-v1.2.md + legalmente-piloto-fuentes-primarias-v1.zip, producido por otro modelo de IA). El manifest de ese expediente autoafirma origen_oficial_confirmado/texto_exacto_consultado/vigencia_comprobada = true y resultado SUFICIENTE — por regla de gobernanza de este repositorio (source-policy.md: 'nunca aceptar como fuente otro contenido generado por IA'; CLAUDE.md: 'ninguna IA es fuente jurídica') esa autoconfirmación NO se traslada aquí. Los extractos del ZIP (687-6215 bytes) son fragmentos de artículos concretos, no el documento legal completo, pese a que 44/45 entradas del manifest declaran documento_completo=true — inconsistencia detectada en auditoría y NO heredada. Integración de evidencia externa v1 (auditoría Codex, 2026-08-26): URL actualizada de servicios.infoleg.gob.ar (devolvía 403 en la auditoría externa) a la versión oficial accesible en argentina.gob.ar/normativa, consultada directamente. Ese hostname NO tiene entrada propia en el registro oficial cerrado (distinto de infoleg.gob.ar/servicios.infoleg.gob.ar, que sí la tiene) — 'registro_oficial_id' se deja deliberadamente en null en vez de reutilizar 'infoleg-gob-ar' (que correspondía al hostname anterior) o inventar una entrada nueva. Los tres booleanos de verificación se registran en true porque el texto oficial fue consultado directamente, pero el nivel de la fuente lo determina el validador real a partir del registro — no se eleva manualmente. Techo estructural Nivel 2 hasta que argentina.gob.ar se registre formalmente o se vuelva a citar vía infoleg.gob.ar/servicios.infoleg.gob.ar. Informe externo de procedencia: legalmente-pieza-01-verificacion-externa-codex-v1.md (SHA-256 cc37d295835701fd0dfa90fcc43c2aa571a77ce86574a6d033f455274c25e21f), registrado en pilot/ como evidencia de auditoría — no sustituye a la norma o resolución oficial, que sigue siendo la fuente jurídica."
           },
-          "registro_oficial_id": "infoleg-gob-ar"
+          "registro_oficial_id": null
         }
       ],
       "confianza": "media",
@@ -223,7 +223,7 @@
         "fecha": null,
         "observaciones": null
       },
-      "estado": "REQUIERE_INVESTIGACION",
+      "estado": "APTO_CON_MATICES",
       "revision_humana": {
         "estado": "PENDIENTE",
         "revisor": null,
@@ -238,7 +238,7 @@
         "nuevo_claim_id": null
       },
       "redaccion_prohibida": null,
-      "notas": "REQUIERE_INVESTIGACION. Corrección jurídica v1: se precisa que México no usa el art. 1 CCF como fuente de este claim (ese artículo sustenta el claim 3, sobre ámbito federal, no la terminología posesoria); se amplía la fuente argentina a los arts. 1908-1910. Ninguna fuente verificada de forma independiente."
+      "notas": "REQUIERE_INVESTIGACION. Corrección jurídica v1: se precisa que México no usa el art. 1 CCF como fuente de este claim (ese artículo sustenta el claim 3, sobre ámbito federal, no la terminología posesoria); se amplía la fuente argentina a los arts. 1908-1910. Ninguna fuente verificada de forma independiente. Integración de evidencia externa v1 (auditoría Codex, 2026-08-26): tras actualizar los metadatos de verificación de las fuentes citadas, el techo real calculado por el validador para este claim es 'APTO_PARA_NARRATIVA' (antes 'REQUIERE_INVESTIGACION') — se declara ese techo exactamente, sin elevarlo ni suprimirlo manualmente. Esto NO constituye aprobación jurídica humana: revision_humana.estado permanece PENDIENTE y gate_arte permanece CERRADO. Informe externo: legalmente-pieza-01-verificacion-externa-codex-v1.md (SHA-256 cc37d295835701fd0dfa90fcc43c2aa571a77ce86574a6d033f455274c25e21f). Alineación con el validador corregido (Fase 1E, 2026-08-26): tras cerrar el bypass de cobertura multijurisdiccional en CAPA_B_VARIABLE (PR #8), el techo real de este claim es 'APTO_CON_MATICES', no 'APTO_PARA_NARRATIVA' — la fuente de Argentina sigue en Nivel 2 (sin registro_oficial_id), y el techo ahora es el mínimo entre los tres países declarados, no el máximo de cualquier fuente suelta. No se modificó ningún texto, artículo, localizador, URL ni booleano de verificación — solo el 'estado' declarado y los campos agregados derivados de él. Esto no constituye aprobación jurídica humana: revision_humana.estado permanece PENDIENTE y gate_arte permanece CERRADO."
     },
     {
       "claim_id": "pieza-01-claim-3",
@@ -289,12 +289,12 @@
             "México"
           ],
           "verificacion_fuente": {
-            "origen_oficial_confirmado": false,
-            "texto_exacto_consultado": false,
-            "vigencia_comprobada": false,
-            "fecha_comprobacion": null,
-            "metodo_o_evidencia": null,
-            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Fuente añadida en la corrección jurídica v1 para sustentar la reserva de competencias a las entidades federativas junto con el Art. 1 CCF."
+            "origen_oficial_confirmado": true,
+            "texto_exacto_consultado": true,
+            "vigencia_comprobada": true,
+            "fecha_comprobacion": "2026-08-26",
+            "metodo_o_evidencia": "Consulta directa del documento oficial (PDF de diputados.gob.mx). Artículo 124 consultado. Informe externo: legalmente-pieza-01-verificacion-externa-codex-v1.md (SHA-256 cc37d295835701fd0dfa90fcc43c2aa571a77ce86574a6d033f455274c25e21f).",
+            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Fuente añadida en la corrección jurídica v1 para sustentar la reserva de competencias a las entidades federativas junto con el Art. 1 CCF. Integración de evidencia externa v1 (auditoría Codex, 2026-08-26): Fuente (art. 124 CPEUM) consultada directamente contra el PDF oficial de diputados.gob.mx. registro_oficial_id ('diputados-gob-mx') y organismo_autor ya coincidían con el registro cerrado. Informe externo de procedencia: legalmente-pieza-01-verificacion-externa-codex-v1.md (SHA-256 cc37d295835701fd0dfa90fcc43c2aa571a77ce86574a6d033f455274c25e21f), registrado en pilot/ como evidencia de auditoría — no sustituye a la norma o resolución oficial, que sigue siendo la fuente jurídica."
           },
           "registro_oficial_id": "diputados-gob-mx"
         }
@@ -316,7 +316,7 @@
         "fecha": null,
         "observaciones": null
       },
-      "estado": "REQUIERE_INVESTIGACION",
+      "estado": "APTO_PARA_NARRATIVA",
       "revision_humana": {
         "estado": "PENDIENTE",
         "revisor": null,
@@ -331,7 +331,7 @@
         "nuevo_claim_id": null
       },
       "redaccion_prohibida": "El Código Civil Federal de México rige cualquier contrato en cualquier estado o sustituye automáticamente los códigos civiles estatales.",
-      "notas": "REQUIERE_INVESTIGACION. Corrección jurídica v1: se matiza que la aplicación de la legislación civil local es 'por regla general', sin perjuicio de reglas de competencia y conflicto de leyes, y se añade el Art. 124 CPEUM (reserva de facultades a los Estados) junto al Art. 1 CCF. redaccion_prohibida actualizada a la formulación exacta de la revisión jurídica. Ninguna fuente verificada de forma independiente."
+      "notas": "REQUIERE_INVESTIGACION. Corrección jurídica v1: se matiza que la aplicación de la legislación civil local es 'por regla general', sin perjuicio de reglas de competencia y conflicto de leyes, y se añade el Art. 124 CPEUM (reserva de facultades a los Estados) junto al Art. 1 CCF. redaccion_prohibida actualizada a la formulación exacta de la revisión jurídica. Ninguna fuente verificada de forma independiente. Integración de evidencia externa v1 (auditoría Codex, 2026-08-26): tras actualizar los metadatos de verificación de las fuentes citadas, el techo real calculado por el validador para este claim es 'APTO_PARA_NARRATIVA' (antes 'REQUIERE_INVESTIGACION') — se declara ese techo exactamente, sin elevarlo ni suprimirlo manualmente. Esto NO constituye aprobación jurídica humana: revision_humana.estado permanece PENDIENTE y gate_arte permanece CERRADO. Informe externo: legalmente-pieza-01-verificacion-externa-codex-v1.md (SHA-256 cc37d295835701fd0dfa90fcc43c2aa571a77ce86574a6d033f455274c25e21f)."
     },
     {
       "claim_id": "pieza-01-claim-4",
@@ -364,12 +364,12 @@
             "México"
           ],
           "verificacion_fuente": {
-            "origen_oficial_confirmado": false,
-            "texto_exacto_consultado": false,
-            "vigencia_comprobada": false,
-            "fecha_comprobacion": null,
-            "metodo_o_evidencia": null,
-            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Localizador y extracto de texto tomados del expediente externo auditado (legalmente-piloto-evidencia-primaria-v1.2.md + legalmente-piloto-fuentes-primarias-v1.zip, producido por otro modelo de IA). El manifest de ese expediente autoafirma origen_oficial_confirmado/texto_exacto_consultado/vigencia_comprobada = true y resultado SUFICIENTE — por regla de gobernanza de este repositorio (source-policy.md: 'nunca aceptar como fuente otro contenido generado por IA'; CLAUDE.md: 'ninguna IA es fuente jurídica') esa autoconfirmación NO se traslada aquí. Los extractos del ZIP (687-6215 bytes) son fragmentos de artículos concretos, no el documento legal completo, pese a que 44/45 entradas del manifest declaran documento_completo=true — inconsistencia detectada en auditoría y NO heredada."
+            "origen_oficial_confirmado": true,
+            "texto_exacto_consultado": true,
+            "vigencia_comprobada": true,
+            "fecha_comprobacion": "2026-08-26",
+            "metodo_o_evidencia": "Consulta directa del documento oficial (PDF de diputados.gob.mx). Artículos consultados según el localizador de esta fuente. Última reforma identificada en el documento: DOF 14-11-2025. Informe externo: legalmente-pieza-01-verificacion-externa-codex-v1.md (SHA-256 cc37d295835701fd0dfa90fcc43c2aa571a77ce86574a6d033f455274c25e21f).",
+            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Localizador y extracto de texto tomados del expediente externo auditado (legalmente-piloto-evidencia-primaria-v1.2.md + legalmente-piloto-fuentes-primarias-v1.zip, producido por otro modelo de IA). El manifest de ese expediente autoafirma origen_oficial_confirmado/texto_exacto_consultado/vigencia_comprobada = true y resultado SUFICIENTE — por regla de gobernanza de este repositorio (source-policy.md: 'nunca aceptar como fuente otro contenido generado por IA'; CLAUDE.md: 'ninguna IA es fuente jurídica') esa autoconfirmación NO se traslada aquí. Los extractos del ZIP (687-6215 bytes) son fragmentos de artículos concretos, no el documento legal completo, pese a que 44/45 entradas del manifest declaran documento_completo=true — inconsistencia detectada en auditoría y NO heredada. Integración de evidencia externa v1 (auditoría Codex, 2026-08-26): Fuente consultada directamente contra el PDF oficial de diputados.gob.mx; el documento reporta 'Última Reforma DOF 14-11-2025'. registro_oficial_id ('diputados-gob-mx') y organismo_autor ya coincidían con el registro cerrado, así que la fuente alcanza Nivel 1 conforme a las reglas existentes del validador — el nivel final lo determina el validador real, no se fuerza aquí. Informe externo de procedencia: legalmente-pieza-01-verificacion-externa-codex-v1.md (SHA-256 cc37d295835701fd0dfa90fcc43c2aa571a77ce86574a6d033f455274c25e21f), registrado en pilot/ como evidencia de auditoría — no sustituye a la norma o resolución oficial, que sigue siendo la fuente jurídica."
           },
           "registro_oficial_id": "diputados-gob-mx"
         },
@@ -386,12 +386,12 @@
             "México"
           ],
           "verificacion_fuente": {
-            "origen_oficial_confirmado": false,
-            "texto_exacto_consultado": false,
-            "vigencia_comprobada": false,
-            "fecha_comprobacion": null,
-            "metodo_o_evidencia": null,
-            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. congresoqroo.gob.mx no tiene entrada propia en el registro oficial — resuelve por subdominio genérico *.gob.mx (gob-mx-generico), que solo permite AUTORIDAD_PUBLICA_OFICIAL, aunque el organismo real (H. Congreso del Estado de Quintana Roo) sea legislativo. Techo Nivel 2 aunque el resto se verificara. Corrección jurídica v1: URL actualizada a la versión oficial vigente consultada (https://documentos.congresoqroo.gob.mx/codigos/C2-XVIII-23062026-20260724T145357-C1820260616258.pdf), referenciada desde la página oficial de códigos del Congreso de Quintana Roo (https://www.congresoqroo.gob.mx/codigos/2)."
+            "origen_oficial_confirmado": true,
+            "texto_exacto_consultado": true,
+            "vigencia_comprobada": true,
+            "fecha_comprobacion": "2026-08-26",
+            "metodo_o_evidencia": "Consulta directa del Código Civil vigente (documentos.congresoqroo.gob.mx) y de la ficha oficial del portal legislativo (congresoqroo.gob.mx/codigos/2), que identifica la versión vigente actualizada al 23-07-2026. Informe externo: legalmente-pieza-01-verificacion-externa-codex-v1.md (SHA-256 cc37d295835701fd0dfa90fcc43c2aa571a77ce86574a6d033f455274c25e21f).",
+            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. congresoqroo.gob.mx no tiene entrada propia en el registro oficial — resuelve por subdominio genérico *.gob.mx (gob-mx-generico), que solo permite AUTORIDAD_PUBLICA_OFICIAL, aunque el organismo real (H. Congreso del Estado de Quintana Roo) sea legislativo. Techo Nivel 2 aunque el resto se verificara. Corrección jurídica v1: URL actualizada a la versión oficial vigente consultada (https://documentos.congresoqroo.gob.mx/codigos/C2-XVIII-23062026-20260724T145357-C1820260616258.pdf), referenciada desde la página oficial de códigos del Congreso de Quintana Roo (https://www.congresoqroo.gob.mx/codigos/2). Integración de evidencia externa v1 (auditoría Codex, 2026-08-26): Código Civil para el Estado de Quintana Roo consultado directamente; el portal legislativo identifica la versión vigente actualizada al 23-07-2026. No se modifica el registro oficial ni se añade un hostname propio para congresoqroo.gob.mx en esta fase — sigue resolviendo por subdominio genérico *.gob.mx a 'gob-mx-generico', que solo permite AUTORIDAD_PUBLICA_OFICIAL (nunca NORMA_OFICIAL), coherente con el tipo_fuente ya declarado en esta fuente. Los tres booleanos se registran en true porque el texto fue consultado directamente contra el documento oficial; el nivel final lo determina el validador real a partir de las reglas existentes del registro, no se eleva manualmente. Informe externo de procedencia: legalmente-pieza-01-verificacion-externa-codex-v1.md (SHA-256 cc37d295835701fd0dfa90fcc43c2aa571a77ce86574a6d033f455274c25e21f), registrado en pilot/ como evidencia de auditoría — no sustituye a la norma o resolución oficial, que sigue siendo la fuente jurídica."
           },
           "registro_oficial_id": "gob-mx-generico"
         },
@@ -400,7 +400,7 @@
           "tipo_fuente": "NORMA_OFICIAL",
           "titulo": "Código Civil español — arts. 436, 447 (presunción de continuidad, interversión), 1940-1942 y 1948 (usucapión ordinaria)",
           "organismo_autor": "Agencia Estatal BOE",
-          "url": "https://www.boe.es/buscar/pdf/1889/BOE-A-1889-4763-consolidado.pdf",
+          "url": "https://www.boe.es/buscar/act.php?id=BOE-A-1889-4763",
           "identificador_bibliografico": null,
           "fecha_consulta": "2026-08-25",
           "localizador": "arts. 436, 447, 1940, 1941, 1942 y 1948",
@@ -408,12 +408,12 @@
             "España"
           ],
           "verificacion_fuente": {
-            "origen_oficial_confirmado": false,
-            "texto_exacto_consultado": false,
-            "vigencia_comprobada": false,
-            "fecha_comprobacion": null,
-            "metodo_o_evidencia": null,
-            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Localizador y extracto de texto tomados del expediente externo auditado (legalmente-piloto-evidencia-primaria-v1.2.md + legalmente-piloto-fuentes-primarias-v1.zip, producido por otro modelo de IA). El manifest de ese expediente autoafirma origen_oficial_confirmado/texto_exacto_consultado/vigencia_comprobada = true y resultado SUFICIENTE — por regla de gobernanza de este repositorio (source-policy.md: 'nunca aceptar como fuente otro contenido generado por IA'; CLAUDE.md: 'ninguna IA es fuente jurídica') esa autoconfirmación NO se traslada aquí. Los extractos del ZIP (687-6215 bytes) son fragmentos de artículos concretos, no el documento legal completo, pese a que 44/45 entradas del manifest declaran documento_completo=true — inconsistencia detectada en auditoría y NO heredada."
+            "origen_oficial_confirmado": true,
+            "texto_exacto_consultado": true,
+            "vigencia_comprobada": true,
+            "fecha_comprobacion": "2026-08-26",
+            "metodo_o_evidencia": "Consulta directa del texto consolidado oficial (boe.es/buscar/act.php). Artículos consultados según el localizador de esta fuente. Informe externo: legalmente-pieza-01-verificacion-externa-codex-v1.md (SHA-256 cc37d295835701fd0dfa90fcc43c2aa571a77ce86574a6d033f455274c25e21f).",
+            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Localizador y extracto de texto tomados del expediente externo auditado (legalmente-piloto-evidencia-primaria-v1.2.md + legalmente-piloto-fuentes-primarias-v1.zip, producido por otro modelo de IA). El manifest de ese expediente autoafirma origen_oficial_confirmado/texto_exacto_consultado/vigencia_comprobada = true y resultado SUFICIENTE — por regla de gobernanza de este repositorio (source-policy.md: 'nunca aceptar como fuente otro contenido generado por IA'; CLAUDE.md: 'ninguna IA es fuente jurídica') esa autoconfirmación NO se traslada aquí. Los extractos del ZIP (687-6215 bytes) son fragmentos de artículos concretos, no el documento legal completo, pese a que 44/45 entradas del manifest declaran documento_completo=true — inconsistencia detectada en auditoría y NO heredada. Integración de evidencia externa v1 (auditoría Codex, 2026-08-26): URL actualizada a la versión consolidada oficial del BOE (boe.es/buscar/act.php?id=BOE-A-1889-4763), consultada directamente. registro_oficial_id ('boe-es') y organismo_autor ya coincidían con el registro cerrado, mismo hostname boe.es que la URL anterior. Informe externo de procedencia: legalmente-pieza-01-verificacion-externa-codex-v1.md (SHA-256 cc37d295835701fd0dfa90fcc43c2aa571a77ce86574a6d033f455274c25e21f), registrado en pilot/ como evidencia de auditoría — no sustituye a la norma o resolución oficial, que sigue siendo la fuente jurídica."
           },
           "registro_oficial_id": "boe-es"
         },
@@ -422,7 +422,7 @@
           "tipo_fuente": "NORMA_OFICIAL",
           "titulo": "Código Civil y Comercial de la Nación (Argentina) — arts. 1897-1900 (prescripción adquisitiva) y 1915 (interversión del título)",
           "organismo_autor": "InfoLEG",
-          "url": "https://servicios.infoleg.gob.ar/infolegInternet/anexos/235000-239999/235975/texact.htm",
+          "url": "https://www.argentina.gob.ar/normativa/nacional/ley-26994-235975/actualizacion",
           "identificador_bibliografico": null,
           "fecha_consulta": "2026-08-25",
           "localizador": "arts. 1897, 1898, 1899, 1900 y 1915",
@@ -430,14 +430,14 @@
             "Argentina"
           ],
           "verificacion_fuente": {
-            "origen_oficial_confirmado": false,
-            "texto_exacto_consultado": false,
-            "vigencia_comprobada": false,
-            "fecha_comprobacion": null,
-            "metodo_o_evidencia": null,
-            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Localizador y extracto de texto tomados del expediente externo auditado (legalmente-piloto-evidencia-primaria-v1.2.md + legalmente-piloto-fuentes-primarias-v1.zip, producido por otro modelo de IA). El manifest de ese expediente autoafirma origen_oficial_confirmado/texto_exacto_consultado/vigencia_comprobada = true y resultado SUFICIENTE — por regla de gobernanza de este repositorio (source-policy.md: 'nunca aceptar como fuente otro contenido generado por IA'; CLAUDE.md: 'ninguna IA es fuente jurídica') esa autoconfirmación NO se traslada aquí. Los extractos del ZIP (687-6215 bytes) son fragmentos de artículos concretos, no el documento legal completo, pese a que 44/45 entradas del manifest declaran documento_completo=true — inconsistencia detectada en auditoría y NO heredada."
+            "origen_oficial_confirmado": true,
+            "texto_exacto_consultado": true,
+            "vigencia_comprobada": true,
+            "fecha_comprobacion": "2026-08-26",
+            "metodo_o_evidencia": "Consulta directa del texto oficial actualizado (argentina.gob.ar/normativa). Artículos consultados según el localizador de esta fuente. Informe externo: legalmente-pieza-01-verificacion-externa-codex-v1.md (SHA-256 cc37d295835701fd0dfa90fcc43c2aa571a77ce86574a6d033f455274c25e21f).",
+            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Localizador y extracto de texto tomados del expediente externo auditado (legalmente-piloto-evidencia-primaria-v1.2.md + legalmente-piloto-fuentes-primarias-v1.zip, producido por otro modelo de IA). El manifest de ese expediente autoafirma origen_oficial_confirmado/texto_exacto_consultado/vigencia_comprobada = true y resultado SUFICIENTE — por regla de gobernanza de este repositorio (source-policy.md: 'nunca aceptar como fuente otro contenido generado por IA'; CLAUDE.md: 'ninguna IA es fuente jurídica') esa autoconfirmación NO se traslada aquí. Los extractos del ZIP (687-6215 bytes) son fragmentos de artículos concretos, no el documento legal completo, pese a que 44/45 entradas del manifest declaran documento_completo=true — inconsistencia detectada en auditoría y NO heredada. Integración de evidencia externa v1 (auditoría Codex, 2026-08-26): URL actualizada de servicios.infoleg.gob.ar (devolvía 403 en la auditoría externa) a la versión oficial accesible en argentina.gob.ar/normativa, consultada directamente. Ese hostname NO tiene entrada propia en el registro oficial cerrado (distinto de infoleg.gob.ar/servicios.infoleg.gob.ar, que sí la tiene) — 'registro_oficial_id' se deja deliberadamente en null en vez de reutilizar 'infoleg-gob-ar' (que correspondía al hostname anterior) o inventar una entrada nueva. Los tres booleanos de verificación se registran en true porque el texto oficial fue consultado directamente, pero el nivel de la fuente lo determina el validador real a partir del registro — no se eleva manualmente. Techo estructural Nivel 2 hasta que argentina.gob.ar se registre formalmente o se vuelva a citar vía infoleg.gob.ar/servicios.infoleg.gob.ar. Informe externo de procedencia: legalmente-pieza-01-verificacion-externa-codex-v1.md (SHA-256 cc37d295835701fd0dfa90fcc43c2aa571a77ce86574a6d033f455274c25e21f), registrado en pilot/ como evidencia de auditoría — no sustituye a la norma o resolución oficial, que sigue siendo la fuente jurídica."
           },
-          "registro_oficial_id": "infoleg-gob-ar"
+          "registro_oficial_id": null
         }
       ],
       "confianza": "media",
@@ -457,7 +457,7 @@
         "fecha": null,
         "observaciones": null
       },
-      "estado": "REQUIERE_INVESTIGACION",
+      "estado": "APTO_CON_MATICES",
       "revision_humana": {
         "estado": "PENDIENTE",
         "revisor": null,
@@ -472,7 +472,7 @@
         "nuevo_claim_id": null
       },
       "redaccion_prohibida": "El inquilino jamás puede adquirir la casa por prescripción.",
-      "notas": "REQUIERE_INVESTIGACION. Corrección jurídica v1: localizadores corregidos por país (México: interversión Arts. 826-827 + usucapión Arts. 1139, 1151-1152; España: Arts. 436, 447, 1940-1942, 1948; Argentina: Arts. 1897-1900 y 1915). La fuente de Quintana Roo se separó en un source_id propio (SRC-P01-MX-QROO-03, arts. 1781 y 1836-1839) distinto del usado en el claim 5 (SRC-P01-MX-QROO-01, posesión general) porque cubre un conjunto de artículos distinto — no se agrupan normas distintas bajo una misma fuente. Se retira la tesis 2014491 de este claim (queda exclusivamente en el claim 5, donde se trata con el detalle que requiere). riesgo_asesoria: medio — un lector podría evaluar si SU arrendamiento concreto usucape. Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente."
+      "notas": "REQUIERE_INVESTIGACION. Corrección jurídica v1: localizadores corregidos por país (México: interversión Arts. 826-827 + usucapión Arts. 1139, 1151-1152; España: Arts. 436, 447, 1940-1942, 1948; Argentina: Arts. 1897-1900 y 1915). La fuente de Quintana Roo se separó en un source_id propio (SRC-P01-MX-QROO-03, arts. 1781 y 1836-1839) distinto del usado en el claim 5 (SRC-P01-MX-QROO-01, posesión general) porque cubre un conjunto de artículos distinto — no se agrupan normas distintas bajo una misma fuente. Se retira la tesis 2014491 de este claim (queda exclusivamente en el claim 5, donde se trata con el detalle que requiere). riesgo_asesoria: medio — un lector podría evaluar si SU arrendamiento concreto usucape. Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Integración de evidencia externa v1 (auditoría Codex, 2026-08-26): tras actualizar los metadatos de verificación de las fuentes citadas, el techo real calculado por el validador para este claim es 'APTO_PARA_NARRATIVA' (antes 'REQUIERE_INVESTIGACION') — se declara ese techo exactamente, sin elevarlo ni suprimirlo manualmente. Esto NO constituye aprobación jurídica humana: revision_humana.estado permanece PENDIENTE y gate_arte permanece CERRADO. Informe externo: legalmente-pieza-01-verificacion-externa-codex-v1.md (SHA-256 cc37d295835701fd0dfa90fcc43c2aa571a77ce86574a6d033f455274c25e21f). Alineación con el validador corregido (Fase 1E, 2026-08-26): tras cerrar el bypass de cobertura multijurisdiccional en CAPA_B_VARIABLE (PR #8), el techo real de este claim es 'APTO_CON_MATICES', no 'APTO_PARA_NARRATIVA' — la fuente de Argentina sigue en Nivel 2 (sin registro_oficial_id), y el techo ahora es el mínimo entre los tres países declarados, no el máximo de cualquier fuente suelta. No se modificó ningún texto, artículo, localizador, URL ni booleano de verificación — solo el 'estado' declarado y los campos agregados derivados de él. Esto no constituye aprobación jurídica humana: revision_humana.estado permanece PENDIENTE y gate_arte permanece CERRADO."
     },
     {
       "claim_id": "pieza-01-claim-5",
@@ -501,12 +501,12 @@
             "México"
           ],
           "verificacion_fuente": {
-            "origen_oficial_confirmado": false,
-            "texto_exacto_consultado": false,
-            "vigencia_comprobada": false,
-            "fecha_comprobacion": null,
-            "metodo_o_evidencia": null,
-            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. congresoqroo.gob.mx no tiene entrada propia en el registro oficial — resuelve por subdominio genérico *.gob.mx (gob-mx-generico), que solo permite AUTORIDAD_PUBLICA_OFICIAL, aunque el organismo real (H. Congreso del Estado de Quintana Roo) sea legislativo. Techo Nivel 2 aunque el resto se verificara. Corrección jurídica v1: URL actualizada a la versión oficial vigente consultada (https://documentos.congresoqroo.gob.mx/codigos/C2-XVIII-23062026-20260724T145357-C1820260616258.pdf), referenciada desde la página oficial de códigos del Congreso de Quintana Roo (https://www.congresoqroo.gob.mx/codigos/2). Corrección jurídica v1: localizador corregido — la posesión derivada está en el art. 1781, no en el 1780 (que se retira de la lista); se añaden los arts. 1836-1839 sobre requisitos de la usucapión."
+            "origen_oficial_confirmado": true,
+            "texto_exacto_consultado": true,
+            "vigencia_comprobada": true,
+            "fecha_comprobacion": "2026-08-26",
+            "metodo_o_evidencia": "Consulta directa del Código Civil vigente (documentos.congresoqroo.gob.mx) y de la ficha oficial del portal legislativo (congresoqroo.gob.mx/codigos/2), que identifica la versión vigente actualizada al 23-07-2026. Informe externo: legalmente-pieza-01-verificacion-externa-codex-v1.md (SHA-256 cc37d295835701fd0dfa90fcc43c2aa571a77ce86574a6d033f455274c25e21f).",
+            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. congresoqroo.gob.mx no tiene entrada propia en el registro oficial — resuelve por subdominio genérico *.gob.mx (gob-mx-generico), que solo permite AUTORIDAD_PUBLICA_OFICIAL, aunque el organismo real (H. Congreso del Estado de Quintana Roo) sea legislativo. Techo Nivel 2 aunque el resto se verificara. Corrección jurídica v1: URL actualizada a la versión oficial vigente consultada (https://documentos.congresoqroo.gob.mx/codigos/C2-XVIII-23062026-20260724T145357-C1820260616258.pdf), referenciada desde la página oficial de códigos del Congreso de Quintana Roo (https://www.congresoqroo.gob.mx/codigos/2). Corrección jurídica v1: localizador corregido — la posesión derivada está en el art. 1781, no en el 1780 (que se retira de la lista); se añaden los arts. 1836-1839 sobre requisitos de la usucapión. Integración de evidencia externa v1 (auditoría Codex, 2026-08-26): Código Civil para el Estado de Quintana Roo consultado directamente; el portal legislativo identifica la versión vigente actualizada al 23-07-2026. No se modifica el registro oficial ni se añade un hostname propio para congresoqroo.gob.mx en esta fase — sigue resolviendo por subdominio genérico *.gob.mx a 'gob-mx-generico', que solo permite AUTORIDAD_PUBLICA_OFICIAL (nunca NORMA_OFICIAL), coherente con el tipo_fuente ya declarado en esta fuente. Los tres booleanos se registran en true porque el texto fue consultado directamente contra el documento oficial; el nivel final lo determina el validador real a partir de las reglas existentes del registro, no se eleva manualmente. Informe externo de procedencia: legalmente-pieza-01-verificacion-externa-codex-v1.md (SHA-256 cc37d295835701fd0dfa90fcc43c2aa571a77ce86574a6d033f455274c25e21f), registrado en pilot/ como evidencia de auditoría — no sustituye a la norma o resolución oficial, que sigue siendo la fuente jurídica."
           },
           "registro_oficial_id": "gob-mx-generico"
         },
@@ -516,19 +516,19 @@
           "titulo": "Tesis AISLADA XXVII.1o.4 C (10a.), Registro digital 2014491, emitida en 2017 — el simple detentador o poseedor derivado carece de justo título para usucapir por esa sola calidad. Órgano emisor: Primer Tribunal Colegiado del Vigésimo Séptimo Circuito. Plataforma oficial de publicación: Suprema Corte de Justicia de la Nación / Buscador Jurídico (bj.scjn.gob.mx) — NO se trata de jurisprudencia obligatoria, es una tesis aislada de un tribunal colegiado de circuito.",
           "organismo_autor": "Primer Tribunal Colegiado del Vigésimo Séptimo Circuito",
           "url": null,
-          "identificador_bibliografico": "Referencia de localización (deliberadamente NO declarada como 'url' del esquema): https://bj.scjn.gob.mx/api/v1/bj/documento/tesis/2014491",
+          "identificador_bibliografico": "Referencias de localización (deliberadamente NO declaradas como 'url' del esquema): https://bj.scjn.gob.mx/api/v1/bj/documento/tesis/2014491 ; https://sjf2.scjn.gob.mx/detalle/tesis/2014491 (detalle oficial, requiere JavaScript para el texto íntegro) ; https://bj.scjn.gob.mx/busqueda?indice=tesis&q=%22Detentador%22 (localizador complementario de búsqueda).",
           "fecha_consulta": "2026-08-25",
           "localizador": "Tesis XXVII.1o.4 C (10a.), Registro 2014491",
           "jurisdicciones_cubiertas": [
             "México"
           ],
           "verificacion_fuente": {
-            "origen_oficial_confirmado": false,
+            "origen_oficial_confirmado": true,
             "texto_exacto_consultado": false,
             "vigencia_comprobada": false,
-            "fecha_comprobacion": null,
-            "metodo_o_evidencia": null,
-            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. HALLAZGO DE AUDITORÍA: bj.scjn.gob.mx (Buscador Jurídico de la SCJN, la PLATAFORMA que publica la tesis) resuelve por subdominio a la entrada 'scjn-gob-mx' del registro, cuyo único organismo reconocido es la SCJN — pero el ÓRGANO EMISOR real de esta tesis es un Tribunal Colegiado de Circuito, un órgano distinto de la SCJN (aunque la SCJN es quien publica/aloja la tesis en el sistema del Semanario Judicial de la Federación). Declarar registro_oficial_id='scjn-gob-mx' con este organismo real produciría un [ERROR ESTRUCTURAL] correcto por incoherencia; en vez de falsear el organismo a 'SCJN' para evitarlo, se deja la URL fuera del campo 'url' del esquema (solo como referencia en identificador_bibliografico) — la fuente nunca podrá alcanzar Nivel 1 así, que es exactamente el techo honesto que le corresponde. Corrección jurídica v1: identificada explícitamente como TESIS AISLADA (no jurisprudencia obligatoria), con año de emisión (2017) y distinción expresa entre órgano emisor y plataforma de publicación."
+            "fecha_comprobacion": "2026-08-26",
+            "metodo_o_evidencia": "Consulta directa de https://sjf2.scjn.gob.mx/detalle/tesis/2014491 (portal oficial del Semanario Judicial de la Federación / SCJN) y de https://bj.scjn.gob.mx/busqueda?indice=tesis&q=%22Detentador%22 (Buscador Jurídico SCJN) como localizador complementario. Se confirmó registro digital 2014491, publicación en 2017, órgano emisor Primer Tribunal Colegiado del Vigésimo Séptimo Circuito, clasificación de tesis aislada (no jurisprudencia obligatoria), y que la SCJN administra la plataforma de publicación sin ser el órgano emisor. La página de detalle requiere JavaScript y NO se leyó íntegramente el texto de la ejecutoria — por eso 'texto_exacto_consultado' y 'vigencia_comprobada' permanecen en false, pese a 'origen_oficial_confirmado' en true. Informe externo: legalmente-pieza-01-verificacion-externa-codex-v1.md (SHA-256 cc37d295835701fd0dfa90fcc43c2aa571a77ce86574a6d033f455274c25e21f).",
+            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. HALLAZGO DE AUDITORÍA: bj.scjn.gob.mx (Buscador Jurídico de la SCJN, la PLATAFORMA que publica la tesis) resuelve por subdominio a la entrada 'scjn-gob-mx' del registro, cuyo único organismo reconocido es la SCJN — pero el ÓRGANO EMISOR real de esta tesis es un Tribunal Colegiado de Circuito, un órgano distinto de la SCJN (aunque la SCJN es quien publica/aloja la tesis en el sistema del Semanario Judicial de la Federación). Declarar registro_oficial_id='scjn-gob-mx' con este organismo real produciría un [ERROR ESTRUCTURAL] correcto por incoherencia; en vez de falsear el organismo a 'SCJN' para evitarlo, se deja la URL fuera del campo 'url' del esquema (solo como referencia en identificador_bibliografico) — la fuente nunca podrá alcanzar Nivel 1 así, que es exactamente el techo honesto que le corresponde. Corrección jurídica v1: identificada explícitamente como TESIS AISLADA (no jurisprudencia obligatoria), con año de emisión (2017) y distinción expresa entre órgano emisor y plataforma de publicación. Integración de evidencia externa v1 (auditoría Codex, 2026-08-26): se añaden como referencias complementarias, dentro de 'identificador_bibliografico' (deliberadamente NO en el campo 'url' del esquema, por el mismo motivo estructural ya documentado — el hostname scjn.gob.mx resuelve al organismo 'SCJN', distinto del órgano emisor real de esta tesis), https://sjf2.scjn.gob.mx/detalle/tesis/2014491 y https://bj.scjn.gob.mx/busqueda?indice=tesis&q=%22Detentador%22. La auditoría externa confirmó origen oficial, registro, año, órgano emisor y carácter de tesis aislada, pero NO pudo leer el texto íntegro de la ejecutoria (contenido con JavaScript) ni confirmar vigencia — por eso esta fuente se declara PARCIALMENTE verificada, nunca plenamente verificada, y sigue sin poder alcanzar Nivel 1 estructuralmente (url=null, registro_oficial_id=null). Informe externo: legalmente-pieza-01-verificacion-externa-codex-v1.md (SHA-256 cc37d295835701fd0dfa90fcc43c2aa571a77ce86574a6d033f455274c25e21f)."
           },
           "registro_oficial_id": null
         }
@@ -565,7 +565,7 @@
         "nuevo_claim_id": null
       },
       "redaccion_prohibida": null,
-      "notas": "REQUIERE_INVESTIGACION. Corrección jurídica v1: localizador de posesión derivada corregido (art. 1781, no 1780); se añaden los arts. 1836-1839 sobre usucapión; la tesis 2014491 se identifica explícitamente como TESIS AISLADA (no jurisprudencia obligatoria), con año 2017, distinguiendo el órgano emisor (Primer Tribunal Colegiado del Vigésimo Séptimo Circuito) de la plataforma oficial de publicación (SCJN / Buscador Jurídico). Aplica específicamente a Quintana Roo (un estado), no a México en general. Ambas fuentes con registro_oficial_id null o de techo Nivel 2 por auditoría (ver notas de cada fuente); ninguna verificada de forma independiente."
+      "notas": "REQUIERE_INVESTIGACION. Corrección jurídica v1: localizador de posesión derivada corregido (art. 1781, no 1780); se añaden los arts. 1836-1839 sobre usucapión; la tesis 2014491 se identifica explícitamente como TESIS AISLADA (no jurisprudencia obligatoria), con año 2017, distinguiendo el órgano emisor (Primer Tribunal Colegiado del Vigésimo Séptimo Circuito) de la plataforma oficial de publicación (SCJN / Buscador Jurídico). Aplica específicamente a Quintana Roo (un estado), no a México en general. Ambas fuentes con registro_oficial_id null o de techo Nivel 2 por auditoría (ver notas de cada fuente); ninguna verificada de forma independiente. Integración de evidencia externa v1 (auditoría Codex, 2026-08-26): tras actualizar los metadatos de verificación de las fuentes citadas, el techo real calculado por el validador para este claim se mantiene en 'REQUIERE_INVESTIGACION'. Informe externo: legalmente-pieza-01-verificacion-externa-codex-v1.md (SHA-256 cc37d295835701fd0dfa90fcc43c2aa571a77ce86574a6d033f455274c25e21f)."
     }
   ],
   "estado_agregado": "REQUIERE_INVESTIGACION",
