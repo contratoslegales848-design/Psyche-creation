@@ -575,10 +575,15 @@ class TestCapaBPaisCoverage(unittest.TestCase):
 
     def _fuente_ar_nivel2(self):
         """Fuente argentina consultada directamente (booleanos en true) pero
-        SIN 'registro_oficial_id' — mismo patrón que argentina.gob.ar en los
-        claim packets reales: nunca alcanza Nivel 1 aunque sus tres
-        booleanos de verificación estén en true."""
-        return base_fuente(id="f-ar", url="https://www.argentina.gob.ar/normativa/x",
+        SIN 'registro_oficial_id', con un hostname deliberadamente sintético
+        y sin entrada propia en el registro oficial cerrado — nunca alcanza
+        Nivel 1 aunque sus tres booleanos de verificación estén en true.
+        (Antes de la verificación externa de argentina.gob.ar registrada en
+        official-source-registry.json como 'argentina-gob-ar-normativa', este
+        fixture usaba precisamente ese hostname como ejemplo de "no
+        registrado"; tras esa alta legítima, dejó de serlo, así que aquí se
+        usa un hostname distinto que sigue sin tener entrada.)"""
+        return base_fuente(id="f-ar", url="https://www.mininterior.gob.ar/normativa/x",
                             jurisdicciones_cubiertas=["Argentina"], organismo_autor="InfoLEG",
                             registro_oficial_id=None)
 
@@ -734,6 +739,84 @@ class TestCapaBPaisCoverage(unittest.TestCase):
         errors, _, max_estado, _ = vcp.validate_claim(c, "c")
         self.assertEqual(errors, [])
         self.assertEqual(max_estado, "APTO_PARA_NARRATIVA")
+
+
+class TestArgentinaGobArNormativa(unittest.TestCase):
+    """Migración segura de fuentes argentinas (2026-08-27): registro
+    'argentina-gob-ar-normativa' en official-source-registry.json, restringido
+    por hostname ('argentina.gob.ar', exacto + subdominios) + organismo exacto
+    ('Argentina.gob.ar — Normativa / Presidencia de la Nación') + tipo_fuente
+    (solo NORMA_OFICIAL). El schema no admite path_prefix — deuda técnica
+    documentada en la propia entrada del registro, no cubierta por estas
+    pruebas de código (no hay mecanismo que probar)."""
+
+    ORGANISMO = "Argentina.gob.ar — Normativa / Presidencia de la Nación"
+    URL = "https://www.argentina.gob.ar/normativa/nacional/ley-26994-235975/actualizacion"
+
+    def _fuente_ar(self, **overrides):
+        f = base_fuente(
+            id="f-ar-normativa", url=self.URL, organismo_autor=self.ORGANISMO,
+            jurisdicciones_cubiertas=["Argentina"], registro_oficial_id="argentina-gob-ar-normativa",
+        )
+        f.update(overrides)
+        return f
+
+    # 1. Registro correcto + organismo correcto + NORMA_OFICIAL + tres booleanos true -> Nivel 1.
+    def test_registro_organismo_tipo_y_booleanos_correctos_alcanza_nivel_1(self):
+        f = self._fuente_ar()
+        errors, warnings = vcp.validate_fuente(f, "f")
+        self.assertEqual(errors, [])
+        self.assertEqual(vcp.compute_fuente_nivel(f), vcp.NIVEL_1_CONFIRMADO)
+
+    # 2. Registro correcto + booleanos false -> Nivel 2 (nunca Nivel 1 solo por el registro).
+    def test_registro_correcto_con_booleanos_false_se_queda_en_nivel_2(self):
+        f = self._fuente_ar(verificacion_fuente=base_verificacion(origen=False, texto=False, vigencia=False))
+        errors, _ = vcp.validate_fuente(f, "f")
+        self.assertEqual(errors, [])
+        self.assertEqual(vcp.compute_fuente_nivel(f), vcp.NIVEL_2_DECLARADO_NO_VERIFICADO)
+
+    # 3. Organismo incorrecto -> rechazo.
+    def test_organismo_incorrecto_rechazado(self):
+        f = self._fuente_ar(organismo_autor="InfoLEG")
+        errors, _ = vcp.validate_fuente(f, "f")
+        self.assertTrue(any("no coincide, tras normalizar, con el organismo canónico" in e for e in errors))
+
+    # 4. Tipo no permitido -> rechazo.
+    def test_tipo_fuente_no_permitido_rechazado(self):
+        f = self._fuente_ar(tipo_fuente="JURISPRUDENCIA_OFICIAL")
+        errors, _ = vcp.validate_fuente(f, "f")
+        self.assertTrue(any("no tiene permitido el tipo de fuente" in e for e in errors))
+
+    # 5. ID incorrecto/ausente para hostname registrado -> rechazo.
+    def test_registro_oficial_id_ausente_para_hostname_registrado_rechazado(self):
+        f = self._fuente_ar(registro_oficial_id=None)
+        errors, _ = vcp.validate_fuente(f, "f")
+        self.assertTrue(any("corresponde al organismo registrado" in e and "argentina-gob-ar-normativa" in e for e in errors))
+        self.assertNotEqual(vcp.compute_fuente_nivel(f), vcp.NIVEL_1_CONFIRMADO)
+
+    def test_registro_oficial_id_incorrecto_para_hostname_registrado_rechazado(self):
+        f = self._fuente_ar(registro_oficial_id="boe-es")
+        errors, _ = vcp.validate_fuente(f, "f")
+        self.assertTrue(any("no corresponde al hostname real de la URL" in e for e in errors))
+
+
+class TestPilotClaimPacketsReales(unittest.TestCase):
+    """Prueba de regresión automatizada (2026-08-27): valida las 3 piezas
+    reales del piloto dentro de la propia suite unittest, no solo mediante
+    ejecución manual de validate-claim-packet.py — para que un cambio de
+    registro (u otro) que rompa alguna de ellas falle la suite
+    automáticamente."""
+
+    PILOT_DIR = Path(__file__).resolve().parent.parent / "pilot" / "claim-packets"
+
+    def test_las_tres_piezas_reales_pasan_validacion_estructural(self):
+        piezas = sorted(self.PILOT_DIR.glob("*.json"))
+        self.assertEqual(len(piezas), 3, f"se esperaban 3 piezas reales, se encontraron {len(piezas)}: {piezas}")
+        for path in piezas:
+            with self.subTest(pieza=path.name):
+                piece = json.loads(path.read_text(encoding="utf-8"))
+                errors, _ = vcp.validate_piece(piece, path.name)
+                self.assertEqual(errors, [], f"{path.name} no debería tener errores estructurales: {errors}")
 
 
 class TestHashCompleto(unittest.TestCase):

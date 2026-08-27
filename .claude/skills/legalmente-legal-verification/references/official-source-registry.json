@@ -95,6 +95,16 @@
       "ambito": "NACIONAL"
     },
     {
+      "id": "argentina-gob-ar-normativa",
+      "hostnames": ["argentina.gob.ar"],
+      "organismo_canonico": "Argentina.gob.ar — Normativa / Presidencia de la Nación",
+      "organismo_aliases": [],
+      "jurisdicciones": ["Argentina"],
+      "tipos_fuente_permitidos": ["NORMA_OFICIAL"],
+      "ambito": "NACIONAL",
+      "_nota": "Verificación externa independiente proporcionada por Codex el 2026-08-27 (no confirmada de forma independiente por este agente en esta sesión — EGRESS_BLOCKED). Codex verificó que la sección /normativa/nacional/ del portal unificado argentina.gob.ar publica el texto actualizado de: Ley 26.994 (Código Civil y Comercial de la Nación, arts. 1897-1900, 1908-1910, 1915, 1941), Ley 20.744 (Ley de Contrato de Trabajo, arts. 10, 63, 242, 245-246) y Ley 11.179 (Código Penal, arts. 109-110). Uso exclusivo: documentos normativos oficiales de alcance nacional (NORMA_OFICIAL) — esta entrada de registro NUNCA sustituye por sí sola la verificación de URL exacta, organismo, localizador y los tres booleanos de 'verificacion_fuente' de cada fuente concreta; el registro solo habilita que una fuente ALCANCE Nivel 1 si además declara esos cuatro elementos correctamente. El schema de este registro NO admite restricción por ruta/path — 'hostnames' solo opera a nivel de hostname completo (exacto o por sufijo de subdominio, vía match_registry_entry_for_url), nunca por path_prefix. Esta entrada, por tanto, cubre TODO el hostname argentina.gob.ar para tipo_fuente=NORMA_OFICIAL bajo este organismo — no solo la sección /normativa/nacional/ — y esa ausencia de restricción por ruta queda documentada aquí explícitamente como DEUDA TÉCNICA conocida del schema, no como omisión de esta entrada. Cualquier fuente que declare este 'registro_oficial_id' fuera de /normativa/nacional/ requiere el mismo escrutinio humano que motivó esta alta."
+    },
+    {
       "id": "csjn-gov-ar",
       "hostnames": ["csjn.gov.ar"],
       "organismo_canonico": "Corte Suprema de Justicia de la Nación (Argentina)",

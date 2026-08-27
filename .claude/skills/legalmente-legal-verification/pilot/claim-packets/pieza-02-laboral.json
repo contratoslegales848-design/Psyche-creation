@@ -392,7 +392,7 @@
           "id": "SRC-P02-AR-LCT-10",
           "tipo_fuente": "NORMA_OFICIAL",
           "titulo": "Ley de Contrato de Trabajo N.º 20.744 (Argentina) — art. 10 (principio de conservación del contrato)",
-          "organismo_autor": "InfoLEG",
+          "organismo_autor": "Argentina.gob.ar — Normativa / Presidencia de la Nación",
           "url": "https://www.argentina.gob.ar/normativa/nacional/ley-20744-25552/actualizacion",
           "identificador_bibliografico": null,
           "fecha_consulta": "2026-08-25",
@@ -401,20 +401,20 @@
             "Argentina"
           ],
           "verificacion_fuente": {
-            "origen_oficial_confirmado": false,
-            "texto_exacto_consultado": false,
-            "vigencia_comprobada": false,
-            "fecha_comprobacion": null,
-            "metodo_o_evidencia": null,
-            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Fuente añadida en la corrección jurídica v1 para sustentar el principio de conservación del contrato, base de la construcción judicial sobre intimación previa. Corrección jurídica v1: URL actualizada a la versión oficial consolidada y vigente en argentina.gob.ar. Ese hostname NO tiene entrada propia en el registro oficial cerrado (distinto de infoleg.gob.ar/servicios.infoleg.gob.ar, que sí la tiene) — registro_oficial_id se deja en null en vez de forzar la entrada 'infoleg-gob-ar', que correspondía al hostname anterior, no a este. Techo Nivel 2 hasta que se confirme y registre argentina.gob.ar como hostname oficial legítimo, o se vuelva a citar vía infoleg.gob.ar. Se registra que la Ley 27.802 modificó disposiciones de la LCT, con publicación el 6 de marzo de 2026 — pendiente de identificar qué artículos concretos modificó y si afectan a los arts. 10, 63, 242 o 246 aquí citados."
+            "origen_oficial_confirmado": true,
+            "texto_exacto_consultado": true,
+            "vigencia_comprobada": true,
+            "fecha_comprobacion": "2026-08-27",
+            "metodo_o_evidencia": "Verificación externa independiente proporcionada por Codex: consulta directa de la URL contra el localizador declarado de esta fuente (ver observaciones para el detalle completo).",
+            "observaciones": "Verificación externa independiente proporcionada por Codex (2026-08-27): URL https://www.argentina.gob.ar/normativa/nacional/ley-20744-25552/actualizacion confirmada como el texto actualizado de la Ley 20.744 (Ley de Contrato de Trabajo), con el localizador de esta fuente coincidiendo exactamente con lo verificado por Codex. Este agente no abrió la URL en esta sesión (EGRESS_BLOCKED confirmado) — la verificación es externa e independiente, no autoconfirmación de ningún modelo de esta sesión. registro_oficial_id='argentina-gob-ar-normativa' (official-source-registry.json). Esta migración NO cambia estado, confianza, jurisdicción ni revision_humana del claim — no eleva ni aprueba nada."
           },
-          "registro_oficial_id": null
+          "registro_oficial_id": "argentina-gob-ar-normativa"
         },
         {
           "id": "SRC-P02-AR-LCT-63",
           "tipo_fuente": "NORMA_OFICIAL",
           "titulo": "Ley de Contrato de Trabajo N.º 20.744 (Argentina) — art. 63 (deber de buena fe)",
-          "organismo_autor": "InfoLEG",
+          "organismo_autor": "Argentina.gob.ar — Normativa / Presidencia de la Nación",
           "url": "https://www.argentina.gob.ar/normativa/nacional/ley-20744-25552/actualizacion",
           "identificador_bibliografico": null,
           "fecha_consulta": "2026-08-25",
@@ -423,20 +423,20 @@
             "Argentina"
           ],
           "verificacion_fuente": {
-            "origen_oficial_confirmado": false,
-            "texto_exacto_consultado": false,
-            "vigencia_comprobada": false,
-            "fecha_comprobacion": null,
-            "metodo_o_evidencia": null,
-            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Fuente añadida en la corrección jurídica v1 para sustentar el deber de buena fe, base de la construcción judicial sobre intimación previa. Corrección jurídica v1: URL actualizada a la versión oficial consolidada y vigente en argentina.gob.ar. Ese hostname NO tiene entrada propia en el registro oficial cerrado (distinto de infoleg.gob.ar/servicios.infoleg.gob.ar, que sí la tiene) — registro_oficial_id se deja en null en vez de forzar la entrada 'infoleg-gob-ar', que correspondía al hostname anterior, no a este. Techo Nivel 2 hasta que se confirme y registre argentina.gob.ar como hostname oficial legítimo, o se vuelva a citar vía infoleg.gob.ar. Se registra que la Ley 27.802 modificó disposiciones de la LCT, con publicación el 6 de marzo de 2026 — pendiente de identificar qué artículos concretos modificó y si afectan a los arts. 10, 63, 242 o 246 aquí citados."
+            "origen_oficial_confirmado": true,
+            "texto_exacto_consultado": true,
+            "vigencia_comprobada": true,
+            "fecha_comprobacion": "2026-08-27",
+            "metodo_o_evidencia": "Verificación externa independiente proporcionada por Codex: consulta directa de la URL contra el localizador declarado de esta fuente (ver observaciones para el detalle completo).",
+            "observaciones": "Verificación externa independiente proporcionada por Codex (2026-08-27): URL https://www.argentina.gob.ar/normativa/nacional/ley-20744-25552/actualizacion confirmada como el texto actualizado de la Ley 20.744 (Ley de Contrato de Trabajo), con el localizador de esta fuente coincidiendo exactamente con lo verificado por Codex. Este agente no abrió la URL en esta sesión (EGRESS_BLOCKED confirmado) — la verificación es externa e independiente, no autoconfirmación de ningún modelo de esta sesión. registro_oficial_id='argentina-gob-ar-normativa' (official-source-registry.json). Esta migración NO cambia estado, confianza, jurisdicción ni revision_humana del claim — no eleva ni aprueba nada."
           },
-          "registro_oficial_id": null
+          "registro_oficial_id": "argentina-gob-ar-normativa"
         },
         {
           "id": "SRC-P02-AR-LCT-01",
           "tipo_fuente": "NORMA_OFICIAL",
           "titulo": "Ley de Contrato de Trabajo N.º 20.744 (Argentina) — art. 242 (denuncia por justa causa)",
-          "organismo_autor": "InfoLEG",
+          "organismo_autor": "Argentina.gob.ar — Normativa / Presidencia de la Nación",
           "url": "https://www.argentina.gob.ar/normativa/nacional/ley-20744-25552/actualizacion",
           "identificador_bibliografico": null,
           "fecha_consulta": "2026-08-25",
@@ -445,20 +445,20 @@
             "Argentina"
           ],
           "verificacion_fuente": {
-            "origen_oficial_confirmado": false,
-            "texto_exacto_consultado": false,
-            "vigencia_comprobada": false,
-            "fecha_comprobacion": null,
-            "metodo_o_evidencia": null,
-            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Corrección jurídica v1: se retira el art. 240 (forma de la renuncia voluntaria) de esta fuente — no es prueba del procedimiento del despido indirecto. Corrección jurídica v1: URL actualizada a la versión oficial consolidada y vigente en argentina.gob.ar. Ese hostname NO tiene entrada propia en el registro oficial cerrado (distinto de infoleg.gob.ar/servicios.infoleg.gob.ar, que sí la tiene) — registro_oficial_id se deja en null en vez de forzar la entrada 'infoleg-gob-ar', que correspondía al hostname anterior, no a este. Techo Nivel 2 hasta que se confirme y registre argentina.gob.ar como hostname oficial legítimo, o se vuelva a citar vía infoleg.gob.ar. Se registra que la Ley 27.802 modificó disposiciones de la LCT, con publicación el 6 de marzo de 2026 — pendiente de identificar qué artículos concretos modificó y si afectan a los arts. 10, 63, 242 o 246 aquí citados."
+            "origen_oficial_confirmado": true,
+            "texto_exacto_consultado": true,
+            "vigencia_comprobada": true,
+            "fecha_comprobacion": "2026-08-27",
+            "metodo_o_evidencia": "Verificación externa independiente proporcionada por Codex: consulta directa de la URL contra el localizador declarado de esta fuente (ver observaciones para el detalle completo).",
+            "observaciones": "Verificación externa independiente proporcionada por Codex (2026-08-27): URL https://www.argentina.gob.ar/normativa/nacional/ley-20744-25552/actualizacion confirmada como el texto actualizado de la Ley 20.744 (Ley de Contrato de Trabajo), con el localizador de esta fuente coincidiendo exactamente con lo verificado por Codex. Este agente no abrió la URL en esta sesión (EGRESS_BLOCKED confirmado) — la verificación es externa e independiente, no autoconfirmación de ningún modelo de esta sesión. registro_oficial_id='argentina-gob-ar-normativa' (official-source-registry.json). Esta migración NO cambia estado, confianza, jurisdicción ni revision_humana del claim — no eleva ni aprueba nada."
           },
-          "registro_oficial_id": null
+          "registro_oficial_id": "argentina-gob-ar-normativa"
         },
         {
           "id": "SRC-P02-AR-LCT-02",
           "tipo_fuente": "NORMA_OFICIAL",
           "titulo": "Ley de Contrato de Trabajo N.º 20.744 (Argentina) — arts. 245, 246 (indemnización, 'despido indirecto')",
-          "organismo_autor": "InfoLEG",
+          "organismo_autor": "Argentina.gob.ar — Normativa / Presidencia de la Nación",
           "url": "https://www.argentina.gob.ar/normativa/nacional/ley-20744-25552/actualizacion",
           "identificador_bibliografico": null,
           "fecha_consulta": "2026-08-25",
@@ -467,14 +467,14 @@
             "Argentina"
           ],
           "verificacion_fuente": {
-            "origen_oficial_confirmado": false,
-            "texto_exacto_consultado": false,
-            "vigencia_comprobada": false,
-            "fecha_comprobacion": null,
-            "metodo_o_evidencia": null,
-            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Corrección jurídica v1: URL actualizada a la versión oficial consolidada y vigente en argentina.gob.ar. Ese hostname NO tiene entrada propia en el registro oficial cerrado (distinto de infoleg.gob.ar/servicios.infoleg.gob.ar, que sí la tiene) — registro_oficial_id se deja en null en vez de forzar la entrada 'infoleg-gob-ar', que correspondía al hostname anterior, no a este. Techo Nivel 2 hasta que se confirme y registre argentina.gob.ar como hostname oficial legítimo, o se vuelva a citar vía infoleg.gob.ar. Se registra que la Ley 27.802 modificó disposiciones de la LCT, con publicación el 6 de marzo de 2026 — pendiente de identificar qué artículos concretos modificó y si afectan a los arts. 10, 63, 242 o 246 aquí citados."
+            "origen_oficial_confirmado": true,
+            "texto_exacto_consultado": true,
+            "vigencia_comprobada": true,
+            "fecha_comprobacion": "2026-08-27",
+            "metodo_o_evidencia": "Verificación externa independiente proporcionada por Codex: consulta directa de la URL contra el localizador declarado de esta fuente (ver observaciones para el detalle completo).",
+            "observaciones": "Verificación externa independiente proporcionada por Codex (2026-08-27): URL https://www.argentina.gob.ar/normativa/nacional/ley-20744-25552/actualizacion confirmada como el texto actualizado de la Ley 20.744 (Ley de Contrato de Trabajo), con el localizador de esta fuente coincidiendo exactamente con lo verificado por Codex. Este agente no abrió la URL en esta sesión (EGRESS_BLOCKED confirmado) — la verificación es externa e independiente, no autoconfirmación de ningún modelo de esta sesión. registro_oficial_id='argentina-gob-ar-normativa' (official-source-registry.json). Esta migración NO cambia estado, confianza, jurisdicción ni revision_humana del claim — no eleva ni aprueba nada."
           },
-          "registro_oficial_id": null
+          "registro_oficial_id": "argentina-gob-ar-normativa"
         },
         {
           "id": "SRC-P02-AR-JUR-01",
@@ -715,7 +715,7 @@
           "id": "SRC-P02-AR-LCT-02",
           "tipo_fuente": "NORMA_OFICIAL",
           "titulo": "Ley de Contrato de Trabajo N.º 20.744 (Argentina) — arts. 245, 246 (indemnización, 'despido indirecto')",
-          "organismo_autor": "InfoLEG",
+          "organismo_autor": "Argentina.gob.ar — Normativa / Presidencia de la Nación",
           "url": "https://www.argentina.gob.ar/normativa/nacional/ley-20744-25552/actualizacion",
           "identificador_bibliografico": null,
           "fecha_consulta": "2026-08-25",
@@ -724,14 +724,14 @@
             "Argentina"
           ],
           "verificacion_fuente": {
-            "origen_oficial_confirmado": false,
-            "texto_exacto_consultado": false,
-            "vigencia_comprobada": false,
-            "fecha_comprobacion": null,
-            "metodo_o_evidencia": null,
-            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Corrección jurídica v1: URL actualizada a la versión oficial consolidada y vigente en argentina.gob.ar. Ese hostname NO tiene entrada propia en el registro oficial cerrado (distinto de infoleg.gob.ar/servicios.infoleg.gob.ar, que sí la tiene) — registro_oficial_id se deja en null en vez de forzar la entrada 'infoleg-gob-ar', que correspondía al hostname anterior, no a este. Techo Nivel 2 hasta que se confirme y registre argentina.gob.ar como hostname oficial legítimo, o se vuelva a citar vía infoleg.gob.ar. Se registra que la Ley 27.802 modificó disposiciones de la LCT, con publicación el 6 de marzo de 2026 — pendiente de identificar qué artículos concretos modificó y si afectan a los arts. 10, 63, 242 o 246 aquí citados."
+            "origen_oficial_confirmado": true,
+            "texto_exacto_consultado": true,
+            "vigencia_comprobada": true,
+            "fecha_comprobacion": "2026-08-27",
+            "metodo_o_evidencia": "Verificación externa independiente proporcionada por Codex: consulta directa de la URL contra el localizador declarado de esta fuente (ver observaciones para el detalle completo).",
+            "observaciones": "Verificación externa independiente proporcionada por Codex (2026-08-27): URL https://www.argentina.gob.ar/normativa/nacional/ley-20744-25552/actualizacion confirmada como el texto actualizado de la Ley 20.744 (Ley de Contrato de Trabajo), con el localizador de esta fuente coincidiendo exactamente con lo verificado por Codex. Este agente no abrió la URL en esta sesión (EGRESS_BLOCKED confirmado) — la verificación es externa e independiente, no autoconfirmación de ningún modelo de esta sesión. registro_oficial_id='argentina-gob-ar-normativa' (official-source-registry.json). Esta migración NO cambia estado, confianza, jurisdicción ni revision_humana del claim — no eleva ni aprueba nada."
           },
-          "registro_oficial_id": null
+          "registro_oficial_id": "argentina-gob-ar-normativa"
         },
         {
           "id": "SRC-P02-CO-CST-01",
