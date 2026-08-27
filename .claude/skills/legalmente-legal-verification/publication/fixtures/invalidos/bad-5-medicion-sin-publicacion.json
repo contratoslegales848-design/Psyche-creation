@@ -1,0 +1,21 @@
+[
+  {
+    "record_type": "MeasurementRecord",
+    "schema_version": "1.0",
+    "content_id": "LM-PUB-FIXTURE-001",
+    "platform": "instagram",
+    "captured_at": "2026-09-03",
+    "window_days": 7,
+    "available_metrics": [
+      "alcance",
+      "guardados",
+      "comentarios"
+    ],
+    "metrics": {
+      "alcance": 0,
+      "guardados": 0,
+      "comentarios": 0
+    },
+    "source": "Captura manual del panel de la plataforma (cifras ficticias de laboratorio)."
+  }
+]

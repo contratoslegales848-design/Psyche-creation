@@ -1,0 +1,62 @@
+[
+  {
+    "record_type": "ProductionHandoff",
+    "schema_version": "1.0",
+    "handoff_id": "HO-FIXTURE-001",
+    "content_id": "LM-PUB-FIXTURE-001",
+    "piece_id": "pub-fixture-comodato",
+    "claim_packet": "publication/fixtures/claim-packet-aprobado.json",
+    "claims": [
+      {
+        "claim_id": "pub-fixture-claim-1",
+        "approved_claim_hash": "ad11199d278c913ce1c5eb3cf94d5d52cdb2c3eb19878818fff2b3fffffad465",
+        "approved_text": "En el comodato se devuelve la misma cosa; en el mutuo se devuelve otro tanto equivalente."
+      }
+    ],
+    "jurisdiccion": "Panhispánica / comparada (Capa A)",
+    "alcance": "CAPA_A_TRANSVERSAL",
+    "advertencia_editorial": "Contenido educativo de divulgación jurídica comparada. No es asesoría legal ni sustituye la consulta con un profesional en la jurisdicción aplicable.",
+    "redacciones_prohibidas": [
+      "No decir 'el comodato siempre es gratuito en toda Hispanoamérica': el matiz de onerosidad varía."
+    ],
+    "status": "APROBADO_QA",
+    "creado_en": "2026-08-26"
+  },
+  {
+    "record_type": "PublicationDecision",
+    "schema_version": "1.0",
+    "decision_id": "PD-FIXTURE-001",
+    "content_id": "LM-PUB-FIXTURE-001",
+    "handoff_id": "HO-FIXTURE-001",
+    "decision": "AUTORIZADA",
+    "decisor": "REVISOR_FICTICIO_SOLO_PRUEBA",
+    "fecha": "2026-08-27",
+    "observaciones": "Revisada la pieza contra el claim aprobado: texto idéntico, jurisdicción visible y advertencia editorial presente. Autorizo publicar.",
+    "plataformas_autorizadas": [
+      "instagram"
+    ],
+    "advertencia_editorial_verificada": true,
+    "qa": {
+      "provenance_claim_packet": true,
+      "hash_coincide": true,
+      "jurisdiccion_visible": true,
+      "advertencia_editorial_presente": true,
+      "texto_coincide_con_aprobado": true,
+      "legibilidad_movil": true
+    }
+  },
+  {
+    "record_type": "PublicationRecord",
+    "schema_version": "1.0",
+    "content_id": "LM-PUB-FIXTURE-001",
+    "piece_id": "pub-fixture-comodato",
+    "platform": "tiktok",
+    "format": "carrusel",
+    "publication_url": "https://example.invalid/legalmente/fixture-001",
+    "published_at": "2026-08-27",
+    "publication_decision_id": "PD-FIXTURE-001",
+    "asset_version": "v1",
+    "status": "PUBLICADA",
+    "measurement_due_at": "2026-09-03"
+  }
+]

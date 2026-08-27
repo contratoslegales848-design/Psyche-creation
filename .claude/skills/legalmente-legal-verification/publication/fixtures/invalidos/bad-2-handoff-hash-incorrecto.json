@@ -1,0 +1,25 @@
+[
+  {
+    "record_type": "ProductionHandoff",
+    "schema_version": "1.0",
+    "handoff_id": "HO-FIXTURE-001",
+    "content_id": "LM-PUB-FIXTURE-001",
+    "piece_id": "pub-fixture-comodato",
+    "claim_packet": "publication/fixtures/claim-packet-aprobado.json",
+    "claims": [
+      {
+        "claim_id": "pub-fixture-claim-1",
+        "approved_claim_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "approved_text": "En el comodato se devuelve la misma cosa; en el mutuo se devuelve otro tanto equivalente."
+      }
+    ],
+    "jurisdiccion": "Panhispánica / comparada (Capa A)",
+    "alcance": "CAPA_A_TRANSVERSAL",
+    "advertencia_editorial": "Contenido educativo de divulgación jurídica comparada. No es asesoría legal ni sustituye la consulta con un profesional en la jurisdicción aplicable.",
+    "redacciones_prohibidas": [
+      "No decir 'el comodato siempre es gratuito en toda Hispanoamérica': el matiz de onerosidad varía."
+    ],
+    "status": "APROBADO_QA",
+    "creado_en": "2026-08-26"
+  }
+]

@@ -1,0 +1,39 @@
+[
+  {
+    "record_type": "ProductionHandoff",
+    "schema_version": "1.0",
+    "handoff_id": "HO-FIXTURE-001",
+    "content_id": "LM-PUB-FIXTURE-001",
+    "piece_id": "pub-fixture-comodato",
+    "claim_packet": "publication/fixtures/claim-packet-aprobado.json",
+    "claims": [
+      {
+        "claim_id": "pub-fixture-claim-1",
+        "approved_claim_hash": "ad11199d278c913ce1c5eb3cf94d5d52cdb2c3eb19878818fff2b3fffffad465",
+        "approved_text": "En el comodato se devuelve la misma cosa; en el mutuo se devuelve otro tanto equivalente."
+      }
+    ],
+    "jurisdiccion": "Panhispánica / comparada (Capa A)",
+    "alcance": "CAPA_A_TRANSVERSAL",
+    "advertencia_editorial": "Contenido educativo de divulgación jurídica comparada. No es asesoría legal ni sustituye la consulta con un profesional en la jurisdicción aplicable.",
+    "redacciones_prohibidas": [
+      "No decir 'el comodato siempre es gratuito en toda Hispanoamérica': el matiz de onerosidad varía."
+    ],
+    "status": "APROBADO_QA",
+    "creado_en": "2026-08-26"
+  },
+  {
+    "record_type": "PublicationDecision",
+    "schema_version": "1.0",
+    "decision_id": "PD-FIXTURE-001",
+    "content_id": "LM-PUB-FIXTURE-001",
+    "handoff_id": "HO-FIXTURE-001",
+    "decision": "RECHAZADA",
+    "decisor": "REVISOR_FICTICIO_SOLO_PRUEBA",
+    "fecha": "2026-08-27",
+    "observaciones": "La pieza no supera revisión: no se publica.",
+    "plataformas_autorizadas": [],
+    "advertencia_editorial_verificada": false,
+    "qa": {}
+  }
+]

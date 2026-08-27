@@ -1002,19 +1002,44 @@ class TestPilotClaimPacketsReales(unittest.TestCase):
         self.assertEqual(warnings, [])
         self.assertEqual(vcp.compute_fuente_nivel(fuente), vcp.NIVEL_1_CONFIRMADO)
 
-    # 8. Revisión humana y gates permanecen sin cambios en las tres piezas.
-    def test_las_tres_piezas_siguen_pendientes_con_gates_cerrados(self):
+    # 8. Los gates de las piezas reales coinciden con el cálculo del validador.
+    #    NO se congelan en 'CERRADO': una aprobación humana firmada puede
+    #    abrirlos legítimamente. Lo que nunca puede ocurrir es un gate abierto
+    #    sin aprobación APROBADA, firmada y con hash coincidente.
+    def test_gates_de_las_piezas_reales_coinciden_con_el_calculo(self):
         for path in sorted(self.PILOT_DIR.glob("*.json")):
             with self.subTest(pieza=path.name):
                 piece = json.loads(path.read_text(encoding="utf-8"))
-                self.assertEqual(piece["gate_global_arte"], "CERRADO")
-                for claim in piece["claims"]:
-                    self.assertEqual(claim["gate_arte"], "CERRADO")
+                gates = []
+                for idx, claim in enumerate(piece["claims"]):
+                    _e, _w, _t, canonical = vcp.validate_claim(claim, f"claims[{idx}]")
+                    canonical = canonical if canonical in vcp.VALID_GATE else "CERRADO"
+                    gates.append(canonical)
+                    self.assertEqual(claim["gate_arte"], canonical)
                     revision = claim["revision_humana"]
-                    self.assertEqual(revision["estado"], "PENDIENTE")
-                    self.assertIsNone(revision["revisor"])
-                    self.assertIsNone(revision["fecha"])
-                    self.assertIsNone(revision["contenido_hash_sha256"])
+                    if claim["gate_arte"] == "ABIERTO":
+                        self.assertEqual(revision["estado"], "APROBADO")
+                        self.assertTrue(vcp.is_nonempty_str(revision["revisor"]))
+                        self.assertTrue(vcp.is_valid_iso_date(revision["fecha"]))
+                        self.assertEqual(
+                            revision["contenido_hash_sha256"],
+                            vcp.compute_content_hash(claim),
+                        )
+                    else:
+                        # Gate cerrado: o no hay aprobación, o su hash no liga.
+                        self.assertTrue(
+                            revision["estado"] != "APROBADO"
+                            or revision["contenido_hash_sha256"] != vcp.compute_content_hash(claim)
+                            or claim["estado"] != "APTO_PARA_NARRATIVA",
+                            "un claim APTO+APROBADO con hash coincidente no puede tener gate CERRADO",
+                        )
+                estado_agregado = vcp.compute_estado_agregado([c["estado"] for c in piece["claims"]])
+                esperado = (
+                    "ABIERTO"
+                    if (estado_agregado == "APTO_PARA_NARRATIVA" and gates and all(g == "ABIERTO" for g in gates))
+                    else "CERRADO"
+                )
+                self.assertEqual(piece["gate_global_arte"], esperado)
 
     def test_pieza_1_conserva_claims_1_2_y_4_y_su_estado(self):
         piece = json.loads((self.PILOT_DIR / "pieza-01-reales.json").read_text(encoding="utf-8"))

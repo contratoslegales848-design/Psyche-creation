@@ -2,3 +2,15 @@ node_modules/
 out/
 .DS_Store
 npm-debug.log*
+
+# Bytecode de Python (la CI rechaza bytecode rastreado)
+__pycache__/
+*.py[cod]
+
+# Entornos y artefactos locales
+.venv/
+venv/
+.env
+.env.*
+!.env.example
+*.log
