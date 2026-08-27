@@ -800,6 +800,172 @@ class TestArgentinaGobArNormativa(unittest.TestCase):
         self.assertTrue(any("no corresponde al hostname real de la URL" in e for e in errors))
 
 
+class TestCongresoQuintanaRooGobMx(unittest.TestCase):
+    """Alta del H. Congreso del Estado de Quintana Roo como fuente legislativa
+    oficial ESTATAL (2026-08-27): entrada 'congresoqroo-gob-mx', restringida
+    por hostname ('congresoqroo.gob.mx', exacto + subdominios reales) +
+    organismo exacto ('H. Congreso del Estado de Quintana Roo') + tipo_fuente
+    (solo NORMA_OFICIAL).
+
+    Antes de esta entrada, congresoqroo.gob.mx resolvía por subdominio a la
+    entrada genérica 'gob-mx-generico', que solo permite
+    AUTORIDAD_PUBLICA_OFICIAL — obligaba a declarar el Código Civil estatal
+    como si fuera un portal administrativo, no como la norma que es.
+
+    LÍMITE CONOCIDO, deliberadamente NO probado aquí: el validador no
+    distingue autoridad estatal de federal. El registro no modela
+    subdivisiones, así que tanto esta entrada como 'diputados-gob-mx'
+    declaran jurisdicción 'México'. Esa distinción es responsabilidad de la
+    revisión humana y del texto del claim; no hay mecanismo de código que
+    probar, y estas pruebas no fingen lo contrario (mismo criterio que la
+    deuda de path_prefix en la entrada argentina)."""
+
+    ORGANISMO = "H. Congreso del Estado de Quintana Roo"
+    URL_PDF = "https://documentos.congresoqroo.gob.mx/codigos/C2-XVIII-23062026-20260724T145357-C1820260616258.pdf"
+    URL_PORTAL = "https://www.congresoqroo.gob.mx/codigos/2"
+    URL_INDICE = "https://documentos.congresoqroo.gob.mx/historial/11_legislatura/decretos/index.htm"
+
+    def _fuente_qroo(self, **overrides):
+        f = base_fuente(
+            id="f-qroo", url=self.URL_PDF, organismo_autor=self.ORGANISMO,
+            jurisdicciones_cubiertas=["México"], registro_oficial_id="congresoqroo-gob-mx",
+        )
+        f.update(overrides)
+        return f
+
+    # 1. El PDF consolidado (Pieza 1) puede declararse NORMA_OFICIAL con este registro -> Nivel 1.
+    def test_url_organismo_tipo_id_y_booleanos_correctos_alcanza_nivel_1(self):
+        f = self._fuente_qroo()
+        self.assertEqual(f["tipo_fuente"], "NORMA_OFICIAL")
+        errors, warnings = vcp.validate_fuente(f, "f")
+        self.assertEqual(errors, [])
+        self.assertEqual(warnings, [])
+        self.assertEqual(vcp.compute_fuente_nivel(f), vcp.NIVEL_1_CONFIRMADO)
+
+    # 2. Una página institucional del mismo hostname puede declararse
+    #    AUTORIDAD_PUBLICA_OFICIAL: el registro permite ese tipo (Ruta C).
+    def test_pagina_institucional_puede_declararse_autoridad_publica_oficial(self):
+        f = self._fuente_qroo(
+            id="f-qroo-indice", tipo_fuente="AUTORIDAD_PUBLICA_OFICIAL", url=self.URL_INDICE,
+        )
+        errors, _ = vcp.validate_fuente(f, "f")
+        self.assertEqual(errors, [], f"AUTORIDAD_PUBLICA_OFICIAL debe permitirse tras la Ruta C: {errors}")
+
+    def test_el_registro_permite_exactamente_los_dos_tipos_de_la_ruta_c(self):
+        entry = vcp.REGISTRY_BY_ID["congresoqroo-gob-mx"]
+        self.assertEqual(
+            sorted(entry["tipos_fuente_permitidos"]),
+            sorted(["NORMA_OFICIAL", "AUTORIDAD_PUBLICA_OFICIAL"]),
+        )
+
+    # 3/4. Los tres booleanos en false dejan la fuente en Nivel 2 aunque hostname,
+    #      organismo, tipo y registro sean perfectos: ampliar tipos NO eleva nivel.
+    def test_registro_correcto_con_booleanos_false_se_queda_en_nivel_2(self):
+        f = self._fuente_qroo(verificacion_fuente=base_verificacion(origen=False, texto=False, vigencia=False))
+        errors, _ = vcp.validate_fuente(f, "f")
+        self.assertEqual(errors, [])
+        self.assertEqual(vcp.compute_fuente_nivel(f), vcp.NIVEL_2_DECLARADO_NO_VERIFICADO)
+
+    def test_indice_institucional_sin_verificar_se_queda_en_nivel_2(self):
+        """Caso exacto de Pieza 3: organismo y registro correctos, tipo permitido,
+        pero sin verificación propia — nunca Nivel 1."""
+        f = self._fuente_qroo(
+            id="f-qroo-indice", tipo_fuente="AUTORIDAD_PUBLICA_OFICIAL", url=self.URL_INDICE,
+            verificacion_fuente=base_verificacion(origen=False, texto=False, vigencia=False),
+        )
+        errors, _ = vcp.validate_fuente(f, "f")
+        self.assertEqual(errors, [])
+        self.assertEqual(vcp.compute_fuente_nivel(f), vcp.NIVEL_2_DECLARADO_NO_VERIFICADO)
+
+    # 2. documentos.congresoqroo.gob.mx coincide con la entrada específica.
+    def test_hostnames_oficiales_resuelven_a_la_entrada_especifica(self):
+        for url in (
+            "https://congresoqroo.gob.mx/codigos/2",
+            self.URL_PORTAL,
+            self.URL_PDF,
+        ):
+            with self.subTest(url=url):
+                entry = vcp.match_registry_entry_for_url(url, vcp.REGISTRY)
+                self.assertIsNotNone(entry, f"{url} debería resolver a una entrada del registro")
+                self.assertEqual(entry["id"], "congresoqroo-gob-mx")
+
+    def test_entrada_especifica_gana_sobre_la_generica_gob_mx(self):
+        """La entrada específica es más larga que 'gob.mx', así que
+        match_registry_entry_for_url debe preferirla — igual que dof.gob.mx."""
+        entry = vcp.match_registry_entry_for_url(self.URL_PDF, vcp.REGISTRY)
+        self.assertEqual(entry["id"], "congresoqroo-gob-mx")
+        self.assertNotEqual(entry["id"], "gob-mx-generico")
+        generico = vcp.match_registry_entry_for_url("https://sat.gob.mx/algo", vcp.REGISTRY)
+        self.assertEqual(generico["id"], "gob-mx-generico")
+
+    def test_hostnames_parecidos_no_resuelven_a_la_entrada_especifica(self):
+        """Nunca por subcadena: un dominio de suplantación no puede heredar
+        la entrada estatal."""
+        self.assertIsNone(
+            vcp.match_registry_entry_for_url("https://congresoqroo.gob.mx.evil.com/x", vcp.REGISTRY)
+        )
+        distinto = vcp.match_registry_entry_for_url("https://notcongresoqroo.gob.mx/x", vcp.REGISTRY)
+        self.assertNotEqual(distinto["id"], "congresoqroo-gob-mx")
+
+    # 3. El organismo genérico anterior no coincide con la entrada nueva.
+    def test_organismo_generico_anterior_no_coincide_con_la_entrada_nueva(self):
+        f = self._fuente_qroo(organismo_autor="Gobierno de México (portal genérico gob.mx)")
+        errors, _ = vcp.validate_fuente(f, "f")
+        self.assertTrue(any("no coincide, tras normalizar, con el organismo canónico" in e for e in errors))
+        self.assertNotEqual(vcp.compute_fuente_nivel(f), vcp.NIVEL_1_CONFIRMADO)
+
+    def test_organismo_incorrecto_rechazado(self):
+        f = self._fuente_qroo(organismo_autor="Congreso de Quintana Roo")
+        errors, _ = vcp.validate_fuente(f, "f")
+        self.assertTrue(any("no coincide, tras normalizar, con el organismo canónico" in e for e in errors))
+
+    # 4. gob-mx-generico no puede utilizarse como ID declarado para esta fuente.
+    def test_gob_mx_generico_no_puede_declararse_para_este_hostname(self):
+        f = self._fuente_qroo(registro_oficial_id="gob-mx-generico")
+        errors, _ = vcp.validate_fuente(f, "f")
+        self.assertTrue(
+            any("no corresponde al hostname real de la URL" in e for e in errors),
+            f"declarar gob-mx-generico para congresoqroo.gob.mx debe rechazarse: {errors}",
+        )
+        self.assertNotEqual(vcp.compute_fuente_nivel(f), vcp.NIVEL_1_CONFIRMADO)
+
+    def test_registro_oficial_id_ausente_para_hostname_registrado_rechazado(self):
+        f = self._fuente_qroo(registro_oficial_id=None)
+        errors, _ = vcp.validate_fuente(f, "f")
+        self.assertTrue(any("corresponde al organismo registrado" in e and "congresoqroo-gob-mx" in e for e in errors))
+        self.assertNotEqual(vcp.compute_fuente_nivel(f), vcp.NIVEL_1_CONFIRMADO)
+
+    # 5. Un tipo de fuente no permitido sigue siendo rechazado.
+    #    La Ruta C amplió a dos tipos, NO abrió el enum entero: un congreso
+    #    estatal no emite jurisprudencia, eso es el poder judicial.
+    def test_tipo_fuente_no_permitido_rechazado(self):
+        f = self._fuente_qroo(tipo_fuente="JURISPRUDENCIA_OFICIAL")
+        errors, _ = vcp.validate_fuente(f, "f")
+        self.assertTrue(
+            any("no tiene permitido el tipo de fuente" in e for e in errors),
+            f"JURISPRUDENCIA_OFICIAL no debería permitirse para congresoqroo-gob-mx: {errors}",
+        )
+
+    def test_jurisdiccion_ajena_rechazada(self):
+        f = self._fuente_qroo(jurisdicciones_cubiertas=["España"])
+        errors, _ = vcp.validate_fuente(f, "f")
+        self.assertTrue(any("país/ámbito ajeno" in e for e in errors))
+
+    def test_entrada_del_registro_bien_formada(self):
+        entry = vcp.REGISTRY_BY_ID.get("congresoqroo-gob-mx")
+        self.assertIsNotNone(entry, "falta la entrada 'congresoqroo-gob-mx' en el registro oficial")
+        self.assertEqual(entry["organismo_canonico"], self.ORGANISMO)
+        self.assertEqual(entry["hostnames"], ["congresoqroo.gob.mx"])
+        self.assertEqual(entry["organismo_aliases"], [])
+        self.assertEqual(entry["jurisdicciones"], ["México"])
+        self.assertEqual(entry["tipos_fuente_permitidos"], ["NORMA_OFICIAL", "AUTORIDAD_PUBLICA_OFICIAL"])
+        self.assertEqual(entry["ambito"], "ESTATAL")
+        self.assertIn("ESTATAL", entry["_nota"])
+        self.assertIn("NO constituye autoridad federal", entry["_nota"])
+        self.assertIn("NO ELEVA NINGÚN NIVEL POR SÍ MISMO", entry["_nota"])
+        self.assertNotIn("InfoLEG", entry["_nota"])
+
+
 class TestPilotClaimPacketsReales(unittest.TestCase):
     """Prueba de regresión automatizada (2026-08-27): valida las 3 piezas
     reales del piloto dentro de la propia suite unittest, no solo mediante
@@ -809,6 +975,8 @@ class TestPilotClaimPacketsReales(unittest.TestCase):
 
     PILOT_DIR = Path(__file__).resolve().parent.parent / "pilot" / "claim-packets"
 
+    # 6. El paquete real de Pieza 1 valida después de la migración.
+    # 7. Piezas 2 y 3 continúan validando sin cambios.
     def test_las_tres_piezas_reales_pasan_validacion_estructural(self):
         piezas = sorted(self.PILOT_DIR.glob("*.json"))
         self.assertEqual(len(piezas), 3, f"se esperaban 3 piezas reales, se encontraron {len(piezas)}: {piezas}")
@@ -817,6 +985,90 @@ class TestPilotClaimPacketsReales(unittest.TestCase):
                 piece = json.loads(path.read_text(encoding="utf-8"))
                 errors, _ = vcp.validate_piece(piece, path.name)
                 self.assertEqual(errors, [], f"{path.name} no debería tener errores estructurales: {errors}")
+
+    def test_pieza_1_fuente_quintana_roo_migrada_y_en_nivel_1(self):
+        piece = json.loads((self.PILOT_DIR / "pieza-01-reales.json").read_text(encoding="utf-8"))
+        claim4 = next(c for c in piece["claims"] if c["claim_id"] == "pieza-01-claim-4")
+        fuente = next(f for f in claim4["fuentes"] if f["id"] == "SRC-P01-MX-QROO-03")
+        self.assertEqual(fuente["registro_oficial_id"], "congresoqroo-gob-mx")
+        self.assertEqual(fuente["organismo_autor"], "H. Congreso del Estado de Quintana Roo")
+        self.assertEqual(fuente["tipo_fuente"], "NORMA_OFICIAL")
+        self.assertEqual(vcp.extract_hostname(fuente["url"]), "documentos.congresoqroo.gob.mx")
+        self.assertEqual(fuente["localizador"], "arts. 1781, 1836, 1837, 1838 y 1839")
+        for boolean in ("origen_oficial_confirmado", "texto_exacto_consultado", "vigencia_comprobada"):
+            self.assertTrue(fuente["verificacion_fuente"][boolean])
+        errors, warnings = vcp.validate_fuente(fuente, "SRC-P01-MX-QROO-03")
+        self.assertEqual(errors, [])
+        self.assertEqual(warnings, [])
+        self.assertEqual(vcp.compute_fuente_nivel(fuente), vcp.NIVEL_1_CONFIRMADO)
+
+    # 8. Revisión humana y gates permanecen sin cambios en las tres piezas.
+    def test_las_tres_piezas_siguen_pendientes_con_gates_cerrados(self):
+        for path in sorted(self.PILOT_DIR.glob("*.json")):
+            with self.subTest(pieza=path.name):
+                piece = json.loads(path.read_text(encoding="utf-8"))
+                self.assertEqual(piece["gate_global_arte"], "CERRADO")
+                for claim in piece["claims"]:
+                    self.assertEqual(claim["gate_arte"], "CERRADO")
+                    revision = claim["revision_humana"]
+                    self.assertEqual(revision["estado"], "PENDIENTE")
+                    self.assertIsNone(revision["revisor"])
+                    self.assertIsNone(revision["fecha"])
+                    self.assertIsNone(revision["contenido_hash_sha256"])
+
+    def test_pieza_1_conserva_claims_1_2_y_4_y_su_estado(self):
+        piece = json.loads((self.PILOT_DIR / "pieza-01-reales.json").read_text(encoding="utf-8"))
+        self.assertEqual(
+            [c["claim_id"] for c in piece["claims"]],
+            ["pieza-01-claim-1", "pieza-01-claim-2", "pieza-01-claim-4"],
+        )
+        self.assertEqual(piece["estado_agregado"], "APTO_PARA_NARRATIVA")
+        for claim in piece["claims"]:
+            self.assertEqual(claim["estado"], "APTO_PARA_NARRATIVA")
+
+    # 9. Pieza 3 conserva su estado anterior, revisión PENDIENTE y gates cerrados,
+    #    y su fuente de Quintana Roo NO se elevó a NORMA_OFICIAL ni a Nivel 1.
+    def test_pieza_3_fuente_quintana_roo_alineada_sin_elevarse(self):
+        piece = json.loads((self.PILOT_DIR / "pieza-03-honor.json").read_text(encoding="utf-8"))
+        claim = next(c for c in piece["claims"] if c["claim_id"] == "pieza-03-claim-4")
+        fuente = next(f for f in claim["fuentes"] if f["id"] == "SRC-P03-MX-QROO-PEN-01")
+
+        # Migrado: organismo real y registro específico.
+        self.assertEqual(fuente["organismo_autor"], "H. Congreso del Estado de Quintana Roo")
+        self.assertEqual(fuente["registro_oficial_id"], "congresoqroo-gob-mx")
+
+        # NO elevado: sigue siendo un índice institucional, no la norma.
+        self.assertEqual(fuente["tipo_fuente"], "AUTORIDAD_PUBLICA_OFICIAL")
+        self.assertEqual(
+            fuente["url"],
+            "https://documentos.congresoqroo.gob.mx/historial/11_legislatura/decretos/index.htm",
+        )
+        self.assertEqual(fuente["localizador"], "arts. 132 a 141, derogados por Decreto 151")
+        verificacion = fuente["verificacion_fuente"]
+        for boolean in ("origen_oficial_confirmado", "texto_exacto_consultado", "vigencia_comprobada"):
+            self.assertFalse(verificacion[boolean], f"{boolean} debe seguir en false: no se verificó el Decreto 151")
+        self.assertIsNone(verificacion["fecha_comprobacion"], "no puede declararse una fecha de verificación falsa")
+
+        errors, _ = vcp.validate_fuente(fuente, "SRC-P03-MX-QROO-PEN-01")
+        self.assertEqual(errors, [])
+        self.assertEqual(vcp.compute_fuente_nivel(fuente), vcp.NIVEL_2_DECLARADO_NO_VERIFICADO)
+
+        # Estado del claim y de la pieza intactos.
+        self.assertEqual(claim["estado"], "REQUIERE_INVESTIGACION")
+        self.assertEqual(claim["gate_arte"], "CERRADO")
+        self.assertEqual(claim["revision_humana"]["estado"], "PENDIENTE")
+        self.assertEqual(piece["estado_agregado"], "REQUIERE_INVESTIGACION")
+        self.assertEqual(piece["gate_global_arte"], "CERRADO")
+
+    def test_pieza_3_no_afirma_haber_verificado_el_decreto_151(self):
+        piece = json.loads((self.PILOT_DIR / "pieza-03-honor.json").read_text(encoding="utf-8"))
+        claim = next(c for c in piece["claims"] if c["claim_id"] == "pieza-03-claim-4")
+        fuente = next(f for f in claim["fuentes"] if f["id"] == "SRC-P03-MX-QROO-PEN-01")
+        observaciones = fuente["verificacion_fuente"]["observaciones"]
+        self.assertIn("NO se abrió ni se verificó desde esa URL el texto exacto del Decreto 151", observaciones)
+        self.assertIn("NIVEL 2", observaciones)
+        self.assertIn("REQUIERE INVESTIGACIÓN ADICIONAL", observaciones)
+        self.assertIn("no prueba el contenido normativo", observaciones)
 
 
 class TestHashCompleto(unittest.TestCase):
