@@ -1,0 +1,171 @@
+{
+  "schema_version": "4.0",
+  "piece_id": "pub-fixture-comodato",
+  "claims": [
+    {
+      "claim_id": "pub-fixture-claim-1",
+      "texto_exacto": "En el comodato se devuelve la misma cosa; en el mutuo se devuelve otro tanto equivalente.",
+      "ubicacion": "hook",
+      "tipo": "definicion",
+      "alcance": "CAPA_A_TRANSVERSAL",
+      "jurisdiccion": null,
+      "nucleo_transversal": "La distinción entre comodato (préstamo de uso, se devuelve la cosa idéntica) y mutuo (préstamo de consumo, se devuelve otro tanto de la misma especie y calidad) es común, con la misma lógica y el mismo nombre, en el derecho civil hispánico comparado.",
+      "variaciones_materiales": null,
+      "jurisdicciones_revisadas": [
+        {
+          "pais": "España",
+          "fuente_ids": [
+            "f-es"
+          ]
+        },
+        {
+          "pais": "México",
+          "fuente_ids": [
+            "f-mx"
+          ]
+        },
+        {
+          "pais": "Argentina",
+          "fuente_ids": [
+            "f-ar"
+          ]
+        },
+        {
+          "pais": "Perú",
+          "fuente_ids": [
+            "f-pe"
+          ]
+        }
+      ],
+      "diferencias_buscadas": "Se buscó si el nombre de la figura, la obligación de restituir la cosa idéntica frente a restituir otro tanto, y el carácter esencialmente gratuito u oneroso de cada figura cambian entre estos cuatro países.",
+      "contraejemplos_encontrados": "Ninguno a nivel de la definición misma en los cuatro códigos revisados.",
+      "justificacion_suficiencia_comparada": "Cuatro códigos civiles independientes, cada uno con fuente oficial propia y localizador de artículo concreto, coinciden en la misma distinción funcional y terminológica, sin contraejemplo. Cada jurisdicción está respaldada por SU PROPIA fuente oficial (no una sola fuente reutilizada) — evidencia comparada suficiente para Capa A.",
+      "fuentes": [
+        {
+          "id": "f-es",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Código Civil español",
+          "organismo_autor": "Agencia Estatal BOE",
+          "url": "https://www.boe.es/buscar/act.php?id=BOE-A-1889-4763",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-08-25",
+          "localizador": "arts. 1740 (comodato) y 1753/1755 (mutuo)",
+          "jurisdicciones_cubiertas": [
+            "España"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": true,
+            "texto_exacto_consultado": true,
+            "vigencia_comprobada": true,
+            "fecha_comprobacion": "2026-08-25",
+            "metodo_o_evidencia": "Lectura directa del texto oficial vigente",
+            "observaciones": null
+          },
+          "registro_oficial_id": "boe-es"
+        },
+        {
+          "id": "f-mx",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Código Civil Federal (México)",
+          "organismo_autor": "Congreso de la Unión (México)",
+          "url": "https://www.diputados.gob.mx/LeyesBiblio/pdf/CCF.pdf",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-08-25",
+          "localizador": "arts. 2497 (comodato) y 2384 (mutuo)",
+          "jurisdicciones_cubiertas": [
+            "México"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": true,
+            "texto_exacto_consultado": true,
+            "vigencia_comprobada": true,
+            "fecha_comprobacion": "2026-08-25",
+            "metodo_o_evidencia": "Lectura directa del texto oficial vigente",
+            "observaciones": null
+          },
+          "registro_oficial_id": "diputados-gob-mx"
+        },
+        {
+          "id": "f-ar",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Código Civil y Comercial de la Nación (Argentina)",
+          "organismo_autor": "InfoLEG — Ministerio de Justicia (Argentina)",
+          "url": "https://servicios.infoleg.gob.ar/infolegInternet/anexos/235000-239999/235975/texact.htm",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-08-25",
+          "localizador": "arts. 1533 (comodato) y 1525 (mutuo)",
+          "jurisdicciones_cubiertas": [
+            "Argentina"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": true,
+            "texto_exacto_consultado": true,
+            "vigencia_comprobada": true,
+            "fecha_comprobacion": "2026-08-25",
+            "metodo_o_evidencia": "Lectura directa del texto oficial vigente",
+            "observaciones": null
+          },
+          "registro_oficial_id": "infoleg-gob-ar"
+        },
+        {
+          "id": "f-pe",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Código Civil (Perú)",
+          "organismo_autor": "Sistema Peruano de Información Jurídica — Minjus",
+          "url": "https://spij.minjus.gob.pe/spij-ext-web/#/detallenorma/H1000921",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-08-25",
+          "localizador": "arts. 1728 (comodato) y 1648 (mutuo)",
+          "jurisdicciones_cubiertas": [
+            "Perú"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": true,
+            "texto_exacto_consultado": true,
+            "vigencia_comprobada": true,
+            "fecha_comprobacion": "2026-08-25",
+            "metodo_o_evidencia": "Lectura directa del texto oficial vigente",
+            "observaciones": null
+          },
+          "registro_oficial_id": "spij-minjus-gob-pe"
+        }
+      ],
+      "confianza": "alta",
+      "riesgo_falsa_universalizacion": "bajo",
+      "riesgo_asesoria": "ninguno",
+      "platform_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "confidentiality_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "estado": "APTO_PARA_NARRATIVA",
+      "revision_humana": {
+        "estado": "APROBADO",
+        "revisor": "REVISOR_FICTICIO_SOLO_PRUEBA",
+        "fecha": "2026-08-26",
+        "observaciones": "Aprobación ficticia de laboratorio: solo existe para ejercitar la cadena post-aprobación.",
+        "contenido_hash_sha256": "ad11199d278c913ce1c5eb3cf94d5d52cdb2c3eb19878818fff2b3fffffad465"
+      },
+      "gate_arte": "ABIERTO",
+      "reformulacion_propuesta": {
+        "texto": null,
+        "verificada": false,
+        "nuevo_claim_id": null
+      },
+      "redaccion_prohibida": "No decir 'el comodato siempre es gratuito en toda Hispanoamérica': el matiz de onerosidad varía.",
+      "notas": "Fixture sintética para la cadena post-aprobación. Revisor ficticio, jamás una persona real."
+    }
+  ],
+  "estado_agregado": "APTO_PARA_NARRATIVA",
+  "revisiones_pendientes": [],
+  "gate_global_arte": "ABIERTO"
+}

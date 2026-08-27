@@ -23,6 +23,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from check_pilot_governance import (  # noqa: E402
+    canonical_gate_arte,
     check_pilot_governance,
     load_validator,
     main,
@@ -340,14 +341,61 @@ class TestPaquetesRealesDelPiloto(unittest.TestCase):
                 piece = json.loads(path.read_text(encoding="utf-8"))
                 self.assertEqual(check_pilot_governance(piece, validator), [])
 
-    def test_tres_paquetes_reales_siguen_pendientes_y_cerrados(self):
+    def test_gates_de_los_paquetes_reales_coinciden_con_el_validador(self):
+        """Los gates del piloto NO se congelan en 'CERRADO'.
+
+        Congelarlos fue el error que produjo el deadlock de gobernanza: en cuanto
+        un humano aprueba legítimamente un claim, el validador OBLIGA a declarar
+        'ABIERTO' y una prueba congelada empieza a fallar por el motivo
+        equivocado. Lo que sí debe cumplirse siempre es coherencia: el gate
+        declarado tiene que ser exactamente el que calculan las reglas
+        fail-closed, y un gate ABIERTO exige aprobación humana firmada con hash
+        que ligue al contenido exacto.
+        """
+        validator = load_validator()
         for path in PILOT_PACKETS:
             with self.subTest(paquete=path.name):
                 piece = json.loads(path.read_text(encoding="utf-8"))
-                self.assertEqual(piece["gate_global_arte"], "CERRADO")
+                canonical_gates = []
+                for idx, claim in enumerate(piece["claims"]):
+                    canonical = canonical_gate_arte(validator, claim, f"claims[{idx}]")
+                    canonical_gates.append(canonical)
+                    self.assertEqual(
+                        claim["gate_arte"], canonical,
+                        f"{path.name}/{claim['claim_id']}: gate declarado no coincide con el canónico",
+                    )
+                    if claim["gate_arte"] == "ABIERTO":
+                        revision = claim["revision_humana"]
+                        self.assertEqual(revision["estado"], "APROBADO")
+                        self.assertTrue(validator.is_nonempty_str(revision["revisor"]))
+                        self.assertTrue(validator.is_valid_iso_date(revision["fecha"]))
+                        self.assertEqual(
+                            revision["contenido_hash_sha256"],
+                            validator.compute_content_hash(claim),
+                            "un gate ABIERTO exige hash que ligue al contenido exacto aprobado",
+                        )
+                estado_agregado = validator.compute_estado_agregado(
+                    [c["estado"] for c in piece["claims"]]
+                )
+                esperado_global = (
+                    "ABIERTO"
+                    if (estado_agregado == "APTO_PARA_NARRATIVA"
+                        and canonical_gates and all(g == "ABIERTO" for g in canonical_gates))
+                    else "CERRADO"
+                )
+                self.assertEqual(piece["gate_global_arte"], esperado_global)
+
+    def test_ningun_gate_abierto_sin_aprobacion_firmada(self):
+        """Invariante dura: en ninguna pieza real puede haber un gate ABIERTO
+        cuya revisión humana no esté APROBADA y firmada."""
+        for path in PILOT_PACKETS:
+            with self.subTest(paquete=path.name):
+                piece = json.loads(path.read_text(encoding="utf-8"))
                 for claim in piece["claims"]:
-                    self.assertEqual(claim["gate_arte"], "CERRADO")
-                    self.assertEqual(claim["revision_humana"]["estado"], "PENDIENTE")
+                    if claim["gate_arte"] == "ABIERTO":
+                        self.assertEqual(claim["revision_humana"]["estado"], "APROBADO")
+                if piece["gate_global_arte"] == "ABIERTO":
+                    self.assertTrue(all(c["gate_arte"] == "ABIERTO" for c in piece["claims"]))
 
     def test_cli_acepta_los_tres_paquetes_reales(self):
         result = subprocess.run(
