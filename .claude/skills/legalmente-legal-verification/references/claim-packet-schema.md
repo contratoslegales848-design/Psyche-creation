@@ -10,7 +10,21 @@
 
 - `APTO_PARA_NARRATIVA` significa **"listo para revisión humana"**, no "listo para arte".
 - `gate_arte: "ABIERTO"` es una condición **necesaria pero no suficiente**: reduce el riesgo de que el propio modelo se autoapruebe sin dejar rastro verificable (liga la aprobación a un hash SHA-256 del contenido exacto del claim — ver más abajo), pero **no** demuestra que un humano real aprobó. La garantía real de autenticidad requiere un mecanismo externo (firma, sesión autenticada, flujo de aprobación fuera de este repositorio) que **esta skill no implementa**.
-- Nunca escribas un nombre real en un fixture de prueba. Usa `REVISOR_FICTICIO_SOLO_PRUEBA` o equivalente. El repositorio tiene una prueba de higiene (`test_no_nombres_reales_en_fixtures`) que falla si aparece el nombre real del fundador en cualquier fixture, referencia o `SKILL.md`.
+- **Ningún agente puede autoasignarse como revisor.** Que el validador o la gobernanza acepten una firma solo prueba que la firma existe, está bien formada y liga al contenido exacto — nunca quién la escribió.
+- Nunca escribas un nombre real en un fixture de prueba. Usa `REVISOR_FICTICIO_SOLO_PRUEBA` o equivalente. El repositorio tiene pruebas de higiene (`test_no_nombres_reales_en_fixtures`, `test_no_nombres_reales_en_referencias_ni_skill` y `test_no_hay_nombres_reales_en_los_scripts`) que fallan si aparece el nombre real del fundador en cualquier fixture, referencia, `SKILL.md` o script.
+
+## Los cuatro estados no son equivalentes (decisión del fundador, 2026-08-27)
+
+Se confunden con facilidad y cada uno habilita algo distinto. En orden, y sin atajos entre ellos:
+
+| Concepto | Qué significa exactamente | Qué habilita |
+| --- | --- | --- |
+| `estado = APTO_PARA_NARRATIVA` | La evidencia permite **someter el claim a aprobación humana**. Lo calcula el validador a partir de las fuentes. | Nada por sí solo. Solo autoriza pedir la revisión. |
+| `revision_humana.estado = APROBADO` | Un humano aprobó **exactamente el contenido ligado al hash canónico**. | Nada por sí solo: si el estado no es `APTO_PARA_NARRATIVA`, o el hash no coincide, el gate sigue `CERRADO`. |
+| `gate_arte = ABIERTO` | Se cumplen **todos** los requisitos a la vez (ver más abajo). Es un veredicto calculado, nunca escrito a mano. | **Exclusivamente**: puede comenzar la narrativa y la producción visual. |
+| Autorización de publicación | Decisión humana **posterior, externa y separada**. | Publicar. |
+
+**`gate_arte: ABIERTO` NO constituye autorización de publicación.** Son dos controles distintos y no hay ninguna implicación del primero al segundo. Este repositorio todavía **no** implementa el control de autorización de publicación (no existe el campo, ni el proceso, ni el archivo). Mientras ese control no exista, **ninguna skill, workflow o agente tiene autorización para publicar** — la publicación la ejecuta un humano, fuera de este sistema.
 
 ## Objeto VERIFICACION_FUENTE (nuevo en v3 — dentro de cada fuente)
 
@@ -127,7 +141,19 @@ El gate de un claim solo puede abrirse si ambos objetos tienen `status` en `{NO_
 
 `claim_id`, `texto_exacto`, `ubicacion` (enum), `tipo` (enum, incluye `atribucion`), `alcance` (`CAPA_A_TRANSVERSAL`, `CAPA_B_VARIABLE`, `CAPA_C_NACIONAL`, `NO_DETERMINADO`, `NO_APLICA`), `jurisdiccion` (string no vacío o lista no vacía de strings — nunca un entero), `variaciones_materiales` (mismo tipo), `confianza`, `riesgo_falsa_universalizacion`, `riesgo_asesoria`, `estado`, `reformulacion_propuesta` (`{texto, verificada, nuevo_claim_id}` — `verificada: true` exige `nuevo_claim_id` real dentro de la misma pieza), `redaccion_prohibida`, `notas` (string o null).
 
-`gate_arte` (`CERRADO`/`ABIERTO`, calculado): `ABIERTO` solo si `estado = APTO_PARA_NARRATIVA` **y** `revision_humana.estado = APROBADO` con hash coincidente **y** `platform_review`/`confidentiality_review` en `{NO_APLICA, APROBADO}`.
+`gate_arte` (`CERRADO`/`ABIERTO`, **calculado, nunca escrito a mano**): `ABIERTO` solo si se cumplen **todas** estas condiciones a la vez:
+
+1. `estado = APTO_PARA_NARRATIVA`;
+2. `revision_humana.estado = APROBADO`;
+3. `revision_humana.revisor` no vacío;
+4. `revision_humana.fecha` ISO válida;
+5. `revision_humana.contenido_hash_sha256` de 64 hexadecimales **que coincide con el hash canónico recalculado del contenido actual del claim**;
+6. `platform_review` y `confidentiality_review` con `status` en `{NO_APLICA, APROBADO}`;
+7. el claim no tiene ningún otro error estructural.
+
+Si falta cualquiera de las siete, el gate es `CERRADO` (fail-closed). Declarar `ABIERTO` sin cumplirlas es `[ERROR ESTRUCTURAL]` — y declarar `CERRADO` cuando se cumplen todas **también** lo es: el gate declarado debe reflejar el cálculo, en las dos direcciones.
+
+Recordatorio: un `gate_arte: ABIERTO` habilita narrativa y producción visual. **No autoriza publicación** (ver la tabla de los cuatro estados, arriba).
 
 ## Objeto PIEZA
 
@@ -136,3 +162,13 @@ El gate de un claim solo puede abrirse si ambos objetos tienen `status` en `{NO_
 ## Verdicto del validador
 
 `[ERROR ESTRUCTURAL]` (rechaza) · `[ADVERTENCIA DE FUENTE]` (informativa — p. ej. hostname fuera de la lista cerrada; nunca concede aprobación por sí sola) · `[OK ESTRUCTURAL — PENDIENTE HUMANO]` · `[GATE CERRADO]` · `[GATE ABIERTO]`.
+
+## Control de gobernanza del piloto (`scripts/check_pilot_governance.py`)
+
+Salvaguarda adicional de CI sobre los paquetes **reales** del piloto (`pilot/claim-packets/`), no sobre los fixtures. **Verifica coherencia; no congela artificialmente los gates.**
+
+Comprueba, para cada paquete: `schema_version` exactamente `"4.0"`; que `revision_humana.estado` sea `PENDIENTE` o `APROBADO`; que toda aprobación esté firmada de forma verificable (`revisor`, `fecha` ISO, hash de 64 hexadecimales); que el `gate_arte` declarado en cada claim **coincida exactamente** con el gate canónico que calcula el validador; y que `gate_global_arte` coincida con el agregado canónico de esos gates.
+
+No reimplementa ninguna regla jurídica: importa `validate-claim-packet.py` con `importlib` (el nombre del archivo lleva guiones y no admite un `import` normal) y delega la decisión del gate en `validate_claim()`, además de reutilizar `compute_content_hash`, `compute_estado_agregado` y `review_allows_gate`. No existe una segunda implementación de esas reglas.
+
+**Historia — el deadlock corregido (2026-08-27):** la versión anterior exigía `gate_arte = CERRADO` de forma **incondicional** en todo el piloto. En cuanto un claim alcanzó `APTO_PARA_NARRATIVA` (Pieza 1, claims 1/2/4, tras la migración de fuentes argentinas), registrar la aprobación humana pasó a ser imposible sin dejar CI en rojo: el validador obligaba a declarar `ABIERTO` y la gobernanza obligaba a `CERRADO`, y ambos corren en el mismo job. La causa de fondo era conceptual — se usaba el gate de **arte** como si fuera un permiso de **publicación**. Al separarlos, la gobernanza pasa a comprobar coherencia con las reglas fail-closed en lugar de congelar el gate, y la garantía de "el piloto no se publica" descansa donde corresponde: en que **no existe** control de autorización de publicación y, por tanto, ningún agente puede publicar.

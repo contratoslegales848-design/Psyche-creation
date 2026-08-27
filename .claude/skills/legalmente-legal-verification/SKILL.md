@@ -14,8 +14,20 @@ No eres tú quien decide si una afirmación jurídica es correcta con solo "sona
 **Esta skill y su validador solo leen y escriben JSON. No autentican personas.** Que `revision_humana.revisor` diga un nombre no prueba que esa persona escribió ese campo — tú, como modelo, podrías escribirlo igual de fácil. Por eso:
 
 - **Nunca inventes una aprobación humana.** Todo claim que produces nace con `revision_humana.estado: "PENDIENTE"`. Ni siquiera si el usuario te pide "márcalo como aprobado" — esa acción la ejecuta un humano real, no tú.
+- **Ningún agente puede autoasignarse como revisor.** Que el validador o la gobernanza acepten una firma solo prueba que existe, está bien formada y liga al contenido exacto — nunca quién la escribió.
 - **Nunca uses un nombre real** en un fixture, prueba o ejemplo — ni el del fundador ni el de nadie. Usa un identificador evidentemente ficticio (`REVISOR_FICTICIO_SOLO_PRUEBA`).
 - `APTO_PARA_NARRATIVA` significa **"listo para que un humano lo revise"**, no "listo para arte". El `gate_arte`/`gate_global_arte` que el validador calcula como `ABIERTO` es una condición **necesaria pero no suficiente** para producción real: liga la aprobación a un hash SHA-256 del contenido exacto (si el texto, fuentes o alcance cambian después, la aprobación se invalida automáticamente), pero la garantía de que un humano real — y no un proceso automatizado — tomó esa decisión requiere un mecanismo externo de autenticación que **esta skill no implementa**. No lo construyas en esta fase; documenta el límite, no lo ocultes.
+
+## Los cuatro estados no son equivalentes (decisión del fundador, 2026-08-27)
+
+No hay atajos entre ellos, y confundir dos consecutivos es el error más caro que puedes cometer en esta skill:
+
+1. **`estado = APTO_PARA_NARRATIVA`** — la evidencia permite **someter el claim a aprobación humana**. No es una aprobación y no habilita nada por sí solo.
+2. **`revision_humana.estado = APROBADO`** — un humano aprobó **exactamente el contenido ligado al hash canónico**. Tampoco abre nada por sí solo: si el estado no es `APTO_PARA_NARRATIVA` o el hash no coincide, el gate sigue `CERRADO`.
+3. **`gate_arte = ABIERTO`** — se cumplen todos los requisitos a la vez. Significa **exclusivamente** que puede comenzar la narrativa y la producción visual.
+4. **Autorización de publicación** — decisión humana **posterior, externa y separada**.
+
+**`gate_arte: ABIERTO` NO constituye autorización de publicación.** Este repositorio todavía **no** implementa ese cuarto control: no existe el campo, ni el proceso, ni el archivo. Mientras no exista, **ninguna skill, workflow o agente tiene autorización para publicar** — la publicación la ejecuta un humano, fuera de este sistema. No añadas un campo de autorización de publicación por tu cuenta: es una decisión de diseño del fundador, no tuya.
 
 ## Cuándo se activa
 
@@ -62,13 +74,17 @@ Determina si parece asesoría individual, si promete un resultado jurídico, si 
 `schema_version: "4.0"`, `piece_id`, `claims[]` (esquema completo en `references/claim-packet-schema.md`). El `estado_agregado` y el `gate_global_arte` de la pieza **se calculan, no se escriben a mano**:
 
 - `estado_agregado`: un claim `BLOQUEADO` bloquea toda la pieza; uno `REQUIERE_INVESTIGACION` la frena; uno con matices la deja en `APTO_CON_MATICES`; solo si **todos** están en `APTO_PARA_NARRATIVA` la pieza llega ahí.
-- `gate_global_arte`: `ABIERTO` solo si **todos** los claims tienen su propio `gate_arte: ABIERTO` — que a su vez exige `estado = APTO_PARA_NARRATIVA` + `revision_humana.estado = APROBADO` con `contenido_hash_sha256` coincidente con el contenido actual + `platform_review`/`confidentiality_review` en `{NO_APLICA, APROBADO}`.
+- `gate_global_arte`: `ABIERTO` solo si **todos** los claims tienen su propio `gate_arte: ABIERTO` — que a su vez exige `estado = APTO_PARA_NARRATIVA` + `revision_humana.estado = APROBADO` con `revisor` y `fecha` no vacíos y `contenido_hash_sha256` coincidente con el contenido actual + `platform_review`/`confidentiality_review` en `{NO_APLICA, APROBADO}`.
+
+El gate se declara tal como sale del cálculo, **en las dos direcciones**: declarar `ABIERTO` sin cumplir todos los requisitos es `[ERROR ESTRUCTURAL]`, y declarar `CERRADO` cuando sí se cumplen **también** lo es. No "cierres" un gate a mano para impedir que algo se publique — para eso está el control de publicación, que es humano y externo.
 
 Cuando una `reformulacion_propuesta` contiene una nueva afirmación jurídica, márcala `verificada: false` hasta que exista un `nuevo_claim_id` real que la haya recorrido de nuevo.
 
 ## Validación estructural
 
 `scripts/validate-claim-packet.py <archivo.json>`. Valida tipos JSON estrictos, enums, fechas ISO, URLs http/https, hostnames por límite real de dominio (nunca subcadena), niveles de fuente fail-closed, la coherencia completa hostname↔organismo↔tipo_fuente↔jurisdicción de cada fuente oficial contra el registro único (`references/official-source-registry.json`), reglas de alcance, coherencia de `revision_humana`/`platform_review`/`confidentiality_review`, el hash de aprobación, y el cálculo de `estado_agregado`/`gate_global_arte`. Diferencia `[ERROR ESTRUCTURAL]`, `[ADVERTENCIA DE FUENTE]` (nunca concede aprobación por sí sola), `[OK ESTRUCTURAL — PENDIENTE HUMANO]`, `[GATE CERRADO]`, `[GATE ABIERTO]`.
+
+`scripts/check_pilot_governance.py <archivo.json>` es la salvaguarda de CI sobre los paquetes **reales** del piloto. **Verifica coherencia; no congela artificialmente los gates**: comprueba que el `gate_arte` de cada claim y el `gate_global_arte` de la pieza coincidan exactamente con lo que las reglas fail-closed del validador permiten, que `schema_version` sea `"4.0"`, y que toda aprobación esté firmada de forma verificable. No reimplementa ninguna regla jurídica — importa el validador con `importlib` y delega en `validate_claim()`, `compute_content_hash()` y `compute_estado_agregado()`. Hasta el 2026-08-27 exigía `gate_arte = CERRADO` de forma incondicional, lo que hacía imposible registrar una aprobación humana sin romper CI (el validador obligaba a lo contrario); ese bloqueo mutuo está corregido y documentado en `references/claim-packet-schema.md`.
 
 ## Qué no hace esta skill
 
