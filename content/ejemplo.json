@@ -6,5 +6,12 @@
   "marca": "LegalMente",
   "imagen": "assets/images/ejemplo.jpg",
   "audio": null,
-  "duracionSegundos": 10
+  "duracionSegundos": 10,
+  "procedencia": {
+    "modo": "EJEMPLO_TECNICO",
+    "content_id": "LM-EJEMPLO-TECNICO-001",
+    "publicable": false,
+    "jurisdiction_layer": "NO_APLICA",
+    "nota": "Artefacto de prueba del pipeline de render. No es una pieza publicable: no tiene ProductionHandoff detrás y no puede entrar en la cadena gobernada. Convertirlo en publicable exige declarar modo GOBERNADO con handoff válido, o modo NO_APLICA con motivo tipificado y autorización humana."
+  }
 }

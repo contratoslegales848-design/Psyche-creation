@@ -50,6 +50,23 @@ Prueba: `test_claim_packet_fuera_de_la_skill_falla`.
 **A9. Perder por el camino la redacción prohibida de un claim.**
 El handoff debe transportarla. Fixture: `bad-13-redaccion-prohibida-no-viaja.json`.
 
+**A10. Hacer avanzar una pieza basada en un caso reconocible declarando que la
+revisión de confidencialidad "no aplica".** *(Era C1, el hueco más serio.)*
+Doce indicadores deterministas se aplican sobre los campos publicables del claim.
+Si alguno dispara, `required` pasa a ser obligatoriamente `true` y el gate solo se
+abre con revisión humana firmada y motivada. Aprobar exige constancia real de qué
+se revisó; bloquear exige revisor y motivo, porque bloquear también es una decisión
+con responsable. Fixtures: `bad-47`, `bad-48`, `bad-49`.
+Límite declarado: los indicadores son un **suelo**, no un techo — ver B5.
+
+**A11. Renderizar como pieza publicable un JSON sin ningún claim packet detrás.**
+*(Era C2, la cadena cortada.)* Cada artefacto de `content/` declara su procedencia
+en uno de tres modos, sin modo por defecto. `src/content.ts` falla cerrado sobre la
+forma en tiempo de bundle — comprobado: quitando `procedencia`, el bundle de
+Remotion falla con exit 1 — y `scripts/validate-content-provenance.py` verifica el
+fondo en CI: que el handoff exista y valide, que los hashes coincidan con el hash
+canónico del claim, y que la capa jurisdiccional no se reetiquete al pasar a arte.
+
 ---
 
 ## B. Vectores parcialmente mitigados
@@ -77,38 +94,46 @@ deliberadamente deterministas y verificables *a ojo* sobre la pieza, pero el
 repositorio no ve la pieza: no puede comprobar que la jurisdicción esté realmente
 visible en la imagen.
 
+**B5. Contenido identificable que ningún indicador reconoce.**
+Lo que queda de C1. Los indicadores detectan las formas habituales de fuga (caso
+propio, primera persona, expediente, identificador, importe, dato de contacto,
+razón social, tratamiento con nombre). No detectan un caso reconocible narrado en
+tercera persona, sin cifras y sin marcadores léxicos — que es precisamente la forma
+más peligrosa, porque es la que un profesional escribe sin darse cuenta. Por eso la
+revisión humana sigue siendo obligatoria por decisión del fundador, y el control
+solo decide **cuándo mirar**, nunca si algo es confidencial.
+Cobertura verificada del estado de partida: ninguno de los 56 fixtures ni de los 3
+paquetes del piloto dispara un indicador, y 9 frases de contenido educativo
+legítimo permanecen limpias — un control que marcara todo se acabaría desactivando.
+
+**B6. Una pieza NO_APLICA mal clasificada.**
+Lo que queda de C2. El modo `NO_APLICA` existe porque hay piezas que legítimamente
+no llevan afirmación jurídica (cita histórica, formato de marca). Exige motivo
+tipificado de una lista cerrada, justificación de al menos 30 caracteres y un
+humano identificado con fecha — pero no puede comprobar que la clasificación sea
+correcta. Alguien puede etiquetar como cita histórica algo que en realidad enuncia
+una regla vigente. El control lo convierte en una decisión trazable con
+responsable; no la sustituye.
+
 ---
 
 ## C. Vectores abiertos (sin control ejecutable — riesgo declarado)
 
-**C1. Confidencialidad. Es el hueco más serio.**
-`confidentiality_review` existe como campo y puede bloquear el gate, pero **nadie
-comprueba su contenido**: no hay detección de nombres, empresas, montos, fechas ni
-operaciones identificables procedentes de experiencia profesional privada
-(CLAUDE.md §5). El único control ejecutable relacionado es la lista negra de
-nombres reales en fixtures y scripts, que protege el *material de prueba*, no el
-*contenido publicable*. Una pieza que reutilice un caso reconocible pasaría todos
-los controles actuales.
-Consecuencia potencial: deber de secreto profesional. Es el candidato número uno a
-próximo control.
-
-**C2. El renderizador no exige procedencia.**
-`content/*.json` solo valida forma (`src/content.ts`): id, título, frase, remate,
-marca, imagen, duración. **No hay ningún campo que ligue una pieza renderizada a un
-claim packet aprobado.** `content/ejemplo.json` se renderiza en CI sin respaldo
-jurídico alguno. Hoy la cadena está cortada en dos mitades que no se hablan: la
-jurídica (`.claude/skills/`) y la de producción (`content/` + `src/`). El
-`ProductionHandoff` es el puente diseñado, pero el renderizador todavía no lo exige.
+**C1 y C2 se cerraron el 2026-08-27.** Se conserva su enunciado original en la
+sección A (A10 y A11) junto al control que ahora los bloquea. Lo que queda de
+ambos, que no es poco, está en B5 y B6.
 
 **C3. Nada impide publicar fuera del sistema.**
 La cadena registra decisiones; no controla las cuentas. Alguien con acceso a la
 plataforma publica sin pasar por aquí. El repositorio es un registro de
 responsabilidad, no un control de acceso — y debe leerse así.
 
-**C4. Sin control de duplicados a nivel de contenido.**
-La unicidad se comprueba por identificadores (`handoff_id`, `decision_id`,
-`content_id`+plataforma), no por semejanza del contenido. Dos piezas casi idénticas
-con IDs distintos pasan.
+**C4. Duplicados por paráfrasis.** *(Parcialmente cerrado.)*
+Ya se detecta el `content_id` repetido, el id de composición repetido, la misma
+frase con otro ID salvo mayúsculas, tildes y signos, y la casilla de taxonomía
+`materia/submateria/concepto` ocupada dos veces. Sigue abierto lo semántico: dos
+piezas que dicen lo mismo con palabras distintas pasan. Detectarlo exigiría un
+motor semántico y hoy no lo hay.
 
 **C5. Las métricas son autodeclaradas.**
 `MeasurementRecord` exige coherencia interna (no inventar claves) y una `source`,
@@ -129,7 +154,12 @@ plataforma.
 
 ## E. Prioridad sugerida de cierre
 
-1. **C1 (confidencialidad)** — mayor consecuencia, ningún control.
-2. **C2 (procedencia en el renderizador)** — convierte la cadena en una cadena real.
+1. **B1 (deriva de fuentes oficiales)** — mayor consecuencia de lo que queda: una
+   norma derogada sostiene una afirmación falsa sin que nada avise. Ver ADR 0001.
+2. **B5 (contenido identificable sin marcadores léxicos)** — no se cierra con más
+   expresiones regulares; se cierra con disciplina de revisión y, quizá, con
+   evidencia adjunta de qué se leyó.
 3. **B3/B4 (autodeclaración)** — mitigable con evidencia adjunta, no con más lógica.
-4. **C4 (duplicados por contenido)** — relevante solo al escalar el volumen.
+4. **C4 (duplicados por paráfrasis)** — relevante solo al escalar el volumen.
+
+Cerrados el 2026-08-27: C1 (ahora A10) y C2 (ahora A11).

@@ -46,6 +46,12 @@ Traslada a producción **exactamente** lo aprobado. Exige:
 Si el texto o el contenido del claim cambian después de la aprobación, el hash
 deja de coincidir y el handoff falla. Ese es el mecanismo antimutación.
 
+Los handoffs reales viven en `publication/records/`. Desde ahí los lee también
+`scripts/validate-content-provenance.py` (en la raíz del repositorio), que exige que
+todo artefacto de `content/` en modo `GOBERNADO` apunte a un handoff válido. Un
+handoff que no valida no se indexa: el artefacto que lo invoque quedará sin
+procedencia.
+
 ### `PublicationDecision`
 La autorización humana de publicación. `decision` ∈ `AUTORIZADA | RECHAZADA | PENDIENTE`.
 Solo `AUTORIZADA` habilita publicar, y exige firma completa (`decisor`, `fecha` ISO,

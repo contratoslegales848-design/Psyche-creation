@@ -1,7 +1,7 @@
 # Estado técnico real de LegalMente
 
-**Fecha:** 2026-08-27 · **Base:** `origin/main` en `82f226e` + rama `chore/phase1-technical-readiness`
-**Semáforo global: AMARILLO.**
+**Fecha:** 2026-08-27 · **Base:** `origin/main` en `82f226e` + ramas `chore/phase1-technical-readiness` y `chore/phase1-p0-confidencialidad-procedencia`
+**Semáforo global: AMARILLO** (los dos P0 quedaron cerrados; el amarillo lo sostienen ahora riesgos declarados, no huecos sin control).
 
 Este documento describe lo que **existe y se ejecuta**, no lo que está planeado.
 Regla de lectura (`CLAUDE.md §2`): una mención en un documento no es una capacidad
@@ -18,9 +18,11 @@ real y una prueba que pasa.
 | Gobernanza del gate de arte | 🟢 VERDE | Deadlock resuelto (PR #12); la gobernanza comprueba coherencia contra el validador canónico, no congela gates. |
 | Registro de fuentes oficiales | 🟢 VERDE | 22 entradas, coincidencia por frontera real de subdominio, cobertura probada. |
 | Separación producción / publicación | 🟢 VERDE (nuevo) | `validate-publication-chain.py` + 41 pruebas + 16 fixtures. Antes no existía. |
-| Enlace verificación → renderizado | 🔴 ROJO | `content/*.json` no tiene ningún campo que lo ligue a un claim packet aprobado. |
-| Confidencialidad | 🔴 ROJO | Campo declarativo sin ningún control ejecutable sobre el contenido publicable. |
-| Pipeline de video (Remotion) | 🟡 AMARILLO | Funciona y renderiza, pero renderiza contenido sin respaldo jurídico. |
+| Enlace verificación → renderizado | 🟢 VERDE (nuevo) | Cada artefacto declara procedencia; sin ella el bundle de Remotion falla. Verificado de punta a punta. |
+| Confidencialidad | 🟡 AMARILLO (era rojo) | Control determinista fail-closed implementado; queda el contenido identificable sin marcadores léxicos (red team B5). |
+| Pipeline de video (Remotion) | 🟢 VERDE (nuevo) | Renderiza, y ya no puede renderizar contenido publicable sin origen verificable. |
+| Anti-duplicados | 🟡 AMARILLO (nuevo) | Controles literales implementados; la paráfrasis sigue sin detectarse. |
+| Motor de producción masiva | ⚫ NO CONSTRUIDO | Contrato técnico definido (`docs/contrato-motor-masivo.md`); el motor, deliberadamente, no. |
 | Documentación vs. realidad | 🟡 AMARILLO | Dos derivas detectadas (ver §5). |
 | `legalmente-web` | 🟡 AMARILLO | Prototipo honesto, pero el repositorio es **público** y `CLAUDE.md §8` lo declara privado. |
 | Publicación automatizada | ⚫ INEXISTENTE (por diseño) | Ninguna automatización publica. Es una regla, no una carencia. |
@@ -37,17 +39,24 @@ real y una prueba que pasa.
   ante duda, cierra. Sin red.
 - `scripts/check_pilot_governance.py` — control de CI: verifica que cada gate
   declarado coincida exactamente con el que calcula el validador.
-- `scripts/validate-publication-chain.py` — **nuevo**: la cadena post-aprobación.
+- `scripts/validate-publication-chain.py` — la cadena post-aprobación.
+- `scripts/confidentiality_rules.py` — **nuevo**: control determinista de
+  confidencialidad. Doce indicadores sobre los campos publicables del claim; si
+  alguno dispara, la revisión humana deja de ser opcional.
+- `scripts/validate-content-provenance.py` (en la raíz) — **nuevo**: procedencia de
+  los artefactos de `content/` y controles anti-duplicados.
 - `references/official-source-registry.json` — 22 organismos oficiales.
 - `fixtures/` — 10 positivas, 46 negativas.
 - `publication/fixtures/` — 2 cadenas válidas, 14 inválidas, 1 claim packet sintético.
 
-**Pruebas: 225, todas en verde.**
+**Pruebas: 275, todas en verde.**
 | Suite | Pruebas |
 |---|---|
 | `test_validate_claim_packet` | 147 |
 | `test_check_pilot_governance` | 37 |
 | `test_validate_publication_chain` | 41 |
+| `test_confidentiality_rules` | 20 |
+| `test_validate_content_provenance` | 30 |
 
 ### 2.2 Los cuatro estados no equivalentes
 
@@ -66,9 +75,16 @@ del claim packet**: si viviera dentro, cada decisión de publicación cambiaría
 hash del claim e invalidaría la aprobación jurídica ya firmada.
 
 ### 2.3 Pipeline de video
-Remotion 4 + React/TypeScript. `content/*.json` → `src/content.ts` (validación de
-forma) → `src/compositions/LegalMenteQuote.tsx`. CI renderiza en `push` a `main`
-que toque `content/**`, y sube los MP4 como artefactos. Funciona.
+Remotion 4 + React/TypeScript. `content/*.json` → `src/content.ts` →
+`src/compositions/LegalMenteQuote.tsx`. CI renderiza en `push` a `main` que toque
+`content/**`, y sube los MP4 como artefactos.
+
+`src/content.ts` ya no valida solo la forma de la pieza: exige `procedencia`, sin
+modo por defecto. Los tres modos son `GOBERNADO` (hay un `ProductionHandoff`
+detrás), `NO_APLICA` (por decisión de gobernanza no hay afirmación jurídica que
+verificar — cita histórica, formato de marca) y `EJEMPLO_TECNICO` (material de
+prueba, `publicable: false` obligatorio). La forma se comprueba en tiempo de bundle
+y el fondo en CI, donde sí se pueden leer los claim packets.
 
 ### 2.4 CI
 | Workflow | Dispara en | Qué hace |
@@ -96,7 +112,9 @@ fusionar**. Esa fusión es una decisión humana pendiente, no un paso técnico.
 ## 3. Lo que NO existe (contra lo que pueda decir cualquier documento)
 
 - `legalmente-story-engine` — no implementada.
-- `legalmente-confidentiality` — no implementada. **Es el hueco más serio.**
+- `legalmente-confidentiality` — la **skill** no existe. Lo que sí existe desde el
+  2026-08-27 es el control ejecutable (`scripts/confidentiality_rules.py`), que era
+  lo que faltaba de verdad. Una skill aportaría guía de redacción, no bloqueo.
 - Los 6 agentes (`legal-researcher`, `legal-auditor`, `narrative-editor`,
   `visual-director`, `privacy-reviewer`, `growth-analyst`) — ninguno existe.
 - Los 4 hooks (PRE-NARRATIVA, PRE-ARTE, PRE-PUBLICACIÓN, POST-PUBLICACIÓN) — ninguno existe.
@@ -107,29 +125,28 @@ fusionar**. Esa fusión es una decisión humana pendiente, no un paso técnico.
 
 ---
 
-## 4. El corte real de la cadena
+## 4. La cadena, ya completa
 
 ```
-[verificación jurídica]                              [producción de video]
-claim packet  →  aprobación humana  →  gate arte      content/*.json  →  Remotion  →  MP4
-      │                                     │               ▲
-      └──────────── ProductionHandoff ──────┘               │
-                     (nuevo, existe)                        │
-                                                            │
-                            ┌───────── AÚN NO CONECTADO ────┘
+[verificación jurídica]                                    [producción]
+claim packet → aprobación humana → gate arte → ProductionHandoff
+                                                      │
+                                                      ▼
+                                        content/*.json (procedencia) → Remotion → MP4
+                                                      │
+                                                      ▼
+                                        PublicationDecision AUTORIZADA (humana)
+                                                      │
+                                                      ▼
+                                     PublicationRecord → Measurement → Learning
 ```
 
-`content/ejemplo.json` se renderiza en CI y **no tiene detrás ningún claim packet**.
-`src/content.ts` valida forma (id, título, frase, remate, marca, imagen, duración);
-no valida procedencia. El `ProductionHandoff` es el puente diseñado para cerrar ese
-hueco, pero el renderizador todavía no lo exige.
+El corte que existía entre la mitad jurídica y la de producción está cerrado. Queda
+verificado, no solo afirmado: quitando `procedencia` de `content/ejemplo.json`, el
+bundle de Remotion falla con exit 1.
 
-**Siguiente paso técnico natural:** añadir a `content/*.json` un campo obligatorio
-`content_id` + `handoff_id`, y un paso de CI que rechace renderizar contenido cuya
-cadena no valide. No se ha hecho en esta fase porque toca `content/` y `src/`, fuera
-del alcance autorizado de este trabajo.
-
----
+`content/ejemplo.json` es hoy el único artefacto, en modo `EJEMPLO_TECNICO` y
+`publicable: false`: es material de prueba del pipeline, no una pieza publicable.
 
 ## 5. Derivas entre documentación y realidad
 
@@ -167,10 +184,9 @@ decisión del fundador, no técnica.
 
 ## 7. Prioridades
 
-**P0 — antes de publicar nada**
-1. Control de confidencialidad sobre contenido publicable (`CLAUDE.md §5` no tiene
-   hoy ningún mecanismo ejecutable).
-2. Ligar `content/*.json` a un `ProductionHandoff` válido y hacer que la CI lo exija.
+**P0 — cerrados el 2026-08-27**
+1. ~~Control de confidencialidad sobre contenido publicable.~~ Implementado.
+2. ~~Ligar `content/*.json` a un `ProductionHandoff` válido.~~ Implementado.
 
 **P1 — antes de escalar el volumen**
 3. Decidir sobre la Pieza 1: fusionar o no la aprobación registrada.
@@ -178,7 +194,10 @@ decisión del fundador, no técnica.
 
 **P2 — cuando el piloto esté medido**
 5. Detección de deriva de fuentes oficiales, fuera del validador (ver ADR 0001).
-6. Control de duplicados por contenido, no solo por identificador.
+   Es ahora el riesgo abierto de mayor consecuencia.
+6. Inventario materializado y planificación de cobertura para el motor masivo
+   (ver `docs/contrato-motor-masivo.md` §4).
+7. Detección de duplicados por paráfrasis, cuando el volumen lo justifique.
 
 **P3 — no ahora**
 7. Integraciones externas (Grok/Manus/Gemini): los contratos están en borrador
@@ -193,3 +212,5 @@ decisión del fundador, no técnica.
 - `docs/adr/0001-arquitectura-de-hashes.md` — por qué hay un solo hash.
 - `docs/red-team-cadena-editorial.md` — vectores de ataque y qué los bloquea.
 - `docs/handoff-contracts/` — contratos externos en borrador.
+- `docs/contrato-motor-masivo.md` — dónde vive cada campo del futuro motor y por qué
+  no se creó ningún modelo paralelo.

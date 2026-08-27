@@ -61,6 +61,9 @@ jobs:
             libgtk-3-0 \
             libx11-xcb1
 
+      - name: Procedencia del contenido (fail-closed antes de producir)
+        run: python3 scripts/validate-content-provenance.py
+
       - name: Instalar dependencias Node
         run: npm ci
 
