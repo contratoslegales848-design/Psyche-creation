@@ -823,6 +823,7 @@ class TestCongresoQuintanaRooGobMx(unittest.TestCase):
     ORGANISMO = "H. Congreso del Estado de Quintana Roo"
     URL_PDF = "https://documentos.congresoqroo.gob.mx/codigos/C2-XVIII-23062026-20260724T145357-C1820260616258.pdf"
     URL_PORTAL = "https://www.congresoqroo.gob.mx/codigos/2"
+    URL_INDICE = "https://documentos.congresoqroo.gob.mx/historial/11_legislatura/decretos/index.htm"
 
     def _fuente_qroo(self, **overrides):
         f = base_fuente(
@@ -832,16 +833,46 @@ class TestCongresoQuintanaRooGobMx(unittest.TestCase):
         f.update(overrides)
         return f
 
-    # 1. URL oficial + organismo correcto + NORMA_OFICIAL + ID correcto + booleanos true -> Nivel 1.
+    # 1. El PDF consolidado (Pieza 1) puede declararse NORMA_OFICIAL con este registro -> Nivel 1.
     def test_url_organismo_tipo_id_y_booleanos_correctos_alcanza_nivel_1(self):
         f = self._fuente_qroo()
+        self.assertEqual(f["tipo_fuente"], "NORMA_OFICIAL")
         errors, warnings = vcp.validate_fuente(f, "f")
         self.assertEqual(errors, [])
         self.assertEqual(warnings, [])
         self.assertEqual(vcp.compute_fuente_nivel(f), vcp.NIVEL_1_CONFIRMADO)
 
+    # 2. Una página institucional del mismo hostname puede declararse
+    #    AUTORIDAD_PUBLICA_OFICIAL: el registro permite ese tipo (Ruta C).
+    def test_pagina_institucional_puede_declararse_autoridad_publica_oficial(self):
+        f = self._fuente_qroo(
+            id="f-qroo-indice", tipo_fuente="AUTORIDAD_PUBLICA_OFICIAL", url=self.URL_INDICE,
+        )
+        errors, _ = vcp.validate_fuente(f, "f")
+        self.assertEqual(errors, [], f"AUTORIDAD_PUBLICA_OFICIAL debe permitirse tras la Ruta C: {errors}")
+
+    def test_el_registro_permite_exactamente_los_dos_tipos_de_la_ruta_c(self):
+        entry = vcp.REGISTRY_BY_ID["congresoqroo-gob-mx"]
+        self.assertEqual(
+            sorted(entry["tipos_fuente_permitidos"]),
+            sorted(["NORMA_OFICIAL", "AUTORIDAD_PUBLICA_OFICIAL"]),
+        )
+
+    # 3/4. Los tres booleanos en false dejan la fuente en Nivel 2 aunque hostname,
+    #      organismo, tipo y registro sean perfectos: ampliar tipos NO eleva nivel.
     def test_registro_correcto_con_booleanos_false_se_queda_en_nivel_2(self):
         f = self._fuente_qroo(verificacion_fuente=base_verificacion(origen=False, texto=False, vigencia=False))
+        errors, _ = vcp.validate_fuente(f, "f")
+        self.assertEqual(errors, [])
+        self.assertEqual(vcp.compute_fuente_nivel(f), vcp.NIVEL_2_DECLARADO_NO_VERIFICADO)
+
+    def test_indice_institucional_sin_verificar_se_queda_en_nivel_2(self):
+        """Caso exacto de Pieza 3: organismo y registro correctos, tipo permitido,
+        pero sin verificación propia — nunca Nivel 1."""
+        f = self._fuente_qroo(
+            id="f-qroo-indice", tipo_fuente="AUTORIDAD_PUBLICA_OFICIAL", url=self.URL_INDICE,
+            verificacion_fuente=base_verificacion(origen=False, texto=False, vigencia=False),
+        )
         errors, _ = vcp.validate_fuente(f, "f")
         self.assertEqual(errors, [])
         self.assertEqual(vcp.compute_fuente_nivel(f), vcp.NIVEL_2_DECLARADO_NO_VERIFICADO)
@@ -904,16 +935,16 @@ class TestCongresoQuintanaRooGobMx(unittest.TestCase):
         self.assertTrue(any("corresponde al organismo registrado" in e and "congresoqroo-gob-mx" in e for e in errors))
         self.assertNotEqual(vcp.compute_fuente_nivel(f), vcp.NIVEL_1_CONFIRMADO)
 
-    # 5. Un tipo de fuente no permitido es rechazado.
+    # 5. Un tipo de fuente no permitido sigue siendo rechazado.
+    #    La Ruta C amplió a dos tipos, NO abrió el enum entero: un congreso
+    #    estatal no emite jurisprudencia, eso es el poder judicial.
     def test_tipo_fuente_no_permitido_rechazado(self):
-        for tipo in ("JURISPRUDENCIA_OFICIAL", "AUTORIDAD_PUBLICA_OFICIAL"):
-            with self.subTest(tipo=tipo):
-                f = self._fuente_qroo(tipo_fuente=tipo)
-                errors, _ = vcp.validate_fuente(f, "f")
-                self.assertTrue(
-                    any("no tiene permitido el tipo de fuente" in e for e in errors),
-                    f"{tipo} no debería permitirse para congresoqroo-gob-mx: {errors}",
-                )
+        f = self._fuente_qroo(tipo_fuente="JURISPRUDENCIA_OFICIAL")
+        errors, _ = vcp.validate_fuente(f, "f")
+        self.assertTrue(
+            any("no tiene permitido el tipo de fuente" in e for e in errors),
+            f"JURISPRUDENCIA_OFICIAL no debería permitirse para congresoqroo-gob-mx: {errors}",
+        )
 
     def test_jurisdiccion_ajena_rechazada(self):
         f = self._fuente_qroo(jurisdicciones_cubiertas=["España"])
@@ -927,10 +958,12 @@ class TestCongresoQuintanaRooGobMx(unittest.TestCase):
         self.assertEqual(entry["hostnames"], ["congresoqroo.gob.mx"])
         self.assertEqual(entry["organismo_aliases"], [])
         self.assertEqual(entry["jurisdicciones"], ["México"])
-        self.assertEqual(entry["tipos_fuente_permitidos"], ["NORMA_OFICIAL"])
+        self.assertEqual(entry["tipos_fuente_permitidos"], ["NORMA_OFICIAL", "AUTORIDAD_PUBLICA_OFICIAL"])
         self.assertEqual(entry["ambito"], "ESTATAL")
         self.assertIn("ESTATAL", entry["_nota"])
         self.assertIn("NO constituye autoridad federal", entry["_nota"])
+        self.assertIn("NO ELEVA NINGÚN NIVEL POR SÍ MISMO", entry["_nota"])
+        self.assertNotIn("InfoLEG", entry["_nota"])
 
 
 class TestPilotClaimPacketsReales(unittest.TestCase):
@@ -992,6 +1025,50 @@ class TestPilotClaimPacketsReales(unittest.TestCase):
         self.assertEqual(piece["estado_agregado"], "APTO_PARA_NARRATIVA")
         for claim in piece["claims"]:
             self.assertEqual(claim["estado"], "APTO_PARA_NARRATIVA")
+
+    # 9. Pieza 3 conserva su estado anterior, revisión PENDIENTE y gates cerrados,
+    #    y su fuente de Quintana Roo NO se elevó a NORMA_OFICIAL ni a Nivel 1.
+    def test_pieza_3_fuente_quintana_roo_alineada_sin_elevarse(self):
+        piece = json.loads((self.PILOT_DIR / "pieza-03-honor.json").read_text(encoding="utf-8"))
+        claim = next(c for c in piece["claims"] if c["claim_id"] == "pieza-03-claim-4")
+        fuente = next(f for f in claim["fuentes"] if f["id"] == "SRC-P03-MX-QROO-PEN-01")
+
+        # Migrado: organismo real y registro específico.
+        self.assertEqual(fuente["organismo_autor"], "H. Congreso del Estado de Quintana Roo")
+        self.assertEqual(fuente["registro_oficial_id"], "congresoqroo-gob-mx")
+
+        # NO elevado: sigue siendo un índice institucional, no la norma.
+        self.assertEqual(fuente["tipo_fuente"], "AUTORIDAD_PUBLICA_OFICIAL")
+        self.assertEqual(
+            fuente["url"],
+            "https://documentos.congresoqroo.gob.mx/historial/11_legislatura/decretos/index.htm",
+        )
+        self.assertEqual(fuente["localizador"], "arts. 132 a 141, derogados por Decreto 151")
+        verificacion = fuente["verificacion_fuente"]
+        for boolean in ("origen_oficial_confirmado", "texto_exacto_consultado", "vigencia_comprobada"):
+            self.assertFalse(verificacion[boolean], f"{boolean} debe seguir en false: no se verificó el Decreto 151")
+        self.assertIsNone(verificacion["fecha_comprobacion"], "no puede declararse una fecha de verificación falsa")
+
+        errors, _ = vcp.validate_fuente(fuente, "SRC-P03-MX-QROO-PEN-01")
+        self.assertEqual(errors, [])
+        self.assertEqual(vcp.compute_fuente_nivel(fuente), vcp.NIVEL_2_DECLARADO_NO_VERIFICADO)
+
+        # Estado del claim y de la pieza intactos.
+        self.assertEqual(claim["estado"], "REQUIERE_INVESTIGACION")
+        self.assertEqual(claim["gate_arte"], "CERRADO")
+        self.assertEqual(claim["revision_humana"]["estado"], "PENDIENTE")
+        self.assertEqual(piece["estado_agregado"], "REQUIERE_INVESTIGACION")
+        self.assertEqual(piece["gate_global_arte"], "CERRADO")
+
+    def test_pieza_3_no_afirma_haber_verificado_el_decreto_151(self):
+        piece = json.loads((self.PILOT_DIR / "pieza-03-honor.json").read_text(encoding="utf-8"))
+        claim = next(c for c in piece["claims"] if c["claim_id"] == "pieza-03-claim-4")
+        fuente = next(f for f in claim["fuentes"] if f["id"] == "SRC-P03-MX-QROO-PEN-01")
+        observaciones = fuente["verificacion_fuente"]["observaciones"]
+        self.assertIn("NO se abrió ni se verificó desde esa URL el texto exacto del Decreto 151", observaciones)
+        self.assertIn("NIVEL 2", observaciones)
+        self.assertIn("REQUIERE INVESTIGACIÓN ADICIONAL", observaciones)
+        self.assertIn("no prueba el contenido normativo", observaciones)
 
 
 class TestHashCompleto(unittest.TestCase):
