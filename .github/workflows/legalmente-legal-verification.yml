@@ -5,11 +5,17 @@ on:
     branches: [main]
     paths:
       - ".claude/skills/legalmente-legal-verification/**"
+      - "content/**"
+      - "src/**"
+      - "scripts/**"
       - ".github/workflows/legalmente-legal-verification.yml"
   push:
     branches: [main]
     paths:
       - ".claude/skills/legalmente-legal-verification/**"
+      - "content/**"
+      - "src/**"
+      - "scripts/**"
       - ".github/workflows/legalmente-legal-verification.yml"
   workflow_dispatch: {}
 
@@ -39,6 +45,10 @@ jobs:
       - name: compileall (detecta errores de sintaxis)
         run: python3 -m compileall -q scripts/
 
+      - name: compileall de los scripts de la raíz
+        working-directory: .
+        run: python3 -m compileall -q scripts/
+
       - name: git diff --check (sin conflictos de espacio en blanco)
         working-directory: .
         run: git diff --check
@@ -66,6 +76,14 @@ jobs:
       - name: Pruebas unitarias de la cadena post-aprobación (unittest)
         working-directory: .claude/skills/legalmente-legal-verification/scripts
         run: python3 -m unittest test_validate_publication_chain -v
+
+      - name: Pruebas unitarias del control de confidencialidad (unittest)
+        working-directory: .claude/skills/legalmente-legal-verification/scripts
+        run: python3 -m unittest test_confidentiality_rules -v
+
+      - name: Pruebas unitarias de la procedencia del contenido (unittest)
+        working-directory: scripts
+        run: python3 -m unittest test_validate_content_provenance -v
 
       - name: Fixtures positivos deben validar (exit 0)
         run: |
@@ -167,3 +185,7 @@ jobs:
             fi
           done
           exit $fail
+
+      - name: Todo el contenido debe declarar procedencia verificable
+        working-directory: .
+        run: python3 scripts/validate-content-provenance.py

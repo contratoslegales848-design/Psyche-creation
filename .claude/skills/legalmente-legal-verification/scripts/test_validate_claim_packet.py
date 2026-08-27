@@ -310,7 +310,16 @@ class TestGateYHash(unittest.TestCase):
         self.assertTrue(errors)
 
     def test_confidentiality_review_rechazada_cierra_el_gate(self):
-        c = approved_claim(confidentiality_review=base_review(required=True, status="RECHAZADO"))
+        # Un bloqueo por confidencialidad es una decisión con responsable: exige
+        # revisor y motivo, igual que una aprobación.
+        bloqueo = base_review(required=True, status="RECHAZADO")
+        bloqueo["revisor"] = REVISOR_FICTICIO
+        bloqueo["fecha"] = "2026-08-27"
+        bloqueo["observaciones"] = (
+            "Bloqueado: el planteamiento se apoya en un supuesto reconocible y no "
+            "puede anonimizarse sin perder la afirmación."
+        )
+        c = approved_claim(confidentiality_review=bloqueo)
         c["gate_arte"] = "ABIERTO"
         errors, _, _, gate = vcp.validate_claim(c, "c")
         self.assertEqual(gate, "CERRADO")

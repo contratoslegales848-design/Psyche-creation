@@ -44,6 +44,13 @@ from datetime import date
 from pathlib import Path
 from urllib.parse import urlparse
 
+# Reglas deterministas de confidencialidad. Viven en su propio módulo para poder
+# revisarse, probarse y revertirse por separado; se importan por ruta calculada
+# desde __file__ para que funcione tanto ejecutando este script directamente como
+# cargándolo con importlib desde otro (el nombre con guiones no es importable).
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import confidentiality_rules  # noqa: E402
+
 SCHEMA_VERSION = "4.0"
 
 # ---------------------------------------------------------------------------
@@ -822,6 +829,13 @@ def validate_claim(claim, path):
     errors.extend(validate_revision_humana(claim.get("revision_humana"), f"{path}.revision_humana"))
     errors.extend(validate_review_object(claim.get("platform_review"), path, "platform_review"))
     errors.extend(validate_review_object(claim.get("confidentiality_review"), path, "confidentiality_review"))
+
+    # Control determinista de confidencialidad: si el texto del claim dispara
+    # indicadores de contenido identificable, la revisión deja de ser opcional.
+    # Invierte la carga de la prueba — antes bastaba con declarar que no aplicaba.
+    conf_errors, conf_warnings = confidentiality_rules.confidentiality_errors(claim, path)
+    errors.extend(conf_errors)
+    warnings.extend(conf_warnings)
 
     # --- reformulacion_propuesta ---
     reform = claim.get("reformulacion_propuesta")
