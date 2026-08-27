@@ -65,7 +65,7 @@
           "tipo_fuente": "NORMA_OFICIAL",
           "titulo": "Fuente sintética Argentina — consultada directamente pero sin registro oficial (Nivel 2)",
           "organismo_autor": "InfoLEG",
-          "url": "https://www.argentina.gob.ar/normativa/x",
+          "url": "https://www.mininterior.gob.ar/normativa/x",
           "identificador_bibliografico": null,
           "fecha_consulta": "2026-08-25",
           "localizador": "art. sintético 3",
@@ -76,7 +76,7 @@
             "vigencia_comprobada": true,
             "fecha_comprobacion": "2026-08-25",
             "metodo_o_evidencia": "Fixture negativo — no es una verificación jurídica real.",
-            "observaciones": "argentina.gob.ar NO tiene entrada propia en el registro oficial cerrado — 'registro_oficial_id' se deja intencionalmente en null. Esta fuente NUNCA debe poder alcanzar Nivel 1 pese a sus tres booleanos en true."
+            "observaciones": "mininterior.gob.ar NO tiene entrada propia en el registro oficial cerrado — 'registro_oficial_id' se deja intencionalmente en null. Esta fuente NUNCA debe poder alcanzar Nivel 1 pese a sus tres booleanos en true. (Antes usaba argentina.gob.ar como ejemplo de hostname no registrado; dejó de serlo tras el alta legítima de 'argentina-gob-ar-normativa' en official-source-registry.json, así que este fixture usa un hostname distinto, aún genuinamente sin registro, para seguir probando cobertura jurisdiccional incompleta y no ausencia de registro en un hostname ya conocido.)"
           },
           "registro_oficial_id": null
         }

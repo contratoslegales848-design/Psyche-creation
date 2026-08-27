@@ -488,7 +488,7 @@
           "id": "SRC-P03-AR-CP-01",
           "tipo_fuente": "NORMA_OFICIAL",
           "titulo": "Código Penal argentino, arts. 109, 110 (reformados por Ley 26.551) — exclusión de asuntos de interés público",
-          "organismo_autor": "InfoLEG",
+          "organismo_autor": "Argentina.gob.ar — Normativa / Presidencia de la Nación",
           "url": "https://www.argentina.gob.ar/normativa/nacional/ley-11179-16546/actualizacion",
           "identificador_bibliografico": null,
           "fecha_consulta": "2026-08-25",
@@ -497,14 +497,14 @@
             "Argentina"
           ],
           "verificacion_fuente": {
-            "origen_oficial_confirmado": false,
-            "texto_exacto_consultado": false,
-            "vigencia_comprobada": false,
-            "fecha_comprobacion": null,
-            "metodo_o_evidencia": null,
-            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Corrección jurídica v1: URL actualizada a la versión oficial consolidada del Código Penal argentino en argentina.gob.ar. Ese hostname no tiene entrada propia en el registro oficial cerrado (distinto de infoleg.gob.ar/servicios.infoleg.gob.ar, que sí la tiene) — registro_oficial_id se deja en null en vez de forzar la entrada 'infoleg-gob-ar', que correspondía al hostname anterior. Techo Nivel 2 hasta que se confirme y registre argentina.gob.ar, o se vuelva a citar vía infoleg.gob.ar."
+            "origen_oficial_confirmado": true,
+            "texto_exacto_consultado": true,
+            "vigencia_comprobada": true,
+            "fecha_comprobacion": "2026-08-27",
+            "metodo_o_evidencia": "Verificación externa independiente proporcionada por Codex: consulta directa de la URL contra el localizador declarado de esta fuente (ver observaciones para el detalle completo).",
+            "observaciones": "Verificación externa independiente proporcionada por Codex (2026-08-27): URL https://www.argentina.gob.ar/normativa/nacional/ley-11179-16546/actualizacion confirmada como el texto actualizado del Código Penal argentino (Ley 11.179), con el localizador de esta fuente (arts. 109 y 110) coincidiendo exactamente con lo verificado por Codex. Esta verificación cubre ÚNICAMENTE los arts. 109-110 del Código Penal — NO constituye ni implica verificación de los precedentes citados en el mismo claim (Fallos 331:1530 'Patitó' y Fallos 308:789, doctrina Campillay), que siguen sin confirmar y mantienen sus advertencias existentes en texto_exacto y notas. Este agente no abrió la URL en esta sesión (EGRESS_BLOCKED confirmado) — la verificación es externa e independiente, no autoconfirmación de ningún modelo de esta sesión. registro_oficial_id='argentina-gob-ar-normativa' (official-source-registry.json). Esta migración NO cambia estado, confianza, jurisdicción ni revision_humana del claim — no eleva ni aprueba nada."
           },
-          "registro_oficial_id": null
+          "registro_oficial_id": "argentina-gob-ar-normativa"
         },
         {
           "id": "SRC-P03-AR-LEY-01",
