@@ -83,7 +83,17 @@
       "jurisdicciones": ["México"],
       "tipos_fuente_permitidos": ["AUTORIDAD_PUBLICA_OFICIAL"],
       "ambito": "NACIONAL",
-      "_nota": "Entrada GENÉRICA de respaldo para cualquier subdominio *.gob.mx sin entrada propia (p. ej. sat.gob.mx). Deliberadamente conservadora: solo AUTORIDAD_PUBLICA_OFICIAL, nunca NORMA_OFICIAL ni JURISPRUDENCIA_OFICIAL, porque un subdominio genérico de gob.mx no es por sí mismo el Diario Oficial ni la SCJN. Un hostname más específico (dof.gob.mx, scjn.gob.mx, diputados.gob.mx, senado.gob.mx) siempre gana sobre esta entrada genérica."
+      "_nota": "Entrada GENÉRICA de respaldo para cualquier subdominio *.gob.mx sin entrada propia (p. ej. sat.gob.mx). Deliberadamente conservadora: solo AUTORIDAD_PUBLICA_OFICIAL, nunca NORMA_OFICIAL ni JURISPRUDENCIA_OFICIAL, porque un subdominio genérico de gob.mx no es por sí mismo el Diario Oficial ni la SCJN. Un hostname más específico (dof.gob.mx, scjn.gob.mx, diputados.gob.mx, senado.gob.mx, congresoqroo.gob.mx) siempre gana sobre esta entrada genérica."
+    },
+    {
+      "id": "congresoqroo-gob-mx",
+      "hostnames": ["congresoqroo.gob.mx"],
+      "organismo_canonico": "H. Congreso del Estado de Quintana Roo",
+      "organismo_aliases": [],
+      "jurisdicciones": ["México"],
+      "tipos_fuente_permitidos": ["NORMA_OFICIAL"],
+      "ambito": "ESTATAL",
+      "_nota": "Fuente legislativa oficial ESTATAL: el poder legislativo del Estado de Quintana Roo, que publica el texto consolidado de sus propios códigos y leyes. Aplicable EXCLUSIVAMENTE a normas del Estado de Quintana Roo — NO constituye autoridad federal mexicana, y una regla estatal que se apoye en esta entrada NUNCA puede presentarse como regla nacional de México ni panhispánica (falsa universalización; ver references/jurisdiction-policy.md). LÍMITE CONOCIDO DEL SCHEMA: el campo 'ambito' es documental — el validador NO lo lee ni distingue hoy autoridad estatal de federal; ambas se declaran como jurisdicción 'México' porque el registro no modela subdivisiones. Esa distinción queda a cargo de la revisión humana y del texto del claim, no del validador. Antes de esta entrada, congresoqroo.gob.mx resolvía por subdominio a la entrada genérica 'gob-mx-generico', que solo permite AUTORIDAD_PUBLICA_OFICIAL: eso obligaba a declarar el Código Civil estatal como si fuera un portal administrativo, no como la norma que es. El hostname declarado cubre, por límite real de subdominio (nunca por subcadena), los tres hostnames oficiales verificados: congresoqroo.gob.mx, www.congresoqroo.gob.mx y documentos.congresoqroo.gob.mx — no se enumeran aparte porque match_registry_entry_for_url ya resuelve subdominios y gana la entrada más específica sobre 'gob.mx'. Registrar el hostname NO sustituye verificar, fuente por fuente, el documento concreto, su vigencia y su localizador: esta entrada solo habilita que una fuente PUEDA alcanzar Nivel 1 si además declara URL real, organismo exacto, tipo permitido y los tres booleanos de 'verificacion_fuente' con base propia. Alta basada en verificación externa independiente proporcionada por Codex el 2026-08-27 (no confirmada de forma independiente por este agente — EGRESS_BLOCKED)."
     },
     {
       "id": "infoleg-gob-ar",
