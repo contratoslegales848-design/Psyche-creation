@@ -85,6 +85,14 @@ jobs:
         working-directory: scripts
         run: python3 -m unittest test_validate_content_provenance -v
 
+      - name: Pruebas unitarias de la vigencia de fuentes (unittest)
+        working-directory: .claude/skills/legalmente-legal-verification/scripts
+        run: python3 -m unittest test_check_source_freshness -v
+
+      - name: Pruebas unitarias del inventario materializado (unittest)
+        working-directory: scripts
+        run: python3 -m unittest test_inventory -v
+
       - name: Fixtures positivos deben validar (exit 0)
         run: |
           set -e
@@ -189,3 +197,21 @@ jobs:
       - name: Todo el contenido debe declarar procedencia verificable
         working-directory: .
         run: python3 scripts/validate-content-provenance.py
+
+      - name: Coherencia del libro mayor de vigencia de fuentes
+        run: python3 scripts/check-source-freshness.py --solo-libro-mayor
+
+      - name: Ninguna fuente desactualizada sostiene un claim aprobado (piloto, reloj real)
+        run: python3 scripts/check-source-freshness.py pilot/claim-packets/*.json
+
+      - name: Vigencia de las fixtures con gate abierto (fecha fijada)
+        # Las fixtures se comprueban con una fecha fija: su plazo de revisión es
+        # real y vencerá algún día, y una fixture no debe poner la CI en rojo por
+        # el paso del tiempo. Los paquetes reales sí usan el reloj real, arriba.
+        run: |
+          python3 scripts/check-source-freshness.py --today 2026-08-27 \
+            publication/fixtures/claim-packet-aprobado.json
+
+      - name: El inventario materializado está al día y sin duplicados
+        working-directory: .
+        run: python3 scripts/inventory.py check

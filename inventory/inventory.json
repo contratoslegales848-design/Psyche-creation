@@ -1,0 +1,30 @@
+{
+  "inventory_version": "1.0",
+  "_nota": "ÍNDICE DERIVADO Y REGENERABLE. No es autoridad sobre ningún dato: si discrepa de un artefacto, el artefacto tiene razón. Sin marca de tiempo, a propósito: mismos artefactos, mismo byte, para que `check` pueda detectar que está obsoleto.",
+  "items": [
+    {
+      "content_id": "LM-EJEMPLO-TECNICO-001",
+      "composition_id": "ejemplo",
+      "materia": null,
+      "submateria": null,
+      "concepto": null,
+      "situacion_humana": null,
+      "content_type": null,
+      "jurisdiction_layer": "NO_APLICA",
+      "territory": [],
+      "modo_procedencia": "EJEMPLO_TECNICO",
+      "publicable": false,
+      "source_state": "NO_APLICA",
+      "verification_state": "NO_APLICA",
+      "production_state": "EJEMPLO_TECNICO",
+      "publication_state": "SIN_DECISION",
+      "publication_url": null,
+      "measurement_due_at": null,
+      "metrics_state": "NO_APLICA",
+      "fingerprint": "el derecho no favorece a quien duerme sobre sus derechos",
+      "learning_count": 0,
+      "artifact": "content/ejemplo.json"
+    }
+  ],
+  "duplicates": []
+}
