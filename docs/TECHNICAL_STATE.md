@@ -22,7 +22,10 @@ real y una prueba que pasa.
 | Confidencialidad | 🟡 AMARILLO (era rojo) | Control determinista fail-closed implementado; queda el contenido identificable sin marcadores léxicos (red team B5). |
 | Pipeline de video (Remotion) | 🟢 VERDE (nuevo) | Renderiza, y ya no puede renderizar contenido publicable sin origen verificable. |
 | Anti-duplicados | 🟡 AMARILLO (nuevo) | Controles literales implementados; la paráfrasis sigue sin detectarse. |
-| Motor de generación visual | 🟡 AMARILLO (nuevo) | Arquitectura completa y probada (`visual/`, 49 pruebas, proveedor falso). Ningún adapter real implementado, y un conflicto de marca sin resolver bloquea fail-closed. |
+| Motor de generación visual | 🟢 VERDE (para su alcance) | `visual/`, 124 pruebas. Gate fail-closed, adapter canónico, familias, memoria anti-repetición, compilador explicable, dry-run, lotes, reintento selectivo, regeneración, registro. Decisión de marca aplicada (ADR 0002). |
+| Composición tipográfica / marca | ⚫ CONTRACT_ONLY | `TypographyPlan` y `BrandCompositionPlan` existen y se prueban; el rasterizado NO — no hay Pillow en el repo. |
+| Adapters de proveedor reales | ⚫ NO CONSTRUIDOS (por diseño) | Solo `FakeImageProvider`. Sin credenciales, sin red, sin créditos. |
+| Contrato cross-repo | 🟢 VERDE (lado Psyche) | `contract/`, Canonical Envelope v1, 8 fixtures, 12 contract tests. El lado consumidor (web) está pendiente. |
 | Motor de producción masiva | ⚫ NO CONSTRUIDO | Contrato técnico definido (`docs/contrato-motor-masivo.md`); el motor, deliberadamente, no. |
 | Documentación vs. realidad | 🟡 AMARILLO | Dos derivas detectadas (ver §5). |
 | `legalmente-web` | 🟡 AMARILLO | Prototipo honesto, pero el repositorio es **público** y `CLAUDE.md §8` lo declara privado. |
@@ -50,7 +53,7 @@ real y una prueba que pasa.
 - `fixtures/` — 10 positivas, 46 negativas.
 - `publication/fixtures/` — 2 cadenas válidas, 14 inválidas, 1 claim packet sintético.
 
-**Pruebas: 324, todas en verde.**
+**Pruebas: 408, todas en verde.**
 | Suite | Pruebas |
 |---|---|
 | `test_validate_claim_packet` | 147 |
@@ -58,7 +61,8 @@ real y una prueba que pasa.
 | `test_validate_publication_chain` | 41 |
 | `test_confidentiality_rules` | 20 |
 | `test_validate_content_provenance` | 30 |
-| `visual/test_visual_pipeline` | 49 |
+| `visual/test_visual_pipeline` + `test_visual_advanced` | 124 |
+| `contract/test_canonical_envelope` | 12 |
 
 ### 2.2 Los cuatro estados no equivalentes
 
@@ -152,8 +156,9 @@ bundle de Remotion falla con exit 1.
 
 ## 5. Derivas entre documentación y realidad
 
-1. **`CLAUDE.md §8` dice que `legalmente-web` es privado. Es público.** Verificado
-   directamente contra el repositorio. Es una afirmación de seguridad incorrecta en
+1. **`CLAUDE.md §8` dice que `legalmente-web` es privado. Es público.** Reverificado
+   el 2026-08-31 por clonado anónimo (`git ls-remote` y `git clone` sin credenciales
+   funcionan; HEAD `23a9ce0`). Sigue sin corregirse. Es una afirmación de seguridad incorrecta en
    el documento operativo, y conviene corregirla o cambiar la visibilidad — pero
    ninguna de las dos cosas la decide una sesión técnica.
 2. **Nombre de paso de CI obsoleto** — decía "mantener el gate cerrado" cuando el
@@ -193,10 +198,11 @@ decisión del fundador, no técnica.
 **P1 — antes de escalar el volumen**
 3. Decidir sobre la Pieza 1: fusionar o no la aprobación registrada.
 4. Corregir la deriva de `legalmente-web` en `CLAUDE.md §8`.
-5. **Resolver el conflicto de marca**: ¿escribe el generador la palabra "LegalMente"
-   dentro de la imagen (`SI`) o se reserva la superficie vacía y se monta después
-   (`NO`)? Hoy vale `NO_RESUELTO` en `visual/policy/legalmente-visual-policy-v1.json`
-   y bloquea cualquier brief que lo pida. Es una decisión de una línea.
+5. ~~Resolver el conflicto de marca.~~ **RESUELTO** el 2026-08-31: `NO`. Ver
+   `docs/adr/0002-marca-composicion-determinista.md`. Aplicado en política 1.1.
+6. **Cerrar los PR #26 y #28 de `legalmente-web` como SUPERSEDED.** Verificado que
+   el HEAD de #25 (`48d846f`) ya contiene íntegramente el hardening de #28.
+   Requiere permisos de escritura que las sesiones de este repo no tienen.
 
 **P2 — cuando el piloto esté medido**
 5. Detección de deriva de fuentes oficiales, fuera del validador (ver ADR 0001).
