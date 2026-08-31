@@ -26,50 +26,53 @@ Estado verificado el 2026-08-31. Ejecutado, no estimado.
 | Consumidor de `legalmente-web` | PATCH_READY (**BLOCKED_BY_REMOTE_WRITE**) |
 | Publicación | OUT_OF_SCOPE (prohibida por diseño) |
 
-## Contenido real: ninguna pieza es elegible hoy
+## Contenido real — matriz de gates (2026-08-31, tras fusionar e7bb82f)
 
-Esto es un hallazgo de producto, no un fallo técnico. El pipeline **bloquea
-correctamente** y lo demuestra.
+| CONTENT_ID | Canon | Sources | Territory | Art Gate | Visual |
+|---|---|---|---|---|---|
+| *(sin minar)* `PIEZA-01-REALES` | APTO_PARA_NARRATIVA | verificadas (4 países) | CAPA_B_VARIABLE | **ABIERTO** | PENDIENTE_HANDOFF |
+| *(sin minar)* `PIEZA-02-LABORAL` | REQUIERE_INVESTIGACION | — | — | CERRADO | NO |
+| *(sin minar)* `PIEZA-03-HONOR` | REQUIERE_INVESTIGACION | — | — | CERRADO | NO |
+| `LM-EJEMPLO-TECNICO-001` | — | — | NO_APLICA | — | material de prueba, no publicable |
 
-| PIECE_ID | Canon | Gate de arte | Visual |
-|---|---|---|---|
-| `PIEZA-01-REALES` | APTO_PARA_NARRATIVA | **CERRADO** | NO |
-| `PIEZA-02-LABORAL` | REQUIERE_INVESTIGACION | CERRADO | NO |
-| `PIEZA-03-HONOR` | REQUIERE_INVESTIGACION | CERRADO | NO |
+**PIEZA-01-REALES pasó de `gate=CERRADO` a `gate=ABIERTO`** el 2026-08-31, al
+fusionar `e7bb82f` (aprobación real de Raymundo Acevedo). Verificado con
+`python3 cli.py gates`. Ningún CONTENT_ID tiene aún handoff minado — por eso
+`VISUAL_READY` sigue en `PENDIENTE_HANDOFF`, no en `SI`: el gate de arte y la
+autorización de producción son dos actos distintos y deliberadamente
+separados.
 
-Artefactos en `content/`: **uno**, `LM-EJEMPLO-TECNICO-001`, en modo
-`EJEMPLO_TECNICO` y `publicable: false`. `ProductionHandoff` reales: **ninguno**.
+## Prueba de producción real ejecutada
 
-## El candidato más cercano y qué lo bloquea exactamente
+Con el gate ya abierto, se ejecutó el pipeline completo sobre el contenido
+real de PIEZA-01 (texto exacto aprobado por Raymundo Acevedo, claim
+`pieza-01-claim-1`, hash `4813708c...`):
 
-`PIEZA-01-REALES` **ya tiene aprobación humana real**, firmada por Raymundo
-Acevedo, con `gate_arte: ABIERTO` en los tres claims. Vive en la rama
-**`claude/legalmente-pieza-01-aprobacion-humana-final-v1` (`e7bb82f`), sin fusionar.**
+1. **Dry-run real** contra `pipeline.generate_visual` con `handoff=None`:
+   `GATE_CERRADO`, 0 llamadas al proveedor. Correcto — no existe
+   `ProductionHandoff`, y esta sesión tiene prohibido fabricar uno.
+2. **Prueba de capa de composición** (código real: `composition.py` +
+   `compositor.py`, sin pasar por el gate de `ProductionHandoff`): el texto
+   exacto real se renderizó verbatim, la marca "LegalMente" se compuso en la
+   superficie reservada, el raw quedó intacto (hash idéntico antes/después),
+   QA de composición sin problemas. Verificado visualmente. **Sin
+   `GenerationReceipt`, sin entrada en `AssetRegistry`** — deliberadamente, para
+   no implicar autorización de producción.
+3. **Hallazgo de red-team real**: un intento de sustituir el hash aprobado por
+   uno forjado NO se rechazaba (`gates.py` sólo comprobaba la forma). Corregido
+   en el mismo pase: `can_enter_visual_generation()` ahora verifica, cuando se
+   le aporta el claim packet real, que el hash coincida con
+   `revision_humana.contenido_hash_sha256`. 6 pruebas de regresión.
 
-El mensaje de ese commit dice que quedó *"BLOQUEADO por tests stale"*. **Esos
-tests ya se corrigieron** y están en `main` (ver `TECHNICAL_STATE.md` §5.3).
+## El único paso que falta
 
-Verificado ahora contra el validador canónico de `main`:
+**Emitir un `ProductionHandoff` para PIEZA-01-REALES.** Es un acto de
+autorización de producción — no jurídica, no de publicación — que ninguna
+sesión debe fabricar. Ver el paquete de decisión en
+`docs/production-handoff-decision-pieza-01.md`.
 
-```
-$ python3 scripts/validate-claim-packet.py pieza-01-aprobada.json
-[GATE ABIERTO] estado_agregado=APTO_PARA_NARRATIVA
-exit 0
-```
-
-**El validador vigente acepta el paquete aprobado y abre el gate.** El bloqueo
-original ya no existe.
-
-### Los tres pasos que faltan, en orden
-
-1. **Fusionar `e7bb82f`.** Decisión humana. Sin ella, en `main` el gate sigue
-   cerrado y toda la cadena posterior está correctamente bloqueada.
-2. **Emitir un `ProductionHandoff`** para `PIEZA-01-REALES`. No existe ninguno.
-   Es un acto de autorización de producción; ninguna sesión debe fabricarlo.
-3. **Crear el artefacto `content/*.json`** con `procedencia.modo = GOBERNADO`,
-   `piece_id`, `handoff_id` y los `approved_claim_hash` de los claims aprobados.
-
-Sólo entonces `visual dry-run LM-PIEZA-01-...` recorrerá la cadena completa.
+Sólo entonces existirá un CONTENT_ID real y `visual dry-run CONTENT_ID`
+recorrerá la cadena completa hasta un `GenerationReceipt` real.
 
 ## Comandos
 
