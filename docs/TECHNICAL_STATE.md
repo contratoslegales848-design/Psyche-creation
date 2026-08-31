@@ -22,6 +22,10 @@ real y una prueba que pasa.
 | Confidencialidad | 🟡 AMARILLO (era rojo) | Control determinista fail-closed implementado; queda el contenido identificable sin marcadores léxicos (red team B5). |
 | Pipeline de video (Remotion) | 🟢 VERDE (nuevo) | Renderiza, y ya no puede renderizar contenido publicable sin origen verificable. |
 | Anti-duplicados | 🟡 AMARILLO (nuevo) | Controles literales implementados; la paráfrasis sigue sin detectarse. |
+| Motor de generación visual | 🟢 VERDE (para su alcance) | `visual/`, 124 pruebas. Gate fail-closed, adapter canónico, familias, memoria anti-repetición, compilador explicable, dry-run, lotes, reintento selectivo, regeneración, registro. Decisión de marca aplicada (ADR 0002). |
+| Composición tipográfica / marca | 🟢 VERDE (nuevo) | `visual/compositor.py`: rasterizado real con Pillow. Métrica tipográfica real, área segura, `exact_copy` inmutable (desborda antes que mutar), marca solo sobre superficie reservada declarada y plana. 33 pruebas. |
+| Adapter de proveedor real | 🟡 AMARILLO (nuevo) | `providers/http_provider.py`: adapter HTTP real con transporte inyectable, 23 pruebas, cero llamadas externas. Sin credenciales configuradas en el workspace: no se ha ejecutado contra ningún proveedor. |
+| Contrato cross-repo | 🟢 VERDE (ambos lados) | Psyche: `contract/`, Canonical Envelope v1, 8 fixtures, 12 tests. Web: consumidor estricto implementado y probado **localmente** (18 tests), entregado como serie de patches verificada en `handoff/legalmente-web/`. Falta empujarlo: escritura remota bloqueada. |
 | Motor de producción masiva | ⚫ NO CONSTRUIDO | Contrato técnico definido (`docs/contrato-motor-masivo.md`); el motor, deliberadamente, no. |
 | Documentación vs. realidad | 🟡 AMARILLO | Dos derivas detectadas (ver §5). |
 | `legalmente-web` | 🟡 AMARILLO | Prototipo honesto, pero el repositorio es **público** y `CLAUDE.md §8` lo declara privado. |
@@ -49,7 +53,7 @@ real y una prueba que pasa.
 - `fixtures/` — 10 positivas, 46 negativas.
 - `publication/fixtures/` — 2 cadenas válidas, 14 inválidas, 1 claim packet sintético.
 
-**Pruebas: 275, todas en verde.**
+**Pruebas: 499, todas en verde** (Psyche). Más 23 del consumidor de web, locales.
 | Suite | Pruebas |
 |---|---|
 | `test_validate_claim_packet` | 147 |
@@ -57,6 +61,8 @@ real y una prueba que pasa.
 | `test_validate_publication_chain` | 41 |
 | `test_confidentiality_rules` | 20 |
 | `test_validate_content_provenance` | 30 |
+| `visual/` (5 suites) | 207 |
+| `contract/test_canonical_envelope` | 12 |
 
 ### 2.2 Los cuatro estados no equivalentes
 
@@ -150,8 +156,9 @@ bundle de Remotion falla con exit 1.
 
 ## 5. Derivas entre documentación y realidad
 
-1. **`CLAUDE.md §8` dice que `legalmente-web` es privado. Es público.** Verificado
-   directamente contra el repositorio. Es una afirmación de seguridad incorrecta en
+1. **`CLAUDE.md §8` dice que `legalmente-web` es privado. Es público.** Reverificado
+   el 2026-08-31 por clonado anónimo (`git ls-remote` y `git clone` sin credenciales
+   funcionan; HEAD `23a9ce0`). Sigue sin corregirse. Es una afirmación de seguridad incorrecta en
    el documento operativo, y conviene corregirla o cambiar la visibilidad — pero
    ninguna de las dos cosas la decide una sesión técnica.
 2. **Nombre de paso de CI obsoleto** — decía "mantener el gate cerrado" cuando el
@@ -189,8 +196,21 @@ decisión del fundador, no técnica.
 2. ~~Ligar `content/*.json` a un `ProductionHandoff` válido.~~ Implementado.
 
 **P1 — antes de escalar el volumen**
-3. Decidir sobre la Pieza 1: fusionar o no la aprobación registrada.
+3. ~~Decidir sobre la Pieza 1: fusionar o no `e7bb82f`.~~ **FUSIONADA** el
+   2026-08-31 (commit `0f8c697`), autorizada expresamente por el fundador.
+   ~~Emitir `ProductionHandoff` para PIEZA-01.~~ **EMITIDO** el mismo día
+   (`HO-PIEZA-01-REALES-001`), autorizado expresamente. `LM-PIEZA-01-REALES`
+   ahora resuelve `AUTORIZADA` y el pipeline formal produjo un
+   `GenerationReceipt` real (incluida una regeneración con lineage). **Ningún
+   `PublicationDecision` existe**: la publicación sigue sin autorizarse. Ver
+   `docs/production-handoff-decision-pieza-01.md` y
+   `docs/real-generation-readiness.md`.
 4. Corregir la deriva de `legalmente-web` en `CLAUDE.md §8`.
+5. ~~Resolver el conflicto de marca.~~ **RESUELTO** el 2026-08-31: `NO`. Ver
+   `docs/adr/0002-marca-composicion-determinista.md`. Aplicado en política 1.1.
+6. **Cerrar los PR #26 y #28 de `legalmente-web` como SUPERSEDED.** Verificado que
+   el HEAD de #25 (`48d846f`) ya contiene íntegramente el hardening de #28.
+   Requiere permisos de escritura que las sesiones de este repo no tienen.
 
 **P2 — cuando el piloto esté medido**
 5. Detección de deriva de fuentes oficiales, fuera del validador (ver ADR 0001).

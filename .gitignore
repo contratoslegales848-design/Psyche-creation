@@ -14,3 +14,7 @@ venv/
 .env.*
 !.env.example
 *.log
+
+# Raiz de runtime persistente del pipeline visual (receipts/assets/registro).
+# Nunca se comitea: ver visual/runtime_config.py.
+/.runtime/

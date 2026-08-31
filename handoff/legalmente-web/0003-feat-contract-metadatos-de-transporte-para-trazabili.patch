@@ -1,0 +1,306 @@
+From 270e150cc0a3c00571fff269f8b677d718806e2a Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Mon, 31 Aug 2026 11:30:54 +0000
+Subject: [PATCH 3/3] feat(contract): metadatos de transporte para trazabilidad
+ cross-repo
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Portado de la única capacidad genuinamente útil y no duplicada de PR #27
+(`src/lib/operations-engine/contracts.ts`): el envelope transporta ahora
+`source_system`, `source_revision` y `provenance_digest`, de modo que un
+CONTENT_ID se puede correlacionar entre repositorios sin acoplar nada en
+tiempo de ejecución.
+
+Dos diferencias deliberadas frente al adapter de #27, ambas probadas:
+
+1. #27 declaraba `canonicalStatus: z.string().min(1)` y sus propios casos
+   afirmaban que "APPROVED" y "LIVE" eran transportables. Un estado canónico
+   opaco no puede impedir que uno forjado atraviese el adapter. Aquí el estado
+   se valida contra el enum conocido y cualquier valor desconocido —incluidos
+   los que suenan a autoridad— se rechaza.
+
+2. #27 usaba `.strict()` y rechazaba cualquier campo extra. Aquí se elige lo
+   contrario a propósito y se documenta: Psyche puede añadir campos opcionales
+   dentro de v1 sin romper consumidores ya desplegados; un cambio incompatible
+   exige subir `schema_version`, y entonces el consumidor falla cerrado. Las dos
+   mitades de esa política están cubiertas por pruebas.
+
+Un `provenance_digest` malformado se rechaza: aparenta trazabilidad, que es peor
+que no declararla.
+
+23 contract tests (antes 18).
+---
+ src/lib/psyche-contract/contract.test.ts      | 36 +++++++++++++++++++
+ .../authority_escalation_attempt.json         |  3 ++
+ .../fixtures/bad_provenance_digest.json       | 35 ++++++++++++++++++
+ .../fixtures/blocked_claim.json               |  3 ++
+ .../fixtures/missing_provenance.json          |  3 ++
+ .../fixtures/source_pending.json              |  3 ++
+ .../fixtures/unknown_state.json               |  3 ++
+ .../fixtures/unknown_version.json             |  3 ++
+ .../fixtures/unsupported_territory.json       |  3 ++
+ .../psyche-contract/fixtures/valid_ready.json |  3 ++
+ src/lib/psyche-contract/index.ts              | 18 ++++++++++
+ 11 files changed, 113 insertions(+)
+ create mode 100644 src/lib/psyche-contract/fixtures/bad_provenance_digest.json
+
+diff --git a/src/lib/psyche-contract/contract.test.ts b/src/lib/psyche-contract/contract.test.ts
+index edb6c5d..9a93db5 100644
+--- a/src/lib/psyche-contract/contract.test.ts
++++ b/src/lib/psyche-contract/contract.test.ts
+@@ -193,3 +193,39 @@ test("todas las fixtures del snapshot son JSON válido y con versión declarada"
+     assert.ok(typeof f.content_id === "string", `${n} sin content_id`);
+   }
+ });
++
++test("metadatos de transporte se leen y se validan", () => {
++  const env = okEnvelope("valid_ready");
++  assert.equal(env.sourceSystem, "Psyche-creation");
++  assert.match(env.provenanceDigest, /^[0-9a-f]{64}$/);
++  assert.ok(env.sourceRevision.length > 0);
++});
++
++test("digest malformado se rechaza", () => {
++  assert.equal(readCanonicalEnvelope(load("bad_provenance_digest")).ok, false);
++});
++
++test("emisor no autorizado se rechaza", () => {
++  const env = { ...(load("valid_ready") as Record<string, unknown>), source_system: "otro" };
++  assert.equal(readCanonicalEnvelope(env).ok, false);
++});
++
++test("el estado canónico nunca es opaco", () => {
++  // Contraste explícito con el adapter de PR #27, que aceptaba cualquier string
++  // como canonicalStatus — incluidos "APPROVED" y "LIVE".
++  for (const falso of ["APPROVED", "LIVE", "PUBLISHABLE", "SUPER_APTO"]) {
++    const env = { ...(load("valid_ready") as Record<string, unknown>), claim_state: falso };
++    assert.equal(readCanonicalEnvelope(env).ok, false, `${falso} no debe aceptarse`);
++  }
++});
++
++test("tolerancia a campos futuros es una decisión declarada, no un descuido", () => {
++  // PR #27 usaba .strict() y rechazaba cualquier campo extra. Aquí se elige lo
++  // contrario a propósito: Psyche puede añadir campos opcionales en v1 sin
++  // romper a los consumidores desplegados. Un cambio incompatible exige subir
++  // schema_version, y entonces el consumidor falla cerrado.
++  const conExtras = { ...(load("valid_ready") as Record<string, unknown>), campo_v1_futuro: "x" };
++  assert.equal(readCanonicalEnvelope(conExtras).ok, true);
++  const otraVersion = { ...(load("valid_ready") as Record<string, unknown>), schema_version: "2.0" };
++  assert.equal(readCanonicalEnvelope(otraVersion).ok, false);
++});
+diff --git a/src/lib/psyche-contract/fixtures/authority_escalation_attempt.json b/src/lib/psyche-contract/fixtures/authority_escalation_attempt.json
+index 13815af..1090f1b 100644
+--- a/src/lib/psyche-contract/fixtures/authority_escalation_attempt.json
++++ b/src/lib/psyche-contract/fixtures/authority_escalation_attempt.json
+@@ -21,8 +21,11 @@
+       }
+     ]
+   },
++  "provenance_digest": "4d1e0ebdd48915bae9a2e88a1c1dc902593556ab321599474c8a501c9db4019f",
+   "schema_version": "1.0",
++  "source_revision": "9e4bded",
+   "source_state": "VERIFICADA",
++  "source_system": "Psyche-creation",
+   "territories": [
+     "Espana",
+     "Mexico",
+diff --git a/src/lib/psyche-contract/fixtures/bad_provenance_digest.json b/src/lib/psyche-contract/fixtures/bad_provenance_digest.json
+new file mode 100644
+index 0000000..10a707d
+--- /dev/null
++++ b/src/lib/psyche-contract/fixtures/bad_provenance_digest.json
+@@ -0,0 +1,35 @@
++{
++  "art_eligibility": "ELEGIBLE",
++  "claim_state": "APTO_PARA_NARRATIVA",
++  "claims": [
++    {
++      "approved_claim_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
++      "claim_id": "c1",
++      "texto_exacto": "En el comodato se devuelve la misma cosa."
++    }
++  ],
++  "content_id": "LM-FIXTURE-009",
++  "emitted_at": "2026-08-31T00:00:00+00:00",
++  "jurisdiction_layer": "CAPA_A_TRANSVERSAL",
++  "legal_gate_state": "ABIERTO",
++  "provenance": {
++    "sources": [
++      {
++        "id": "f-es",
++        "registro_oficial_id": "boe-es",
++        "url": "https://www.boe.es/buscar/act.php?id=BOE-A-1889-4763"
++      }
++    ]
++  },
++  "provenance_digest": "no-es-un-sha256",
++  "schema_version": "1.0",
++  "source_revision": "9e4bded",
++  "source_state": "VERIFICADA",
++  "source_system": "Psyche-creation",
++  "territories": [
++    "Espana",
++    "Mexico",
++    "Argentina",
++    "Peru"
++  ]
++}
+diff --git a/src/lib/psyche-contract/fixtures/blocked_claim.json b/src/lib/psyche-contract/fixtures/blocked_claim.json
+index 02175b8..7c3c404 100644
+--- a/src/lib/psyche-contract/fixtures/blocked_claim.json
++++ b/src/lib/psyche-contract/fixtures/blocked_claim.json
+@@ -21,8 +21,11 @@
+       }
+     ]
+   },
++  "provenance_digest": "4d1e0ebdd48915bae9a2e88a1c1dc902593556ab321599474c8a501c9db4019f",
+   "schema_version": "1.0",
++  "source_revision": "9e4bded",
+   "source_state": "VERIFICADA",
++  "source_system": "Psyche-creation",
+   "territories": [
+     "Espana",
+     "Mexico",
+diff --git a/src/lib/psyche-contract/fixtures/missing_provenance.json b/src/lib/psyche-contract/fixtures/missing_provenance.json
+index dae337e..fee0f44 100644
+--- a/src/lib/psyche-contract/fixtures/missing_provenance.json
++++ b/src/lib/psyche-contract/fixtures/missing_provenance.json
+@@ -13,8 +13,11 @@
+   "jurisdiction_layer": "CAPA_A_TRANSVERSAL",
+   "legal_gate_state": "ABIERTO",
+   "provenance": {},
++  "provenance_digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "schema_version": "1.0",
++  "source_revision": "9e4bded",
+   "source_state": "VERIFICADA",
++  "source_system": "Psyche-creation",
+   "territories": [
+     "Espana",
+     "Mexico",
+diff --git a/src/lib/psyche-contract/fixtures/source_pending.json b/src/lib/psyche-contract/fixtures/source_pending.json
+index dec4290..fe88f40 100644
+--- a/src/lib/psyche-contract/fixtures/source_pending.json
++++ b/src/lib/psyche-contract/fixtures/source_pending.json
+@@ -21,8 +21,11 @@
+       }
+     ]
+   },
++  "provenance_digest": "4d1e0ebdd48915bae9a2e88a1c1dc902593556ab321599474c8a501c9db4019f",
+   "schema_version": "1.0",
++  "source_revision": "9e4bded",
+   "source_state": "PENDIENTE",
++  "source_system": "Psyche-creation",
+   "territories": [
+     "Espana",
+     "Mexico",
+diff --git a/src/lib/psyche-contract/fixtures/unknown_state.json b/src/lib/psyche-contract/fixtures/unknown_state.json
+index c50002c..5f5274d 100644
+--- a/src/lib/psyche-contract/fixtures/unknown_state.json
++++ b/src/lib/psyche-contract/fixtures/unknown_state.json
+@@ -21,8 +21,11 @@
+       }
+     ]
+   },
++  "provenance_digest": "4d1e0ebdd48915bae9a2e88a1c1dc902593556ab321599474c8a501c9db4019f",
+   "schema_version": "1.0",
++  "source_revision": "9e4bded",
+   "source_state": "VERIFICADA",
++  "source_system": "Psyche-creation",
+   "territories": [
+     "Espana",
+     "Mexico",
+diff --git a/src/lib/psyche-contract/fixtures/unknown_version.json b/src/lib/psyche-contract/fixtures/unknown_version.json
+index 7643226..af08abd 100644
+--- a/src/lib/psyche-contract/fixtures/unknown_version.json
++++ b/src/lib/psyche-contract/fixtures/unknown_version.json
+@@ -21,8 +21,11 @@
+       }
+     ]
+   },
++  "provenance_digest": "4d1e0ebdd48915bae9a2e88a1c1dc902593556ab321599474c8a501c9db4019f",
+   "schema_version": "99.0",
++  "source_revision": "9e4bded",
+   "source_state": "VERIFICADA",
++  "source_system": "Psyche-creation",
+   "territories": [
+     "Espana",
+     "Mexico",
+diff --git a/src/lib/psyche-contract/fixtures/unsupported_territory.json b/src/lib/psyche-contract/fixtures/unsupported_territory.json
+index 9a771cd..dd18f79 100644
+--- a/src/lib/psyche-contract/fixtures/unsupported_territory.json
++++ b/src/lib/psyche-contract/fixtures/unsupported_territory.json
+@@ -21,7 +21,10 @@
+       }
+     ]
+   },
++  "provenance_digest": "4d1e0ebdd48915bae9a2e88a1c1dc902593556ab321599474c8a501c9db4019f",
+   "schema_version": "1.0",
++  "source_revision": "9e4bded",
+   "source_state": "VERIFICADA",
++  "source_system": "Psyche-creation",
+   "territories": []
+ }
+diff --git a/src/lib/psyche-contract/fixtures/valid_ready.json b/src/lib/psyche-contract/fixtures/valid_ready.json
+index ab50a78..d83e45c 100644
+--- a/src/lib/psyche-contract/fixtures/valid_ready.json
++++ b/src/lib/psyche-contract/fixtures/valid_ready.json
+@@ -21,8 +21,11 @@
+       }
+     ]
+   },
++  "provenance_digest": "4d1e0ebdd48915bae9a2e88a1c1dc902593556ab321599474c8a501c9db4019f",
+   "schema_version": "1.0",
++  "source_revision": "9e4bded",
+   "source_state": "VERIFICADA",
++  "source_system": "Psyche-creation",
+   "territories": [
+     "Espana",
+     "Mexico",
+diff --git a/src/lib/psyche-contract/index.ts b/src/lib/psyche-contract/index.ts
+index 7fd63da..797f902 100644
+--- a/src/lib/psyche-contract/index.ts
++++ b/src/lib/psyche-contract/index.ts
+@@ -55,6 +55,10 @@ export type CanonicalEnvelope = {
+   readonly artEligibility: ArtEligibility;
+   readonly provenanceSourceIds: readonly string[];
+   readonly emittedAt: string;
++  /** Metadatos de transporte: permiten correlacionar un CONTENT_ID entre repos. */
++  readonly sourceSystem: string;
++  readonly sourceRevision: string;
++  readonly provenanceDigest: string;
+ };
+ 
+ export type ContractIssue = { readonly path: string; readonly message: string };
+@@ -132,6 +136,17 @@ export function readCanonicalEnvelope(input: unknown): ContractResult {
+     });
+   }
+ 
++  // Transporte. Un digest malformado aparenta trazabilidad: peor que ausente.
++  const digest = input.provenance_digest;
++  if (digest !== undefined && !/^[0-9a-fA-F]{64}$/.test(String(digest))) {
++    issues.push(issue("envelope.provenance_digest", "se espera sha256 hex de 64 caracteres"));
++  }
++  if (input.source_system !== undefined && input.source_system !== "Psyche-creation") {
++    issues.push(
++      issue("envelope.source_system", "el único emisor autorizado del canon es Psyche-creation"),
++    );
++  }
++
+   const rawClaims = input.claims;
+   const claims: CanonicalClaimRef[] = [];
+   if (!Array.isArray(rawClaims) || rawClaims.length === 0) {
+@@ -186,6 +201,9 @@ export function readCanonicalEnvelope(input: unknown): ContractResult {
+       artEligibility: input.art_eligibility as ArtEligibility,
+       provenanceSourceIds: sourceIds,
+       emittedAt: nonEmpty(input.emitted_at) ? input.emitted_at : "",
++      sourceSystem: nonEmpty(input.source_system) ? input.source_system : "",
++      sourceRevision: nonEmpty(input.source_revision) ? input.source_revision : "",
++      provenanceDigest: nonEmpty(input.provenance_digest) ? input.provenance_digest : "",
+     },
+   };
+ }
+-- 
+2.43.0
+
