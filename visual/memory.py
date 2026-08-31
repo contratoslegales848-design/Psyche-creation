@@ -21,6 +21,12 @@ PESO_SUJETO = 30
 PESO_CAMARA = 15
 PESO_METAFORA = 15
 PESO_OBJETO = 10
+# Eje de contenido: la COMBINACION materia+concepto, nunca cada uno por
+# separado. Reusar "civil" en otra pieza, o "posesion" en otra materia, no es
+# repeticion — es exactamente lo que permite seguir explorando el mismo
+# universo de materias. Repetir la MISMA pareja (materia, concepto) si lo es:
+# ese patron ya se agoto visualmente la ultima vez que se combino.
+PESO_MATERIA_CONCEPTO = 20
 
 UMBRAL_ALTO = 60
 UMBRAL_MEDIO = 30
@@ -57,9 +63,18 @@ class VisualMemoryEntry:
     human_presence: str = ""
     architecture: str = ""
     brand_surface: str = ""
+    materia: str = ""       # taxonomia.materia del content/*.json real, nunca inventada aqui
+    concepto: str = ""      # taxonomia.concepto del content/*.json real, nunca inventada aqui
 
     def to_dict(self):
         return asdict(self)
+
+    @property
+    def combinacion_materia_concepto(self):
+        """Clave normalizada de la pareja. Vacia si falta cualquiera de los dos:
+        una pieza sin taxonomia declarada no participa de este eje."""
+        m, c = normaliza(self.materia), normaliza(self.concepto)
+        return f"{m}||{c}" if m and c else ""
 
 
 @dataclass
@@ -150,6 +165,17 @@ class VisualMemory:
             score += min(PESO_METAFORA, PESO_METAFORA * n_metafora // MAX_RECENT_OCCURRENCES)
             razones.append(f"metafora {entry.metaphor!r} repetida {n_metafora} veces.")
             evitar.append(entry.metaphor)
+
+        combo = entry.combinacion_materia_concepto
+        if combo:
+            n_combo = sum(1 for e in recientes if e.combinacion_materia_concepto == combo)
+            if n_combo:
+                score += min(PESO_MATERIA_CONCEPTO, PESO_MATERIA_CONCEPTO * n_combo // MAX_RECENT_OCCURRENCES)
+                razones.append(
+                    f"combinacion materia+concepto ({entry.materia!r}, {entry.concepto!r}) "
+                    f"ya usada {n_combo} de las ultimas {len(recientes)} — la materia y el "
+                    "concepto por separado siguen disponibles, solo esta pareja exacta se penaliza.")
+                evitar.append(f"repetir la combinacion {entry.materia}+{entry.concepto}")
 
         objetos = {normaliza(o) for o in entry.secondary_objects if normaliza(o)}
         if objetos:

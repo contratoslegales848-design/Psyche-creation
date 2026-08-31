@@ -57,14 +57,21 @@ class VisualRun:
         return FAILED
 
 
-def _entry_desde_brief(content_id, brief, generation_id=""):
-    """Huella de memoria derivada del brief. Un solo lugar que la construye."""
+def _entry_desde_brief(content_id, brief, generation_id="", taxonomia=None):
+    """Huella de memoria derivada del brief. Un solo lugar que la construye.
+
+    `taxonomia` es el bloque REAL `content/*.json`.taxonomia del artefacto (si
+    el llamador lo tiene) — nunca se infiere ni se inventa aqui. Sin el, la
+    entrada simplemente no participa del eje materia+concepto (ver memory.py).
+    """
+    tax = taxonomia or {}
     return VisualMemoryEntry(
         content_id=content_id, generation_id=generation_id,
         visual_family=brief.visual_family, scene_type=brief.environment,
         main_subject=brief.subject, camera_angle=brief.camera,
         metaphor=brief.metaphor, brand_surface=brief.marca_superficie,
-        secondary_objects=[brief.acento_frio_objeto] if brief.acento_frio_objeto else [])
+        secondary_objects=[brief.acento_frio_objeto] if brief.acento_frio_objeto else [],
+        materia=str(tax.get("materia") or ""), concepto=str(tax.get("concepto") or ""))
 
 
 def _receipt_base(procedencia, brief, policy, families_version=""):
@@ -90,7 +97,7 @@ def generate_visual(procedencia, brief, policy, provider, handoff=None,
                     claim_packet=None,
                     allow_regeneration=False,
                     exact_copy="", author="", content_type="", families_version="",
-                    reserved_surface=None, compose_asset=True):
+                    reserved_surface=None, compose_asset=True, taxonomia=None):
     """Ejecuta el pipeline. Con dry_run=True no se llama al proveedor (0 llamadas)."""
     log = EventLog()
     base = _receipt_base(procedencia, brief, policy, families_version)
@@ -113,7 +120,7 @@ def generate_visual(procedencia, brief, policy, provider, handoff=None,
     # 1b. Riesgo de repeticion: si hay memoria y no se paso una evaluacion ya
     # hecha, se calcula aqui. Antes este parametro se transportaba sin usarse.
     if repetition is None and memory is not None:
-        repetition = memory.assess(_entry_desde_brief(base["content_id"], brief))
+        repetition = memory.assess(_entry_desde_brief(base["content_id"], brief, taxonomia=taxonomia))
 
     # 2. Compilacion.
     caps = provider.capabilities()
@@ -300,6 +307,7 @@ class BatchItem:
     author: str = ""
     content_type: str = ""
     reserved_surface: object = None
+    taxonomia: dict = None
     state: str = PENDING
     run: VisualRun = None
 
@@ -349,14 +357,15 @@ def run_batch(items, policy, provider, batch_id="batch-1", dry_run=False, **kw):
                               known_hashes=hashes, dry_run=dry_run,
                               exact_copy=it.exact_copy, author=it.author,
                               content_type=it.content_type,
-                              reserved_surface=it.reserved_surface, **kw)
+                              reserved_surface=it.reserved_surface,
+                              taxonomia=it.taxonomia, **kw)
         it.run = run
         it.state = NEEDS_REVIEW if run.receipt.status == "DRY_RUN" else run.item_state
         if run.receipt.asset_sha256:
             hashes.add(run.receipt.asset_sha256)
         if run.ok:
             memoria.record(_entry_desde_brief(it.content_id, it.brief,
-                                              run.receipt.generation_id))
+                                              run.receipt.generation_id, taxonomia=it.taxonomia))
     return BatchResult(batch_id, list(items))
 
 
