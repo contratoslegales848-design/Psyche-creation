@@ -197,6 +197,7 @@ jobs:
         run: python3 scripts/validate-content-provenance.py
 
       - name: Instalar dependencias (solo Pillow, para el compositor)
+        working-directory: .
         run: python3 -m pip install --quiet -r requirements.txt
 
       - name: Pipeline visual — suite completa (proveedor falso, sin red ni créditos)
