@@ -1,0 +1,36 @@
+{
+  "content_id": "LM-PIEZA-01-REALES",
+  "generation_id": "gen-48e114c0a1d5",
+  "asset_path": "artifacts/human-review/LM-PIEZA-01-REALES/gen-48e114c0a1d5.png",
+  "asset_sha256": "b5228b0bf312fa9c58218c414138f5ee8ff3dc3adb3312f290e62d065364428e",
+  "exact_copy": "En los ordenamientos examinados, la propiedad o dominio atribuye facultades amplias de aprovechamiento, goce y disposición sobre una cosa, siempre dentro de los límites establecidos por la ley. La formulación técnica no es idéntica en México, España y Argentina.",
+  "author": "Nota comparada — México, España, Argentina",
+  "visual_family": "basalt_and_gold_leaf",
+  "brand_mode": "POST_COMPOSITE",
+  "structural_qa": {
+    "asset_sha256": "7db126bbf40043c904f5ebcc06f3fdf14aa014758b77848885bb4406fe2aa8ed",
+    "avisos": [],
+    "detected_mime": "image/png",
+    "height": 8,
+    "passed": true,
+    "problemas": [],
+    "width": 8
+  },
+  "semantic_qa": {
+    "inspector": "noop",
+    "metrics": {},
+    "reason_codes": [],
+    "state": "NOT_EVALUATED"
+  },
+  "warnings": [
+    "La aprobacion visual final es siempre humana; el QA automatico no la sustituye."
+  ],
+  "parent_generation_id": "gen-3cf4872a04c2",
+  "feedback_codes": [
+    "TOO_DARK"
+  ],
+  "human_visual_review_state": "PENDIENTE",
+  "provider": "fake (SIMULATED — placeholder art, not final quality)",
+  "canonical_hash": "4813708c81cec506caa8a5df5141741d8c074bfe38d909394429e72db866f2cb",
+  "note": "HUMAN_REVIEW materializado. No es approved/published/production-final. No crea generacion nueva: referencia gen-48e114c0a1d5 existente."
+}

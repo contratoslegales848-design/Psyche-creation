@@ -24,6 +24,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import canonical
 import compositor
+import inventory
 import pipeline
 import resolver
 import registry as registry_mod
@@ -60,6 +61,10 @@ def main(argv=None):
     sub.add_parser("policy")
     sub.add_parser("content")
     sub.add_parser("gates")
+    sub.add_parser("inventory")
+    sub.add_parser("inbox")
+    sub.add_parser("next")
+    s = sub.add_parser("command-center"); s.add_argument("--json", action="store_true")
     s = sub.add_parser("resolve"); s.add_argument("content_id")
     for c in ("validate", "dry-run", "simulate"):
         s = sub.add_parser(c)
@@ -93,6 +98,44 @@ def main(argv=None):
         for f in resolver.gate_summary():
             print(f"  {f['PIECE_ID']:20} canon={f['CANON']:24} gate={f['ART_GATE']:8} "
                   f"claims={f['CLAIMS']:2} visual={f['VISUAL_READY']}")
+        return 0
+
+    if a.cmd == "inventory":
+        for r in inventory.build_readiness():
+            print(f"  {r.piece_id:20} canon={r.canonical_state:24} gate={r.art_gate:8} "
+                  f"handoff={r.handoff_state:16} gen={r.latest_generation_id or '-':16} "
+                  f"visual_review={r.human_visual_review_state}")
+            for b in r.blockers:
+                print(f"      ! {b}")
+        return 0
+
+    if a.cmd == "inbox":
+        items = inventory.build_inbox()
+        if not items:
+            print("  (vacio: nada espera decision humana ahora mismo)")
+            return 0
+        for it in items:
+            print(f"  [{it.decision_type:26}] {it.piece_id:20} {it.detail}")
+        return 0
+
+    if a.cmd == "next":
+        candidatos = [r for r in inventory.build_readiness() if r.canonical_state != "REQUIERE_INVESTIGACION"]
+        candidatos.sort(key=lambda r: len(r.blockers))
+        if not candidatos:
+            print("  (sin candidatos: todas las piezas requieren investigacion juridica)")
+            return 0
+        for r in candidatos[:5]:
+            print(f"  {r.piece_id:20} bloqueos={len(r.blockers):2} siguiente={r.next_action}")
+        return 0
+
+    if a.cmd == "command-center":
+        payload = inventory.command_center_payload()
+        if a.json:
+            print(json.dumps(payload, ensure_ascii=False, indent=2))
+        else:
+            for f in payload:
+                print(f"  {f['content_id']:24} piece={f['piece_id']:20} visual={f['visual_state']:18} "
+                      f"review={f['human_visual_review_state']:16} next={f['next_action']}")
         return 0
 
     if a.cmd == "resolve":
