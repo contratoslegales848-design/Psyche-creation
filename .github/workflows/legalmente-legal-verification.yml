@@ -204,7 +204,7 @@ jobs:
         run: |
           python3 -m unittest \
             test_visual_pipeline test_visual_advanced \
-            test_composition test_http_provider -v
+            test_composition test_http_provider test_resolver -v
 
       - name: Contrato canónico cross-repo
         working-directory: contract

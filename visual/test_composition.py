@@ -13,6 +13,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import composition  # noqa: E402
+import inspection  # noqa: E402
 import compositor  # noqa: E402
 import pipeline  # noqa: E402
 import registry as registry_mod  # noqa: E402
@@ -276,3 +277,63 @@ class TestPipelineConComposicion(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
+
+
+class TestSuperficiesDeMarcaVariadas(unittest.TestCase):
+    """§32 — BrandCompositionPlan no esta atado a una sola ubicacion."""
+
+    VARIANTES = {
+        "placa_plana_inferior": compositor.ReservedSurface(120, 1650, 500, 90),
+        "lomo_de_libro_lateral": compositor.ReservedSurface(60, 700, 90, 420),
+        "carpeta_centro": compositor.ReservedSurface(340, 980, 400, 120),
+        "chapa_pequena_esquina_de_escena": compositor.ReservedSurface(700, 1500, 260, 70),
+    }
+
+    def test_todas_las_superficies_componen_la_marca(self):
+        for nombre, s in self.VARIANTES.items():
+            r = compositor.compose(raw(), plan(), BRAND, s)
+            self.assertEqual(r.state, compositor.COMPOSED, nombre)
+            self.assertTrue(r.brand_applied, nombre)
+
+    def test_cada_superficie_produce_un_asset_distinto(self):
+        hashes = {n: compositor.compose(raw(), plan(), BRAND, s).composed_sha256
+                  for n, s in self.VARIANTES.items()}
+        self.assertEqual(len(set(hashes.values())), len(self.VARIANTES),
+                         "la marca deberia caer en sitios distintos, no en uno fijo")
+
+
+class TestHeuristicasDeImagen(unittest.TestCase):
+    """§36/§37 — un riesgo heuristico no es una certeza semantica."""
+
+    FIXTURES = {
+        "muy_oscura": ((6, 5, 5), "DARKNESS_RISK"),
+        "sepia_dominante": ((150, 110, 60), "SEPIA_DOMINANCE_RISK"),
+        "normal_clara": ((236, 232, 220), None),
+    }
+
+    def test_fixtures_de_riesgo(self):
+        insp = inspection.HeuristicSemanticInspector()
+        for nombre, (rgb, esperado) in self.FIXTURES.items():
+            rep = insp.inspect(png_bytes(6, 6, rgb))
+            if esperado:
+                self.assertIn(esperado, rep.reason_codes, nombre)
+
+    def test_el_riesgo_nunca_es_VISUAL_FAIL(self):
+        insp = inspection.HeuristicSemanticInspector()
+        for rgb, _ in self.FIXTURES.values():
+            rep = insp.inspect(png_bytes(6, 6, rgb))
+            self.assertNotEqual(rep.state, inspection.FAIL,
+                                "una heuristica no puede fingir un fallo semantico")
+            self.assertIn(rep.state, (inspection.PASS, inspection.NEEDS_HUMAN_REVIEW))
+
+    def test_el_riesgo_se_declara_como_heuristica(self):
+        rep = inspection.HeuristicSemanticInspector().inspect(png_bytes(6, 6, (5, 5, 5)))
+        self.assertTrue(any("no equivalen a comprension visual" in n for n in rep.notes))
+
+    def test_riesgo_no_bloquea_el_pipeline_pero_pide_revision(self):
+        run = pipeline.generate_visual(
+            PROC, make_brief(), POLICY, FakeImageProvider(), HANDOFF,
+            inspector=inspection.HeuristicSemanticInspector(),
+            exact_copy=FRASE, content_type="maxima", reserved_surface=surface())
+        self.assertTrue(run.ok)   # estructuralmente pasa
+        self.assertEqual(run.receipt.semantic_qa["state"], inspection.NEEDS_HUMAN_REVIEW)

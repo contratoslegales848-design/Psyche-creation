@@ -24,6 +24,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import canonical
 import pipeline
+import resolver
 import registry as registry_mod
 from brief import VisualBrief, VisualPolicy
 from errors import VisualInputInvalidError
@@ -56,6 +57,9 @@ def main(argv=None):
     sub = ap.add_subparsers(dest="cmd", required=True)
     sub.add_parser("families")
     sub.add_parser("policy")
+    sub.add_parser("content")
+    sub.add_parser("gates")
+    s = sub.add_parser("resolve"); s.add_argument("content_id")
     for c in ("validate", "dry-run", "simulate"):
         s = sub.add_parser(c)
         s.add_argument("artefacto")
@@ -66,10 +70,35 @@ def main(argv=None):
     s = sub.add_parser("show-receipt")
     s.add_argument("root"); s.add_argument("content_id"); s.add_argument("generation_id")
     s = sub.add_parser("show-history"); s.add_argument("root"); s.add_argument("content_id")
+    s = sub.add_parser("explain")
+    s.add_argument("root"); s.add_argument("content_id"); s.add_argument("generation_id")
     a = ap.parse_args(argv)
 
     policy = VisualPolicy.load()
     fams = VisualFamilyRegistry.load()
+
+    if a.cmd == "content":
+        for cid, path, modo in resolver.list_content_ids():
+            print(f"  {cid:28} {modo:16} {path}")
+        return 0
+
+    if a.cmd == "gates":
+        for f in resolver.gate_summary():
+            print(f"  {f['PIECE_ID']:20} canon={f['CANON']:24} gate={f['ART_GATE']:8} "
+                  f"claims={f['CLAIMS']:2} visual={f['VISUAL_READY']}")
+        return 0
+
+    if a.cmd == "resolve":
+        r = resolver.resolve(a.content_id)
+        print(f"  content_id : {r.content_id}")
+        print(f"  origen     : {r.origin}")
+        print(f"  artefacto  : {r.artefacto_path or 'NO ENCONTRADO'}")
+        print(f"  claim pack : {r.packet_path or '-'}")
+        print(f"  handoff    : {r.handoff_path or 'NO EXISTE'}")
+        print(f"  produccion : {'AUTORIZADA' if r.production_ready else 'BLOQUEADA'}")
+        for b in r.blocking:
+            print(f"  ! {b}")
+        return 0 if r.production_ready else 1
 
     if a.cmd == "families":
         for n in fams.names():
@@ -135,7 +164,48 @@ def main(argv=None):
     if a.cmd == "show-history":
         for g in reg.generations_for(a.content_id):
             print(f"{g['created_at']}  {g['generation_id']}  {g['status']}  "
-                  f"parent={g.get('parent_generation_id') or '-'}")
+                  f"parent={g.get('parent_generation_id') or '-'}  "
+                  f"feedback={g.get('feedback_codes') or '-'}")
+        return 0
+
+    if a.cmd == "explain":
+        g = reg.get_generation(a.content_id, a.generation_id)
+        if not g:
+            print("generacion no encontrada")
+            return 1
+        print(f"POR QUE SALIO ESTA IMAGEN — {g['generation_id']}")
+        print(f"\n  CONTENIDO")
+        print(f"    content_id     {g['content_id']}")
+        print(f"    content_hash   {g.get('content_hash') or '-'}")
+        print(f"    procedencia    {g.get('procedencia', {}).get('modo')} "
+              f"handoff={g.get('procedencia', {}).get('handoff_id')}")
+        print(f"\n  VERSIONES")
+        for k in ("visual_policy_version", "visual_family_registry_version",
+                  "visual_brief_version", "prompt_compiler_version", "compositor_version"):
+            if g.get(k):
+                print(f"    {k:32} {g[k]}")
+        print(f"\n  DECISIONES")
+        for e in g.get("explanation", []):
+            print(f"    · {e}")
+        print(f"\n  PROVEEDOR")
+        print(f"    {g.get('provider')} / {g.get('model') or '-'}  seed={g.get('seed')}")
+        print(f"    prompt_sha256  {g.get('prompt_sha256', '')[:32]}")
+        print(f"    plan_hash      {g.get('generation_plan_hash', '')[:32]}")
+        print(f"\n  ASSETS")
+        print(f"    raw       {g.get('raw_asset_id') or '-'}  {g.get('asset_sha256','')[:16]}")
+        print(f"    compuesto {g.get('composed_asset_id') or '-'}  {g.get('composed_sha256','')[:16]}")
+        print(f"\n  QA")
+        sq = g.get("structural_qa", {})
+        print(f"    estructural  passed={sq.get('passed')} {sq.get('detected_mime','')}")
+        se = g.get("semantic_qa", {})
+        print(f"    semantica    {se.get('state')} ({se.get('inspector')}) {se.get('reason_codes') or ''}")
+        if g.get("parent_generation_id"):
+            print(f"\n  LINAJE")
+            print(f"    regenerada desde {g['parent_generation_id']}")
+            print(f"    feedback         {g.get('feedback_codes')}")
+            for campo, v in (g.get("changed_fields") or {}).items():
+                print(f"    cambio  {campo}: {str(v.get('antes'))[:40]!r} -> {str(v.get('despues'))[:40]!r}")
+        print(f"\n  APROBACION HUMANA: {g.get('human_visual_approval')}")
         return 0
     return 1
 
