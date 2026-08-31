@@ -1,6 +1,6 @@
 # Estado técnico real de LegalMente
 
-**Fecha:** 2026-08-27 · **Base:** `origin/main` en `82f226e` + ramas `chore/phase1-technical-readiness` y `chore/phase1-p0-confidencialidad-procedencia`
+**Fecha:** 2026-08-27 · **Base:** `origin/main` en `3dd358b` (PR #14 y #15 fusionados) + rama `feat/source-freshness-e-inventario`
 **Semáforo global: AMARILLO** (los dos P0 quedaron cerrados; el amarillo lo sostienen ahora riesgos declarados, no huecos sin control).
 
 Este documento describe lo que **existe y se ejecuta**, no lo que está planeado.
@@ -21,8 +21,11 @@ real y una prueba que pasa.
 | Enlace verificación → renderizado | 🟢 VERDE (nuevo) | Cada artefacto declara procedencia; sin ella el bundle de Remotion falla. Verificado de punta a punta. |
 | Confidencialidad | 🟡 AMARILLO (era rojo) | Control determinista fail-closed implementado; queda el contenido identificable sin marcadores léxicos (red team B5). |
 | Pipeline de video (Remotion) | 🟢 VERDE (nuevo) | Renderiza, y ya no puede renderizar contenido publicable sin origen verificable. |
-| Anti-duplicados | 🟡 AMARILLO (nuevo) | Controles literales implementados; la paráfrasis sigue sin detectarse. |
-| Motor de producción masiva | ⚫ NO CONSTRUIDO | Contrato técnico definido (`docs/contrato-motor-masivo.md`); el motor, deliberadamente, no. |
+| Anti-duplicados | 🟡 AMARILLO | Cinco colisiones deterministas; la paráfrasis sigue sin detectarse. |
+| Vigencia de fuentes | 🟡 AMARILLO (era rojo implícito) | Libro mayor + control offline fail-closed. Abierto: nadie avisa desde fuera de que una norma cambió. |
+| Inventario materializado | 🟢 VERDE (nuevo) | Índice determinista y regenerable; `check` detecta que está obsoleto. |
+| Métricas | 🟡 AMARILLO | `DUE_FOR_MEASUREMENT` consultable; las cifras siguen tecleándose a mano. |
+| Motor de producción masiva | ⚫ NO CONSTRUIDO | Contrato e infraestructura mínima listos; el motor, deliberadamente, no. |
 | Documentación vs. realidad | 🟡 AMARILLO | Dos derivas detectadas (ver §5). |
 | `legalmente-web` | 🟡 AMARILLO | Prototipo honesto, pero el repositorio es **público** y `CLAUDE.md §8` lo declara privado. |
 | Publicación automatizada | ⚫ INEXISTENTE (por diseño) | Ninguna automatización publica. Es una regla, no una carencia. |
@@ -43,13 +46,17 @@ real y una prueba que pasa.
 - `scripts/confidentiality_rules.py` — **nuevo**: control determinista de
   confidencialidad. Doce indicadores sobre los campos publicables del claim; si
   alguno dispara, la revisión humana deja de ser opcional.
-- `scripts/validate-content-provenance.py` (en la raíz) — **nuevo**: procedencia de
-  los artefactos de `content/` y controles anti-duplicados.
+- `scripts/validate-content-provenance.py` (en la raíz) — procedencia de los
+  artefactos de `content/` y controles anti-duplicados.
+- `scripts/check-source-freshness.py` — **nuevo**: vigencia de fuentes. Offline y
+  sin reloj de red; deriva el veredicto sin tocar el claim packet.
+- `scripts/inventory.py` (en la raíz) — **nuevo**: inventario materializado,
+  determinista y regenerable, con consultas y anti-duplicados v2.
 - `references/official-source-registry.json` — 22 organismos oficiales.
 - `fixtures/` — 10 positivas, 46 negativas.
 - `publication/fixtures/` — 2 cadenas válidas, 14 inválidas, 1 claim packet sintético.
 
-**Pruebas: 275, todas en verde.**
+**Pruebas: 337, todas en verde.**
 | Suite | Pruebas |
 |---|---|
 | `test_validate_claim_packet` | 147 |
@@ -57,6 +64,8 @@ real y una prueba que pasa.
 | `test_validate_publication_chain` | 41 |
 | `test_confidentiality_rules` | 20 |
 | `test_validate_content_provenance` | 30 |
+| `test_check_source_freshness` | 31 |
+| `test_inventory` | 31 |
 
 ### 2.2 Los cuatro estados no equivalentes
 
@@ -193,11 +202,15 @@ decisión del fundador, no técnica.
 4. Corregir la deriva de `legalmente-web` en `CLAUDE.md §8`.
 
 **P2 — cuando el piloto esté medido**
-5. Detección de deriva de fuentes oficiales, fuera del validador (ver ADR 0001).
-   Es ahora el riesgo abierto de mayor consecuencia.
-6. Inventario materializado y planificación de cobertura para el motor masivo
-   (ver `docs/contrato-motor-masivo.md` §4).
-7. Detección de duplicados por paráfrasis, cuando el volumen lo justifique.
+5. ~~Inventario materializado.~~ Implementado.
+6. Vigilancia activa de cambios normativos: un proceso de research **con red y
+   fuera del validador** que marque fuentes para revisión. Es ahora el riesgo
+   abierto de mayor consecuencia (red team C6): el libro mayor solo sabe lo que un
+   humano escribió en él.
+7. Planificación de cobertura sobre el inventario (qué casillas de
+   `materia/submateria/concepto` faltan).
+8. Ingesta automatizada de métricas: hoy las cifras se teclean.
+9. Detección de duplicados por paráfrasis, cuando el volumen lo justifique.
 
 **P3 — no ahora**
 7. Integraciones externas (Grok/Manus/Gemini): los contratos están en borrador
@@ -214,3 +227,6 @@ decisión del fundador, no técnica.
 - `docs/handoff-contracts/` — contratos externos en borrador.
 - `docs/contrato-motor-masivo.md` — dónde vive cada campo del futuro motor y por qué
   no se creó ningún modelo paralelo.
+- `.claude/skills/legalmente-legal-verification/references/README-vigencia.md` — el
+  libro mayor de vigencia y por qué el veredicto se deriva en vez de almacenarse.
+- `inventory/README.md` — el índice derivado, sus consultas y sus límites.
