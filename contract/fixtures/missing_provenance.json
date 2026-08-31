@@ -1,0 +1,24 @@
+{
+  "art_eligibility": "ELEGIBLE",
+  "claim_state": "APTO_PARA_NARRATIVA",
+  "claims": [
+    {
+      "approved_claim_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "claim_id": "c1",
+      "texto_exacto": "En el comodato se devuelve la misma cosa."
+    }
+  ],
+  "content_id": "LM-FIXTURE-005",
+  "emitted_at": "2026-08-31T00:00:00+00:00",
+  "jurisdiction_layer": "CAPA_A_TRANSVERSAL",
+  "legal_gate_state": "ABIERTO",
+  "provenance": {},
+  "schema_version": "1.0",
+  "source_state": "VERIFICADA",
+  "territories": [
+    "Espana",
+    "Mexico",
+    "Argentina",
+    "Peru"
+  ]
+}

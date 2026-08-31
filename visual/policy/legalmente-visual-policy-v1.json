@@ -1,5 +1,5 @@
 {
-  "policy_version": "1.0",
+  "policy_version": "1.1",
   "descripcion": "Politica visual ejecutable de LegalMente. Solo contiene reglas que un programa puede comprobar. Las reglas de criterio (que escuela artistica toca, que metafora) viven en la skill legalmente-visual-system y NO se duplican aqui.",
   "formatos": {
     "VERTICAL_9_16": {"width": 1080, "height": 1920, "aspect_ratio": "9:16", "full_bleed": true},
@@ -38,17 +38,25 @@
   "marca": {
     "integracion_fisica_requerida": true,
     "superficies_permitidas": [
-      "lomo de libro", "carpeta", "placa de laton", "vidrio", "piedra",
-      "madera", "sello de lacre", "cuaderno", "chapa numerada", "matasellos"
+      "lomo de libro", "carpeta", "placa de laton", "placa de bronce", "vidrio", "piedra",
+      "madera", "sello de lacre", "cuaderno", "chapa numerada", "matasellos", "metal"
     ],
-    "prohibido": ["watermark", "logo flotante", "branding sobrepuesto arbitrariamente"],
-    "texto_marca_lo_escribe_el_generador": "NO_RESUELTO",
-    "nota_texto_marca": "CONFLICTO ABIERTO, pendiente de decision del fundador. docs/decision-visual-marca-sin-texto.md (ADR PROPUESTO, no aprobado) sostiene que el generador no escribe ninguna letra, ni siquiera 'LegalMente', y que la superficie de marca se reserva vacia para montaje posterior. El mandato de integracion §20 sostiene que la palabra debe integrarse fisicamente en la escena. Mientras el valor sea NO_RESUELTO el compilador falla cerrado ante cualquier brief que pida al generador escribir la marca. Valores admisibles una vez decidido: SI | NO."
+    "prohibido": [
+      "watermark", "logo flotante", "branding sobrepuesto arbitrariamente",
+      "branding de esquina ajeno a la escena", "overlay aleatorio",
+      "texto de marca escrito por el generador"
+    ],
+    "texto_marca_lo_escribe_el_generador": "NO",
+    "generator_writes_brand_text": false,
+    "post_composite_brand_text": true,
+    "brand_text": "LegalMente",
+    "nota_texto_marca": "DECIDIDO por el fundador (2026-08-31): el generador NO escribe ninguna letra, tampoco la marca. La integracion fisica de marca SIGUE siendo obligatoria — la escena reserva una superficie fisica real (placa, laton, lomo, sello...) con perspectiva, material y luz correctos, y la palabra 'LegalMente' se compone despues de forma determinista. Ver docs/adr/0002-marca-composicion-determinista.md."
   },
   "texto": {
     "modos_permitidos": ["IMAGE_ONLY", "POST_COMPOSITE"],
     "modo_nativo_requiere_capacidad_demostrada": true,
     "contenido_juridico_exige_post_composite": true,
+    "marca_nunca_usa_native_text": true,
     "nota": "Citas, autores, conceptos juridicos y cualquier carga juridica se montan de forma determinista despues. Nunca se acepta texto juridico escrito por un generador de imagenes."
   },
   "unicidad": {

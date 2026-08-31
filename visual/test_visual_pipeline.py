@@ -12,7 +12,7 @@ import gates  # noqa: E402
 import pipeline  # noqa: E402
 import receipts as receipts_mod  # noqa: E402
 from brief import VisualBrief, VisualPolicy  # noqa: E402
-from compiler import compile_prompt  # noqa: E402
+from compiler import compile_request  # noqa: E402
 from providers import FakeImageProvider  # noqa: E402
 from providers.base import NormalizedImageRequest, negotiate  # noqa: E402
 from qa import structural_qa  # noqa: E402
@@ -34,6 +34,16 @@ PROC = {
     "handoff_id": "HO-001",
     "claims": [{"claim_id": "c1", "approved_claim_hash": "a" * 64}],
 }
+
+
+def compile_prompt(brief, policy, capabilities=None, recent_memory=(), **kw):
+    """Adaptador SOLO DE PRUEBAS a la forma antigua de 4 tuplas."""
+    req = compile_request(brief, policy, capabilities=capabilities, **kw)
+    negs = list(req.negative_constraints)
+    for e in sorted({str(x) for x in recent_memory if str(x).strip()}):
+        if f"repetir: {e}" not in negs:
+            negs.append(f"repetir: {e}")
+    return req.positive_prompt, ", ".join(negs), req.provider_parameters, req.metadata
 
 
 def make_brief(**kw):
@@ -141,11 +151,20 @@ class TestBriefYPolitica(unittest.TestCase):
         e = make_brief(text_rendering_mode="NATIVE_TEXT", tiene_carga_juridica=True).validate(POLICY)
         self.assertTrue(e)
 
-    def test_conflicto_marca_bloquea_fail_closed(self):
-        """El conflicto §20 vs ADR propuesto se bloquea, no se decide en silencio."""
-        self.assertEqual(POLICY.marca_escribe_generador, "NO_RESUELTO")
-        e = make_brief(marca_texto_en_imagen=True).validate(POLICY)
-        self.assertTrue(any("CONFLICTO NO RESUELTO" in x for x in e))
+    def test_decision_de_marca_aplicada(self):
+        """Decision del fundador 2026-08-31: el generador no escribe la marca."""
+        self.assertEqual(POLICY.marca_escribe_generador, "NO")
+        self.assertTrue(POLICY.data["marca"]["integracion_fisica_requerida"])
+        self.assertTrue(POLICY.data["marca"]["post_composite_brand_text"])
+        self.assertFalse(POLICY.data["marca"]["generator_writes_brand_text"])
+
+    def test_politica_de_marca_ilegible_bloquea(self):
+        import copy
+        from brief import VisualPolicy as VP
+        d = copy.deepcopy(POLICY.data)
+        d["marca"]["texto_marca_lo_escribe_el_generador"] = "QUIZAS"
+        p = VP(version="x", data=d)
+        self.assertTrue(make_brief(marca_texto_en_imagen=True).validate(p))
 
     def test_politica_sin_version_es_rechazada(self):
         with tempfile.TemporaryDirectory() as d:
@@ -266,7 +285,7 @@ class TestPipeline(unittest.TestCase):
 
     def test_brief_invalido_no_llama_al_proveedor(self):
         prov = FakeImageProvider()
-        run = pipeline.generate_visual(PROC, make_brief(marca_texto_en_imagen=True),
+        run = pipeline.generate_visual(PROC, make_brief(visual_family="anime_pastel"),
                                        POLICY, prov, HANDOFF)
         self.assertEqual(run.receipt.status, "BRIEF_INVALIDO")
         self.assertEqual(prov.llamadas, 0)
@@ -305,12 +324,12 @@ class TestPipeline(unittest.TestCase):
 
     def test_lote_detecta_duplicado_entre_piezas(self):
         prov = FakeImageProvider("duplicate_asset")
-        items = [(PROC, make_brief(), HANDOFF),
-                 (PROC, make_brief(subject="otra escena distinta"), HANDOFF)]
-        runs = pipeline.generate_batch(items, POLICY, prov)
-        self.assertTrue(runs[0].ok)
-        self.assertEqual(runs[1].receipt.status, "QA_FALLIDO")
-        self.assertTrue(any("duplicado" in p for p in runs[1].receipt.qa_problemas))
+        items = [pipeline.BatchItem(PROC, make_brief(), HANDOFF),
+                 pipeline.BatchItem(PROC, make_brief(subject="otra escena distinta"), HANDOFF)]
+        batch = pipeline.run_batch(items, POLICY, prov)
+        self.assertTrue(batch.items[0].run.ok)
+        self.assertEqual(batch.items[1].run.receipt.status, "QA_FALLIDO")
+        self.assertTrue(any("duplicado" in p for p in batch.items[1].run.receipt.qa_problemas))
 
     def test_receipt_registra_procedencia_y_versiones(self):
         run = pipeline.generate_visual(PROC, make_brief(), POLICY, FakeImageProvider(), HANDOFF)

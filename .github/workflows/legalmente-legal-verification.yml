@@ -9,6 +9,7 @@ on:
       - "src/**"
       - "scripts/**"
       - "visual/**"
+      - "contract/**"
       - ".github/workflows/legalmente-legal-verification.yml"
   push:
     branches: [main]
@@ -18,6 +19,7 @@ on:
       - "src/**"
       - "scripts/**"
       - "visual/**"
+      - "contract/**"
       - ".github/workflows/legalmente-legal-verification.yml"
   workflow_dispatch: {}
 
@@ -194,7 +196,11 @@ jobs:
 
       - name: Pipeline visual — suite completa (proveedor falso, sin red ni créditos)
         working-directory: visual
-        run: python3 -m unittest test_visual_pipeline -v
+        run: python3 -m unittest test_visual_pipeline test_visual_advanced -v
+
+      - name: Contrato canónico cross-repo
+        working-directory: contract
+        run: python3 -m unittest test_canonical_envelope -v
 
       - name: El pipeline visual no puede aprobar nada por sí solo
         working-directory: visual

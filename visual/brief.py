@@ -135,14 +135,16 @@ class VisualBrief:
                     f"marca_superficie {self.marca_superficie!r} fuera de las superficies permitidas."
                 )
 
-        # --- conflicto abierto, resuelto fail-closed ---
-        if self.marca_texto_en_imagen:
-            decidido = policy.marca_escribe_generador
-            if decidido != "SI":
-                e.append(
-                    "CONFLICTO NO RESUELTO: el brief pide que el generador escriba 'LegalMente' dentro de la "
-                    "imagen, pero la politica declara "
-                    f"texto_marca_lo_escribe_el_generador={decidido!r}. Requiere decision expresa del fundador "
-                    "(ver docs/decision-visual-marca-sin-texto.md). Hasta entonces se bloquea."
-                )
+        # --- marca ---
+        # `marca_texto_en_imagen` es una PETICION, no una orden. Si la politica
+        # vigente prohibe que el generador escriba la marca (decision del fundador
+        # 2026-08-31), el compilador la convierte a composicion posterior y lo deja
+        # anotado; la peticion nunca llega al proveedor. Solo un valor desconocido
+        # en la politica bloquea, porque entonces el estado no es legible.
+        if self.marca_texto_en_imagen and policy.marca_escribe_generador not in ("SI", "NO"):
+            e.append(
+                "estado de marca no legible en la politica "
+                f"(texto_marca_lo_escribe_el_generador={policy.marca_escribe_generador!r}); "
+                "sin decision legible se cierra."
+            )
         return e
