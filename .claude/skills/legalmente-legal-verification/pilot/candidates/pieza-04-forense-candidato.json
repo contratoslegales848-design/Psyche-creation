@@ -1,20 +1,32 @@
 {
   "record_type": "ContentCandidate",
-  "schema_version": "0.1-borrador",
+  "schema_version": "0.2-borrador",
   "candidate_id": "CANDIDATO-04-FORENSE",
   "estado": "CANDIDATE",
-  "nota_de_estado": "Esta pieza NO tiene ningun claim todavia. 'texto_exacto' de un claim real exige investigacion verificada (skill legalmente-legal-verification o un humano con fuentes primarias) — nunca redaccion directa de un modelo sin fuente. Este archivo documenta el candidato: la pregunta, la hipotesis comparada de trabajo (no una afirmacion jurídica), y las fuentes que HABRIA que verificar. No crea contenido publicable.",
+  "nota_de_estado": "Esta pieza NO tiene ningun claim aprobado todavia. El campo 'borrador_claim_NO_VERIFICADO' de abajo es un BORRADOR redactado para acelerar la verificacion humana — no es un claim, no tiene fuente confirmada, y no puede entrar al pipeline visual ni a validate-claim-packet.py hasta que alguien con acceso de red confirme cada fuente contra el texto oficial y mueva este contenido a un claim packet real en pilot/claim-packets/.",
   "origen": "Elegido por el fundador el 2026-08-31: 'lo forense' fue el unico concepto concreto en un pedido abierto sobre poblar una materia nueva. No proviene de ningun documento de Drive.",
 
-  "materia": "procesal",
-  "submateria": "prueba_pericial_forense",
+  "materia": "civil",
+  "submateria": "prueba_pericial",
   "situacion_humana": "quien_ve_una_pericial_o_evidencia_forense_presentada_como_concluyente",
 
   "pregunta_humana": "¿Una prueba pericial o forense por si sola decide un caso?",
 
-  "hipotesis_de_trabajo_NO_VERIFICADA": {
-    "texto": "En los sistemas procesales de tradicion continental que rigen a Mexico, España y Argentina, la prueba pericial se valora junto con el resto del material probatorio segun reglas de sana critica o libre valoracion razonada — no vincula automaticamente al juzgador ni sustituye su valoracion. Esto es doctrina procesal ampliamente aceptada, no una cita de un articulo especifico: verificar el articulado exacto de cada codigo antes de convertir esto en un claim con texto_exacto.",
-    "riesgo_si_no_se_verifica": "Sonar plausible no es lo mismo que ser exacto. Los numeros de articulo, el nombre exacto del estandar (p. ej. 'sana critica' vs 'libre valoracion') y las excepciones varian por codigo y por materia (penal vs civil) dentro del mismo pais."
+  "decision_de_alcance": {
+    "decidido_por": "Claude, con autorizacion expresa del fundador para ampliar criterio en decisiones de alcance (no en verificacion de fuente, que sigue siendo regla no negociable de CLAUDE.md §4)",
+    "fecha": "2026-08-31",
+    "civil_no_penal": "El estandar procesal penal varia mas entre estos tres paises (sistemas acusatorios en distintas etapas de reforma); el riesgo de falsa universalizacion es mas alto. Civil es comparativamente mas estable.",
+    "nacional_no_subnacional": "Mismo patron que PIEZA-01 (CAPA_B_VARIABLE, comparado a nivel pais). Si Argentina tiene variacion provincial real en materia civil, eso se declara como limitacion del claim al verificar — no se intenta cubrir aqui."
+  },
+
+  "borrador_claim_NO_VERIFICADO": {
+    "advertencia": "NO ES UN CLAIM. Redactado por Claude a partir de doctrina procesal civil comparada general (sana critica / libre valoracion de la prueba pericial es un principio ampliamente documentado en tratados de derecho procesal civil comparado de estos tres paises) — NUNCA verificado contra el texto oficial vigente de ningun codigo. El numero de articulo de cada pais es una ESTIMACION basada en la numeracion tipica de estos codigos, marcada explicitamente como tal, y DEBE confirmarse o corregirse antes de usarse.",
+    "texto_borrador": "En los sistemas procesales civiles de México, España y Argentina, la prueba pericial no vincula automáticamente al juzgador: se valora junto con el resto del material probatorio conforme a las reglas de la sana crítica (España, Argentina) o de la valoración libre y razonada de la prueba (México). El dictamen pericial orienta la decisión judicial; no la sustituye ni la determina por sí solo.",
+    "localizadores_estimados_SIN_CONFIRMAR": {
+      "México": "Código Federal de Procedimientos Civiles o código procesal civil aplicable — artículo sobre valoración de la prueba pericial (número NO confirmado; requiere búsqueda real, no asumir).",
+      "España": "Ley de Enjuiciamiento Civil (LEC), art. 348 (estimación: 'el tribunal valorará los dictámenes periciales según las reglas de la sana crítica') — número de artículo A CONFIRMAR contra el texto vigente, esto es una estimación de memoria, no una verificación.",
+      "Argentina": "Código Procesal Civil y Comercial de la Nación, artículo sobre fuerza probatoria del dictamen pericial (número NO confirmado; requiere búsqueda real)."
+    }
   },
 
   "jurisdicciones_candidatas": ["México", "España", "Argentina"],
@@ -23,21 +35,21 @@
   "fuentes_candidatas_SIN_VERIFICAR": [
     {
       "pais": "México",
-      "titulo_candidato": "Código Nacional de Procedimientos Penales — valoración de la prueba pericial",
-      "url_candidata": "https://www.diputados.gob.mx/LeyesBiblio/pdf/CNPP.pdf",
-      "nota": "URL de dominio oficial conocido (diputados.gob.mx), NUNCA abierta en esta sesion (EGRESS_BLOCKED). Localizador de articulo NO identificado todavia — falta busqueda real."
+      "titulo_candidato": "Código Federal de Procedimientos Civiles — valoración de la prueba pericial",
+      "url_candidata": "https://www.diputados.gob.mx/LeyesBiblio/pdf/CFPC.pdf",
+      "nota": "URL de dominio oficial conocido (diputados.gob.mx), NUNCA abierta en esta sesion (EGRESS_BLOCKED, reconfirmado 2026-08-31). Localizador de articulo NO identificado todavia — falta busqueda real. NOTA: se cambio de CNPP (penal) a CFPC (civil) por la decision de alcance de arriba."
     },
     {
       "pais": "España",
-      "titulo_candidato": "Ley de Enjuiciamiento Criminal / Ley de Enjuiciamiento Civil — prueba pericial",
-      "url_candidata": "https://www.boe.es/buscar/act.php?id=BOE-A-1882-6036",
-      "nota": "Misma limitacion: dominio oficial conocido, no abierto, articulo no identificado."
+      "titulo_candidato": "Ley de Enjuiciamiento Civil (LEC) — art. 348 (estimado, sin confirmar)",
+      "url_candidata": "https://www.boe.es/buscar/act.php?id=BOE-A-2000-323",
+      "nota": "URL corregida a la LEC (Ley 1/2000), no a la LECrim de la version anterior de este candidato — coherente con el alcance civil. Nunca abierta en esta sesion."
     },
     {
       "pais": "Argentina",
-      "titulo_candidato": "Código Procesal Penal Federal / Código Procesal Civil y Comercial — prueba pericial",
-      "url_candidata": "https://servicios.infoleg.gob.ar/infolegInternet/anexos/230000-234999/234362/norma.htm",
-      "nota": "Misma limitacion: dominio oficial conocido, no abierto, articulo no identificado. Esta URL es un candidato razonable (Codigo Procesal Penal Federal), no una confirmacion."
+      "titulo_candidato": "Código Procesal Civil y Comercial de la Nación — fuerza probatoria del dictamen pericial",
+      "url_candidata": "https://servicios.infoleg.gob.ar/infolegInternet/anexos/15000-19999/16547/texact.htm",
+      "nota": "URL candidata para el CPCCN (no el Codigo Procesal Penal Federal de la version anterior). Nunca abierta en esta sesion. Verificar tambien si sigue vigente o fue modificado."
     }
   ],
 
@@ -45,12 +57,13 @@
 
   "next_action": "VERIFY_SOURCES",
   "owner": "SYSTEM_O_HUMANO_CON_RED",
-  "bloqueado_por": "EGRESS_BLOCKED en esta sesion (confirmado 2026-08-31 contra diputados.gob.mx, boe.es, scjn.gob.mx, wikipedia.org).",
+  "bloqueado_por": "EGRESS_BLOCKED en esta sesion (reconfirmado 2026-08-31 contra diputados.gob.mx con la URL especifica del CNPP; el resto de URLs de este candidato no se ha intentado abrir por el mismo bloqueo de red, no por falta de intento previo).",
 
   "prohibiciones_explicitas": [
-    "No convertir 'hipotesis_de_trabajo_NO_VERIFICADA' en un claim con texto_exacto sin verificacion real de fuente.",
-    "No citar un numero de articulo especifico hasta confirmarlo contra el texto oficial.",
-    "No presentar 'sana critica' como el estandar universal: verificar el nombre exacto y el alcance en cada codigo.",
-    "No abrir gate_arte ni generar imagen alguna a partir de este candidato."
+    "borrador_claim_NO_VERIFICADO no puede copiarse a un claim packet real ni a texto_exacto sin verificar cada fuente y cada localizador estimado contra el texto oficial vigente.",
+    "Los numeros de articulo marcados 'estimado' o 'SIN_CONFIRMAR' no pueden tratarse como verificados bajo ninguna circunstancia.",
+    "No presentar 'sana critica' ni 'valoracion libre y razonada' como el estandar universal sin confirmar el nombre exacto vigente en cada codigo.",
+    "No abrir gate_arte ni generar imagen alguna a partir de este candidato.",
+    "Si la verificacion real contradice el borrador (articulo distinto, estandar distinto, derogado), el borrador se descarta — no se ajusta el resultado para que coincida con lo redactado aqui."
   ]
 }
