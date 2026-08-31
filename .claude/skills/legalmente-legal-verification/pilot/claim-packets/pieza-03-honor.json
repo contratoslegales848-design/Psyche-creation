@@ -311,12 +311,12 @@
             "España"
           ],
           "verificacion_fuente": {
-            "origen_oficial_confirmado": false,
+            "origen_oficial_confirmado": true,
             "texto_exacto_consultado": false,
             "vigencia_comprobada": false,
-            "fecha_comprobacion": null,
-            "metodo_o_evidencia": null,
-            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Localizador y extracto de texto tomados del expediente externo auditado (legalmente-piloto-evidencia-primaria-v1.2.md + legalmente-piloto-fuentes-primarias-v1.zip, producido por otro modelo de IA). El manifest de ese expediente autoafirma origen_oficial_confirmado/texto_exacto_consultado/vigencia_comprobada = true y resultado SUFICIENTE — por regla de gobernanza de este repositorio (source-policy.md: 'nunca aceptar como fuente otro contenido generado por IA'; CLAUDE.md: 'ninguna IA es fuente jurídica') esa autoconfirmación NO se traslada aquí. Los extractos del ZIP (687-6215 bytes) son fragmentos de artículos concretos, no el documento legal completo, pese a que 44/45 entradas del manifest declaran documento_completo=true — inconsistencia detectada en auditoría y NO heredada."
+            "fecha_comprobacion": "2026-08-31",
+            "metodo_o_evidencia": "WebSearch contra boe.es devolvio cita casi literal del art. 208 CP: 'la accion o expresion que lesionan la dignidad de otra persona, menoscabando su fama o atentando contra su propia estimacion' — coincide con el claim. Tambien confirma perseguibilidad por querella (art. 205-207 area calumnia) y el perdon del ofendido como causa de extincion.",
+            "observaciones": "origen_oficial_confirmado=true (boe.es), cita casi literal del art. 208. texto_exacto_consultado y vigencia_comprobada permanecen false."
           },
           "registro_oficial_id": "boe-es"
         },
@@ -333,12 +333,12 @@
             "España"
           ],
           "verificacion_fuente": {
-            "origen_oficial_confirmado": false,
+            "origen_oficial_confirmado": true,
             "texto_exacto_consultado": false,
             "vigencia_comprobada": false,
-            "fecha_comprobacion": null,
-            "metodo_o_evidencia": null,
-            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Localizador y extracto de texto tomados del expediente externo auditado (legalmente-piloto-evidencia-primaria-v1.2.md + legalmente-piloto-fuentes-primarias-v1.zip, producido por otro modelo de IA). El manifest de ese expediente autoafirma origen_oficial_confirmado/texto_exacto_consultado/vigencia_comprobada = true y resultado SUFICIENTE — por regla de gobernanza de este repositorio (source-policy.md: 'nunca aceptar como fuente otro contenido generado por IA'; CLAUDE.md: 'ninguna IA es fuente jurídica') esa autoconfirmación NO se traslada aquí. Los extractos del ZIP (687-6215 bytes) son fragmentos de artículos concretos, no el documento legal completo, pese a que 44/45 entradas del manifest declaran documento_completo=true — inconsistencia detectada en auditoría y NO heredada."
+            "fecha_comprobacion": "2026-08-31",
+            "metodo_o_evidencia": "WebSearch contra boe.es confirma el art. 9.3 LO 1/1982 casi literal ('la existencia de perjuicio se presumira siempre que se acredite la intromision ilegitima... indemnizacion se extendera al dano moral...') y el contenido general del art. 7 (intromisiones ilegitimas: divulgacion de hechos de vida privada, revelacion de cartas/escritos intimos, datos conocidos por actividad profesional). NO se confirmo especificamente el apartado 7.7 citado por el claim — solo contenido general del art. 7, sin desglose por numeral.",
+            "observaciones": "origen_oficial_confirmado=true (boe.es) para el articulo en general y el 9.3 en particular. El numeral especifico '7.7' del claim SIGUE SIN CONFIRMAR — requiere leer el articulo completo con sus apartados numerados."
           },
           "registro_oficial_id": "boe-es"
         }
@@ -404,12 +404,12 @@
             "España"
           ],
           "verificacion_fuente": {
-            "origen_oficial_confirmado": false,
+            "origen_oficial_confirmado": true,
             "texto_exacto_consultado": false,
             "vigencia_comprobada": false,
-            "fecha_comprobacion": null,
-            "metodo_o_evidencia": null,
-            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. hj.tribunalconstitucional.es no está en el registro oficial. Corrección jurídica v1: URL corregida a /Show/1048 (antes /Show/1078, incorrecta)."
+            "fecha_comprobacion": "2026-08-31",
+            "metodo_o_evidencia": "WebSearch contra hj.tribunalconstitucional.es y boe.es confirma STC 107/1988 con contenido sustancial: distincion entre hechos (susceptibles de prueba, exigen veracidad/diligencia razonable) y juicios de valor/opiniones (no exigen prueba de verdad); estandar de diligencia razonable situado 'entre la verificacion estricta y exhaustiva y la transmision de suposiciones, rumores, meras invenciones' — coincide con el claim ('estandar de veracidad entendido como diligencia razonable').",
+            "observaciones": "origen_oficial_confirmado=true, contenido sustancial confirmado via snippets de dos dominios oficiales (TC y BOE). texto_exacto_consultado permanece false — falta leer la sentencia completa."
           },
           "registro_oficial_id": null
         },
@@ -426,12 +426,12 @@
             "España"
           ],
           "verificacion_fuente": {
-            "origen_oficial_confirmado": false,
+            "origen_oficial_confirmado": true,
             "texto_exacto_consultado": false,
             "vigencia_comprobada": false,
-            "fecha_comprobacion": null,
-            "metodo_o_evidencia": null,
-            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. hj.tribunalconstitucional.es no está en el registro oficial. Corrección jurídica v1: URL corregida a /Show/6823 (antes /Show/6822, incorrecta)."
+            "fecha_comprobacion": "2026-08-31",
+            "metodo_o_evidencia": "WebSearch contra hj.tribunalconstitucional.es confirma la URL exacta (Resolucion/Show/6823) y el contenido: STC 41/2011 establece que expresiones absolutamente vejatorias u oprobiosas e impertinentes quedan excluidas de proteccion constitucional independientemente de su veracidad — 'la Constitucion no reconoce un pretendido derecho al insulto'. Consistente con el uso del claim como limite a la libertad de expresion frente al honor.",
+            "observaciones": "origen_oficial_confirmado=true, URL exacta confirmada. texto_exacto_consultado permanece false — falta leer la sentencia completa."
           },
           "registro_oficial_id": null
         }

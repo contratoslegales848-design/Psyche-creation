@@ -286,12 +286,12 @@
             "España"
           ],
           "verificacion_fuente": {
-            "origen_oficial_confirmado": false,
+            "origen_oficial_confirmado": true,
             "texto_exacto_consultado": false,
             "vigencia_comprobada": false,
-            "fecha_comprobacion": null,
-            "metodo_o_evidencia": null,
-            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Localizador y extracto de texto tomados del expediente externo auditado (legalmente-piloto-evidencia-primaria-v1.2.md + legalmente-piloto-fuentes-primarias-v1.zip, producido por otro modelo de IA). El manifest de ese expediente autoafirma origen_oficial_confirmado/texto_exacto_consultado/vigencia_comprobada = true y resultado SUFICIENTE — por regla de gobernanza de este repositorio (source-policy.md: 'nunca aceptar como fuente otro contenido generado por IA'; CLAUDE.md: 'ninguna IA es fuente jurídica') esa autoconfirmación NO se traslada aquí. Los extractos del ZIP (687-6215 bytes) son fragmentos de artículos concretos, no el documento legal completo, pese a que 44/45 entradas del manifest declaran documento_completo=true — inconsistencia detectada en auditoría y NO heredada."
+            "fecha_comprobacion": "2026-08-31",
+            "metodo_o_evidencia": "WebSearch contra boe.es confirma el art. 50 ET (lista abierta/numerus apertus de incumplimientos graves del empresario que justifican extincion indemnizada por voluntad del trabajador: impago o retrasos continuados en el pago del salario, entre otros) y que los efectos exigen declaracion judicial previa de la gravedad. DISCREPANCIA DETECTADA: el claim cita 'art. 49.1.d', pero la evidencia real apunta a que es el art. 49.1.j) ET el que remite al art. 50.1 para la extincion por voluntad del trabajador — requiere confirmacion adicional antes de dar el localizador del claim por bueno.",
+            "observaciones": "origen_oficial_confirmado=true (boe.es) para el art. 50. El localizador '49.1.d' del claim puede ser incorrecto (evidencia sugiere 49.1.j) — NO corregido automaticamente aqui, queda como discrepancia a resolver por quien verifique con el texto completo."
           },
           "registro_oficial_id": "boe-es"
         },
@@ -702,12 +702,12 @@
             "España"
           ],
           "verificacion_fuente": {
-            "origen_oficial_confirmado": false,
+            "origen_oficial_confirmado": true,
             "texto_exacto_consultado": false,
             "vigencia_comprobada": false,
-            "fecha_comprobacion": null,
-            "metodo_o_evidencia": null,
-            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Localizador y extracto de texto tomados del expediente externo auditado (legalmente-piloto-evidencia-primaria-v1.2.md + legalmente-piloto-fuentes-primarias-v1.zip, producido por otro modelo de IA). El manifest de ese expediente autoafirma origen_oficial_confirmado/texto_exacto_consultado/vigencia_comprobada = true y resultado SUFICIENTE — por regla de gobernanza de este repositorio (source-policy.md: 'nunca aceptar como fuente otro contenido generado por IA'; CLAUDE.md: 'ninguna IA es fuente jurídica') esa autoconfirmación NO se traslada aquí. Los extractos del ZIP (687-6215 bytes) son fragmentos de artículos concretos, no el documento legal completo, pese a que 44/45 entradas del manifest declaran documento_completo=true — inconsistencia detectada en auditoría y NO heredada."
+            "fecha_comprobacion": "2026-08-31",
+            "metodo_o_evidencia": "WebSearch contra boe.es confirma el art. 50 ET (lista abierta/numerus apertus de incumplimientos graves del empresario que justifican extincion indemnizada por voluntad del trabajador: impago o retrasos continuados en el pago del salario, entre otros) y que los efectos exigen declaracion judicial previa de la gravedad. DISCREPANCIA DETECTADA: el claim cita 'art. 49.1.d', pero la evidencia real apunta a que es el art. 49.1.j) ET el que remite al art. 50.1 para la extincion por voluntad del trabajador — requiere confirmacion adicional antes de dar el localizador del claim por bueno.",
+            "observaciones": "origen_oficial_confirmado=true (boe.es) para el art. 50. El localizador '49.1.d' del claim puede ser incorrecto (evidencia sugiere 49.1.j) — NO corregido automaticamente aqui, queda como discrepancia a resolver por quien verifique con el texto completo."
           },
           "registro_oficial_id": "boe-es"
         },
