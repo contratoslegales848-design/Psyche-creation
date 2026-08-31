@@ -36,15 +36,24 @@ def _cerrar(*motivos):
     return GateDecision(permitido=False, motivos=list(motivos))
 
 
-def can_enter_visual_generation(procedencia, handoff=None):
+def can_enter_visual_generation(procedencia, handoff=None, claim_packet=None):
     """¿Puede esta pieza entrar a generacion visual?
 
     `procedencia` es el bloque `procedencia` de un artefacto de content/.
     `handoff` es el ProductionHandoff ya validado por
     validate-publication-chain.py, o None si no se aporto.
+    `claim_packet` es el claim packet REAL (dict cargado de
+    pilot/claim-packets/*.json), cuando el llamador lo tiene disponible —
+    resolver.py siempre lo tiene. Si se aporta, el hash que la pieza declara
+    para cada claim se contrasta contra el hash REAL de la aprobacion humana
+    en el paquete; una pieza no puede autoafirmar un hash aprobado que el
+    canon no respalda. Si no se aporta (p. ej. en pruebas con fixtures
+    sinteticos), el comportamiento es el de siempre: se confia en la forma del
+    dato, no en su contenido contra disco.
 
     Falla cerrado ante: procedencia ausente, modo desconocido, campo canonico
-    ausente, handoff ausente o handoff en un estado que no autoriza producir.
+    ausente, handoff ausente, handoff en un estado que no autoriza producir, o
+    (con claim_packet) un hash que no coincide con la aprobacion humana real.
     """
     if not isinstance(procedencia, dict):
         return _cerrar("Sin bloque 'procedencia': un artefacto sin origen no entra al pipeline visual.")
@@ -84,6 +93,11 @@ def can_enter_visual_generation(procedencia, handoff=None):
                 or not str(c.get("approved_claim_hash") or "").strip():
             return _cerrar(f"claim #{i} incompleto: exige 'claim_id' y 'approved_claim_hash'.")
 
+    if claim_packet is not None:
+        motivo = _verificar_hashes_contra_paquete(claims, claim_packet)
+        if motivo:
+            return _cerrar(motivo)
+
     if handoff is None:
         return _cerrar(
             f"handoff {handoff_id!r} no aportado. El pipeline visual no infiere el estado de produccion: "
@@ -108,6 +122,36 @@ def can_enter_visual_generation(procedencia, handoff=None):
     # El handoff solo existe si el validador canonico vio gate_arte ABIERTO
     # (validate-publication-chain.py §validate_handoff). No se re-deriva aqui.
     return GateDecision(True, [f"handoff {handoff_id!r} en {status}."])
+
+
+def _verificar_hashes_contra_paquete(claims_declarados, claim_packet):
+    """Contrasta los hashes que la pieza declara contra el paquete real.
+
+    Una pieza no puede autoafirmar un `approved_claim_hash` que el claim
+    packet no respalda: exige que el claim exista en el paquete, este
+    APROBADO por un humano, y que el hash coincida EXACTAMENTE con el que
+    quedo registrado en esa aprobacion. Devuelve el motivo de cierre, o None
+    si todo coincide.
+    """
+    if not isinstance(claim_packet, dict):
+        return "claim_packet con forma invalida: no se puede verificar contra el canon."
+    por_id = {
+        c.get("claim_id"): c for c in (claim_packet.get("claims") or [])
+        if isinstance(c, dict)
+    }
+    for c in claims_declarados:
+        cid, declarado = c.get("claim_id"), c.get("approved_claim_hash")
+        real = por_id.get(cid)
+        if real is None:
+            return f"claim {cid!r} no existe en el claim packet real: no se autoafirma un claim ajeno."
+        rev = real.get("revision_humana") or {}
+        if rev.get("estado") != "APROBADO":
+            return f"claim {cid!r} no tiene revision_humana.estado=APROBADO en el canon real."
+        real_hash = rev.get("contenido_hash_sha256")
+        if not real_hash or declarado != real_hash:
+            return (f"claim {cid!r}: el hash declarado no coincide con el hash de la aprobacion "
+                    "humana real. Una pieza no puede autoafirmar un hash que el canon no respalda.")
+    return None
 
 
 def requires_human_visual_review(qa_report):

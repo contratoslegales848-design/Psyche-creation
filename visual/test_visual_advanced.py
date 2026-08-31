@@ -16,6 +16,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import canonical  # noqa: E402
 import composition  # noqa: E402
+import gates  # noqa: E402
 import feedback  # noqa: E402
 import inspection  # noqa: E402
 import pipeline  # noqa: E402
@@ -714,3 +715,51 @@ class TestConsultasDelRegistro(unittest.TestCase):
             for malo in ("../otro", "a/b", ".."):
                 with self.assertRaises(StoragePathError):
                     reg.generations_for(malo)
+
+
+class TestVerificacionDeHashContraElPaquete(unittest.TestCase):
+    """Hallazgo del red-team sobre PIEZA-01: sin claim_packet, el gate confiaba
+    en el hash declarado por la propia pieza sin contrastarlo contra la
+    aprobacion humana real. gates.py ahora lo verifica cuando se le aporta el
+    paquete (resolver.py siempre lo tiene disponible)."""
+
+    PAQUETE = {
+        "piece_id": "P-1",
+        "claims": [{
+            "claim_id": "c1",
+            "revision_humana": {"estado": "APROBADO", "contenido_hash_sha256": "a" * 64},
+        }],
+    }
+
+    def _proc(self, hash_declarado, claim_id="c1"):
+        return dict(PROC, claims=[{"claim_id": claim_id, "approved_claim_hash": hash_declarado}])
+
+    def test_hash_correcto_abre(self):
+        d = gates.can_enter_visual_generation(self._proc("a" * 64), HANDOFF, claim_packet=self.PAQUETE)
+        self.assertTrue(d.permitido)
+
+    def test_hash_alterado_cierra(self):
+        d = gates.can_enter_visual_generation(self._proc("b" * 64), HANDOFF, claim_packet=self.PAQUETE)
+        self.assertFalse(d.permitido)
+
+    def test_claim_ajeno_al_paquete_cierra(self):
+        d = gates.can_enter_visual_generation(self._proc("a" * 64, "otro-claim"), HANDOFF,
+                                              claim_packet=self.PAQUETE)
+        self.assertFalse(d.permitido)
+
+    def test_claim_no_aprobado_en_el_paquete_cierra(self):
+        paquete = {"piece_id": "P-1", "claims": [{
+            "claim_id": "c1", "revision_humana": {"estado": "PENDIENTE", "contenido_hash_sha256": "a" * 64}}]}
+        d = gates.can_enter_visual_generation(self._proc("a" * 64), HANDOFF, claim_packet=paquete)
+        self.assertFalse(d.permitido)
+
+    def test_sin_claim_packet_preserva_comportamiento_anterior(self):
+        """Compatibilidad: los 200 tests existentes con fixtures sinteticas no aportan
+        claim_packet, y deben seguir funcionando exactamente igual que antes."""
+        d = gates.can_enter_visual_generation(PROC, HANDOFF)
+        self.assertTrue(d.permitido)
+
+    def test_pipeline_completo_rechaza_hash_forjado(self):
+        run = pipeline.generate_visual(self._proc("f" * 64), make_brief(), POLICY, FakeImageProvider(),
+                                       HANDOFF, claim_packet=self.PAQUETE)
+        self.assertEqual(run.receipt.status, "GATE_CERRADO")

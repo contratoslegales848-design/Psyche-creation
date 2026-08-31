@@ -64,6 +64,9 @@ def main(argv=None):
         s = sub.add_parser(c)
         s.add_argument("artefacto")
         s.add_argument("--handoff")
+        s.add_argument("--claim-packet",
+                       help="claim packet real para verificar el hash contra la aprobacion humana; "
+                            "si se omite, se busca por piece_id en pilot/claim-packets/.")
         if c == "simulate":
             s.add_argument("--out", default="artifacts/visual")
     s = sub.add_parser("batch-dry-run"); s.add_argument("directorio")
@@ -124,12 +127,20 @@ def main(argv=None):
                   f"gate={vi.art_gate_state} claims={len(vi.claim_refs)}")
             return 0
 
+        claim_packet = _load(a.claim_packet) if a.claim_packet else None
+        if claim_packet is None:
+            piece_id = art.get("procedencia", {}).get("piece_id")
+            for cid, path, _ in [(p["piece_id"], p["path"], None) for p in resolver.list_pieces()]:
+                if cid == piece_id:
+                    claim_packet = _load(resolver.REPO / path)
+                    break
+
         brief = brief_desde(vi, policy, fams)
         reg = registry_mod.AssetRegistry(a.out) if a.cmd == "simulate" else None
         run = pipeline.generate_visual(
             art["procedencia"], brief, policy, FakeImageProvider(), handoff=handoff,
             family=fams.get(brief.visual_family), families_version=fams.version,
-            dry_run=(a.cmd == "dry-run"), registry=reg,
+            dry_run=(a.cmd == "dry-run"), registry=reg, claim_packet=claim_packet,
             exact_copy=vi.exact_copy, author=vi.author, content_type=vi.content_type)
         print(f"status={run.receipt.status} generation_id={run.receipt.generation_id}")
         if run.plan:

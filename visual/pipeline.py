@@ -87,6 +87,7 @@ def generate_visual(procedencia, brief, policy, provider, handoff=None,
                     memory=None, known_hashes=(), family=None, repetition=None,
                     inspector=None, dry_run=False, registry=None,
                     parent_generation_id="", feedback_codes=(), changed_fields=None,
+                    claim_packet=None,
                     allow_regeneration=False,
                     exact_copy="", author="", content_type="", families_version="",
                     reserved_surface=None, compose_asset=True):
@@ -103,7 +104,7 @@ def generate_visual(procedencia, brief, policy, provider, handoff=None,
         return r
 
     # 1. Gate — estado canonico leido, nunca recalculado.
-    decision = gates.can_enter_visual_generation(procedencia, handoff)
+    decision = gates.can_enter_visual_generation(procedencia, handoff, claim_packet=claim_packet)
     if not decision.permitido:
         log.emit("visual.gate.rejected", content_id=base["content_id"], reason=decision.motivos[:1])
         return VisualRun(fin("GATE_CERRADO", motivos=decision.motivos), events=log.to_list())
