@@ -1,0 +1,41 @@
+{
+  "id": "pieza-01-reales",
+  "titulo": "Propiedad y posesión (comparado)",
+  "frase": "En los ordenamientos examinados, la propiedad o dominio atribuye facultades amplias de aprovechamiento, goce y disposición sobre una cosa, siempre dentro de los límites establecidos por la ley. La formulación técnica no es idéntica en México, España y Argentina.",
+  "remate": "Nota comparada — México, España, Argentina",
+  "marca": "LegalMente",
+  "imagen": "assets/images/pieza-01-reales.jpg",
+  "audio": null,
+  "duracionSegundos": 10,
+  "procedencia": {
+    "modo": "GOBERNADO",
+    "content_id": "LM-PIEZA-01-REALES",
+    "publicable": true,
+    "jurisdiction_layer": "CAPA_B_VARIABLE",
+    "piece_id": "PIEZA-01-REALES",
+    "handoff_id": "HO-PIEZA-01-REALES-001",
+    "claims": [
+      {
+        "claim_id": "pieza-01-claim-1",
+        "approved_claim_hash": "4813708c81cec506caa8a5df5141741d8c074bfe38d909394429e72db866f2cb"
+      },
+      {
+        "claim_id": "pieza-01-claim-2",
+        "approved_claim_hash": "4b0d70f38f4032d96b0f30d014a0062c21e1db7e6b18a37370c9cdd85f8321a0"
+      },
+      {
+        "claim_id": "pieza-01-claim-4",
+        "approved_claim_hash": "74056bcf72062faa8374383eafe3482f37638a8b7ce04c8d71e7f8698695e938"
+      }
+    ],
+    "production_status": "APROBADO_QA",
+    "nota": "Producción autorizada (ProductionHandoff HO-PIEZA-01-REALES-001). 'publicable: true' clasifica este artefacto como contenido de producción real, no como material de prueba — NO implica que la publicación esté autorizada. Publicar exige, aparte y además, una PublicationDecision humana con decisor identificado; ninguna existe todavía."
+  },
+  "taxonomia": {
+    "materia": "civil",
+    "submateria": "derechos_reales",
+    "concepto": "propiedad_y_posesion",
+    "situacion_humana": "quien_ocupa_un_bien_reconociendo_dominio_ajeno",
+    "content_type": "concepto"
+  }
+}

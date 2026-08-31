@@ -1,0 +1,76 @@
+{
+  "record_type": "ContentCandidate",
+  "schema_version": "0.3-borrador",
+  "candidate_id": "CANDIDATO-04-FORENSE",
+  "estado": "CANDIDATE",
+  "nota_de_estado": "Esta pieza NO tiene ningun claim aprobado todavia. El campo 'borrador_claim_NO_VERIFICADO' de abajo es un BORRADOR redactado para acelerar la verificacion humana — no es un claim, ninguna fuente esta CONFIRMADA en el sentido fail-closed de esta skill (WebFetch/curl directos siguen EGRESS_BLOCKED), y no puede entrar al pipeline visual ni a validate-claim-packet.py hasta que alguien con acceso de red directo confirme el texto literal contra el PDF/pagina oficial y mueva este contenido a un claim packet real en pilot/claim-packets/.",
+  "origen": "Elegido por el fundador el 2026-08-31: 'lo forense' fue el unico concepto concreto en un pedido abierto sobre poblar una materia nueva. No proviene de ningun documento de Drive.",
+
+  "materia": "civil",
+  "submateria": "prueba_pericial",
+  "situacion_humana": "quien_ve_una_pericial_o_evidencia_forense_presentada_como_concluyente",
+
+  "pregunta_humana": "¿Una prueba pericial o forense por si sola decide un caso?",
+
+  "decision_de_alcance": {
+    "decidido_por": "Claude, con autorizacion expresa del fundador para ampliar criterio en decisiones de alcance (no en verificacion de fuente, que sigue siendo regla no negociable de CLAUDE.md §4)",
+    "fecha": "2026-08-31",
+    "civil_no_penal": "El estandar procesal penal varia mas entre estos tres paises (sistemas acusatorios en distintas etapas de reforma); el riesgo de falsa universalizacion es mas alto. Civil es comparativamente mas estable.",
+    "nacional_no_subnacional": "Mismo patron que PIEZA-01 (CAPA_B_VARIABLE, comparado a nivel pais). Si Argentina tiene variacion provincial real en materia civil, eso se declara como limitacion del claim al verificar — no se intenta cubrir aqui."
+  },
+
+  "descubrimiento_via_websearch_2026_08_31": {
+    "metodo": "WebSearch (no WebFetch/curl): otra via real, no sujeta al mismo bloqueo de egress por dominio — devuelve snippets indexados, no el documento completo. Nivel de evidencia MENOR que abrir el PDF directamente: se documenta asi, no se presenta como equivalente a origen_oficial_confirmado + texto_exacto_consultado = true.",
+    "espana_LEC_art_348": "CONFIRMADO CON ALTA CONFIANZA: multiples snippets del propio dominio boe.es (incluida la URL candidata exacta boe.es/buscar/pdf/2000/BOE-A-2000-323-consolidado.pdf) describen el art. 348 LEC como 'el tribunal valorara los dictamenes periciales segun las reglas de la sana critica' — coincide con el borrador. Sigue pendiente leer el texto literal completo del articulo (WebFetch bloqueado) antes de marcar texto_exacto_consultado=true.",
+    "mexico_CFPC_DEROGADO": "HALLAZGO REAL: el Codigo Federal de Procedimientos Civiles (fuente candidata original) fue reemplazado por el Codigo Nacional de Procedimientos Civiles y Familiares (CNPCF) — bug de vigencia detectado y corregido AQUI, no en un claim ya aprobado. El articulo exacto sobre valoracion de la prueba pericial en el CNPCF sigue SIN IDENTIFICAR: las busquedas solo devolvieron principios generales ('la prudente apreciacion del Magistrado, atendiendo siempre al principio de proporcionalidad'), sin numero de articulo confiable.",
+    "argentina_CPCCN_art_477_sin_confirmar": "PARCIAL: la URL candidata (servicios.infoleg.gob.ar/.../16547/texact.htm) se confirmo como el Codigo Procesal Civil y Comercial de la Nacion vigente. El articulo 477 aparece referenciado en busquedas relacionadas con dictamen pericial, pero NINGUNA busqueda devolvio su texto literal — no se puede confirmar que sea el articulo correcto ni su contenido exacto."
+  },
+
+  "borrador_claim_NO_VERIFICADO": {
+    "advertencia": "NO ES UN CLAIM. El texto de España tiene ahora respaldo indirecto real (snippets de boe.es); México y Argentina siguen siendo estimacion/no confirmados. NO puede copiarse a un claim packet real sin que alguien lea el texto literal completo de cada fuente.",
+    "texto_borrador": "En los sistemas procesales civiles de México, España y Argentina, la prueba pericial no vincula automáticamente al juzgador: se valora junto con el resto del material probatorio conforme a las reglas de la sana crítica (España) o de la prudente apreciación judicial atendiendo al principio de proporcionalidad (México). El dictamen pericial orienta la decisión judicial; no la sustituye ni la determina por sí solo.",
+    "localizadores": {
+      "México": "Código Nacional de Procedimientos Civiles y Familiares (corregido desde CFPC, derogado) — artículo específico SIN IDENTIFICAR todavía.",
+      "España": "Ley de Enjuiciamiento Civil (LEC, Ley 1/2000), art. 348 — respaldado por snippets del dominio oficial boe.es, texto literal completo aún no leído.",
+      "Argentina": "Código Procesal Civil y Comercial de la Nación, art. 477 (referenciado en fuentes relacionadas, texto literal NO confirmado — podría no ser el artículo correcto)."
+    }
+  },
+
+  "jurisdicciones_candidatas": ["México", "España", "Argentina"],
+  "alcance_esperado": "CAPA_B_VARIABLE",
+
+  "fuentes_candidatas_SIN_VERIFICAR": [
+    {
+      "pais": "México",
+      "titulo_candidato": "Código Nacional de Procedimientos Civiles y Familiares — valoración de la prueba pericial",
+      "url_candidata": "https://www.diputados.gob.mx/LeyesBiblio/pdf_mov/Codigo_Nacional_de_Procedimientos_Civiles_y_Familiares.pdf",
+      "nota": "CORREGIDA vía WebSearch 2026-08-31: la fuente anterior (CFPC) está derogada. Esta URL identifica el código vigente, pero el artículo exacto y su texto siguen sin confirmarse — WebFetch directo sigue EGRESS_BLOCKED."
+    },
+    {
+      "pais": "España",
+      "titulo_candidato": "Ley de Enjuiciamiento Civil (LEC) — art. 348",
+      "url_candidata": "https://www.boe.es/buscar/pdf/2000/BOE-A-2000-323-consolidado.pdf",
+      "nota": "Respaldada por múltiples snippets del propio dominio boe.es vía WebSearch 2026-08-31 (WebFetch directo sigue EGRESS_BLOCKED). Es la fuente con mayor confianza de las tres — aun así, falta leer el texto literal completo."
+    },
+    {
+      "pais": "Argentina",
+      "titulo_candidato": "Código Procesal Civil y Comercial de la Nación — art. 477 (referenciado, no confirmado)",
+      "url_candidata": "https://servicios.infoleg.gob.ar/infolegInternet/anexos/15000-19999/16547/texact.htm",
+      "nota": "URL confirmada como el CPCCN vigente vía WebSearch. Art. 477 aparece en resultados relacionados con dictamen pericial pero sin texto literal — no confirmar sin leerlo."
+    }
+  ],
+
+  "conexion_editorial": "Se eligio por conectar con un cliche cultural muy extendido (cine/literatura policial: 'la pericial resuelve el caso'), que es precisamente el tipo de mito que LegalMente puede corregir sin caer en asesoria — siempre que el claim final este verificado.",
+
+  "next_action": "VERIFY_SOURCES",
+  "owner": "SYSTEM_O_HUMANO_CON_RED",
+  "bloqueado_por": "WebFetch/curl directos siguen EGRESS_BLOCKED (reconfirmado 2026-08-31). WebSearch SÍ funciona y permitió avanzar España a alta confianza y corregir un error real de vigencia en México — pero no sustituye leer el texto literal completo de cada artículo, que sigue pendiente.",
+
+  "prohibiciones_explicitas": [
+    "borrador_claim_NO_VERIFICADO no puede copiarse a un claim packet real ni a texto_exacto sin leer el texto literal completo de cada fuente — snippets de WebSearch no equivalen a texto_exacto_consultado=true.",
+    "El artículo 477 argentino y el artículo mexicano en el CNPCF no pueden tratarse como confirmados: no se leyó su texto.",
+    "No presentar 'sana crítica' como el estándar universal en los tres países: México usa 'prudente apreciación'/'proporcionalidad', término distinto, ya reflejado en el borrador.",
+    "No abrir gate_arte ni generar imagen alguna a partir de este candidato.",
+    "Si la lectura literal contradice el borrador (artículo distinto, estándar distinto, derogado de nuevo), el borrador se descarta — no se ajusta el resultado para que coincida con lo redactado aquí."
+  ]
+}
