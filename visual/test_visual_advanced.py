@@ -659,3 +659,58 @@ class TestMemoriaCableadaEnLote(unittest.TestCase):
                                        HANDOFF, memory=VisualMemory(), dry_run=True)
         self.assertEqual(run.plan.repetition_score, 0)
         self.assertEqual(run.plan.repetition_level, "BAJO")
+
+
+class TestConsultasDelRegistro(unittest.TestCase):
+    """§36 — la API de consulta del registro, ejercitada de verdad.
+
+    Estaba definida y sin probar: una API publica sin pruebas es un pasivo.
+    """
+
+    def _run(self, reg, cid="LM-TEST-001"):
+        import compositor
+        return pipeline.generate_visual(
+            dict(PROC, content_id=cid), make_brief(content_id=cid), POLICY,
+            FakeImageProvider(), dict(HANDOFF, content_id=cid), registry=reg,
+            exact_copy="Una frase juridica breve", content_type="maxima",
+            reserved_surface=compositor.ReservedSurface(120, 1650, 500, 90))
+
+    def test_rutas_de_raw_y_composed(self):
+        with tempfile.TemporaryDirectory() as d:
+            reg = registry_mod.AssetRegistry(d)
+            run = self._run(reg)
+            g = run.receipt.generation_id
+            self.assertIsNotNone(reg.raw_asset_path("LM-TEST-001", g, run.receipt.raw_asset_id))
+            self.assertIsNotNone(
+                reg.composed_asset_path("LM-TEST-001", g, run.receipt.composed_asset_id))
+
+    def test_ruta_inexistente_devuelve_none(self):
+        with tempfile.TemporaryDirectory() as d:
+            reg = registry_mod.AssetRegistry(d)
+            run = self._run(reg)
+            self.assertIsNone(
+                reg.composed_asset_path("LM-TEST-001", run.receipt.generation_id, "asset-noexiste"))
+
+    def test_generaciones_fallidas(self):
+        with tempfile.TemporaryDirectory() as d:
+            reg = registry_mod.AssetRegistry(d)
+            fallo = pipeline.generate_visual(PROC, make_brief(), POLICY,
+                                             FakeImageProvider("timeout"), HANDOFF)
+            reg.store(fallo.receipt)
+            self.assertEqual(len(reg.failed_generations("LM-TEST-001")), 1)
+            self.assertEqual(reg.failed_generations("LM-TEST-001")[0]["status"],
+                             "GENERACION_FALLIDA")
+
+    def test_contenido_sin_generaciones(self):
+        with tempfile.TemporaryDirectory() as d:
+            reg = registry_mod.AssetRegistry(d)
+            self.assertEqual(reg.generations_for("LM-NO-EXISTE"), [])
+            self.assertIsNone(reg.latest_generation("LM-NO-EXISTE"))
+            self.assertIsNone(reg.human_approved_asset("LM-NO-EXISTE"))
+
+    def test_consulta_con_id_inseguro_falla_cerrado(self):
+        with tempfile.TemporaryDirectory() as d:
+            reg = registry_mod.AssetRegistry(d)
+            for malo in ("../otro", "a/b", ".."):
+                with self.assertRaises(StoragePathError):
+                    reg.generations_for(malo)

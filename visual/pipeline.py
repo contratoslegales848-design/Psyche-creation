@@ -15,21 +15,19 @@ import gates
 import receipts as receipts_mod
 from composition import build_typography_plan, ExactCopyViolation
 from compiler import compile_request
-from compositor import (
-    CompositionError, CompositionOverflow, NEEDS_HUMAN_REVIEW as COMP_NEEDS_REVIEW,
-    compose, composition_qa,
-)
-from inspection import NoopSemanticInspector, NOT_EVALUATED, FAIL, NEEDS_HUMAN_REVIEW
+from compositor import CompositionError, CompositionOverflow, compose, composition_qa
+from inspection import NoopSemanticInspector, FAIL, NEEDS_HUMAN_REVIEW
 from memory import VisualMemory, VisualMemoryEntry
 from observability import EventLog
-from plan import GenerationPlan, ACCEPT, ADAPT, REJECT
+from plan import GenerationPlan, REJECT
 from providers.base import NormalizedImageRequest
-from providers.selection import ProviderRegistry, evaluate
+from providers.selection import evaluate
 from qa import structural_qa
 
-# Estados por item de lote (§28).
-PENDING, RUNNING, BLOCKED, GENERATED, FAILED, NEEDS_REVIEW = (
-    "PENDING", "RUNNING", "BLOCKED", "GENERATED", "FAILED", "NEEDS_HUMAN_REVIEW")
+# Estados por item de lote (§28). No existe un estado GENERATED: un asset
+# producido queda SIEMPRE en NEEDS_HUMAN_REVIEW, porque nada lo aprueba solo.
+PENDING, RUNNING, BLOCKED, FAILED, NEEDS_REVIEW = (
+    "PENDING", "RUNNING", "BLOCKED", "FAILED", "NEEDS_HUMAN_REVIEW")
 
 
 @dataclass

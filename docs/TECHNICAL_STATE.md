@@ -23,9 +23,9 @@ real y una prueba que pasa.
 | Pipeline de video (Remotion) | 🟢 VERDE (nuevo) | Renderiza, y ya no puede renderizar contenido publicable sin origen verificable. |
 | Anti-duplicados | 🟡 AMARILLO (nuevo) | Controles literales implementados; la paráfrasis sigue sin detectarse. |
 | Motor de generación visual | 🟢 VERDE (para su alcance) | `visual/`, 124 pruebas. Gate fail-closed, adapter canónico, familias, memoria anti-repetición, compilador explicable, dry-run, lotes, reintento selectivo, regeneración, registro. Decisión de marca aplicada (ADR 0002). |
-| Composición tipográfica / marca | ⚫ CONTRACT_ONLY | `TypographyPlan` y `BrandCompositionPlan` existen y se prueban; el rasterizado NO — no hay Pillow en el repo. |
-| Adapters de proveedor reales | ⚫ NO CONSTRUIDOS (por diseño) | Solo `FakeImageProvider`. Sin credenciales, sin red, sin créditos. |
-| Contrato cross-repo | 🟢 VERDE (lado Psyche) | `contract/`, Canonical Envelope v1, 8 fixtures, 12 contract tests. El lado consumidor (web) está pendiente. |
+| Composición tipográfica / marca | 🟢 VERDE (nuevo) | `visual/compositor.py`: rasterizado real con Pillow. Métrica tipográfica real, área segura, `exact_copy` inmutable (desborda antes que mutar), marca solo sobre superficie reservada declarada y plana. 33 pruebas. |
+| Adapter de proveedor real | 🟡 AMARILLO (nuevo) | `providers/http_provider.py`: adapter HTTP real con transporte inyectable, 23 pruebas, cero llamadas externas. Sin credenciales configuradas en el workspace: no se ha ejecutado contra ningún proveedor. |
+| Contrato cross-repo | 🟢 VERDE (ambos lados) | Psyche: `contract/`, Canonical Envelope v1, 8 fixtures, 12 tests. Web: consumidor estricto implementado y probado **localmente** (18 tests), entregado como serie de patches verificada en `handoff/legalmente-web/`. Falta empujarlo: escritura remota bloqueada. |
 | Motor de producción masiva | ⚫ NO CONSTRUIDO | Contrato técnico definido (`docs/contrato-motor-masivo.md`); el motor, deliberadamente, no. |
 | Documentación vs. realidad | 🟡 AMARILLO | Dos derivas detectadas (ver §5). |
 | `legalmente-web` | 🟡 AMARILLO | Prototipo honesto, pero el repositorio es **público** y `CLAUDE.md §8` lo declara privado. |
@@ -53,7 +53,7 @@ real y una prueba que pasa.
 - `fixtures/` — 10 positivas, 46 negativas.
 - `publication/fixtures/` — 2 cadenas válidas, 14 inválidas, 1 claim packet sintético.
 
-**Pruebas: 408, todas en verde.**
+**Pruebas: 472, todas en verde** (Psyche). Más 18 del consumidor de web, locales.
 | Suite | Pruebas |
 |---|---|
 | `test_validate_claim_packet` | 147 |
@@ -61,7 +61,7 @@ real y una prueba que pasa.
 | `test_validate_publication_chain` | 41 |
 | `test_confidentiality_rules` | 20 |
 | `test_validate_content_provenance` | 30 |
-| `visual/test_visual_pipeline` + `test_visual_advanced` | 124 |
+| `visual/` (4 suites) | 185 |
 | `contract/test_canonical_envelope` | 12 |
 
 ### 2.2 Los cuatro estados no equivalentes
