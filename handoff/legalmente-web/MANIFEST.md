@@ -11,8 +11,8 @@ la escritura remota sobre `legallmente-alt/legalmente-web` está bloqueada
 | Repositorio destino | `legallmente-alt/legalmente-web` |
 | Commit base | `23a9ce0209579a9b85c049b628e2a2c86fb0c5d7` (`main`) |
 | Rama local | `local/psyche-contract-consumer-v1` |
-| Commits | 2 |
-| Patches | `0001-feat-contract-*.patch`, `0002-test-public-*.patch` |
+| Commits | 3 |
+| Patches | `0001-feat-contract-*`, `0002-test-public-*`, `0003-feat-contract-*` |
 | Bundle | `legalmente-web-integration.bundle` |
 | Conflictos conocidos | ninguno contra `23a9ce0` |
 
@@ -24,6 +24,11 @@ la escritura remota sobre `legallmente-alt/legalmente-web` está bloqueada
 2. **`test(public)`** — endurece `scripts/public-route-proof.mjs` con dos guardas
    nuevas: fuga por serialización (contenido, no solo nombre de archivo) y
    enlaces públicos a rutas `/internal`.
+3. **`feat(contract)`** — metadatos de transporte (`source_system`,
+   `source_revision`, `provenance_digest`) portados de PR #27, con dos
+   diferencias deliberadas y probadas: el estado canónico no es opaco (#27
+   aceptaba `"APPROVED"` y `"LIVE"`), y la tolerancia a campos v1 futuros es una
+   política declarada, no un descuido.
 
 ## Cómo aplicarlo
 
@@ -54,7 +59,7 @@ npm run build:public && npm run test:public-routes
 ## Resultado observado
 
 Verificado **en un clon limpio distinto del directorio de trabajo**
-(`/tmp/verify`), tras aplicar los patches con `git am`:
+(`/tmp/verify3`, base `23a9ce0` sin cambios), tras aplicar los 3 patches con `git am`:
 
 | Comprobación | Baseline (23a9ce0) | Tras los patches |
 |---|---|---|
@@ -65,7 +70,7 @@ Verificado **en un clon limpio distinto del directorio de trabajo**
 | `test:knowledge-integrity` | OK | OK |
 | `test:ecosystem-kernel` | OK | OK |
 | `test:agent-contribution` | OK | OK |
-| `test:psyche-contract` | no existía | OK (18) |
+| `test:psyche-contract` | no existía | OK (23) |
 | `build` / `build:public` | OK | OK |
 | `test:public-routes` | OK | OK (con 2 guardas nuevas) |
 

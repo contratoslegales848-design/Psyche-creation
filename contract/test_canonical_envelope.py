@@ -83,3 +83,39 @@ class TestContrato(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
+
+
+class TestTransporte(unittest.TestCase):
+    """Metadatos de transporte para trazabilidad cross-repo (portados de PR #27)."""
+
+    def test_fixtures_declaran_emisor_y_digest(self):
+        env = load("valid_ready")
+        self.assertEqual(env["source_system"], "Psyche-creation")
+        self.assertTrue(env["source_revision"])
+        self.assertRegex(env["provenance_digest"], r"^[0-9a-f]{64}$")
+
+    def test_digest_con_forma_invalida_se_rechaza(self):
+        """Un digest malformado aparenta trazabilidad: es peor que no tenerlo."""
+        with self.assertRaises(ContractViolation):
+            consume(load("bad_provenance_digest"))
+
+    def test_emisor_no_autorizado_se_rechaza(self):
+        env = dict(load("valid_ready"), source_system="otro-sistema")
+        self.assertTrue(validate_envelope(env))
+
+    def test_transporte_ausente_no_rompe_la_v1(self):
+        """Los metadatos son aditivos: su ausencia no invalida un envelope v1."""
+        env = {k: v for k, v in load("valid_ready").items()
+               if k not in ("source_system", "source_revision", "provenance_digest")}
+        self.assertEqual(validate_envelope(env), [])
+
+    def test_el_estado_canonico_nunca_es_opaco(self):
+        """Contraste con PR #27, que aceptaba cualquier string como canonicalStatus.
+
+        Aquí un estado desconocido —incluido 'APPROVED', que suena a autoridad—
+        se rechaza. Un adapter que transporta estados opacos no puede impedir
+        que uno forjado lo atraviese.
+        """
+        for falso in ("APPROVED", "LIVE", "PUBLISHABLE", "SUPER_APTO"):
+            env = dict(load("valid_ready"), claim_state=falso)
+            self.assertTrue(validate_envelope(env), f"{falso} no debe aceptarse")

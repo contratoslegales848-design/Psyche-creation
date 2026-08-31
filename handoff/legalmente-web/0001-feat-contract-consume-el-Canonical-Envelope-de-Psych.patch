@@ -1,7 +1,7 @@
 From 48356b289f3364f3ddfccdf5bf71e3e5a08b529e Mon Sep 17 00:00:00 2001
 From: Claude <noreply@anthropic.com>
 Date: Mon, 31 Aug 2026 08:15:26 +0000
-Subject: [PATCH 1/2] feat(contract): consume el Canonical Envelope de Psyche
+Subject: [PATCH 1/3] feat(contract): consume el Canonical Envelope de Psyche
  tras una frontera estricta
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8

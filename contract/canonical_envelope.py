@@ -9,6 +9,7 @@ ejecucion entre repositorios (§62).
 """
 
 import json
+import re
 from dataclasses import dataclass, field, asdict
 
 ENVELOPE_SCHEMA_VERSION = "1.0"
@@ -34,6 +35,12 @@ class CanonicalEnvelope:
     provenance: dict = field(default_factory=dict)
     art_eligibility: str = "NO_ELEGIBLE"
     emitted_at: str = ""
+    # --- metadatos de transporte (trazabilidad cross-repo) ---
+    # Portados de la exploracion de PR #27 en legalmente-web: permiten correlacionar
+    # un CONTENT_ID entre repositorios sin acoplar nada en tiempo de ejecucion.
+    source_system: str = "Psyche-creation"
+    source_revision: str = ""       # commit/tag del canon que emitio esto
+    provenance_digest: str = ""     # sha256 sobre las referencias de procedencia
 
     def to_dict(self):
         return asdict(self)
@@ -74,6 +81,15 @@ def validate_envelope(data):
     prov = data.get("provenance")
     if not isinstance(prov, dict) or not prov.get("sources"):
         e.append("provenance ausente o sin fuentes: no se infiere procedencia valida.")
+
+    # Transporte: si se declara un digest, debe tener forma de sha256. Un digest
+    # con forma invalida es peor que ausente, porque aparenta trazabilidad.
+    dig = data.get("provenance_digest")
+    if dig and not re.fullmatch(r"[0-9a-fA-F]{64}", str(dig)):
+        e.append(f"provenance_digest con forma invalida: se espera sha256 hex de 64 caracteres.")
+    if data.get("source_system") and data["source_system"] != "Psyche-creation":
+        e.append(f"source_system inesperado: {data['source_system']!r}. "
+                 "El unico emisor autorizado del canon es Psyche-creation.")
 
     claims = data.get("claims")
     if not isinstance(claims, list) or not claims:

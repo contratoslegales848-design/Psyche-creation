@@ -1,7 +1,7 @@
 From 658a8a8cb0ce497f285f5e40c46be34de7484ec4 Mon Sep 17 00:00:00 2001
 From: Claude <noreply@anthropic.com>
 Date: Mon, 31 Aug 2026 08:15:26 +0000
-Subject: [PATCH 2/2] test(public): probar la frontera interna por contenido,
+Subject: [PATCH 2/3] test(public): probar la frontera interna por contenido,
  no solo por nombre de archivo
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8

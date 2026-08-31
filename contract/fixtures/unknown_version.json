@@ -21,8 +21,11 @@
       }
     ]
   },
+  "provenance_digest": "4d1e0ebdd48915bae9a2e88a1c1dc902593556ab321599474c8a501c9db4019f",
   "schema_version": "99.0",
+  "source_revision": "9e4bded",
   "source_state": "VERIFICADA",
+  "source_system": "Psyche-creation",
   "territories": [
     "Espana",
     "Mexico",

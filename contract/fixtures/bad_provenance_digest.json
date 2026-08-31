@@ -1,6 +1,6 @@
 {
   "art_eligibility": "ELEGIBLE",
-  "claim_state": "BLOQUEADO",
+  "claim_state": "APTO_PARA_NARRATIVA",
   "claims": [
     {
       "approved_claim_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
@@ -8,7 +8,7 @@
       "texto_exacto": "En el comodato se devuelve la misma cosa."
     }
   ],
-  "content_id": "LM-FIXTURE-007",
+  "content_id": "LM-FIXTURE-009",
   "emitted_at": "2026-08-31T00:00:00+00:00",
   "jurisdiction_layer": "CAPA_A_TRANSVERSAL",
   "legal_gate_state": "ABIERTO",
@@ -21,7 +21,7 @@
       }
     ]
   },
-  "provenance_digest": "4d1e0ebdd48915bae9a2e88a1c1dc902593556ab321599474c8a501c9db4019f",
+  "provenance_digest": "no-es-un-sha256",
   "schema_version": "1.0",
   "source_revision": "9e4bded",
   "source_state": "VERIFICADA",

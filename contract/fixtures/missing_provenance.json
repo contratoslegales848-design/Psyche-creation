@@ -13,8 +13,11 @@
   "jurisdiction_layer": "CAPA_A_TRANSVERSAL",
   "legal_gate_state": "ABIERTO",
   "provenance": {},
+  "provenance_digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
   "schema_version": "1.0",
+  "source_revision": "9e4bded",
   "source_state": "VERIFICADA",
+  "source_system": "Psyche-creation",
   "territories": [
     "Espana",
     "Mexico",
