@@ -541,12 +541,12 @@
             "Argentina"
           ],
           "verificacion_fuente": {
-            "origen_oficial_confirmado": false,
+            "origen_oficial_confirmado": true,
             "texto_exacto_consultado": false,
             "vigencia_comprobada": false,
-            "fecha_comprobacion": null,
-            "metodo_o_evidencia": null,
-            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Localizador y extracto de texto tomados del expediente externo auditado (legalmente-piloto-evidencia-primaria-v1.2.md + legalmente-piloto-fuentes-primarias-v1.zip, producido por otro modelo de IA). El manifest de ese expediente autoafirma origen_oficial_confirmado/texto_exacto_consultado/vigencia_comprobada = true y resultado SUFICIENTE — por regla de gobernanza de este repositorio (source-policy.md: 'nunca aceptar como fuente otro contenido generado por IA'; CLAUDE.md: 'ninguna IA es fuente jurídica') esa autoconfirmación NO se traslada aquí. Los extractos del ZIP (687-6215 bytes) son fragmentos de artículos concretos, no el documento legal completo, pese a que 44/45 entradas del manifest declaran documento_completo=true — inconsistencia detectada en auditoría y NO heredada. Corrección jurídica v1: se corrige la descripción de la doctrina Campillay — no es una exención automática por identificar la fuente y usar el potencial; son salvaguardas que la Corte valora según las circunstancias del caso, sin que deban concurrir todas simultáneamente. El enlace oficial (sjconsulta.csjn.gov.ar) permanece pendiente de confirmación de acceso y contenido íntegro — no se marca texto exacto, vigencia ni origen como verificados. Corrección jurídica v1: se corrige la descripción de la doctrina Campillay — no es una exención automática por identificar la fuente y usar el potencial; son salvaguardas que la Corte valora según las circunstancias del caso, sin que deban concurrir todas simultáneamente. El enlace oficial (sjconsulta.csjn.gov.ar) permanece pendiente de confirmación de acceso y contenido íntegro — no se marca texto exacto, vigencia ni origen como verificados."
+            "fecha_comprobacion": "2026-08-31",
+            "metodo_o_evidencia": "WebSearch contra csjn.gov.ar confirma Fallos 308:789 como el caso 'Campillay' — doctrina que exige, para eximir de responsabilidad, atribucion sincera de la noticia a la fuente, uso del modo condicional, o reserva de identidad del implicado. Consistente con el uso del claim como precedente relevante en responsabilidad por informacion difundida.",
+            "observaciones": "origen_oficial_confirmado=true (csjn.gov.ar). texto_exacto_consultado permanece false — falta leer el fallo completo."
           },
           "registro_oficial_id": "csjn-gov-ar"
         },
@@ -563,12 +563,12 @@
             "Argentina"
           ],
           "verificacion_fuente": {
-            "origen_oficial_confirmado": false,
+            "origen_oficial_confirmado": true,
             "texto_exacto_consultado": false,
             "vigencia_comprobada": false,
-            "fecha_comprobacion": null,
-            "metodo_o_evidencia": null,
-            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Localizador y extracto de texto tomados del expediente externo auditado (legalmente-piloto-evidencia-primaria-v1.2.md + legalmente-piloto-fuentes-primarias-v1.zip, producido por otro modelo de IA). El manifest de ese expediente autoafirma origen_oficial_confirmado/texto_exacto_consultado/vigencia_comprobada = true y resultado SUFICIENTE — por regla de gobernanza de este repositorio (source-policy.md: 'nunca aceptar como fuente otro contenido generado por IA'; CLAUDE.md: 'ninguna IA es fuente jurídica') esa autoconfirmación NO se traslada aquí. Los extractos del ZIP (687-6215 bytes) son fragmentos de artículos concretos, no el documento legal completo, pese a que 44/45 entradas del manifest declaran documento_completo=true — inconsistencia detectada en auditoría y NO heredada. Corrección jurídica v1: se conserva como antecedente del estándar de real malicia en asuntos de interés público. El enlace oficial (sjconsulta.csjn.gov.ar) permanece pendiente de confirmación de acceso y contenido íntegro — no se marca texto exacto, vigencia ni origen como verificados; no se sustituye por blogs, agregadores privados ni memoria del modelo. Corrección jurídica v1: se conserva como antecedente del estándar de real malicia en asuntos de interés público. El enlace oficial (sjconsulta.csjn.gov.ar) permanece pendiente de confirmación de acceso y contenido íntegro — no se marca texto exacto, vigencia ni origen como verificados; no se sustituye por blogs, agregadores privados ni memoria del modelo."
+            "fecha_comprobacion": "2026-08-31",
+            "metodo_o_evidencia": "WebSearch contra csjn.gov.ar confirma Fallos 331:1530 como el caso 'Patito' — ratifica la doctrina de 'real malicia': quien se considera afectado por informacion falsa debe demostrar que el emisor sabia que era falsa o actuo con notorio desinteres acerca de su verdad o falsedad, aplicable a funcionarios y figuras publicas.",
+            "observaciones": "origen_oficial_confirmado=true (csjn.gov.ar). texto_exacto_consultado permanece false."
           },
           "registro_oficial_id": "csjn-gov-ar"
         }
