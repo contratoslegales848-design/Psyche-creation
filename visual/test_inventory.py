@@ -34,13 +34,12 @@ class TestInventarioReal(unittest.TestCase):
             self.assertTrue(any("REQUIERE_INVESTIGACION" in b for b in r.blockers))
             self.assertEqual(r.handoff_state, "SIN_HANDOFF")
             # SIEMPRE trabajo de SISTEMA, nunca escala a HUMAN por si solo —
-            # pero la accion exacta depende del estado REAL de verificacion:
-            # PIEZA-02 tuvo una fuente confirmada via WebSearch (2026-08-31),
-            # asi que sigue teniendo trabajo legitimo (VERIFY_SOURCES);
-            # PIEZA-03 sigue con todas sus fuentes intentadas y bloqueadas.
+            # la accion exacta depende del estado REAL de verificacion, que
+            # avanza con cada ronda real de WebSearch (2026-08-31): ambas
+            # piezas ya tienen al menos una fuente con origen_oficial_
+            # confirmado=true, asi que ambas siguen en VERIFY_SOURCES.
             self.assertEqual(r.owner, inventory.OWNER_SYSTEM)
-        self.assertEqual(filas["PIEZA-02-LABORAL"].next_executable_action, inventory.ACTION_VERIFY_SOURCES)
-        self.assertEqual(filas["PIEZA-03-HONOR"].next_executable_action, inventory.ACTION_BLOCKED_BY_SOURCE_ACCESS)
+            self.assertEqual(r.next_executable_action, inventory.ACTION_VERIFY_SOURCES)
 
     def test_pieza01_lee_el_puntero_persistente_vigente(self):
         """review-packet.json (ya corregido) debe reflejar la generacion mas
@@ -91,14 +90,17 @@ class TestInventarioReal(unittest.TestCase):
                 self.assertLess(len(a.blockers), len(c.blockers))
 
     def test_executable_now_no_abre_gates_aunque_incluya_verify_sources(self):
-        """El motor 'next' nunca abre gates: PIEZA-02 puede aparecer en
-        executable_now() (VERIFY_SOURCES sigue siendo trabajo legitimo de
-        sistema con el gate cerrado) sin que eso implique que su art_gate se
-        abrio. PIEZA-03, con todas las fuentes agotadas, no aparece."""
+        """El motor 'next' nunca abre gates: una pieza REQUIERE_INVESTIGACION
+        con VERIFY_SOURCES puede legitimamente aparecer en executable_now()
+        (sigue habiendo fuentes por intentar) sin que eso implique que su
+        art_gate se abrio. Cual de las dos piezas aparece depende del estado
+        REAL de verificacion (cambia segun cuantas fuentes ya se intentaron),
+        no de una lista fija — lo unico invariante es el gate."""
         ejecutables = {r.piece_id: r for r in inventory.executable_now()}
-        if "PIEZA-02-LABORAL" in ejecutables:
-            self.assertEqual(ejecutables["PIEZA-02-LABORAL"].art_gate, "CERRADO")
-        self.assertNotIn("PIEZA-03-HONOR", ejecutables)
+        for pid in ("PIEZA-02-LABORAL", "PIEZA-03-HONOR"):
+            if pid in ejecutables:
+                self.assertEqual(ejecutables[pid].art_gate, "CERRADO")
+                self.assertEqual(ejecutables[pid].next_executable_action, inventory.ACTION_VERIFY_SOURCES)
 
     def test_command_center_payload_no_recalcula_autoridad(self):
         """El campo art_gate del payload es una lectura, nunca una re-derivacion:
