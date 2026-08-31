@@ -93,6 +93,7 @@ def main(argv=None):
     sub.add_parser("gates")
     sub.add_parser("inventory")
     sub.add_parser("inbox")
+    sub.add_parser("system-queue")
     s = sub.add_parser("next")
     s.add_argument("--executable", action="store_true",
                     help="solo lo que LegalMente puede ejecutar AHORA sin intervencion humana.")
@@ -147,6 +148,19 @@ def main(argv=None):
             print(f"      next_executable_action={r.next_executable_action}")
             for b in r.blockers:
                 print(f"      ! {b}")
+        return 0
+
+    if a.cmd == "system-queue":
+        cola = inventory.system_executable_queue()
+        if not cola:
+            print("  (sin trabajo de sistema pendiente)")
+            return 0
+        for r in cola:
+            print(f"  {r.piece_id:20} accion={r.next_executable_action:28} owner={r.owner}")
+            if r.source_summary is not None:
+                s = r.source_summary
+                print(f"      fuentes: accesibles={s.accessible_count} inaccesibles={s.inaccessible_count} "
+                      f"sin_verificar={s.not_verified_count} de {len(s.checks)}")
         return 0
 
     if a.cmd == "inbox":
@@ -206,6 +220,9 @@ def main(argv=None):
     if a.cmd == "topology":
         for link in topology.build_topology():
             print(f"  {link['source']:32} -> {link['target']:28} {link['state']:16} {link['reason']}")
+        print("\n  -- content factory (idea -> ProductionHandoff) --")
+        for link in topology.content_factory_topology():
+            print(f"  {link['source']:24} -> {link['target']:24} {link['state']:18} {link['reason']}")
         return 0
 
     if a.cmd == "resolve":

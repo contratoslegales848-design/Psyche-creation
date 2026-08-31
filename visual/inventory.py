@@ -24,6 +24,7 @@ from pathlib import Path
 
 import resolver
 import review_semantics
+import source_verification
 
 HUMAN_REVIEW_DIR = resolver.REPO / "artifacts" / "human-review"
 
@@ -42,6 +43,7 @@ DECISION_BUSINESS_COST = "BUSINESS_COST"
 # Vocabulario cerrado de NEXT_EXECUTABLE_ACTION. Este motor OBSERVA y DERIVA
 # — jamas abre un gate, jamas eleva autoridad.
 ACTION_VERIFY_SOURCES = "VERIFY_SOURCES"
+ACTION_BLOCKED_BY_SOURCE_ACCESS = "BLOCKED_BY_SOURCE_ACCESS"
 ACTION_HUMAN_LEGAL_REVIEW = "HUMAN_LEGAL_REVIEW"
 ACTION_EMIT_PRODUCTION_HANDOFF = "EMIT_PRODUCTION_HANDOFF"
 ACTION_GENERATE_VISUAL = "GENERATE_VISUAL"
@@ -53,8 +55,33 @@ ACTION_MEASURE = "MEASURE"
 ACTION_NO_ACTION = "NO_ACTION"
 ACTION_BLOCKED = "BLOCKED"
 
+OWNER_SYSTEM = "SYSTEM"
+OWNER_HUMAN = "HUMAN"
+
+# machine work != human authority (mandato de continuacion §1). VERIFY_SOURCES
+# y BLOCKED_BY_SOURCE_ACCESS son trabajo/estado de SISTEMA: mientras exista
+# una via legitima de ejecutarlo, la persona NO es el owner. Solo se convierte
+# en HUMAN cuando la preparacion ya esta hecha (o topo con un gate real).
+ACTION_OWNER = {
+    ACTION_VERIFY_SOURCES: OWNER_SYSTEM,
+    ACTION_BLOCKED_BY_SOURCE_ACCESS: OWNER_SYSTEM,
+    ACTION_HUMAN_LEGAL_REVIEW: OWNER_HUMAN,
+    ACTION_EMIT_PRODUCTION_HANDOFF: OWNER_HUMAN,
+    ACTION_GENERATE_VISUAL: OWNER_SYSTEM,
+    ACTION_WAIT_REAL_PROVIDER: OWNER_SYSTEM,
+    ACTION_AUTOMATED_VISUAL_QA: OWNER_SYSTEM,
+    ACTION_HUMAN_VISUAL_REVIEW: OWNER_HUMAN,
+    ACTION_PUBLICATION_DECISION: OWNER_HUMAN,
+    ACTION_MEASURE: OWNER_SYSTEM,
+    ACTION_NO_ACTION: OWNER_SYSTEM,
+    ACTION_BLOCKED: OWNER_SYSTEM,
+}
+
 # Acciones que el sistema puede completar SIN intervencion humana (mecanicas).
-AUTOMATIC_ACTIONS = {ACTION_GENERATE_VISUAL, ACTION_AUTOMATED_VISUAL_QA, ACTION_MEASURE}
+# BLOCKED_BY_SOURCE_ACCESS NO esta aqui a proposito: es SYSTEM-owned pero no
+# ejecutable ahora mismo (el propio nombre lo dice) — executable_now() exige
+# ademas que la accion sea realizable, no solo que no sea humana.
+AUTOMATIC_ACTIONS = {ACTION_GENERATE_VISUAL, ACTION_AUTOMATED_VISUAL_QA, ACTION_MEASURE, ACTION_VERIFY_SOURCES}
 
 
 def _load(p):
@@ -88,10 +115,16 @@ class ContentReadinessRecord:
     blockers: list = field(default_factory=list)
     next_action: str = ""
     next_executable_action: str = ACTION_BLOCKED
+    source_summary: object = None  # source_verification.PieceSourceSummary o None
+
+    @property
+    def owner(self):
+        return ACTION_OWNER.get(self.next_executable_action, OWNER_HUMAN)
 
     def to_dict(self):
         return {
             "piece_id": self.piece_id,
+            "owner": self.owner,
             "canonical_state": self.canonical_state,
             "art_gate": self.art_gate,
             "territory": self.territory,
@@ -126,8 +159,16 @@ def _review_packet_para(content_id):
     return _load(d / "review-packet.json") if d.is_dir() else None
 
 
-def _next_executable_action(canonical_state, art_gate, handoff_state, clasif):
+def _next_executable_action(canonical_state, art_gate, handoff_state, clasif, source_summary=None):
     if canonical_state == "REQUIERE_INVESTIGACION":
+        # SYSTEM sigue siendo owner mientras la investigacion sea legitimamente
+        # ejecutable; solo se distingue de un bloqueo REAL de acceso a fuentes
+        # ya intentado (mandato de continuacion §1, §26). Nunca escala a HUMAN
+        # solo porque el estado se llame REQUIERE_INVESTIGACION.
+        if source_summary is not None:
+            estado = source_verification.next_system_action(source_summary)
+            if estado == source_verification.STATUS_BLOCKED_BY_SOURCE_ACCESS:
+                return ACTION_BLOCKED_BY_SOURCE_ACCESS
         return ACTION_VERIFY_SOURCES
     if art_gate != "ABIERTO":
         return ACTION_HUMAN_LEGAL_REVIEW
@@ -146,9 +187,14 @@ def _next_executable_action(canonical_state, art_gate, handoff_state, clasif):
     return ACTION_NO_ACTION
 
 
-def _next_action_para(art_gate, handoff_state, canonical_state, clasif):
+def _next_action_para(art_gate, handoff_state, canonical_state, clasif, source_summary=None):
     if canonical_state == "REQUIERE_INVESTIGACION":
-        return "requiere investigacion juridica humana antes de reabrir el gate de arte."
+        if source_summary is not None and source_verification.next_system_action(source_summary) == \
+                source_verification.STATUS_BLOCKED_BY_SOURCE_ACCESS:
+            return (f"investigacion de fuentes intentada de verdad y bloqueada por acceso "
+                    f"({source_summary.inaccessible_count}/{len(source_summary.checks)} fuentes inaccesibles "
+                    f"via egress); sigue siendo trabajo de SISTEMA, no un gate humano.")
+        return "investigacion de fuentes SISTEMA en curso: aun quedan fuentes por verificar."
     if art_gate != "ABIERTO":
         return "requiere revision juridica humana que abra el gate de arte."
     if handoff_state == "SIN_HANDOFF":
@@ -216,9 +262,16 @@ def build_readiness():
         elif rec.handoff_state == "HANDOFF_EMITIDO":
             rec.blockers.append("handoff emitido pero sin ninguna materializacion de revision humana encontrada.")
 
-        rec.next_action = _next_action_para(rec.art_gate, rec.handoff_state, rec.canonical_state, clasif)
+        source_summary = None
+        if rec.canonical_state == "REQUIERE_INVESTIGACION":
+            claim_packet = _load(resolver.REPO / p["path"])
+            source_summary = source_verification.summarize_piece(claim_packet)
+            rec.source_summary = source_summary
+
+        rec.next_action = _next_action_para(
+            rec.art_gate, rec.handoff_state, rec.canonical_state, clasif, source_summary)
         rec.next_executable_action = _next_executable_action(
-            rec.canonical_state, rec.art_gate, rec.handoff_state, clasif)
+            rec.canonical_state, rec.art_gate, rec.handoff_state, clasif, source_summary)
         out.append(rec)
     return out
 
@@ -252,6 +305,12 @@ def build_inbox(readiness=None):
     items = []
     for r in readiness:
         if r.canonical_state == "REQUIERE_INVESTIGACION" or r.art_gate != "ABIERTO":
+            if r.owner == OWNER_SYSTEM:
+                # SISTEMA sigue siendo owner (investigacion en curso o
+                # bloqueada por acceso a fuentes): esto NO es una decision
+                # humana todavia (mandato de continuacion §1, §2). No se
+                # gasta una fila del inbox humano en trabajo de sistema.
+                continue
             items.append(InboxItem(
                 DECISION_LEGAL_REVIEW, r.piece_id,
                 f"canon={r.canonical_state} gate={r.art_gate}: exige revision juridica humana."))
@@ -292,6 +351,16 @@ def executable_now(readiness=None):
     """
     readiness = readiness if readiness is not None else build_readiness()
     return [r for r in readiness if r.next_executable_action in AUTOMATIC_ACTIONS]
+
+
+def system_executable_queue(readiness=None):
+    """Todo el trabajo de SISTEMA — ejecutable ahora o bloqueado por acceso —
+    separado del HUMAN_DECISION_INBOX (mandato de continuacion §25). Incluye
+    piezas en BLOCKED_BY_SOURCE_ACCESS: siguen siendo trabajo de sistema, solo
+    que hoy no son ejecutables (la cola no miente sobre eso, ver §26)."""
+    readiness = readiness if readiness is not None else build_readiness()
+    return [r for r in readiness if r.owner == OWNER_SYSTEM and
+            r.next_executable_action not in (ACTION_NO_ACTION,)]
 
 
 def command_center_payload():

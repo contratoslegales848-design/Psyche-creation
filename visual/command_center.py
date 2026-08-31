@@ -33,6 +33,7 @@ def build_envelope():
     filas = inventory.command_center_payload()
     inbox = [i.to_dict() for i in inventory.build_inbox()]
     ejecutable = [r.to_dict() for r in inventory.executable_now()]
+    cola_sistema = [r.to_dict() for r in inventory.system_executable_queue()]
 
     for f in filas:
         f["data_freshness"] = FRESHNESS_SIMULATED if f.get("provider_is_simulated") else FRESHNESS_DERIVED
@@ -45,6 +46,7 @@ def build_envelope():
         "content": filas,
         "human_decision_inbox": inbox,
         "automatic_executable_now": ejecutable,
+        "system_executable_queue": cola_sistema,
         "authority_note": (
             "Este payload NUNCA recalcula autoridad juridica ni visual. "
             "publicable=true no es PublicationDecision. ProductionHandoff no es "

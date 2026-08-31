@@ -33,7 +33,11 @@ class TestInventarioReal(unittest.TestCase):
             self.assertEqual(r.canonical_state, "REQUIERE_INVESTIGACION")
             self.assertTrue(any("REQUIERE_INVESTIGACION" in b for b in r.blockers))
             self.assertEqual(r.handoff_state, "SIN_HANDOFF")
-            self.assertEqual(r.next_executable_action, inventory.ACTION_VERIFY_SOURCES)
+            # Ambas piezas: investigacion realmente intentada y bloqueada por
+            # acceso a fuentes (confirmado en esta sesion via WebFetch/curl) —
+            # sigue siendo trabajo de SISTEMA, nunca escala a HUMAN por si solo.
+            self.assertEqual(r.next_executable_action, inventory.ACTION_BLOCKED_BY_SOURCE_ACCESS)
+            self.assertEqual(r.owner, inventory.OWNER_SYSTEM)
 
     def test_pieza01_lee_el_puntero_persistente_vigente(self):
         """review-packet.json (ya corregido) debe reflejar la generacion mas
@@ -62,10 +66,18 @@ class TestInventarioReal(unittest.TestCase):
         negocio = [i for i in items if i.decision_type == inventory.DECISION_BUSINESS_COST]
         self.assertEqual({i.piece_id for i in negocio}, {"PIEZA-01-REALES"})
 
-    def test_inbox_incluye_legal_review_para_piezas_cerradas(self):
+    def test_inbox_no_incluye_legal_review_mientras_es_trabajo_de_sistema(self):
+        """Punto central del mandato de continuacion V4: mientras la
+        investigacion sea trabajo de SISTEMA (VERIFY_SOURCES o
+        BLOCKED_BY_SOURCE_ACCESS), NO debe aparecer como decision humana."""
         items = inventory.build_inbox()
         legales = {i.piece_id for i in items if i.decision_type == inventory.DECISION_LEGAL_REVIEW}
-        self.assertEqual(legales, {"PIEZA-02-LABORAL", "PIEZA-03-HONOR"})
+        self.assertEqual(legales, set())
+
+    def test_system_queue_incluye_piezas_bloqueadas_por_acceso(self):
+        cola = {r.piece_id for r in inventory.system_executable_queue()}
+        self.assertEqual({"PIEZA-02-LABORAL", "PIEZA-03-HONOR"} & cola,
+                          {"PIEZA-02-LABORAL", "PIEZA-03-HONOR"})
 
     def test_next_nunca_propone_una_pieza_con_gate_cerrado_antes_que_una_abierta(self):
         filas = inventory.build_readiness()

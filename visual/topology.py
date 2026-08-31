@@ -72,3 +72,47 @@ def build_topology():
         "deliberado: ningun ProductionHandoff abre ni implica una PublicationDecision."))
 
     return links
+
+
+# Vocabulario propio de las etapas del Content Factory (mandato de
+# continuacion §19) — deliberadamente DISTINTO del vocabulario organismo-wide
+# de arriba: aqui se pregunta "que tan hecho esta este mecanismo", no "esta
+# conectado este enlace".
+CF_CONNECTED = "CONNECTED"
+CF_PARTIAL = "PARTIAL"
+CF_DOCUMENTED_ONLY = "DOCUMENTED_ONLY"
+CF_DISCONNECTED = "DISCONNECTED"
+CF_MISSING = "MISSING"
+
+
+def content_factory_topology():
+    """Etapas reales del 'nacimiento' de una pieza (idea -> CONTENT_ID ->
+    ProductionHandoff), clasificadas por lo que EXISTE hoy en el repo — no lo
+    que Drive describe. Investigado (mandato de continuacion §19), no
+    construido: no se crea ninguna 'fabrica' nueva, solo se lee lo real."""
+    return [
+        _link("idea", "claim_draft", CF_DOCUMENTED_ONLY,
+              "no existe automatizacion de intake: un humano/agente redacta el claim packet "
+              "a mano, sin ningun candidate_id ni estructura de captura previa."),
+        _link("claim_draft", "source_discovery", CF_CONNECTED,
+              "pilot/claim-packets/*.json ya declara fuentes por claim con el esquema real "
+              "(tipo_fuente, url, localizador) — WORKING, es la estructura que este propio "
+              "modulo (source_verification.py) lee."),
+        _link("source_discovery", "source_verification", CF_CONNECTED,
+              "verificacion_fuente{origen_oficial_confirmado, texto_exacto_consultado, "
+              "vigencia_comprobada, metodo_o_evidencia} existe y se pobla realmente "
+              "(ver pieza-02/03) — WORKING, aunque hoy BLOCKED_BY_SOURCE_ACCESS en esta sesion."),
+        _link("source_verification", "territory_mapping", CF_CONNECTED,
+              "jurisdicciones_cubiertas por fuente + jurisdiction_layer por claim: WORKING, "
+              "ya presente en los claim packets reales."),
+        _link("territory_mapping", "human_legal_review", CF_PARTIAL,
+              "revision_humana{estado, revisor, fecha, contenido_hash_sha256} existe y se "
+              "usa de verdad (PIEZA-01) pero no hay ningun mecanismo que declare "
+              "automaticamente 'evidencia suficiente para revision' — sigue exigiendo lectura "
+              "humana o de un agente explicito de las proposiciones, claim por claim."),
+        _link("human_legal_review", "content_id", CF_CONNECTED,
+              "resolver.py + content/*.json: WORKING, demostrado con LM-PIEZA-01-REALES."),
+        _link("content_id", "production_handoff", CF_CONNECTED,
+              "validate-publication-chain.py + gates.py: WORKING, demostrado con "
+              "HO-PIEZA-01-REALES-001."),
+    ]
