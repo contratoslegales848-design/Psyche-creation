@@ -1,0 +1,35 @@
+{
+  "art_eligibility": "NO_ELEGIBLE",
+  "claim_state": "REQUIERE_INVESTIGACION",
+  "claims": [
+    {
+      "approved_claim_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "claim_id": "c1",
+      "texto_exacto": "En el comodato se devuelve la misma cosa."
+    }
+  ],
+  "content_id": "LM-FIXTURE-003",
+  "emitted_at": "2026-08-31T00:00:00+00:00",
+  "jurisdiction_layer": "CAPA_A_TRANSVERSAL",
+  "legal_gate_state": "CERRADO",
+  "provenance": {
+    "sources": [
+      {
+        "id": "f-es",
+        "registro_oficial_id": "boe-es",
+        "url": "https://www.boe.es/buscar/act.php?id=BOE-A-1889-4763"
+      }
+    ]
+  },
+  "provenance_digest": "4d1e0ebdd48915bae9a2e88a1c1dc902593556ab321599474c8a501c9db4019f",
+  "schema_version": "1.0",
+  "source_revision": "9e4bded",
+  "source_state": "PENDIENTE",
+  "source_system": "Psyche-creation",
+  "territories": [
+    "Espana",
+    "Mexico",
+    "Argentina",
+    "Peru"
+  ]
+}
