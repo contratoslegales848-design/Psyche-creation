@@ -36,12 +36,20 @@ MAX_RECENT_OCCURRENCES = 2
 
 
 def normaliza(texto):
-    """Minusculas, sin tildes, sin puntuacion suelta. Compara conceptos, no cadenas."""
+    """Minusculas, sin tildes, sin puntuacion suelta. Compara conceptos, no cadenas.
+
+    Guiones Y guiones bajos se tratan como separadores de palabra, no como
+    caracteres a preservar: sin esto, cualquier identificador con "_" (todos
+    los nombres reales de familia visual — "basalt_and_gold_leaf" — y varios
+    valores reales de taxonomia — "propiedad_y_posesion") colapsaba
+    silenciosamente a cadena vacia, porque `"fam_a".isalnum()` es False.
+    """
     if not texto:
         return ""
     t = unicodedata.normalize("NFKD", str(texto).strip().lower())
     t = "".join(c for c in t if not unicodedata.combining(c))
-    return " ".join(c for c in t.replace("-", " ").split() if c.isalnum() or " " in c)
+    t = t.replace("-", " ").replace("_", " ")
+    return " ".join(c for c in t.split() if c.isalnum() or " " in c)
 
 
 @dataclass

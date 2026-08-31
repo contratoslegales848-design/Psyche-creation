@@ -7,7 +7,9 @@
   },
   "composicion": {
     "scene_count": 1,
-    "prohibido": ["collage", "grid", "storyboard", "multiples escenas", "split screen", "diptico", "triptico"]
+    "prohibido": ["collage", "grid", "storyboard", "multiples escenas", "split screen", "diptico", "triptico",
+      "neon", "estetica hacker", "persona sola frente a columnas",
+      "libros o pergaminos apilados sobre escritorio oscuro", "objeto forense sobre pergamino"]
   },
   "familias_visuales": [
     "hiperrealismo_editorial_cinematografico",
