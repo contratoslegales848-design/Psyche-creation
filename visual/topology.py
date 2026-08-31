@@ -74,6 +74,27 @@ def build_topology():
     return links
 
 
+def publication_measurement_learning_topology():
+    """Publication chain, medicion y aprendizaje — mapeados, no publicados
+    (mandato de continuacion §30-32). Verificado contra el codigo real de
+    validate-publication-chain.py y visual/memory.py, no contra descripcion."""
+    return [
+        _link("production_handoff", "publication_record_schema", "PARTIAL",
+              "validate-publication-chain.py define el esquema completo de PublicationRecord "
+              "(metrics, available_metrics, window_days) y lo valida — pero existe UN solo "
+              "registro real en publication/records/ (el ProductionHandoff de PIEZA-01); "
+              "cero PublicationDecision o PublicationRecord con metricas jamas emitidos."),
+        _link("publication_record_schema", "measurement", "NO_MEDIDO",
+              "el esquema de metricas existe y se valida (metrics/available_metrics coherentes "
+              "entre si), pero no hay ningun dato real: NO_MEDIDO, no 0 ni ausencia silenciosa."),
+        _link("measurement", "content_factory_learning_loop", DISCONNECTED,
+              "no existe ningun codigo que conecte metricas de publicacion con la seleccion de "
+              "temas, el content factory o VisualMemory. VisualMemory (visual/memory.py) SI "
+              "aprende, pero solo de generaciones aceptadas (anti-repeticion visual) — nunca de "
+              "rendimiento real de publicacion, porque nunca hubo una publicacion real."),
+    ]
+
+
 # Vocabulario propio de las etapas del Content Factory (mandato de
 # continuacion §19) — deliberadamente DISTINTO del vocabulario organismo-wide
 # de arriba: aqui se pregunta "que tan hecho esta este mecanismo", no "esta

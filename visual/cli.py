@@ -223,6 +223,9 @@ def main(argv=None):
         print("\n  -- content factory (idea -> ProductionHandoff) --")
         for link in topology.content_factory_topology():
             print(f"  {link['source']:24} -> {link['target']:24} {link['state']:18} {link['reason']}")
+        print("\n  -- publication / measurement / learning --")
+        for link in topology.publication_measurement_learning_topology():
+            print(f"  {link['source']:28} -> {link['target']:28} {link['state']:12} {link['reason']}")
         return 0
 
     if a.cmd == "resolve":
