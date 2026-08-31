@@ -10,7 +10,8 @@ FEEDBACK_CODES = {
     "TOO_DARK", "TOO_MURKY", "SEPIA_DOMINANT", "WRONG_FORMAT", "TEXT_ERROR",
     "AUTHOR_ERROR", "BRAND_ERROR", "BRAND_FLOATING", "WRONG_COMPOSITION",
     "REPETITIVE_SCENE", "REPETITIVE_OBJECT", "REPETITIVE_CAMERA", "TOO_GENERIC",
-    "MORE_HYPERREALISTIC", "CHANGE_CAMERA", "CHANGE_METAPHOR", "OTHER",
+    "MORE_HYPERREALISTIC", "CHANGE_CAMERA", "CHANGE_METAPHOR", "WEAK_VISUAL_METAPHOR",
+    "OTHER",
 }
 
 # Campos del brief que el feedback visual PUEDE tocar. Todo lo demas es canon.
@@ -100,6 +101,12 @@ def apply_feedback(brief, codes, comment=""):
             set_("camera", "encuadre distinto del anterior")
         elif c == "CHANGE_METAPHOR":
             set_("metaphor", "")
+        elif c == "WEAK_VISUAL_METAPHOR":
+            # Mecanico solamente: borra la metafora debil y marca la escena/objeto
+            # actuales como evitables. La metafora nueva es contenido creativo y la
+            # aporta quien construye el brief revisado (no este modulo mecanico).
+            set_("metaphor", "")
+            add_negativo(f"repetir escena generica: {brief.environment}")
         # WRONG_FORMAT y AUTHOR_ERROR no se autocorrigen: tocan canon o taxonomia
         # y exigen decision humana explicita, no una transformacion automatica.
 

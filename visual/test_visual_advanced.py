@@ -779,3 +779,27 @@ class TestVerificacionDeHashContraElPaquete(unittest.TestCase):
         run = pipeline.generate_visual(self._proc("f" * 64), make_brief(), POLICY, FakeImageProvider(),
                                        HANDOFF, claim_packet=self.PAQUETE)
         self.assertEqual(run.receipt.status, "GATE_CERRADO")
+
+
+class TestFeedbackDebilidadMetafora(unittest.TestCase):
+    """WEAK_VISUAL_METAPHOR: mecanico solamente (borra metafora + evita la escena
+    actual); el contenido creativo de la metafora nueva no lo inventa este codigo."""
+
+    def test_codigo_reconocido_y_mecanico(self):
+        from brief import VisualBrief
+        b = VisualBrief(content_id="x", formato="VERTICAL_9_16", visual_family="oleo_narrativo",
+                        subject="s", environment="archivo notarial", camera="c", focal_point="f",
+                        acento_frio_objeto="o", marca_superficie="piedra", metaphor="algo debil")
+        nuevo, cambios = feedback.apply_feedback(b, ["WEAK_VISUAL_METAPHOR"])
+        self.assertEqual(nuevo.metaphor, "")
+        self.assertIn("metaphor", cambios)
+        self.assertTrue(any("archivo notarial" in n for n in nuevo.negative_constraints))
+
+    def test_no_toca_canon(self):
+        from brief import VisualBrief
+        b = VisualBrief(content_id="LM-X", formato="VERTICAL_9_16", visual_family="oleo_narrativo",
+                        subject="s", environment="e", camera="c", focal_point="f",
+                        acento_frio_objeto="o", marca_superficie="piedra")
+        nuevo, _ = feedback.apply_feedback(b, ["WEAK_VISUAL_METAPHOR", "TOO_GENERIC"])
+        self.assertEqual(nuevo.content_id, "LM-X")
+        self.assertEqual(nuevo.formato, "VERTICAL_9_16")
