@@ -8,6 +8,9 @@ on:
       - "content/**"
       - "src/**"
       - "scripts/**"
+      - "visual/**"
+      - "contract/**"
+      - "requirements.txt"
       - ".github/workflows/legalmente-legal-verification.yml"
   push:
     branches: [main]
@@ -16,6 +19,9 @@ on:
       - "content/**"
       - "src/**"
       - "scripts/**"
+      - "visual/**"
+      - "contract/**"
+      - "requirements.txt"
       - ".github/workflows/legalmente-legal-verification.yml"
   workflow_dispatch: {}
 
@@ -189,3 +195,32 @@ jobs:
       - name: Todo el contenido debe declarar procedencia verificable
         working-directory: .
         run: python3 scripts/validate-content-provenance.py
+
+      - name: Instalar dependencias (solo Pillow, para el compositor)
+        working-directory: .
+        run: python3 -m pip install --quiet -r requirements.txt
+
+      - name: Pipeline visual — suite completa (proveedor falso, sin red ni créditos)
+        working-directory: visual
+        run: |
+          python3 -m unittest \
+            test_visual_pipeline test_visual_advanced \
+            test_composition test_http_provider test_resolver -v
+
+      - name: Contrato canónico cross-repo
+        working-directory: contract
+        run: python3 -m unittest test_canonical_envelope -v
+
+      - name: El pipeline visual no puede aprobar nada por sí solo
+        working-directory: visual
+        run: |
+          python3 - <<'PY'
+          import sys; sys.path.insert(0, '.')
+          import receipts
+          prohibidos = [s for s in receipts.STATUS
+                        if 'APROBADO' in s or 'APPROVED' in s or 'PRODUCCION' in s]
+          if prohibidos:
+              print(f"FALLÓ: el pipeline declara estados de aprobación alcanzables: {prohibidos}")
+              sys.exit(1)
+          print("OK: ningún status del pipeline visual significa aprobado.")
+          PY
