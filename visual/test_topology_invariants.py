@@ -111,12 +111,17 @@ class TestSystemVsHumanInvariant(unittest.TestCase):
     """§5.2 — casos A-D del mandato de reviewability, contra el codigo real."""
 
     def test_case_a_requiere_investigacion_bloqueada_es_system_no_human(self):
+        """Ambas piezas: owner SIEMPRE SYSTEM mientras REQUIERE_INVESTIGACION,
+        cualquiera sea la accion exacta (VERIFY_SOURCES si aun quedan fuentes
+        por intentar, BLOCKED_BY_SOURCE_ACCESS si todas fallaron) — nunca
+        aparecen en el inbox humano en ninguno de los dos casos."""
         filas = {r.piece_id: r for r in inventory.build_readiness()}
         for pid in ("PIEZA-02-LABORAL", "PIEZA-03-HONOR"):
             r = filas[pid]
             self.assertEqual(r.canonical_state, "REQUIERE_INVESTIGACION")
             self.assertEqual(r.owner, inventory.OWNER_SYSTEM)
-            self.assertEqual(r.next_executable_action, inventory.ACTION_BLOCKED_BY_SOURCE_ACCESS)
+            self.assertIn(r.next_executable_action,
+                          (inventory.ACTION_VERIFY_SOURCES, inventory.ACTION_BLOCKED_BY_SOURCE_ACCESS))
         inbox_piece_ids = {i.piece_id for i in inventory.build_inbox()}
         self.assertNotIn("PIEZA-02-LABORAL", inbox_piece_ids)
         self.assertNotIn("PIEZA-03-HONOR", inbox_piece_ids)

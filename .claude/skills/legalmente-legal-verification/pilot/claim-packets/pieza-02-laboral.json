@@ -29,12 +29,12 @@
             "México"
           ],
           "verificacion_fuente": {
-            "origen_oficial_confirmado": false,
+            "origen_oficial_confirmado": true,
             "texto_exacto_consultado": false,
             "vigencia_comprobada": false,
-            "fecha_comprobacion": null,
-            "metodo_o_evidencia": null,
-            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Localizador y extracto de texto tomados del expediente externo auditado (legalmente-piloto-evidencia-primaria-v1.2.md + legalmente-piloto-fuentes-primarias-v1.zip, producido por otro modelo de IA). El manifest de ese expediente autoafirma origen_oficial_confirmado/texto_exacto_consultado/vigencia_comprobada = true y resultado SUFICIENTE — por regla de gobernanza de este repositorio (source-policy.md: 'nunca aceptar como fuente otro contenido generado por IA'; CLAUDE.md: 'ninguna IA es fuente jurídica') esa autoconfirmación NO se traslada aquí. Los extractos del ZIP (687-6215 bytes) son fragmentos de artículos concretos, no el documento legal completo, pese a que 44/45 entradas del manifest declaran documento_completo=true — inconsistencia detectada en auditoría y NO heredada."
+            "fecha_comprobacion": "2026-08-31",
+            "metodo_o_evidencia": "WebSearch (no WebFetch/curl directo, que sigue EGRESS_BLOCKED) devolvio multiples snippets del propio dominio diputados.gob.mx citando el texto literal de las fracciones I-III del art. 47 LFT ('enganar... con certificados falsos', 'incurrir... en faltas de probidad u honradez...', 'comprometer... por su imprudencia o descuido inexcusable la seguridad del establecimiento'). Esto es evidencia real de origen oficial y de que el articulo existe con ese contenido general — pero NO equivale a leer el articulo completo (todas sus fracciones) ni a confirmar vigencia (reforma mas reciente encontrada: DOF 24-12-2024, no se confirmo si afecta este articulo especificamente).",
+            "observaciones": "origen_oficial_confirmado=true por evidencia real vía WebSearch contra diputados.gob.mx (2026-08-31), no por autoconfirmacion de ningun modelo ni por el expediente externo previo. texto_exacto_consultado y vigencia_comprobada permanecen false hasta leer el PDF completo o que alguien con red directa lo confirme — WebSearch da snippets, no el documento integro."
           },
           "registro_oficial_id": "diputados-gob-mx"
         },
