@@ -1,0 +1,18 @@
+{
+  "record_type": "ReviewPacketPointerChange",
+  "note": "review-packet.json es un puntero de conveniencia al PENDIENTE mas reciente para revision humana; los archivos review-packet-<generation_id>.json son el historial inmutable, uno por generacion, y nunca se sobrescriben.",
+  "changes": [
+    {
+      "changed_at": "2026-08-31",
+      "before_generation_id": null,
+      "after_generation_id": "gen-48e114c0a1d5",
+      "reason": "Primera materializacion de revision humana (GEN2)."
+    },
+    {
+      "changed_at": "2026-08-31",
+      "before_generation_id": "gen-48e114c0a1d5",
+      "after_generation_id": "gen-2f2dfb9c6f2f",
+      "reason": "GEN3 (gen-2f2dfb9c6f2f) se genero a partir de feedback humano sobre GEN2 (WEAK_VISUAL_METAPHOR + TOO_GENERIC) y quedo en estado PENDIENTE. review-packet.json apuntaba todavia a GEN2 desde su materializacion original: puntero desactualizado, corregido aqui. El contenido de GEN2 se preserva integro en review-packet-gen-48e114c0a1d5.json, sin cambios."
+    }
+  ]
+}

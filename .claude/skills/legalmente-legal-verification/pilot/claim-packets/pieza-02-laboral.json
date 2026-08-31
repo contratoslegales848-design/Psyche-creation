@@ -29,12 +29,12 @@
             "México"
           ],
           "verificacion_fuente": {
-            "origen_oficial_confirmado": false,
+            "origen_oficial_confirmado": true,
             "texto_exacto_consultado": false,
             "vigencia_comprobada": false,
-            "fecha_comprobacion": null,
-            "metodo_o_evidencia": null,
-            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Localizador y extracto de texto tomados del expediente externo auditado (legalmente-piloto-evidencia-primaria-v1.2.md + legalmente-piloto-fuentes-primarias-v1.zip, producido por otro modelo de IA). El manifest de ese expediente autoafirma origen_oficial_confirmado/texto_exacto_consultado/vigencia_comprobada = true y resultado SUFICIENTE — por regla de gobernanza de este repositorio (source-policy.md: 'nunca aceptar como fuente otro contenido generado por IA'; CLAUDE.md: 'ninguna IA es fuente jurídica') esa autoconfirmación NO se traslada aquí. Los extractos del ZIP (687-6215 bytes) son fragmentos de artículos concretos, no el documento legal completo, pese a que 44/45 entradas del manifest declaran documento_completo=true — inconsistencia detectada en auditoría y NO heredada."
+            "fecha_comprobacion": "2026-08-31",
+            "metodo_o_evidencia": "WebSearch (no WebFetch/curl directo, que sigue EGRESS_BLOCKED) devolvio multiples snippets del propio dominio diputados.gob.mx citando el texto literal de las fracciones I-III del art. 47 LFT ('enganar... con certificados falsos', 'incurrir... en faltas de probidad u honradez...', 'comprometer... por su imprudencia o descuido inexcusable la seguridad del establecimiento'). Esto es evidencia real de origen oficial y de que el articulo existe con ese contenido general — pero NO equivale a leer el articulo completo (todas sus fracciones) ni a confirmar vigencia (reforma mas reciente encontrada: DOF 24-12-2024, no se confirmo si afecta este articulo especificamente).",
+            "observaciones": "origen_oficial_confirmado=true por evidencia real vía WebSearch contra diputados.gob.mx (2026-08-31), no por autoconfirmacion de ningun modelo ni por el expediente externo previo. texto_exacto_consultado y vigencia_comprobada permanecen false hasta leer el PDF completo o que alguien con red directa lo confirme — WebSearch da snippets, no el documento integro."
           },
           "registro_oficial_id": "diputados-gob-mx"
         },
@@ -51,12 +51,12 @@
             "México"
           ],
           "verificacion_fuente": {
-            "origen_oficial_confirmado": false,
+            "origen_oficial_confirmado": true,
             "texto_exacto_consultado": false,
             "vigencia_comprobada": false,
-            "fecha_comprobacion": null,
-            "metodo_o_evidencia": null,
-            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Localizador y extracto de texto tomados del expediente externo auditado (legalmente-piloto-evidencia-primaria-v1.2.md + legalmente-piloto-fuentes-primarias-v1.zip, producido por otro modelo de IA). El manifest de ese expediente autoafirma origen_oficial_confirmado/texto_exacto_consultado/vigencia_comprobada = true y resultado SUFICIENTE — por regla de gobernanza de este repositorio (source-policy.md: 'nunca aceptar como fuente otro contenido generado por IA'; CLAUDE.md: 'ninguna IA es fuente jurídica') esa autoconfirmación NO se traslada aquí. Los extractos del ZIP (687-6215 bytes) son fragmentos de artículos concretos, no el documento legal completo, pese a que 44/45 entradas del manifest declaran documento_completo=true — inconsistencia detectada en auditoría y NO heredada."
+            "fecha_comprobacion": "2026-08-31",
+            "metodo_o_evidencia": "WebSearch contra diputados.gob.mx devolvio snippets describiendo el art. 51 (causas de rescision sin responsabilidad para el trabajador: actos de deshonestidad/violencia/amenazas del patron, peligro grave, exigir actos que atenten contra la dignidad) y el art. 52 (el trabajador puede separarse dentro de los 30 dias siguientes y tiene derecho a la indemnizacion del art. 50) — coincide con el claim ('rescision imputable al patron / despido indirecto').",
+            "observaciones": "origen_oficial_confirmado=true por evidencia real vía WebSearch (2026-08-31). texto_exacto_consultado y vigencia_comprobada permanecen false."
           },
           "registro_oficial_id": "diputados-gob-mx"
         }
@@ -122,12 +122,12 @@
             "México"
           ],
           "verificacion_fuente": {
-            "origen_oficial_confirmado": false,
+            "origen_oficial_confirmado": true,
             "texto_exacto_consultado": false,
             "vigencia_comprobada": false,
-            "fecha_comprobacion": null,
-            "metodo_o_evidencia": null,
-            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Localizador y extracto de texto tomados del expediente externo auditado (legalmente-piloto-evidencia-primaria-v1.2.md + legalmente-piloto-fuentes-primarias-v1.zip, producido por otro modelo de IA). El manifest de ese expediente autoafirma origen_oficial_confirmado/texto_exacto_consultado/vigencia_comprobada = true y resultado SUFICIENTE — por regla de gobernanza de este repositorio (source-policy.md: 'nunca aceptar como fuente otro contenido generado por IA'; CLAUDE.md: 'ninguna IA es fuente jurídica') esa autoconfirmación NO se traslada aquí. Los extractos del ZIP (687-6215 bytes) son fragmentos de artículos concretos, no el documento legal completo, pese a que 44/45 entradas del manifest declaran documento_completo=true — inconsistencia detectada en auditoría y NO heredada."
+            "fecha_comprobacion": "2026-08-31",
+            "metodo_o_evidencia": "WebSearch contra diputados.gob.mx devolvio snippets describiendo el art. 48 (reinstalacion o indemnizacion de tres meses; salarios vencidos con tope de 12 meses si el patron no prueba la causa) y el art. 50 (formula de indemnizacion segun duracion de la relacion). Coincide con el claim en cuanto a 'reinstalacion o indemnizacion de tres meses' y 'salarios vencidos'. NO se confirmo la mencion de 'intereses' del claim -- el snippet no la menciona, ni la contradice; queda pendiente de verificar contra el texto completo.",
+            "observaciones": "origen_oficial_confirmado=true por evidencia real vía WebSearch (2026-08-31). texto_exacto_consultado y vigencia_comprobada permanecen false — falta leer el articulo completo. La mencion de 'intereses' en el claim no tiene respaldo ni contradiccion en esta ronda de busqueda."
           },
           "registro_oficial_id": "diputados-gob-mx"
         }
@@ -193,12 +193,12 @@
             "México"
           ],
           "verificacion_fuente": {
-            "origen_oficial_confirmado": false,
+            "origen_oficial_confirmado": true,
             "texto_exacto_consultado": false,
             "vigencia_comprobada": false,
-            "fecha_comprobacion": null,
-            "metodo_o_evidencia": null,
-            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Localizador y extracto de texto tomados del expediente externo auditado (legalmente-piloto-evidencia-primaria-v1.2.md + legalmente-piloto-fuentes-primarias-v1.zip, producido por otro modelo de IA). El manifest de ese expediente autoafirma origen_oficial_confirmado/texto_exacto_consultado/vigencia_comprobada = true y resultado SUFICIENTE — por regla de gobernanza de este repositorio (source-policy.md: 'nunca aceptar como fuente otro contenido generado por IA'; CLAUDE.md: 'ninguna IA es fuente jurídica') esa autoconfirmación NO se traslada aquí. Los extractos del ZIP (687-6215 bytes) son fragmentos de artículos concretos, no el documento legal completo, pese a que 44/45 entradas del manifest declaran documento_completo=true — inconsistencia detectada en auditoría y NO heredada."
+            "fecha_comprobacion": "2026-08-31",
+            "metodo_o_evidencia": "WebSearch contra diputados.gob.mx: el art. 53 (causas de terminacion de la relacion de trabajo) fraccion I dice literalmente 'El mutuo consentimiento de las partes' — coincide exactamente con el claim ('regula la terminacion por mutuo consentimiento').",
+            "observaciones": "origen_oficial_confirmado=true por evidencia real vía WebSearch (2026-08-31), con cita casi literal de la fraccion I. texto_exacto_consultado y vigencia_comprobada permanecen false — falta confirmar contra el PDF completo que no haya sido reformada."
           },
           "registro_oficial_id": "diputados-gob-mx"
         },
@@ -215,12 +215,12 @@
             "México"
           ],
           "verificacion_fuente": {
-            "origen_oficial_confirmado": false,
+            "origen_oficial_confirmado": true,
             "texto_exacto_consultado": false,
             "vigencia_comprobada": false,
-            "fecha_comprobacion": null,
-            "metodo_o_evidencia": null,
-            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Fuente añadida en la corrección jurídica v1 junto al Art. 53.I LFT, para el marco constitucional de la renuncia — sin presentarla como la única regulación jurídica de la figura."
+            "fecha_comprobacion": "2026-08-31",
+            "metodo_o_evidencia": "WebSearch contra diputados.gob.mx: el art. 5 constitucional protege la libertad de dedicarse a la profesion/industria/comercio/trabajo que convenga, licitos, y prohibe que el Estado permita contratos que impliquen perdida o sacrificio irrevocable de la libertad de la persona — coincide con el claim ('libertad de trabajo reconocida por el articulo 5 constitucional aporta el marco constitucional').",
+            "observaciones": "origen_oficial_confirmado=true por evidencia real vía WebSearch (2026-08-31). texto_exacto_consultado y vigencia_comprobada permanecen false."
           },
           "registro_oficial_id": "diputados-gob-mx"
         }
@@ -286,12 +286,12 @@
             "España"
           ],
           "verificacion_fuente": {
-            "origen_oficial_confirmado": false,
+            "origen_oficial_confirmado": true,
             "texto_exacto_consultado": false,
             "vigencia_comprobada": false,
-            "fecha_comprobacion": null,
-            "metodo_o_evidencia": null,
-            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Localizador y extracto de texto tomados del expediente externo auditado (legalmente-piloto-evidencia-primaria-v1.2.md + legalmente-piloto-fuentes-primarias-v1.zip, producido por otro modelo de IA). El manifest de ese expediente autoafirma origen_oficial_confirmado/texto_exacto_consultado/vigencia_comprobada = true y resultado SUFICIENTE — por regla de gobernanza de este repositorio (source-policy.md: 'nunca aceptar como fuente otro contenido generado por IA'; CLAUDE.md: 'ninguna IA es fuente jurídica') esa autoconfirmación NO se traslada aquí. Los extractos del ZIP (687-6215 bytes) son fragmentos de artículos concretos, no el documento legal completo, pese a que 44/45 entradas del manifest declaran documento_completo=true — inconsistencia detectada en auditoría y NO heredada."
+            "fecha_comprobacion": "2026-08-31",
+            "metodo_o_evidencia": "WebSearch contra boe.es confirma el art. 50 ET (lista abierta/numerus apertus de incumplimientos graves del empresario que justifican extincion indemnizada por voluntad del trabajador: impago o retrasos continuados en el pago del salario, entre otros) y que los efectos exigen declaracion judicial previa de la gravedad. DISCREPANCIA DETECTADA: el claim cita 'art. 49.1.d', pero la evidencia real apunta a que es el art. 49.1.j) ET el que remite al art. 50.1 para la extincion por voluntad del trabajador — requiere confirmacion adicional antes de dar el localizador del claim por bueno.",
+            "observaciones": "origen_oficial_confirmado=true (boe.es) para el art. 50. El localizador '49.1.d' del claim puede ser incorrecto (evidencia sugiere 49.1.j) — NO corregido automaticamente aqui, queda como discrepancia a resolver por quien verifique con el texto completo."
           },
           "registro_oficial_id": "boe-es"
         },
@@ -311,9 +311,9 @@
             "origen_oficial_confirmado": false,
             "texto_exacto_consultado": false,
             "vigencia_comprobada": false,
-            "fecha_comprobacion": null,
-            "metodo_o_evidencia": null,
-            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Localizador y extracto de texto tomados del expediente externo auditado (legalmente-piloto-evidencia-primaria-v1.2.md + legalmente-piloto-fuentes-primarias-v1.zip, producido por otro modelo de IA). El manifest de ese expediente autoafirma origen_oficial_confirmado/texto_exacto_consultado/vigencia_comprobada = true y resultado SUFICIENTE — por regla de gobernanza de este repositorio (source-policy.md: 'nunca aceptar como fuente otro contenido generado por IA'; CLAUDE.md: 'ninguna IA es fuente jurídica') esa autoconfirmación NO se traslada aquí. Los extractos del ZIP (687-6215 bytes) son fragmentos de artículos concretos, no el documento legal completo, pese a que 44/45 entradas del manifest declaran documento_completo=true — inconsistencia detectada en auditoría y NO heredada. HALLAZGO DE AUDITORÍA (revisión independiente ChatGPT/Codex): durante el intento de consulta, el portal CENDOJ del Poder Judicial de España activó un control CAPTCHA que impidió el acceso automatizado al texto íntegro de la sentencia. Por lo tanto esta fuente permanece como jurisprudencia PENDIENTE de lectura y confirmación independiente — no se marcan origen_oficial_confirmado, texto_exacto_consultado ni vigencia_comprobada como true mientras no se consiga leer el contenido oficial completo."
+            "fecha_comprobacion": "2026-08-31",
+            "metodo_o_evidencia": "WebSearch contra poderjudicial.es no logro localizar directamente la sentencia con ECLI:ES:TS:2012:6137 sobre despido indirecto. Los resultados devolvieron jurisprudencia relacionada (extincion de contrato, despido) pero no la sentencia especifica citada.",
+            "observaciones": "NO VERIFICADA. Junto con SRC-P02-ES-JUR-02 (tambien no verificada, con inconsistencia interna detectada), ambas jurisprudencias espanolas de PIEZA-02 requieren identificacion/confirmacion humana directa antes de darse por buenas — no se fuerza ninguna coincidencia."
           },
           "registro_oficial_id": "poderjudicial-es"
         },
@@ -333,9 +333,9 @@
             "origen_oficial_confirmado": false,
             "texto_exacto_consultado": false,
             "vigencia_comprobada": false,
-            "fecha_comprobacion": null,
-            "metodo_o_evidencia": null,
-            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Localizador y extracto de texto tomados del expediente externo auditado (legalmente-piloto-evidencia-primaria-v1.2.md + legalmente-piloto-fuentes-primarias-v1.zip, producido por otro modelo de IA). El manifest de ese expediente autoafirma origen_oficial_confirmado/texto_exacto_consultado/vigencia_comprobada = true y resultado SUFICIENTE — por regla de gobernanza de este repositorio (source-policy.md: 'nunca aceptar como fuente otro contenido generado por IA'; CLAUDE.md: 'ninguna IA es fuente jurídica') esa autoconfirmación NO se traslada aquí. Los extractos del ZIP (687-6215 bytes) son fragmentos de artículos concretos, no el documento legal completo, pese a que 44/45 entradas del manifest declaran documento_completo=true — inconsistencia detectada en auditoría y NO heredada. HALLAZGO DE AUDITORÍA (revisión independiente ChatGPT/Codex): durante el intento de consulta, el portal CENDOJ del Poder Judicial de España activó un control CAPTCHA que impidió el acceso automatizado al texto íntegro de la sentencia. Por lo tanto esta fuente permanece como jurisprudencia PENDIENTE de lectura y confirmación independiente — no se marcan origen_oficial_confirmado, texto_exacto_consultado ni vigencia_comprobada como true mientras no se consiga leer el contenido oficial completo."
+            "fecha_comprobacion": "2026-08-31",
+            "metodo_o_evidencia": "WebSearch contra poderjudicial.es NO logro localizar una sentencia STS 2486/2018 de la Sala de lo Social sobre despido indirecto/incumplimiento del empresario. La unica coincidencia real del numero '2486/2018' encontrada es una sentencia de la Sala de lo CIVIL sobre nulidad de clausula suelo (materia hipotecaria, sin relacion con el claim). DISCREPANCIA REAL: el ECLI/numero de sentencia citado en el claim (STS 2486/2018, ECLI:ES:TS:2020:3698) puede estar mal identificado — el ECLI referencia el ano 2020, no 2018, lo que ya es inconsistente en el propio dato original.",
+            "observaciones": "NO VERIFICADA. Discrepancia real detectada, no forzada a coincidir: el numero de sentencia y el ECLI del claim son internamente inconsistentes (2018 vs 2020) y la busqueda no encontro una sentencia laboral con ese numero. Requiere que un humano identifique la sentencia correcta o retire esta fuente del claim."
           },
           "registro_oficial_id": "poderjudicial-es"
         }
@@ -560,12 +560,12 @@
             "Colombia"
           ],
           "verificacion_fuente": {
-            "origen_oficial_confirmado": false,
+            "origen_oficial_confirmado": true,
             "texto_exacto_consultado": false,
             "vigencia_comprobada": false,
-            "fecha_comprobacion": null,
-            "metodo_o_evidencia": null,
-            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Localizador y extracto de texto tomados del expediente externo auditado (legalmente-piloto-evidencia-primaria-v1.2.md + legalmente-piloto-fuentes-primarias-v1.zip, producido por otro modelo de IA). El manifest de ese expediente autoafirma origen_oficial_confirmado/texto_exacto_consultado/vigencia_comprobada = true y resultado SUFICIENTE — por regla de gobernanza de este repositorio (source-policy.md: 'nunca aceptar como fuente otro contenido generado por IA'; CLAUDE.md: 'ninguna IA es fuente jurídica') esa autoconfirmación NO se traslada aquí. Los extractos del ZIP (687-6215 bytes) son fragmentos de artículos concretos, no el documento legal completo, pese a que 44/45 entradas del manifest declaran documento_completo=true — inconsistencia detectada en auditoría y NO heredada."
+            "fecha_comprobacion": "2026-08-31",
+            "metodo_o_evidencia": "WebSearch contra funcionpublica.gov.co confirma: art. 61 (terminacion del contrato, incl. suspension de actividades del empleador por mas de 120 dias), art. 62 (justas causas de terminacion unilateral por el empleador). Confirma tambien la regla citada en el claim: 'la parte que termina unilateralmente el contrato debe comunicar a la otra la causal o motivo... y posteriormente no pueden alegarse validamente causales distintas'.",
+            "observaciones": "origen_oficial_confirmado=true (funcionpublica.gov.co, ya en el registro oficial). texto_exacto_consultado y vigencia_comprobada permanecen false."
           },
           "registro_oficial_id": "funcionpublica-gov-co"
         },
@@ -582,12 +582,12 @@
             "Colombia"
           ],
           "verificacion_fuente": {
-            "origen_oficial_confirmado": false,
+            "origen_oficial_confirmado": true,
             "texto_exacto_consultado": false,
             "vigencia_comprobada": false,
-            "fecha_comprobacion": null,
-            "metodo_o_evidencia": null,
-            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Localizador y extracto de texto tomados del expediente externo auditado (legalmente-piloto-evidencia-primaria-v1.2.md + legalmente-piloto-fuentes-primarias-v1.zip, producido por otro modelo de IA). El manifest de ese expediente autoafirma origen_oficial_confirmado/texto_exacto_consultado/vigencia_comprobada = true y resultado SUFICIENTE — por regla de gobernanza de este repositorio (source-policy.md: 'nunca aceptar como fuente otro contenido generado por IA'; CLAUDE.md: 'ninguna IA es fuente jurídica') esa autoconfirmación NO se traslada aquí. Los extractos del ZIP (687-6215 bytes) son fragmentos de artículos concretos, no el documento legal completo, pese a que 44/45 entradas del manifest declaran documento_completo=true — inconsistencia detectada en auditoría y NO heredada."
+            "fecha_comprobacion": "2026-08-31",
+            "metodo_o_evidencia": "WebSearch contra funcionpublica.gov.co confirma: art. 61 (terminacion del contrato, incl. suspension de actividades del empleador por mas de 120 dias), art. 62 (justas causas de terminacion unilateral por el empleador). Confirma tambien la regla citada en el claim: 'la parte que termina unilateralmente el contrato debe comunicar a la otra la causal o motivo... y posteriormente no pueden alegarse validamente causales distintas'.",
+            "observaciones": "origen_oficial_confirmado=true (funcionpublica.gov.co, ya en el registro oficial). texto_exacto_consultado y vigencia_comprobada permanecen false."
           },
           "registro_oficial_id": "funcionpublica-gov-co"
         },
@@ -680,12 +680,12 @@
             "México"
           ],
           "verificacion_fuente": {
-            "origen_oficial_confirmado": false,
+            "origen_oficial_confirmado": true,
             "texto_exacto_consultado": false,
             "vigencia_comprobada": false,
-            "fecha_comprobacion": null,
-            "metodo_o_evidencia": null,
-            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Localizador y extracto de texto tomados del expediente externo auditado (legalmente-piloto-evidencia-primaria-v1.2.md + legalmente-piloto-fuentes-primarias-v1.zip, producido por otro modelo de IA). El manifest de ese expediente autoafirma origen_oficial_confirmado/texto_exacto_consultado/vigencia_comprobada = true y resultado SUFICIENTE — por regla de gobernanza de este repositorio (source-policy.md: 'nunca aceptar como fuente otro contenido generado por IA'; CLAUDE.md: 'ninguna IA es fuente jurídica') esa autoconfirmación NO se traslada aquí. Los extractos del ZIP (687-6215 bytes) son fragmentos de artículos concretos, no el documento legal completo, pese a que 44/45 entradas del manifest declaran documento_completo=true — inconsistencia detectada en auditoría y NO heredada."
+            "fecha_comprobacion": "2026-08-31",
+            "metodo_o_evidencia": "WebSearch contra diputados.gob.mx devolvio snippets describiendo el art. 51 (causas de rescision sin responsabilidad para el trabajador: actos de deshonestidad/violencia/amenazas del patron, peligro grave, exigir actos que atenten contra la dignidad) y el art. 52 (el trabajador puede separarse dentro de los 30 dias siguientes y tiene derecho a la indemnizacion del art. 50) — coincide con el claim ('rescision imputable al patron / despido indirecto').",
+            "observaciones": "origen_oficial_confirmado=true por evidencia real vía WebSearch (2026-08-31). texto_exacto_consultado y vigencia_comprobada permanecen false."
           },
           "registro_oficial_id": "diputados-gob-mx"
         },
@@ -702,12 +702,12 @@
             "España"
           ],
           "verificacion_fuente": {
-            "origen_oficial_confirmado": false,
+            "origen_oficial_confirmado": true,
             "texto_exacto_consultado": false,
             "vigencia_comprobada": false,
-            "fecha_comprobacion": null,
-            "metodo_o_evidencia": null,
-            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Localizador y extracto de texto tomados del expediente externo auditado (legalmente-piloto-evidencia-primaria-v1.2.md + legalmente-piloto-fuentes-primarias-v1.zip, producido por otro modelo de IA). El manifest de ese expediente autoafirma origen_oficial_confirmado/texto_exacto_consultado/vigencia_comprobada = true y resultado SUFICIENTE — por regla de gobernanza de este repositorio (source-policy.md: 'nunca aceptar como fuente otro contenido generado por IA'; CLAUDE.md: 'ninguna IA es fuente jurídica') esa autoconfirmación NO se traslada aquí. Los extractos del ZIP (687-6215 bytes) son fragmentos de artículos concretos, no el documento legal completo, pese a que 44/45 entradas del manifest declaran documento_completo=true — inconsistencia detectada en auditoría y NO heredada."
+            "fecha_comprobacion": "2026-08-31",
+            "metodo_o_evidencia": "WebSearch contra boe.es confirma el art. 50 ET (lista abierta/numerus apertus de incumplimientos graves del empresario que justifican extincion indemnizada por voluntad del trabajador: impago o retrasos continuados en el pago del salario, entre otros) y que los efectos exigen declaracion judicial previa de la gravedad. DISCREPANCIA DETECTADA: el claim cita 'art. 49.1.d', pero la evidencia real apunta a que es el art. 49.1.j) ET el que remite al art. 50.1 para la extincion por voluntad del trabajador — requiere confirmacion adicional antes de dar el localizador del claim por bueno.",
+            "observaciones": "origen_oficial_confirmado=true (boe.es) para el art. 50. El localizador '49.1.d' del claim puede ser incorrecto (evidencia sugiere 49.1.j) — NO corregido automaticamente aqui, queda como discrepancia a resolver por quien verifique con el texto completo."
           },
           "registro_oficial_id": "boe-es"
         },
@@ -746,12 +746,12 @@
             "Colombia"
           ],
           "verificacion_fuente": {
-            "origen_oficial_confirmado": false,
+            "origen_oficial_confirmado": true,
             "texto_exacto_consultado": false,
             "vigencia_comprobada": false,
-            "fecha_comprobacion": null,
-            "metodo_o_evidencia": null,
-            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Localizador y extracto de texto tomados del expediente externo auditado (legalmente-piloto-evidencia-primaria-v1.2.md + legalmente-piloto-fuentes-primarias-v1.zip, producido por otro modelo de IA). El manifest de ese expediente autoafirma origen_oficial_confirmado/texto_exacto_consultado/vigencia_comprobada = true y resultado SUFICIENTE — por regla de gobernanza de este repositorio (source-policy.md: 'nunca aceptar como fuente otro contenido generado por IA'; CLAUDE.md: 'ninguna IA es fuente jurídica') esa autoconfirmación NO se traslada aquí. Los extractos del ZIP (687-6215 bytes) son fragmentos de artículos concretos, no el documento legal completo, pese a que 44/45 entradas del manifest declaran documento_completo=true — inconsistencia detectada en auditoría y NO heredada."
+            "fecha_comprobacion": "2026-08-31",
+            "metodo_o_evidencia": "WebSearch contra funcionpublica.gov.co confirma: art. 61 (terminacion del contrato, incl. suspension de actividades del empleador por mas de 120 dias), art. 62 (justas causas de terminacion unilateral por el empleador). Confirma tambien la regla citada en el claim: 'la parte que termina unilateralmente el contrato debe comunicar a la otra la causal o motivo... y posteriormente no pueden alegarse validamente causales distintas'.",
+            "observaciones": "origen_oficial_confirmado=true (funcionpublica.gov.co, ya en el registro oficial). texto_exacto_consultado y vigencia_comprobada permanecen false."
           },
           "registro_oficial_id": "funcionpublica-gov-co"
         }

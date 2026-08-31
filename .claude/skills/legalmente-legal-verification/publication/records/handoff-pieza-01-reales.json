@@ -1,0 +1,33 @@
+{
+  "record_type": "ProductionHandoff",
+  "schema_version": "1.0",
+  "handoff_id": "HO-PIEZA-01-REALES-001",
+  "content_id": "LM-PIEZA-01-REALES",
+  "piece_id": "PIEZA-01-REALES",
+  "claim_packet": "pilot/claim-packets/pieza-01-reales.json",
+  "claims": [
+    {
+      "claim_id": "pieza-01-claim-1",
+      "approved_claim_hash": "4813708c81cec506caa8a5df5141741d8c074bfe38d909394429e72db866f2cb",
+      "approved_text": "En los ordenamientos examinados, la propiedad o dominio atribuye facultades amplias de aprovechamiento, goce y disposición sobre una cosa, siempre dentro de los límites establecidos por la ley. La formulación técnica no es idéntica en México, España y Argentina."
+    },
+    {
+      "claim_id": "pieza-01-claim-2",
+      "approved_claim_hash": "4b0d70f38f4032d96b0f30d014a0062c21e1db7e6b18a37370c9cdd85f8321a0",
+      "approved_text": "La terminología no es uniforme. El Código Civil Federal mexicano denomina 'posesión derivada' a la de quien recibe temporalmente una cosa mediante arrendamiento, depósito u otro título análogo. El Código Civil español utiliza 'tenencia' dentro de su regulación de la posesión y distingue entre poseer como dueño o como tenedor. Argentina diferencia expresamente posesión y tenencia como dos relaciones de poder. Son figuras funcionalmente comparables, pero no necesariamente equivalentes en todos sus efectos."
+    },
+    {
+      "claim_id": "pieza-01-claim-4",
+      "approved_claim_hash": "74056bcf72062faa8374383eafe3482f37638a8b7ce04c8d71e7f8698695e938",
+      "approved_text": "Quien detenta un bien reconociendo el dominio ajeno no adquiere la propiedad por el simple transcurso del tiempo mientras conserve esa calidad. Para que pueda comenzar una posesión apta para usucapir debe producirse y probarse un cambio jurídicamente relevante hacia la posesión en concepto de propietario, además de cumplirse los requisitos y plazos de la legislación aplicable."
+    }
+  ],
+  "jurisdiccion": "Comparada (Capa B): México · España · Argentina",
+  "alcance": "CAPA_B_VARIABLE",
+  "advertencia_editorial": "Contenido educativo comparado (México · España · Argentina). No es asesoría jurídica. Las reglas, plazos y requisitos cambian según el país y, en México, también según el estado. Un caso concreto requiere análisis individual con la legislación aplicable.",
+  "redacciones_prohibidas": [
+    "El inquilino jamás puede adquirir la casa por prescripción."
+  ],
+  "status": "APROBADO_QA",
+  "creado_en": "2026-08-31"
+}
