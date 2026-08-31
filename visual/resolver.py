@@ -158,12 +158,40 @@ def resolve(content_id, content_dir=None, packets_dir=None, records_dir=None):
     return r
 
 
+def _piece_id_de(content_id):
+    for cid, path, _ in list_content_ids():
+        if cid == content_id:
+            d = _load(REPO / path)
+            return (d or {}).get("procedencia", {}).get("piece_id")
+    return None
+
+
 def gate_summary():
-    """Resumen de puertas por pieza. Solo estados existentes; ningun razonamiento nuevo."""
-    return [{
-        "PIECE_ID": p["piece_id"],
-        "CANON": p["estado_agregado"],
-        "ART_GATE": p["gate_global_arte"],
-        "CLAIMS": p["claims"],
-        "VISUAL_READY": "NO" if p["gate_global_arte"] != "ABIERTO" else "PENDIENTE_HANDOFF",
-    } for p in list_pieces()]
+    """Resumen de puertas por pieza. Solo estados existentes; ningun razonamiento nuevo.
+
+    VISUAL_READY refleja la produccion REAL: si algun content_id gobernado
+    resuelve en AUTORIZADA para este piece_id, no basta con mirar el gate del
+    claim packet — eso quedaria obsoleto en cuanto exista handoff y artefacto.
+    """
+    piece_ids_con_produccion = set()
+    for cid, path, modo in list_content_ids():
+        if modo != "GOBERNADO":
+            continue
+        pid = _piece_id_de(cid)
+        if pid and resolve(cid).production_ready:
+            piece_ids_con_produccion.add(pid)
+
+    filas = []
+    for p in list_pieces():
+        if p["gate_global_arte"] != "ABIERTO":
+            visual = "NO"
+        elif p["piece_id"] in piece_ids_con_produccion:
+            visual = "READY_FOR_VISUAL"
+        else:
+            visual = "PENDIENTE_HANDOFF"
+        filas.append({
+            "PIECE_ID": p["piece_id"], "CANON": p["estado_agregado"],
+            "ART_GATE": p["gate_global_arte"], "CLAIMS": p["claims"],
+            "VISUAL_READY": visual,
+        })
+    return filas

@@ -53,7 +53,7 @@ real y una prueba que pasa.
 - `fixtures/` — 10 positivas, 46 negativas.
 - `publication/fixtures/` — 2 cadenas válidas, 14 inválidas, 1 claim packet sintético.
 
-**Pruebas: 498, todas en verde** (Psyche). Más 23 del consumidor de web, locales.
+**Pruebas: 499, todas en verde** (Psyche). Más 23 del consumidor de web, locales.
 | Suite | Pruebas |
 |---|---|
 | `test_validate_claim_packet` | 147 |
@@ -61,7 +61,7 @@ real y una prueba que pasa.
 | `test_validate_publication_chain` | 41 |
 | `test_confidentiality_rules` | 20 |
 | `test_validate_content_provenance` | 30 |
-| `visual/` (5 suites) | 206 |
+| `visual/` (5 suites) | 207 |
 | `contract/test_canonical_envelope` | 12 |
 
 ### 2.2 Los cuatro estados no equivalentes
@@ -198,9 +198,13 @@ decisión del fundador, no técnica.
 **P1 — antes de escalar el volumen**
 3. ~~Decidir sobre la Pieza 1: fusionar o no `e7bb82f`.~~ **FUSIONADA** el
    2026-08-31 (commit `0f8c697`), autorizada expresamente por el fundador.
-   `PIEZA-01-REALES` tiene ahora `gate_arte: ABIERTO` real. El siguiente paso
-   —el único que falta— es emitir un `ProductionHandoff`, decisión humana
-   documentada en `docs/production-handoff-decision-pieza-01.md`.
+   ~~Emitir `ProductionHandoff` para PIEZA-01.~~ **EMITIDO** el mismo día
+   (`HO-PIEZA-01-REALES-001`), autorizado expresamente. `LM-PIEZA-01-REALES`
+   ahora resuelve `AUTORIZADA` y el pipeline formal produjo un
+   `GenerationReceipt` real (incluida una regeneración con lineage). **Ningún
+   `PublicationDecision` existe**: la publicación sigue sin autorizarse. Ver
+   `docs/production-handoff-decision-pieza-01.md` y
+   `docs/real-generation-readiness.md`.
 4. Corregir la deriva de `legalmente-web` en `CLAUDE.md §8`.
 5. ~~Resolver el conflicto de marca.~~ **RESUELTO** el 2026-08-31: `NO`. Ver
    `docs/adr/0002-marca-composicion-determinista.md`. Aplicado en política 1.1.

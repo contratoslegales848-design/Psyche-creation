@@ -10,7 +10,41 @@ ProductionHandoff). Aqui solo se decide si una pieza ya autorizada puede entrar
 al pipeline visual.
 """
 
+import importlib.util
+import sys
 from dataclasses import dataclass, field
+from pathlib import Path
+
+_SKILL_SCRIPTS = Path(__file__).resolve().parent.parent / ".claude" / "skills" / \
+    "legalmente-legal-verification" / "scripts"
+
+
+def _cargar_compute_content_hash():
+    """Importa la funcion canonica de hash desde el validador de la skill.
+
+    No se reimplementa aqui: reusar la MISMA funcion que aprueba los claims es
+    lo unico que garantiza que "el hash cambio" signifique lo mismo en los dos
+    sitios. Perezoso y opcional: si no esta disponible, el llamador decide.
+    """
+    ruta = _SKILL_SCRIPTS / "validate-claim-packet.py"
+    if not ruta.is_file():
+        return None
+    nombre = "legalmente_validate_claim_packet"
+    if nombre in sys.modules:
+        return getattr(sys.modules[nombre], "compute_content_hash", None)
+    if str(_SKILL_SCRIPTS) not in sys.path:
+        sys.path.insert(0, str(_SKILL_SCRIPTS))
+    spec = importlib.util.spec_from_file_location(nombre, ruta)
+    if spec is None or spec.loader is None:
+        return None
+    modulo = importlib.util.module_from_spec(spec)
+    sys.modules[nombre] = modulo
+    try:
+        spec.loader.exec_module(modulo)
+    except Exception:
+        del sys.modules[nombre]
+        return None
+    return getattr(modulo, "compute_content_hash", None)
 
 # Unico estado de handoff que habilita produccion visual.
 HANDOFF_STATUS_PRODUCIBLE = "APROBADO_QA"
@@ -132,6 +166,16 @@ def _verificar_hashes_contra_paquete(claims_declarados, claim_packet):
     APROBADO por un humano, y que el hash coincida EXACTAMENTE con el que
     quedo registrado en esa aprobacion. Devuelve el motivo de cierre, o None
     si todo coincide.
+
+    Ademas, cuando esta disponible, recalcula el hash REAL y actual del claim
+    con la misma funcion canonica que usa el validador (`compute_content_hash`)
+    y lo compara contra el snapshot congelado en la aprobacion. Sin esto, un
+    claim que mutara DESPUES de aprobado (con el snapshot de la aprobacion sin
+    refrescar) seguiria abriendo el gate: el snapshot y el declarado
+    coincidirian entre si sin que ninguno de los dos reflejara ya el contenido
+    real. Es exactamente el ataque que scripts/validate-content-provenance.py
+    bloquea a nivel de artefacto; aqui se cierra la misma puerta a nivel de gate,
+    para los llamadores que no pasan por ese script (p. ej. resolver.py).
     """
     if not isinstance(claim_packet, dict):
         return "claim_packet con forma invalida: no se puede verificar contra el canon."
@@ -139,6 +183,7 @@ def _verificar_hashes_contra_paquete(claims_declarados, claim_packet):
         c.get("claim_id"): c for c in (claim_packet.get("claims") or [])
         if isinstance(c, dict)
     }
+    compute_content_hash = _cargar_compute_content_hash()
     for c in claims_declarados:
         cid, declarado = c.get("claim_id"), c.get("approved_claim_hash")
         real = por_id.get(cid)
@@ -151,6 +196,16 @@ def _verificar_hashes_contra_paquete(claims_declarados, claim_packet):
         if not real_hash or declarado != real_hash:
             return (f"claim {cid!r}: el hash declarado no coincide con el hash de la aprobacion "
                     "humana real. Una pieza no puede autoafirmar un hash que el canon no respalda.")
+        if compute_content_hash is not None:
+            try:
+                actual = compute_content_hash(real)
+            except Exception:
+                return (f"claim {cid!r}: no se pudo recalcular el hash actual del claim; "
+                        "fail-closed ante un canon que no se puede verificar.")
+            if actual != real_hash:
+                return (f"claim {cid!r}: el contenido del claim cambio despues de la aprobacion "
+                        "(el hash actual ya no coincide con el snapshot aprobado). "
+                        "Una aprobacion vieja no puede autorizar canon nuevo en silencio.")
     return None
 
 

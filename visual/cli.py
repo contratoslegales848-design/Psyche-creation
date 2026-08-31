@@ -23,11 +23,12 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import canonical
+import compositor
 import pipeline
 import resolver
 import registry as registry_mod
 from brief import VisualBrief, VisualPolicy
-from errors import VisualInputInvalidError
+from errors import StoragePathError, VisualInputInvalidError
 from families import VisualFamilyRegistry
 from providers import FakeImageProvider
 
@@ -67,6 +68,9 @@ def main(argv=None):
         s.add_argument("--claim-packet",
                        help="claim packet real para verificar el hash contra la aprobacion humana; "
                             "si se omite, se busca por piece_id en pilot/claim-packets/.")
+        s.add_argument("--reserved-surface", metavar="X,Y,W,H",
+                       help="superficie fisica reservada para la marca, en pixeles del lienzo. "
+                            "Sin esto la marca no se compone (NEEDS_HUMAN_REVIEW), nunca watermark.")
         if c == "simulate":
             s.add_argument("--out", default="artifacts/visual")
     s = sub.add_parser("batch-dry-run"); s.add_argument("directorio")
@@ -135,12 +139,18 @@ def main(argv=None):
                     claim_packet = _load(resolver.REPO / path)
                     break
 
+        surface = None
+        if a.reserved_surface:
+            x, y, w, h = (int(n) for n in a.reserved_surface.split(","))
+            surface = compositor.ReservedSurface(x, y, w, h)
+
         brief = brief_desde(vi, policy, fams)
         reg = registry_mod.AssetRegistry(a.out) if a.cmd == "simulate" else None
         run = pipeline.generate_visual(
             art["procedencia"], brief, policy, FakeImageProvider(), handoff=handoff,
             family=fams.get(brief.visual_family), families_version=fams.version,
             dry_run=(a.cmd == "dry-run"), registry=reg, claim_packet=claim_packet,
+            reserved_surface=surface,
             exact_copy=vi.exact_copy, author=vi.author, content_type=vi.content_type)
         print(f"status={run.receipt.status} generation_id={run.receipt.generation_id}")
         if run.plan:
@@ -168,19 +178,24 @@ def main(argv=None):
         return 0
 
     reg = registry_mod.AssetRegistry(a.root)
-    if a.cmd == "show-receipt":
-        r = reg.get_generation(a.content_id, a.generation_id)
-        print(json.dumps(r, ensure_ascii=False, indent=2) if r else "no encontrado")
-        return 0 if r else 1
-    if a.cmd == "show-history":
-        for g in reg.generations_for(a.content_id):
-            print(f"{g['created_at']}  {g['generation_id']}  {g['status']}  "
-                  f"parent={g.get('parent_generation_id') or '-'}  "
-                  f"feedback={g.get('feedback_codes') or '-'}")
-        return 0
+    try:
+        if a.cmd == "show-receipt":
+            r = reg.get_generation(a.content_id, a.generation_id)
+            print(json.dumps(r, ensure_ascii=False, indent=2) if r else "no encontrado")
+            return 0 if r else 1
+        if a.cmd == "show-history":
+            for g in reg.generations_for(a.content_id):
+                print(f"{g['created_at']}  {g['generation_id']}  {g['status']}  "
+                      f"parent={g.get('parent_generation_id') or '-'}  "
+                      f"feedback={g.get('feedback_codes') or '-'}")
+            return 0
+        if a.cmd == "explain":
+            g = reg.get_generation(a.content_id, a.generation_id)
+    except StoragePathError as exc:
+        print(f"RECHAZADO: {exc}")
+        return 1
 
     if a.cmd == "explain":
-        g = reg.get_generation(a.content_id, a.generation_id)
         if not g:
             print("generacion no encontrada")
             return 1

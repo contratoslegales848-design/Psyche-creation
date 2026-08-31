@@ -1,6 +1,6 @@
 # Decision Packet — ¿Emitir ProductionHandoff para PIEZA-01-REALES?
 
-**No es una decisión técnica. Requiere al fundador.**
+**EJECUTADO el 2026-08-31, autorizado expresamente por el fundador para este mandato (alcance: emitir el handoff únicamente; NO publicación, NO despliegue, NO merge).**
 
 ## DECISION
 
@@ -51,15 +51,11 @@ Un `ProductionHandoff` es un registro append-only en
 el commit que lo añade lo elimina. No implica publicación ni tiene efecto
 fuera del repositorio.
 
-## EXACT ACTION
+## EXECUTED
 
-1. El fundador (o quien tenga autoridad delegada) decide `YES` / `NO`.
-2. Si `YES`: una sesión (esta u otra) construye el `ProductionHandoff` con
-   `validate-publication-chain.py` como referencia de forma, transportando
-   **exactamente** los tres claims aprobados y sus hashes — sin alterar nada.
-3. Tras el handoff, crear `content/pieza-01-reales.json` en modo `GOBERNADO`
-   con `piece_id`, `handoff_id` y los `approved_claim_hash`.
-4. Sólo entonces `visual dry-run` y `visual simulate` producirán un
-   `GenerationReceipt` real, registrado en `AssetRegistry`.
-5. La publicación sigue siendo un acto humano posterior y separado
-   (`PublicationDecision`), fuera del alcance de cualquier sesión técnica.
+1. **Handoff emitido**: `.claude/skills/legalmente-legal-verification/publication/records/handoff-pieza-01-reales.json` (`handoff_id: HO-PIEZA-01-REALES-001`), transportando exactamente los tres claims aprobados y sus hashes reales. Validado: `[CADENA VÁLIDA]`, exit 0.
+2. **`CONTENT_ID` minado**: `LM-PIEZA-01-REALES`.
+3. **`content/pieza-01-reales.json` creado** en modo `GOBERNADO`. Validado: `[PROCEDENCIA VÁLIDA]`, exit 0.
+4. **Pipeline formal ejecutado de punta a punta** (sin bypass del orquestador): `visual resolve` → `AUTORIZADA`, `visual dry-run` → `READY` (0 llamadas), `visual simulate` → `GenerationReceipt` real + `AssetRegistry` real. Marca y copy reales inspeccionados visualmente. Regenerado una vez (`TOO_DARK`), GEN1 preservado.
+5. **Ningún actor humano fue inventado**: el schema de `ProductionHandoff` no exige un campo de actor — el emisor humano es la persona que da esta instrucción explícita, y la aprobación jurídica que el handoff transporta sigue siendo, sin alterar, la de Raymundo Acevedo. Ver `docs/real-generation-readiness.md` para la prueba completa.
+6. **La publicación sigue sin autorizarse**: no existe ninguna `PublicationDecision`. `content/pieza-01-reales.json` declara `publicable: true` porque el validador exige ese valor para clasificar contenido de producción real frente a material de prueba — eso NO es autorización de publicar, que exige un registro separado con decisor identificado.

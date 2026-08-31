@@ -26,53 +26,64 @@ Estado verificado el 2026-08-31. Ejecutado, no estimado.
 | Consumidor de `legalmente-web` | PATCH_READY (**BLOCKED_BY_REMOTE_WRITE**) |
 | Publicación | OUT_OF_SCOPE (prohibida por diseño) |
 
-## Contenido real — matriz de gates (2026-08-31, tras fusionar e7bb82f)
+## Contenido real — matriz de gates (2026-08-31, tras ProductionHandoff real)
 
-| CONTENT_ID | Canon | Sources | Territory | Art Gate | Visual |
+| CONTENT_ID | Canon | Territory | Art Gate | Handoff | Visual |
 |---|---|---|---|---|---|
-| *(sin minar)* `PIEZA-01-REALES` | APTO_PARA_NARRATIVA | verificadas (4 países) | CAPA_B_VARIABLE | **ABIERTO** | PENDIENTE_HANDOFF |
-| *(sin minar)* `PIEZA-02-LABORAL` | REQUIERE_INVESTIGACION | — | — | CERRADO | NO |
-| *(sin minar)* `PIEZA-03-HONOR` | REQUIERE_INVESTIGACION | — | — | CERRADO | NO |
-| `LM-EJEMPLO-TECNICO-001` | — | — | NO_APLICA | — | material de prueba, no publicable |
+| `LM-PIEZA-01-REALES` | APTO_PARA_NARRATIVA | CAPA_B_VARIABLE (MX·ES·AR) | **ABIERTO** | **VALID** | **READY_FOR_VISUAL** |
+| *(sin minar)* `PIEZA-02-LABORAL` | REQUIERE_INVESTIGACION | — | CERRADO | NONE | BLOCKED |
+| *(sin minar)* `PIEZA-03-HONOR` | REQUIERE_INVESTIGACION | — | CERRADO | NONE | BLOCKED |
+| `LM-EJEMPLO-TECNICO-001` | — | NO_APLICA | — | — | material de prueba, no publicable |
 
-**PIEZA-01-REALES pasó de `gate=CERRADO` a `gate=ABIERTO`** el 2026-08-31, al
-fusionar `e7bb82f` (aprobación real de Raymundo Acevedo). Verificado con
-`python3 cli.py gates`. Ningún CONTENT_ID tiene aún handoff minado — por eso
-`VISUAL_READY` sigue en `PENDIENTE_HANDOFF`, no en `SI`: el gate de arte y la
-autorización de producción son dos actos distintos y deliberadamente
-separados.
+**PIEZA-01-REALES tiene ahora `ProductionHandoff` real** (`HO-PIEZA-01-REALES-001`,
+en `publication/records/handoff-pieza-01-reales.json`) y un `CONTENT_ID` real
+minado (`LM-PIEZA-01-REALES`, en `content/pieza-01-reales.json`, modo `GOBERNADO`).
+Verificado con `python3 cli.py gates` y `python3 cli.py resolve LM-PIEZA-01-REALES`
+→ `produccion: AUTORIZADA`.
 
-## Prueba de producción real ejecutada
+## Prueba de producción real ejecutada — pipeline formal, sin bypass
 
-Con el gate ya abierto, se ejecutó el pipeline completo sobre el contenido
-real de PIEZA-01 (texto exacto aprobado por Raymundo Acevedo, claim
-`pieza-01-claim-1`, hash `4813708c...`):
+Con el gate abierto y el handoff emitido, se ejecutó el **orquestador oficial**
+(`pipeline.generate_visual`, sin llamadas directas al compositor) sobre el
+contenido real de PIEZA-01:
 
-1. **Dry-run real** contra `pipeline.generate_visual` con `handoff=None`:
-   `GATE_CERRADO`, 0 llamadas al proveedor. Correcto — no existe
-   `ProductionHandoff`, y esta sesión tiene prohibido fabricar uno.
-2. **Prueba de capa de composición** (código real: `composition.py` +
-   `compositor.py`, sin pasar por el gate de `ProductionHandoff`): el texto
-   exacto real se renderizó verbatim, la marca "LegalMente" se compuso en la
-   superficie reservada, el raw quedó intacto (hash idéntico antes/después),
-   QA de composición sin problemas. Verificado visualmente. **Sin
-   `GenerationReceipt`, sin entrada en `AssetRegistry`** — deliberadamente, para
-   no implicar autorización de producción.
-3. **Hallazgo de red-team real**: un intento de sustituir el hash aprobado por
-   uno forjado NO se rechazaba (`gates.py` sólo comprobaba la forma). Corregido
-   en el mismo pase: `can_enter_visual_generation()` ahora verifica, cuando se
-   le aporta el claim packet real, que el hash coincida con
-   `revision_humana.contenido_hash_sha256`. 6 pruebas de regresión.
+1. `visual resolve LM-PIEZA-01-REALES` → `produccion: AUTORIZADA`.
+2. `visual dry-run` → `DRY_RUN` (READY), **0 llamadas al proveedor**.
+3. `visual simulate` → `PENDIENTE_REVISION_HUMANA`, `GenerationReceipt` real,
+   `AssetRegistry` real (raw + composed en disco). Marca "LegalMente" compuesta
+   en superficie reservada real. Copy exacto verbatim, autor correcto, sin
+   watermark, sin recorte. Verificado visualmente.
+4. **Regenerado una vez** (`TOO_DARK`): GEN2 con `parent_generation_id` = GEN1,
+   GEN1 preservado sin cambios, mismo `ProductionHandoff` reutilizado (no se
+   emite uno nuevo por reintento).
+5. **Identidad consistente** entre `ProductionHandoff.content_id`,
+   `content/*.json.procedencia.content_id` y `GenerationReceipt.content_id`:
+   los tres coinciden. El hash aprobado coincide en los tres lugares.
+6. **Canon inmutable**: el claim packet y el handoff no cambiaron (`git status`
+   limpio) durante toda la generación.
+7. **Bloqueo de control reconfirmado**: `PIEZA-02-LABORAL` (real, sin handoff)
+   sigue en `GATE_CERRADO`, 0 llamadas, 0 bytes.
 
-## El único paso que falta
+### Segundo hallazgo de red-team real, corregido
 
-**Emitir un `ProductionHandoff` para PIEZA-01-REALES.** Es un acto de
-autorización de producción — no jurídica, no de publicación — que ninguna
-sesión debe fabricar. Ver el paquete de decisión en
-`docs/production-handoff-decision-pieza-01.md`.
+Una aprobación humana **congelada** (`revision_humana.contenido_hash_sha256`)
+no protegía por sí sola contra un claim **mutado después de aprobado**: el gate
+solo comparaba dos snapshots estáticos entre sí, nunca contra el contenido
+actual. Corregido: `gates.py` recalcula ahora el hash real y vigente del claim
+con la misma función canónica que usa el validador
+(`compute_content_hash`), cerrando exactamente el hueco que
+`scripts/validate-content-provenance.py` ya cerraba a nivel de artefacto, pero
+que faltaba a nivel de gate para llamadores que no pasan por ese script. 1
+prueba de regresión adicional.
 
-Sólo entonces existirá un CONTENT_ID real y `visual dry-run CONTENT_ID`
-recorrerá la cadena completa hasta un `GenerationReceipt` real.
+## Qué significa `publicable: true` en `content/pieza-01-reales.json`
+
+El validador exige ese valor para todo artefacto en modo `GOBERNADO` — es una
+etiqueta de categoría ("esto es contenido de producción real", no material de
+prueba), **no una autorización de publicar**. Publicar exige una
+`PublicationDecision` humana separada, con decisor identificado, que **no
+existe**. `content/pieza-01-reales.json` lo declara explícitamente en
+`procedencia.nota`.
 
 ## Comandos
 

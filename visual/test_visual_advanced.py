@@ -723,11 +723,13 @@ class TestVerificacionDeHashContraElPaquete(unittest.TestCase):
     aprobacion humana real. gates.py ahora lo verifica cuando se le aporta el
     paquete (resolver.py siempre lo tiene disponible)."""
 
+    _CLAIM_C1 = {"claim_id": "c1", "texto_exacto": "contenido de prueba, congelado"}
+    _HASH_REAL_C1 = gates._cargar_compute_content_hash()(_CLAIM_C1)
     PAQUETE = {
         "piece_id": "P-1",
         "claims": [{
-            "claim_id": "c1",
-            "revision_humana": {"estado": "APROBADO", "contenido_hash_sha256": "a" * 64},
+            **_CLAIM_C1,
+            "revision_humana": {"estado": "APROBADO", "contenido_hash_sha256": _HASH_REAL_C1},
         }],
     }
 
@@ -735,7 +737,7 @@ class TestVerificacionDeHashContraElPaquete(unittest.TestCase):
         return dict(PROC, claims=[{"claim_id": claim_id, "approved_claim_hash": hash_declarado}])
 
     def test_hash_correcto_abre(self):
-        d = gates.can_enter_visual_generation(self._proc("a" * 64), HANDOFF, claim_packet=self.PAQUETE)
+        d = gates.can_enter_visual_generation(self._proc(self._HASH_REAL_C1), HANDOFF, claim_packet=self.PAQUETE)
         self.assertTrue(d.permitido)
 
     def test_hash_alterado_cierra(self):
@@ -743,9 +745,23 @@ class TestVerificacionDeHashContraElPaquete(unittest.TestCase):
         self.assertFalse(d.permitido)
 
     def test_claim_ajeno_al_paquete_cierra(self):
-        d = gates.can_enter_visual_generation(self._proc("a" * 64, "otro-claim"), HANDOFF,
+        d = gates.can_enter_visual_generation(self._proc(self._HASH_REAL_C1, "otro-claim"), HANDOFF,
                                               claim_packet=self.PAQUETE)
         self.assertFalse(d.permitido)
+
+    def test_contenido_mutado_tras_aprobacion_cierra(self):
+        """§24-25: una aprobacion vieja no puede autorizar canon nuevo en silencio."""
+        paquete_mutado = {
+            "piece_id": "P-1",
+            "claims": [{
+                "claim_id": "c1", "texto_exacto": "contenido MUTADO tras la aprobacion",
+                "revision_humana": {"estado": "APROBADO", "contenido_hash_sha256": self._HASH_REAL_C1},
+            }],
+        }
+        d = gates.can_enter_visual_generation(self._proc(self._HASH_REAL_C1), HANDOFF,
+                                              claim_packet=paquete_mutado)
+        self.assertFalse(d.permitido)
+        self.assertTrue(any("cambio despues de la aprobacion" in m for m in d.motivos))
 
     def test_claim_no_aprobado_en_el_paquete_cierra(self):
         paquete = {"piece_id": "P-1", "claims": [{

@@ -14,7 +14,7 @@ PR **draft**, nada más.
 
 | Campo | Valor |
 |---|---|
-| Base | `23a9ce0209579a9b85c049b628e2a2c86fb0c5d7` (`main`, verificado sin cambios el 2026-08-31) |
+| Base | `23a9ce0209579a9b85c049b628e2a2c86fb0c5d7` (`main`, reverificado sin cambios el 2026-08-31, dos veces) |
 | Patches | 3, en este mismo directorio |
 | sha256 `0001` | `3cc324f4e60fc0a2b939df7f304592b42304d9854c255a42dcb1ed82f3aa7020` |
 | sha256 `0002` | `26d54fdff4ac25f2167efcc04bced69044fd0fd9947f2ae5bfa448ce7d0ae15c` |
@@ -80,3 +80,8 @@ WEB NO PUEDE:   approve_claim · recompute_sources · upgrade_jurisdiction
 sesión tampoco tenía. `#27` diverge de `main` en 114 archivos y su única
 capacidad única y útil (metadatos de transporte) ya está portada en estos
 patches. No reabras ese análisis.
+
+
+## Nota — PIEZA-01 ya tiene ProductionHandoff real (no cambia este contrato)
+
+Del lado de Psyche: `PIEZA-01-REALES` ya tiene un `ProductionHandoff` real emitido y un `CONTENT_ID` real (`LM-PIEZA-01-REALES`), con un `GenerationReceipt` de prueba producido por el pipeline formal. **El esquema del Canonical Envelope no cambió** — `contract/canonical_envelope.py` y las 8 fixtures siguen siendo las mismas que consumen estos 3 patches. No hace falta regenerar nada por este motivo.
