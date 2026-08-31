@@ -106,13 +106,13 @@
       },
       "estado": "APTO_PARA_NARRATIVA",
       "revision_humana": {
-        "estado": "PENDIENTE",
-        "revisor": null,
-        "fecha": null,
-        "observaciones": null,
-        "contenido_hash_sha256": null
+        "estado": "APROBADO",
+        "revisor": "Raymundo Acevedo",
+        "fecha": "2026-08-27",
+        "observaciones": "Aprobación humana expresa de Raymundo Acevedo (2026-08-27), registrada por instrucción directa suya: \"Yo, Raymundo Acevedo, apruebo para narrativa los claims pieza-01-claim-1, pieza-01-claim-2 y pieza-01-claim-4 sobre el contenido exacto ligado a sus hashes canónicos vigentes. La aprobación conserva íntegros los textos, fuentes, localizadores, jurisdicciones, variaciones materiales, notas y redacciones prohibidas. Debe mantenerse visible el alcance comparado México–España–Argentina. Cualquier plazo mexicano deberá identificarse como federal o estatal, según corresponda. La siguiente advertencia será obligatoria en la narrativa: 'Contenido educativo comparado (México · España · Argentina). No es asesoría jurídica. Las reglas, plazos y requisitos cambian según el país y, en México, también según el estado. Un caso concreto requiere análisis individual con la legislación aplicable.' Esta aprobación permite narrativa y cálculo del gate de arte. No autoriza publicación, asesoría individual, imágenes, audio, video ni distribución.\" El hash se calculó con compute_content_hash (cubre todo el claim salvo revision_humana y gate_arte): cualquier cambio posterior en texto, fuentes, localizadores, jurisdicciones, matices, notas o prohibiciones invalida automáticamente esta aprobación. gate_arte y gate_global_arte se calcularon con la lógica real del validador, no se forzaron. NO existe autorización de publicación: ese control no está implementado en este repositorio.",
+        "contenido_hash_sha256": "4813708c81cec506caa8a5df5141741d8c074bfe38d909394429e72db866f2cb"
       },
-      "gate_arte": "CERRADO",
+      "gate_arte": "ABIERTO",
       "reformulacion_propuesta": {
         "texto": null,
         "verificada": false,
@@ -225,13 +225,13 @@
       },
       "estado": "APTO_PARA_NARRATIVA",
       "revision_humana": {
-        "estado": "PENDIENTE",
-        "revisor": null,
-        "fecha": null,
-        "observaciones": null,
-        "contenido_hash_sha256": null
+        "estado": "APROBADO",
+        "revisor": "Raymundo Acevedo",
+        "fecha": "2026-08-27",
+        "observaciones": "Aprobación humana expresa de Raymundo Acevedo (2026-08-27), registrada por instrucción directa suya: \"Yo, Raymundo Acevedo, apruebo para narrativa los claims pieza-01-claim-1, pieza-01-claim-2 y pieza-01-claim-4 sobre el contenido exacto ligado a sus hashes canónicos vigentes. La aprobación conserva íntegros los textos, fuentes, localizadores, jurisdicciones, variaciones materiales, notas y redacciones prohibidas. Debe mantenerse visible el alcance comparado México–España–Argentina. Cualquier plazo mexicano deberá identificarse como federal o estatal, según corresponda. La siguiente advertencia será obligatoria en la narrativa: 'Contenido educativo comparado (México · España · Argentina). No es asesoría jurídica. Las reglas, plazos y requisitos cambian según el país y, en México, también según el estado. Un caso concreto requiere análisis individual con la legislación aplicable.' Esta aprobación permite narrativa y cálculo del gate de arte. No autoriza publicación, asesoría individual, imágenes, audio, video ni distribución.\" El hash se calculó con compute_content_hash (cubre todo el claim salvo revision_humana y gate_arte): cualquier cambio posterior en texto, fuentes, localizadores, jurisdicciones, matices, notas o prohibiciones invalida automáticamente esta aprobación. gate_arte y gate_global_arte se calcularon con la lógica real del validador, no se forzaron. NO existe autorización de publicación: ese control no está implementado en este repositorio.",
+        "contenido_hash_sha256": "4b0d70f38f4032d96b0f30d014a0062c21e1db7e6b18a37370c9cdd85f8321a0"
       },
-      "gate_arte": "CERRADO",
+      "gate_arte": "ABIERTO",
       "reformulacion_propuesta": {
         "texto": null,
         "verificada": false,
@@ -366,13 +366,13 @@
       },
       "estado": "APTO_PARA_NARRATIVA",
       "revision_humana": {
-        "estado": "PENDIENTE",
-        "revisor": null,
-        "fecha": null,
-        "observaciones": null,
-        "contenido_hash_sha256": null
+        "estado": "APROBADO",
+        "revisor": "Raymundo Acevedo",
+        "fecha": "2026-08-27",
+        "observaciones": "Aprobación humana expresa de Raymundo Acevedo (2026-08-27), registrada por instrucción directa suya: \"Yo, Raymundo Acevedo, apruebo para narrativa los claims pieza-01-claim-1, pieza-01-claim-2 y pieza-01-claim-4 sobre el contenido exacto ligado a sus hashes canónicos vigentes. La aprobación conserva íntegros los textos, fuentes, localizadores, jurisdicciones, variaciones materiales, notas y redacciones prohibidas. Debe mantenerse visible el alcance comparado México–España–Argentina. Cualquier plazo mexicano deberá identificarse como federal o estatal, según corresponda. La siguiente advertencia será obligatoria en la narrativa: 'Contenido educativo comparado (México · España · Argentina). No es asesoría jurídica. Las reglas, plazos y requisitos cambian según el país y, en México, también según el estado. Un caso concreto requiere análisis individual con la legislación aplicable.' Esta aprobación permite narrativa y cálculo del gate de arte. No autoriza publicación, asesoría individual, imágenes, audio, video ni distribución.\" El hash se calculó con compute_content_hash (cubre todo el claim salvo revision_humana y gate_arte): cualquier cambio posterior en texto, fuentes, localizadores, jurisdicciones, matices, notas o prohibiciones invalida automáticamente esta aprobación. gate_arte y gate_global_arte se calcularon con la lógica real del validador, no se forzaron. NO existe autorización de publicación: ese control no está implementado en este repositorio.",
+        "contenido_hash_sha256": "74056bcf72062faa8374383eafe3482f37638a8b7ce04c8d71e7f8698695e938"
       },
-      "gate_arte": "CERRADO",
+      "gate_arte": "ABIERTO",
       "reformulacion_propuesta": {
         "texto": null,
         "verificada": false,
@@ -383,10 +383,6 @@
     }
   ],
   "estado_agregado": "APTO_PARA_NARRATIVA",
-  "revisiones_pendientes": [
-    "pieza-01-claim-1",
-    "pieza-01-claim-2",
-    "pieza-01-claim-4"
-  ],
-  "gate_global_arte": "CERRADO"
+  "revisiones_pendientes": [],
+  "gate_global_arte": "ABIERTO"
 }
