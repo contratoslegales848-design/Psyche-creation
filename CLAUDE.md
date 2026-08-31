@@ -63,7 +63,7 @@ Ante un conflicto, gana el nivel más alto disponible.
 ## 8. Límites entre repositorios
 
 - **Psyche-creation** (este repo, público, cuenta `contratoslegales848-design`): pipeline de video Remotion, skills, docs operativos, catálogo de contenido para producción.
-- **legalmente-web** (privado, cuenta `legallmente-alt`, si está disponible en la sesión): sitio web Next.js. Esta sesión normalmente no puede hacer push directo ahí (cuentas distintas) — se trabaja por bundle o sesión aparte.
+- **legalmente-web** (**público**, cuenta `legallmente-alt`): sitio web Next.js. Verificado el 2026-08-31 por clonado anónimo de `https://github.com/legallmente-alt/legalmente-web.git` (sin credenciales). Las sesiones de este repo pueden **leerlo y trabajarlo en local**, pero **no** hacer push ni operar sus PRs (cuentas distintas) — se entrega por serie de patches o bundle, o en una sesión aparte con permisos.
 
 No mezclar código ni responsabilidades de ambos repos sin una decisión explícita del fundador.
 
