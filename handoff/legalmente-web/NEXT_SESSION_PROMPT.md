@@ -85,3 +85,27 @@ patches. No reabras ese análisis.
 ## Nota — PIEZA-01 ya tiene ProductionHandoff real (no cambia este contrato)
 
 Del lado de Psyche: `PIEZA-01-REALES` ya tiene un `ProductionHandoff` real emitido y un `CONTENT_ID` real (`LM-PIEZA-01-REALES`), con un `GenerationReceipt` de prueba producido por el pipeline formal. **El esquema del Canonical Envelope no cambió** — `contract/canonical_envelope.py` y las 8 fixtures siguen siendo las mismas que consumen estos 3 patches. No hace falta regenerar nada por este motivo.
+
+## READY_FOR_WEB_SESSION — contrato nuevo del Command Center (v1.0, no integrado todavía)
+
+**Estado explícito: no está integrado.** Es una especificación de consumer delta lista para aplicarse — no un cuarto patch generado contra el repo real de `legalmente-web` (esta sesión no tiene ese repo clonado ni permiso de escritura sobre él).
+
+Productor: `visual/command_center.py` (Psyche). Contrato:
+
+- `command_center_contract_version: "1.0"` (`command_center.CONTRACT_VERSION`).
+- Envelope con: `content` (una fila por `content_id` real), `human_decision_inbox`, `automatic_executable_now`, `data_freshness` a nivel de payload y por fila.
+- Vocabulario cerrado de `data_freshness`: `LIVE / DERIVED / SNAPSHOT / SIMULATED / UNKNOWN`. Ningún consumidor debe tratar `SIMULATED` ni `SNAPSHOT` como `LIVE`.
+- Vocabulario cerrado de `human_art_review`: `PENDIENTE / SIN_GENERACION / APPROVE_VISUAL / REJECT_VISUAL / NOT_ACTIONABLE_UNTIL_REAL_PROVIDER / NOT_AVAILABLE / DESCONOCIDO`. `NOT_ACTIONABLE_UNTIL_REAL_PROVIDER` significa exactamente eso: el proveedor es `FakeImageProvider` (simulado) y no hay arte real que un humano pueda juzgar todavía. Un consumidor NUNCA debe presentar esto como "listo para revisar".
+- Separación explícita e irrenunciable en cada fila: `art_gate` (juicio jurídico) ≠ `human_art_review` (juicio visual) ≠ `publication_decision`/`publication_state` (autorización de publicar). `publicable: true` en el canon de Psyche es una etiqueta de categoría, nunca autorización de publicar.
+- Ausencia de dato se representa como `UNKNOWN` / `NOT_AVAILABLE` / `NO_MEDIDO` — nunca como `0`, `false` ni una aprobación implícita.
+- **Fail-closed obligatorio**: un consumidor que reciba una `contract_version` que no reconoce debe **rechazar el payload entero**, no leerlo parcialmente. `command_center.validate_envelope()` es la referencia de esa validación del lado productor; portar la misma lógica (o equivalente) al lado consumidor.
+- Fixtures de referencia (8, todas verificadas contra `validate_envelope()`): `visual/fixtures/command_center/{valid,unknown_version,unknown_state,simulated_provider,blocked_content,no_metrics,publication_absent,authority_escalation_attempt}.json`.
+
+**Integración requerida cuando exista una sesión con permiso de escritura sobre `legalmente-web`:**
+1. Añadir un reader estricto análogo a `src/lib/psyche-contract/index.ts` (mismo patrón fail-closed que ya usa el Canonical Envelope) para el envelope del Command Center.
+2. Rechazar cualquier `contract_version` fuera de `{"1.0"}`.
+3. Nunca derivar `publication_state` ni `human_art_review` — son campos transportados, no recalculados (mismo principio que `deriveVisualOutputState()` ya aplica al Canonical Envelope).
+4. Renderizar `NOT_ACTIONABLE_UNTIL_REAL_PROVIDER` de forma visualmente distinta a `PENDIENTE`: la UI no debe invitar a "aprobar" un placeholder de `FakeImageProvider`.
+5. Portar las 8 fixtures como casos de prueba del lado consumidor antes de confiar en datos reales de Psyche.
+
+No se regeneró ningún patch de los 3 existentes: el Canonical Envelope no cambió. Esta sección es aditiva.

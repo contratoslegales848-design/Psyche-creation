@@ -1,0 +1,11 @@
+{
+  "contract_version": "1.0",
+  "content": [
+    {
+      "content_id": "LM-SIN-METRICAS",
+      "measurement_state": "NO_MEDIDO",
+      "human_art_review": "NOT_AVAILABLE"
+    }
+  ],
+  "human_decision_inbox": []
+}

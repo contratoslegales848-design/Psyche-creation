@@ -1,0 +1,18 @@
+{
+  "contract_version": "1.0",
+  "content": [
+    {
+      "content_id": "LM-BLOQUEADO",
+      "art_gate": "CERRADO",
+      "blocker": "gate_global_arte='CERRADO'",
+      "human_art_review": "NOT_AVAILABLE"
+    }
+  ],
+  "human_decision_inbox": [
+    {
+      "decision_type": "LEGAL_REVIEW",
+      "piece_id": "PIEZA-X",
+      "detail": "..."
+    }
+  ]
+}

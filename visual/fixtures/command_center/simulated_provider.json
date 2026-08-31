@@ -1,0 +1,12 @@
+{
+  "contract_version": "1.0",
+  "content": [
+    {
+      "content_id": "LM-EJEMPLO",
+      "provider_is_simulated": true,
+      "data_freshness": "SIMULATED",
+      "human_art_review": "NOT_ACTIONABLE_UNTIL_REAL_PROVIDER"
+    }
+  ],
+  "human_decision_inbox": []
+}

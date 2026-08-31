@@ -13,6 +13,9 @@ de el mentiria en cuanto ese directorio desapareciera. review-packet.json,
 en cambio, se comitea: es el unico puntero al estado visual que persiste.
 Si en el futuro el registro se mueve a una raiz persistente, este modulo
 puede empezar a leerlo tambien — hoy no existe esa raiz, asi que no se finge.
+
+Ausencia de dato != cero ni PASS: se representa como NOT_AVAILABLE / UNKNOWN,
+nunca como una aprobacion o un exito implicitos.
 """
 
 import json
@@ -20,8 +23,12 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 import resolver
+import review_semantics
 
 HUMAN_REVIEW_DIR = resolver.REPO / "artifacts" / "human-review"
+
+UNKNOWN = "UNKNOWN"
+NOT_AVAILABLE = "NOT_AVAILABLE"
 
 # Vocabulario cerrado de tipos de decision humana pendiente. No se inventan
 # categorias nuevas aqui: cada una corresponde a un gate real ya modelado en
@@ -30,6 +37,24 @@ DECISION_LEGAL_REVIEW = "LEGAL_REVIEW"
 DECISION_PRODUCTION_HANDOFF = "PRODUCTION_HANDOFF"
 DECISION_VISUAL_REVIEW = "VISUAL_REVIEW"
 DECISION_PUBLICATION_AUTHORIZATION = "PUBLICATION_AUTHORIZATION"
+DECISION_BUSINESS_COST = "BUSINESS_COST"
+
+# Vocabulario cerrado de NEXT_EXECUTABLE_ACTION. Este motor OBSERVA y DERIVA
+# — jamas abre un gate, jamas eleva autoridad.
+ACTION_VERIFY_SOURCES = "VERIFY_SOURCES"
+ACTION_HUMAN_LEGAL_REVIEW = "HUMAN_LEGAL_REVIEW"
+ACTION_EMIT_PRODUCTION_HANDOFF = "EMIT_PRODUCTION_HANDOFF"
+ACTION_GENERATE_VISUAL = "GENERATE_VISUAL"
+ACTION_WAIT_REAL_PROVIDER = "WAIT_REAL_PROVIDER"
+ACTION_AUTOMATED_VISUAL_QA = "AUTOMATED_VISUAL_QA"
+ACTION_HUMAN_VISUAL_REVIEW = "HUMAN_VISUAL_REVIEW"
+ACTION_PUBLICATION_DECISION = "PUBLICATION_DECISION"
+ACTION_MEASURE = "MEASURE"
+ACTION_NO_ACTION = "NO_ACTION"
+ACTION_BLOCKED = "BLOCKED"
+
+# Acciones que el sistema puede completar SIN intervencion humana (mecanicas).
+AUTOMATIC_ACTIONS = {ACTION_GENERATE_VISUAL, ACTION_AUTOMATED_VISUAL_QA, ACTION_MEASURE}
 
 
 def _load(p):
@@ -44,28 +69,48 @@ class ContentReadinessRecord:
     """Estado real de una pieza, derivado — nunca inventado ni recalculado."""
 
     piece_id: str
-    canonical_state: str = "DESCONOCIDO"
-    art_gate: str = "DESCONOCIDO"
+    canonical_state: str = UNKNOWN
+    art_gate: str = UNKNOWN
+    territory: str = NOT_AVAILABLE
     content_ids: list = field(default_factory=list)
     handoff_state: str = "SIN_HANDOFF"
     latest_generation_id: str = ""
-    human_visual_review_state: str = "SIN_GENERACION"
     provider_mode: str = ""
+    provider_is_simulated: bool = True
+    mechanical_qa: str = NOT_AVAILABLE
+    copy_qa: str = NOT_AVAILABLE
+    brand_composition_qa: str = NOT_AVAILABLE
+    real_art_semantic_qa: str = NOT_AVAILABLE
+    human_art_review: str = NOT_AVAILABLE
+    publication_decision: str = "NO_EXISTE"
+    publication_state: str = "NO_PUBLICADO"
+    measurement_state: str = "NO_MEDIDO"
     blockers: list = field(default_factory=list)
     next_action: str = ""
+    next_executable_action: str = ACTION_BLOCKED
 
     def to_dict(self):
         return {
             "piece_id": self.piece_id,
             "canonical_state": self.canonical_state,
             "art_gate": self.art_gate,
+            "territory": self.territory,
             "content_ids": list(self.content_ids),
             "handoff_state": self.handoff_state,
             "latest_generation_id": self.latest_generation_id,
-            "human_visual_review_state": self.human_visual_review_state,
             "provider_mode": self.provider_mode,
+            "provider_is_simulated": self.provider_is_simulated,
+            "mechanical_qa": self.mechanical_qa,
+            "copy_qa": self.copy_qa,
+            "brand_composition_qa": self.brand_composition_qa,
+            "real_art_semantic_qa": self.real_art_semantic_qa,
+            "human_art_review": self.human_art_review,
+            "publication_decision": self.publication_decision,
+            "publication_state": self.publication_state,
+            "measurement_state": self.measurement_state,
             "blockers": list(self.blockers),
             "next_action": self.next_action,
+            "next_executable_action": self.next_executable_action,
         }
 
 
@@ -81,18 +126,41 @@ def _review_packet_para(content_id):
     return _load(d / "review-packet.json") if d.is_dir() else None
 
 
-def _next_action_para(art_gate, handoff_state, review_state, canonical_state):
+def _next_executable_action(canonical_state, art_gate, handoff_state, clasif):
+    if canonical_state == "REQUIERE_INVESTIGACION":
+        return ACTION_VERIFY_SOURCES
+    if art_gate != "ABIERTO":
+        return ACTION_HUMAN_LEGAL_REVIEW
+    if handoff_state == "SIN_HANDOFF":
+        return ACTION_EMIT_PRODUCTION_HANDOFF
+    if clasif.mechanical_qa == NOT_AVAILABLE and clasif.raw_human_visual_review_state == "SIN_GENERACION":
+        return ACTION_GENERATE_VISUAL
+    if clasif.provider_is_simulated:
+        return ACTION_WAIT_REAL_PROVIDER
+    if clasif.mechanical_qa == NOT_AVAILABLE:
+        return ACTION_AUTOMATED_VISUAL_QA
+    if clasif.human_art_review == "PENDIENTE":
+        return ACTION_HUMAN_VISUAL_REVIEW
+    if clasif.human_art_review == "APPROVE_VISUAL":
+        return ACTION_PUBLICATION_DECISION
+    return ACTION_NO_ACTION
+
+
+def _next_action_para(art_gate, handoff_state, canonical_state, clasif):
     if canonical_state == "REQUIERE_INVESTIGACION":
         return "requiere investigacion juridica humana antes de reabrir el gate de arte."
     if art_gate != "ABIERTO":
         return "requiere revision juridica humana que abra el gate de arte."
     if handoff_state == "SIN_HANDOFF":
         return "requiere ProductionHandoff humano antes de poder generar."
-    if review_state in ("PENDIENTE", "SIN_GENERACION"):
+    if clasif.provider_is_simulated:
+        return ("mecanica probada con FakeImageProvider (placeholder, no arte final): "
+                "bloqueado por proveedor real, no por decision humana pendiente.")
+    if clasif.human_art_review in ("PENDIENTE", "SIN_GENERACION"):
         return "requiere decision de revision visual humana (APPROVE_VISUAL / REGENERATE / REJECT_VISUAL)."
-    if review_state == "REJECT_VISUAL":
+    if clasif.human_art_review == "REJECT_VISUAL":
         return "requiere una nueva regeneracion o el cierre humano de la pieza."
-    if review_state == "APPROVE_VISUAL":
+    if clasif.human_art_review == "APPROVE_VISUAL":
         return "visual aprobado; falta PublicationDecision humana explicita — nunca automatica."
     return "sin proxima accion determinable con el estado disponible."
 
@@ -100,11 +168,15 @@ def _next_action_para(art_gate, handoff_state, review_state, canonical_state):
 def build_readiness():
     """Un ContentReadinessRecord real por cada pieza del piloto. Nunca abre nada."""
     piece_id_a_content_ids = {}
+    territorio_por_pieza = {}
     for cid, path, modo in resolver.list_content_ids():
         d = _load(resolver.REPO / path)
-        pid = ((d or {}).get("procedencia") or {}).get("piece_id")
+        proc = (d or {}).get("procedencia") or {}
+        pid = proc.get("piece_id")
         if pid:
             piece_id_a_content_ids.setdefault(pid, []).append(cid)
+            if proc.get("jurisdiction_layer"):
+                territorio_por_pieza[pid] = proc["jurisdiction_layer"]
 
     out = []
     for p in resolver.list_pieces():
@@ -112,6 +184,7 @@ def build_readiness():
             piece_id=p["piece_id"],
             canonical_state=p["estado_agregado"],
             art_gate=p["gate_global_arte"],
+            territory=territorio_por_pieza.get(p["piece_id"], NOT_AVAILABLE),
             content_ids=sorted(piece_id_a_content_ids.get(p["piece_id"], [])),
         )
         if p["estado_agregado"] == "REQUIERE_INVESTIGACION":
@@ -130,15 +203,22 @@ def build_readiness():
             packet = _review_packet_para(cid)
             if packet:
                 break
+        clasif = review_semantics.classify(packet)
+        rec.provider_is_simulated = clasif.provider_is_simulated
+        rec.mechanical_qa = clasif.mechanical_qa
+        rec.copy_qa = clasif.copy_qa
+        rec.brand_composition_qa = clasif.brand_composition_qa
+        rec.real_art_semantic_qa = clasif.real_art_semantic_qa
+        rec.human_art_review = clasif.human_art_review
         if packet:
             rec.latest_generation_id = packet.get("generation_id", "")
-            rec.human_visual_review_state = packet.get("human_visual_review_state", "DESCONOCIDO")
             rec.provider_mode = packet.get("provider", "")
         elif rec.handoff_state == "HANDOFF_EMITIDO":
             rec.blockers.append("handoff emitido pero sin ninguna materializacion de revision humana encontrada.")
 
-        rec.next_action = _next_action_para(
-            rec.art_gate, rec.handoff_state, rec.human_visual_review_state, rec.canonical_state)
+        rec.next_action = _next_action_para(rec.art_gate, rec.handoff_state, rec.canonical_state, clasif)
+        rec.next_executable_action = _next_executable_action(
+            rec.canonical_state, rec.art_gate, rec.handoff_state, clasif)
         out.append(rec)
     return out
 
@@ -160,11 +240,13 @@ class InboxItem:
 
 
 def build_inbox(readiness=None):
-    """Todo lo que espera una decision humana AHORA, en un solo lugar.
+    """Solo decisiones IRREDUCIBLES que de verdad necesitan una persona.
 
-    No junta motivos con acciones: cada fila es una decision real, del
-    vocabulario cerrado DECISION_*. Vacio no es un caso especial: una pieza
-    sin bloqueos simplemente no aporta filas.
+    No incluye una revision visual FakeProvider como si fuera una decision
+    artistica accionable: eso es exactamente el error que este mandato pide
+    evitar (mandato de continuacion §4). No junta motivos con acciones: cada
+    fila es una decision real, del vocabulario cerrado DECISION_*. Vacio no
+    es un caso especial: una pieza sin bloqueos simplemente no aporta filas.
     """
     readiness = readiness if readiness is not None else build_readiness()
     items = []
@@ -178,16 +260,38 @@ def build_inbox(readiness=None):
             items.append(InboxItem(
                 DECISION_PRODUCTION_HANDOFF, r.piece_id,
                 "gate ABIERTO sin ProductionHandoff: exige decision humana de produccion."))
-        if r.human_visual_review_state in ("PENDIENTE", "SIN_GENERACION") and r.handoff_state == "HANDOFF_EMITIDO":
+            continue
+        if r.provider_is_simulated:
+            # Deliberadamente NO es una fila de VISUAL_REVIEW: no hay arte
+            # real que evaluar. La decision humana verdadera aqui es de
+            # negocio/costo (activar proveedor real), no artistica.
+            items.append(InboxItem(
+                DECISION_BUSINESS_COST, r.piece_id,
+                f"mecanica probada (FakeImageProvider) en {r.latest_generation_id or '(ninguna)'}; "
+                "requiere decision de negocio para activar un proveedor real (credenciales + gasto), "
+                "no una revision artistica de un placeholder."))
+            continue
+        if r.human_art_review in ("PENDIENTE", "SIN_GENERACION"):
             items.append(InboxItem(
                 DECISION_VISUAL_REVIEW, r.piece_id,
-                f"generacion {r.latest_generation_id or '(ninguna)'} en {r.human_visual_review_state}: "
+                f"generacion {r.latest_generation_id or '(ninguna)'} con arte REAL en {r.human_art_review}: "
                 "exige APPROVE_VISUAL / REGENERATE / REJECT_VISUAL."))
-        if r.human_visual_review_state == "APPROVE_VISUAL":
+        if r.human_art_review == "APPROVE_VISUAL":
             items.append(InboxItem(
                 DECISION_PUBLICATION_AUTHORIZATION, r.piece_id,
                 "visual aprobado; no existe PublicationDecision. Nunca se fabrica aqui."))
     return items
+
+
+def executable_now(readiness=None):
+    """¿Que puede hacer LegalMente AHORA sin intervencion humana?
+
+    Solo las piezas cuyo next_executable_action es mecanico (AUTOMATIC_ACTIONS).
+    Este motor NUNCA abre gates: solo observa lo que YA esta autorizado a
+    correr (p. ej. GENERATE_VISUAL solo aparece cuando gate+handoff ya existen).
+    """
+    readiness = readiness if readiness is not None else build_readiness()
+    return [r for r in readiness if r.next_executable_action in AUTOMATIC_ACTIONS]
 
 
 def command_center_payload():
@@ -204,20 +308,26 @@ def command_center_payload():
         d = _load(resolver.REPO / path) or {}
         piece_id = (d.get("procedencia") or {}).get("piece_id", "")
         rp = readiness_por_pieza.get(piece_id)
-        packet = _review_packet_para(cid)
         filas.append({
             "content_id": cid,
             "piece_id": piece_id,
-            "canonical_state": rp.canonical_state if rp else "DESCONOCIDO",
-            "art_gate": rp.art_gate if rp else "DESCONOCIDO",
+            "canonical_state": rp.canonical_state if rp else UNKNOWN,
+            "art_gate": rp.art_gate if rp else UNKNOWN,
+            "territory": rp.territory if rp else NOT_AVAILABLE,
             "handoff_state": "HANDOFF_EMITIDO" if r.handoff is not None else "SIN_HANDOFF",
             "visual_state": "PRODUCCION_AUTORIZADA" if r.production_ready else "BLOQUEADO",
-            "latest_generation_id": packet.get("generation_id", "") if packet else "",
-            "provider_mode": packet.get("provider", "") if packet else "",
-            "qa_state": (packet.get("structural_qa", {}) or {}).get("passed") if packet else None,
-            "human_visual_review_state": packet.get("human_visual_review_state", "") if packet else "SIN_GENERACION",
+            "latest_generation_id": rp.latest_generation_id if rp else "",
+            "provider_mode": rp.provider_mode if rp else "",
+            "provider_is_simulated": rp.provider_is_simulated if rp else True,
+            "mechanical_qa": rp.mechanical_qa if rp else NOT_AVAILABLE,
+            "real_art_semantic_qa": rp.real_art_semantic_qa if rp else NOT_AVAILABLE,
+            "human_art_review": rp.human_art_review if rp else NOT_AVAILABLE,
+            "publication_decision": rp.publication_decision if rp else "NO_EXISTE",
+            "publication_state": rp.publication_state if rp else "NO_PUBLICADO",
+            "measurement_state": rp.measurement_state if rp else "NO_MEDIDO",
             "blocker": r.blocking[0] if r.blocking else "",
             "next_action": rp.next_action if rp else "",
+            "next_executable_action": rp.next_executable_action if rp else ACTION_BLOCKED,
             "provenance_mode": modo,
         })
     return filas

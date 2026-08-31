@@ -23,10 +23,14 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import canonical
+import command_center
 import compositor
 import inventory
 import pipeline
+import provider_preflight
 import resolver
+import runtime_config
+import topology
 import registry as registry_mod
 from brief import VisualBrief, VisualPolicy
 from errors import StoragePathError, VisualInputInvalidError
@@ -36,6 +40,32 @@ from providers import FakeImageProvider
 
 def _load(p):
     return json.loads(Path(p).read_text(encoding="utf-8"))
+
+
+def gen3_brief_pieza01(policy, fams):
+    """Reconstruye el VisualBrief de GEN3 desde el puntero persistente.
+
+    El AssetRegistry que produjo GEN3 vivia en /tmp (hueco conocido, ver
+    runtime_config.py) y no sobrevive entre sesiones; el brief original no
+    quedo comitado como objeto. Lo que SI persiste es
+    review-packet-gen-2f2dfb9c6f2f.json, con cada `changed_fields` que la
+    regeneracion aplico (antes/despues). Se reconstruye aplicando esos
+    "despues" sobre la base que ya genera brief_desde() para este content_id
+    — no se inventa ningun valor nuevo.
+    """
+    art = _load(resolver.REPO / "content" / "pieza-01-reales.json")
+    from canonical import VisualInput
+    proc = art["procedencia"]
+    vi = VisualInput(content_id=proc["content_id"], provenance_mode=proc["modo"],
+                      jurisdiction_layer=proc.get("jurisdiction_layer", ""),
+                      publicable=bool(proc.get("publicable")))
+    brief = brief_desde(vi, policy, fams)
+    packet = _load(resolver.REPO / "artifacts" / "human-review" / "LM-PIEZA-01-REALES" /
+                    "review-packet-gen-2f2dfb9c6f2f.json")
+    for campo, cambio in (packet.get("changed_fields") or {}).items():
+        if hasattr(brief, campo):
+            setattr(brief, campo, cambio.get("despues"))
+    return brief
 
 
 def brief_desde(vi, policy, fams):
@@ -63,8 +93,13 @@ def main(argv=None):
     sub.add_parser("gates")
     sub.add_parser("inventory")
     sub.add_parser("inbox")
-    sub.add_parser("next")
+    s = sub.add_parser("next")
+    s.add_argument("--executable", action="store_true",
+                    help="solo lo que LegalMente puede ejecutar AHORA sin intervencion humana.")
     s = sub.add_parser("command-center"); s.add_argument("--json", action="store_true")
+    sub.add_parser("provider-preflight")
+    sub.add_parser("provider-request")
+    sub.add_parser("topology")
     s = sub.add_parser("resolve"); s.add_argument("content_id")
     for c in ("validate", "dry-run", "simulate"):
         s = sub.add_parser(c)
@@ -77,7 +112,10 @@ def main(argv=None):
                        help="superficie fisica reservada para la marca, en pixeles del lienzo. "
                             "Sin esto la marca no se compone (NEEDS_HUMAN_REVIEW), nunca watermark.")
         if c == "simulate":
-            s.add_argument("--out", default="artifacts/visual")
+            s.add_argument("--out", default=None,
+                           help="raiz del registro de generaciones. Por defecto, la raiz runtime "
+                                "persistente (LEGALMENTE_RUNTIME_ROOT o .runtime/visual-registry), "
+                                "nunca /tmp.")
     s = sub.add_parser("batch-dry-run"); s.add_argument("directorio")
     s = sub.add_parser("show-receipt")
     s.add_argument("root"); s.add_argument("content_id"); s.add_argument("generation_id")
@@ -103,8 +141,10 @@ def main(argv=None):
     if a.cmd == "inventory":
         for r in inventory.build_readiness():
             print(f"  {r.piece_id:20} canon={r.canonical_state:24} gate={r.art_gate:8} "
-                  f"handoff={r.handoff_state:16} gen={r.latest_generation_id or '-':16} "
-                  f"visual_review={r.human_visual_review_state}")
+                  f"handoff={r.handoff_state:16} gen={r.latest_generation_id or '-':16}")
+            print(f"      mechanical_qa={r.mechanical_qa:14} real_art_semantic_qa={r.real_art_semantic_qa:14} "
+                  f"human_art_review={r.human_art_review:34} simulated={r.provider_is_simulated}")
+            print(f"      next_executable_action={r.next_executable_action}")
             for b in r.blockers:
                 print(f"      ! {b}")
         return 0
@@ -119,23 +159,53 @@ def main(argv=None):
         return 0
 
     if a.cmd == "next":
-        candidatos = [r for r in inventory.build_readiness() if r.canonical_state != "REQUIERE_INVESTIGACION"]
+        readiness = inventory.build_readiness()
+        if a.executable:
+            ejecutables = inventory.executable_now(readiness)
+            if not ejecutables:
+                print("  (nada ejecutable ahora mismo sin intervencion humana)")
+                return 0
+            for r in ejecutables:
+                print(f"  {r.piece_id:20} accion={r.next_executable_action}")
+            return 0
+        candidatos = [r for r in readiness if r.canonical_state != "REQUIERE_INVESTIGACION"]
         candidatos.sort(key=lambda r: len(r.blockers))
         if not candidatos:
             print("  (sin candidatos: todas las piezas requieren investigacion juridica)")
             return 0
         for r in candidatos[:5]:
-            print(f"  {r.piece_id:20} bloqueos={len(r.blockers):2} siguiente={r.next_action}")
+            print(f"  {r.piece_id:20} bloqueos={len(r.blockers):2} accion={r.next_executable_action:26} "
+                  f"siguiente={r.next_action}")
         return 0
 
     if a.cmd == "command-center":
-        payload = inventory.command_center_payload()
+        envelope = command_center.build_envelope()
         if a.json:
-            print(json.dumps(payload, ensure_ascii=False, indent=2))
+            print(json.dumps(envelope, ensure_ascii=False, indent=2))
         else:
-            for f in payload:
+            for f in envelope["content"]:
                 print(f"  {f['content_id']:24} piece={f['piece_id']:20} visual={f['visual_state']:18} "
-                      f"review={f['human_visual_review_state']:16} next={f['next_action']}")
+                      f"human_art_review={f['human_art_review']:34} next={f['next_executable_action']}")
+        return 0
+
+    if a.cmd == "provider-preflight":
+        r = provider_preflight.preflight()
+        print(json.dumps(r.to_dict(), ensure_ascii=False, indent=2))
+        return 0 if r.status == provider_preflight.READY else 1
+
+    if a.cmd == "provider-request":
+        brief = gen3_brief_pieza01(policy, fams)
+        from providers.base import ProviderCapabilities
+        caps = ProviderCapabilities(provider_id=provider_preflight.DEFAULT_PROFILE.provider_id,
+                                     aspect_ratios=provider_preflight.DEFAULT_PROFILE.aspect_ratios)
+        req = provider_preflight.build_pieza01_request(brief, policy, fams.get(brief.visual_family), caps)
+        print(json.dumps(req, ensure_ascii=False, indent=2))
+        print("\nZERO network execution. ZERO credits. Esta peticion no fue enviada a nadie.")
+        return 0
+
+    if a.cmd == "topology":
+        for link in topology.build_topology():
+            print(f"  {link['source']:32} -> {link['target']:28} {link['state']:16} {link['reason']}")
         return 0
 
     if a.cmd == "resolve":
@@ -188,7 +258,8 @@ def main(argv=None):
             surface = compositor.ReservedSurface(x, y, w, h)
 
         brief = brief_desde(vi, policy, fams)
-        reg = registry_mod.AssetRegistry(a.out) if a.cmd == "simulate" else None
+        out_root = a.out if (a.cmd == "simulate" and a.out) else runtime_config.default_registry_root()
+        reg = registry_mod.AssetRegistry(out_root) if a.cmd == "simulate" else None
         run = pipeline.generate_visual(
             art["procedencia"], brief, policy, FakeImageProvider(), handoff=handoff,
             family=fams.get(brief.visual_family), families_version=fams.version,

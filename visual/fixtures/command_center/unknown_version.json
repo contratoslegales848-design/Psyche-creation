@@ -1,0 +1,76 @@
+{
+  "contract_version": "99.0",
+  "producer": "psyche-creation/visual",
+  "generated_at": "2026-08-31T15:45:00.757222+00:00",
+  "data_freshness": "SNAPSHOT",
+  "content": [
+    {
+      "content_id": "LM-EJEMPLO-TECNICO-001",
+      "piece_id": "",
+      "canonical_state": "UNKNOWN",
+      "art_gate": "UNKNOWN",
+      "territory": "NOT_AVAILABLE",
+      "handoff_state": "SIN_HANDOFF",
+      "visual_state": "BLOQUEADO",
+      "latest_generation_id": "",
+      "provider_mode": "",
+      "provider_is_simulated": true,
+      "mechanical_qa": "NOT_AVAILABLE",
+      "real_art_semantic_qa": "NOT_AVAILABLE",
+      "human_art_review": "NOT_AVAILABLE",
+      "publication_decision": "NO_EXISTE",
+      "publication_state": "NO_PUBLICADO",
+      "measurement_state": "NO_MEDIDO",
+      "blocker": "modo EJEMPLO_TECNICO: material de prueba del pipeline, no contenido publicable.",
+      "next_action": "",
+      "next_executable_action": "BLOCKED",
+      "provenance_mode": "EJEMPLO_TECNICO",
+      "data_freshness": "SIMULATED"
+    },
+    {
+      "content_id": "LM-PIEZA-01-REALES",
+      "piece_id": "PIEZA-01-REALES",
+      "canonical_state": "APTO_PARA_NARRATIVA",
+      "art_gate": "ABIERTO",
+      "territory": "CAPA_B_VARIABLE",
+      "handoff_state": "HANDOFF_EMITIDO",
+      "visual_state": "PRODUCCION_AUTORIZADA",
+      "latest_generation_id": "gen-2f2dfb9c6f2f",
+      "provider_mode": "fake (SIMULATED)",
+      "provider_is_simulated": true,
+      "mechanical_qa": "PASS",
+      "real_art_semantic_qa": "NOT_AVAILABLE",
+      "human_art_review": "NOT_ACTIONABLE_UNTIL_REAL_PROVIDER",
+      "publication_decision": "NO_EXISTE",
+      "publication_state": "NO_PUBLICADO",
+      "measurement_state": "NO_MEDIDO",
+      "blocker": "",
+      "next_action": "mecanica probada con FakeImageProvider (placeholder, no arte final): bloqueado por proveedor real, no por decision humana pendiente.",
+      "next_executable_action": "WAIT_REAL_PROVIDER",
+      "provenance_mode": "GOBERNADO",
+      "data_freshness": "SIMULATED"
+    }
+  ],
+  "human_decision_inbox": [
+    {
+      "decision_type": "BUSINESS_COST",
+      "piece_id": "PIEZA-01-REALES",
+      "detail": "mecanica probada (FakeImageProvider) en gen-2f2dfb9c6f2f; requiere decision de negocio para activar un proveedor real (credenciales + gasto), no una revision artistica de un placeholder.",
+      "actor": "humano"
+    },
+    {
+      "decision_type": "LEGAL_REVIEW",
+      "piece_id": "PIEZA-02-LABORAL",
+      "detail": "canon=REQUIERE_INVESTIGACION gate=CERRADO: exige revision juridica humana.",
+      "actor": "humano"
+    },
+    {
+      "decision_type": "LEGAL_REVIEW",
+      "piece_id": "PIEZA-03-HONOR",
+      "detail": "canon=REQUIERE_INVESTIGACION gate=CERRADO: exige revision juridica humana.",
+      "actor": "humano"
+    }
+  ],
+  "automatic_executable_now": [],
+  "authority_note": "Este payload NUNCA recalcula autoridad juridica ni visual. publicable=true no es PublicationDecision. ProductionHandoff no es PublicationDecision. human_legal_approval no es human_art_review."
+}
