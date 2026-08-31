@@ -1,0 +1,60 @@
+{
+  "policy_version": "1.0",
+  "descripcion": "Politica visual ejecutable de LegalMente. Solo contiene reglas que un programa puede comprobar. Las reglas de criterio (que escuela artistica toca, que metafora) viven en la skill legalmente-visual-system y NO se duplican aqui.",
+  "formatos": {
+    "VERTICAL_9_16": {"width": 1080, "height": 1920, "aspect_ratio": "9:16", "full_bleed": true},
+    "SOCIAL_4_5": {"width": 1080, "height": 1350, "aspect_ratio": "4:5", "full_bleed": true}
+  },
+  "composicion": {
+    "scene_count": 1,
+    "prohibido": ["collage", "grid", "storyboard", "multiples escenas", "split screen", "diptico", "triptico"]
+  },
+  "familias_visuales": [
+    "hiperrealismo_editorial_cinematografico",
+    "oleo_cinematografico",
+    "oleo_clasico_institucional",
+    "claroscuro_de_museo",
+    "foto_impasto",
+    "neo_editorial_dark_luxury",
+    "basalt_and_gold_leaf",
+    "oleo_narrativo"
+  ],
+  "paleta": {
+    "requerida": {
+      "nogal_profundo": ["#2B1B17", "#1E1412"],
+      "marfil_editorial": ["#FCFAF2", "#F4EFE1"],
+      "azul_petroleo": ["#0F2537", "#16324F"],
+      "laton_oro_viejo": ["#C5A059", "#B38F4D"]
+    },
+    "prohibida": [
+      "sepia dominante",
+      "amarillo poster",
+      "marron embarrado",
+      "negros sin detalle",
+      "pieza excesivamente oscura"
+    ],
+    "acento_frio_debe_ser_objeto_fisico": true
+  },
+  "marca": {
+    "integracion_fisica_requerida": true,
+    "superficies_permitidas": [
+      "lomo de libro", "carpeta", "placa de laton", "vidrio", "piedra",
+      "madera", "sello de lacre", "cuaderno", "chapa numerada", "matasellos"
+    ],
+    "prohibido": ["watermark", "logo flotante", "branding sobrepuesto arbitrariamente"],
+    "texto_marca_lo_escribe_el_generador": "NO_RESUELTO",
+    "nota_texto_marca": "CONFLICTO ABIERTO, pendiente de decision del fundador. docs/decision-visual-marca-sin-texto.md (ADR PROPUESTO, no aprobado) sostiene que el generador no escribe ninguna letra, ni siquiera 'LegalMente', y que la superficie de marca se reserva vacia para montaje posterior. El mandato de integracion §20 sostiene que la palabra debe integrarse fisicamente en la escena. Mientras el valor sea NO_RESUELTO el compilador falla cerrado ante cualquier brief que pida al generador escribir la marca. Valores admisibles una vez decidido: SI | NO."
+  },
+  "texto": {
+    "modos_permitidos": ["IMAGE_ONLY", "POST_COMPOSITE"],
+    "modo_nativo_requiere_capacidad_demostrada": true,
+    "contenido_juridico_exige_post_composite": true,
+    "nota": "Citas, autores, conceptos juridicos y cualquier carga juridica se montan de forma determinista despues. Nunca se acepta texto juridico escrito por un generador de imagenes."
+  },
+  "unicidad": {
+    "ventana_memoria_visual": 12,
+    "evitar_escena_repetida": true,
+    "evitar_objeto_repetido": true,
+    "evitar_composicion_repetida": true
+  }
+}

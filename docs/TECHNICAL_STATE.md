@@ -22,6 +22,7 @@ real y una prueba que pasa.
 | Confidencialidad | 🟡 AMARILLO (era rojo) | Control determinista fail-closed implementado; queda el contenido identificable sin marcadores léxicos (red team B5). |
 | Pipeline de video (Remotion) | 🟢 VERDE (nuevo) | Renderiza, y ya no puede renderizar contenido publicable sin origen verificable. |
 | Anti-duplicados | 🟡 AMARILLO (nuevo) | Controles literales implementados; la paráfrasis sigue sin detectarse. |
+| Motor de generación visual | 🟡 AMARILLO (nuevo) | Arquitectura completa y probada (`visual/`, 49 pruebas, proveedor falso). Ningún adapter real implementado, y un conflicto de marca sin resolver bloquea fail-closed. |
 | Motor de producción masiva | ⚫ NO CONSTRUIDO | Contrato técnico definido (`docs/contrato-motor-masivo.md`); el motor, deliberadamente, no. |
 | Documentación vs. realidad | 🟡 AMARILLO | Dos derivas detectadas (ver §5). |
 | `legalmente-web` | 🟡 AMARILLO | Prototipo honesto, pero el repositorio es **público** y `CLAUDE.md §8` lo declara privado. |
@@ -49,7 +50,7 @@ real y una prueba que pasa.
 - `fixtures/` — 10 positivas, 46 negativas.
 - `publication/fixtures/` — 2 cadenas válidas, 14 inválidas, 1 claim packet sintético.
 
-**Pruebas: 275, todas en verde.**
+**Pruebas: 324, todas en verde.**
 | Suite | Pruebas |
 |---|---|
 | `test_validate_claim_packet` | 147 |
@@ -57,6 +58,7 @@ real y una prueba que pasa.
 | `test_validate_publication_chain` | 41 |
 | `test_confidentiality_rules` | 20 |
 | `test_validate_content_provenance` | 30 |
+| `visual/test_visual_pipeline` | 49 |
 
 ### 2.2 Los cuatro estados no equivalentes
 
@@ -191,6 +193,10 @@ decisión del fundador, no técnica.
 **P1 — antes de escalar el volumen**
 3. Decidir sobre la Pieza 1: fusionar o no la aprobación registrada.
 4. Corregir la deriva de `legalmente-web` en `CLAUDE.md §8`.
+5. **Resolver el conflicto de marca**: ¿escribe el generador la palabra "LegalMente"
+   dentro de la imagen (`SI`) o se reserva la superficie vacía y se monta después
+   (`NO`)? Hoy vale `NO_RESUELTO` en `visual/policy/legalmente-visual-policy-v1.json`
+   y bloquea cualquier brief que lo pida. Es una decisión de una línea.
 
 **P2 — cuando el piloto esté medido**
 5. Detección de deriva de fuentes oficiales, fuera del validador (ver ADR 0001).
