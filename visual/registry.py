@@ -57,10 +57,20 @@ class AssetRegistry:
         asset_id = assert_id_seguro(receipt.asset_id or receipt.generation_id, "asset_id")
         if raw_bytes:
             (d / "raw").mkdir(exist_ok=True)
-            (d / "raw" / f"{asset_id}.png").write_bytes(raw_bytes)
+            rid = assert_id_seguro(receipt.raw_asset_id or asset_id, "raw_asset_id")
+            destino = d / "raw" / f"{rid}.png"
+            if destino.exists():
+                raise ReceiptIntegrityError(
+                    f"ya existe un asset en bruto en {destino}; no se sobrescribe.")
+            destino.write_bytes(raw_bytes)
         if composed_bytes:
             (d / "composed").mkdir(exist_ok=True)
-            (d / "composed" / f"{asset_id}.png").write_bytes(composed_bytes)
+            cid = assert_id_seguro(receipt.composed_asset_id or asset_id, "composed_asset_id")
+            destino = d / "composed" / f"{cid}.png"
+            if destino.exists():
+                raise ReceiptIntegrityError(
+                    f"ya existe un asset compuesto en {destino}; no se sobrescribe.")
+            destino.write_bytes(composed_bytes)
         (d / "receipt.json").write_text(
             json.dumps(receipt.to_dict(), ensure_ascii=False, indent=2, sort_keys=True) + "\n",
             encoding="utf-8")
@@ -96,6 +106,10 @@ class AssetRegistry:
 
     def composed_asset_path(self, content_id, generation_id, asset_id):
         p = self._dir(content_id, generation_id) / "composed" / f"{assert_id_seguro(asset_id, 'asset_id')}.png"
+        return p if p.is_file() else None
+
+    def raw_asset_path(self, content_id, generation_id, asset_id):
+        p = self._dir(content_id, generation_id) / "raw" / f"{assert_id_seguro(asset_id, 'asset_id')}.png"
         return p if p.is_file() else None
 
     def human_approved_asset(self, content_id):

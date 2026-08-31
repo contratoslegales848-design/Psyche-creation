@@ -15,6 +15,10 @@ import gates
 import receipts as receipts_mod
 from composition import build_typography_plan, ExactCopyViolation
 from compiler import compile_request
+from compositor import (
+    CompositionError, CompositionOverflow, NEEDS_HUMAN_REVIEW as COMP_NEEDS_REVIEW,
+    compose, composition_qa,
+)
 from inspection import NoopSemanticInspector, NOT_EVALUATED, FAIL, NEEDS_HUMAN_REVIEW
 from memory import VisualMemory, VisualMemoryEntry
 from observability import EventLog
@@ -37,6 +41,7 @@ class VisualRun:
     qa_report: object = None
     semantic: object = None
     typography_plan: object = None
+    composed_bytes: bytes = b""
     events: list = field(default_factory=list)
 
     @property
@@ -48,7 +53,8 @@ class VisualRun:
         s = self.receipt.status
         if s == "PENDIENTE_REVISION_HUMANA":
             return NEEDS_REVIEW
-        if s in ("GATE_CERRADO", "BRIEF_INVALIDO", "PROVEEDOR_INCOMPATIBLE"):
+        if s in ("GATE_CERRADO", "BRIEF_INVALIDO", "PROVEEDOR_INCOMPATIBLE",
+                 "COMPOSICION_DESBORDADA"):
             return BLOCKED
         return FAILED
 
@@ -84,7 +90,8 @@ def generate_visual(procedencia, brief, policy, provider, handoff=None,
                     inspector=None, dry_run=False, registry=None,
                     parent_generation_id="", feedback_codes=(), changed_fields=None,
                     allow_regeneration=False,
-                    exact_copy="", author="", content_type="", families_version=""):
+                    exact_copy="", author="", content_type="", families_version="",
+                    reserved_surface=None, compose_asset=True):
     """Ejecuta el pipeline. Con dry_run=True no se llama al proveedor (0 llamadas)."""
     log = EventLog()
     base = _receipt_base(procedencia, brief, policy, families_version)
@@ -230,7 +237,42 @@ def generate_visual(procedencia, brief, policy, provider, handoff=None,
 
     base["brand_plan"] = compiled.brand_plan
 
+    # 8b. Composicion determinista: el texto exacto y la marca los pone
+    # LegalMente, nunca el proveedor. El raw jamas se modifica.
+    composed_bytes = b""
+    comp_avisos = []
+    if typo is not None and compose_asset:
+        try:
+            comp = compose(result.image_bytes, typo, compiled.brand_plan,
+                           reserved_surface=reserved_surface)
+        except CompositionOverflow as exc:
+            return VisualRun(fin("COMPOSICION_DESBORDADA", qa_problemas=[str(exc)]),
+                             plan=plan, compiled=compiled, qa_report=rep, semantic=sem,
+                             typography_plan=typo, events=log.to_list())
+        except CompositionError as exc:
+            return VisualRun(fin("QA_FALLIDO", qa_problemas=[f"composicion: {exc}"]),
+                             plan=plan, compiled=compiled, qa_report=rep, semantic=sem,
+                             events=log.to_list())
+
+        problemas_comp = composition_qa(comp, result.image_bytes, typo, exact_copy)
+        if problemas_comp:
+            return VisualRun(fin("QA_FALLIDO", qa_problemas=problemas_comp), plan=plan,
+                             compiled=compiled, qa_report=rep, semantic=sem,
+                             typography_plan=typo, events=log.to_list())
+
+        composed_bytes = comp.composed_bytes
+        comp_avisos = list(comp.warnings)
+        base.update(
+            composition=comp.to_dict(),
+            composed_sha256=comp.composed_sha256,
+            compositor_version=comp.compositor_version,
+            raw_asset_id=receipts_mod.asset_id_for(base["content_id"], rep.asset_sha256),
+            composed_asset_id=receipts_mod.asset_id_for(
+                base["content_id"] + "|composed", comp.composed_sha256),
+        )
+
     motivos = gates.requires_human_visual_review(rep)
+    motivos.extend(comp_avisos)
     if sem.state == NEEDS_HUMAN_REVIEW:
         motivos.append(f"heuristicas visuales: {sem.reason_codes}")
     if typo is not None and typo.warnings:
@@ -240,10 +282,11 @@ def generate_visual(procedencia, brief, policy, provider, handoff=None,
                   asset_id=receipts_mod.asset_id_for(base["content_id"], rep.asset_sha256),
                   motivos=motivos)
     run = VisualRun(receipt, plan=plan, compiled=compiled, asset_bytes=result.image_bytes,
-                    qa_report=rep, semantic=sem, typography_plan=typo, events=log.to_list())
+                    qa_report=rep, semantic=sem, typography_plan=typo,
+                    composed_bytes=composed_bytes, events=log.to_list())
 
     if registry is not None:
-        registry.store(receipt, raw_bytes=result.image_bytes)
+        registry.store(receipt, raw_bytes=result.image_bytes, composed_bytes=composed_bytes)
     return run
 
 
@@ -257,6 +300,7 @@ class BatchItem:
     exact_copy: str = ""
     author: str = ""
     content_type: str = ""
+    reserved_surface: object = None
     state: str = PENDING
     run: VisualRun = None
 
@@ -305,7 +349,8 @@ def run_batch(items, policy, provider, batch_id="batch-1", dry_run=False, **kw):
                               handoff=it.handoff, memory=memoria,
                               known_hashes=hashes, dry_run=dry_run,
                               exact_copy=it.exact_copy, author=it.author,
-                              content_type=it.content_type, **kw)
+                              content_type=it.content_type,
+                              reserved_surface=it.reserved_surface, **kw)
         it.run = run
         it.state = NEEDS_REVIEW if run.receipt.status == "DRY_RUN" else run.item_state
         if run.receipt.asset_sha256:
@@ -323,7 +368,8 @@ def retry_failed(batch, policy, provider, **kw):
         it.state = RUNNING
         run = generate_visual(it.procedencia, it.brief, policy, provider,
                               handoff=it.handoff, exact_copy=it.exact_copy,
-                              author=it.author, content_type=it.content_type, **kw)
+                              author=it.author, content_type=it.content_type,
+                              reserved_surface=it.reserved_surface, **kw)
         it.run = run
         it.state = run.item_state
     return batch

@@ -10,6 +10,7 @@ on:
       - "scripts/**"
       - "visual/**"
       - "contract/**"
+      - "requirements.txt"
       - ".github/workflows/legalmente-legal-verification.yml"
   push:
     branches: [main]
@@ -20,6 +21,7 @@ on:
       - "scripts/**"
       - "visual/**"
       - "contract/**"
+      - "requirements.txt"
       - ".github/workflows/legalmente-legal-verification.yml"
   workflow_dispatch: {}
 
@@ -194,9 +196,15 @@ jobs:
         working-directory: .
         run: python3 scripts/validate-content-provenance.py
 
+      - name: Instalar dependencias (solo Pillow, para el compositor)
+        run: python3 -m pip install --quiet -r requirements.txt
+
       - name: Pipeline visual — suite completa (proveedor falso, sin red ni créditos)
         working-directory: visual
-        run: python3 -m unittest test_visual_pipeline test_visual_advanced -v
+        run: |
+          python3 -m unittest \
+            test_visual_pipeline test_visual_advanced \
+            test_composition test_http_provider -v
 
       - name: Contrato canónico cross-repo
         working-directory: contract

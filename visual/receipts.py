@@ -18,7 +18,7 @@ from dataclasses import dataclass, field, asdict
 from datetime import datetime, timezone
 from pathlib import Path
 
-RECEIPT_SCHEMA_VERSION = "2.0"
+RECEIPT_SCHEMA_VERSION = "3.0"
 
 STATUS = (
     "GATE_CERRADO",
@@ -27,6 +27,7 @@ STATUS = (
     "DRY_RUN",
     "GENERACION_FALLIDA",
     "QA_FALLIDO",
+    "COMPOSICION_DESBORDADA",
     "PENDIENTE_REVISION_HUMANA",
 )
 
@@ -57,6 +58,11 @@ class GenerationReceipt:
     brand_mode: str = ""
     brand_plan: dict = field(default_factory=dict)
     typography_plan: dict = field(default_factory=dict)
+    composition: dict = field(default_factory=dict)
+    raw_asset_id: str = ""
+    composed_asset_id: str = ""
+    composed_sha256: str = ""
+    compositor_version: str = ""
     parametros: dict = field(default_factory=dict)
     procedencia: dict = field(default_factory=dict)
     structural_qa: dict = field(default_factory=dict)

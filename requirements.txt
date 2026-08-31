@@ -1,0 +1,8 @@
+# Dependencias de Python del repositorio.
+#
+# El validador jurídico, la cadena post-aprobación y el núcleo del pipeline
+# visual son deliberadamente stdlib-only: se ejecutan sin instalar nada.
+#
+# Pillow es la ÚNICA dependencia, y solo la necesita el compositor determinista
+# (visual/compositor.py). Justificación: docs/adr/0003-dependencia-pillow-compositor.md
+Pillow>=10.0,<14
