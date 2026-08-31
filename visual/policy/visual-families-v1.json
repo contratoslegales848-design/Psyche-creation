@@ -1,0 +1,86 @@
+{
+  "registry_version": "1.0",
+  "descripcion": "Familias visuales de LegalMente. Aportan DATOS al compilador (luz, camara, materiales, entornos, tropos prohibidos), no prompts monoliticos. El criterio de rotacion sigue viviendo en la skill legalmente-visual-system; aqui solo esta lo comprobable por codigo.",
+  "familias": {
+    "hiperrealismo_editorial_cinematografico": {
+      "lighting_intent": "luz de ventana amplia, sombra suave, alto rango dinamico",
+      "camera_tendencies": ["35mm", "50mm", "plano medio"],
+      "material_vocabulary": ["madera encerada", "papel de algodon", "laton bruñido", "vidrio"],
+      "preferred_environments": ["despacho editorial", "archivo", "mesa de trabajo"],
+      "palette_tendency": ["marfil_editorial", "nogal_profundo", "azul_petroleo"],
+      "human_presence": "opcional, nunca rostro protagonista",
+      "brand_surface_preferences": ["placa de laton", "lomo de libro"],
+      "forbidden_tropes": ["martillo de juez", "balanza dorada centrada", "sala de tribunal americana"]
+    },
+    "oleo_cinematografico": {
+      "lighting_intent": "clave lateral calida con relleno frio",
+      "camera_tendencies": ["plano medio corto", "ligeramente contrapicado"],
+      "material_vocabulary": ["lienzo", "empaste", "bronce", "terciopelo"],
+      "preferred_environments": ["gabinete", "biblioteca", "vestibulo institucional"],
+      "palette_tendency": ["nogal_profundo", "laton_oro_viejo"],
+      "human_presence": "figura sugerida, no retrato",
+      "brand_surface_preferences": ["placa de bronce", "sello de lacre"],
+      "forbidden_tropes": ["balanza", "mazo", "peluca judicial"]
+    },
+    "oleo_clasico_institucional": {
+      "lighting_intent": "luz cenital de museo, sombras contenidas",
+      "camera_tendencies": ["frontal", "plano general corto"],
+      "material_vocabulary": ["marmol", "roble", "pan de oro"],
+      "preferred_environments": ["sala institucional", "escalinata", "archivo historico"],
+      "palette_tendency": ["nogal_profundo", "marfil_editorial", "laton_oro_viejo"],
+      "human_presence": "ausente",
+      "brand_surface_preferences": ["piedra", "placa de bronce"],
+      "forbidden_tropes": ["balanza", "diosa de la justicia con venda"]
+    },
+    "claroscuro_de_museo": {
+      "lighting_intent": "una sola fuente dura, caida rapida, NEGROS CON DETALLE",
+      "camera_tendencies": ["primer plano de objeto", "plano detalle"],
+      "material_vocabulary": ["cuero", "cera", "hierro", "papel envejecido"],
+      "preferred_environments": ["mesa aislada", "nicho oscuro"],
+      "palette_tendency": ["nogal_profundo", "azul_petroleo"],
+      "human_presence": "manos como maximo",
+      "brand_surface_preferences": ["sello de lacre", "chapa numerada"],
+      "forbidden_tropes": ["tribunal", "mazo", "balanza"]
+    },
+    "foto_impasto": {
+      "lighting_intent": "luz difusa amplia, textura visible",
+      "camera_tendencies": ["macro", "plano detalle"],
+      "material_vocabulary": ["pintura espesa", "papel rugoso", "metal mate"],
+      "preferred_environments": ["superficie neutra", "taller"],
+      "palette_tendency": ["marfil_editorial", "azul_petroleo"],
+      "human_presence": "ausente",
+      "brand_surface_preferences": ["chapa numerada", "cuaderno"],
+      "forbidden_tropes": ["tribunal", "balanza"]
+    },
+    "neo_editorial_dark_luxury": {
+      "lighting_intent": "clave baja controlada con acento frio, sin empastar",
+      "camera_tendencies": ["plano medio", "composicion descentrada"],
+      "material_vocabulary": ["vidrio ahumado", "laton", "piedra oscura"],
+      "preferred_environments": ["interior contemporaneo", "vitrina"],
+      "palette_tendency": ["nogal_profundo", "azul_petroleo", "laton_oro_viejo"],
+      "human_presence": "opcional, silueta",
+      "brand_surface_preferences": ["vidrio", "metal"],
+      "forbidden_tropes": ["mazo", "balanza", "columnas griegas"]
+    },
+    "basalt_and_gold_leaf": {
+      "lighting_intent": "contraste alto entre piedra mate y reflejo dorado",
+      "camera_tendencies": ["plano detalle", "cenital"],
+      "material_vocabulary": ["basalto", "pan de oro", "grafito"],
+      "preferred_environments": ["superficie mineral", "pedestal"],
+      "palette_tendency": ["nogal_profundo", "laton_oro_viejo"],
+      "human_presence": "ausente",
+      "brand_surface_preferences": ["piedra", "placa de laton"],
+      "forbidden_tropes": ["balanza", "tribunal", "mazo"]
+    },
+    "oleo_narrativo": {
+      "lighting_intent": "luz narrativa direccional, atmosfera legible",
+      "camera_tendencies": ["plano general corto", "plano medio"],
+      "material_vocabulary": ["tela", "madera", "papel"],
+      "preferred_environments": ["escena cotidiana", "umbral", "mesa compartida"],
+      "palette_tendency": ["marfil_editorial", "nogal_profundo"],
+      "human_presence": "figuras de espaldas o parciales",
+      "brand_surface_preferences": ["carpeta", "cuaderno"],
+      "forbidden_tropes": ["tribunal", "mazo", "balanza"]
+    }
+  }
+}
