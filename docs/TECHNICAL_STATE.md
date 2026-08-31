@@ -53,7 +53,7 @@ real y una prueba que pasa.
 - `fixtures/` — 10 positivas, 46 negativas.
 - `publication/fixtures/` — 2 cadenas válidas, 14 inválidas, 1 claim packet sintético.
 
-**Pruebas: 487, todas en verde** (Psyche). Más 18 del consumidor de web, locales.
+**Pruebas: 498, todas en verde** (Psyche). Más 23 del consumidor de web, locales.
 | Suite | Pruebas |
 |---|---|
 | `test_validate_claim_packet` | 147 |
@@ -61,7 +61,7 @@ real y una prueba que pasa.
 | `test_validate_publication_chain` | 41 |
 | `test_confidentiality_rules` | 20 |
 | `test_validate_content_provenance` | 30 |
-| `visual/` (5 suites) | 200 |
+| `visual/` (5 suites) | 206 |
 | `contract/test_canonical_envelope` | 12 |
 
 ### 2.2 Los cuatro estados no equivalentes
@@ -196,11 +196,11 @@ decisión del fundador, no técnica.
 2. ~~Ligar `content/*.json` a un `ProductionHandoff` válido.~~ Implementado.
 
 **P1 — antes de escalar el volumen**
-3. **Decidir sobre la Pieza 1: fusionar o no `e7bb82f`.** Es ahora la única puerta
-   entre LegalMente y una producción visual real. La aprobación humana de Raymundo
-   ya existe y abre el gate; el validador vigente la acepta (`[GATE ABIERTO]`,
-   exit 0). El motivo por el que quedó sin fusionar —tests obsoletos— ya está
-   corregido en `main`. Ver `docs/real-generation-readiness.md`.
+3. ~~Decidir sobre la Pieza 1: fusionar o no `e7bb82f`.~~ **FUSIONADA** el
+   2026-08-31 (commit `0f8c697`), autorizada expresamente por el fundador.
+   `PIEZA-01-REALES` tiene ahora `gate_arte: ABIERTO` real. El siguiente paso
+   —el único que falta— es emitir un `ProductionHandoff`, decisión humana
+   documentada en `docs/production-handoff-decision-pieza-01.md`.
 4. Corregir la deriva de `legalmente-web` en `CLAUDE.md §8`.
 5. ~~Resolver el conflicto de marca.~~ **RESUELTO** el 2026-08-31: `NO`. Ver
    `docs/adr/0002-marca-composicion-determinista.md`. Aplicado en política 1.1.
