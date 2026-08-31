@@ -1,0 +1,12 @@
+{
+  "contract_version": "1.0",
+  "content": [
+    {
+      "content_id": "LM-SIN-PUBLICAR",
+      "publication_decision": "NO_EXISTE",
+      "publication_state": "NO_PUBLICADO",
+      "human_art_review": "APPROVE_VISUAL"
+    }
+  ],
+  "human_decision_inbox": []
+}
