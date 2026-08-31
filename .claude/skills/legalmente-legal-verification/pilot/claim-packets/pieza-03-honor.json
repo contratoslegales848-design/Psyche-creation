@@ -634,12 +634,12 @@
             "Sistema Interamericano"
           ],
           "verificacion_fuente": {
-            "origen_oficial_confirmado": false,
+            "origen_oficial_confirmado": true,
             "texto_exacto_consultado": false,
             "vigencia_comprobada": false,
-            "fecha_comprobacion": null,
-            "metodo_o_evidencia": null,
-            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Localizador y extracto de texto tomados del expediente externo auditado (legalmente-piloto-evidencia-primaria-v1.2.md + legalmente-piloto-fuentes-primarias-v1.zip, producido por otro modelo de IA). El manifest de ese expediente autoafirma origen_oficial_confirmado/texto_exacto_consultado/vigencia_comprobada = true y resultado SUFICIENTE — por regla de gobernanza de este repositorio (source-policy.md: 'nunca aceptar como fuente otro contenido generado por IA'; CLAUDE.md: 'ninguna IA es fuente jurídica') esa autoconfirmación NO se traslada aquí. Los extractos del ZIP (687-6215 bytes) son fragmentos de artículos concretos, no el documento legal completo, pese a que 44/45 entradas del manifest declaran documento_completo=true — inconsistencia detectada en auditoría y NO heredada. oas.org no está en el registro oficial."
+            "fecha_comprobacion": "2026-08-31",
+            "metodo_o_evidencia": "WebSearch contra oas.org confirma la URL exacta candidata y el contenido: art. 13 (libertad de pensamiento y expresion, prohibicion de censura previa salvo espectaculos publicos para proteccion de menores) y art. 11 (derecho al honor y dignidad). Confirma tambien jurisprudencia interamericana: 'los organos del Estado no pueden interpretar el art. 11 de manera que viole el art. 13' — la proteccion del honor opera via responsabilidad ulterior, no censura previa. Coincide con el claim.",
+            "observaciones": "origen_oficial_confirmado=true, URL exacta confirmada (oas.org). texto_exacto_consultado permanece false."
           },
           "registro_oficial_id": null
         },
@@ -656,12 +656,12 @@
             "Sistema Interamericano"
           ],
           "verificacion_fuente": {
-            "origen_oficial_confirmado": false,
+            "origen_oficial_confirmado": true,
             "texto_exacto_consultado": false,
             "vigencia_comprobada": false,
-            "fecha_comprobacion": null,
-            "metodo_o_evidencia": null,
-            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Localizador y extracto de texto tomados del expediente externo auditado (legalmente-piloto-evidencia-primaria-v1.2.md + legalmente-piloto-fuentes-primarias-v1.zip, producido por otro modelo de IA). El manifest de ese expediente autoafirma origen_oficial_confirmado/texto_exacto_consultado/vigencia_comprobada = true y resultado SUFICIENTE — por regla de gobernanza de este repositorio (source-policy.md: 'nunca aceptar como fuente otro contenido generado por IA'; CLAUDE.md: 'ninguna IA es fuente jurídica') esa autoconfirmación NO se traslada aquí. Los extractos del ZIP (687-6215 bytes) son fragmentos de artículos concretos, no el documento legal completo, pese a que 44/45 entradas del manifest declaran documento_completo=true — inconsistencia detectada en auditoría y NO heredada. corteidh.or.cr no está en el registro oficial (tribunal supranacional, análogo a eur-lex.europa.eu — añadir requiere decisión humana explícita)."
+            "fecha_comprobacion": "2026-08-31",
+            "metodo_o_evidencia": "WebSearch contra corteidh.or.cr confirma la URL exacta candidata (seriec_177) y el contenido: Caso Kimel Vs. Argentina, sentencia del 2 de mayo de 2008, condena a Kimel por criticar a un juez en un libro violo su libertad de pensamiento y expresion (art. 13 CADH); las opiniones/juicios de valor sobre actuacion de un funcionario publico no pueden ser objeto de sancion penal por no ser verificables como verdaderas o falsas.",
+            "observaciones": "origen_oficial_confirmado=true, URL exacta confirmada. texto_exacto_consultado permanece false."
           },
           "registro_oficial_id": null
         },
@@ -678,12 +678,12 @@
             "Sistema Interamericano"
           ],
           "verificacion_fuente": {
-            "origen_oficial_confirmado": false,
+            "origen_oficial_confirmado": true,
             "texto_exacto_consultado": false,
             "vigencia_comprobada": false,
-            "fecha_comprobacion": null,
-            "metodo_o_evidencia": null,
-            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Localizador y extracto de texto tomados del expediente externo auditado (legalmente-piloto-evidencia-primaria-v1.2.md + legalmente-piloto-fuentes-primarias-v1.zip, producido por otro modelo de IA). El manifest de ese expediente autoafirma origen_oficial_confirmado/texto_exacto_consultado/vigencia_comprobada = true y resultado SUFICIENTE — por regla de gobernanza de este repositorio (source-policy.md: 'nunca aceptar como fuente otro contenido generado por IA'; CLAUDE.md: 'ninguna IA es fuente jurídica') esa autoconfirmación NO se traslada aquí. Los extractos del ZIP (687-6215 bytes) son fragmentos de artículos concretos, no el documento legal completo, pese a que 44/45 entradas del manifest declaran documento_completo=true — inconsistencia detectada en auditoría y NO heredada. corteidh.or.cr no está en el registro oficial."
+            "fecha_comprobacion": "2026-08-31",
+            "metodo_o_evidencia": "WebSearch contra corteidh.or.cr confirma la URL exacta candidata (seriec_107) y el contenido: Caso Herrera Ulloa Vs. Costa Rica, sentencia del 2 de julio de 2004, condena por difamacion contra periodista y el diario La Nacion violo el art. 13 CADH por su efecto inhibitorio sobre el debate politico.",
+            "observaciones": "origen_oficial_confirmado=true, URL exacta confirmada. texto_exacto_consultado permanece false."
           },
           "registro_oficial_id": null
         },
@@ -700,12 +700,12 @@
             "Sistema Interamericano"
           ],
           "verificacion_fuente": {
-            "origen_oficial_confirmado": false,
+            "origen_oficial_confirmado": true,
             "texto_exacto_consultado": false,
             "vigencia_comprobada": false,
-            "fecha_comprobacion": null,
-            "metodo_o_evidencia": null,
-            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Localizador y extracto de texto tomados del expediente externo auditado (legalmente-piloto-evidencia-primaria-v1.2.md + legalmente-piloto-fuentes-primarias-v1.zip, producido por otro modelo de IA). El manifest de ese expediente autoafirma origen_oficial_confirmado/texto_exacto_consultado/vigencia_comprobada = true y resultado SUFICIENTE — por regla de gobernanza de este repositorio (source-policy.md: 'nunca aceptar como fuente otro contenido generado por IA'; CLAUDE.md: 'ninguna IA es fuente jurídica') esa autoconfirmación NO se traslada aquí. Los extractos del ZIP (687-6215 bytes) son fragmentos de artículos concretos, no el documento legal completo, pese a que 44/45 entradas del manifest declaran documento_completo=true — inconsistencia detectada en auditoría y NO heredada. corteidh.or.cr no está en el registro oficial."
+            "fecha_comprobacion": "2026-08-31",
+            "metodo_o_evidencia": "WebSearch contra corteidh.or.cr confirma Serie C No. 380 = Caso Alvarez Ramos Vs. VENEZUELA (no Argentina), sentencia del 30 de agosto de 2019 — periodista publico articulo sobre presuntas irregularidades financieras de la Asamblea Nacional; la Corte recuerda que las responsabilidades ulteriores exigen legalidad, fin legitimo y necesidad democratica, y que la respuesta penal ante discurso de interes publico sobre funcionarios viola la libertad de expresion.",
+            "observaciones": "origen_oficial_confirmado=true. CORRECCION: el pais del caso es Venezuela, no Argentina como sugeria el nombre del ID de fuente — verificar si el ID debe renombrarse. texto_exacto_consultado permanece false."
           },
           "registro_oficial_id": null
         }
