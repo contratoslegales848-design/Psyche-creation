@@ -1,0 +1,88 @@
+From 658a8a8cb0ce497f285f5e40c46be34de7484ec4 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Mon, 31 Aug 2026 08:15:26 +0000
+Subject: [PATCH 2/2] test(public): probar la frontera interna por contenido,
+ no solo por nombre de archivo
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+La prueba de rutas públicas comprobaba nombres de archivo y rutas. Faltaban dos
+vectores reales:
+
+1. SERIALIZATION — un dato interno puede viajar en el CONTENIDO: props, JSON
+   embebido, payload de hidratación o datos estáticos, en un archivo cuyo nombre
+   es perfectamente inocente. Ahora se revisa el contenido de todo lo publicado
+   en busca de marcadores internos. robots.txt queda excluido: su
+   `Disallow: /internal/` es intencional.
+
+2. ROUTE — el recorrido de enlaces se SALTABA los href a /internal para no
+   marcarlos como rotos, así que una página pública podía enlazar a una ruta
+   interna y la prueba pasaba igualmente. Ahora se comprueba que no existan.
+
+Verificado plantando ambas fugas en el artefacto construido: las dos guardas
+fallan como deben, y el artefacto real sigue limpio.
+---
+ scripts/public-route-proof.mjs | 49 +++++++++++++++++++++++++++++++++-
+ 1 file changed, 48 insertions(+), 1 deletion(-)
+
+diff --git a/scripts/public-route-proof.mjs b/scripts/public-route-proof.mjs
+index 9289377..65b53d5 100644
+--- a/scripts/public-route-proof.mjs
++++ b/scripts/public-route-proof.mjs
+@@ -89,4 +89,51 @@ if (brokenLinks.length > 0) {
+   throw new Error(`Broken public links found:\n${brokenLinks.join("\n")}`);
+ }
+ 
+-console.log(`Public route proof passed: ${requiredRoutes.length} routes, ${htmlFiles.length} HTML files, ${sitemapUrls.length} sitemap URLs, internal route absent, links valid, security files present.`);
++// --- SERIALIZATION BOUNDARY -------------------------------------------------
++// Las comprobaciones anteriores miran NOMBRES de archivo y rutas. Un dato interno
++// puede filtrarse igualmente por el contenido: props, JSON embebido, payload de
++// hidratación o datos estáticos. Esto revisa el contenido de todo lo que se
++// publica. robots.txt queda excluido: su `Disallow: /internal/` es intencional.
++const internalContentMarkers = [
++  "product-lab",
++  "wave01a",
++  "reviewRegistry",
++  "review_registry",
++  "approved_claim_hash",
++  "internalOnly",
++];
++const serializationLeaks = [];
++for (const file of publicFiles) {
++  if (file.endsWith("robots.txt")) continue;
++  let content;
++  try {
++    content = readFileSync(file, "utf8");
++  } catch {
++    continue; // binario: no transporta props ni JSON
++  }
++  for (const marker of internalContentMarkers) {
++    if (content.toLowerCase().includes(marker.toLowerCase())) {
++      serializationLeaks.push(`${file.replace(`${outputRoot}/`, "")}: ${marker}`);
++    }
++  }
++}
++if (serializationLeaks.length > 0) {
++  throw new Error(`Internal data serialized into the public artifact:\n${serializationLeaks.join("\n")}`);
++}
++
++// --- ROUTE BOUNDARY ---------------------------------------------------------
++// Una página pública no debe ENLAZAR a /internal. El recorrido de enlaces de
++// arriba se salta esos href para no marcarlos como rotos; aquí se comprueba que
++// no existan, que es lo que de verdad importa.
++const internalLinks = [];
++for (const htmlFile of htmlFiles) {
++  const html = readFileSync(htmlFile, "utf8");
++  for (const match of html.matchAll(/(?:href|src)="(\/internal[^"]*)"/g)) {
++    internalLinks.push(`${htmlFile.replace(`${outputRoot}/`, "")}: ${match[1]}`);
++  }
++}
++if (internalLinks.length > 0) {
++  throw new Error(`Public pages link to internal routes:\n${internalLinks.join("\n")}`);
++}
++
++console.log(`Public route proof passed: ${requiredRoutes.length} routes, ${htmlFiles.length} HTML files, ${sitemapUrls.length} sitemap URLs, internal route absent, links valid, no internal data serialized, security files present.`);
+-- 
+2.43.0
+

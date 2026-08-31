@@ -1,0 +1,974 @@
+From 48356b289f3364f3ddfccdf5bf71e3e5a08b529e Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Mon, 31 Aug 2026 08:15:26 +0000
+Subject: [PATCH 1/2] feat(contract): consume el Canonical Envelope de Psyche
+ tras una frontera estricta
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Psyche-creation es la autoridad; la web consume, adapta y presenta. Hasta ahora
+no existía ninguna frontera por la que ese canon entrara: el `outputState` del
+VisualProductionEnvelope lo aportaba quien construyera el objeto, de modo que la
+web podía declarar READY_FOR_VISUAL por su cuenta.
+
+src/lib/psyche-contract/
+- index.ts    lectura estricta del envelope v1. La versión se comprueba ANTES
+              que nada: una versión desconocida no se inspecciona siquiera,
+              porque no sabemos qué significan sus campos. Estado desconocido,
+              procedencia ausente, claim sin hash aprobado e incoherencias que
+              delatan escalamiento de autoridad se rechazan. Sin fallback optimista.
+- mapping.ts  deriveVisualOutputState() deriva SOLO desde el canon: READY_FOR_VISUAL
+              exige claim apto + fuente verificada + gate abierto + elegibilidad,
+              todo decidido aguas arriba. supportsTerritory() no amplía cobertura.
+              Cada valor presentado lleva procedencia (CANONICAL / DERIVED /
+              SNAPSHOT / EXPERIMENTAL / UNKNOWN / NO_MEDIDO) con source,
+              derivation, observedAt, owner, freshness y confidence.
+- fixtures/   snapshot versionado de las 8 fixtures de Psyche. Sin acoplamiento
+              en tiempo de ejecución entre repositorios: se copian ficheros.
+
+18 contract tests, entre ellos: BLOQUEADO sigue BLOQUEADO a través de lectura,
+mapeo, agregación y presentación; la web no puede declarar READY_FOR_VISUAL ni
+pasando un outputState falso; el hash canónico se transporta y nunca se recalcula;
+un snapshot nunca se presenta como dato en vivo; los campos opcionales futuros
+se toleran.
+
+Ningún componente de React parsea el envelope: se importa desde aquí o no se importa.
+---
+ package.json                                  |   3 +-
+ src/lib/psyche-contract/README.md             |  42 ++++
+ src/lib/psyche-contract/contract.test.ts      | 195 ++++++++++++++++++
+ .../authority_escalation_attempt.json         |  32 +++
+ .../fixtures/blocked_claim.json               |  32 +++
+ .../fixtures/missing_provenance.json          |  24 +++
+ .../fixtures/source_pending.json              |  32 +++
+ .../fixtures/unknown_state.json               |  32 +++
+ .../fixtures/unknown_version.json             |  32 +++
+ .../fixtures/unsupported_territory.json       |  27 +++
+ .../psyche-contract/fixtures/valid_ready.json |  32 +++
+ src/lib/psyche-contract/index.ts              | 191 +++++++++++++++++
+ src/lib/psyche-contract/mapping.ts            | 150 ++++++++++++++
+ 13 files changed, 823 insertions(+), 1 deletion(-)
+ create mode 100644 src/lib/psyche-contract/README.md
+ create mode 100644 src/lib/psyche-contract/contract.test.ts
+ create mode 100644 src/lib/psyche-contract/fixtures/authority_escalation_attempt.json
+ create mode 100644 src/lib/psyche-contract/fixtures/blocked_claim.json
+ create mode 100644 src/lib/psyche-contract/fixtures/missing_provenance.json
+ create mode 100644 src/lib/psyche-contract/fixtures/source_pending.json
+ create mode 100644 src/lib/psyche-contract/fixtures/unknown_state.json
+ create mode 100644 src/lib/psyche-contract/fixtures/unknown_version.json
+ create mode 100644 src/lib/psyche-contract/fixtures/unsupported_territory.json
+ create mode 100644 src/lib/psyche-contract/fixtures/valid_ready.json
+ create mode 100644 src/lib/psyche-contract/index.ts
+ create mode 100644 src/lib/psyche-contract/mapping.ts
+
+diff --git a/package.json b/package.json
+index bb5ac84..d3dfb96 100644
+--- a/package.json
++++ b/package.json
+@@ -15,7 +15,8 @@
+     "test:knowledge-integrity": "tsx --test src/lib/knowledge-graph/integrity.test.ts",
+     "test:ecosystem-kernel": "tsx --test src/lib/ecosystem-kernel/index.test.ts",
+     "test:agent-contribution": "tsx --test src/lib/agent-contribution/contract.test.ts",
+-    "test:public-routes": "node scripts/public-route-proof.mjs"
++    "test:public-routes": "node scripts/public-route-proof.mjs",
++    "test:psyche-contract": "tsx --test src/lib/psyche-contract/contract.test.ts"
+   },
+   "dependencies": {
+     "next": "14.2.35",
+diff --git a/src/lib/psyche-contract/README.md b/src/lib/psyche-contract/README.md
+new file mode 100644
+index 0000000..09728ff
+--- /dev/null
++++ b/src/lib/psyche-contract/README.md
+@@ -0,0 +1,42 @@
++# Psyche Contract — consumidor estricto
++
++Esta carpeta es **la única frontera autorizada** por la que datos canónicos de
++`Psyche-creation` entran en `legalmente-web`.
++
++```
++PSYCHE CANON
++     ↓
++CANONICAL ENVELOPE v1
++     ↓
++adapter estricto (este módulo)
++     ↓
++Operations Engine / Product UI
++```
++
++## Reglas
++
++- **Psyche es la autoridad.** Web muestra, agrupa, ordena, formatea y prepara UX.
++- **Web nunca**: aprueba un claim, recalcula validación jurídica, eleva
++  jurisdicción, infiere suficiencia de fuentes, cambia hashes canónicos, abre un
++  gate jurídico, reinterpreta `BLOCKED` como listo, ni convierte `UNKNOWN` en éxito.
++- **Ningún componente de React parsea el envelope.** Se importa desde aquí o no
++  se importa.
++- **Fail-closed**: versión desconocida, estado desconocido, procedencia ausente o
++  campo requerido ausente ⇒ se rechaza. No hay *fallback* optimista.
++
++## Fixtures
++
++`fixtures/` es un **snapshot versionado** de las fixtures que produce Psyche en
++`contract/fixtures/`. No hay acoplamiento en tiempo de ejecución entre repos: se
++copian ficheros y `contract.test.ts` comprueba compatibilidad.
++
++Al actualizar el contrato en Psyche, recopiar el snapshot y volver a ejecutar
++`npm run test:psyche-contract`. Si la versión del esquema cambia, este consumidor
++debe rechazarla hasta que se implemente explícitamente.
++
++## Migración a v2
++
++`SUPPORTED_SCHEMA_VERSIONS` es la lista blanca. Para adoptar una v2:
++añadir la versión, mapear los campos nuevos, y mantener v1 mientras Psyche la
++siga emitiendo. Un envelope de versión no listada **siempre** se rechaza — nunca
++se interpreta con optimismo.
+diff --git a/src/lib/psyche-contract/contract.test.ts b/src/lib/psyche-contract/contract.test.ts
+new file mode 100644
+index 0000000..edb6c5d
+--- /dev/null
++++ b/src/lib/psyche-contract/contract.test.ts
+@@ -0,0 +1,195 @@
++/**
++ * Contract tests del consumidor de Psyche.
++ *
++ * Se ejecutan contra el snapshot versionado de fixtures que produce Psyche en
++ * `contract/fixtures/`. Sin acoplamiento en tiempo de ejecución entre repos.
++ */
++
++import assert from "node:assert/strict";
++import { readFileSync } from "node:fs";
++import { join } from "node:path";
++import test from "node:test";
++
++import { readCanonicalEnvelope, SUPPORTED_SCHEMA_VERSIONS } from "./index";
++import {
++  asSnapshot,
++  deriveVisualOutputState,
++  notMeasured,
++  supportsTerritory,
++  toPresentation,
++} from "./mapping";
++
++const FIXTURES = join(process.cwd(), "src/lib/psyche-contract/fixtures");
++const load = (name: string): unknown =>
++  JSON.parse(readFileSync(join(FIXTURES, `${name}.json`), "utf8"));
++
++const okEnvelope = (name: string) => {
++  const r = readCanonicalEnvelope(load(name));
++  assert.equal(r.ok, true, `${name} debía ser aceptada`);
++  if (!r.ok) throw new Error("inalcanzable");
++  return r.envelope;
++};
++
++test("versión soportada se acepta", () => {
++  const env = okEnvelope("valid_ready");
++  assert.equal(env.contentId, "LM-FIXTURE-001");
++  assert.ok(SUPPORTED_SCHEMA_VERSIONS.includes(env.schemaVersion as "1.0"));
++  assert.equal(env.claims.length, 1);
++  assert.equal(env.provenanceSourceIds.length, 1);
++});
++
++test("versión desconocida falla cerrado", () => {
++  const r = readCanonicalEnvelope(load("unknown_version"));
++  assert.equal(r.ok, false);
++  if (r.ok) return;
++  assert.match(r.issues[0].message, /no soportada/);
++});
++
++test("estado canónico desconocido falla cerrado", () => {
++  assert.equal(readCanonicalEnvelope(load("unknown_state")).ok, false);
++});
++
++test("procedencia ausente no se infiere como válida", () => {
++  const r = readCanonicalEnvelope(load("missing_provenance"));
++  assert.equal(r.ok, false);
++  if (r.ok) return;
++  assert.ok(r.issues.some((i) => i.path.includes("provenance")));
++});
++
++test("envelope ausente o con forma inválida", () => {
++  for (const malo of [null, undefined, [], "texto", 42, true]) {
++    assert.equal(readCanonicalEnvelope(malo).ok, false);
++  }
++});
++
++test("intento de escalamiento de autoridad se rechaza", () => {
++  const r = readCanonicalEnvelope(load("authority_escalation_attempt"));
++  assert.equal(r.ok, false);
++  if (r.ok) return;
++  assert.ok(r.issues.some((i) => /BLOQUEADO|incoherente/.test(i.message)));
++});
++
++test("BLOQUEADO sigue BLOQUEADO a través de todo el mapeo", () => {
++  const env = okEnvelope("blocked_claim");
++  assert.equal(env.claimState, "BLOQUEADO");
++  assert.equal(env.artEligibility, "NO_ELEGIBLE");
++  assert.equal(deriveVisualOutputState(env), "NOT_PUBLISHED");
++
++  const p = toPresentation(env);
++  assert.equal(p.claimState.value, "BLOQUEADO");
++  assert.equal(p.visualOutputState.value, "NOT_PUBLISHED");
++  assert.equal(p.claimState.provenance, "CANONICAL");
++
++  // Ninguna agregación ni orden ni formato puede convertirlo en listo.
++  const agregado = [env, okEnvelope("valid_ready")].map(deriveVisualOutputState);
++  assert.ok(agregado.includes("NOT_PUBLISHED"));
++  assert.equal(agregado.filter((s) => s === "READY_FOR_VISUAL").length, 1);
++});
++
++test("fuente pendiente no habilita arte", () => {
++  const env = okEnvelope("source_pending");
++  assert.equal(env.sourceState, "PENDIENTE");
++  assert.equal(deriveVisualOutputState(env), "HOLD_SOURCE");
++});
++
++test("territorio no cubierto sigue no cubierto", () => {
++  const env = okEnvelope("unsupported_territory");
++  assert.deepEqual(env.territories, []);
++  assert.equal(supportsTerritory(env, "México"), false);
++  assert.equal(deriveVisualOutputState(env), "DRAFT");
++});
++
++test("capa A transversal cubre cualquier territorio", () => {
++  const env = okEnvelope("valid_ready");
++  assert.equal(env.jurisdictionLayer, "CAPA_A_TRANSVERSAL");
++  assert.equal(supportsTerritory(env, "Chile"), true);
++});
++
++test("solo el envelope válido y completo llega a READY_FOR_VISUAL", () => {
++  assert.equal(deriveVisualOutputState(okEnvelope("valid_ready")), "READY_FOR_VISUAL");
++});
++
++test("la web no puede declarar READY_FOR_VISUAL por su cuenta", () => {
++  // Un envelope que se autodeclara elegible pero con el gate cerrado se rechaza
++  // en la frontera; nunca llega al mapeo.
++  const forjado = {
++    ...(load("valid_ready") as Record<string, unknown>),
++    legal_gate_state: "CERRADO",
++  };
++  assert.equal(readCanonicalEnvelope(forjado).ok, false);
++
++  // Y aunque alguien intentara pasar un outputState "listo" por fuera, el mapeo
++  // no lo lee: deriva desde el canon.
++  const conEstadoFalso = {
++    ...(load("blocked_claim") as Record<string, unknown>),
++    outputState: "READY_FOR_VISUAL",
++  };
++  const r = readCanonicalEnvelope(conEstadoFalso);
++  assert.equal(r.ok, true);
++  if (!r.ok) return;
++  assert.equal(deriveVisualOutputState(r.envelope), "NOT_PUBLISHED");
++});
++
++test("campos opcionales futuros se toleran (compatibilidad hacia adelante)", () => {
++  const conExtras = {
++    ...(load("valid_ready") as Record<string, unknown>),
++    campo_futuro: "algo",
++    otro: 123,
++  };
++  assert.equal(readCanonicalEnvelope(conExtras).ok, true);
++});
++
++test("hash canónico se transporta, nunca se recalcula", () => {
++  const env = okEnvelope("valid_ready");
++  const original = (load("valid_ready") as { claims: { approved_claim_hash: string }[] })
++    .claims[0].approved_claim_hash;
++  assert.equal(env.claims[0].approvedClaimHash, original);
++});
++
++test("claim sin hash aprobado se rechaza", () => {
++  const sinHash = {
++    ...(load("valid_ready") as Record<string, unknown>),
++    claims: [{ claim_id: "c1" }],
++  };
++  assert.equal(readCanonicalEnvelope(sinHash).ok, false);
++});
++
++test("toda la presentación declara su procedencia", () => {
++  const p = toPresentation(okEnvelope("valid_ready"));
++  for (const [clave, valor] of Object.entries(p)) {
++    assert.ok(valor.provenance, `${clave} sin procedencia`);
++    assert.ok(valor.source, `${clave} sin fuente`);
++  }
++  assert.equal(p.contentId.provenance, "CANONICAL");
++  assert.equal(p.claimCount.provenance, "DERIVED");
++  assert.ok(p.claimCount.derivation);
++});
++
++test("un snapshot nunca se presenta como dato en vivo", () => {
++  const s = asSnapshot(42, "fixture:inventario", "2026-08-31T00:00:00Z");
++  assert.equal(s.provenance, "SNAPSHOT");
++  assert.ok(s.observedAt);
++  assert.match(s.freshness ?? "", /no es un dato en vivo/);
++
++  const n = notMeasured(0, "metricas:instagram");
++  assert.equal(n.provenance, "NO_MEDIDO");
++  assert.equal(n.confidence, "UNKNOWN");
++});
++
++test("todas las fixtures del snapshot son JSON válido y con versión declarada", () => {
++  const nombres = [
++    "valid_ready",
++    "blocked_claim",
++    "source_pending",
++    "unsupported_territory",
++    "missing_provenance",
++    "unknown_version",
++    "unknown_state",
++    "authority_escalation_attempt",
++  ];
++  for (const n of nombres) {
++    const f = load(n) as Record<string, unknown>;
++    assert.ok(typeof f.schema_version === "string", `${n} sin schema_version`);
++    assert.ok(typeof f.content_id === "string", `${n} sin content_id`);
++  }
++});
+diff --git a/src/lib/psyche-contract/fixtures/authority_escalation_attempt.json b/src/lib/psyche-contract/fixtures/authority_escalation_attempt.json
+new file mode 100644
+index 0000000..13815af
+--- /dev/null
++++ b/src/lib/psyche-contract/fixtures/authority_escalation_attempt.json
+@@ -0,0 +1,32 @@
++{
++  "art_eligibility": "ELEGIBLE",
++  "claim_state": "BLOQUEADO",
++  "claims": [
++    {
++      "approved_claim_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
++      "claim_id": "c1",
++      "texto_exacto": "En el comodato se devuelve la misma cosa."
++    }
++  ],
++  "content_id": "LM-FIXTURE-007",
++  "emitted_at": "2026-08-31T00:00:00+00:00",
++  "jurisdiction_layer": "CAPA_A_TRANSVERSAL",
++  "legal_gate_state": "ABIERTO",
++  "provenance": {
++    "sources": [
++      {
++        "id": "f-es",
++        "registro_oficial_id": "boe-es",
++        "url": "https://www.boe.es/buscar/act.php?id=BOE-A-1889-4763"
++      }
++    ]
++  },
++  "schema_version": "1.0",
++  "source_state": "VERIFICADA",
++  "territories": [
++    "Espana",
++    "Mexico",
++    "Argentina",
++    "Peru"
++  ]
++}
+diff --git a/src/lib/psyche-contract/fixtures/blocked_claim.json b/src/lib/psyche-contract/fixtures/blocked_claim.json
+new file mode 100644
+index 0000000..02175b8
+--- /dev/null
++++ b/src/lib/psyche-contract/fixtures/blocked_claim.json
+@@ -0,0 +1,32 @@
++{
++  "art_eligibility": "NO_ELEGIBLE",
++  "claim_state": "BLOQUEADO",
++  "claims": [
++    {
++      "approved_claim_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
++      "claim_id": "c1",
++      "texto_exacto": "En el comodato se devuelve la misma cosa."
++    }
++  ],
++  "content_id": "LM-FIXTURE-002",
++  "emitted_at": "2026-08-31T00:00:00+00:00",
++  "jurisdiction_layer": "CAPA_A_TRANSVERSAL",
++  "legal_gate_state": "CERRADO",
++  "provenance": {
++    "sources": [
++      {
++        "id": "f-es",
++        "registro_oficial_id": "boe-es",
++        "url": "https://www.boe.es/buscar/act.php?id=BOE-A-1889-4763"
++      }
++    ]
++  },
++  "schema_version": "1.0",
++  "source_state": "VERIFICADA",
++  "territories": [
++    "Espana",
++    "Mexico",
++    "Argentina",
++    "Peru"
++  ]
++}
+diff --git a/src/lib/psyche-contract/fixtures/missing_provenance.json b/src/lib/psyche-contract/fixtures/missing_provenance.json
+new file mode 100644
+index 0000000..dae337e
+--- /dev/null
++++ b/src/lib/psyche-contract/fixtures/missing_provenance.json
+@@ -0,0 +1,24 @@
++{
++  "art_eligibility": "ELEGIBLE",
++  "claim_state": "APTO_PARA_NARRATIVA",
++  "claims": [
++    {
++      "approved_claim_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
++      "claim_id": "c1",
++      "texto_exacto": "En el comodato se devuelve la misma cosa."
++    }
++  ],
++  "content_id": "LM-FIXTURE-005",
++  "emitted_at": "2026-08-31T00:00:00+00:00",
++  "jurisdiction_layer": "CAPA_A_TRANSVERSAL",
++  "legal_gate_state": "ABIERTO",
++  "provenance": {},
++  "schema_version": "1.0",
++  "source_state": "VERIFICADA",
++  "territories": [
++    "Espana",
++    "Mexico",
++    "Argentina",
++    "Peru"
++  ]
++}
+diff --git a/src/lib/psyche-contract/fixtures/source_pending.json b/src/lib/psyche-contract/fixtures/source_pending.json
+new file mode 100644
+index 0000000..dec4290
+--- /dev/null
++++ b/src/lib/psyche-contract/fixtures/source_pending.json
+@@ -0,0 +1,32 @@
++{
++  "art_eligibility": "NO_ELEGIBLE",
++  "claim_state": "REQUIERE_INVESTIGACION",
++  "claims": [
++    {
++      "approved_claim_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
++      "claim_id": "c1",
++      "texto_exacto": "En el comodato se devuelve la misma cosa."
++    }
++  ],
++  "content_id": "LM-FIXTURE-003",
++  "emitted_at": "2026-08-31T00:00:00+00:00",
++  "jurisdiction_layer": "CAPA_A_TRANSVERSAL",
++  "legal_gate_state": "CERRADO",
++  "provenance": {
++    "sources": [
++      {
++        "id": "f-es",
++        "registro_oficial_id": "boe-es",
++        "url": "https://www.boe.es/buscar/act.php?id=BOE-A-1889-4763"
++      }
++    ]
++  },
++  "schema_version": "1.0",
++  "source_state": "PENDIENTE",
++  "territories": [
++    "Espana",
++    "Mexico",
++    "Argentina",
++    "Peru"
++  ]
++}
+diff --git a/src/lib/psyche-contract/fixtures/unknown_state.json b/src/lib/psyche-contract/fixtures/unknown_state.json
+new file mode 100644
+index 0000000..c50002c
+--- /dev/null
++++ b/src/lib/psyche-contract/fixtures/unknown_state.json
+@@ -0,0 +1,32 @@
++{
++  "art_eligibility": "ELEGIBLE",
++  "claim_state": "SUPER_APROBADO",
++  "claims": [
++    {
++      "approved_claim_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
++      "claim_id": "c1",
++      "texto_exacto": "En el comodato se devuelve la misma cosa."
++    }
++  ],
++  "content_id": "LM-FIXTURE-008",
++  "emitted_at": "2026-08-31T00:00:00+00:00",
++  "jurisdiction_layer": "CAPA_A_TRANSVERSAL",
++  "legal_gate_state": "ABIERTO",
++  "provenance": {
++    "sources": [
++      {
++        "id": "f-es",
++        "registro_oficial_id": "boe-es",
++        "url": "https://www.boe.es/buscar/act.php?id=BOE-A-1889-4763"
++      }
++    ]
++  },
++  "schema_version": "1.0",
++  "source_state": "VERIFICADA",
++  "territories": [
++    "Espana",
++    "Mexico",
++    "Argentina",
++    "Peru"
++  ]
++}
+diff --git a/src/lib/psyche-contract/fixtures/unknown_version.json b/src/lib/psyche-contract/fixtures/unknown_version.json
+new file mode 100644
+index 0000000..7643226
+--- /dev/null
++++ b/src/lib/psyche-contract/fixtures/unknown_version.json
+@@ -0,0 +1,32 @@
++{
++  "art_eligibility": "ELEGIBLE",
++  "claim_state": "APTO_PARA_NARRATIVA",
++  "claims": [
++    {
++      "approved_claim_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
++      "claim_id": "c1",
++      "texto_exacto": "En el comodato se devuelve la misma cosa."
++    }
++  ],
++  "content_id": "LM-FIXTURE-006",
++  "emitted_at": "2026-08-31T00:00:00+00:00",
++  "jurisdiction_layer": "CAPA_A_TRANSVERSAL",
++  "legal_gate_state": "ABIERTO",
++  "provenance": {
++    "sources": [
++      {
++        "id": "f-es",
++        "registro_oficial_id": "boe-es",
++        "url": "https://www.boe.es/buscar/act.php?id=BOE-A-1889-4763"
++      }
++    ]
++  },
++  "schema_version": "99.0",
++  "source_state": "VERIFICADA",
++  "territories": [
++    "Espana",
++    "Mexico",
++    "Argentina",
++    "Peru"
++  ]
++}
+diff --git a/src/lib/psyche-contract/fixtures/unsupported_territory.json b/src/lib/psyche-contract/fixtures/unsupported_territory.json
+new file mode 100644
+index 0000000..9a771cd
+--- /dev/null
++++ b/src/lib/psyche-contract/fixtures/unsupported_territory.json
+@@ -0,0 +1,27 @@
++{
++  "art_eligibility": "NO_ELEGIBLE",
++  "claim_state": "REQUIERE_INVESTIGACION",
++  "claims": [
++    {
++      "approved_claim_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
++      "claim_id": "c1",
++      "texto_exacto": "En el comodato se devuelve la misma cosa."
++    }
++  ],
++  "content_id": "LM-FIXTURE-004",
++  "emitted_at": "2026-08-31T00:00:00+00:00",
++  "jurisdiction_layer": "CAPA_C_NACIONAL",
++  "legal_gate_state": "CERRADO",
++  "provenance": {
++    "sources": [
++      {
++        "id": "f-es",
++        "registro_oficial_id": "boe-es",
++        "url": "https://www.boe.es/buscar/act.php?id=BOE-A-1889-4763"
++      }
++    ]
++  },
++  "schema_version": "1.0",
++  "source_state": "VERIFICADA",
++  "territories": []
++}
+diff --git a/src/lib/psyche-contract/fixtures/valid_ready.json b/src/lib/psyche-contract/fixtures/valid_ready.json
+new file mode 100644
+index 0000000..ab50a78
+--- /dev/null
++++ b/src/lib/psyche-contract/fixtures/valid_ready.json
+@@ -0,0 +1,32 @@
++{
++  "art_eligibility": "ELEGIBLE",
++  "claim_state": "APTO_PARA_NARRATIVA",
++  "claims": [
++    {
++      "approved_claim_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
++      "claim_id": "c1",
++      "texto_exacto": "En el comodato se devuelve la misma cosa."
++    }
++  ],
++  "content_id": "LM-FIXTURE-001",
++  "emitted_at": "2026-08-31T00:00:00+00:00",
++  "jurisdiction_layer": "CAPA_A_TRANSVERSAL",
++  "legal_gate_state": "ABIERTO",
++  "provenance": {
++    "sources": [
++      {
++        "id": "f-es",
++        "registro_oficial_id": "boe-es",
++        "url": "https://www.boe.es/buscar/act.php?id=BOE-A-1889-4763"
++      }
++    ]
++  },
++  "schema_version": "1.0",
++  "source_state": "VERIFICADA",
++  "territories": [
++    "Espana",
++    "Mexico",
++    "Argentina",
++    "Peru"
++  ]
++}
+diff --git a/src/lib/psyche-contract/index.ts b/src/lib/psyche-contract/index.ts
+new file mode 100644
+index 0000000..7fd63da
+--- /dev/null
++++ b/src/lib/psyche-contract/index.ts
+@@ -0,0 +1,191 @@
++/**
++ * Consumidor estricto del Canonical Envelope de Psyche-creation.
++ *
++ * Psyche es la autoridad; este módulo la transporta sin recalcularla. Es la
++ * única frontera por la que el canon entra en la web: ningún componente debe
++ * parsear un envelope por su cuenta.
++ *
++ * Todo lo desconocido falla cerrado. No existe fallback optimista.
++ */
++
++/** Versiones que este consumidor sabe interpretar. Lista blanca, no rango. */
++export const SUPPORTED_SCHEMA_VERSIONS = ["1.0"] as const;
++
++export const CLAIM_STATES = [
++  "APTO_PARA_NARRATIVA",
++  "REQUIERE_INVESTIGACION",
++  "BLOQUEADO",
++  "PENDIENTE",
++] as const;
++export const SOURCE_STATES = ["VERIFICADA", "PENDIENTE", "INSUFICIENTE"] as const;
++export const LEGAL_GATE_STATES = ["ABIERTO", "CERRADO"] as const;
++export const JURISDICTION_LAYERS = [
++  "CAPA_A_TRANSVERSAL",
++  "CAPA_B_VARIABLE",
++  "CAPA_C_NACIONAL",
++  "NO_APLICA",
++] as const;
++export const ART_ELIGIBILITY = ["ELEGIBLE", "NO_ELEGIBLE"] as const;
++
++export type ClaimState = (typeof CLAIM_STATES)[number];
++export type SourceState = (typeof SOURCE_STATES)[number];
++export type LegalGateState = (typeof LEGAL_GATE_STATES)[number];
++export type JurisdictionLayer = (typeof JURISDICTION_LAYERS)[number];
++export type ArtEligibility = (typeof ART_ELIGIBILITY)[number];
++
++export type CanonicalClaimRef = {
++  readonly claimId: string;
++  readonly approvedClaimHash: string;
++  readonly textoExacto?: string;
++};
++
++/**
++ * Vista de solo lectura del canon. Todos los campos de autoridad llegan tal
++ * cual desde Psyche; ninguno se deriva aquí.
++ */
++export type CanonicalEnvelope = {
++  readonly schemaVersion: string;
++  readonly contentId: string;
++  readonly claimState: ClaimState;
++  readonly sourceState: SourceState;
++  readonly legalGateState: LegalGateState;
++  readonly jurisdictionLayer: JurisdictionLayer;
++  readonly territories: readonly string[];
++  readonly claims: readonly CanonicalClaimRef[];
++  readonly artEligibility: ArtEligibility;
++  readonly provenanceSourceIds: readonly string[];
++  readonly emittedAt: string;
++};
++
++export type ContractIssue = { readonly path: string; readonly message: string };
++export type ContractResult =
++  | { readonly ok: true; readonly envelope: CanonicalEnvelope; readonly issues: readonly [] }
++  | { readonly ok: false; readonly issues: readonly ContractIssue[] };
++
++const isRecord = (v: unknown): v is Record<string, unknown> =>
++  typeof v === "object" && v !== null && !Array.isArray(v);
++const nonEmpty = (v: unknown): v is string => typeof v === "string" && v.trim().length > 0;
++const issue = (path: string, message: string): ContractIssue => ({ path, message });
++const oneOf = <T extends readonly string[]>(list: T, v: unknown): v is T[number] =>
++  typeof v === "string" && (list as readonly string[]).includes(v);
++
++/**
++ * Punto de entrada del límite de confianza.
++ *
++ * Devuelve el envelope tipado o la lista de problemas. Nunca lanza, nunca
++ * devuelve algo a medias y nunca eleva autoridad.
++ */
++export function readCanonicalEnvelope(input: unknown): ContractResult {
++  if (!isRecord(input)) {
++    return { ok: false, issues: [issue("envelope", "ausente o con forma inválida")] };
++  }
++
++  // La versión se comprueba ANTES que nada: un envelope de versión desconocida
++  // no se inspecciona, porque no sabemos qué significan sus campos.
++  const version = input.schema_version;
++  if (!oneOf(SUPPORTED_SCHEMA_VERSIONS, version)) {
++    return {
++      ok: false,
++      issues: [
++        issue(
++          "envelope.schema_version",
++          `versión no soportada: ${JSON.stringify(version)}. Fail-closed: no se consume.`,
++        ),
++      ],
++    };
++  }
++
++  const issues: ContractIssue[] = [];
++  if (!nonEmpty(input.content_id)) issues.push(issue("envelope.content_id", "requerido"));
++
++  if (!oneOf(CLAIM_STATES, input.claim_state)) {
++    issues.push(issue("envelope.claim_state", "estado canónico desconocido"));
++  }
++  if (!oneOf(SOURCE_STATES, input.source_state)) {
++    issues.push(issue("envelope.source_state", "estado de fuente desconocido"));
++  }
++  if (!oneOf(LEGAL_GATE_STATES, input.legal_gate_state)) {
++    issues.push(issue("envelope.legal_gate_state", "estado de gate desconocido"));
++  }
++  if (!oneOf(JURISDICTION_LAYERS, input.jurisdiction_layer)) {
++    issues.push(issue("envelope.jurisdiction_layer", "capa jurisdiccional desconocida"));
++  }
++  if (!oneOf(ART_ELIGIBILITY, input.art_eligibility)) {
++    issues.push(issue("envelope.art_eligibility", "elegibilidad desconocida"));
++  }
++
++  // Procedencia: nunca se infiere como válida si falta.
++  const provenance = input.provenance;
++  const sources = isRecord(provenance) ? provenance.sources : undefined;
++  const sourceIds: string[] = [];
++  if (!Array.isArray(sources) || sources.length === 0) {
++    issues.push(
++      issue("envelope.provenance", "ausente o sin fuentes: no se infiere procedencia válida"),
++    );
++  } else {
++    sources.forEach((s: unknown, i: number) => {
++      if (!isRecord(s) || !nonEmpty(s.id)) {
++        issues.push(issue(`envelope.provenance.sources[${i}]`, "fuente sin id"));
++      } else {
++        sourceIds.push(s.id);
++      }
++    });
++  }
++
++  const rawClaims = input.claims;
++  const claims: CanonicalClaimRef[] = [];
++  if (!Array.isArray(rawClaims) || rawClaims.length === 0) {
++    issues.push(issue("envelope.claims", "el envelope no transporta claims"));
++  } else {
++    rawClaims.forEach((c: unknown, i: number) => {
++      if (!isRecord(c) || !nonEmpty(c.claim_id) || !nonEmpty(c.approved_claim_hash)) {
++        issues.push(
++          issue(`envelope.claims[${i}]`, "requiere claim_id y approved_claim_hash"),
++        );
++        return;
++      }
++      claims.push({
++        claimId: c.claim_id,
++        approvedClaimHash: c.approved_claim_hash,
++        textoExacto: nonEmpty(c.texto_exacto) ? c.texto_exacto : undefined,
++      });
++    });
++  }
++
++  // Incoherencias que delatan un intento de elevar autoridad aguas arriba.
++  if (input.legal_gate_state === "ABIERTO" && input.claim_state !== "APTO_PARA_NARRATIVA") {
++    issues.push(
++      issue("envelope", "incoherente: gate ABIERTO con claim que no es APTO_PARA_NARRATIVA"),
++    );
++  }
++  if (input.art_eligibility === "ELEGIBLE" && input.legal_gate_state !== "ABIERTO") {
++    issues.push(issue("envelope", "incoherente: elegible para arte con el gate cerrado"));
++  }
++  if (input.claim_state === "BLOQUEADO" && input.art_eligibility === "ELEGIBLE") {
++    issues.push(issue("envelope", "un claim BLOQUEADO no puede ser elegible para arte"));
++  }
++
++  if (issues.length > 0) return { ok: false, issues };
++
++  const territories = Array.isArray(input.territories)
++    ? input.territories.filter(nonEmpty)
++    : [];
++
++  return {
++    ok: true,
++    issues: [],
++    envelope: {
++      schemaVersion: version,
++      contentId: input.content_id as string,
++      claimState: input.claim_state as ClaimState,
++      sourceState: input.source_state as SourceState,
++      legalGateState: input.legal_gate_state as LegalGateState,
++      jurisdictionLayer: input.jurisdiction_layer as JurisdictionLayer,
++      territories,
++      claims,
++      artEligibility: input.art_eligibility as ArtEligibility,
++      provenanceSourceIds: sourceIds,
++      emittedAt: nonEmpty(input.emitted_at) ? input.emitted_at : "",
++    },
++  };
++}
+diff --git a/src/lib/psyche-contract/mapping.ts b/src/lib/psyche-contract/mapping.ts
+new file mode 100644
+index 0000000..15f3678
+--- /dev/null
++++ b/src/lib/psyche-contract/mapping.ts
+@@ -0,0 +1,150 @@
++/**
++ * Mapeo canon → tipos de presentación de la web.
++ *
++ * Aquí es donde la autoridad podría escaparse hacia arriba, así que la regla es
++ * explícita: `VisualOutputState` se DERIVA de los campos canónicos y jamás se
++ * acepta del exterior. La web no puede declarar `READY_FOR_VISUAL` por su cuenta;
++ * solo puede reconocerlo cuando Psyche ya lo dice.
++ */
++
++import type { VisualOutputState } from "../ecosystem-kernel";
++import type { CanonicalEnvelope } from "./index";
++
++/** Procedencia de cada valor que la web muestra. Nunca se presenta un snapshot como dato en vivo. */
++export const PROVENANCE_KINDS = [
++  "CANONICAL",
++  "DERIVED",
++  "SNAPSHOT",
++  "EXPERIMENTAL",
++  "UNKNOWN",
++  "NO_MEDIDO",
++] as const;
++export type ProvenanceKind = (typeof PROVENANCE_KINDS)[number];
++
++export type ProvenancedValue<T> = {
++  readonly value: T;
++  readonly provenance: ProvenanceKind;
++  readonly source: string;
++  readonly derivation?: string;
++  readonly observedAt?: string;
++  readonly owner?: string;
++  readonly freshness?: string;
++  readonly confidence?: "HIGH" | "MEDIUM" | "LOW" | "UNKNOWN";
++};
++
++/**
++ * Deriva el estado visual SOLO desde el canon.
++ *
++ * READY_FOR_VISUAL exige, todo a la vez y decidido aguas arriba: claim apto,
++ * fuente verificada, gate jurídico abierto y elegibilidad declarada. Si algo
++ * falta, el resultado es un estado de espera — nunca uno de avance.
++ */
++export function deriveVisualOutputState(envelope: CanonicalEnvelope): VisualOutputState {
++  if (envelope.claimState === "BLOQUEADO") return "NOT_PUBLISHED";
++  if (envelope.sourceState !== "VERIFICADA") return "HOLD_SOURCE";
++  if (envelope.claimState !== "APTO_PARA_NARRATIVA") return "DRAFT";
++  if (envelope.legalGateState !== "ABIERTO") return "DRAFT";
++  if (envelope.artEligibility !== "ELEGIBLE") return "DRAFT";
++  return "READY_FOR_VISUAL";
++}
++
++/** ¿Cubre el canon este territorio? La web no amplía cobertura territorial. */
++export function supportsTerritory(envelope: CanonicalEnvelope, territory: string): boolean {
++  if (envelope.jurisdictionLayer === "CAPA_A_TRANSVERSAL") return true;
++  return envelope.territories.includes(territory);
++}
++
++/** Vista lista para UI. Todo campo de autoridad viene etiquetado como CANONICAL. */
++export type CanonicalPresentation = {
++  readonly contentId: ProvenancedValue<string>;
++  readonly claimState: ProvenancedValue<string>;
++  readonly sourceState: ProvenancedValue<string>;
++  readonly legalGateState: ProvenancedValue<string>;
++  readonly jurisdictionLayer: ProvenancedValue<string>;
++  readonly territories: ProvenancedValue<readonly string[]>;
++  readonly visualOutputState: ProvenancedValue<VisualOutputState>;
++  readonly claimCount: ProvenancedValue<number>;
++  readonly sourceCount: ProvenancedValue<number>;
++};
++
++export function toPresentation(envelope: CanonicalEnvelope): CanonicalPresentation {
++  const canonical = <T>(value: T): ProvenancedValue<T> => ({
++    value,
++    provenance: "CANONICAL",
++    source: "psyche-creation:canonical-envelope",
++    observedAt: envelope.emittedAt,
++    owner: "psyche-creation",
++    confidence: "HIGH",
++  });
++
++  return {
++    contentId: canonical(envelope.contentId),
++    claimState: canonical(envelope.claimState),
++    sourceState: canonical(envelope.sourceState),
++    legalGateState: canonical(envelope.legalGateState),
++    jurisdictionLayer: canonical(envelope.jurisdictionLayer),
++    territories: canonical(envelope.territories),
++    visualOutputState: {
++      value: deriveVisualOutputState(envelope),
++      provenance: "DERIVED",
++      source: "psyche-creation:canonical-envelope",
++      derivation:
++        "deriveVisualOutputState(claimState, sourceState, legalGateState, artEligibility)",
++      observedAt: envelope.emittedAt,
++      owner: "legalmente-web",
++      confidence: "HIGH",
++    },
++    claimCount: {
++      value: envelope.claims.length,
++      provenance: "DERIVED",
++      source: "psyche-creation:canonical-envelope",
++      derivation: "envelope.claims.length",
++      observedAt: envelope.emittedAt,
++      owner: "legalmente-web",
++      confidence: "HIGH",
++    },
++    sourceCount: {
++      value: envelope.provenanceSourceIds.length,
++      provenance: "DERIVED",
++      source: "psyche-creation:canonical-envelope",
++      derivation: "envelope.provenance.sources.length",
++      observedAt: envelope.emittedAt,
++      owner: "legalmente-web",
++      confidence: "HIGH",
++    },
++  };
++}
++
++/**
++ * Marca un valor que proviene de un snapshot o de una fixture.
++ *
++ * Existe para que nada tomado de un fichero estático pueda presentarse como
++ * medición en vivo: quien lo use debe pasar cuándo se observó.
++ */
++export function asSnapshot<T>(
++  value: T,
++  source: string,
++  observedAt: string,
++  owner = "legalmente-web",
++): ProvenancedValue<T> {
++  return {
++    value,
++    provenance: "SNAPSHOT",
++    source,
++    observedAt,
++    owner,
++    freshness: `snapshot tomado en ${observedAt}; no es un dato en vivo`,
++    confidence: "MEDIUM",
++  };
++}
++
++/** Valor que nadie ha medido todavía. Preferible a inventar un cero. */
++export function notMeasured<T>(value: T, source: string): ProvenancedValue<T> {
++  return {
++    value,
++    provenance: "NO_MEDIDO",
++    source,
++    freshness: "sin medición",
++    confidence: "UNKNOWN",
++  };
++}
+-- 
+2.43.0
+
