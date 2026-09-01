@@ -394,7 +394,8 @@ def regenerate(previous_run, brief_revisado, policy, provider, procedencia, code
 
 
 # --- entrada canónica desde content/*.json -------------------------------
-def generate_visual_from_content_id(content_id, brief, policy, provider, **kwargs):
+def generate_visual_from_content_id(content_id, brief, policy, provider,
+                                     vinculo_visual="", **kwargs):
     """Ejecuta el pipeline a partir de un CONTENT_ID real.
 
     La función conecta resolver -> canonical -> generate_visual. Nunca infiere
@@ -402,9 +403,18 @@ def generate_visual_from_content_id(content_id, brief, policy, provider, **kwarg
     tal como están y el pipeline devuelve ``GATE_CERRADO`` si falta aprobación.
     El brief visual sigue siendo obligatorio porque la taxonomía editorial no
     debe inventar una dirección de arte.
+
+    ``vinculo_visual`` (opcional) es la metáfora de una transición de ruta
+    (``route_engine.RouteMatrixRow.vinculo_visual``): si se aporta y el brief
+    no trae ya una metáfora propia, se usa como ``brief.metaphor`` — el mismo
+    campo que ``compiler.py`` ya inserta literalmente en el prompt compilado
+    ("Metafora visual: ..."). No es contenido jurídico ni un dato que
+    requiera verificación: solo orienta la dirección de arte hacia el
+    vínculo editorial entre el nodo anterior y el actual.
     """
     import resolver as resolver_mod
     from canonical import build_visual_input
+    from dataclasses import replace as _replace
 
     resolution = resolver_mod.resolve(content_id)
     if not resolution.resolved:
@@ -414,6 +424,9 @@ def generate_visual_from_content_id(content_id, brief, policy, provider, **kwarg
     procedencia = resolution.artefacto["procedencia"]
     taxonomia = resolution.artefacto.get("taxonomia") or {}
 
+    if vinculo_visual and not getattr(brief, "metaphor", ""):
+        brief = _replace(brief, metaphor=str(vinculo_visual))
+
     params = dict(kwargs)
     params.setdefault("handoff", resolution.handoff)
     params.setdefault("claim_packet", resolution.packet)
@@ -422,3 +435,24 @@ def generate_visual_from_content_id(content_id, brief, policy, provider, **kwarg
     params.setdefault("content_type", visual_input.content_type)
     params.setdefault("taxonomia", taxonomia)
     return generate_visual(procedencia, brief, policy, provider, **params)
+
+
+def generate_visual_from_route_row(route_row, brief, policy, provider, **kwargs):
+    """Consume una fila producida por RouteEngine y conserva su vínculo visual.
+
+    ``route_row.content_id`` debe ser un CONTENT_ID real (el campo dedicado,
+    nunca ``route_row.fuente`` -- ``fuente`` es la referencia evidencial de
+    la pieza, un concepto distinto). La fila solo aporta la metáfora de
+    transición; la autoridad sigue resolviéndose desde el canon real vía
+    ``generate_visual_from_content_id``, que es quien evalúa el gate.
+    """
+    content_id = str(getattr(route_row, "content_id", "") or "").strip()
+    if not content_id:
+        raise ValueError(
+            "la fila de ruta no declara content_id: abre la ruta con "
+            "RouteEngine.leer_entrada_desde_artefacto() para tener un CONTENT_ID real."
+        )
+    return generate_visual_from_content_id(
+        content_id, brief, policy, provider,
+        vinculo_visual=getattr(route_row, "vinculo_visual", ""), **kwargs
+    )

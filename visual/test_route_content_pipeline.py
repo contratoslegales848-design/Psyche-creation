@@ -51,5 +51,31 @@ class TestRutaDesdeContenidoReal(unittest.TestCase):
         self.assertEqual(provider.llamadas, 0)
 
 
+class TestVinculoVisual(unittest.TestCase):
+    def test_fila_de_ruta_se_convierte_en_metafora_del_prompt(self):
+        artefacto = json.loads((REPO / "content" / "pieza-01-reales.json").read_text(encoding="utf-8"))
+        motor = route_engine.RouteEngine()
+        ruta_id = motor.leer_entrada_desde_artefacto(artefacto)
+        # civil -> CAUSA es la primera arista real del grafo para esta ruta.
+        fila = motor.producir_pieza(ruta_id, categoria_elegida=route_engine.CAT_CAUSA)
+        self.assertEqual(fila.content_id, "LM-PIEZA-01-REALES")
+        self.assertTrue(fila.vinculo_visual)
+
+        brief = replace(make_brief(), content_id="LM-PIEZA-01-REALES")
+        provider = FakeImageProvider()
+        run = pipeline.generate_visual_from_route_row(fila, brief, POLICY, provider, dry_run=True)
+        self.assertEqual(run.receipt.content_id, "LM-PIEZA-01-REALES")
+        self.assertIn(fila.vinculo_visual, run.compiled.positive_prompt)
+        self.assertEqual(provider.llamadas, 0)
+
+    def test_fila_sin_content_id_no_se_puede_producir(self):
+        motor = route_engine.RouteEngine()
+        ruta_id = motor.leer_entrada("entrada sin artefacto real", "Penal")
+        fila = motor.producir_pieza(ruta_id, categoria_elegida=route_engine.CAT_CAUSA)
+        self.assertEqual(fila.content_id, "")  # ruta manual: nunca se inventa un content_id
+        with self.assertRaises(ValueError):
+            pipeline.generate_visual_from_route_row(fila, make_brief(), POLICY, FakeImageProvider())
+
+
 if __name__ == "__main__":
     unittest.main()

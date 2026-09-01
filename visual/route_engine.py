@@ -22,7 +22,8 @@ pieza registra sus nodos usados y abre la siguiente conexion.
 Campos de la matriz (RouteMatrixRow), en el orden pedido: ID de ruta |
 content_id | nodo anterior | nodo actual | siguiente vinculo | materia |
 concepto | formato | estado | fuente | jurisdiccion | verificacion | pieza
-producida | proxima accion.
+producida | proxima accion | vinculo_visual (metafora de la transicion,
+consumida por pipeline.generate_visual_from_content_id via brief.metaphor).
 """
 
 import hashlib
@@ -56,6 +57,24 @@ GRAFO_CATEGORIAS = {
     CAT_PROCEDIMIENTO: [CAT_REPARACION],
     CAT_REPARACION: [CAT_PREVENCION],
     CAT_PREVENCION: [],  # hoja: el motor nunca reabre CAUSA en automatico (evita ciclo infinito)
+}
+
+# Cada transicion tiene una metafora visual ejecutable. Es vocabulario de
+# NAVEGACION -- expresa la relacion editorial entre nodos y alimenta
+# brief.metaphor (ver pipeline.generate_visual_from_content_id) -- nunca una
+# afirmacion juridica ni un dato que requiera verificacion.
+VINCULOS_VISUALES = {
+    (CAT_MATERIA, CAT_CAUSA): "una materia abstracta se concreta en una conducta observable",
+    (CAT_CAUSA, CAT_BIEN_JURIDICO): "la conducta revela el bien jurídico que está en juego",
+    (CAT_CAUSA, CAT_CONSECUENCIA): "una acción deja una huella visible en su consecuencia",
+    (CAT_BIEN_JURIDICO, CAT_CONSECUENCIA): "lo protegido se transforma en un efecto identificable",
+    (CAT_CONSECUENCIA, CAT_RESPONSABILIDAD): "el daño conecta físicamente con quien debe responder",
+    (CAT_RESPONSABILIDAD, CAT_PRUEBA): "la responsabilidad se sostiene en rastros verificables",
+    (CAT_RESPONSABILIDAD, CAT_DEFENSA): "la posición de una parte abre un espacio de defensa",
+    (CAT_PRUEBA, CAT_PROCEDIMIENTO): "los rastros se ordenan en una ruta de actuación",
+    (CAT_DEFENSA, CAT_PROCEDIMIENTO): "la defensa encuentra el cauce procedimental correspondiente",
+    (CAT_PROCEDIMIENTO, CAT_REPARACION): "el camino procesal desemboca en una forma de reparación",
+    (CAT_REPARACION, CAT_PREVENCION): "la reparación deja una barrera para evitar la repetición",
 }
 
 # Vocabulario por materia: etiqueta de NAVEGACION por defecto de cada
@@ -127,12 +146,14 @@ class PiezaEjecutivaBorrador:
     nota_jurisdiccional: str
     prompt_borrador: str
     estado_verificacion: str = "NO_VERIFICADO"
+    vinculo_visual: str = ""                  # metafora de la transicion anterior -> actual
 
     def to_dict(self):
         return asdict(self)
 
 
-def _producir_pieza_borrador(materia, categoria_actual, etiqueta_actual, etiqueta_anterior):
+def _producir_pieza_borrador(materia, categoria_anterior, categoria_actual, etiqueta_actual, etiqueta_anterior):
+    vinculo_visual = VINCULOS_VISUALES.get((categoria_anterior, categoria_actual), "") if categoria_anterior else ""
     if etiqueta_anterior:
         hook = f"¿Qué ocurre cuando {etiqueta_anterior.lower()} conecta con {etiqueta_actual.lower()} en materia {materia}?"
     else:
@@ -153,7 +174,9 @@ def _producir_pieza_borrador(materia, categoria_actual, etiqueta_actual, etiquet
         prompt_borrador=(
             f"[PENDIENTE legalmente-visual-system] Prompt visual para '{etiqueta_actual}' "
             f"({materia}) según política visual vigente y motor de rotación de estilos."
+            + (f" El vínculo debe hacerse visible: {vinculo_visual}." if vinculo_visual else "")
         ),
+        vinculo_visual=vinculo_visual,
     )
 
 
@@ -187,6 +210,7 @@ class RouteMatrixRow:
     verificacion: str = "NO_VERIFICADO"       # estado_verificacion de la pieza de ESTA fila
     pieza_producida: dict = None
     proxima_accion: str = "ABRIR_VINCULO"     # ABRIR_VINCULO | VERIFY_SOURCES | RUTA_COMPLETA
+    vinculo_visual: str = ""                  # metafora de la transicion nodo_anterior -> nodo_actual
 
     def to_dict(self):
         return asdict(self)
@@ -333,7 +357,9 @@ class RouteEngine:
 
         self._aristas_usadas.setdefault(ruta_id, set()).add((actual.nodo_actual, destino))
         etiqueta = _etiqueta_por_defecto(actual.materia, destino)
-        pieza = _producir_pieza_borrador(actual.materia, destino, etiqueta, actual.nodo_actual_label)
+        pieza = _producir_pieza_borrador(
+            actual.materia, actual.nodo_actual, destino, etiqueta, actual.nodo_actual_label
+        )
         siguiente = self._conexiones_no_explotadas(ruta_id, destino)
 
         fila = RouteMatrixRow(
@@ -356,6 +382,7 @@ class RouteEngine:
             verificacion=pieza.estado_verificacion,
             pieza_producida=pieza.to_dict(),
             proxima_accion="RUTA_COMPLETA" if not siguiente else "VERIFY_SOURCES",
+            vinculo_visual=pieza.vinculo_visual,
         )
         if actual.estado == "PENDIENTE":
             actual.estado = "PRODUCIDO"
