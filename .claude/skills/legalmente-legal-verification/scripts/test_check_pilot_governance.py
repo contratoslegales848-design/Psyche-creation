@@ -40,6 +40,7 @@ PILOT_PACKETS = [
     PILOT_DIR / "pieza-01-reales.json",
     PILOT_DIR / "pieza-02-laboral.json",
     PILOT_DIR / "pieza-03-honor.json",
+    PILOT_DIR / "pieza-04-laboral-basico.json",
 ]
 
 REVISOR_FICTICIO = tvcp.REVISOR_FICTICIO
