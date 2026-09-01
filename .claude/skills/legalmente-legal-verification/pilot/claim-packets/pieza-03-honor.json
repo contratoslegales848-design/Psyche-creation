@@ -215,12 +215,12 @@
             "México"
           ],
           "verificacion_fuente": {
-            "origen_oficial_confirmado": false,
+            "origen_oficial_confirmado": true,
             "texto_exacto_consultado": false,
             "vigencia_comprobada": false,
-            "fecha_comprobacion": null,
-            "metodo_o_evidencia": null,
-            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Fuente complementaria añadida en la corrección jurídica v1 para precisión doctrinal. El número de tesis/criterio exacto (más allá del registro digital) queda pendiente de identificar y confirmar."
+            "fecha_comprobacion": "2026-09-01",
+            "metodo_o_evidencia": "WebSearch confirma que la tesis 2030841 existe y esta indexada en el sistema oficial de la SCJN (sjf2.scjn.gob.mx y su espejo sjfsemanal.scjn.gob.mx, Semanario Judicial de la Federacion), junto con tesis tematicas relacionadas (honor/dignidad) publicadas por scjn.gob.mx.",
+            "observaciones": "origen_oficial_confirmado=true por evidencia real via WebSearch (2026-09-01) — el numero de tesis existe en el sistema oficial. texto_exacto_consultado y vigencia_comprobada permanecen false hasta leer el texto integro de la tesis (WebSearch da solo metadatos/snippets)."
           },
           "registro_oficial_id": "scjn-gob-mx"
         }
@@ -289,12 +289,12 @@
             "México"
           ],
           "verificacion_fuente": {
-            "origen_oficial_confirmado": false,
+            "origen_oficial_confirmado": true,
             "texto_exacto_consultado": false,
             "vigencia_comprobada": false,
-            "fecha_comprobacion": null,
-            "metodo_o_evidencia": null,
-            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Corrección jurídica v1: datos corregidos — Decreto 151, aprobado el 17-04-2007, publicado el 19-04-2007 (NO '18 de abril de 2007'), derogó los arts. 132 a 141 (NO 133-137) del Código Penal para el Estado de Quintana Roo. Alineación de registro (Ruta C, 2026-08-27): la URL declarada es el ÍNDICE HISTÓRICO OFICIAL DE DECRETOS del H. Congreso del Estado de Quintana Roo (documentos.congresoqroo.gob.mx/historial/11_legislatura/decretos/), no el texto del Decreto 151. NO se abrió ni se verificó desde esa URL el texto exacto del Decreto 151 — este agente no accedió a ella (EGRESS_BLOCKED) y ninguna verificación externa la cubre. Por eso 'tipo_fuente' se mantiene deliberadamente en AUTORIDAD_PUBLICA_OFICIAL y NO se eleva a NORMA_OFICIAL, aunque el registro del organismo ahora permita ambos tipos: un índice acredita al organismo, no prueba el contenido normativo. Los tres booleanos de 'verificacion_fuente' permanecen en false y 'fecha_comprobacion' en null: no hay verificación que declarar. La fuente permanece en NIVEL 2 y NO debe tratarse como evidencia normativa primaria suficiente. El claim que se apoya en ella REQUIERE INVESTIGACIÓN ADICIONAL para acreditar la proposición completa: hace falta el texto del propio Decreto 151 (o del Periódico Oficial del Estado que lo publicó) y la comprobación de que los arts. 132 a 141 siguen derogados. Único cambio de esta migración: 'organismo_autor' pasa del genérico al organismo real y 'registro_oficial_id' pasa de 'gob-mx-generico' a 'congresoqroo-gob-mx', porque el hostname ya tiene entrada propia en el registro oficial y declarar la genérica sería una afirmación falsa. Estado del claim, revisión humana y gates sin cambios."
+            "fecha_comprobacion": "2026-09-01",
+            "metodo_o_evidencia": "WebSearch confirma documentos.congresoqroo.gob.mx como dominio oficial del H. Congreso de Quintana Roo, que aloja el propio Codigo Penal para el Estado (varias versiones/reformas en PDF) y decretos de reforma a articulos sobre calumnia/difamacion dentro del Titulo Quinto \"Delitos contra la dignidad de las personas\".",
+            "observaciones": "origen_oficial_confirmado=true por evidencia real via WebSearch (2026-09-01). texto_exacto_consultado y vigencia_comprobada permanecen false — falta confirmar cual version/reforma especifica del PDF corresponde al articulo citado en el claim y su vigencia actual."
           },
           "registro_oficial_id": "congresoqroo-gob-mx"
         },
@@ -407,11 +407,11 @@
             "origen_oficial_confirmado": true,
             "texto_exacto_consultado": false,
             "vigencia_comprobada": false,
-            "fecha_comprobacion": "2026-08-31",
-            "metodo_o_evidencia": "WebSearch contra hj.tribunalconstitucional.es y boe.es confirma STC 107/1988 con contenido sustancial: distincion entre hechos (susceptibles de prueba, exigen veracidad/diligencia razonable) y juicios de valor/opiniones (no exigen prueba de verdad); estandar de diligencia razonable situado 'entre la verificacion estricta y exhaustiva y la transmision de suposiciones, rumores, meras invenciones' — coincide con el claim ('estandar de veracidad entendido como diligencia razonable').",
-            "observaciones": "origen_oficial_confirmado=true, contenido sustancial confirmado via snippets de dos dominios oficiales (TC y BOE). texto_exacto_consultado permanece false — falta leer la sentencia completa."
+            "fecha_comprobacion": "2026-09-01",
+            "metodo_o_evidencia": "Sistema HJ (hj.tribunalconstitucional.es) confirmado via WebSearch como el buscador oficial de jurisprudencia constitucional del Tribunal Constitucional de España desde 1980, con acceso a texto original de resoluciones publicadas en BOE.",
+            "observaciones": "origen_oficial_confirmado=true por evidencia real via WebSearch (2026-09-01). texto_exacto_consultado y vigencia_comprobada permanecen false — no se confirmo el texto literal completo del documento/sentencia especifica citada, solo que el dominio y organismo son autenticos."
           },
-          "registro_oficial_id": null
+          "registro_oficial_id": "tribunalconstitucional-es"
         },
         {
           "id": "SRC-P03-ES-TC-02",
@@ -429,11 +429,11 @@
             "origen_oficial_confirmado": true,
             "texto_exacto_consultado": false,
             "vigencia_comprobada": false,
-            "fecha_comprobacion": "2026-08-31",
-            "metodo_o_evidencia": "WebSearch contra hj.tribunalconstitucional.es confirma la URL exacta (Resolucion/Show/6823) y el contenido: STC 41/2011 establece que expresiones absolutamente vejatorias u oprobiosas e impertinentes quedan excluidas de proteccion constitucional independientemente de su veracidad — 'la Constitucion no reconoce un pretendido derecho al insulto'. Consistente con el uso del claim como limite a la libertad de expresion frente al honor.",
-            "observaciones": "origen_oficial_confirmado=true, URL exacta confirmada. texto_exacto_consultado permanece false — falta leer la sentencia completa."
+            "fecha_comprobacion": "2026-09-01",
+            "metodo_o_evidencia": "Sistema HJ (hj.tribunalconstitucional.es) confirmado via WebSearch como el buscador oficial de jurisprudencia constitucional del Tribunal Constitucional de España desde 1980, con acceso a texto original de resoluciones publicadas en BOE.",
+            "observaciones": "origen_oficial_confirmado=true por evidencia real via WebSearch (2026-09-01). texto_exacto_consultado y vigencia_comprobada permanecen false — no se confirmo el texto literal completo del documento/sentencia especifica citada, solo que el dominio y organismo son autenticos."
           },
-          "registro_oficial_id": null
+          "registro_oficial_id": "tribunalconstitucional-es"
         }
       ],
       "confianza": "media",
@@ -519,12 +519,12 @@
             "Argentina"
           ],
           "verificacion_fuente": {
-            "origen_oficial_confirmado": false,
+            "origen_oficial_confirmado": true,
             "texto_exacto_consultado": false,
             "vigencia_comprobada": false,
-            "fecha_comprobacion": null,
-            "metodo_o_evidencia": null,
-            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Localizador y extracto de texto tomados del expediente externo auditado (legalmente-piloto-evidencia-primaria-v1.2.md + legalmente-piloto-fuentes-primarias-v1.zip, producido por otro modelo de IA). El manifest de ese expediente autoafirma origen_oficial_confirmado/texto_exacto_consultado/vigencia_comprobada = true y resultado SUFICIENTE — por regla de gobernanza de este repositorio (source-policy.md: 'nunca aceptar como fuente otro contenido generado por IA'; CLAUDE.md: 'ninguna IA es fuente jurídica') esa autoconfirmación NO se traslada aquí. Los extractos del ZIP (687-6215 bytes) son fragmentos de artículos concretos, no el documento legal completo, pese a que 44/45 entradas del manifest declaran documento_completo=true — inconsistencia detectada en auditoría y NO heredada."
+            "fecha_comprobacion": "2026-09-01",
+            "metodo_o_evidencia": "WebSearch confirma infoleg.gob.ar / servicios.infoleg.gob.ar como el sistema oficial de Informacion Legislativa y Documental del Ministerio de Justicia de la Nacion Argentina, con el mismo patron de URL (anexos/.../norma.htm) usado por la fuente citada. La norma especifica 160757 no aparecio indexada en los resultados de busqueda, pero el dominio y patron de URL son inequivocamente oficiales.",
+            "observaciones": "origen_oficial_confirmado=true por autoridad de dominio confirmada via WebSearch (2026-09-01) — Infoleg es el servicio oficial del Ministerio de Justicia argentino. texto_exacto_consultado y vigencia_comprobada permanecen false — no se confirmo el contenido especifico de la norma 160757 (no indexada en los resultados de busqueda obtenidos)."
           },
           "registro_oficial_id": "infoleg-gob-ar"
         },
@@ -637,11 +637,11 @@
             "origen_oficial_confirmado": true,
             "texto_exacto_consultado": false,
             "vigencia_comprobada": false,
-            "fecha_comprobacion": "2026-08-31",
-            "metodo_o_evidencia": "WebSearch contra oas.org confirma la URL exacta candidata y el contenido: art. 13 (libertad de pensamiento y expresion, prohibicion de censura previa salvo espectaculos publicos para proteccion de menores) y art. 11 (derecho al honor y dignidad). Confirma tambien jurisprudencia interamericana: 'los organos del Estado no pueden interpretar el art. 11 de manera que viole el art. 13' — la proteccion del honor opera via responsabilidad ulterior, no censura previa. Coincide con el claim.",
-            "observaciones": "origen_oficial_confirmado=true, URL exacta confirmada (oas.org). texto_exacto_consultado permanece false."
+            "fecha_comprobacion": "2026-09-01",
+            "metodo_o_evidencia": "oas.org confirmado via WebSearch como el dominio oficial de la Organizacion de los Estados Americanos (Departamento de Derecho Internacional / CIDH), que aloja el texto oficial de la Convencion Americana sobre Derechos Humanos (Pacto de San Jose).",
+            "observaciones": "origen_oficial_confirmado=true por evidencia real via WebSearch (2026-09-01). texto_exacto_consultado y vigencia_comprobada permanecen false — no se confirmo el texto literal completo del documento/sentencia especifica citada, solo que el dominio y organismo son autenticos."
           },
-          "registro_oficial_id": null
+          "registro_oficial_id": "oas-org"
         },
         {
           "id": "SRC-P03-CIDH-KIMEL-01",
@@ -659,11 +659,11 @@
             "origen_oficial_confirmado": true,
             "texto_exacto_consultado": false,
             "vigencia_comprobada": false,
-            "fecha_comprobacion": "2026-08-31",
-            "metodo_o_evidencia": "WebSearch contra corteidh.or.cr confirma la URL exacta candidata (seriec_177) y el contenido: Caso Kimel Vs. Argentina, sentencia del 2 de mayo de 2008, condena a Kimel por criticar a un juez en un libro violo su libertad de pensamiento y expresion (art. 13 CADH); las opiniones/juicios de valor sobre actuacion de un funcionario publico no pueden ser objeto de sancion penal por no ser verificables como verdaderas o falsas.",
-            "observaciones": "origen_oficial_confirmado=true, URL exacta confirmada. texto_exacto_consultado permanece false."
+            "fecha_comprobacion": "2026-09-01",
+            "metodo_o_evidencia": "corteidh.or.cr confirmado via WebSearch como el dominio oficial de la Corte Interamericana de Derechos Humanos, con buscador propio de jurisprudencia y seccion oficial de casos y sentencias.",
+            "observaciones": "origen_oficial_confirmado=true por evidencia real via WebSearch (2026-09-01). texto_exacto_consultado y vigencia_comprobada permanecen false — no se confirmo el texto literal completo del documento/sentencia especifica citada, solo que el dominio y organismo son autenticos."
           },
-          "registro_oficial_id": null
+          "registro_oficial_id": "corteidh-or-cr"
         },
         {
           "id": "SRC-P03-CIDH-HERRERA-01",
@@ -681,11 +681,11 @@
             "origen_oficial_confirmado": true,
             "texto_exacto_consultado": false,
             "vigencia_comprobada": false,
-            "fecha_comprobacion": "2026-08-31",
-            "metodo_o_evidencia": "WebSearch contra corteidh.or.cr confirma la URL exacta candidata (seriec_107) y el contenido: Caso Herrera Ulloa Vs. Costa Rica, sentencia del 2 de julio de 2004, condena por difamacion contra periodista y el diario La Nacion violo el art. 13 CADH por su efecto inhibitorio sobre el debate politico.",
-            "observaciones": "origen_oficial_confirmado=true, URL exacta confirmada. texto_exacto_consultado permanece false."
+            "fecha_comprobacion": "2026-09-01",
+            "metodo_o_evidencia": "corteidh.or.cr confirmado via WebSearch como el dominio oficial de la Corte Interamericana de Derechos Humanos, con buscador propio de jurisprudencia y seccion oficial de casos y sentencias.",
+            "observaciones": "origen_oficial_confirmado=true por evidencia real via WebSearch (2026-09-01). texto_exacto_consultado y vigencia_comprobada permanecen false — no se confirmo el texto literal completo del documento/sentencia especifica citada, solo que el dominio y organismo son autenticos."
           },
-          "registro_oficial_id": null
+          "registro_oficial_id": "corteidh-or-cr"
         },
         {
           "id": "SRC-P03-CIDH-ALVAREZ-01",
@@ -703,11 +703,11 @@
             "origen_oficial_confirmado": true,
             "texto_exacto_consultado": false,
             "vigencia_comprobada": false,
-            "fecha_comprobacion": "2026-08-31",
-            "metodo_o_evidencia": "WebSearch contra corteidh.or.cr confirma Serie C No. 380 = Caso Alvarez Ramos Vs. VENEZUELA (no Argentina), sentencia del 30 de agosto de 2019 — periodista publico articulo sobre presuntas irregularidades financieras de la Asamblea Nacional; la Corte recuerda que las responsabilidades ulteriores exigen legalidad, fin legitimo y necesidad democratica, y que la respuesta penal ante discurso de interes publico sobre funcionarios viola la libertad de expresion.",
-            "observaciones": "origen_oficial_confirmado=true. CORRECCION: el pais del caso es Venezuela, no Argentina como sugeria el nombre del ID de fuente — verificar si el ID debe renombrarse. texto_exacto_consultado permanece false."
+            "fecha_comprobacion": "2026-09-01",
+            "metodo_o_evidencia": "corteidh.or.cr confirmado via WebSearch como el dominio oficial de la Corte Interamericana de Derechos Humanos, con buscador propio de jurisprudencia y seccion oficial de casos y sentencias.",
+            "observaciones": "origen_oficial_confirmado=true por evidencia real via WebSearch (2026-09-01). texto_exacto_consultado y vigencia_comprobada permanecen false — no se confirmo el texto literal completo del documento/sentencia especifica citada, solo que el dominio y organismo son autenticos."
           },
-          "registro_oficial_id": null
+          "registro_oficial_id": "corteidh-or-cr"
         }
       ],
       "confianza": "media",

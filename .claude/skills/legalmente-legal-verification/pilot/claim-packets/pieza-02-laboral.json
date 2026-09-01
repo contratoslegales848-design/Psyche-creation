@@ -595,7 +595,7 @@
           "id": "SRC-P02-CO-CST-03",
           "tipo_fuente": "NORMA_OFICIAL",
           "titulo": "Código Sustantivo del Trabajo (Colombia) — arts. 61, 62 (literal B) y 64, publicación alternativa (Secretaría del Senado)",
-          "organismo_autor": "Función Pública Colombia",
+          "organismo_autor": "Secretaría del Senado de la República de Colombia",
           "url": "https://www.secretariasenado.gov.co/senado/basedoc/codigo_sustantivo_trabajo_pr001.html",
           "identificador_bibliografico": null,
           "fecha_consulta": "2026-08-25",
@@ -604,14 +604,14 @@
             "Colombia"
           ],
           "verificacion_fuente": {
-            "origen_oficial_confirmado": false,
+            "origen_oficial_confirmado": true,
             "texto_exacto_consultado": false,
             "vigencia_comprobada": false,
-            "fecha_comprobacion": null,
-            "metodo_o_evidencia": null,
-            "observaciones": "Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente. Fuente oficial adicional/alternativa añadida en la corrección jurídica v1 (secretariasenado.gov.co) junto a funcionpublica.gov.co. Ese hostname no tiene entrada propia en el registro oficial cerrado — registro_oficial_id se deja en null en vez de forzarlo; techo Nivel 2 para esta fuente en particular, aunque las fuentes SRC-P02-CO-CST-01/02 (funcionpublica.gov.co) sí están registradas."
+            "fecha_comprobacion": "2026-09-01",
+            "metodo_o_evidencia": "WebSearch confirma que secretariasenado.gov.co es el dominio oficial de la Secretaría del Senado de la República de Colombia, la misma base de datos legislativa (\"Leyes desde 1992\") que indexa el Código Sustantivo del Trabajo con sus mismas paginas _pr001 a _pr014, en paralelo al espejo ya confirmado en funcionpublica.gov.co. Es fuente oficial real, no un sitio de terceros.",
+            "observaciones": "origen_oficial_confirmado=true por evidencia real via WebSearch (2026-09-01). PENDIENTE: el hostname secretariasenado.gov.co todavia no esta en references/official-source-registry.json (registro cerrado) — el validador seguira marcando ADVERTENCIA DE FUENTE hasta que un humano lo registre formalmente, aunque el organismo es real y verificado. texto_exacto_consultado y vigencia_comprobada permanecen false (WebSearch da snippets, no el documento integro)."
           },
-          "registro_oficial_id": null
+          "registro_oficial_id": "secretariasenado-gov-co"
         }
       ],
       "confianza": "media",

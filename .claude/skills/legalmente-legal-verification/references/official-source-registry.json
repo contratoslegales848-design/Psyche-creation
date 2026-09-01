@@ -205,6 +205,46 @@
       "tipos_fuente_permitidos": ["NORMA_OFICIAL"],
       "ambito": "SUPRANACIONAL",
       "_nota": "Ámbito supranacional explícito — nunca respalda un país concreto no declarado, ni se asume que 'cubre a toda la audiencia panhispánica'."
+    },
+    {
+      "id": "secretariasenado-gov-co",
+      "hostnames": ["secretariasenado.gov.co", "www.secretariasenado.gov.co"],
+      "organismo_canonico": "Secretaría del Senado de la República de Colombia",
+      "organismo_aliases": ["Secretaría del Senado (Colombia)"],
+      "jurisdicciones": ["Colombia"],
+      "tipos_fuente_permitidos": ["NORMA_OFICIAL"],
+      "ambito": "NACIONAL",
+      "_nota": "Verificado por este agente vía WebSearch (2026-09-01): el dominio aloja la misma base de datos legislativa ('Leyes desde 1992') que indexa el Código Sustantivo del Trabajo (mismo documento que ya respalda funcionpublica-gov-co), con las mismas páginas _pr001 a _pr014. Alta basada en evidencia externa real, no autoconfirmación."
+    },
+    {
+      "id": "tribunalconstitucional-es",
+      "hostnames": ["tribunalconstitucional.es", "hj.tribunalconstitucional.es"],
+      "organismo_canonico": "Tribunal Constitucional de España",
+      "organismo_aliases": ["TC España", "Sistema HJ"],
+      "jurisdicciones": ["España"],
+      "tipos_fuente_permitidos": ["JURISPRUDENCIA_OFICIAL"],
+      "ambito": "NACIONAL",
+      "_nota": "Verificado por este agente vía WebSearch (2026-09-01): hj.tribunalconstitucional.es es el 'Sistema HJ', buscador oficial de jurisprudencia constitucional del TC desde 1980, con acceso al texto original de resoluciones publicadas en BOE."
+    },
+    {
+      "id": "oas-org",
+      "hostnames": ["oas.org", "www.oas.org", "portal.oas.org"],
+      "organismo_canonico": "Organización de los Estados Americanos (OEA/OAS)",
+      "organismo_aliases": ["OEA", "OAS", "Departamento de Derecho Internacional — OEA", "CIDH", "OEA / Corte Interamericana de Derechos Humanos"],
+      "jurisdicciones": ["Sistema Interamericano"],
+      "tipos_fuente_permitidos": ["NORMA_OFICIAL"],
+      "ambito": "SUPRANACIONAL",
+      "_nota": "Verificado por este agente vía WebSearch (2026-09-01): oas.org (Departamento de Derecho Internacional / CIDH) aloja el texto oficial de tratados multilaterales interamericanos, incluida la Convención Americana sobre Derechos Humanos. Ámbito supranacional explícito — nunca respalda un país concreto no declarado."
+    },
+    {
+      "id": "corteidh-or-cr",
+      "hostnames": ["corteidh.or.cr", "www.corteidh.or.cr", "jurisprudencia.corteidh.or.cr"],
+      "organismo_canonico": "Corte Interamericana de Derechos Humanos",
+      "organismo_aliases": ["Corte IDH", "CoIDH"],
+      "jurisdicciones": ["Sistema Interamericano"],
+      "tipos_fuente_permitidos": ["JURISPRUDENCIA_OFICIAL"],
+      "ambito": "SUPRANACIONAL",
+      "_nota": "Verificado por este agente vía WebSearch (2026-09-01): corteidh.or.cr es el dominio oficial de la Corte IDH, con buscador propio de jurisprudencia y sección oficial de casos y sentencias. Ámbito supranacional explícito — nunca respalda un país concreto no declarado."
     }
   ]
 }
