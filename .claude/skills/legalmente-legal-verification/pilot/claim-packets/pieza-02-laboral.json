@@ -276,12 +276,12 @@
         {
           "id": "SRC-P02-ES-ET-01",
           "tipo_fuente": "NORMA_OFICIAL",
-          "titulo": "Estatuto de los Trabajadores (España, RDL 2/2015) — arts. 49.1.d, 50 (dimisión y extinción por causa del empresario)",
+          "titulo": "Estatuto de los Trabajadores (España, RDL 2/2015) — arts. 49.1.j, 50 (dimisión y extinción por causa del empresario)",
           "organismo_autor": "Agencia Estatal BOE",
           "url": "https://www.boe.es/buscar/pdf/2015/BOE-A-2015-11430-consolidado.pdf",
           "identificador_bibliografico": null,
           "fecha_consulta": "2026-08-25",
-          "localizador": "arts. 49.1.d y 50",
+          "localizador": "arts. 49.1.j y 50",
           "jurisdicciones_cubiertas": [
             "España"
           ],
@@ -289,53 +289,31 @@
             "origen_oficial_confirmado": true,
             "texto_exacto_consultado": false,
             "vigencia_comprobada": false,
-            "fecha_comprobacion": "2026-08-31",
-            "metodo_o_evidencia": "WebSearch contra boe.es confirma el art. 50 ET (lista abierta/numerus apertus de incumplimientos graves del empresario que justifican extincion indemnizada por voluntad del trabajador: impago o retrasos continuados en el pago del salario, entre otros) y que los efectos exigen declaracion judicial previa de la gravedad. DISCREPANCIA DETECTADA: el claim cita 'art. 49.1.d', pero la evidencia real apunta a que es el art. 49.1.j) ET el que remite al art. 50.1 para la extincion por voluntad del trabajador — requiere confirmacion adicional antes de dar el localizador del claim por bueno.",
-            "observaciones": "origen_oficial_confirmado=true (boe.es) para el art. 50. El localizador '49.1.d' del claim puede ser incorrecto (evidencia sugiere 49.1.j) — NO corregido automaticamente aqui, queda como discrepancia a resolver por quien verifique con el texto completo."
+            "fecha_comprobacion": "2026-09-01",
+            "metodo_o_evidencia": "WebSearch de seguimiento (2026-09-01, query dirigida al propio 49.1.j) confirma de forma convergente en múltiples fuentes jurídicas secundarias independientes (Iberley, vLex, elDerecho, Legálitas, gobiernodecanarias.org, supercontable.com) que el art. 49.1.j) ET —no el 49.1.d)— es el que dispone la extinción 'por voluntad del trabajador, fundada en un incumplimiento contractual del empresario', y que remite su desarrollo al art. 50 ET. El art. 49.1.d) regula un supuesto distinto (mutuo acuerdo/causas consignadas en el contrato). La discrepancia detectada en la ronda anterior queda resuelta con evidencia convergente, aunque sigue siendo evidencia secundaria (no el texto oficial completo del BOE leído directamente).",
+            "observaciones": "origen_oficial_confirmado=true (boe.es) para el art. 50, ya confirmado en la ronda anterior. Localizador corregido de '49.1.d' a '49.1.j' — la discrepancia señalada el 2026-08-31 queda resuelta por convergencia de fuentes secundarias independientes, no por lectura directa del BOE (que sigue EGRESS_BLOCKED). texto_exacto_consultado permanece false: sigue haciendo falta leer el texto oficial completo antes de Nivel 1."
           },
           "registro_oficial_id": "boe-es"
         },
         {
-          "id": "SRC-P02-ES-JUR-01",
+          "id": "SRC-P02-ES-JUR-03",
           "tipo_fuente": "JURISPRUDENCIA_OFICIAL",
-          "titulo": "STS 3504/2011, 20 de julio de 2012 (ECLI:ES:TS:2012:6137) — excepciones al mantenimiento en el puesto bajo Art. 50 ET",
-          "organismo_autor": "Poder Judicial de España",
-          "url": "https://www.poderjudicial.es/search/openDocument/f8c0da1866ba8219/20120925",
+          "titulo": "STS 6207/2012 (ECLI:ES:TS:2012:6207) — el trabajador conserva el derecho a indemnización si deja de acudir al trabajo por incumplimiento empresarial grave; doctrina análoga al art. 1.124 del Código Civil",
+          "organismo_autor": "Consejo General del Poder Judicial",
+          "url": "https://www.poderjudicial.es/cgpj/es/Poder_Judicial/Noticias_Judiciales/El_Tribunal_Supremo_falla_que_el_trabajador_conserva_derecho_a_la_indemnizacion_si_deja_de_acudir_al_trabajo_por_incumplimiento_empresarial_grave",
           "identificador_bibliografico": null,
-          "fecha_consulta": "2026-08-25",
-          "localizador": "STS 3504/2011, ECLI:ES:TS:2012:6137",
+          "fecha_consulta": "2026-09-01",
+          "localizador": "STS 6207/2012 (ROJ), ECLI:ES:TS:2012:6207",
           "jurisdicciones_cubiertas": [
             "España"
           ],
           "verificacion_fuente": {
-            "origen_oficial_confirmado": false,
+            "origen_oficial_confirmado": true,
             "texto_exacto_consultado": false,
             "vigencia_comprobada": false,
-            "fecha_comprobacion": "2026-08-31",
-            "metodo_o_evidencia": "WebSearch contra poderjudicial.es no logro localizar directamente la sentencia con ECLI:ES:TS:2012:6137 sobre despido indirecto. Los resultados devolvieron jurisprudencia relacionada (extincion de contrato, despido) pero no la sentencia especifica citada.",
-            "observaciones": "NO VERIFICADA. Junto con SRC-P02-ES-JUR-02 (tambien no verificada, con inconsistencia interna detectada), ambas jurisprudencias espanolas de PIEZA-02 requieren identificacion/confirmacion humana directa antes de darse por buenas — no se fuerza ninguna coincidencia. PISTA 2026-09-01 (no confirmada, no aplicada): WebSearch encontro una noticia oficial en poderjudicial.es (Sala de Prensa CGPJ) titulada 'El Tribunal Supremo falla que el trabajador conserva derecho a la indemnizacion si deja de acudir al trabajo por incumplimiento empresarial grave', citando STS 6207/2012 sobre exactamente el mismo tema (Art. 50 ET) que este claim. No se confirmo su ECLI ni se leyo el texto integro — podria ser la sentencia correcta en lugar de STS 3504/2011, pero esto requiere confirmacion humana directa antes de sustituir la cita; no se fuerza el cambio."
-          },
-          "registro_oficial_id": "poderjudicial-es"
-        },
-        {
-          "id": "SRC-P02-ES-JUR-02",
-          "tipo_fuente": "JURISPRUDENCIA_OFICIAL",
-          "titulo": "STS 2486/2018, 28 de octubre de 2020 (ECLI:ES:TS:2020:3698) — reitera excepciones al mantenimiento en el puesto",
-          "organismo_autor": "Poder Judicial de España",
-          "url": "https://www.poderjudicial.es/search/openDocument/37c541c888d3f668/20201117",
-          "identificador_bibliografico": null,
-          "fecha_consulta": "2026-08-25",
-          "localizador": "STS 2486/2018, ECLI:ES:TS:2020:3698",
-          "jurisdicciones_cubiertas": [
-            "España"
-          ],
-          "verificacion_fuente": {
-            "origen_oficial_confirmado": false,
-            "texto_exacto_consultado": false,
-            "vigencia_comprobada": false,
-            "fecha_comprobacion": "2026-08-31",
-            "metodo_o_evidencia": "WebSearch contra poderjudicial.es NO logro localizar una sentencia STS 2486/2018 de la Sala de lo Social sobre despido indirecto/incumplimiento del empresario. La unica coincidencia real del numero '2486/2018' encontrada es una sentencia de la Sala de lo CIVIL sobre nulidad de clausula suelo (materia hipotecaria, sin relacion con el claim). DISCREPANCIA REAL: el ECLI/numero de sentencia citado en el claim (STS 2486/2018, ECLI:ES:TS:2020:3698) puede estar mal identificado — el ECLI referencia el ano 2020, no 2018, lo que ya es inconsistente en el propio dato original.",
-            "observaciones": "NO VERIFICADA. Discrepancia real detectada, no forzada a coincidir: el numero de sentencia y el ECLI del claim son internamente inconsistentes (2018 vs 2020) y la busqueda no encontro una sentencia laboral con ese numero. Requiere que un humano identifique la sentencia correcta o retire esta fuente del claim."
+            "fecha_comprobacion": "2026-09-01",
+            "metodo_o_evidencia": "WebSearch (2026-09-01) confirma, cruzando la nota de prensa oficial del CGPJ en poderjudicial.es con fuentes secundarias independientes (vLex, iberley, laboral-social.com), que STS 6207/2012 (ECLI:ES:TS:2012:6207, Sala de lo Social) resolvió exactamente el supuesto de este claim: un trabajador a quien la empresa pagaba el salario con retrasos reiterados, que comunicó en conciliación que dejaría de acudir al trabajo si no se le pagaba en 8 días, y a quien el Supremo reconoció el derecho a la indemnización — aplicando a los arts. 49.1.j/50 ET una función 'análoga' al art. 1.124 del Código Civil sobre incumplimiento de obligaciones recíprocas. Esta era la 'pista' señalada sin confirmar en la ronda anterior (2026-09-01): queda confirmada por evidencia convergente y sustituye a las dos fuentes anteriores (SRC-P02-ES-JUR-01, SRC-P02-ES-JUR-02), que citaban un ECLI/número de sentencia que la búsqueda no pudo localizar y que tenían una inconsistencia interna de fecha (2018 vs 2020).",
+            "observaciones": "origen_oficial_confirmado=true por evidencia real vía WebSearch contra el propio dominio poderjudicial.es (nota de prensa del CGPJ, no la resolución judicial íntegra). texto_exacto_consultado y vigencia_comprobada permanecen false: la URL declarada es la nota de prensa oficial que identifica la sentencia, no el documento judicial completo (WebFetch sigue EGRESS_BLOCKED hacia poderjudicial.es) — no se pudo leer el texto íntegro de la resolución ni confirmar de forma independiente que siga vigente (no derogada ni matizada por doctrina posterior)."
           },
           "registro_oficial_id": "poderjudicial-es"
         }
@@ -372,7 +350,7 @@
         "nuevo_claim_id": null
       },
       "redaccion_prohibida": "En España el trabajador debe quedarse obligatoriamente en la empresa hasta la sentencia del Art. 50 ET.",
-      "notas": "REQUIERE_INVESTIGACION. Corrección jurídica v1: se matiza que el cese anticipado depende de circunstancias excepcionales desarrolladas jurisprudencialmente — no se formula como autorización general, y tampoco se afirma lo contrario (que el trabajador siempre puede abandonar el puesto antes de la sentencia). CENDOJ activó un control CAPTCHA durante la revisión independiente que impidió confirmar el texto íntegro de ambas sentencias — permanecen como jurisprudencia pendiente de lectura y confirmación independiente, sin ningún booleano de verificacion_fuente en true. Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente."
+      "notas": "REQUIERE_INVESTIGACION. Corrección jurídica v2 (2026-09-01): se corrige el localizador de la fuente normativa de '49.1.d' a '49.1.j' (art. 49.1.d regula un supuesto distinto — mutuo acuerdo/causas consignadas en contrato — no la extinción por incumplimiento del empresario), resolviendo la discrepancia señalada en la corrección v1. Se retiran SRC-P02-ES-JUR-01 y SRC-P02-ES-JUR-02 (ECLI/número de sentencia no localizables, con inconsistencia interna de fecha) y se sustituyen por SRC-P02-ES-JUR-03 (STS 6207/2012, ECLI:ES:TS:2012:6207), la 'pista' de la corrección v1 ahora confirmada por evidencia convergente — sigue sin alcanzar Nivel 1 porque la URL disponible es la nota de prensa oficial del CGPJ, no el texto íntegro de la resolución (WebFetch sigue EGRESS_BLOCKED hacia poderjudicial.es en esta sesión). El estado del claim permanece REQUIERE_INVESTIGACION: la corrección mejora la precisión de las fuentes, no basta por sí sola para APTO_CON_MATICES ni APTO_PARA_NARRATIVA. Historial v1: se matiza que el cese anticipado depende de circunstancias excepcionales desarrolladas jurisprudencialmente. CENDOJ activó un control CAPTCHA durante una revisión independiente anterior. Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión (2026-09-01) contra boe.es, diputados.gob.mx, argentina.gob.ar, funcionpublica.gov.co, secretariasenado.gov.co y poderjudicial.es — igual que en sesiones anteriores contra 7 dominios oficiales representativos. No se pudo confirmar texto exacto ni vigencia de forma independiente para ninguna fuente oficial en esta ronda."
     },
     {
       "claim_id": "pieza-02-claim-5",
@@ -692,12 +670,12 @@
         {
           "id": "SRC-P02-ES-ET-01",
           "tipo_fuente": "NORMA_OFICIAL",
-          "titulo": "Estatuto de los Trabajadores (España, RDL 2/2015) — arts. 49.1.d, 50 (dimisión y extinción por causa del empresario)",
+          "titulo": "Estatuto de los Trabajadores (España, RDL 2/2015) — arts. 49.1.j, 50 (dimisión y extinción por causa del empresario)",
           "organismo_autor": "Agencia Estatal BOE",
           "url": "https://www.boe.es/buscar/pdf/2015/BOE-A-2015-11430-consolidado.pdf",
           "identificador_bibliografico": null,
           "fecha_consulta": "2026-08-25",
-          "localizador": "arts. 49.1.d y 50",
+          "localizador": "arts. 49.1.j y 50",
           "jurisdicciones_cubiertas": [
             "España"
           ],
@@ -705,9 +683,9 @@
             "origen_oficial_confirmado": true,
             "texto_exacto_consultado": false,
             "vigencia_comprobada": false,
-            "fecha_comprobacion": "2026-08-31",
-            "metodo_o_evidencia": "WebSearch contra boe.es confirma el art. 50 ET (lista abierta/numerus apertus de incumplimientos graves del empresario que justifican extincion indemnizada por voluntad del trabajador: impago o retrasos continuados en el pago del salario, entre otros) y que los efectos exigen declaracion judicial previa de la gravedad. DISCREPANCIA DETECTADA: el claim cita 'art. 49.1.d', pero la evidencia real apunta a que es el art. 49.1.j) ET el que remite al art. 50.1 para la extincion por voluntad del trabajador — requiere confirmacion adicional antes de dar el localizador del claim por bueno.",
-            "observaciones": "origen_oficial_confirmado=true (boe.es) para el art. 50. El localizador '49.1.d' del claim puede ser incorrecto (evidencia sugiere 49.1.j) — NO corregido automaticamente aqui, queda como discrepancia a resolver por quien verifique con el texto completo."
+            "fecha_comprobacion": "2026-09-01",
+            "metodo_o_evidencia": "WebSearch de seguimiento (2026-09-01) confirma de forma convergente en múltiples fuentes secundarias independientes que el art. 49.1.j) ET —no el 49.1.d)— dispone la extinción por voluntad del trabajador fundada en incumplimiento del empresario, desarrollada en el art. 50 ET. Ver detalle completo en la fuente equivalente del claim pieza-02-claim-4 (mismo hallazgo, misma corrección).",
+            "observaciones": "Localizador corregido de '49.1.d' a '49.1.j', igual que en pieza-02-claim-4. texto_exacto_consultado permanece false."
           },
           "registro_oficial_id": "boe-es"
         },
@@ -788,7 +766,7 @@
         "nuevo_claim_id": null
       },
       "redaccion_prohibida": null,
-      "notas": "REQUIERE_INVESTIGACION — comparación de 4 países, techo = el país más débil (ninguno verificado todavía). Corrección jurídica v1: formulación reconstruida para no presentar como reglas universales y cerradas la sentencia previa obligatoria en España, la intimación telegráfica previa obligatoria en Argentina, la carta de renuncia obligatoria en Colombia, ni un procedimiento equivalente entre los cuatro países — cada uno depende de su propio marco normativo y jurisprudencial, aún pendiente de verificación independiente. URL de Argentina actualizada a argentina.gob.ar, consistente con el claim 5. Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente."
+      "notas": "REQUIERE_INVESTIGACION — comparación de 4 países, techo = el país más débil (ninguno verificado todavía). Corrección jurídica v2 (2026-09-01): se corrige el localizador de la fuente española de '49.1.d' a '49.1.j', igual que en pieza-02-claim-4 (misma discrepancia, mismo hallazgo). Corrección jurídica v1: formulación reconstruida para no presentar como reglas universales y cerradas la sentencia previa obligatoria en España, la intimación telegráfica previa obligatoria en Argentina, la carta de renuncia obligatoria en Colombia, ni un procedimiento equivalente entre los cuatro países — cada uno depende de su propio marco normativo y jurisprudencial, aún pendiente de verificación independiente. URL de Argentina actualizada a argentina.gob.ar, consistente con el claim 5. Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión (2026-09-01) contra boe.es, diputados.gob.mx, argentina.gob.ar, funcionpublica.gov.co y poderjudicial.es, igual que en sesiones anteriores. No se pudo confirmar texto exacto ni vigencia de forma independiente para ninguna fuente oficial en esta ronda."
     }
   ],
   "estado_agregado": "REQUIERE_INVESTIGACION",
