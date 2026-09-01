@@ -18,6 +18,11 @@ estado_verificacion="NO_VERIFICADO" y su proxima_accion apunta a
 
 Regla central: toda entrada genera una ruta; toda ruta genera piezas; toda
 pieza registra sus nodos usados y abre la siguiente conexion.
+
+Campos de la matriz (RouteMatrixRow), en el orden pedido: ID de ruta |
+content_id | nodo anterior | nodo actual | siguiente vinculo | materia |
+concepto | formato | estado | fuente | jurisdiccion | verificacion | pieza
+producida | proxima accion.
 """
 
 import hashlib
@@ -155,9 +160,16 @@ def _producir_pieza_borrador(materia, categoria_actual, etiqueta_actual, etiquet
 @dataclass
 class RouteMatrixRow:
     """Una fila real de la matriz de rutas. Los campos siguen el orden
-    pedido: ID de ruta | nodo actual | nodo anterior | siguiente vínculo |
-    materia | formato | estado | fuente | jurisdicción | pieza producida |
-    próxima acción."""
+    pedido: ID de ruta | content_id | nodo anterior | nodo actual |
+    siguiente vínculo | materia | concepto | formato | estado | fuente |
+    jurisdicción | verificación | pieza producida | próxima acción.
+
+    `content_id` y `concepto` solo se llenan cuando la ruta se abrio desde
+    un artefacto real (`leer_entrada_desde_artefacto`); una ruta manual los
+    deja vacios en vez de inventarlos. `fuente` es la referencia evidencial
+    (p.ej. una cita cuando exista); `verificacion` es el estado de
+    verificacion juridica de la PIEZA de esta fila -- son dos cosas
+    distintas y nunca deben compartir un solo campo."""
 
     ruta_id: str
     nodo_actual: str                          # categoria, p.ej. "CAUSA"
@@ -166,10 +178,13 @@ class RouteMatrixRow:
     nodo_anterior_label: str = ""
     siguiente_vinculo: list = field(default_factory=list)   # categorias candidatas no explotadas
     materia: str = ""
+    concepto: str = ""                        # taxonomia.concepto del artefacto real, nunca inventado
+    content_id: str = ""                      # content_id real del artefacto de origen, si lo hay
     formato: str = "NO_ASIGNADO"
     estado: str = "PENDIENTE"                 # PENDIENTE | PRODUCIDO | RUTA_COMPLETA
-    fuente: str = "NO_VERIFICADO"
+    fuente: str = ""                          # referencia evidencial (cita), vacia si no hay ninguna aun
     jurisdiccion: str = "PANHISPANICO_COMPARADO"
+    verificacion: str = "NO_VERIFICADO"       # estado_verificacion de la pieza de ESTA fila
     pieza_producida: dict = None
     proxima_accion: str = "ABRIR_VINCULO"     # ABRIR_VINCULO | VERIFY_SOURCES | RUTA_COMPLETA
 
@@ -329,8 +344,16 @@ class RouteEngine:
             nodo_anterior_label=actual.nodo_actual_label,
             siguiente_vinculo=siguiente,
             materia=actual.materia,
+            # continuidad real: content_id/concepto/jurisdiccion vienen del
+            # artefacto que abrio la ruta y deben sobrevivir cada nodo, no
+            # solo el primero -- perderlos aqui seria perder el contexto que
+            # justifico abrir la ruta.
+            concepto=actual.concepto,
+            content_id=actual.content_id,
+            jurisdiccion=actual.jurisdiccion,
             formato=formato,
             estado="PRODUCIDO",
+            verificacion=pieza.estado_verificacion,
             pieza_producida=pieza.to_dict(),
             proxima_accion="RUTA_COMPLETA" if not siguiente else "VERIFY_SOURCES",
         )
@@ -371,13 +394,17 @@ class RouteEngine:
         Solo extrae identidad editorial y taxonomía declaradas en el
         artefacto; no inventa materia, conceptos ni autoridad jurídica. La
         ruta sigue siendo una estructura de navegación y sus piezas
-        permanecen sin verificar."""
+        permanecen sin verificar. `content_id` y `concepto` quedan
+        registrados en CADA fila (incluidas las que se produzcan despues,
+        via `producir_pieza`, que los propaga) -- nunca solo en la
+        primera."""
         if not isinstance(artefacto, dict):
             raise ValueError("artefacto de contenido ausente o invalido.")
         proc = artefacto.get("procedencia") or {}
         tax = artefacto.get("taxonomia") or {}
         content_id = str(proc.get("content_id") or artefacto.get("id") or "").strip()
         materia = str(tax.get("materia") or "").strip()
+        concepto = str(tax.get("concepto") or "").strip()
         entrada = str(artefacto.get("titulo") or artefacto.get("frase") or "").strip()
         if not content_id:
             raise ValueError("artefacto sin procedencia.content_id ni id.")
@@ -387,7 +414,8 @@ class RouteEngine:
             raise ValueError(f"artefacto {content_id!r} sin titulo ni frase.")
         ruta_id = self.leer_entrada(entrada, materia)
         for fila in self.filas_de(ruta_id):
-            fila.fuente = content_id
+            fila.content_id = content_id
+            fila.concepto = concepto
         return ruta_id
 
 

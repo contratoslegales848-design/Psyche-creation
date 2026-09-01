@@ -65,9 +65,9 @@ class TestRutaPenalDeAceptacion(unittest.TestCase):
     def test_matriz_tiene_los_campos_pedidos(self):
         fila = self.filas[1].to_dict()
         for campo in [
-            "ruta_id", "nodo_actual", "nodo_anterior", "siguiente_vinculo",
-            "materia", "formato", "estado", "fuente", "jurisdiccion",
-            "pieza_producida", "proxima_accion",
+            "ruta_id", "content_id", "nodo_anterior", "nodo_actual", "siguiente_vinculo",
+            "materia", "concepto", "formato", "estado", "fuente", "jurisdiccion",
+            "verificacion", "pieza_producida", "proxima_accion",
         ]:
             self.assertIn(campo, fila)
 

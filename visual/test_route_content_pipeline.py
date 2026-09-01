@@ -25,8 +25,17 @@ class TestRutaDesdeContenidoReal(unittest.TestCase):
         ruta_id = motor.leer_entrada_desde_artefacto(artefacto)
         fila = motor.ultima_fila(ruta_id)
         self.assertEqual(fila.materia, "civil")
-        self.assertEqual(fila.fuente, "LM-PIEZA-01-REALES")
+        self.assertEqual(fila.content_id, "LM-PIEZA-01-REALES")
+        self.assertEqual(fila.concepto, "propiedad_y_posesion")
         self.assertEqual(fila.nodo_actual_label, "civil")
+
+    def test_content_id_y_concepto_sobreviven_a_cada_nodo_producido(self):
+        artefacto = json.loads((REPO / "content" / "pieza-01-reales.json").read_text(encoding="utf-8"))
+        motor = route_engine.RouteEngine()
+        ruta_id = motor.leer_entrada_desde_artefacto(artefacto)
+        fila = motor.producir_pieza(ruta_id)  # avanza un nodo mas alla del inicial
+        self.assertEqual(fila.content_id, "LM-PIEZA-01-REALES")
+        self.assertEqual(fila.concepto, "propiedad_y_posesion")
 
     def test_content_id_real_se_transporta_al_pipeline_sin_inventar(self):
         content_id = "LM-PIEZA-01-REALES"
