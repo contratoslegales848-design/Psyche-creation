@@ -364,3 +364,44 @@ class RouteEngine:
             if resultado.proxima_accion == "RUTA_COMPLETA":
                 break
         return filas
+
+    def leer_entrada_desde_artefacto(self, artefacto):
+        """Abre una ruta desde un artefacto real de ``content/*.json``.
+
+        Solo extrae identidad editorial y taxonomía declaradas en el
+        artefacto; no inventa materia, conceptos ni autoridad jurídica. La
+        ruta sigue siendo una estructura de navegación y sus piezas
+        permanecen sin verificar."""
+        if not isinstance(artefacto, dict):
+            raise ValueError("artefacto de contenido ausente o invalido.")
+        proc = artefacto.get("procedencia") or {}
+        tax = artefacto.get("taxonomia") or {}
+        content_id = str(proc.get("content_id") or artefacto.get("id") or "").strip()
+        materia = str(tax.get("materia") or "").strip()
+        entrada = str(artefacto.get("titulo") or artefacto.get("frase") or "").strip()
+        if not content_id:
+            raise ValueError("artefacto sin procedencia.content_id ni id.")
+        if not materia:
+            raise ValueError(f"artefacto {content_id!r} sin taxonomia.materia.")
+        if not entrada:
+            raise ValueError(f"artefacto {content_id!r} sin titulo ni frase.")
+        ruta_id = self.leer_entrada(entrada, materia)
+        for fila in self.filas_de(ruta_id):
+            fila.fuente = content_id
+        return ruta_id
+
+
+def abrir_ruta_desde_content_id(engine, content_id, resolver_module=None):
+    """Resuelve un CONTENT_ID real y lo registra en el motor.
+
+    La resolución fail-closed pertenece a ``resolver``; este helper no abre
+    gates ni convierte el artefacto en publicable. Devuelve ``(resolution,
+    ruta_id)`` para que el pipeline pueda consumir ambos contratos.
+    """
+    if resolver_module is None:
+        import resolver as resolver_module
+    resolution = resolver_module.resolve(content_id)
+    if not resolution.resolved:
+        raise ValueError("content_id no resuelto: " + "; ".join(resolution.blocking))
+    ruta_id = engine.leer_entrada_desde_artefacto(resolution.artefacto)
+    return resolution, ruta_id

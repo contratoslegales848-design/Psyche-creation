@@ -391,3 +391,34 @@ def regenerate(previous_run, brief_revisado, policy, provider, procedencia, code
         parent_generation_id=previous_run.receipt.generation_id,
         feedback_codes=list(codes), changed_fields=changed_fields,
         allow_regeneration=True, **kw)
+
+
+# --- entrada canónica desde content/*.json -------------------------------
+def generate_visual_from_content_id(content_id, brief, policy, provider, **kwargs):
+    """Ejecuta el pipeline a partir de un CONTENT_ID real.
+
+    La función conecta resolver -> canonical -> generate_visual. Nunca infiere
+    procedencia ni abre gates: el ``handoff`` y el claim packet se transportan
+    tal como están y el pipeline devuelve ``GATE_CERRADO`` si falta aprobación.
+    El brief visual sigue siendo obligatorio porque la taxonomía editorial no
+    debe inventar una dirección de arte.
+    """
+    import resolver as resolver_mod
+    from canonical import build_visual_input
+
+    resolution = resolver_mod.resolve(content_id)
+    if not resolution.resolved:
+        raise ValueError("CONTENT_ID no resuelto: " + "; ".join(resolution.blocking))
+
+    visual_input = build_visual_input(resolution.artefacto, resolution.handoff)
+    procedencia = resolution.artefacto["procedencia"]
+    taxonomia = resolution.artefacto.get("taxonomia") or {}
+
+    params = dict(kwargs)
+    params.setdefault("handoff", resolution.handoff)
+    params.setdefault("claim_packet", resolution.packet)
+    params.setdefault("exact_copy", visual_input.exact_copy)
+    params.setdefault("author", visual_input.author)
+    params.setdefault("content_type", visual_input.content_type)
+    params.setdefault("taxonomia", taxonomia)
+    return generate_visual(procedencia, brief, policy, provider, **params)
