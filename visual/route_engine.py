@@ -117,14 +117,37 @@ VOCABULARIO_POR_MATERIA = {
     },
 }
 
+# Anulaciones mas especificas por (materia, submateria): la tabla de arriba
+# es un promedio razonable por materia, pero "Incumplimiento" es vocabulario
+# de obligaciones/contratos y NO encaja con derechos reales (propiedad,
+# posesion, usucapion no nacen de un incumplimiento sino de un hecho o acto
+# posesorio). Hallazgo real detectado al verificar la fila CAUSA de
+# LM-PIEZA-01-REALES (civil/derechos_reales/propiedad_y_posesion) contra su
+# claim packet real: ningun claim aprobado de esa pieza es sobre un
+# incumplimiento -- son definiciones de propiedad/posesion y una regla de
+# usucapion. Sigue siendo vocabulario de NAVEGACION generico (no una
+# afirmacion juridica): no requiere verificacion legal, igual que el resto
+# de esta tabla.
+VOCABULARIO_POR_SUBMATERIA = {
+    ("civil", "derechos_reales"): {
+        CAT_CAUSA: "Hecho o acto posesorio",
+        CAT_BIEN_JURIDICO: "Derecho real en juego",
+        CAT_CONSECUENCIA: "Efecto sobre la posesión o propiedad",
+    },
+}
+
 
 def _normaliza_materia(materia):
     return (materia or "").strip().lower()
 
 
-def _etiqueta_por_defecto(materia, categoria):
+def _etiqueta_por_defecto(materia, categoria, submateria=""):
     if categoria == CAT_MATERIA:
         return (materia or "").strip() or "Materia sin especificar"
+    clave_sub = (_normaliza_materia(materia), _normaliza_materia(submateria))
+    tabla_sub = VOCABULARIO_POR_SUBMATERIA.get(clave_sub, {})
+    if categoria in tabla_sub:
+        return tabla_sub[categoria]
     tabla = VOCABULARIO_POR_MATERIA.get(_normaliza_materia(materia), {})
     return tabla.get(categoria, categoria.replace("_", " ").title())
 
@@ -357,7 +380,7 @@ class RouteEngine:
             return actual
 
         self._aristas_usadas.setdefault(ruta_id, set()).add((actual.nodo_actual, destino))
-        etiqueta = _etiqueta_por_defecto(actual.materia, destino)
+        etiqueta = _etiqueta_por_defecto(actual.materia, destino, submateria=actual.submateria)
         pieza = _producir_pieza_borrador(
             actual.materia, actual.nodo_actual, destino, etiqueta, actual.nodo_actual_label
         )

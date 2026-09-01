@@ -89,6 +89,24 @@ class TestExportContenidoReal(unittest.TestCase):
             self.assertEqual(row["submateria"], "derechos_reales")
             self.assertEqual(row["concepto"], "propiedad_y_posesion")
 
+    def test_causa_en_derechos_reales_no_usa_vocabulario_de_incumplimiento(self):
+        # Hallazgo real: "Incumplimiento" (etiqueta generica de civil) es
+        # vocabulario de obligaciones/contratos y no encaja con derechos
+        # reales (propiedad/posesion/usucapion nacen de un hecho o acto
+        # posesorio, no de un incumplimiento). Ningun claim aprobado de
+        # pieza-01-reales.json es sobre un incumplimiento.
+        fila_causa = self.rows[-1]
+        self.assertEqual(fila_causa["nodo_actual"], "CAUSA — Hecho o acto posesorio")
+        self.assertNotIn("Incumplimiento", fila_causa["nodo_actual"])
+
+    def test_civil_generico_sin_submateria_derechos_reales_conserva_incumplimiento(self):
+        # La anulacion es especifica a (civil, derechos_reales) -- otra
+        # submateria/civil generico sigue usando la tabla por materia.
+        motor = route_engine.RouteEngine()
+        motor.avanzar_ruta_completa("civil generico", "Civil", [route_engine.CAT_CAUSA])
+        fila = motor.ultima_fila(motor._filas[0].ruta_id)
+        self.assertEqual(fila.nodo_actual_label, "Incumplimiento")
+
 
 class TestAltoNivelDesdeContentId(unittest.TestCase):
     """Fase 4: entrada real -> resolver -> ruta -> export, reanudable."""
