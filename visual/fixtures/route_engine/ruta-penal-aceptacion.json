@@ -1,0 +1,196 @@
+{
+  "schema_version": "1.0",
+  "filas": [
+    {
+      "ruta_id": "RUTA-b7df88ca6ee0",
+      "nodo_actual": "MATERIA",
+      "nodo_actual_label": "Penal",
+      "nodo_anterior": "",
+      "nodo_anterior_label": "",
+      "siguiente_vinculo": [
+        "CAUSA"
+      ],
+      "materia": "Penal",
+      "formato": "NO_ASIGNADO",
+      "estado": "PRODUCIDO",
+      "fuente": "NO_VERIFICADO",
+      "jurisdiccion": "PANHISPANICO_COMPARADO",
+      "pieza_producida": null,
+      "proxima_accion": "ABRIR_VINCULO"
+    },
+    {
+      "ruta_id": "RUTA-b7df88ca6ee0",
+      "nodo_actual": "CAUSA",
+      "nodo_actual_label": "Delito",
+      "nodo_anterior": "MATERIA",
+      "nodo_anterior_label": "Penal",
+      "siguiente_vinculo": [
+        "BIEN_JURIDICO",
+        "CONSECUENCIA"
+      ],
+      "materia": "Penal",
+      "formato": "NO_ASIGNADO",
+      "estado": "PRODUCIDO",
+      "fuente": "NO_VERIFICADO",
+      "jurisdiccion": "PANHISPANICO_COMPARADO",
+      "pieza_producida": {
+        "hook": "¿Qué ocurre cuando penal conecta con delito en materia Penal?",
+        "copy_borrador": "[BORRADOR NO VERIFICADO] Desarrollar Delito dentro de Penal, partiendo de Penal. Requiere verificación jurídica (legalmente-legal-verification) antes de convertirse en copy real.",
+        "texto_imagen": "DELITO — Penal",
+        "nota_jurisdiccional": "Panhispánico / comparado (Capa A/B por defecto) — clasificar Capa C explícita si el contenido final se vuelve país-específico. Ver CLAUDE.md §4.",
+        "prompt_borrador": "[PENDIENTE legalmente-visual-system] Prompt visual para 'Delito' (Penal) según política visual vigente y motor de rotación de estilos.",
+        "estado_verificacion": "NO_VERIFICADO"
+      },
+      "proxima_accion": "VERIFY_SOURCES"
+    },
+    {
+      "ruta_id": "RUTA-b7df88ca6ee0",
+      "nodo_actual": "CONSECUENCIA",
+      "nodo_actual_label": "Daño",
+      "nodo_anterior": "CAUSA",
+      "nodo_anterior_label": "Delito",
+      "siguiente_vinculo": [
+        "RESPONSABILIDAD"
+      ],
+      "materia": "Penal",
+      "formato": "NO_ASIGNADO",
+      "estado": "PRODUCIDO",
+      "fuente": "NO_VERIFICADO",
+      "jurisdiccion": "PANHISPANICO_COMPARADO",
+      "pieza_producida": {
+        "hook": "¿Qué ocurre cuando delito conecta con daño en materia Penal?",
+        "copy_borrador": "[BORRADOR NO VERIFICADO] Desarrollar Daño dentro de Penal, partiendo de Delito. Requiere verificación jurídica (legalmente-legal-verification) antes de convertirse en copy real.",
+        "texto_imagen": "DAÑO — Penal",
+        "nota_jurisdiccional": "Panhispánico / comparado (Capa A/B por defecto) — clasificar Capa C explícita si el contenido final se vuelve país-específico. Ver CLAUDE.md §4.",
+        "prompt_borrador": "[PENDIENTE legalmente-visual-system] Prompt visual para 'Daño' (Penal) según política visual vigente y motor de rotación de estilos.",
+        "estado_verificacion": "NO_VERIFICADO"
+      },
+      "proxima_accion": "VERIFY_SOURCES"
+    },
+    {
+      "ruta_id": "RUTA-b7df88ca6ee0",
+      "nodo_actual": "RESPONSABILIDAD",
+      "nodo_actual_label": "Responsabilidad civil",
+      "nodo_anterior": "CONSECUENCIA",
+      "nodo_anterior_label": "Daño",
+      "siguiente_vinculo": [
+        "PRUEBA",
+        "DEFENSA"
+      ],
+      "materia": "Penal",
+      "formato": "NO_ASIGNADO",
+      "estado": "PRODUCIDO",
+      "fuente": "NO_VERIFICADO",
+      "jurisdiccion": "PANHISPANICO_COMPARADO",
+      "pieza_producida": {
+        "hook": "¿Qué ocurre cuando daño conecta con responsabilidad civil en materia Penal?",
+        "copy_borrador": "[BORRADOR NO VERIFICADO] Desarrollar Responsabilidad civil dentro de Penal, partiendo de Daño. Requiere verificación jurídica (legalmente-legal-verification) antes de convertirse en copy real.",
+        "texto_imagen": "RESPONSABILIDAD CIVIL — Penal",
+        "nota_jurisdiccional": "Panhispánico / comparado (Capa A/B por defecto) — clasificar Capa C explícita si el contenido final se vuelve país-específico. Ver CLAUDE.md §4.",
+        "prompt_borrador": "[PENDIENTE legalmente-visual-system] Prompt visual para 'Responsabilidad civil' (Penal) según política visual vigente y motor de rotación de estilos.",
+        "estado_verificacion": "NO_VERIFICADO"
+      },
+      "proxima_accion": "VERIFY_SOURCES"
+    },
+    {
+      "ruta_id": "RUTA-b7df88ca6ee0",
+      "nodo_actual": "PRUEBA",
+      "nodo_actual_label": "Prueba",
+      "nodo_anterior": "RESPONSABILIDAD",
+      "nodo_anterior_label": "Responsabilidad civil",
+      "siguiente_vinculo": [
+        "PROCEDIMIENTO"
+      ],
+      "materia": "Penal",
+      "formato": "NO_ASIGNADO",
+      "estado": "PRODUCIDO",
+      "fuente": "NO_VERIFICADO",
+      "jurisdiccion": "PANHISPANICO_COMPARADO",
+      "pieza_producida": {
+        "hook": "¿Qué ocurre cuando responsabilidad civil conecta con prueba en materia Penal?",
+        "copy_borrador": "[BORRADOR NO VERIFICADO] Desarrollar Prueba dentro de Penal, partiendo de Responsabilidad civil. Requiere verificación jurídica (legalmente-legal-verification) antes de convertirse en copy real.",
+        "texto_imagen": "PRUEBA — Penal",
+        "nota_jurisdiccional": "Panhispánico / comparado (Capa A/B por defecto) — clasificar Capa C explícita si el contenido final se vuelve país-específico. Ver CLAUDE.md §4.",
+        "prompt_borrador": "[PENDIENTE legalmente-visual-system] Prompt visual para 'Prueba' (Penal) según política visual vigente y motor de rotación de estilos.",
+        "estado_verificacion": "NO_VERIFICADO"
+      },
+      "proxima_accion": "VERIFY_SOURCES"
+    },
+    {
+      "ruta_id": "RUTA-b7df88ca6ee0",
+      "nodo_actual": "PROCEDIMIENTO",
+      "nodo_actual_label": "Proceso",
+      "nodo_anterior": "PRUEBA",
+      "nodo_anterior_label": "Prueba",
+      "siguiente_vinculo": [
+        "REPARACION"
+      ],
+      "materia": "Penal",
+      "formato": "NO_ASIGNADO",
+      "estado": "PRODUCIDO",
+      "fuente": "NO_VERIFICADO",
+      "jurisdiccion": "PANHISPANICO_COMPARADO",
+      "pieza_producida": {
+        "hook": "¿Qué ocurre cuando prueba conecta con proceso en materia Penal?",
+        "copy_borrador": "[BORRADOR NO VERIFICADO] Desarrollar Proceso dentro de Penal, partiendo de Prueba. Requiere verificación jurídica (legalmente-legal-verification) antes de convertirse en copy real.",
+        "texto_imagen": "PROCESO — Penal",
+        "nota_jurisdiccional": "Panhispánico / comparado (Capa A/B por defecto) — clasificar Capa C explícita si el contenido final se vuelve país-específico. Ver CLAUDE.md §4.",
+        "prompt_borrador": "[PENDIENTE legalmente-visual-system] Prompt visual para 'Proceso' (Penal) según política visual vigente y motor de rotación de estilos.",
+        "estado_verificacion": "NO_VERIFICADO"
+      },
+      "proxima_accion": "VERIFY_SOURCES"
+    },
+    {
+      "ruta_id": "RUTA-b7df88ca6ee0",
+      "nodo_actual": "REPARACION",
+      "nodo_actual_label": "Reparación",
+      "nodo_anterior": "PROCEDIMIENTO",
+      "nodo_anterior_label": "Proceso",
+      "siguiente_vinculo": [
+        "PREVENCION"
+      ],
+      "materia": "Penal",
+      "formato": "NO_ASIGNADO",
+      "estado": "PRODUCIDO",
+      "fuente": "NO_VERIFICADO",
+      "jurisdiccion": "PANHISPANICO_COMPARADO",
+      "pieza_producida": {
+        "hook": "¿Qué ocurre cuando proceso conecta con reparación en materia Penal?",
+        "copy_borrador": "[BORRADOR NO VERIFICADO] Desarrollar Reparación dentro de Penal, partiendo de Proceso. Requiere verificación jurídica (legalmente-legal-verification) antes de convertirse en copy real.",
+        "texto_imagen": "REPARACIÓN — Penal",
+        "nota_jurisdiccional": "Panhispánico / comparado (Capa A/B por defecto) — clasificar Capa C explícita si el contenido final se vuelve país-específico. Ver CLAUDE.md §4.",
+        "prompt_borrador": "[PENDIENTE legalmente-visual-system] Prompt visual para 'Reparación' (Penal) según política visual vigente y motor de rotación de estilos.",
+        "estado_verificacion": "NO_VERIFICADO"
+      },
+      "proxima_accion": "VERIFY_SOURCES"
+    }
+  ],
+  "aristas_usadas": {
+    "RUTA-b7df88ca6ee0": [
+      [
+        "CAUSA",
+        "CONSECUENCIA"
+      ],
+      [
+        "CONSECUENCIA",
+        "RESPONSABILIDAD"
+      ],
+      [
+        "MATERIA",
+        "CAUSA"
+      ],
+      [
+        "PROCEDIMIENTO",
+        "REPARACION"
+      ],
+      [
+        "PRUEBA",
+        "PROCEDIMIENTO"
+      ],
+      [
+        "RESPONSABILIDAD",
+        "PRUEBA"
+      ]
+    ]
+  }
+}
