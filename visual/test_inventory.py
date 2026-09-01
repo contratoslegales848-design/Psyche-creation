@@ -21,10 +21,11 @@ import review_semantics  # noqa: E402
 class TestInventarioReal(unittest.TestCase):
     """Contra el canon real: PIEZA-01-REALES abierta, 02 y 03 cerradas."""
 
-    def test_las_tres_piezas_del_piloto_aparecen(self):
+    def test_las_cuatro_piezas_del_piloto_aparecen(self):
         filas = inventory.build_readiness()
         self.assertEqual({r.piece_id for r in filas},
-                          {"PIEZA-01-REALES", "PIEZA-02-LABORAL", "PIEZA-03-HONOR"})
+                          {"PIEZA-01-REALES", "PIEZA-02-LABORAL", "PIEZA-03-HONOR",
+                           "PIEZA-04-LABORAL-BASICO"})
 
     def test_piezas_requieren_investigacion_bloquean_por_esa_razon(self):
         filas = {r.piece_id: r for r in inventory.build_readiness()}
@@ -71,10 +72,24 @@ class TestInventarioReal(unittest.TestCase):
     def test_inbox_no_incluye_legal_review_mientras_es_trabajo_de_sistema(self):
         """Punto central del mandato de continuacion V4: mientras la
         investigacion sea trabajo de SISTEMA (VERIFY_SOURCES o
-        BLOCKED_BY_SOURCE_ACCESS), NO debe aparecer como decision humana."""
+        BLOCKED_BY_SOURCE_ACCESS), NO debe aparecer como decision humana.
+        PIEZA-02 y PIEZA-03 siguen en REQUIERE_INVESTIGACION: no deben
+        aparecer. PIEZA-04 ya superó esa fase (APTO_CON_MATICES) — su
+        aparicion aqui es el comportamiento correcto, cubierta aparte en
+        test_inbox_incluye_legal_review_para_pieza_apto_con_matices."""
         items = inventory.build_inbox()
         legales = {i.piece_id for i in items if i.decision_type == inventory.DECISION_LEGAL_REVIEW}
-        self.assertEqual(legales, set())
+        self.assertEqual(legales & {"PIEZA-02-LABORAL", "PIEZA-03-HONOR"}, set())
+
+    def test_inbox_incluye_legal_review_para_pieza_apto_con_matices(self):
+        """PIEZA-04-LABORAL-BASICO ya no es trabajo de SISTEMA: su estado
+        canonico es APTO_CON_MATICES (no REQUIERE_INVESTIGACION), asi que
+        _next_executable_action la escala a ACTION_HUMAN_LEGAL_REVIEW en
+        cuanto el gate de arte sigue CERRADO — exactamente lo que corresponde:
+        un humano decide si lo investigado hasta ahora basta, no el sistema."""
+        items = inventory.build_inbox()
+        legales = {i.piece_id for i in items if i.decision_type == inventory.DECISION_LEGAL_REVIEW}
+        self.assertIn("PIEZA-04-LABORAL-BASICO", legales)
 
     def test_system_queue_incluye_piezas_bloqueadas_por_acceso(self):
         cola = {r.piece_id for r in inventory.system_executable_queue()}

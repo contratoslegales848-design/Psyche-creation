@@ -976,19 +976,22 @@ class TestCongresoQuintanaRooGobMx(unittest.TestCase):
 
 
 class TestPilotClaimPacketsReales(unittest.TestCase):
-    """Prueba de regresión automatizada (2026-08-27): valida las 3 piezas
-    reales del piloto dentro de la propia suite unittest, no solo mediante
-    ejecución manual de validate-claim-packet.py — para que un cambio de
-    registro (u otro) que rompa alguna de ellas falle la suite
+    """Prueba de regresión automatizada (2026-08-27, ampliada 2026-09-01):
+    valida las piezas reales del piloto dentro de la propia suite unittest,
+    no solo mediante ejecución manual de validate-claim-packet.py — para que
+    un cambio de registro (u otro) que rompa alguna de ellas falle la suite
     automáticamente."""
 
     PILOT_DIR = Path(__file__).resolve().parent.parent / "pilot" / "claim-packets"
 
     # 6. El paquete real de Pieza 1 valida después de la migración.
     # 7. Piezas 2 y 3 continúan validando sin cambios.
-    def test_las_tres_piezas_reales_pasan_validacion_estructural(self):
+    # 9. Pieza 4 (laboral básico transversal, Capa A) se suma tras orden expresa
+    #    del fundador — ver CLAUDE.md §6, "salvo orden expresa del fundador" —
+    #    documentada en docs/direccion-basico-antes-que-complejo.md.
+    def test_las_cuatro_piezas_reales_pasan_validacion_estructural(self):
         piezas = sorted(self.PILOT_DIR.glob("*.json"))
-        self.assertEqual(len(piezas), 3, f"se esperaban 3 piezas reales, se encontraron {len(piezas)}: {piezas}")
+        self.assertEqual(len(piezas), 4, f"se esperaban 4 piezas reales, se encontraron {len(piezas)}: {piezas}")
         for path in piezas:
             with self.subTest(pieza=path.name):
                 piece = json.loads(path.read_text(encoding="utf-8"))

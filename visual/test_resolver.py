@@ -31,8 +31,11 @@ class TestResolucionReal(unittest.TestCase):
         self.assertTrue(all(len(t) == 3 for t in ids))
 
     def test_gate_summary_no_reinterpreta_estados(self):
+        # 4 piezas reales en pilot/claim-packets/ desde pieza-04-laboral-basico
+        # (laboral básico transversal, Capa A) — orden expresa del fundador,
+        # documentada en docs/direccion-basico-antes-que-complejo.md.
         filas = resolver.gate_summary()
-        self.assertEqual(len(filas), 3)
+        self.assertEqual(len(filas), 4)
         for f in filas:
             # VISUAL_READY jamas dice SI mientras el gate canonico este cerrado.
             if f["ART_GATE"] != "ABIERTO":
