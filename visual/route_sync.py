@@ -143,6 +143,94 @@ def to_csv_text(rows):
     return buf.getvalue()
 
 
+DRIVE_PAYLOAD_SCHEMA_VERSION = "1.0"
+
+
+def _columna_a1(n):
+    """Indice de columna (1-based) -> notacion A1: 1->A, 14->N, 27->AA."""
+    if n < 1:
+        raise ValueError("indice de columna invalido: las columnas empiezan en 1.")
+    nombre = ""
+    while n > 0:
+        n, resto = divmod(n - 1, 26)
+        nombre = chr(ord("A") + resto) + nombre
+    return nombre
+
+
+def build_sheet_values(rows):
+    """Matriz 2D exacta que debe quedar escrita en la hoja: encabezado
+    canonico + una lista por fila, en el orden fijo de CANONICAL_FIELDS.
+
+    Cada celda es SIEMPRE `str`: un `None` se escribiria en Sheets como el
+    texto literal "None", que despues seria indistinguible de un dato real.
+    """
+    encabezado = list(CANONICAL_FIELDS)
+    filas = [[str(r.get(k, "") or "") for k in CANONICAL_FIELDS] for r in rows]
+    return [encabezado] + filas
+
+
+def build_drive_payload(rows):
+    """Payload determinista listo para que un escritor externo lo suba.
+
+    Este modulo NO escribe en Drive ni habla con ninguna red: produce el
+    dato exacto y su firma, para que la escritura (que exige credenciales y
+    autorizacion humana) ocurra fuera y pueda verificarse despues contra
+    `verify_readback`. `values` son SOLO los datos -- el encabezado se
+    obtiene de `build_sheet_values`, para no duplicarlo en dos sitios.
+    """
+    assert_no_duplicate_rows(rows)
+    valores = build_sheet_values(rows)
+    return {
+        "schema_version": DRIVE_PAYLOAD_SCHEMA_VERSION,
+        "fields": list(CANONICAL_FIELDS),
+        "row_count": len(rows),
+        "content_sha256": rows_signature(rows),
+        "range_a1": f"A1:{_columna_a1(len(CANONICAL_FIELDS))}{len(rows) + 1}",
+        "values": valores[1:],
+        "rows": list(rows),
+    }
+
+
+@dataclass
+class ReadbackResult:
+    """Resultado de comparar lo que la hoja devolvio contra lo que se debio
+    escribir. Fail-closed: cualquier diferencia deja `ok=False` con el
+    detalle exacto, nunca un "parece bien"."""
+
+    ok: bool
+    problemas: list = field(default_factory=list)
+
+    def to_dict(self):
+        return {"ok": self.ok, "problemas": list(self.problemas)}
+
+
+def verify_readback(values_leidos, rows_esperadas):
+    """Paso 9 del ciclo: releer la hoja y confirmar que no se perdio nada.
+
+    `values_leidos` es la matriz 2D tal como la devuelve la lectura de la
+    hoja (encabezado incluido). Se compara celda a celda contra lo que
+    `build_sheet_values` dice que debio escribirse. Una lectura vacia falla
+    cerrado: no poder leer nunca equivale a haber escrito bien.
+    """
+    esperado = build_sheet_values(rows_esperadas)
+    if not values_leidos:
+        return ReadbackResult(False, ["lectura de vuelta vacia: no confirma ninguna escritura."])
+
+    problemas = []
+    leido_encabezado = list(values_leidos[0])
+    if leido_encabezado != esperado[0]:
+        problemas.append(f"encabezado distinto: {leido_encabezado!r} != {esperado[0]!r}")
+
+    leidas, esperadas = values_leidos[1:], esperado[1:]
+    if len(leidas) != len(esperadas):
+        problemas.append(f"{len(leidas)} filas leidas vs {len(esperadas)} esperadas.")
+    for i, (leida, esp) in enumerate(zip(leidas, esperadas)):
+        if list(leida) != esp:
+            problemas.append(f"fila {i}: {list(leida)!r} != {esp!r}")
+
+    return ReadbackResult(not problemas, problemas)
+
+
 @dataclass
 class SyncReceipt:
     """Recibo local de una sincronizacion: que se exporto, cuando, y con
