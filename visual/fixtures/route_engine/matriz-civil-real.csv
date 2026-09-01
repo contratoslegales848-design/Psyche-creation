@@ -1,3 +1,3 @@
 ruta_id,content_id,nodo_anterior,nodo_actual,siguiente_vinculo,materia,submateria,concepto,formato,estado,fuente,jurisdiccion,estado_verificacion,proxima_accion
 RUTA-aaf18a6e76f1,LM-PIEZA-01-REALES,,MATERIA — civil,"[""CAUSA""]",civil,derechos_reales,propiedad_y_posesion,NO_ASIGNADO,PRODUCIDO,,PANHISPANICO_COMPARADO,NO_VERIFICADO,ABRIR_VINCULO
-RUTA-aaf18a6e76f1,LM-PIEZA-01-REALES,MATERIA — civil,CAUSA — Incumplimiento,"[""BIEN_JURIDICO"", ""CONSECUENCIA""]",civil,derechos_reales,propiedad_y_posesion,NO_ASIGNADO,PRODUCIDO,,PANHISPANICO_COMPARADO,NO_VERIFICADO,VERIFY_SOURCES
+RUTA-aaf18a6e76f1,LM-PIEZA-01-REALES,MATERIA — civil,CAUSA — Hecho o acto posesorio,"[""BIEN_JURIDICO"", ""CONSECUENCIA""]",civil,derechos_reales,propiedad_y_posesion,NO_ASIGNADO,PRODUCIDO,,PANHISPANICO_COMPARADO,NO_VERIFICADO,VERIFY_SOURCES

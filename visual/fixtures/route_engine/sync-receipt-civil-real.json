@@ -17,7 +17,7 @@
     "proxima_accion"
   ],
   "row_count": 2,
-  "content_sha256": "03a99b37c5b686d798ef1d4ea81972eb5bfe35189eeab55ec60b0992d62e3fb5",
+  "content_sha256": "79ce9ed28b29899ee0c17acebf09aadb64764ecb50b19b6f8ba09c5f8e819893",
   "rows": [
     {
       "ruta_id": "RUTA-aaf18a6e76f1",
@@ -39,7 +39,7 @@
       "ruta_id": "RUTA-aaf18a6e76f1",
       "content_id": "LM-PIEZA-01-REALES",
       "nodo_anterior": "MATERIA — civil",
-      "nodo_actual": "CAUSA — Incumplimiento",
+      "nodo_actual": "CAUSA — Hecho o acto posesorio",
       "siguiente_vinculo": "[\"BIEN_JURIDICO\", \"CONSECUENCIA\"]",
       "materia": "civil",
       "submateria": "derechos_reales",
