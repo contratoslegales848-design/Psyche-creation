@@ -1,0 +1,155 @@
+{
+  "schema_version": "4.0",
+  "piece_id": "PIEZA-04-LABORAL-BASICO",
+  "claims": [
+    {
+      "claim_id": "pieza-04-claim-1",
+      "texto_exacto": "En las jurisdicciones panhispánicas revisadas existe relación laboral (o contrato de trabajo) cuando concurren tres elementos: la prestación personal de un servicio, la subordinación o dependencia de quien lo presta respecto de quien lo recibe, y el pago de una remuneración a cambio. Esta misma lógica de tres elementos se repite, con nombres y matices propios de cada país, en México, Argentina, Colombia y España.",
+      "ubicacion": "descripcion_tema",
+      "tipo": "definicion",
+      "alcance": "CAPA_A_TRANSVERSAL",
+      "jurisdiccion": null,
+      "nucleo_transversal": "Servicio personal + subordinación/dependencia + remuneración = relación laboral. Ningún país revisado exige, para esta definición básica, forma escrita del contrato: la prestación efectiva del servicio con esos tres elementos basta.",
+      "variaciones_materiales": null,
+      "jurisdicciones_revisadas": [
+        {
+          "pais": "México",
+          "fuente_ids": ["SRC-P04-MX-LFT-20"]
+        },
+        {
+          "pais": "Argentina",
+          "fuente_ids": ["SRC-P04-AR-LCT-21-22"]
+        },
+        {
+          "pais": "Colombia",
+          "fuente_ids": ["SRC-P04-CO-CST-22-23"]
+        },
+        {
+          "pais": "España",
+          "fuente_ids": ["SRC-P04-ES-ET-01"]
+        }
+      ],
+      "diferencias_buscadas": "Se buscó específicamente: (1) si algún país exige forma escrita como requisito de existencia (no solo de prueba); (2) si algún país distingue conceptualmente 'contrato' de 'relación' de trabajo como dos figuras separadas, o los trata como sinónimos; (3) si el elemento de 'remuneración' se nombra igual en los cuatro países.",
+      "contraejemplos_encontrados": "México (LFT art. 20) y Argentina (LCT arts. 21-22) SÍ distinguen expresamente 'contrato de trabajo' de 'relación de trabajo' como dos conceptos formales separados (aunque con los mismos efectos prácticos) — México dice literalmente que ambos 'producen los mismos efectos'. Colombia (CST art. 22) y España (ET art. 1) NO hacen esa distinción formal: definen una sola figura ('contrato de trabajo') cuya existencia se presume por la prestación efectiva del servicio. Ninguno de los cuatro países revisados exige forma escrita para que exista la relación/contrato en su definición básica — la distinción contrato/relación de México y Argentina es conceptual, no un requisito de forma adicional.",
+      "justificacion_suficiencia_comparada": "Los 4 países cubren las tres grandes familias de codificación laboral panhispánica citadas habitualmente como representativas: España (origen histórico del Estatuto de los Trabajadores, influencia directa en varios códigos latinoamericanos), México (tradición constitucional social temprana, art. 123 CPEUM), y dos codificaciones sudamericanas con historia y momentos de sanción distintos (Argentina 1974/1976, Colombia 1950) que no comparten redactor común. Que los tres elementos (prestación personal + subordinación + remuneración) aparezcan de forma sustancialmente idéntica en las cuatro, sin que ninguna fuente contradiga la fórmula, es evidencia razonable de que se trata de Capa A (misma lógica jurídica, no una coincidencia de un solo país). No se declara 'universal panhispánico completo' — solo se investigaron 4 de los países del ámbito de LegalMente; queda pendiente ampliar a más países antes de tratar esta base como definitivamente cerrada.",
+      "fuentes": [
+        {
+          "id": "SRC-P04-MX-LFT-20",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Ley Federal del Trabajo (México) — art. 20 (relación de trabajo y contrato individual de trabajo)",
+          "organismo_autor": "H. Cámara de Diputados",
+          "url": "https://www.diputados.gob.mx/LeyesBiblio/pdf/LFT.pdf",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-09-01",
+          "localizador": "art. 20",
+          "jurisdicciones_cubiertas": ["México"],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": true,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": "2026-09-01",
+            "metodo_o_evidencia": "WebSearch devolvió lo que se presenta como el texto completo de los tres párrafos del art. 20 LFT (definición de relación de trabajo, definición de contrato individual de trabajo, y equivalencia de efectos entre ambos), citado de forma consistente por múltiples fuentes secundarias independientes (vLex, leyes-mx.com, sesamehr.mx) y coincidente con el propio dominio oficial diputados.gob.mx en los resultados de búsqueda.",
+            "observaciones": "origen_oficial_confirmado=true por convergencia de evidencia vía WebSearch contra diputados.gob.mx (2026-09-01) — no por autoconfirmación de ningún modelo. texto_exacto_consultado y vigencia_comprobada permanecen false: WebFetch sigue EGRESS_BLOCKED hacia diputados.gob.mx en esta sesión, así que no leí yo mismo el PDF íntegro ni confirmé que no haya reforma posterior a la fecha de consulta."
+          },
+          "registro_oficial_id": "diputados-gob-mx"
+        },
+        {
+          "id": "SRC-P04-AR-LCT-21-22",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Ley de Contrato de Trabajo N.º 20.744 (Argentina) — arts. 21 (contrato de trabajo) y 22 (relación de trabajo)",
+          "organismo_autor": "Argentina.gob.ar — Normativa / Presidencia de la Nación",
+          "url": "https://www.argentina.gob.ar/normativa/nacional/norma-25552/actualizacion",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-09-01",
+          "localizador": "arts. 21 y 22",
+          "jurisdicciones_cubiertas": ["Argentina"],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": true,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": "2026-09-01",
+            "metodo_o_evidencia": "WebSearch devolvió el texto literal de los arts. 21 y 22 LCT (definiciones de 'contrato de trabajo' y 'relación de trabajo' respectivamente), con el propio portal argentina.gob.ar entre los resultados de búsqueda como fuente de la 'TEXTO ACTUALIZADO — Ley 20744'.",
+            "observaciones": "origen_oficial_confirmado=true por evidencia real vía WebSearch (2026-09-01) contra argentina.gob.ar, ya registrado como fuente oficial (registro_oficial_id='argentina-gob-ar-normativa', usado también en pieza-02-laboral). texto_exacto_consultado y vigencia_comprobada permanecen false: WebFetch sigue EGRESS_BLOCKED hacia argentina.gob.ar en esta sesión."
+          },
+          "registro_oficial_id": "argentina-gob-ar-normativa"
+        },
+        {
+          "id": "SRC-P04-CO-CST-22-23",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Código Sustantivo del Trabajo (Colombia, Decreto 2663 de 1950) — arts. 22 (definición del contrato de trabajo) y 23 (elementos esenciales)",
+          "organismo_autor": "Función Pública Colombia",
+          "url": "https://www.funcionpublica.gov.co/eva/gestornormativo/norma.php?i=199983",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-09-01",
+          "localizador": "arts. 22 y 23",
+          "jurisdicciones_cubiertas": ["Colombia"],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": true,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": "2026-09-01",
+            "metodo_o_evidencia": "WebSearch devolvió el texto de los arts. 22 y 23 del CST (definición de contrato de trabajo y sus tres elementos esenciales: actividad personal, subordinación continuada, salario), citado por fuentes secundarias (leyes.co) y confirmado el propio hostname oficial funcionpublica.gov.co como el que aloja el Decreto 2663 de 1950 (mismo documento ya usado como fuente en pieza-02-laboral, id 'funcionpublica-gov-co').",
+            "observaciones": "origen_oficial_confirmado=true por convergencia de evidencia vía WebSearch (2026-09-01). texto_exacto_consultado y vigencia_comprobada permanecen false: WebFetch sigue EGRESS_BLOCKED hacia funcionpublica.gov.co en esta sesión."
+          },
+          "registro_oficial_id": "funcionpublica-gov-co"
+        },
+        {
+          "id": "SRC-P04-ES-ET-01",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Estatuto de los Trabajadores (España, RDL 2/2015) — art. 1.1 (concepto y presunción de relación laboral)",
+          "organismo_autor": "Agencia Estatal BOE",
+          "url": "https://www.boe.es/buscar/pdf/2015/BOE-A-2015-11430-consolidado.pdf",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-09-01",
+          "localizador": "art. 1.1",
+          "jurisdicciones_cubiertas": ["España"],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": true,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": "2026-09-01",
+            "metodo_o_evidencia": "WebSearch devolvió el texto del art. 1.1 ET: la presunción de contrato de trabajo entre quien presta un servicio por cuenta y dentro del ámbito de organización y dirección de otro (subordinación), y quien lo recibe a cambio de una retribución (remuneración) — coincide con el mismo esquema de tres elementos hallado en los otros tres países. Coincidencia entre múltiples resultados de búsqueda, incluido el propio dominio boe.es.",
+            "observaciones": "origen_oficial_confirmado=true por evidencia real vía WebSearch (2026-09-01) contra boe.es, ya registrado (registro_oficial_id='boe-es', usado también en pieza-02-laboral). texto_exacto_consultado y vigencia_comprobada permanecen false: WebFetch sigue EGRESS_BLOCKED hacia boe.es en esta sesión."
+          },
+          "registro_oficial_id": "boe-es"
+        }
+      ],
+      "confianza": "media",
+      "riesgo_falsa_universalizacion": "medio",
+      "riesgo_asesoria": "bajo",
+      "platform_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "confidentiality_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "estado": "APTO_CON_MATICES",
+      "revision_humana": {
+        "estado": "PENDIENTE",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null,
+        "contenido_hash_sha256": null
+      },
+      "gate_arte": "CERRADO",
+      "reformulacion_propuesta": {
+        "texto": null,
+        "verificada": false,
+        "nuevo_claim_id": null
+      },
+      "redaccion_prohibida": "En todos los países panhispánicos el contrato de trabajo debe constar por escrito para que exista.",
+      "notas": "Primera pieza de la materia laboral básica transversal (Capa A), abierta tras la dirección de contenido de PR #30 (básico antes que complejo) y distinta de pieza-02-laboral (despido/renuncia, Capa C, país por país). APTO_CON_MATICES es el techo alcanzable en esta ronda: las 4 fuentes son NORMA_OFICIAL con hostname y organismo verificados, pero ninguna tiene texto_exacto_consultado=true porque WebFetch sigue EGRESS_BLOCKED hacia los 4 dominios oficiales en esta sesión (confirmado de nuevo, no asumido de sesiones anteriores) — solo hay evidencia por WebSearch, que la propia skill trata como insuficiente para Nivel 1 ('da snippets, no el documento íntegro'). No se declara APTO_PARA_NARRATIVA. El fundador propuso depositar copias en crudo de los textos oficiales en Google Drive como canal de lectura alternativo cuando la red directa siga bloqueada; si eso ocurre, la fuente seguirá citándose como NORMA_OFICIAL con su URL oficial real (nunca como DRIVE_INTERNO, que el schema nunca deja sostener ningún estado apto), y antes de marcar texto_exacto_consultado=true se cotejará el contenido depositado contra la evidencia ya reunida aquí — Drive no sostiene por sí solo ningún estado apto."
+    }
+  ],
+  "estado_agregado": "APTO_CON_MATICES",
+  "revisiones_pendientes": ["pieza-04-claim-1"],
+  "gate_global_arte": "CERRADO"
+}
