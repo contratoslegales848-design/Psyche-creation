@@ -1,0 +1,55 @@
+{
+  "schema_version": "1.0",
+  "fields": [
+    "ruta_id",
+    "content_id",
+    "nodo_anterior",
+    "nodo_actual",
+    "siguiente_vinculo",
+    "materia",
+    "submateria",
+    "concepto",
+    "formato",
+    "estado",
+    "fuente",
+    "jurisdiccion",
+    "estado_verificacion",
+    "proxima_accion"
+  ],
+  "row_count": 2,
+  "content_sha256": "03a99b37c5b686d798ef1d4ea81972eb5bfe35189eeab55ec60b0992d62e3fb5",
+  "rows": [
+    {
+      "ruta_id": "RUTA-aaf18a6e76f1",
+      "content_id": "LM-PIEZA-01-REALES",
+      "nodo_anterior": "",
+      "nodo_actual": "MATERIA — civil",
+      "siguiente_vinculo": "[\"CAUSA\"]",
+      "materia": "civil",
+      "submateria": "derechos_reales",
+      "concepto": "propiedad_y_posesion",
+      "formato": "NO_ASIGNADO",
+      "estado": "PRODUCIDO",
+      "fuente": "",
+      "jurisdiccion": "PANHISPANICO_COMPARADO",
+      "estado_verificacion": "NO_VERIFICADO",
+      "proxima_accion": "ABRIR_VINCULO"
+    },
+    {
+      "ruta_id": "RUTA-aaf18a6e76f1",
+      "content_id": "LM-PIEZA-01-REALES",
+      "nodo_anterior": "MATERIA — civil",
+      "nodo_actual": "CAUSA — Incumplimiento",
+      "siguiente_vinculo": "[\"BIEN_JURIDICO\", \"CONSECUENCIA\"]",
+      "materia": "civil",
+      "submateria": "derechos_reales",
+      "concepto": "propiedad_y_posesion",
+      "formato": "NO_ASIGNADO",
+      "estado": "PRODUCIDO",
+      "fuente": "",
+      "jurisdiccion": "PANHISPANICO_COMPARADO",
+      "estado_verificacion": "NO_VERIFICADO",
+      "proxima_accion": "VERIFY_SOURCES"
+    }
+  ]
+}

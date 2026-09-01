@@ -21,8 +21,8 @@ pieza registra sus nodos usados y abre la siguiente conexion.
 
 Campos de la matriz (RouteMatrixRow), en el orden pedido: ID de ruta |
 content_id | nodo anterior | nodo actual | siguiente vinculo | materia |
-concepto | formato | estado | fuente | jurisdiccion | verificacion | pieza
-producida | proxima accion | vinculo_visual (metafora de la transicion,
+submateria | concepto | formato | estado | fuente | jurisdiccion |
+verificacion | pieza producida | proxima accion | vinculo_visual (metafora de la transicion,
 consumida por pipeline.generate_visual_from_content_id via brief.metaphor).
 """
 
@@ -201,6 +201,7 @@ class RouteMatrixRow:
     nodo_anterior_label: str = ""
     siguiente_vinculo: list = field(default_factory=list)   # categorias candidatas no explotadas
     materia: str = ""
+    submateria: str = ""                      # taxonomia.submateria del artefacto real, nunca inventada
     concepto: str = ""                        # taxonomia.concepto del artefacto real, nunca inventado
     content_id: str = ""                      # content_id real del artefacto de origen, si lo hay
     formato: str = "NO_ASIGNADO"
@@ -370,10 +371,11 @@ class RouteEngine:
             nodo_anterior_label=actual.nodo_actual_label,
             siguiente_vinculo=siguiente,
             materia=actual.materia,
-            # continuidad real: content_id/concepto/jurisdiccion vienen del
-            # artefacto que abrio la ruta y deben sobrevivir cada nodo, no
-            # solo el primero -- perderlos aqui seria perder el contexto que
-            # justifico abrir la ruta.
+            # continuidad real: content_id/submateria/concepto/jurisdiccion
+            # vienen del artefacto que abrio la ruta y deben sobrevivir cada
+            # nodo, no solo el primero -- perderlos aqui seria perder el
+            # contexto que justifico abrir la ruta.
+            submateria=actual.submateria,
             concepto=actual.concepto,
             content_id=actual.content_id,
             jurisdiccion=actual.jurisdiccion,
@@ -419,18 +421,19 @@ class RouteEngine:
         """Abre una ruta desde un artefacto real de ``content/*.json``.
 
         Solo extrae identidad editorial y taxonomía declaradas en el
-        artefacto; no inventa materia, conceptos ni autoridad jurídica. La
-        ruta sigue siendo una estructura de navegación y sus piezas
-        permanecen sin verificar. `content_id` y `concepto` quedan
-        registrados en CADA fila (incluidas las que se produzcan despues,
-        via `producir_pieza`, que los propaga) -- nunca solo en la
-        primera."""
+        artefacto; no inventa materia, submateria, conceptos ni autoridad
+        jurídica. La ruta sigue siendo una estructura de navegación y sus
+        piezas permanecen sin verificar. `content_id`, `submateria` y
+        `concepto` quedan registrados en CADA fila (incluidas las que se
+        produzcan despues, via `producir_pieza`, que los propaga) -- nunca
+        solo en la primera."""
         if not isinstance(artefacto, dict):
             raise ValueError("artefacto de contenido ausente o invalido.")
         proc = artefacto.get("procedencia") or {}
         tax = artefacto.get("taxonomia") or {}
         content_id = str(proc.get("content_id") or artefacto.get("id") or "").strip()
         materia = str(tax.get("materia") or "").strip()
+        submateria = str(tax.get("submateria") or "").strip()
         concepto = str(tax.get("concepto") or "").strip()
         entrada = str(artefacto.get("titulo") or artefacto.get("frase") or "").strip()
         if not content_id:
@@ -442,6 +445,7 @@ class RouteEngine:
         ruta_id = self.leer_entrada(entrada, materia)
         for fila in self.filas_de(ruta_id):
             fila.content_id = content_id
+            fila.submateria = submateria
             fila.concepto = concepto
         return ruta_id
 
