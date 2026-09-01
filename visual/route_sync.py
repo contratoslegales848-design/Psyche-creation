@@ -235,6 +235,121 @@ def avanzar_desde_content_id(engine, content_id, categoria_elegida=None,
     return resolution, export_ruta(engine, ruta_id)
 
 
+@dataclass
+class CicloResultado:
+    """Resultado de un ciclo operativo completo (pasos 1-13 del mandato).
+    No es un campo nuevo de la matriz -- es el reporte de UNA ejecucion del
+    ciclo, para que el llamador (CLI, otra sesion, un humano) sepa
+    exactamente que paso y cual es la unica proxima accion."""
+
+    resolution: object
+    fila: object                    # RouteMatrixRow real (no el dict exportado)
+    fila_exportada: dict            # las 14 columnas del contrato
+    continuidad_ok: bool
+    problemas_continuidad: list
+    visual_intentado: bool
+    visual_status: str              # "" si no se intento; si no, el status real del receipt
+    visual_error: str               # "" si no hubo excepcion
+    proxima_accion: str             # UNA sola frase ejecutable
+
+    def to_dict(self):
+        d = dict(self.fila_exportada)
+        d["_continuidad_ok"] = self.continuidad_ok
+        d["_visual_intentado"] = self.visual_intentado
+        d["_visual_status"] = self.visual_status
+        d["_proxima_accion_ciclo"] = self.proxima_accion
+        return d
+
+
+def ejecutar_ciclo_operativo(engine, content_id, categoria_elegida=None, formato="NO_ASIGNADO",
+                              brief=None, policy=None, provider=None, dry_run=True,
+                              resolver_module=None, pipeline_module=None):
+    """El ciclo operativo completo (pasos 1-13 del mandato de operacion
+    continua), en una sola llamada:
+
+    1-2. Lee el estado real y valida el content_id contra el canon
+         (`route_engine.abrir_ruta_desde_content_id` -> `resolver.resolve`,
+         fail-closed: ValueError si no resuelve).
+    3-4. Elige el siguiente nodo natural no utilizado y construye el
+         vinculo (`RouteEngine.producir_pieza`, nunca repite una arista).
+    5-6. Crea la pieza ejecutiva BORRADOR, siempre NO_VERIFICADO
+         (`route_engine._producir_pieza_borrador`).
+    7.   `proxima_accion` queda VERIFY_SOURCES o RUTA_COMPLETA segun
+         corresponda (ya calculado por `producir_pieza`).
+    8-10. SOLO si el llamador aporta `brief` + `policy` + `provider`, envia
+         la fila al pipeline canonico via
+         `pipeline.generate_visual_from_route_row` -- que evalua el gate
+         real y jamas produce mas que PENDIENTE_REVISION_HUMANA. Si no se
+         aportan los tres, el ciclo se detiene despues del paso 7 sin
+         inventar un brief (la direccion de arte no debe inventarse).
+    11.  El resultado del intento visual (status del receipt, o el error si
+         algo exploto) se registra en `fila.pieza_producida`, nunca en un
+         campo nuevo de las 14 columnas del contrato.
+    12.  La fila ya vive en `engine` (mutacion in-place vía
+         `RouteEngine.producir_pieza`) -- exportarla es idempotente
+         (`export_row`), no se duplica nada.
+    13.  Se relee `engine.filas_de(ruta_id)` y se corre
+         `valida_continuidad()` ANTES de devolver el resultado: si algo se
+         perdio, `continuidad_ok` es False y `problemas_continuidad` lo dice
+         explicito -- nunca se devuelve un resultado silenciosamente
+         corrupto.
+
+    Un fallo del intento visual (paso 8-10) NUNCA corrompe el estado de la
+    ruta: la pieza y su registro en la matriz ya existen antes de intentar
+    el paso visual, y una excepcion ahi se captura y se reporta en
+    `visual_error` en vez de propagarse y dejar la matriz en un estado
+    ambiguo.
+    """
+    resolution, ruta_id = route_engine.abrir_ruta_desde_content_id(
+        engine, content_id, resolver_module=resolver_module)
+    fila = engine.producir_pieza(ruta_id, categoria_elegida=categoria_elegida, formato=formato)
+
+    visual_intentado = False
+    visual_status = ""
+    visual_error = ""
+    if brief is not None and policy is not None and provider is not None:
+        visual_intentado = True
+        pl = pipeline_module
+        if pl is None:
+            import pipeline as pl
+        try:
+            run = pl.generate_visual_from_route_row(fila, brief, policy, provider, dry_run=dry_run)
+            visual_status = run.receipt.status
+            if fila.pieza_producida is not None:
+                fila.pieza_producida["visual_run_status"] = visual_status
+        except Exception as exc:  # nunca deja el ciclo a medias: se reporta, no se propaga
+            visual_error = f"{type(exc).__name__}: {exc}"
+            if fila.pieza_producida is not None:
+                fila.pieza_producida["visual_run_error"] = visual_error
+
+    # Paso 13: releer y comprobar que la informacion no se perdio ANTES de devolver.
+    continuidad_ok, problemas_continuidad = engine.valida_continuidad(ruta_id)
+
+    if visual_error:
+        proxima_accion = f"REVISAR_ERROR_VISUAL: {visual_error}"
+    elif visual_status == "GATE_CERRADO":
+        proxima_accion = "GATE_CERRADO: resolver bloqueo juridico antes de reintentar (ver receipt.motivos)."
+    elif visual_status in ("DRY_RUN", "PENDIENTE_REVISION_HUMANA"):
+        proxima_accion = (
+            "REVISION_HUMANA_VISUAL_PENDIENTE" if visual_status == "PENDIENTE_REVISION_HUMANA"
+            else "DRY_RUN_OK: repetir con dry_run=False y proveedor real para producir el asset."
+        )
+    else:
+        proxima_accion = fila.proxima_accion  # VERIFY_SOURCES | RUTA_COMPLETA | ABRIR_VINCULO
+
+    return CicloResultado(
+        resolution=resolution,
+        fila=fila,
+        fila_exportada=export_row(fila),
+        continuidad_ok=continuidad_ok,
+        problemas_continuidad=problemas_continuidad,
+        visual_intentado=visual_intentado,
+        visual_status=visual_status,
+        visual_error=visual_error,
+        proxima_accion=proxima_accion,
+    )
+
+
 def sync_is_noop(engine, receipt_path):
     """True si el estado ACTUAL del motor produce exactamente la misma
     firma que el ultimo recibo persistido -- es decir, sincronizar de nuevo

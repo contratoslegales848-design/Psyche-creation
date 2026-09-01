@@ -138,6 +138,86 @@ class TestGateEndToEndConContenidoRealNoPublicable(unittest.TestCase):
         self.assertEqual(provider.llamadas, 0)
 
 
+class TestCicloOperativoCompleto(unittest.TestCase):
+    """El ciclo de 14 pasos, en una sola llamada (route_sync.ejecutar_ciclo_operativo)."""
+
+    def test_sin_brief_se_detiene_despues_del_paso_7_sin_inventar_direccion_de_arte(self):
+        motor = route_engine.RouteEngine()
+        resultado = route_sync.ejecutar_ciclo_operativo(motor, "LM-PIEZA-01-REALES")
+        self.assertFalse(resultado.visual_intentado)
+        self.assertEqual(resultado.visual_status, "")
+        self.assertTrue(resultado.continuidad_ok, resultado.problemas_continuidad)
+        self.assertEqual(resultado.fila_exportada["estado_verificacion"], "NO_VERIFICADO")
+        self.assertIn(resultado.proxima_accion, ("VERIFY_SOURCES", "RUTA_COMPLETA", "ABRIR_VINCULO"))
+
+    def test_con_brief_y_gate_abierto_se_detiene_en_dry_run_sin_llamar_proveedor(self):
+        motor = route_engine.RouteEngine()
+        POLICY = VisualPolicy.load()
+        provider = FakeImageProvider()
+        brief = replace(make_brief(), content_id="LM-PIEZA-01-REALES")
+        resultado = route_sync.ejecutar_ciclo_operativo(
+            motor, "LM-PIEZA-01-REALES", brief=brief, policy=POLICY, provider=provider, dry_run=True,
+        )
+        self.assertTrue(resultado.visual_intentado)
+        self.assertEqual(resultado.visual_error, "")
+        self.assertIn(resultado.visual_status, ("DRY_RUN", "GATE_CERRADO"))
+        self.assertEqual(provider.llamadas, 0)
+        self.assertTrue(resultado.continuidad_ok, resultado.problemas_continuidad)
+        # el vinculo visual de la fila producida (MATERIA->CAUSA) llega al prompt.
+        self.assertTrue(resultado.fila.vinculo_visual)
+
+    def test_pieza_nunca_se_marca_verificada_pase_lo_que_pase_en_el_paso_visual(self):
+        motor = route_engine.RouteEngine()
+        POLICY = VisualPolicy.load()
+        provider = FakeImageProvider()
+        brief = replace(make_brief(), content_id="LM-PIEZA-01-REALES")
+        resultado = route_sync.ejecutar_ciclo_operativo(
+            motor, "LM-PIEZA-01-REALES", brief=brief, policy=POLICY, provider=provider, dry_run=True,
+        )
+        # ninguna funcion auxiliar (ciclo, pipeline de conveniencia, export) puede
+        # elevar la autoridad juridica de la pieza -- sigue NO_VERIFICADO siempre.
+        self.assertEqual(resultado.fila_exportada["estado_verificacion"], "NO_VERIFICADO")
+        self.assertEqual(resultado.fila.pieza_producida["estado_verificacion"], "NO_VERIFICADO")
+
+    def test_error_del_pipeline_no_deja_la_matriz_en_estado_ambiguo(self):
+        class ProveedorRoto:
+            def generate(self, *a, **kw):
+                raise RuntimeError("proveedor caido")
+
+            def capabilities(self):
+                from providers import FakeImageProvider
+                return FakeImageProvider().capabilities()
+
+        motor = route_engine.RouteEngine()
+        POLICY = VisualPolicy.load()
+        brief = replace(make_brief(), content_id="LM-PIEZA-01-REALES")
+        resultado = route_sync.ejecutar_ciclo_operativo(
+            motor, "LM-PIEZA-01-REALES", brief=brief, policy=POLICY, provider=ProveedorRoto(),
+            dry_run=False,
+        )
+        # la ruta ya avanzo (paso 3-7) ANTES del intento visual: un proveedor
+        # roto no borra ni corrompe esa parte, solo se reporta el error.
+        self.assertTrue(resultado.continuidad_ok, resultado.problemas_continuidad)
+        self.assertNotEqual(resultado.visual_error, "")
+        self.assertIn("REVISAR_ERROR_VISUAL", resultado.proxima_accion)
+        self.assertEqual(len(motor.filas_de(resultado.fila.ruta_id)), 2)  # MATERIA + el nodo producido
+
+    def test_content_id_inexistente_falla_seguro_sin_tocar_la_matriz(self):
+        motor = route_engine.RouteEngine()
+        with self.assertRaises(ValueError):
+            route_sync.ejecutar_ciclo_operativo(motor, "NO-EXISTE-ESTE-ID")
+        self.assertEqual(len(motor), 0)
+
+    def test_dos_ciclos_sucesivos_avanzan_sin_duplicar(self):
+        motor = route_engine.RouteEngine()
+        r1 = route_sync.ejecutar_ciclo_operativo(motor, "LM-PIEZA-01-REALES")
+        r2 = route_sync.ejecutar_ciclo_operativo(motor, "LM-PIEZA-01-REALES")
+        self.assertEqual(r1.fila.ruta_id, r2.fila.ruta_id)
+        self.assertNotEqual(r1.fila.nodo_actual, r2.fila.nodo_actual)
+        self.assertTrue(r2.continuidad_ok, r2.problemas_continuidad)
+        route_sync.assert_no_duplicate_rows(route_sync.export_ruta(motor, r1.fila.ruta_id))
+
+
 class TestIdempotencia(unittest.TestCase):
     def test_segunda_sincronizacion_no_duplica_filas(self):
         motor = route_engine.RouteEngine()
