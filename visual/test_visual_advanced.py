@@ -587,10 +587,6 @@ class TestObservabilidad(unittest.TestCase):
             self.assertNotIn(s, blob)
 
 
-if __name__ == "__main__":
-    unittest.main(verbosity=2)
-
-
 class TestIdempotencia(unittest.TestCase):
     """§30 — un rerun accidental no duplica generacion; regenerar es intencional."""
 
@@ -803,3 +799,7 @@ class TestFeedbackDebilidadMetafora(unittest.TestCase):
         nuevo, _ = feedback.apply_feedback(b, ["WEAK_VISUAL_METAPHOR", "TOO_GENERIC"])
         self.assertEqual(nuevo.content_id, "LM-X")
         self.assertEqual(nuevo.formato, "VERTICAL_9_16")
+
+
+if __name__ == "__main__":
+    unittest.main(verbosity=2)
