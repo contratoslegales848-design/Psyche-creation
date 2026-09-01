@@ -275,10 +275,6 @@ class TestPipelineConComposicion(unittest.TestCase):
                             for m in run.receipt.motivos))
 
 
-if __name__ == "__main__":
-    unittest.main(verbosity=2)
-
-
 class TestSuperficiesDeMarcaVariadas(unittest.TestCase):
     """§32 — BrandCompositionPlan no esta atado a una sola ubicacion."""
 
@@ -337,3 +333,7 @@ class TestHeuristicasDeImagen(unittest.TestCase):
             exact_copy=FRASE, content_type="maxima", reserved_surface=surface())
         self.assertTrue(run.ok)   # estructuralmente pasa
         self.assertEqual(run.receipt.semantic_qa["state"], inspection.NEEDS_HUMAN_REVIEW)
+
+
+if __name__ == "__main__":
+    unittest.main(verbosity=2)

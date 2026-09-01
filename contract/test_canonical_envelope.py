@@ -81,10 +81,6 @@ class TestContrato(unittest.TestCase):
             json.loads(f.read_text(encoding="utf-8"))
 
 
-if __name__ == "__main__":
-    unittest.main(verbosity=2)
-
-
 class TestTransporte(unittest.TestCase):
     """Metadatos de transporte para trazabilidad cross-repo (portados de PR #27)."""
 
@@ -119,3 +115,7 @@ class TestTransporte(unittest.TestCase):
         for falso in ("APPROVED", "LIVE", "PUBLISHABLE", "SUPER_APTO"):
             env = dict(load("valid_ready"), claim_state=falso)
             self.assertTrue(validate_envelope(env), f"{falso} no debe aceptarse")
+
+
+if __name__ == "__main__":
+    unittest.main(verbosity=2)
