@@ -14,6 +14,8 @@ LegalMente es una marca panhispánica de educación jurídica (no una cuenta de 
 
 Una mención en un documento de Drive **no es** una capacidad implementada. Antes de asumir que algo existe (una skill, un agente, un hook), verificar el archivo real en `.claude/` o `/root/.claude/`.
 
+**Dirección de contenido vigente**: antes de proponer o producir cualquier tema, materia o pieza, leer `docs/direccion-basico-antes-que-complejo.md` — prioriza lo básico transversal (mismo en toda jurisdicción panhispánica) sobre lo que se ramifica por país, fija el orden de materias a llenar, y define el protocolo para que cualquier agente estudie antes de contribuir.
+
 ## 3. Jerarquía de autoridad
 
 1. Decisiones expresas del fundador.
