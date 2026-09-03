@@ -192,6 +192,10 @@ jobs:
           done
           exit $fail
 
+      - name: Motor de temas — barrera de transversalidad (unittest)
+        working-directory: content/topics
+        run: python3 -m unittest test_topics -v
+
       - name: Todo el contenido debe declarar procedencia verificable
         working-directory: .
         run: python3 scripts/validate-content-provenance.py
