@@ -12,7 +12,7 @@ tener su contenido en `ACCESS_GAP`, porque las instrucciones prohíben descargar
 o ejecutar artefactos externos de forma automática. Existencia verificada no es
 contenido verificado.
 
-Búsqueda ejecutada: 2026-09-03, cuenta legallmente@gmail.com, vía CLI autorizado.
+Búsqueda ejecutada: 2026-09-03 desde la cuenta de Drive de la sesión, vía CLI autorizado.
 Sin escritura en Drive.
 """
 

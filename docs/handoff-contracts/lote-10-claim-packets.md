@@ -80,7 +80,7 @@ Cinco, todos míos, ninguno simulado:
 ## Dependencias bloqueadas
 
 `BLOCKED_EXTERNAL_ACCESS` — los documentos rectores de Drive citados como evidencia devuelven
-`Requested entity was not found` con la cuenta `legallmente@gmail.com`: Manifiesto Visual Rector,
+`Requested entity was not found` con la cuenta de Drive de esta sesión: Manifiesto Visual Rector,
 Catálogo Top 15, Expediente Tetris y Manifiesto Operativo de Agentes. **Precisión necesaria:** eso
 significa *no accesibles desde esta cuenta*, no que no existan. No se sustituyeron por inferencias.
 
