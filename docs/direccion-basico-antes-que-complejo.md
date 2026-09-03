@@ -10,6 +10,14 @@ hecho todavía — el fundador pidió "repo ahora, Drive después" — y sigue v
 regla de CLAUDE.md §6: no se modifica Drive sin autorización explícita para esa acción
 concreta cuando llegue el momento.
 
+> **Implementación ejecutable (2026-09-03).** Este documento fija la dirección; quien la hace
+> cumplir es el motor de temas de `content/topics/`, descrito en
+> [`docs/motor-de-temas-transversales.md`](motor-de-temas-transversales.md). Un tema que nombra
+> un país, una ley nacional, una moneda o un plazo ya no puede entrar al catálogo: hay una
+> prueba que lo impide. Este archivo sigue siendo el canon de la decisión; el motor es su
+> ejecución, nunca al revés.
+
+
 ## 1. Principio rector
 
 El motor de LegalMente (route engine + fórmula visual + verificación jurídica) ya

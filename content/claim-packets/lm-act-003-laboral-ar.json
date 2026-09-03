@@ -1,0 +1,154 @@
+{
+  "schema_version": "4.0",
+  "piece_id": "LM-ACT-003",
+  "claims": [
+    {
+      "nucleo_transversal": null,
+      "variaciones_materiales": null,
+      "jurisdicciones_revisadas": null,
+      "diferencias_buscadas": null,
+      "contraejemplos_encontrados": null,
+      "justificacion_suficiencia_comparada": null,
+      "confianza": "baja",
+      "riesgo_falsa_universalizacion": "bajo",
+      "riesgo_asesoria": "medio",
+      "platform_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "confidentiality_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "estado": "REQUIERE_INVESTIGACION",
+      "revision_humana": {
+        "estado": "PENDIENTE",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null,
+        "contenido_hash_sha256": null
+      },
+      "gate_arte": "CERRADO",
+      "reformulacion_propuesta": {
+        "texto": null,
+        "verificada": false,
+        "nuevo_claim_id": null
+      },
+      "claim_id": "lm-act-003-claim-1",
+      "texto_exacto": "La Ley 27.742 de Bases derogo las multas por falta de registro laboral previstas en la Ley 24.013.",
+      "ubicacion": "hook",
+      "tipo": "regla",
+      "alcance": "CAPA_C_NACIONAL",
+      "jurisdiccion": "Argentina",
+      "fuentes": [
+        {
+          "id": "SRC-ACT003-AR-LEY-27742",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Ley 27.742 de Bases y Puntos de Partida para la Libertad de los Argentinos",
+          "organismo_autor": "Boletín Oficial de la República Argentina",
+          "url": "https://www.boletinoficial.gob.ar/detalleAviso/primera/310086/20240708",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-09-03",
+          "localizador": "capitulo de modernizacion laboral (articulo exacto sin determinar)",
+          "jurisdicciones_cubiertas": [
+            "Argentina"
+          ],
+          "registro_oficial_id": "boletinoficial-gob-ar",
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": false,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": null,
+            "metodo_o_evidencia": null,
+            "observaciones": "No se pudo consultar el texto oficial: WebFetch permanece EGRESS_BLOCKED hacia dominios oficiales en esta sesion, y el enlace del CGPJ/CENDOJ redirige a CAPTCHA (no se resuelve ni se elude). Ningun booleano puede marcarse true sin lectura real. Ademas falta el localizador exacto: 'derogo las multas' exige citar el articulo derogatorio concreto, no la ley entera."
+          }
+        }
+      ],
+      "redaccion_prohibida": "La falta de registro laboral ya no tiene ninguna consecuencia en Argentina.",
+      "notas": "Afirmacion derogatoria: la mas fragil de verificar y la mas danina si es falsa. Siguiente accion tecnica: obtener el texto del Boletin Oficial y citar el articulo derogatorio exacto."
+    },
+    {
+      "nucleo_transversal": null,
+      "variaciones_materiales": null,
+      "jurisdicciones_revisadas": null,
+      "diferencias_buscadas": null,
+      "contraejemplos_encontrados": null,
+      "justificacion_suficiencia_comparada": null,
+      "confianza": "baja",
+      "riesgo_falsa_universalizacion": "bajo",
+      "riesgo_asesoria": "medio",
+      "platform_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "confidentiality_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "estado": "REQUIERE_INVESTIGACION",
+      "revision_humana": {
+        "estado": "PENDIENTE",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null,
+        "contenido_hash_sha256": null
+      },
+      "gate_arte": "CERRADO",
+      "reformulacion_propuesta": {
+        "texto": null,
+        "verificada": false,
+        "nuevo_claim_id": null
+      },
+      "claim_id": "lm-act-003-claim-2",
+      "texto_exacto": "La indemnizacion por despido sin causa del art. 245 de la Ley de Contrato de Trabajo sigue vigente en Argentina.",
+      "ubicacion": "caption",
+      "tipo": "regla",
+      "alcance": "CAPA_C_NACIONAL",
+      "jurisdiccion": "Argentina",
+      "fuentes": [
+        {
+          "id": "SRC-ACT003-AR-LCT-245",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Ley de Contrato de Trabajo N.o 20.744 — art. 245 (indemnizacion por antiguedad)",
+          "organismo_autor": "Información Legislativa y Documental (InfoLEG, Argentina)",
+          "url": "https://servicios.infoleg.gob.ar/infolegInternet/anexos/25000-29999/25552/texact.htm",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-09-03",
+          "localizador": "art. 245",
+          "jurisdicciones_cubiertas": [
+            "Argentina"
+          ],
+          "registro_oficial_id": "infoleg-gob-ar",
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": false,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": null,
+            "metodo_o_evidencia": null,
+            "observaciones": "No se pudo consultar el texto oficial: WebFetch permanece EGRESS_BLOCKED hacia dominios oficiales en esta sesion, y el enlace del CGPJ/CENDOJ redirige a CAPTCHA (no se resuelve ni se elude). Ningun booleano puede marcarse true sin lectura real. 'Sigue vigente' es precisamente una afirmacion de vigencia: exige vigencia_comprobada=true, que aqui no puede sostenerse."
+          }
+        }
+      ],
+      "redaccion_prohibida": "El art. 245 LCT garantiza siempre la misma indemnizacion.",
+      "notas": "Separado del claim-1 a proposito: que una norma se derogue no prueba que otra siga vigente. Siguiente accion tecnica: comprobar el texto actualizado de la LCT tras la Ley 27.742."
+    }
+  ],
+  "estado_agregado": "REQUIERE_INVESTIGACION",
+  "revisiones_pendientes": [
+    "lm-act-003-claim-1",
+    "lm-act-003-claim-2"
+  ],
+  "gate_global_arte": "CERRADO"
+}

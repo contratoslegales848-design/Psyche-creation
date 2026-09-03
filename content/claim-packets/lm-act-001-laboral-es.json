@@ -1,0 +1,154 @@
+{
+  "schema_version": "4.0",
+  "piece_id": "LM-ACT-001",
+  "claims": [
+    {
+      "nucleo_transversal": null,
+      "variaciones_materiales": null,
+      "jurisdicciones_revisadas": null,
+      "diferencias_buscadas": null,
+      "contraejemplos_encontrados": null,
+      "justificacion_suficiencia_comparada": null,
+      "confianza": "baja",
+      "riesgo_falsa_universalizacion": "bajo",
+      "riesgo_asesoria": "medio",
+      "platform_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "confidentiality_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "estado": "REQUIERE_INVESTIGACION",
+      "revision_humana": {
+        "estado": "PENDIENTE",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null,
+        "contenido_hash_sha256": null
+      },
+      "gate_arte": "CERRADO",
+      "reformulacion_propuesta": {
+        "texto": null,
+        "verificada": false,
+        "nuevo_claim_id": null
+      },
+      "claim_id": "lm-act-001-claim-1",
+      "texto_exacto": "Despidieron al trabajador con carta formal. La justicia declaro el despido improcedente porque la empresa omitio darle audiencia previa para defenderse.",
+      "ubicacion": "hook",
+      "tipo": "regla",
+      "alcance": "CAPA_C_NACIONAL",
+      "jurisdiccion": "España",
+      "fuentes": [
+        {
+          "id": "SRC-ACT001-ES-STS-1250-2024",
+          "tipo_fuente": "JURISPRUDENCIA_OFICIAL",
+          "titulo": "STS 1250/2024, Sala de lo Social — audiencia previa al despido disciplinario",
+          "organismo_autor": "Consejo General del Poder Judicial",
+          "url": "https://www.poderjudicial.es/search/indexAN.jsp",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-09-03",
+          "localizador": "STS 1250/2024 (numero de resolucion declarado por el fundador, sin verificar)",
+          "jurisdicciones_cubiertas": [
+            "España"
+          ],
+          "registro_oficial_id": "poderjudicial-es",
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": false,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": null,
+            "metodo_o_evidencia": null,
+            "observaciones": "No se pudo consultar el texto oficial: WebFetch permanece EGRESS_BLOCKED hacia dominios oficiales en esta sesion, y el enlace del CGPJ/CENDOJ redirige a CAPTCHA (no se resuelve ni se elude). Ningun booleano puede marcarse true sin lectura real. El numero de sentencia lo aporto el fundador; no se ha localizado la resolucion en CENDOJ desde esta sesion."
+          }
+        }
+      ],
+      "redaccion_prohibida": "En Espana todo despido sin audiencia previa es automaticamente improcedente.",
+      "notas": "Afirmacion de derecho espanol: solo puede sostenerse con jurisprudencia espanola. La fuente del Convenio 158 OIT se separo al claim-2 porque un convenio internacional no es, por si solo, fuente de derecho interno espanol. Siguiente accion tecnica: obtener la resolucion desde CENDOJ (hoy tras CAPTCHA)."
+    },
+    {
+      "nucleo_transversal": null,
+      "variaciones_materiales": null,
+      "jurisdicciones_revisadas": null,
+      "diferencias_buscadas": null,
+      "contraejemplos_encontrados": null,
+      "justificacion_suficiencia_comparada": null,
+      "confianza": "baja",
+      "riesgo_falsa_universalizacion": "bajo",
+      "riesgo_asesoria": "medio",
+      "platform_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "confidentiality_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "estado": "REQUIERE_INVESTIGACION",
+      "revision_humana": {
+        "estado": "PENDIENTE",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null,
+        "contenido_hash_sha256": null
+      },
+      "gate_arte": "CERRADO",
+      "reformulacion_propuesta": {
+        "texto": null,
+        "verificada": false,
+        "nuevo_claim_id": null
+      },
+      "claim_id": "lm-act-001-claim-2",
+      "texto_exacto": "El Convenio 158 de la OIT, en su articulo 7, contempla que no se ponga fin a la relacion de trabajo por motivos de conducta sin dar al trabajador la posibilidad de defenderse previamente.",
+      "ubicacion": "caption",
+      "tipo": "regla",
+      "alcance": "NO_APLICA",
+      "jurisdiccion": null,
+      "fuentes": [
+        {
+          "id": "SRC-ACT001-OIT-C158-ART7",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Convenio 158 OIT sobre la terminacion de la relacion de trabajo — art. 7",
+          "organismo_autor": "Organización Internacional del Trabajo",
+          "url": "https://www.ilo.org/dyn/normlex/en/f?p=NORMLEXPUB:12100:0::NO::P12100_ILO_CODE:C158",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-09-03",
+          "localizador": "art. 7",
+          "jurisdicciones_cubiertas": [
+            "Ámbito internacional"
+          ],
+          "registro_oficial_id": "ilo-org",
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": false,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": null,
+            "metodo_o_evidencia": null,
+            "observaciones": "Organismo registrado el 2026-09-03 (ilo-org). El registro solo lo autoriza a respaldar 'Ambito internacional': un convenio OIT no cubre Espana por si solo, hace falta ademas la fuente nacional espanola. Sigue faltando lectura del texto."
+          }
+        }
+      ],
+      "redaccion_prohibida": "El Convenio 158 de la OIT obliga directamente a las empresas espanolas.",
+      "notas": "Alcance NO_APLICA a proposito: describe el contenido de un instrumento internacional, no una regla nacional. Un convenio solo obliga en el pais que lo ratifico y su efecto interno depende de ese derecho: afirmar consecuencias en Espana exige ademas la fuente espanola del claim-1. Siguiente accion tecnica: leer el art. 7 en NORMLEX."
+    }
+  ],
+  "estado_agregado": "REQUIERE_INVESTIGACION",
+  "revisiones_pendientes": [
+    "lm-act-001-claim-1",
+    "lm-act-001-claim-2"
+  ],
+  "gate_global_arte": "CERRADO"
+}

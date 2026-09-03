@@ -1,0 +1,154 @@
+{
+  "schema_version": "4.0",
+  "piece_id": "LM-HIS-005",
+  "claims": [
+    {
+      "nucleo_transversal": null,
+      "variaciones_materiales": null,
+      "jurisdicciones_revisadas": null,
+      "diferencias_buscadas": null,
+      "contraejemplos_encontrados": null,
+      "justificacion_suficiencia_comparada": null,
+      "confianza": "baja",
+      "riesgo_falsa_universalizacion": "bajo",
+      "riesgo_asesoria": "alto",
+      "platform_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "confidentiality_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "estado": "REQUIERE_INVESTIGACION",
+      "revision_humana": {
+        "estado": "PENDIENTE",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null,
+        "contenido_hash_sha256": null
+      },
+      "gate_arte": "CERRADO",
+      "reformulacion_propuesta": {
+        "texto": null,
+        "verificada": false,
+        "nuevo_claim_id": null
+      },
+      "claim_id": "lm-his-005-claim-1",
+      "texto_exacto": "Una clausula suelo que no supera el control de transparencia material es nula, aunque su redaccion sea gramaticalmente clara.",
+      "ubicacion": "hook",
+      "tipo": "regla",
+      "alcance": "CAPA_C_NACIONAL",
+      "jurisdiccion": "España",
+      "fuentes": [
+        {
+          "id": "SRC-HIS005-ES-STS-2013",
+          "tipo_fuente": "JURISPRUDENCIA_OFICIAL",
+          "titulo": "STS de 9 de mayo de 2013 — clausulas suelo y transparencia material",
+          "organismo_autor": "Consejo General del Poder Judicial",
+          "url": "https://www.poderjudicial.es/search/indexAN.jsp",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-09-03",
+          "localizador": "STS 9-5-2013 (Pleno Sala Primera)",
+          "jurisdicciones_cubiertas": [
+            "España"
+          ],
+          "registro_oficial_id": "poderjudicial-es",
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": false,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": null,
+            "metodo_o_evidencia": null,
+            "observaciones": "No se pudo consultar el texto oficial: WebFetch permanece EGRESS_BLOCKED hacia dominios oficiales en esta sesion. Ningun booleano de verificacion puede marcarse true sin lectura real. ATENCION: esa sentencia limito la retroactividad; la restitucion total procede de jurisprudencia posterior del TJUE. Afirmar 'desde el origen' citando solo la STS de 2013 seria incorrecto."
+          }
+        }
+      ],
+      "redaccion_prohibida": "La letra clara siempre salva la clausula.",
+      "notas": "Esta es la parte que la STS de 9-5-2013 SI sostiene: nulidad por falta de transparencia material. Se separo del efecto restitutorio, que esa misma sentencia limito. Siguiente accion tecnica: leer el fallo desde CENDOJ."
+    },
+    {
+      "nucleo_transversal": null,
+      "variaciones_materiales": null,
+      "jurisdicciones_revisadas": null,
+      "diferencias_buscadas": null,
+      "contraejemplos_encontrados": null,
+      "justificacion_suficiencia_comparada": null,
+      "confianza": "baja",
+      "riesgo_falsa_universalizacion": "bajo",
+      "riesgo_asesoria": "alto",
+      "platform_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "confidentiality_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "estado": "REQUIERE_INVESTIGACION",
+      "revision_humana": {
+        "estado": "PENDIENTE",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null,
+        "contenido_hash_sha256": null
+      },
+      "gate_arte": "CERRADO",
+      "reformulacion_propuesta": {
+        "texto": null,
+        "verificada": false,
+        "nuevo_claim_id": null
+      },
+      "claim_id": "lm-his-005-claim-2",
+      "texto_exacto": "La restitucion de lo cobrado de mas desde el origen del contrato, sin limite temporal, deriva de la jurisprudencia del TJUE posterior a 2013, no de la sentencia espanola de 9 de mayo de 2013.",
+      "ubicacion": "hook",
+      "tipo": "consecuencia",
+      "alcance": "CAPA_C_NACIONAL",
+      "jurisdiccion": "España",
+      "fuentes": [
+        {
+          "id": "SRC-HIS005-UE-TJUE",
+          "tipo_fuente": "JURISPRUDENCIA_OFICIAL",
+          "titulo": "Jurisprudencia del TJUE sobre restitucion en clausulas abusivas",
+          "organismo_autor": "Tribunal de Justicia de la Unión Europea",
+          "url": "https://curia.europa.eu/juris/recherche.jsf",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-09-03",
+          "localizador": "asunto concreto SIN DETERMINAR",
+          "jurisdicciones_cubiertas": [
+            "Unión Europea"
+          ],
+          "registro_oficial_id": null,
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": false,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": null,
+            "metodo_o_evidencia": null,
+            "observaciones": "El TJUE (curia.europa.eu) NO figura en el registro oficial unico: EUR-Lex esta registrado para normas, pero no hay entrada para la jurisdiccion del Tribunal. Sin ella no puede alcanzar Nivel 1. Falta ademas identificar el asunto concreto."
+          }
+        }
+      ],
+      "redaccion_prohibida": "La STS de 9-5-2013 obliga al banco a devolver todo lo cobrado de mas desde el origen.",
+      "notas": "CORRECCION DE FONDO. El copy original afirmaba restitucion 'desde el origen' citando la STS de 2013, que precisamente LIMITO la retroactividad. Publicarlo asi habria sido incorrecto. La restitucion integra procede del TJUE, cuya jurisdiccion (curia.europa.eu) NO esta en el registro oficial: dependencia declarada. Siguiente accion tecnica: registrar curia.europa.eu e identificar el asunto exacto."
+    }
+  ],
+  "estado_agregado": "REQUIERE_INVESTIGACION",
+  "revisiones_pendientes": [
+    "lm-his-005-claim-1",
+    "lm-his-005-claim-2"
+  ],
+  "gate_global_arte": "CERRADO"
+}

@@ -71,25 +71,18 @@ jobs:
           fi
           echo "Sin bytecode rastreado."
 
-      - name: Pruebas unitarias (unittest)
+      # Descubrimiento, no enumeración. Enumerar módulos dejaba fuera de CI
+      # cualquier archivo de prueba nuevo sin que nada lo señalara: así se
+      # quedaron sin ejecutar durante semanas 146 de las 355 pruebas de
+      # `visual/`, entre ellas todo el route engine y los invariantes de
+      # topología. Con `discover`, una prueba nueva entra en CI por existir.
+      - name: Pruebas de la skill jurídica (unittest discover)
         working-directory: .claude/skills/legalmente-legal-verification/scripts
-        run: python3 -m unittest test_validate_claim_packet -v
+        run: python3 -m unittest discover -p 'test_*.py' -v
 
-      - name: Pruebas unitarias del control de gobernanza del piloto (unittest)
-        working-directory: .claude/skills/legalmente-legal-verification/scripts
-        run: python3 -m unittest test_check_pilot_governance -v
-
-      - name: Pruebas unitarias de la cadena post-aprobación (unittest)
-        working-directory: .claude/skills/legalmente-legal-verification/scripts
-        run: python3 -m unittest test_validate_publication_chain -v
-
-      - name: Pruebas unitarias del control de confidencialidad (unittest)
-        working-directory: .claude/skills/legalmente-legal-verification/scripts
-        run: python3 -m unittest test_confidentiality_rules -v
-
-      - name: Pruebas unitarias de la procedencia del contenido (unittest)
+      - name: Pruebas de scripts de la raíz (unittest discover)
         working-directory: scripts
-        run: python3 -m unittest test_validate_content_provenance -v
+        run: python3 -m unittest discover -p 'test_*.py' -v
 
       - name: Fixtures positivos deben validar (exit 0)
         run: |
@@ -202,14 +195,19 @@ jobs:
 
       - name: Pipeline visual — suite completa (proveedor falso, sin red ni créditos)
         working-directory: visual
-        run: |
-          python3 -m unittest \
-            test_visual_pipeline test_visual_advanced \
-            test_composition test_http_provider test_resolver -v
+        run: python3 -m unittest discover -p 'test_*.py' -v
+
+      - name: Ecosistema — registro, relaciones y matriz de gates (unittest discover)
+        working-directory: ecosystem
+        run: python3 -m unittest discover -p 'test_*.py' -v
+
+      - name: Motor de temas — barrera de transversalidad (unittest)
+        working-directory: content/topics
+        run: python3 -m unittest test_topics -v
 
       - name: Contrato canónico cross-repo
         working-directory: contract
-        run: python3 -m unittest test_canonical_envelope -v
+        run: python3 -m unittest discover -p 'test_*.py' -v
 
       - name: El pipeline visual no puede aprobar nada por sí solo
         working-directory: visual

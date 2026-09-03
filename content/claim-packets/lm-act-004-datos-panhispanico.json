@@ -1,0 +1,167 @@
+{
+  "schema_version": "4.0",
+  "piece_id": "LM-ACT-004",
+  "claims": [
+    {
+      "claim_id": "lm-act-004-claim-1",
+      "texto_exacto": "Escanear el iris a cambio de criptomonedas no convalida el tratamiento: las autoridades frenan la captacion biometrica cuando el consentimiento es incentivado y afecta a menores.",
+      "ubicacion": "hook",
+      "tipo": "regla",
+      "alcance": "CAPA_A_TRANSVERSAL",
+      "jurisdiccion": null,
+      "nucleo_transversal": "Nucleo declarado, no verificado: un consentimiento incentivado economicamente podria no ser libre, y el tratamiento de datos biometricos de menores recibe proteccion reforzada. Verificar por pais antes de sostenerlo como transversal.",
+      "variaciones_materiales": null,
+      "jurisdicciones_revisadas": [
+        {
+          "pais": "España",
+          "fuente_ids": [
+            "SRC-ACT004-ES-AEPD"
+          ]
+        },
+        {
+          "pais": "México",
+          "fuente_ids": [
+            "SRC-ACT004-MX-INAI"
+          ]
+        },
+        {
+          "pais": "Colombia",
+          "fuente_ids": [
+            "SRC-ACT004-CO-SIC"
+          ]
+        }
+      ],
+      "diferencias_buscadas": "Se debe comprobar por pais: (1) si el consentimiento incentivado se trata como viciado o solo como indicio; (2) si la biometria es categoria especial con prohibicion de principio o solo con salvaguardas; (3) que autoridad tiene competencia cautelar y con que efecto; (4) el regimen especifico de menores.",
+      "contraejemplos_encontrados": "NINGUNO INVESTIGADO TODAVIA. La ausencia de contraejemplos aqui no es evidencia de convergencia: es ausencia de investigacion.",
+      "justificacion_suficiencia_comparada": "INSUFICIENTE. Se declaran tres paises revisados, pero ninguna de sus autoridades (AEPD, INAI, SIC) figura en el registro oficial unico, asi que ninguna alcanza Nivel 1. El RGPD via EUR-Lex solo respalda el ambito 'Union Europea' — el propio validador rechazo el intento de hacerlo cubrir Espana como jurisdiccion nacional. El techo de Capa A es el MINIMO entre los techos por pais: con tres paises sin cobertura verificada, el claim no puede superar REQUIERE_INVESTIGACION.",
+      "fuentes": [
+        {
+          "id": "SRC-ACT004-UE-RGPD-7",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Reglamento (UE) 2016/679 (RGPD) — art. 7, condiciones para el consentimiento",
+          "organismo_autor": "EUR-Lex — Oficina de Publicaciones de la Unión Europea",
+          "url": "https://eur-lex.europa.eu/legal-content/ES/TXT/?uri=CELEX%3A32016R0679",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-09-03",
+          "localizador": "art. 7",
+          "jurisdicciones_cubiertas": [
+            "Unión Europea"
+          ],
+          "registro_oficial_id": "eur-lex-europa-eu",
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": false,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": null,
+            "metodo_o_evidencia": null,
+            "observaciones": "No se pudo consultar el texto oficial: WebFetch permanece EGRESS_BLOCKED hacia dominios oficiales en esta sesion. El registro oficial unico solo autoriza a EUR-Lex a respaldar el ambito 'Union Europea': no cubre Espana como jurisdiccion nacional, ni Mexico, ni Colombia. Por tanto Espana queda sin fuente propia registrada en este claim."
+          }
+        },
+        {
+          "id": "SRC-ACT004-ES-AEPD",
+          "tipo_fuente": "AUTORIDAD_PUBLICA_OFICIAL",
+          "titulo": "Resoluciones de la AEPD sobre tratamiento de datos biometricos",
+          "organismo_autor": "Agencia Española de Protección de Datos",
+          "url": "https://www.aepd.es/informes-y-resoluciones/resoluciones",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-09-03",
+          "localizador": "resolucion concreta SIN DETERMINAR",
+          "jurisdicciones_cubiertas": [
+            "España"
+          ],
+          "registro_oficial_id": "aepd-es",
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": false,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": null,
+            "metodo_o_evidencia": null,
+            "observaciones": "Organismo registrado el 2026-09-03 por orden del fundador. Nivel 1 sigue sin alcanzarse: faltan localizador concreto y lectura del texto oficial. Ademas falta el localizador."
+          }
+        },
+        {
+          "id": "SRC-ACT004-MX-INAI",
+          "tipo_fuente": "AUTORIDAD_PUBLICA_OFICIAL",
+          "titulo": "Criterios del INAI sobre datos biometricos",
+          "organismo_autor": "Instituto Nacional de Transparencia, Acceso a la Información y Protección de Datos Personales",
+          "url": "https://home.inai.org.mx/",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-09-03",
+          "localizador": "criterio concreto SIN DETERMINAR",
+          "jurisdicciones_cubiertas": [
+            "México"
+          ],
+          "registro_oficial_id": "inai-org-mx",
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": false,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": null,
+            "metodo_o_evidencia": null,
+            "observaciones": "Organismo registrado el 2026-09-03 por orden del fundador. Nivel 1 sigue sin alcanzarse: faltan localizador concreto y lectura del texto oficial. El INAI ademas atraviesa cambios institucionales que obligan a comprobar competencia vigente antes de citarlo."
+          }
+        },
+        {
+          "id": "SRC-ACT004-CO-SIC",
+          "tipo_fuente": "AUTORIDAD_PUBLICA_OFICIAL",
+          "titulo": "Actuaciones de la SIC en proteccion de datos biometricos",
+          "organismo_autor": "Superintendencia de Industria y Comercio",
+          "url": "https://www.sic.gov.co/",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-09-03",
+          "localizador": "actuacion concreta SIN DETERMINAR",
+          "jurisdicciones_cubiertas": [
+            "Colombia"
+          ],
+          "registro_oficial_id": "sic-gov-co",
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": false,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": null,
+            "metodo_o_evidencia": null,
+            "observaciones": "Organismo registrado el 2026-09-03 por orden del fundador. Nivel 1 sigue sin alcanzarse: faltan localizador concreto y lectura del texto oficial."
+          }
+        }
+      ],
+      "confianza": "baja",
+      "riesgo_falsa_universalizacion": "alto",
+      "riesgo_asesoria": "medio",
+      "platform_review": {
+        "required": true,
+        "status": "PENDIENTE",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": "Tema sensible en plataformas: biometria, menores y criptomonedas. Requiere Platform Risk Check antes de cualquier difusion. Esta skill lo senala, no lo ejecuta."
+      },
+      "confidentiality_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "estado": "REQUIERE_INVESTIGACION",
+      "revision_humana": {
+        "estado": "PENDIENTE",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null,
+        "contenido_hash_sha256": null
+      },
+      "gate_arte": "CERRADO",
+      "reformulacion_propuesta": {
+        "texto": null,
+        "verificada": false,
+        "nuevo_claim_id": null
+      },
+      "redaccion_prohibida": "En todos los paises hispanohablantes es ilegal escanear el iris a cambio de criptomonedas.",
+      "notas": "Riesgo de falsa universalizacion ALTO: la redaccion declarada habla de 'las autoridades' en plural y sin pais, que es exactamente el patron que la Capa A debe impedir cuando no hay cobertura por jurisdiccion. Siguiente accion tecnica: anadir AEPD, INAI y SIC al registro oficial unico y localizar una resolucion concreta por pais."
+    }
+  ],
+  "estado_agregado": "REQUIERE_INVESTIGACION",
+  "revisiones_pendientes": [
+    "lm-act-004-claim-1"
+  ],
+  "gate_global_arte": "CERRADO"
+}

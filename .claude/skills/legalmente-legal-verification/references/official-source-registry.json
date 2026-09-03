@@ -1,6 +1,7 @@
 {
-  "registry_version": "1.0",
+  "registry_version": "1.1",
   "_nota": "Registro ÚNICO y cerrado de organismos oficiales conocidos por el validador (Fase 1D.1). Toda validación de hostname, organismo, tipo de fuente permitido y jurisdicción/ámbito se deriva de aquí — el validador NO mantiene ninguna lista paralela. Un hostname oficial legítimo que falte aquí falla cerrado (genera advertencia, nunca alcanza Nivel 1) hasta que un humano añada la entrada explícitamente. 'tipos_fuente_permitidos' es deliberadamente conservador: ante la duda, se permite MENOS tipos, no más — cada entrada documenta por qué se restringió así, para revisión humana.",
+  "_nota_verificacion": "Dos verificaciones NO equivalentes, deliberadamente separadas y nunca colapsables. 'verificacion_identidad' = SOURCE_IDENTITY_VERIFIED significa SOLO que el dominio pertenece al organismo declarado. 'verificacion_contenido' = SOURCE_CONTENT_VERIFIED significaría que un texto jurídico concreto fue leído literalmente en ese dominio; hoy NINGUNA entrada lo alcanza, porque WebFetch está EGRESS_BLOCKED. Identidad verificada NO abre gate, NO acredita vigencia normativa y NO sustituye la lectura del texto: una fuente sigue necesitando 'texto_exacto_consultado' y 'vigencia_comprobada' en su propio claim para alcanzar Nivel 1. 'vigencia_institucional' es un tercer eje distinto: describe si el ORGANISMO sigue existiendo y siendo competente (VIGENTE) o fue extinguido (HISTORICO), y toda entrada HISTORICO declara su sucesor en 'sucedido_por'.",
   "sources": [
     {
       "id": "boe-es",
@@ -245,6 +246,73 @@
       "tipos_fuente_permitidos": ["JURISPRUDENCIA_OFICIAL"],
       "ambito": "SUPRANACIONAL",
       "_nota": "Verificado por este agente vía WebSearch (2026-09-01): corteidh.or.cr es el dominio oficial de la Corte IDH, con buscador propio de jurisprudencia y sección oficial de casos y sentencias. Ámbito supranacional explícito — nunca respalda un país concreto no declarado."
+    },
+    {
+      "id": "aepd-es",
+      "hostnames": ["aepd.es", "www.aepd.es", "sedeagpd.gob.es"],
+      "organismo_canonico": "Agencia Española de Protección de Datos",
+      "organismo_aliases": ["AEPD"],
+      "jurisdicciones": ["España"],
+      "tipos_fuente_permitidos": ["AUTORIDAD_PUBLICA_OFICIAL"],
+      "ambito": "NACIONAL",
+      "vigencia_institucional": "VIGENTE",
+      "verificacion_identidad": "SOURCE_IDENTITY_VERIFIED",
+      "verificacion_contenido": "SOURCE_CONTENT_NOT_VERIFIED",
+      "_nota": "Identidad del dominio verificada por este agente vía WebSearch (2026-09-03): aepd.es es el sitio de la autoridad de control española de protección de datos — secciones institucionales propias ('La Agencia', 'Dónde encontrarnos'), sede electrónica y resoluciones sancionadoras publicadas en el propio dominio. SOURCE_IDENTITY_VERIFIED no es SOURCE_CONTENT_VERIFIED: que el dominio sea el correcto NO acredita ningún texto concreto — WebFetch sigue EGRESS_BLOCKED, así que ninguna fuente que use esta entrada alcanza Nivel 1 sin lectura literal posterior. Autoridad de control, no legislador: respalda criterio administrativo y resoluciones propias, nunca el texto de una ley — para eso, 'boe-es'."
+    },
+    {
+      "id": "sic-gov-co",
+      "hostnames": ["sic.gov.co", "www.sic.gov.co", "sedeelectronica.sic.gov.co"],
+      "organismo_canonico": "Superintendencia de Industria y Comercio (Colombia)",
+      "organismo_aliases": ["SIC", "Superintendencia de Industria y Comercio"],
+      "jurisdicciones": ["Colombia"],
+      "tipos_fuente_permitidos": ["AUTORIDAD_PUBLICA_OFICIAL"],
+      "ambito": "NACIONAL",
+      "vigencia_institucional": "VIGENTE",
+      "verificacion_identidad": "SOURCE_IDENTITY_VERIFIED",
+      "verificacion_contenido": "SOURCE_CONTENT_NOT_VERIFIED",
+      "_nota": "Identidad del dominio verificada por este agente vía WebSearch (2026-09-03): sic.gov.co es el sitio de la Superintendencia de Industria y Comercio, con Delegatura de Protección de Datos Personales propia y sede electrónica en sedeelectronica.sic.gov.co. Autoridad de control colombiana en habeas data (Leyes 1266 de 2008 y 1581 de 2012). NO es fuente del texto legal: el texto normativo colombiano viene de 'funcionpublica-gov-co' o 'secretariasenado-gov-co'. SOURCE_IDENTITY_VERIFIED no es SOURCE_CONTENT_VERIFIED."
+    },
+    {
+      "id": "ilo-org",
+      "hostnames": ["ilo.org", "www.ilo.org", "normlex.ilo.org"],
+      "organismo_canonico": "Organización Internacional del Trabajo",
+      "organismo_aliases": ["OIT", "ILO", "International Labour Organization"],
+      "jurisdicciones": ["Ámbito internacional"],
+      "tipos_fuente_permitidos": ["NORMA_OFICIAL", "AUTORIDAD_PUBLICA_OFICIAL"],
+      "ambito": "SUPRANACIONAL",
+      "vigencia_institucional": "VIGENTE",
+      "verificacion_identidad": "SOURCE_IDENTITY_VERIFIED",
+      "verificacion_contenido": "SOURCE_CONTENT_NOT_VERIFIED",
+      "_nota": "Identidad del dominio verificada por este agente vía WebSearch (2026-09-03): ilo.org es el sitio de la OIT y normlex.ilo.org su sistema oficial de normas internacionales del trabajo — convenios, estado de ratificaciones y comentarios de los órganos de control. ADVERTENCIA SUSTANTIVA, no de dominio: un convenio de la OIT solo obliga en el país que lo RATIFICÓ, y su eficacia interna depende de ese derecho nacional. Por eso 'jurisdicciones' es exclusivamente el ámbito internacional: esta entrada NUNCA respalda por sí sola una afirmación sobre el derecho interno de España, México, Argentina ni de ningún otro país. Citarla como fundamento nacional es exactamente el patrón de falsa universalización que el registro existe para impedir."
+    },
+    {
+      "id": "inai-org-mx",
+      "hostnames": ["inai.org.mx", "home.inai.org.mx", "inicio.inai.org.mx"],
+      "organismo_canonico": "Instituto Nacional de Transparencia, Acceso a la Información y Protección de Datos Personales",
+      "organismo_aliases": ["INAI"],
+      "jurisdicciones": ["México"],
+      "tipos_fuente_permitidos": ["AUTORIDAD_PUBLICA_OFICIAL"],
+      "ambito": "NACIONAL",
+      "vigencia_institucional": "HISTORICO",
+      "sucedido_por": ["sabg-buengobierno-mx"],
+      "verificacion_identidad": "SOURCE_IDENTITY_VERIFIED",
+      "verificacion_contenido": "SOURCE_CONTENT_NOT_VERIFIED",
+      "_nota": "ENTRADA HISTÓRICA — el INAI ya NO es autoridad vigente. La reforma constitucional de simplificación orgánica (publicada en diciembre de 2024) extinguió el organismo autónomo; la disolución efectiva se sitúa en marzo de 2025 y sus funciones se repartieron: protección de datos personales a la Secretaría Anticorrupción y Buen Gobierno, acceso a la información a 'Transparencia para el Pueblo'. Identidad del dominio verificada por este agente vía WebSearch (2026-09-03): inai.org.mx fue el portal institucional del INAI. CONSECUENCIA OPERATIVA: esta entrada solo puede sostener afirmaciones referidas al periodo en que el INAI era competente, siempre con la fecha visible; NUNCA puede usarse para afirmar en presente 'la autoridad mexicana de datos personales es / exige / resuelve' — para eso, 'sabg-buengobierno-mx'. Las fechas exactas de extinción y de traspaso de competencias NO están verificadas contra el DOF por este agente: requieren comprobación humana antes de que ningún claim que dependa de ellas alcance Nivel 1."
+    },
+    {
+      "id": "sabg-buengobierno-mx",
+      "hostnames": ["anticorrupcionybg.gob.mx", "buengobierno.gob.mx", "portal-transparencia.buengobierno.gob.mx"],
+      "organismo_canonico": "Secretaría Anticorrupción y Buen Gobierno (México)",
+      "organismo_aliases": ["SABG", "Secretaría Anticorrupción y Buen Gobierno"],
+      "jurisdicciones": ["México"],
+      "tipos_fuente_permitidos": ["AUTORIDAD_PUBLICA_OFICIAL"],
+      "ambito": "NACIONAL",
+      "vigencia_institucional": "VIGENTE",
+      "sucede_a": ["inai-org-mx"],
+      "verificacion_identidad": "SOURCE_IDENTITY_VERIFIED",
+      "verificacion_contenido": "SOURCE_CONTENT_NOT_VERIFIED",
+      "_nota": "Sucesora del INAI en materia de protección de datos personales tras la extinción del organismo autónomo. Identidad verificada por este agente vía WebSearch (2026-09-03): la Secretaría opera anticorrupcionybg.gob.mx y su propio portal de transparencia, y publica ahí su normatividad de protección de datos. Se registra con dominios PROPIOS y no con 'gob.mx' a secas para no colisionar con 'gob-mx-generico': el emparejamiento del validador elige el hostname declarado más específico, de modo que un subdominio propio resuelve a esta entrada y no a la genérica. SOURCE_IDENTITY_VERIFIED no es SOURCE_CONTENT_VERIFIED. El alcance exacto de las competencias heredadas debe comprobarse en el DOF por un humano antes de sostener ningún claim en presente."
     }
   ]
 }
