@@ -1,7 +1,7 @@
 # Handoff — Lote de 10 claim packets v4
 
 **Fecha:** 2026-09-03 · **Rama:** `claude/legalmente-integration-surgery-nap17t`
-**Ubicación:** `content/claim-packets/` · **Estado global:** `NOT_PUBLISHED` · 10/10 gates `CERRADO`
+**Ubicación:** `content/claim-packets/` · **Estado global:** `NOT_PUBLISHED` · 10 piezas · **13 claims** · 10/10 gates `CERRADO`
 
 Los diez temas fueron declarados por el fundador con la etiqueta «QA PASSED» y copy exacto ya
 aprobado. Ninguno lo estaba: no existían en el canon, no tenían claim packet, y los cuatro
@@ -12,7 +12,8 @@ Este lote los convierte en expedientes trazables con una siguiente acción concr
 
 | Packet | Claim | Fuente primaria | Jurisdicción | Estado | Gate | Razón |
 |---|---|---|---|---|---|---|
-| `LM-ACT-001` | `lm-act-001-claim-1` | STS 1250/2024 (CENDOJ) + Convenio 158 OIT art. 7 | España | `REQUIERE_INVESTIGACION` | `CERRADO` | La resolución no se localizó: el enlace del CGPJ está tras CAPTCHA. El número lo aportó el fundador |
+| `LM-ACT-001` | `lm-act-001-claim-1` | STS 1250/2024 (CENDOJ) | España | `REQUIERE_INVESTIGACION` | `CERRADO` | Resolución no localizada: el enlace del CGPJ está tras CAPTCHA |
+| `LM-ACT-001` | `lm-act-001-claim-2` | Convenio 158 OIT art. 7 | `NO_APLICA` | `REQUIERE_INVESTIGACION` | `CERRADO` | **Desdoblado**: un convenio internacional no es fuente de derecho interno por sí solo |
 | `LM-ACT-003` | `lm-act-003-claim-1` | Ley 27.742 (Boletín Oficial AR) | Argentina | `REQUIERE_INVESTIGACION` | `CERRADO` | Falta el artículo derogatorio exacto: «derogó las multas» exige citar el artículo, no la ley entera |
 | `LM-ACT-003` | `lm-act-003-claim-2` | LCT art. 245 (InfoLEG) | Argentina | `REQUIERE_INVESTIGACION` | `CERRADO` | «Sigue vigente» es una afirmación de vigencia; exige `vigencia_comprobada`, imposible sin lectura |
 | `LM-ACT-004` | `lm-act-004-claim-1` | RGPD art. 7 (EUR-Lex) + AEPD + INAI + SIC | Capa A: ES, MX, CO | `REQUIERE_INVESTIGACION` | `CERRADO` | EUR-Lex sólo respalda «Unión Europea»: España queda sin fuente nacional propia. Techo = mínimo por país |
@@ -22,7 +23,8 @@ Este lote los convierte en expedientes trazables con una siguiente acción concr
 | `LM-EVG-003` | `lm-evg-003-claim-1` | CPEUM arts. 6-7 + CCF art. 1916 Bis | `NO_DETERMINADO` | `REQUIERE_INVESTIGACION` | `CERRADO` | Declarada panhispánica con fuentes de un solo país |
 | `LM-CORP-002` | `lm-corp-002-claim-1` | LGSM arts. 16, 91-VII, 229-II + CCom art. 78 | `NO_DETERMINADO` | `REQUIERE_INVESTIGACION` | `CERRADO` | Declarada panhispánica con fuentes de un solo país |
 | `LM-CORP-004` | `lm-corp-004-claim-1` | LFPPI arts. 79-82 | `NO_DETERMINADO` | `REQUIERE_INVESTIGACION` | `CERRADO` | Declarada panhispánica con fuentes de un solo país |
-| `LM-HIS-005` | `lm-his-005-claim-1` | STS 9-5-2013 (CGPJ) + jurisprudencia TJUE | España | `REQUIERE_INVESTIGACION` | `CERRADO` | La STS de 2013 **limitó** la retroactividad; «desde el origen» procede de jurisprudencia posterior del TJUE |
+| `LM-HIS-005` | `lm-his-005-claim-1` | STS 9-5-2013 (CGPJ) | España | `REQUIERE_INVESTIGACION` | `CERRADO` | Nulidad por falta de transparencia material: lo que esa sentencia sí sostiene |
+| `LM-HIS-005` | `lm-his-005-claim-2` | Jurisprudencia TJUE | España | `REQUIERE_INVESTIGACION` | `CERRADO` | **Desdoblado**: la restitución íntegra procede del TJUE, no de la STS de 2013, que limitó la retroactividad |
 
 ## El hallazgo que más pesa
 
@@ -106,3 +108,22 @@ elegible: los diez gates están cerrados.
 **Conseguir acceso de lectura a las fuentes oficiales** —levantar el bloqueo de `WebFetch` o
 depositar los textos en Drive— empezando por los tres artículos de `LM-EVG-001`, que es la única
 pieza del lote con cobertura estructural completa en tres países y la primera capaz de subir de estado.
+
+---
+
+## Actualización 2026-09-03 — desdobles y salidas
+
+Dos piezas se desdoblaron para que ninguna afirmación viajara mezclada con otra que no la sostiene.
+`LM-ACT-001` separa el Convenio 158 OIT de la jurisprudencia española; `LM-HIS-005` separa lo que la
+STS de 2013 sí sostiene de lo que procede del TJUE, y corrige el copy además de la tabla de fuentes.
+El lote pasa de 11 a **13 claims**; los diez gates siguen `CERRADO`.
+
+### Salidas de autoridad: cero
+
+`scripts/report_blocked_packets.py` deriva de los propios packets qué falta por claim. Resultado
+actual: **13 claims, 13 bloqueados, 0 salidas de autoridad permitidas**. Ningún packet puede producir
+`copy_social.md`, `visual_prompt.json` ni `handshake_web.json` mientras su gate esté cerrado — hay
+prueba que lo impide en `scripts/test_report_blocked_packets.py`.
+
+Motivo dominante, en los 13: ninguna fuente alcanza Nivel 1 (texto no leído, vigencia no comprobada)
+y la revisión humana está `PENDIENTE`. En los cuatro monopaís se suma el alcance sin determinar.
