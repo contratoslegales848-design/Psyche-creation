@@ -75,6 +75,10 @@ jobs:
         working-directory: .claude/skills/legalmente-legal-verification/scripts
         run: python3 -m unittest test_validate_claim_packet -v
 
+      - name: Pruebas de integridad adversarial del registro oficial (unittest)
+        working-directory: .claude/skills/legalmente-legal-verification/scripts
+        run: python3 -m unittest test_official_source_registry -v
+
       - name: Pruebas unitarias del control de gobernanza del piloto (unittest)
         working-directory: .claude/skills/legalmente-legal-verification/scripts
         run: python3 -m unittest test_check_pilot_governance -v
