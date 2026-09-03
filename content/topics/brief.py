@@ -68,10 +68,45 @@ MICROEVENTOS = {
         "una página se desplaza unos milímetros y deja ver lo que había debajo",
         "una puerta se cierra despacio mientras la cámara avanza unos centímetros",
     ),
-    "LISTADO": (
-        "una cinta métrica se detiene en seco",
+    "CONCEPTO": (
+        "una lámpara se enciende y define el contorno de un solo objeto",
+        "el polvo se posa y deja limpia una única superficie",
+    ),
+    "APRENDIZAJE": (
+        "una mano retira un objeto y deja la marca que había debajo",
+        "una página ya escrita se alisa con la palma",
+    ),
+    "ERROR_FRECUENTE": (
+        "una gota cae sobre tinta todavía fresca",
+        "un papel firmado resbala unos centímetros fuera de la carpeta",
+    ),
+    "PREGUNTA_COMUN": (
+        "un sobre cerrado gira lentamente sin llegar a abrirse",
+        "una lámpara parpadea una vez sobre un documento sin firmar",
+    ),
+    "REFLEXION": (
+        "la luz recorre despacio una superficie de madera vieja",
+        "el reflejo de una ventana cruza la mesa sin tocar los papeles",
+    ),
+    "SITUACION_HUMANA": (
+        "dos manos empujan el mismo documento en direcciones opuestas",
+        "una silla vacía queda en el encuadre mientras la luz cambia",
+    ),
+    "GUIA_O_CHECKLIST": (
+        "una pluma marca una casilla y se detiene antes de la siguiente",
         "un cajón se abre lo justo para mostrar el borde de unos papeles",
-        "una lámpara de escritorio se enciende sobre una superficie ordenada",
+    ),
+    "PASOS": (
+        "tres objetos se alinean uno tras otro con un chasquido seco",
+        "una regla se desliza y encuadra un solo renglón",
+    ),
+    "FRASE_O_MAXIMA": (
+        "una letra grabada en piedra recibe luz rasante",
+        "el lacre se enfría y fija su relieve",
+    ),
+    "PRESENTACION_INSTITUCIONAL": (
+        "una placa metálica gira hasta quedar frontal a la cámara",
+        "una carpeta de cuero se cierra con un chasquido discreto",
     ),
 }
 
@@ -101,8 +136,26 @@ def _indice_estable(tema_id, n):
     return sum(ord(c) for c in str(tema_id)) % max(n, 1)
 
 
+# Orden del pipeline. Antes del gate de arte solo caben estructuras de
+# investigacion y propuestas NO EJECUTABLES:
+#
+#   pregunta humana -> candidato -> investigacion -> fuente y territorio ->
+#   claim -> validacion tecnica -> revision humana -> GATE DE ARTE ->
+#   narrativa y formato -> imagen -> QA -> autorizacion humana de publicacion
+#
+# Este modulo vive ANTES del gate. Por eso lo que produce se llama ficha de
+# investigacion y no prompt de produccion: un prompt con aspecto de listo, junto
+# a un gate cerrado, es una invitacion a saltarselo.
+PIPELINE = (
+    "pregunta_humana", "candidato", "investigacion", "fuente_y_territorio",
+    "claim", "validacion_tecnica", "revision_humana", "gate_de_arte",
+    "narrativa_y_formato", "imagen", "qa", "autorizacion_humana_de_publicacion",
+)
+ETAPA_DE_ESTE_MODULO = "candidato"
+
+
 def construir_brief(tema, familias=None):
-    """Brief completo de un tema. Solo para temas que pasan la barrera.
+    """Ficha de investigacion de un candidato. NO es un prompt de produccion.
 
     Un tema no transversal no recibe brief: producir arte para él sería gastar
     en una pieza que después habría que reclasificar o tirar.
@@ -118,7 +171,7 @@ def construir_brief(tema, familias=None):
 
     fams = familias if familias is not None else cargar_familias()
     familia = fams[_indice_estable(tema["id"], len(fams))]
-    formato = tema["formato"]
+    formato = tema["forma_editorial"]
     micros = MICROEVENTOS[formato]
     micro = micros[_indice_estable(tema["id"] + "m", len(micros))]
     superficie = SUPERFICIES_DE_MARCA[
@@ -148,7 +201,12 @@ def construir_brief(tema, familias=None):
             "submateria": tema.get("submateria", ""),
             "concepto": tema["concepto"],
             "situacion_humana": tema.get("situacion_humana", ""),
-            "content_type": "concepto",
+            # La forma editorial real viaja a la taxonomia. Fijarlas todas como
+            # "concepto" borraba la unica senal que permite detectar que un lote
+            # esta repitiendo formato.
+            "content_type": formato,
+            "angulo": tema.get("angulo", ""),
+            "utilidad": tema.get("utilidad", ""),
         },
         "imagen": {
             **FORMATO_9_16,
@@ -171,7 +229,10 @@ def construir_brief(tema, familias=None):
             "arco": list(ARCO_ANIMACION),
             "micro_evento": micro,
             "invariantes": list(INVARIANTES_ANIMACION),
-            "prompt": prompt_animacion,
+            # Se guarda como propuesta, no como prompt listo: mientras el gate
+            # este cerrado no hay imagen que animar, y un campo llamado "prompt"
+            # invita a usarlo.
+            "propuesta_de_prompt_NO_EJECUTABLE": prompt_animacion,
             "duracion_de_referencia_s": [10, 11],
         },
         # Los huecos se entregan VACÍOS a propósito. Rellenarlos sin fuente sería
@@ -200,7 +261,12 @@ def construir_brief(tema, familias=None):
             "advertencia_del_tema": tema["advertencia"],
             "riesgo_de_deriva_nacional": tema["riesgo_de_deriva_nacional"],
         },
-        # Invariantes. Un brief no es una autorización de nada.
+        # Invariantes. Una ficha de investigación no autoriza nada.
+        "ejecutable": False,
+        "etapa_del_pipeline": ETAPA_DE_ESTE_MODULO,
+        "etapas_pendientes_antes_del_arte": list(
+            PIPELINE[PIPELINE.index(ETAPA_DE_ESTE_MODULO) + 1:PIPELINE.index("gate_de_arte") + 1]),
+        "estado_epistemico": T.TOPIC_CANDIDATE,
         "estado_juridico": "REQUIERE_INVESTIGACION",
         "gate_arte": "CERRADO",
         "revision_humana": "PENDIENTE",

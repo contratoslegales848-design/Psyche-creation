@@ -83,19 +83,56 @@ class TestRegistroReal(unittest.TestCase):
             if obj.declared_state in registry.TERMINAL_ABSENT_STATES:
                 self.assertEqual(obj.resolve_state(), obj.declared_state)
 
-    def test_la_rama_atrasada_se_declara_en_lugar_de_confundirse(self):
-        """No es lo mismo 'nunca se construyo' que 'esta rama va atrasada'.
+    def test_ningun_objeto_existente_sigue_declarado_ausente(self):
+        """Una ausencia no puede sobrevivir a la llegada del archivo.
 
-        PIEZA-04 y la direccion de contenido existen y estan fusionadas en main;
-        aqui no. Registrarlas como MISSING_ARTIFACT borraria esa diferencia y
-        haria creer que el proyecto no las tiene."""
-        atrasados = {
+        PIEZA-04 y la direccion de contenido estuvieron declaradas
+        ABSENT_ON_THIS_BRANCH mientras la rama iba por detras de main. La
+        convergencia las trajo al arbol, y una declaracion de ausencia que
+        sobrevive a eso deja de describir el proyecto: lo contradice. Esta
+        prueba falla si vuelve a ocurrir con cualquier objeto.
+        """
+        contradicciones = [
             o.object_id for o in registry.ALL_OBJECTS
-            if o.resolve_state() == registry.ABSENT_ON_THIS_BRANCH
-        }
-        self.assertEqual(atrasados, {"PSY-EVID-PACKET-04", "PSY-NAV-DIRECCION"})
-        for oid in atrasados:
-            self.assertIn("ECO-BLK-STALE-BRANCH", registry.by_id(oid).blockers)
+            if o.resolve_state() == registry.STALE_ABSENCE_DECLARATION
+        ]
+        self.assertEqual(
+            contradicciones, [],
+            "estos objetos siguen declarados ausentes pero su archivo esta en "
+            f"el arbol: {contradicciones}")
+
+    def test_una_ausencia_declarada_nunca_se_promueve_sola_a_canonical(self):
+        """El contrapeso de la prueba anterior.
+
+        Corregir una declaracion obsoleta es trabajo de un humano. Si
+        resolve_state() ascendiera sola a CANONICAL, el registro se habria
+        convertido en una via para conceder estado canonico sin decision.
+        """
+        falso = replace(registry.ALL_OBJECTS[0],
+                        object_id="TMP-STALE",
+                        declared_state=registry.ABSENT_ON_THIS_BRANCH,
+                        path="ecosystem/registry.py")
+        self.assertEqual(falso.resolve_state(), registry.STALE_ABSENCE_DECLARATION)
+        self.assertNotEqual(falso.resolve_state(), registry.CANONICAL)
+
+    def test_una_ausencia_real_se_conserva_como_ausencia(self):
+        """Y sigue distinguiendose de 'nunca se construyo'."""
+        falso = replace(registry.ALL_OBJECTS[0],
+                        object_id="TMP-ABSENT",
+                        declared_state=registry.ABSENT_ON_THIS_BRANCH,
+                        path="ecosystem/no-existe-en-ninguna-rama.py")
+        self.assertEqual(falso.resolve_state(), registry.ABSENT_ON_THIS_BRANCH)
+        self.assertNotEqual(falso.resolve_state(), registry.MISSING_ARTIFACT)
+
+    def test_el_motor_de_rutas_esta_registrado(self):
+        """Un componente no registrado es un componente que nadie echa de menos:
+        el route engine llevaba tiempo fuera del registro, y esa invisibilidad
+        es la misma que dejo sus pruebas fuera de CI."""
+        ids = {o.object_id for o in registry.ALL_OBJECTS}
+        for oid in ("PSY-NAV-ROUTE-ENGINE", "PSY-NAV-ROUTE-SYNC", "PSY-KNOW-TOPICS"):
+            with self.subTest(objeto=oid):
+                self.assertIn(oid, ids)
+                self.assertEqual(registry.by_id(oid).resolve_state(), registry.CANONICAL)
 
     def test_el_hueco_entrada_evidencia_esta_declarado(self):
         """El hueco de integracion mas importante debe ser visible, no implicito."""

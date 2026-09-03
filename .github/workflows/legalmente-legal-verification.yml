@@ -201,7 +201,7 @@ jobs:
         working-directory: ecosystem
         run: python3 -m unittest discover -p 'test_*.py' -v
 
-      - name: Motor de temas — barrera de transversalidad (unittest)
+      - name: Motor de candidatos — barrera, diversidad y memoria (unittest)
         working-directory: content/topics
         run: python3 -m unittest test_topics -v
 

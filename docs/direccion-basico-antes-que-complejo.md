@@ -142,7 +142,40 @@ Instrucción expresa del fundador, para registrar como regla operativa:
    aplica a todo el proyecto, no solo al contenido: código, arquitectura,
    estrategia de publicación.
 
-## 7. Qué NO cambia con este documento
+## 7. Orden de descubrimiento — la pirámide como profundidad, no como jerarquía universal
+
+**Añadido el 2026-09-03 por orden del fundador.** No sustituye nada de lo anterior: precisa
+en qué orden se descubre el conocimiento.
+
+La referencia a Kelsen funciona aquí como **lógica de profundidad y dependencia**: qué hay que
+entender antes para poder entender lo siguiente. **No** afirma que derecho natural, derechos
+humanos y Derecho internacional formen una única jerarquía positiva universal. La
+aplicabilidad y la posición jerárquica de tratados y derechos internacionales **se verifica
+territorialmente; no se presume**.
+
+| | Nivel | Qué contiene |
+|---|---|---|
+| A | Persona y convivencia | Dignidad, preguntas humanas fundamentales |
+| B | Fundamentos de comprensión | Derecho natural, filosofía, historia — **nunca fuente automática de Derecho positivo** |
+| C | Derechos humanos | Marcos internacionales y obligaciones correlativas |
+| D | Conceptos transversales | Persona, capacidad, voluntad, relación jurídica, derecho, deber, obligación, objeto, tiempo, responsabilidad, prueba |
+| E | Ramas madre | Civil, familiar, laboral, mercantil, penal, administrativo, fiscal, agrario, ambiental, digital, procesal |
+| F | Submaterias e instituciones | Y las relaciones entre ramas |
+| G | Territorio | Legislación, autoridades, procedimientos, plazos, consecuencias concretas |
+| H | Especialización | Herramientas profesionales |
+
+### Prioridad
+
+```
+UTILIDAD_HUMANA × IMPORTANCIA × VACÍO_DE_COBERTURA × CAPACIDAD_DE_CONEXIÓN × VERIFICABILIDAD
+```
+
+Es un producto, no una suma: si un factor es cero, el candidato no entra por muy alto que
+puntúe en los demás. **La novedad no es un factor.** Un tema no se prioriza por ser nuevo, y se
+excluye si es trivial, de poca utilidad o prematuramente especializado mientras queden
+fundamentos importantes sin cubrir.
+
+## 8. Qué NO cambia con este documento
 
 - Ninguna afirmación jurídica se da por verificada aquí. Este documento es
   dirección editorial y de producto, no un claim jurídico.
@@ -153,7 +186,7 @@ Instrucción expresa del fundador, para registrar como regla operativa:
 - No se crea contenido nuevo de ninguna materia en este documento — es
   dirección, no producción.
 
-## 8. Siguiente paso ejecutable
+## 9. Siguiente paso ejecutable
 
 Cuando el fundador lo indique: elegir una materia de la lista de la sección 3
 (recomendado: laboral, por ser la de mayor vacío confirmado en dos fuentes

@@ -35,6 +35,16 @@ FOUND_AUXILIARY = "FOUND_AUXILIARY"
 # (esta en main), pero no en el arbol de esta rama. Confundir ambos casos
 # borraria la diferencia entre "nunca se construyo" y "esta rama esta atrasada".
 ABSENT_ON_THIS_BRANCH = "ABSENT_ON_THIS_BRANCH"
+# Estado RESUELTO, no declarable: el objeto se declaro ausente de esta rama pero
+# el archivo esta en el arbol. Existe porque la convergencia con main hizo
+# aparecer objetos que seguian declarados ausentes, y una ausencia que sobrevive
+# a la llegada del archivo es una mentira que el registro no puede sostener.
+#
+# No se resuelve a CANONICAL por su cuenta, y es deliberado: promover sola una
+# declaracion obsoleta convertiria al registro en una via para conceder estado
+# canonico sin que nadie lo decida. Lo que hace es senalar la contradiccion para
+# que un humano corrija la declaracion.
+STALE_ABSENCE_DECLARATION = "STALE_ABSENCE_DECLARATION"
 
 DECLARABLE_STATES = frozenset({
     CANONICAL, FROZEN, AUXILIARY, PROPOSED, BLOCKED,
@@ -44,7 +54,10 @@ DECLARABLE_STATES = frozenset({
 
 # Estados terminales: describen una ausencia ya comprobada, asi que
 # resolve_state() no puede degradarlos ni promoverlos.
-TERMINAL_ABSENT_STATES = frozenset({MISSING_ARTIFACT, ABSENT_ON_THIS_BRANCH})
+# Solo MISSING_ARTIFACT es terminal. ABSENT_ON_THIS_BRANCH describe una rama
+# atrasada, y eso se arregla solo en cuanto la rama deja de estarlo: mantenerlo
+# terminal hacia que la ausencia sobreviviera a la fusion.
+TERMINAL_ABSENT_STATES = frozenset({MISSING_ARTIFACT})
 
 # Capas del modelo unificado (prompt de integracion §4).
 LAYER_ENTRY = "entrada_humana"
@@ -120,6 +133,10 @@ class EcosystemObject:
             return self.declared_state
         if not self.verifiable():
             return self.declared_state
+        if self.declared_state == ABSENT_ON_THIS_BRANCH:
+            # La rama ya no esta atrasada respecto de este objeto. No se
+            # promueve a CANONICAL: se marca la contradiccion.
+            return STALE_ABSENCE_DECLARATION if self.exists() else ABSENT_ON_THIS_BRANCH
         return self.declared_state if self.exists() else MISSING_ARTIFACT
 
 
@@ -185,12 +202,13 @@ _PSYCHE_OBJECTS: tuple[EcosystemObject, ...] = (
         object_id="PSY-EVID-PACKET-04", label="Claim packet PIEZA-04 (laboral basico)",
         layer=LAYER_EVIDENCE, repo=REPO_PSYCHE,
         path=".claude/skills/legalmente-legal-verification/pilot/claim-packets/pieza-04-laboral-basico.json",
-        declared_state=ABSENT_ON_THIS_BRANCH, owner="fundador",
-        next_action="Rebasar esta rama sobre main, o trabajarlo desde main",
-        blockers=("ECO-BLK-STALE-BRANCH",),
-        notes="Existe y esta fusionado en main (Capa A transversal, "
-              "APTO_CON_MATICES, gate de arte CERRADO). No esta en el arbol de "
-              "esta rama, que va 27 commits por detras de main.",
+        declared_state=CANONICAL, owner="fundador",
+        next_action="Revision humana pendiente; gate de arte CERRADO",
+        blockers=(),
+        notes="Capa A transversal, APTO_CON_MATICES, gate de arte CERRADO. "
+              "Estuvo declarado ABSENT_ON_THIS_BRANCH mientras la rama iba por "
+              "detras de main; la convergencia lo trajo al arbol y la "
+              "declaracion se corrigio. Canonico no significa aprobado.",
     ),
     _obj(
         object_id="PSY-EVID-PROVENANCE", label="Validador de procedencia de contenido",
@@ -246,13 +264,50 @@ _PSYCHE_OBJECTS: tuple[EcosystemObject, ...] = (
         object_id="PSY-NAV-DIRECCION", label="Direccion de contenido: basico antes que complejo",
         layer=LAYER_NAVIGATION, repo=REPO_PSYCHE,
         path="docs/direccion-basico-antes-que-complejo.md",
-        declared_state=ABSENT_ON_THIS_BRANCH, owner="fundador",
-        next_action="Rebasar esta rama sobre main, o trabajarlo desde main",
-        blockers=("ECO-BLK-STALE-BRANCH",),
-        notes="CLAUDE.md lo cita como direccion de contenido vigente y existe "
-              "en main, pero no en el arbol de esta rama.",
+        declared_state=CANONICAL, owner="fundador",
+        next_action="Reflejarlo en Drive cuando haya autorizacion expresa",
+        blockers=(),
+        notes="Mandato de voz del fundador (2026-09-01). CLAUDE.md lo cita como "
+              "direccion de contenido vigente. Estuvo declarado "
+              "ABSENT_ON_THIS_BRANCH mientras la rama iba por detras de main.",
+    ),
+    # --- Motor de rutas: existia en main y no estaba registrado ------------
+    # Su ausencia del registro es la que permitio que CI dejara de ejecutar sus
+    # pruebas sin que nada lo senalara. Un componente no registrado es un
+    # componente que nadie echa de menos.
+    _obj(
+        object_id="PSY-NAV-ROUTE-ENGINE", label="Motor de rutas editoriales",
+        layer=LAYER_NAVIGATION, repo=REPO_PSYCHE, path="visual/route_engine.py",
+        declared_state=CANONICAL, owner="fundador",
+        next_action="Ampliar VOCABULARIO_POR_MATERIA a las materias sin cubrir",
+        blockers=(),
+        notes="Encadena nodos (CAUSA -> CONSECUENCIA -> ...) desde un content_id "
+              "real. No emite autoridad juridica: transporta el vinculo visual.",
+    ),
+    _obj(
+        object_id="PSY-NAV-ROUTE-SYNC", label="Sincronizacion de rutas con la hoja canonica",
+        layer=LAYER_NAVIGATION, repo=REPO_PSYCHE, path="visual/route_sync.py",
+        declared_state=CANONICAL, owner="fundador",
+        next_action="Importar el CSV regenerado en la hoja canonica (pendiente humano)",
+        # Sin bloqueos: el modulo es canonico y funciona. Lo pendiente es una
+        # accion humana sobre la hoja, no un impedimento del componente.
+        blockers=(),
+        notes="Solo lectura de vuelta (verify_readback) con localizacion por campo. "
+              "Esta sesion no puede escribir en Sheets.",
+    ),
+    _obj(
+        object_id="PSY-KNOW-TOPICS", label="Motor de temas transversales",
+        layer=LAYER_KNOWLEDGE, repo=REPO_PSYCHE, path="content/topics/transversality.py",
+        declared_state=CANONICAL, owner="fundador",
+        next_action="Buscar fuentes oficiales para los candidatos de menor riesgo",
+        # Sin bloqueos: el motor es canonico. Lo que esta bloqueado es que sus
+        # candidatos lleguen a claim, y eso lo declara cada candidato.
+        blockers=(),
+        notes="Produce candidatos e hipotesis, nunca claims. Ningun candidato "
+              "abre gate ni acredita alcance por si mismo.",
     ),
 )
+
 
 # --- Objetos de legalmente-web (lectura externa, sin escritura) -------------
 

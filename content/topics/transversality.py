@@ -1,27 +1,43 @@
-"""Barrera de transversalidad: el filtro que decide si un tema es Capa A.
+"""Barrera de anclaje nacional: descarta lo que YA se ve nacional. Nada mas.
 
-El problema real que resuelve. La generación de contenido venía derivando hacia
-lo nacional: de las diez piezas del último lote, seis eran de un solo país, y
-cuatro de ellas además se habían DECLARADO panhispánicas aportando fuentes de una
-sola jurisdicción. Esa es la falsa universalización que la Capa A existe para
-impedir, y hasta ahora nada la detectaba en el momento de proponer el tema — solo
-mucho después, al revisar las fuentes.
+Este modulo NO decide si un tema es Capa A. Ningun filtro de texto puede.
 
-Este módulo mueve la comprobación al principio. Un tema que nombra un país, una
-ley nacional, una moneda o un organismo nacional no es transversal, y aquí se
-rechaza antes de que llegue a costar arte, copy o revisión humana.
+El problema que resuelve. La generacion venia derivando hacia lo nacional: de las
+diez piezas del ultimo lote, seis eran de un solo pais, y cuatro se DECLARARON
+panhispanicas aportando fuentes de una sola jurisdiccion. Nada lo detectaba al
+proponer el tema, solo mucho despues, al revisar las fuentes.
 
-Lo que este módulo NO hace, y no debe hacer nunca:
+Lo que el filtro demuestra, dicho con exactitud:
 
-  - No afirma nada jurídico. Un tema es una pregunta, no una regla.
-  - No aprueba, no abre gates y no sustituye la verificación de fuentes.
-  - Un tema que pasa este filtro sigue en REQUIERE_INVESTIGACION con gate CERRADO
-    hasta que tenga fuentes oficiales propias de al menos tres jurisdicciones.
+    NO_EXPLICIT_NATIONAL_ANCHOR
 
-Pasar el filtro significa exactamente una cosa: que el tema MERECE que se busquen
-esas fuentes. Nada más.
+Es decir: el TEXTO del candidato no nombra pais, ley nacional, moneda ni plazo.
+Eso es una propiedad de la redaccion, no del derecho. NO demuestra
+CAPA_A_TRANSVERSAL, y confundir ambas cosas seria repetir el error con mejor
+letra: cuatro de aquellas diez piezas estaban escritas sin un solo toponimo y
+describian el derecho de un unico pais.
 
-Sin red. Determinista. Solo lee el catálogo.
+CUIDADO — un tema tampoco es terreno neutral. Un titulo, una pregunta, un
+contraste o una justificacion pueden contener una proposicion juridica. Decir
+"esta distincion existe en toda la tradicion civil" es afirmar algo sobre mas de
+veinte ordenamientos sin haber leido ninguno. Por eso el catalogo guarda esas
+justificaciones como LEGAL_HYPOTHESIS y no como hechos, y por eso este modulo no
+puede sostener que un candidato carezca de riesgo juridico.
+
+Escalera epistemica, de menor a mayor exigencia:
+
+    TOPIC_CANDIDATE        pregunta humana que merece investigarse
+    LEGAL_HYPOTHESIS       relacion plausible, todavia no demostrada
+    VERIFIED_CLAIM         con fuente, territorio, vigencia y limites
+    HUMAN_APPROVED_CONTENT texto exacto aprobado por un humano
+
+Este modulo emite el PRIMERO y no puede conceder ninguno de los otros tres.
+
+Y sobre la cobertura: tres jurisdicciones con evidencia propia demuestran
+cobertura comparada DE ESAS TRES. No universalidad panhispanica. Hay mas de
+veinte ordenamientos hispanohablantes; tres no son todos.
+
+Sin red. Determinista. Solo lee el catalogo y el registro oficial.
 """
 
 import json
@@ -93,8 +109,29 @@ PLAZO_RE = re.compile(
 # Un porcentaje o un importe hacen lo mismo.
 CIFRA_RE = re.compile(r"\d+\s*%|\b\d[\d.,]*\s*(?=%)")
 
+# Escalera epistemica. Ningun escalon se alcanza por el paso del tiempo ni por
+# la ausencia de objeciones, y este modulo NO puede subir ninguno por su cuenta:
+# solo emite el primero.
+TOPIC_CANDIDATE = "TOPIC_CANDIDATE"          # pregunta humana que merece investigarse
+LEGAL_HYPOTHESIS = "LEGAL_HYPOTHESIS"        # relacion plausible, no demostrada
+VERIFIED_CLAIM = "VERIFIED_CLAIM"            # con fuente, territorio, vigencia y limites
+HUMAN_APPROVED_CONTENT = "HUMAN_APPROVED_CONTENT"  # texto exacto aprobado por un humano
+
+# Lo unico que demuestra pasar el filtro de texto. NO es una capa jurisdiccional
+# y no debe compararse con ninguna: describe una propiedad del TEXTO del
+# candidato, no del derecho.
+NO_EXPLICIT_NATIONAL_ANCHOR = "NO_EXPLICIT_NATIONAL_ANCHOR"
+
+# Cuando no se ha podido consultar el inventario de piezas vigentes.
+INVENTORY_NOT_CHECKED = "INVENTORY_NOT_CHECKED"
+
 RIESGOS_VALIDOS = ("bajo", "medio", "alto")
-FORMATOS_VALIDOS = ("DIFERENCIAS", "MITO", "CONSECUENCIA", "LISTADO")
+# El vocabulario de formas vive en lote.py, que es su dueno. Aqui se importa
+# tarde para no crear un ciclo, y no se duplica: dos listas de formas volverian a
+# derivar como derivaron las capas jurisdiccionales.
+def formas_editoriales():
+    from lote import FORMAS_EDITORIALES
+    return FORMAS_EDITORIALES
 
 
 def normalizar(texto):
@@ -116,7 +153,7 @@ def _contiene_termino(texto_norm, termino):
 
 def texto_de_tema(tema):
     """Todo el texto libre del tema, que es donde puede colarse lo nacional."""
-    campos = ("titulo_de_trabajo", "pregunta_central", "por_que_es_transversal",
+    campos = ("titulo_de_trabajo", "pregunta_central", "hipotesis_de_transversalidad",
               "situacion_humana", "concepto", "submateria", "materia")
     return " \n ".join(str(tema.get(c, "")) for c in campos)
 
@@ -159,12 +196,12 @@ def evaluar_tema(tema):
     """
     motivos = detectar_anclajes_nacionales(texto_de_tema(tema))
     errores = []
-    for campo in ("id", "formato", "materia", "concepto", "titulo_de_trabajo",
-                  "pregunta_central", "por_que_es_transversal", "advertencia"):
+    for campo in ("id", "forma_editorial", "materia", "concepto", "titulo_de_trabajo",
+                  "pregunta_central", "hipotesis_de_transversalidad", "advertencia"):
         if not str(tema.get(campo, "")).strip():
             errores.append(f"falta el campo obligatorio {campo!r}")
-    if tema.get("formato") not in FORMATOS_VALIDOS:
-        errores.append(f"formato inválido: {tema.get('formato')!r}")
+    if tema.get("forma_editorial") not in formas_editoriales():
+        errores.append(f"forma editorial inválida: {tema.get('forma_editorial')!r}")
     if tema.get("riesgo_de_deriva_nacional") not in RIESGOS_VALIDOS:
         errores.append(f"riesgo inválido: {tema.get('riesgo_de_deriva_nacional')!r}")
 
@@ -172,7 +209,19 @@ def evaluar_tema(tema):
     return {
         "id": tema.get("id"),
         "admisible_como_tema": admisible,
-        "capa_propuesta": "CAPA_A_TRANSVERSAL" if admisible else "NO_DETERMINADO",
+        # Lo que el filtro demuestra, dicho con exactitud. La version anterior
+        # ponia aqui "CAPA_A_TRANSVERSAL", y eso era un salto injustificado: que
+        # un texto no nombre paises no dice nada sobre el derecho de esos paises.
+        # Cuatro de las diez piezas del ultimo lote estaban redactadas sin un solo
+        # toponimo y describian el derecho de uno solo.
+        "demostrado_por_el_filtro": (
+            NO_EXPLICIT_NATIONAL_ANCHOR if admisible else "ANCLAJE_NACIONAL_PRESENTE"),
+        "capa_jurisdiccional": "NO_DETERMINADO",
+        "estado_epistemico": TOPIC_CANDIDATE,
+        "_no_demostrado": (
+            "El filtro NO demuestra CAPA_A_TRANSVERSAL. La capa solo puede "
+            "establecerse con evidencia oficial por jurisdiccion, y ni siquiera "
+            "entonces se convierte en universalidad panhispanica."),
         "anclajes_nacionales": motivos,
         "errores_de_forma": errores,
         # Los tres campos siguientes son invariantes, no resultados: un tema
@@ -284,6 +333,16 @@ def evaluar_cobertura_de_claim(claim, registro=None):
         "alcance_declarado": declarado,
         "paises_cubiertos_por_fuentes": paises,
         "cobertura_suficiente_para_capa_a": suficiente,
+        # Precision deliberada: lo que tres jurisdicciones con fuente propia
+        # demuestran es cobertura comparada DE ESAS TRES. Hay mas de veinte
+        # ordenamientos hispanohablantes; tres no son todos. Llamar "panhispanico"
+        # a un minimo de tres seria la misma falsa universalizacion, solo que con
+        # el liston tres veces mas alto.
+        "cobertura_comparada_de": list(paises),
+        "es_universalidad_panhispanica": False,
+        "_nota_alcance": (
+            f"Evidencia comparada en {len(paises)} jurisdiccion(es): {paises}. "
+            "No se extrapola al resto del ambito hispanohablante."),
         "alcance_maximo_sostenible": (
             "CAPA_A_TRANSVERSAL" if suficiente
             else ("CAPA_C_NACIONAL" if len(paises) == 1 else "NO_DETERMINADO")),
@@ -304,10 +363,13 @@ def main(argv=None):
         print(json.dumps(dictamenes, ensure_ascii=False, indent=2))
         return 0
     ok = [d for d in dictamenes if d["admisible_como_tema"]]
-    print(f"temas evaluados : {len(dictamenes)}")
-    print(f"transversales   : {len(ok)}")
-    print(f"rechazados      : {len(dictamenes) - len(ok)}")
-    print("\nTodos en REQUIERE_INVESTIGACION, gate CERRADO, NOT_PUBLISHED.")
+    print(f"candidatos evaluados          : {len(dictamenes)}")
+    print(f"sin anclaje nacional explicito : {len(ok)}")
+    print(f"rechazados                     : {len(dictamenes) - len(ok)}")
+    print("\nNO_EXPLICIT_NATIONAL_ANCHOR no es CAPA_A_TRANSVERSAL: solo dice que el")
+    print("texto del candidato no nombra pais, ley, moneda ni plazo. La capa")
+    print("jurisdiccional sigue en NO_DETERMINADO para los 24.")
+    print("Estado epistemico: TOPIC_CANDIDATE. Gate CERRADO. NOT_PUBLISHED.")
     for d in dictamenes:
         if d["admisible_como_tema"]:
             continue

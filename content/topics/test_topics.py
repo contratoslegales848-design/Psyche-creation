@@ -19,6 +19,7 @@ AQUI = Path(__file__).resolve().parent
 sys.path.insert(0, str(AQUI))
 
 import brief as B  # noqa: E402
+import lote as L  # noqa: E402
 import transversality as T  # noqa: E402
 
 CATALOGO = T.cargar_catalogo()
@@ -36,11 +37,11 @@ class TestCatalogo(unittest.TestCase):
         self.assertEqual(len({t["id"] for t in TEMAS}), len(TEMAS))
         self.assertEqual(len({t["concepto"] for t in TEMAS}), len(TEMAS))
 
-    def test_todo_tema_declara_por_que_es_transversal(self):
+    def test_todo_tema_declara_su_hipotesis(self):
         """Sin esa justificación, 'transversal' sería una etiqueta, no un juicio."""
         for t in TEMAS:
             with self.subTest(tema=t["id"]):
-                self.assertGreater(len(t["por_que_es_transversal"]), 40)
+                self.assertGreater(len(t["hipotesis_de_transversalidad"]), 40)
 
     def test_todo_tema_declara_donde_puede_derivar(self):
         """La advertencia dice qué parte del asunto SÍ es nacional. Un tema que no
@@ -67,7 +68,7 @@ class TestBarreraDeTransversalidad(unittest.TestCase):
 
     def test_un_tema_que_cita_una_norma_nacional_es_rechazado(self):
         malo = dict(TEMAS[0], id="LM-T-X",
-                    por_que_es_transversal="Lo regula el Código Civil y basta con eso.")
+                    hipotesis_de_transversalidad="Lo regula el Código Civil y basta con eso.")
         d = T.evaluar_tema(malo)
         self.assertFalse(d["admisible_como_tema"])
 
@@ -215,7 +216,7 @@ class TestBriefNoAutorizaNada(unittest.TestCase):
             with self.subTest(tema=b["tema_id"]):
                 self.assertEqual(tuple(b["animacion"]["arco"]), B.ARCO_ANIMACION)
                 self.assertTrue(b["animacion"]["micro_evento"])
-                self.assertIn("no borrar", b["animacion"]["prompt"])
+                self.assertIn("no borrar", b["animacion"]["propuesta_de_prompt_NO_EJECUTABLE"])
                 self.assertTrue(any("texto montado no se borra" in i
                                     for i in b["animacion"]["invariantes"]))
 
@@ -257,6 +258,178 @@ class TestBriefNoAutorizaNada(unittest.TestCase):
         antes = CATALOGO
         B.construir_todos()
         self.assertEqual(T.cargar_catalogo(), antes)
+
+
+class TestNoSobreafirmar(unittest.TestCase):
+    """Las pruebas que impiden que el motor prometa mas de lo que demuestra."""
+
+    def test_ausencia_de_pais_no_equivale_a_capa_a(self):
+        """El error central corregido: un texto sin topónimos no dice nada sobre
+        el derecho de ningún país. Cuatro de las diez piezas del último lote
+        estaban escritas sin un solo país y describían el de uno solo."""
+        d = T.evaluar_tema(TEMAS[0])
+        self.assertTrue(d["admisible_como_tema"])
+        self.assertEqual(d["demostrado_por_el_filtro"], T.NO_EXPLICIT_NATIONAL_ANCHOR)
+        self.assertEqual(d["capa_jurisdiccional"], "NO_DETERMINADO")
+        # La capa solo puede aparecer dentro del propio descargo, nunca como
+        # valor de un campo: eso seria concederla.
+        valores = [v for k, v in d.items() if not k.startswith("_")]
+        self.assertNotIn("CAPA_A_TRANSVERSAL", json.dumps(valores, ensure_ascii=False))
+        self.assertIn("CAPA_A_TRANSVERSAL", d["_no_demostrado"])
+
+    def test_todo_candidato_sale_como_topic_candidate(self):
+        """El motor emite el primer escalón y no puede conceder ninguno de los
+        otros tres."""
+        for d in T.evaluar_catalogo():
+            with self.subTest(tema=d["id"]):
+                self.assertEqual(d["estado_epistemico"], T.TOPIC_CANDIDATE)
+                self.assertNotEqual(d["estado_epistemico"], T.VERIFIED_CLAIM)
+                self.assertNotEqual(d["estado_epistemico"], T.HUMAN_APPROVED_CONTENT)
+
+    def test_las_justificaciones_son_hipotesis_no_hechos(self):
+        """'Es común a toda la tradición civil' es una proposición jurídica sobre
+        más de veinte ordenamientos. Puede sostenerse como hipótesis; no puede
+        afirmarse sin haber leído ninguno."""
+        for t_ in TEMAS:
+            with self.subTest(tema=t_["id"]):
+                self.assertEqual(t_["estado_epistemico"], "LEGAL_HYPOTHESIS")
+                self.assertEqual(t_["evidencia_por_jurisdiccion"], [])
+
+    def test_tres_paises_no_se_describen_como_toda_la_comunidad(self):
+        """Tres jurisdicciones demuestran cobertura comparada de esas tres. Hay
+        más de veinte ordenamientos hispanohablantes."""
+        reg = T.cargar_registro()
+        claim = {"claim_id": "x", "alcance": "CAPA_A_TRANSVERSAL", "fuentes": [
+            {"id": "f1", "registro_oficial_id": "dof-gob-mx"},
+            {"id": "f2", "registro_oficial_id": "boe-es"},
+            {"id": "f3", "registro_oficial_id": "infoleg-gob-ar"}]}
+        r = T.evaluar_cobertura_de_claim(claim, reg)
+        self.assertTrue(r["cobertura_suficiente_para_capa_a"])
+        self.assertFalse(r["es_universalidad_panhispanica"])
+        self.assertEqual(sorted(r["cobertura_comparada_de"]),
+                         ["argentina", "espana", "mexico"])
+        self.assertIn("No se extrapola", r["_nota_alcance"])
+
+    def test_ningun_estado_tecnico_abre_aprobacion_arte_ni_publicacion(self):
+        briefs = B.construir_todos()
+        for b in briefs:
+            with self.subTest(tema=b["tema_id"]):
+                self.assertEqual(b["gate_arte"], "CERRADO")
+                self.assertEqual(b["revision_humana"], "PENDIENTE")
+                self.assertEqual(b["publicacion"], "NOT_PUBLISHED")
+                texto = json.dumps(b, ensure_ascii=False)
+                for prohibido in ("APROBADO", "APPROVED", "AUTORIZAD", "PUBLICABLE"):
+                    self.assertNotIn(prohibido, texto.upper())
+
+
+class TestDiversidadEditorial(unittest.TestCase):
+    def test_un_lote_de_diez_identico_en_forma_falla(self):
+        lote = [{"forma_editorial": "MITO", "concepto": f"c{i}", "angulo": "a",
+                 "situacion_humana": "s", "utilidad": "u"} for i in range(10)]
+        r = L.evaluar_diversidad(lote)
+        self.assertFalse(r["diverso"])
+        self.assertTrue(any("formas editoriales distintas" in p for p in r["problemas"]))
+        self.assertTrue(any("aparece 10 veces" in p for p in r["problemas"]))
+
+    def test_un_lote_con_cinco_formas_y_maximo_dos_repeticiones_pasa(self):
+        formas = ["MITO", "MITO", "DIFERENCIAS", "DIFERENCIAS", "CONCEPTO",
+                  "CONCEPTO", "APRENDIZAJE", "APRENDIZAJE", "PREGUNTA_COMUN",
+                  "ERROR_FRECUENTE"]
+        lote = [{"forma_editorial": f, "concepto": f"c{i}", "angulo": f"a{i}",
+                 "situacion_humana": f"s{i}", "utilidad": f"u{i}"}
+                for i, f in enumerate(formas)]
+        r = L.evaluar_diversidad(lote)
+        self.assertTrue(r["diverso"], r["problemas"])
+        self.assertGreaterEqual(r["formas_distintas"], L.MINIMO_FORMAS_DISTINTAS)
+
+    def test_cambiar_solo_la_forma_no_convierte_lo_repetido_en_nuevo(self):
+        """Dos piezas que coinciden en concepto, ángulo, situación y utilidad son
+        la misma pieza con otra ropa, aunque cambie el formato."""
+        lote = [{"forma_editorial": "MITO", "concepto": "c", "angulo": "a",
+                 "situacion_humana": "s", "utilidad": "u"},
+                {"forma_editorial": "CONCEPTO", "concepto": "c", "angulo": "a",
+                 "situacion_humana": "s", "utilidad": "u"}]
+        r = L.evaluar_diversidad(lote)
+        self.assertFalse(r["diverso"])
+        self.assertTrue(any("misma pieza con otra ropa" in p for p in r["problemas"]))
+
+    def test_organizar_un_lote_no_aprueba_nada(self):
+        r = L.evaluar_diversidad([{"forma_editorial": "MITO", "concepto": "c",
+                                   "angulo": "a", "situacion_humana": "s",
+                                   "utilidad": "u"}])
+        self.assertFalse(r["aprueba_claims"])
+        self.assertFalse(r["abre_gate"])
+        self.assertFalse(r["autoriza_publicacion"])
+
+    def test_el_catalogo_puede_producir_un_lote_diverso(self):
+        """Prueba de realidad: si el pozo no da para cinco formas, la regla es
+        decorativa. Con doce DIFERENCIAS de veinticuatro no daba."""
+        from collections import Counter
+        formas = Counter(t["forma_editorial"] for t in TEMAS)
+        self.assertGreaterEqual(len(formas), L.MINIMO_FORMAS_DISTINTAS)
+        self.assertGreaterEqual(sum(1 for n in formas.values() if n >= 1),
+                                L.MINIMO_FORMAS_DISTINTAS)
+
+    def test_la_forma_editorial_real_llega_a_la_taxonomia(self):
+        """Fijar todos los briefs como content_type='concepto' borraba la única
+        señal que permite ver que un lote está repitiendo formato."""
+        vistos = set()
+        for b in B.construir_todos():
+            with self.subTest(tema=b["tema_id"]):
+                self.assertEqual(b["taxonomia"]["content_type"], b["formato_editorial"])
+                self.assertTrue(b["taxonomia"]["angulo"])
+                self.assertTrue(b["taxonomia"]["utilidad"])
+            vistos.add(b["taxonomia"]["content_type"])
+        self.assertGreater(len(vistos), 1, "todos los briefs comparten content_type")
+
+
+class TestOrdenDelPipeline(unittest.TestCase):
+    def test_la_ficha_no_es_ejecutable(self):
+        """Un prompt con aspecto de listo, junto a un gate cerrado, es una
+        invitación a saltárselo."""
+        for b in B.construir_todos():
+            with self.subTest(tema=b["tema_id"]):
+                self.assertFalse(b["ejecutable"])
+                self.assertEqual(b["etapa_del_pipeline"], "candidato")
+                self.assertIn("gate_de_arte", b["etapas_pendientes_antes_del_arte"])
+                self.assertNotIn("prompt", b["animacion"])
+
+    def test_el_gate_de_arte_va_despues_de_la_revision_humana(self):
+        i = B.PIPELINE.index("revision_humana")
+        j = B.PIPELINE.index("gate_de_arte")
+        k = B.PIPELINE.index("autorizacion_humana_de_publicacion")
+        self.assertLess(i, j)
+        self.assertLess(j, k)
+        self.assertEqual(B.PIPELINE[-1], "autorizacion_humana_de_publicacion")
+
+
+class TestMemoriaAntiRepeticion(unittest.TestCase):
+    def test_el_inventario_real_se_consulta(self):
+        _inv, estado = L.cargar_inventario()
+        self.assertEqual(estado, "INVENTORY_CHECKED")
+
+    def test_sin_inventario_no_se_declara_novedad(self):
+        """La respuesta honesta cuando no se pudo comprobar no es 'es nuevo'."""
+        r = L.evaluar_novedad({"id": "X", "concepto": "loquesea"},
+                              inventario=[], estado_inventario=T.INVENTORY_NOT_CHECKED)
+        self.assertFalse(r["puede_declararse_nuevo"])
+        self.assertEqual(r["estado_inventario"], T.INVENTORY_NOT_CHECKED)
+
+    def test_un_concepto_ya_ocupado_no_es_nuevo(self):
+        inv = [{"origen": "content/pieza-01-reales.json", "concepto": "propiedad_y_posesion",
+                "situacion_humana": ""}]
+        r = L.evaluar_novedad({"id": "X", "concepto": "propiedad_y_posesion"},
+                              inventario=inv, estado_inventario="INVENTORY_CHECKED")
+        self.assertFalse(r["puede_declararse_nuevo"])
+        self.assertTrue(r["coincidencias"])
+
+    def test_ids_distintos_entre_si_no_bastan(self):
+        """Comprobar que los ids del lote nuevo son distintos ENTRE SÍ no
+        demuestra nada sobre lo ya producido."""
+        inv, estado = L.cargar_inventario()
+        resultados = [L.evaluar_novedad(t_, inv, estado) for t_ in TEMAS]
+        self.assertTrue(all("estado_inventario" in r for r in resultados))
+        self.assertTrue(all(r["motivo"] for r in resultados))
 
 
 if __name__ == "__main__":
