@@ -12,11 +12,34 @@ como estructura, no como contenido publicable.
 
 Cada protocolo declara su condicion de parada. La condicion de parada es la
 parte importante: es donde el sistema deja de ayudar y empieza a hacer dano.
+
+PROCEDENCIA — CORRECCION 2026-09-03
+-----------------------------------
+Estos cinco protocolos NO son originales de este modulo. Se escribieron aqui
+sin haber buscado antes en Drive, y la busqueda posterior encontro el original:
+`02_five_help_protocols.md` (Drive id 17HeKx9FqZrvqwMDTOarjUtuzqvtYeOUf), parte
+de `LEGALMENTE_RAYMUNDO_LINKEDIN_HELP_CONTRIBUTION_V1`, con los mismos cinco
+protocolos en el mismo orden y con el mismo proposito.
+
+Este modulo queda declarado `DERIVED_FROM` ese artefacto. La autoridad es del
+original de Drive; si ambos divergen, gana Drive. Se conserva la version en
+codigo unicamente porque aporta validacion determinista (condiciones de parada
+comprobables por prueba) que el documento no tiene — no porque sea una segunda
+fuente.
 """
 
 from dataclasses import dataclass, field
 
 PROPOSED = "PROPOSED"
+
+# Identidad: este modulo deriva de un artefacto canonico anterior.
+IDENTITY_RELATION = "DERIVED_FROM"
+IDENTITY_TARGET = "DRV-FIVE-HELP-PROTOCOLS"
+IDENTITY_TARGET_DRIVE_ID = "17HeKx9FqZrvqwMDTOarjUtuzqvtYeOUf"
+IDENTITY_NOTE = (
+    "Duplicado no intencionado detectado el 2026-09-03. La autoridad es del "
+    "artefacto de Drive; este modulo aporta solo validacion determinista."
+)
 
 
 @dataclass(frozen=True)

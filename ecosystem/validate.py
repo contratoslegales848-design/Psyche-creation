@@ -11,7 +11,7 @@ siempre el mismo informe.
 
 from dataclasses import dataclass
 
-from . import gate_matrix, help_protocols, registry, relations
+from . import drive_evidence, gate_matrix, help_protocols, registry, relations
 
 HOLD = "HOLD"
 REJECT = "REJECT"
@@ -108,9 +108,12 @@ def _check_relations_resolve(objects) -> list[Finding]:
     Se exceptuan los destinos externos documentados, que no son objetos del
     registro sino nodos del grafo heredado o del mundo real.
     """
+    # Un extremo es conocido si vive en el registro de objetos O en el de
+    # evidencia de Drive: son dos registros del mismo ecosistema, no dos mundos.
     known = {obj.object_id for obj in objects}
+    known |= {artifact.artifact_id for artifact in drive_evidence.ALL_ARTIFACTS}
     external = {
-        "publication_decision", "distribution_linkedin", "HELP-001..005", "ecosystem",
+        "publication_decision", "distribution_linkedin", "ecosystem",
     }
     findings: list[Finding] = []
     for link in relations.ecosystem_links():

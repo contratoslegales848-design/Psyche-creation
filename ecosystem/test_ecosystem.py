@@ -14,7 +14,9 @@ from unittest import mock
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from ecosystem import gate_matrix, help_protocols, registry, relations, validate  # noqa: E402
+from ecosystem import (  # noqa: E402
+    drive_evidence, gate_matrix, help_protocols, registry, relations, validate,
+)
 
 
 class TestRegistroReal(unittest.TestCase):
@@ -29,20 +31,51 @@ class TestRegistroReal(unittest.TestCase):
         """Deriva documental: declarar que algo existe y que no exista."""
         self.assertEqual([o.object_id for o in registry.drifted()], [])
 
-    def test_los_paquetes_nombrados_sin_artefacto_estan_registrados_como_tales(self):
-        """El hallazgo central: seis paquetes del §1 no existen.
+    def test_los_paquetes_auxiliares_si_existen_en_drive(self):
+        """CORRECCION de la sesion anterior.
 
-        No se inventan ni se dan por implementados. Si alguno aparece de
-        verdad en el futuro, esta prueba obliga a actualizar el registro."""
-        faltantes = {
+        Se habian declarado MISSING_ARTIFACT tras buscarlos solo con greps
+        sobre los repositorios. La busqueda en Drive del 2026-09-03 los
+        encontro todos. Esta prueba fija la correccion para que nadie vuelva
+        a concluir inexistencia sin haber buscado donde el objeto vive."""
+        encontrados = {
             o.object_id for o in registry.ALL_OBJECTS
-            if o.resolve_state() == registry.MISSING_ARTIFACT
+            if o.resolve_state() == registry.FOUND_AUXILIARY
         }
-        for esperado in ("MIS-VISUAL-FACTORY", "MIS-EXPANSION-LAB",
-                         "MIS-COMMERCIAL-OPS", "MIS-LC1-RELEASE",
-                         "MIS-PUBLIC-CLOSURE", "MIS-DEMAND-INTEL",
-                         "MIS-LINKEDIN-BANK", "MIS-GOLD-STANDARD"):
-            self.assertIn(esperado, faltantes)
+        for esperado in ("MIS-CONTENT-FACTORY", "MIS-VISUAL-FACTORY",
+                         "MIS-EXPANSION-LAB", "MIS-COMMERCIAL-OPS",
+                         "MIS-LC1-RELEASE", "MIS-PUBLIC-CLOSURE",
+                         "MIS-DEMAND-INTEL", "MIS-LINKEDIN-BANK"):
+            self.assertIn(esperado, encontrados)
+
+    def test_existencia_verificada_no_es_contenido_verificado(self):
+        """Un ZIP localizado en Drive no es un paquete leido.
+
+        Las instrucciones prohiben descargar o ejecutar artefactos externos de
+        forma automatica, asi que todo paquete arrastra el bloqueo de contenido
+        no leido en vez de darse por integrado."""
+        for obj in registry.ALL_OBJECTS:
+            if obj.resolve_state() == registry.FOUND_AUXILIARY:
+                self.assertIn("ECO-BLK-DRIVE-CONTENT-UNREAD", obj.blockers,
+                              f"{obj.object_id} se da por leido sin estarlo")
+
+    def test_las_tres_fuentes_en_hold_siguen_ausentes_tras_buscarlas(self):
+        """§8: no se convierten en verificadas, y la ausencia ya es documentada."""
+        ausentes = {a.artifact_id for a in drive_evidence.sources_still_missing()}
+        self.assertEqual(ausentes,
+                         {"DRV-SRC-AR-LCT", "DRV-SRC-CO-CST", "DRV-SRC-ES-STS"})
+        for artifact in drive_evidence.sources_still_missing():
+            self.assertIsNone(artifact.drive_id)
+            self.assertIn("2026-09-03", artifact.evidence)
+
+    def test_los_protocolos_declaran_de_donde_derivan(self):
+        """No puede haber dos objetos que representen lo mismo sin decirlo."""
+        self.assertEqual(help_protocols.IDENTITY_RELATION, "DERIVED_FROM")
+        origen = drive_evidence.by_id(help_protocols.IDENTITY_TARGET)
+        self.assertIsNotNone(origen)
+        self.assertEqual(origen.drive_id, help_protocols.IDENTITY_TARGET_DRIVE_ID)
+        self.assertTrue(origen.content_verified(),
+                        "el original debe haberse leido para poder afirmar el duplicado")
 
     def test_un_objeto_ausente_jamas_se_promueve(self):
         """resolve_state() puede degradar, nunca ascender."""
@@ -73,7 +106,10 @@ class TestRegistroReal(unittest.TestCase):
             and l["target"] == "PSY-EVID-SKILL-VERIF"
         ]
         self.assertEqual(len(hueco), 1)
-        self.assertEqual(hueco[0]["state"], relations.DISCONNECTED)
+        # Parcialmente cerrado: existe contrato con vinculos verificados, pero
+        # los concept_id aun se declaran a mano en vez de leerse del grafo web.
+        self.assertEqual(hueco[0]["state"], relations.READY_TO_CONNECT)
+        self.assertIn("CONCEPT -> CLAIM_ID", hueco[0]["reason"])
 
     def test_el_grafo_heredado_se_consume_de_verdad(self):
         """No se duplica topology.py: se lee en vivo."""

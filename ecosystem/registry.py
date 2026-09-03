@@ -28,6 +28,9 @@ READY_FOR_HUMAN_REVIEW = "READY_FOR_HUMAN_REVIEW"
 # Estados propios de este registro, para no fingir que algo existe:
 MISSING_ARTIFACT = "MISSING_ARTIFACT"
 EXTERNAL_READ_ONLY = "EXTERNAL_READ_ONLY"
+# Existe en Drive con ID, fecha y tamano verificados; su contenido puede no
+# haberse leido (ver ecosystem/drive_evidence.py).
+FOUND_AUXILIARY = "FOUND_AUXILIARY"
 # Distinto de MISSING_ARTIFACT a proposito: el objeto SI existe en el proyecto
 # (esta en main), pero no en el arbol de esta rama. Confundir ambos casos
 # borraria la diferencia entre "nunca se construyo" y "esta rama esta atrasada".
@@ -36,7 +39,7 @@ ABSENT_ON_THIS_BRANCH = "ABSENT_ON_THIS_BRANCH"
 DECLARABLE_STATES = frozenset({
     CANONICAL, FROZEN, AUXILIARY, PROPOSED, BLOCKED,
     READY_FOR_HUMAN_REVIEW, MISSING_ARTIFACT, EXTERNAL_READ_ONLY,
-    ABSENT_ON_THIS_BRANCH,
+    ABSENT_ON_THIS_BRANCH, FOUND_AUXILIARY,
 })
 
 # Estados terminales: describen una ausencia ya comprobada, asi que
@@ -293,49 +296,86 @@ _WEB_OBJECTS: tuple[EcosystemObject, ...] = (
     ),
 )
 
-# --- Objetos nombrados por el prompt que NO tienen artefacto ---------------
-# Registrados, no inventados. Su ausencia es el hallazgo, no un hueco a rellenar.
+# --- Paquetes auxiliares que viven en Drive --------------------------------
+#
+# CORRECCION 2026-09-03. La version anterior de este registro los declaro a
+# todos MISSING_ARTIFACT basandose solo en greps sobre los repositorios. La
+# busqueda en Drive demostro que EXISTEN. El error no fue el estado, sino el
+# metodo: ausencia en un repositorio no es evidencia de inexistencia.
+#
+# Existen (FOUND_AUXILIARY) pero su contenido no se ha leido: las instrucciones
+# prohiben descargar o ejecutar artefactos externos de forma automatica. Por eso
+# arrastran ECO-BLK-DRIVE-CONTENT-UNREAD, no un bloqueo de existencia.
+
+def _drive_pkg(object_id: str, label: str, layer: str, drive_ref: str,
+               note: str = "") -> EcosystemObject:
+    return _obj(
+        object_id=object_id, label=label, layer=layer, repo=REPO_DRIVE, path=None,
+        declared_state=FOUND_AUXILIARY, owner="fundador",
+        next_action="Autorizar lectura del contenido, o dejarlo como referencia",
+        blockers=("ECO-BLK-DRIVE-CONTENT-UNREAD",),
+        relations=(f"evidencia:{drive_ref}",),
+        notes=note or f"Localizado en Drive el 2026-09-03 ({drive_ref}). "
+                      "Existencia verificada; contenido no leido.",
+    )
+
+
+_DRIVE_OBJECTS: tuple[EcosystemObject, ...] = (
+    _drive_pkg("MIS-CONTENT-FACTORY", "Content Factory V1", LAYER_KNOWLEDGE,
+               "DRV-CONTENT-FACTORY"),
+    _drive_pkg("MIS-VISUAL-FACTORY", "Visual Factory V1", LAYER_VISUAL,
+               "DRV-VISUAL-FACTORY",
+               "Localizado en Drive el 2026-09-03 (DRV-VISUAL-FACTORY). 124 MB: "
+               "el mayor del ecosistema. Contenido no leido."),
+    _drive_pkg("MIS-EXPANSION-LAB", "Expansion Business Launch Lab V1",
+               LAYER_DISTRIBUTION, "DRV-EXPANSION-LAB"),
+    _drive_pkg("MIS-COMMERCIAL-OPS", "Commercial & Launch Operations Factory V1",
+               LAYER_OPERATION, "DRV-COMMERCIAL-OPS"),
+    _drive_pkg("MIS-LC1-RELEASE", "LC1 Release Assembly Dry Run Factory V1",
+               LAYER_OPERATION, "DRV-LC1-RELEASE"),
+    _drive_pkg("MIS-PUBLIC-CLOSURE", "Public Launch Closure Factory V1",
+               LAYER_GOVERNANCE, "DRV-PUBLIC-CLOSURE"),
+    _drive_pkg("MIS-DEMAND-INTEL", "Demand / Growth Acquisition Intelligence V1",
+               LAYER_DISTRIBUTION, "DRV-DEMAND-INTEL"),
+    _drive_pkg("MIS-LINKEDIN-BANK", "LinkedIn Strategy (Artefacto 05)",
+               LAYER_DISTRIBUTION, "DRV-LINKEDIN-STRATEGY",
+               "Existe como documento de Drive. No es autorizacion de "
+               "publicacion; la aportacion de Raymundo se declara AUXILIARY / "
+               "NON-CANONICAL en su propio README."),
+)
+
+# --- Objetos que siguen sin aparecer tras busqueda documentada -------------
 
 def _missing(object_id: str, label: str, layer: str, note: str) -> EcosystemObject:
     return _obj(
         object_id=object_id, label=label, layer=layer, repo=REPO_DRIVE, path=None,
         declared_state=MISSING_ARTIFACT, owner="fundador",
-        next_action="Localizar el artefacto en Drive o declararlo inexistente",
+        next_action="Localizar el artefacto o declararlo inexistente",
         blockers=("ECO-BLK-NAMED-NOT-BUILT",), notes=note,
     )
 
 
 _MISSING_OBJECTS: tuple[EcosystemObject, ...] = (
-    _missing("MIS-CONTENT-FACTORY", "Content Factory V1", LAYER_KNOWLEDGE,
-             "Cero artefactos. Solo existe vocabulario de etapas en "
-             "visual/topology.py:content_factory_topology(), que es una lectura "
-             "de lo real, no una fabrica."),
-    _missing("MIS-VISUAL-FACTORY", "Visual Factory V1", LAYER_VISUAL,
-             "Cero coincidencias en ambos repositorios."),
-    _missing("MIS-EXPANSION-LAB", "Expansion Business Launch Lab V1", LAYER_DISTRIBUTION,
-             "Cero coincidencias en ambos repositorios."),
-    _missing("MIS-COMMERCIAL-OPS", "Commercial & Launch Operations Factory V1", LAYER_OPERATION,
-             "Cero coincidencias en ambos repositorios."),
-    _missing("MIS-LC1-RELEASE", "LC1 Release Assembly V1", LAYER_OPERATION,
-             "Cero coincidencias en ambos repositorios."),
-    _missing("MIS-PUBLIC-CLOSURE", "Public Launch Closure Factory V1", LAYER_GOVERNANCE,
-             "Cero coincidencias en ambos repositorios."),
-    _missing("MIS-DEMAND-INTEL", "Demand / Growth Intelligence V1", LAYER_DISTRIBUTION,
-             "Cero coincidencias en ambos repositorios."),
-    _missing("MIS-LINKEDIN-BANK", "LinkedIn Strategy / banco de experiencia de Raymundo",
-             LAYER_DISTRIBUTION,
-             "'Raymundo' aparece en el repositorio unicamente como aprobador "
-             "humano en decisiones y claim packets. 'LinkedIn' aparece una vez, "
-             "de paso. No existe banco editorial alguno."),
     _missing("MIS-RC0", "RC0", LAYER_GOVERNANCE,
-             "Nombrado como intocable por el prompt, pero sin artefacto "
-             "identificable en este repositorio."),
+             "Nombrado como intocable, pero sin artefacto identificable ni en "
+             "los repositorios ni en la busqueda de Drive del 2026-09-03."),
     _missing("MIS-GOLD-STANDARD", "Gold Standard visual", LAYER_VISUAL,
-             "Nombrado como condicion para generar arte nuevo. Sin artefacto: "
-             "por tanto la condicion no puede darse por cumplida."),
+             "Nombrado como condicion para generar arte nuevo. Sin artefacto "
+             "localizado: la condicion no puede darse por cumplida."),
+    _missing("MIS-SRC-AR-LCT", "PDF oficial AR_LCT", LAYER_EVIDENCE,
+             "Buscado en Drive el 2026-09-03 por titulo LCT y SOURCE_: sin "
+             "resultado. La carpeta AR sigue vacia. Permanece en HOLD."),
+    _missing("MIS-SRC-CO-CST", "PDF oficial CO_CST", LAYER_EVIDENCE,
+             "Buscado en Drive el 2026-09-03: sin resultado. La carpeta CO "
+             "sigue vacia. Permanece en HOLD."),
+    _missing("MIS-SRC-ES-STS", "PDF oficial ES_STS_6207_2012", LAYER_EVIDENCE,
+             "Buscado en Drive el 2026-09-03: sin resultado. El enlace oficial "
+             "sigue tras CAPTCHA, que no se resuelve ni se elude."),
 )
 
-ALL_OBJECTS: tuple[EcosystemObject, ...] = _PSYCHE_OBJECTS + _WEB_OBJECTS + _MISSING_OBJECTS
+ALL_OBJECTS: tuple[EcosystemObject, ...] = (
+    _PSYCHE_OBJECTS + _WEB_OBJECTS + _DRIVE_OBJECTS + _MISSING_OBJECTS
+)
 
 
 def by_id(object_id: str) -> EcosystemObject | None:

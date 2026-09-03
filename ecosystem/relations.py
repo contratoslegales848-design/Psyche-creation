@@ -62,13 +62,20 @@ def ecosystem_links() -> list[dict]:
     links: list[dict] = []
 
     # --- Hueco 2: entrada humana (web) <-> evidencia (psyche) --------------
+    # Parcialmente cerrado el 2026-09-03 por ecosystem/concept_claim_bridge.py.
+    from . import concept_claim_bridge  # noqa: PLC0415 (import tardio deliberado)
+
+    verificados = len(concept_claim_bridge.verified_bindings())
+    declarados = len(concept_claim_bridge.DECLARED_BINDINGS)
     grafo = state_of("WEB-NAV-KNOWLEDGE-GRAPH")
     links.append(_link(
-        "WEB-NAV-KNOWLEDGE-GRAPH", "PSY-EVID-SKILL-VERIF", DISCONNECTED,
-        "El grafo de mundos y conceptos vive en legalmente-web; los claim "
-        "packets viven en psyche-creation. No existe ningun objeto que ligue "
-        f"un CONCEPT con un CLAIM_ID. Estado del grafo: {grafo}. "
-        "Es el hueco de integracion mas importante del ecosistema."))
+        "WEB-NAV-KNOWLEDGE-GRAPH", "PSY-EVID-SKILL-VERIF", READY_TO_CONNECT,
+        f"Existe un contrato CONCEPT -> CLAIM_ID con {declarados} vinculos "
+        f"declarados, de los cuales {verificados} estan verificados contra el "
+        f"canon real. Estado del grafo: {grafo}. Queda READY_TO_CONNECT y no "
+        "CONNECTED porque los concept_id se declaran a mano: todavia no se "
+        "leen del knowledge graph de legalmente-web, que este repositorio no "
+        "puede importar."))
 
     # --- Contrato cross-repo ------------------------------------------------
     links.append(_link(
@@ -100,10 +107,13 @@ def ecosystem_links() -> list[dict]:
         "Unica ruta de ayuda implementada y con prueba de privacidad propia."))
 
     links.append(_link(
-        "WEB-NAV-KNOWLEDGE-GRAPH", "HELP-001..005", MISSING,
-        "Los cinco protocolos de ayuda que el prompt de integracion describe "
-        "no existen en ningun repositorio. Registrados en help_protocols.py "
-        "como PROPOSED, sin copy normativo."))
+        "WEB-NAV-KNOWLEDGE-GRAPH", "DRV-FIVE-HELP-PROTOCOLS", READY_TO_CONNECT,
+        "CORRECCION 2026-09-03: los cinco protocolos SI existen, en Drive "
+        "(02_five_help_protocols.md, parte de RAYMUNDO_LINKEDIN_HELP_"
+        "CONTRIBUTION_V1, estado AUXILIARY_CONTRIBUTION_READY_FOR_FOUNDER_"
+        "REVIEW). ecosystem/help_protocols.py es un DERIVED_FROM de ese "
+        "original, no una segunda fuente. Falta que una persona los revise y "
+        "que se liguen a rutas reales del grafo."))
 
     # --- Paquetes nombrados sin artefacto -----------------------------------
     for obj in registry.ALL_OBJECTS:
@@ -115,9 +125,11 @@ def ecosystem_links() -> list[dict]:
 
     # --- Distribucion --------------------------------------------------------
     links.append(_link(
-        "MIS-LINKEDIN-BANK", "distribution_linkedin", MISSING,
-        "Sin banco editorial no hay puente que construir: el registro de "
-        "temas propuestos queda vacio a proposito, no relleno con inferencias."))
+        "MIS-LINKEDIN-BANK", "distribution_linkedin", BLOCKED,
+        "CORRECCION 2026-09-03: el banco editorial SI existe (Artefacto 05 "
+        "LinkedIn Strategy, mas la aportacion de Raymundo). Sigue BLOCKED, no "
+        "MISSING: su contenido no se ha leido y su propio README lo declara "
+        "AUXILIARY / NON-CANONICAL, sin autorizar publicacion ni DM."))
 
     return links
 
