@@ -69,14 +69,14 @@
           "jurisdicciones_cubiertas": [
             "España"
           ],
-          "registro_oficial_id": null,
+          "registro_oficial_id": "aepd-es",
           "verificacion_fuente": {
             "origen_oficial_confirmado": false,
             "texto_exacto_consultado": false,
             "vigencia_comprobada": false,
             "fecha_comprobacion": null,
             "metodo_o_evidencia": null,
-            "observaciones": "Este organismo NO figura en references/official-source-registry.json. Sin entrada de registro no alcanza Nivel 1 aunque el dominio sea legitimo: requiere que un humano anada la entrada tras confirmar hostname, tipo de fuente y jurisdiccion autorizada. Ademas falta el localizador."
+            "observaciones": "Organismo registrado el 2026-09-03 por orden del fundador. Nivel 1 sigue sin alcanzarse: faltan localizador concreto y lectura del texto oficial. Ademas falta el localizador."
           }
         },
         {
@@ -91,14 +91,14 @@
           "jurisdicciones_cubiertas": [
             "México"
           ],
-          "registro_oficial_id": null,
+          "registro_oficial_id": "inai-org-mx",
           "verificacion_fuente": {
             "origen_oficial_confirmado": false,
             "texto_exacto_consultado": false,
             "vigencia_comprobada": false,
             "fecha_comprobacion": null,
             "metodo_o_evidencia": null,
-            "observaciones": "Este organismo NO figura en references/official-source-registry.json. Sin entrada de registro no alcanza Nivel 1 aunque el dominio sea legitimo: requiere que un humano anada la entrada tras confirmar hostname, tipo de fuente y jurisdiccion autorizada. El INAI ademas atraviesa cambios institucionales que obligan a comprobar competencia vigente antes de citarlo."
+            "observaciones": "Organismo registrado el 2026-09-03 por orden del fundador. Nivel 1 sigue sin alcanzarse: faltan localizador concreto y lectura del texto oficial. El INAI ademas atraviesa cambios institucionales que obligan a comprobar competencia vigente antes de citarlo."
           }
         },
         {
@@ -113,14 +113,14 @@
           "jurisdicciones_cubiertas": [
             "Colombia"
           ],
-          "registro_oficial_id": null,
+          "registro_oficial_id": "sic-gov-co",
           "verificacion_fuente": {
             "origen_oficial_confirmado": false,
             "texto_exacto_consultado": false,
             "vigencia_comprobada": false,
             "fecha_comprobacion": null,
             "metodo_o_evidencia": null,
-            "observaciones": "Este organismo NO figura en references/official-source-registry.json. Sin entrada de registro no alcanza Nivel 1 aunque el dominio sea legitimo: requiere que un humano anada la entrada tras confirmar hostname, tipo de fuente y jurisdiccion autorizada."
+            "observaciones": "Organismo registrado el 2026-09-03 por orden del fundador. Nivel 1 sigue sin alcanzarse: faltan localizador concreto y lectura del texto oficial."
           }
         }
       ],

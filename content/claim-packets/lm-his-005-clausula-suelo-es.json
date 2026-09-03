@@ -1,6 +1,6 @@
 {
   "schema_version": "4.0",
-  "piece_id": "LM-ACT-001",
+  "piece_id": "LM-HIS-005",
   "claims": [
     {
       "nucleo_transversal": null,
@@ -11,7 +11,7 @@
       "justificacion_suficiencia_comparada": null,
       "confianza": "baja",
       "riesgo_falsa_universalizacion": "bajo",
-      "riesgo_asesoria": "medio",
+      "riesgo_asesoria": "alto",
       "platform_review": {
         "required": false,
         "status": "NO_APLICA",
@@ -40,22 +40,22 @@
         "verificada": false,
         "nuevo_claim_id": null
       },
-      "claim_id": "lm-act-001-claim-1",
-      "texto_exacto": "Despidieron al trabajador con carta formal. La justicia declaro el despido improcedente porque la empresa omitio darle audiencia previa para defenderse.",
+      "claim_id": "lm-his-005-claim-1",
+      "texto_exacto": "La nulidad de la clausula suelo por falta de transparencia material obliga al banco a restituir lo cobrado de mas desde el origen del contrato.",
       "ubicacion": "hook",
-      "tipo": "regla",
+      "tipo": "consecuencia",
       "alcance": "CAPA_C_NACIONAL",
       "jurisdiccion": "España",
       "fuentes": [
         {
-          "id": "SRC-ACT001-ES-STS-1250-2024",
+          "id": "SRC-HIS005-ES-STS-2013",
           "tipo_fuente": "JURISPRUDENCIA_OFICIAL",
-          "titulo": "STS 1250/2024, Sala de lo Social — audiencia previa al despido disciplinario",
+          "titulo": "STS de 9 de mayo de 2013 — clausulas suelo y transparencia material",
           "organismo_autor": "Consejo General del Poder Judicial",
           "url": "https://www.poderjudicial.es/search/indexAN.jsp",
           "identificador_bibliografico": null,
           "fecha_consulta": "2026-09-03",
-          "localizador": "STS 1250/2024 (numero de resolucion declarado por el fundador, sin verificar)",
+          "localizador": "STS 9-5-2013 (Pleno Sala Primera)",
           "jurisdicciones_cubiertas": [
             "España"
           ],
@@ -66,39 +66,39 @@
             "vigencia_comprobada": false,
             "fecha_comprobacion": null,
             "metodo_o_evidencia": null,
-            "observaciones": "No se pudo consultar el texto oficial: WebFetch permanece EGRESS_BLOCKED hacia dominios oficiales en esta sesion, y el enlace del CGPJ/CENDOJ redirige a CAPTCHA (no se resuelve ni se elude). Ningun booleano puede marcarse true sin lectura real. El numero de sentencia lo aporto el fundador; no se ha localizado la resolucion en CENDOJ desde esta sesion."
+            "observaciones": "No se pudo consultar el texto oficial: WebFetch permanece EGRESS_BLOCKED hacia dominios oficiales en esta sesion. Ningun booleano de verificacion puede marcarse true sin lectura real. ATENCION: esa sentencia limito la retroactividad; la restitucion total procede de jurisprudencia posterior del TJUE. Afirmar 'desde el origen' citando solo la STS de 2013 seria incorrecto."
           }
         },
         {
-          "id": "SRC-ACT001-OIT-C158-ART7",
-          "tipo_fuente": "NORMA_OFICIAL",
-          "titulo": "Convenio 158 OIT sobre la terminacion de la relacion de trabajo — art. 7",
-          "organismo_autor": "Organización Internacional del Trabajo",
-          "url": "https://www.ilo.org/dyn/normlex/en/f?p=NORMLEXPUB:12100:0::NO::P12100_ILO_CODE:C158",
+          "id": "SRC-HIS005-UE-TJUE",
+          "tipo_fuente": "JURISPRUDENCIA_OFICIAL",
+          "titulo": "Jurisprudencia del TJUE sobre restitucion en clausulas abusivas",
+          "organismo_autor": "Tribunal de Justicia de la Unión Europea",
+          "url": "https://curia.europa.eu/juris/recherche.jsf",
           "identificador_bibliografico": null,
           "fecha_consulta": "2026-09-03",
-          "localizador": "art. 7",
+          "localizador": "asunto concreto SIN DETERMINAR",
           "jurisdicciones_cubiertas": [
-            "Ámbito internacional"
+            "Unión Europea"
           ],
-          "registro_oficial_id": "ilo-org",
+          "registro_oficial_id": null,
           "verificacion_fuente": {
             "origen_oficial_confirmado": false,
             "texto_exacto_consultado": false,
             "vigencia_comprobada": false,
             "fecha_comprobacion": null,
             "metodo_o_evidencia": null,
-            "observaciones": "Organismo registrado el 2026-09-03 (ilo-org). El registro solo lo autoriza a respaldar 'Ambito internacional': un convenio OIT no cubre Espana por si solo, hace falta ademas la fuente nacional espanola. Sigue faltando lectura del texto."
+            "observaciones": "El TJUE (curia.europa.eu) NO figura en el registro oficial unico: EUR-Lex esta registrado para normas, pero no hay entrada para la jurisdiccion del Tribunal. Sin ella no puede alcanzar Nivel 1. Falta ademas identificar el asunto concreto."
           }
         }
       ],
-      "redaccion_prohibida": "En Espana todo despido sin audiencia previa es automaticamente improcedente.",
-      "notas": "Tema declarado por el fundador el 2026-09-03. La afirmacion depende de una linea jurisprudencial concreta y reciente: sin leer la resolucion no se puede sostener. Siguiente accion tecnica: obtener el PDF de la STS desde CENDOJ por via autorizada (el enlace directo esta tras CAPTCHA) y anadir la OIT al registro oficial."
+      "redaccion_prohibida": "Todo el que tenga clausula suelo recupera automaticamente todo su dinero.",
+      "notas": "Riesgo de asesoria ALTO: la pieza describe un resultado economico concreto y personas con hipoteca pueden actuar sobre ella. La afirmacion 'desde el origen' depende de jurisprudencia del TJUE posterior a la STS citada. Siguiente accion tecnica: registrar curia.europa.eu e identificar el asunto del TJUE que fija la restitucion integra."
     }
   ],
   "estado_agregado": "REQUIERE_INVESTIGACION",
   "revisiones_pendientes": [
-    "lm-act-001-claim-1"
+    "lm-his-005-claim-1"
   ],
   "gate_global_arte": "CERRADO"
 }

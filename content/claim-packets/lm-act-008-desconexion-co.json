@@ -1,0 +1,82 @@
+{
+  "schema_version": "4.0",
+  "piece_id": "LM-ACT-008",
+  "claims": [
+    {
+      "nucleo_transversal": null,
+      "variaciones_materiales": null,
+      "jurisdicciones_revisadas": null,
+      "diferencias_buscadas": null,
+      "contraejemplos_encontrados": null,
+      "justificacion_suficiencia_comparada": null,
+      "confianza": "baja",
+      "riesgo_falsa_universalizacion": "bajo",
+      "riesgo_asesoria": "alto",
+      "platform_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "confidentiality_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "estado": "REQUIERE_INVESTIGACION",
+      "revision_humana": {
+        "estado": "PENDIENTE",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null,
+        "contenido_hash_sha256": null
+      },
+      "gate_arte": "CERRADO",
+      "reformulacion_propuesta": {
+        "texto": null,
+        "verificada": false,
+        "nuevo_claim_id": null
+      },
+      "claim_id": "lm-act-008-claim-1",
+      "texto_exacto": "Enviar mensajes de trabajo fuera de jornada vulnera el derecho a la desconexion laboral en Colombia y constituye indicio de acoso.",
+      "ubicacion": "hook",
+      "tipo": "regla",
+      "alcance": "CAPA_C_NACIONAL",
+      "jurisdiccion": "Colombia",
+      "fuentes": [
+        {
+          "id": "SRC-ACT008-CO-LEY-2191",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Ley 2191 de 2022 — desconexion laboral",
+          "organismo_autor": "Departamento Administrativo de la Función Pública (Colombia) — Gestor Normativo",
+          "url": "https://www.funcionpublica.gov.co/eva/gestornormativo/norma.php?i=176305",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-09-03",
+          "localizador": "arts. 3 y 4",
+          "jurisdicciones_cubiertas": [
+            "Colombia"
+          ],
+          "registro_oficial_id": "funcionpublica-gov-co",
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": false,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": null,
+            "metodo_o_evidencia": null,
+            "observaciones": "No se pudo consultar el texto oficial: WebFetch permanece EGRESS_BLOCKED hacia dominios oficiales en esta sesion. Ningun booleano de verificacion puede marcarse true sin lectura real. Ademas: 'constituye indicio de acoso' es una consecuencia juridica autonoma que la ley de desconexion puede no establecer; exige comprobar si el texto lo dice o si procede de la Ley 1010 de 2006 sobre acoso laboral."
+          }
+        }
+      ],
+      "redaccion_prohibida": "Cualquier mensaje fuera de jornada es acoso laboral.",
+      "notas": "La pieza encadena dos afirmaciones de distinto peso: vulnerar la desconexion (probable) y constituir indicio de acoso (consecuencia grave). Siguiente accion tecnica: leer arts. 3 y 4 y verificar si el vinculo con acoso esta en la norma o es inferencia."
+    }
+  ],
+  "estado_agregado": "REQUIERE_INVESTIGACION",
+  "revisiones_pendientes": [
+    "lm-act-008-claim-1"
+  ],
+  "gate_global_arte": "CERRADO"
+}

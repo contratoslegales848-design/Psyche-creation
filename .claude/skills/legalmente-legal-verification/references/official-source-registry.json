@@ -1,210 +1,478 @@
 {
-  "registry_version": "1.0",
+  "registry_version": "1.1",
   "_nota": "Registro ÚNICO y cerrado de organismos oficiales conocidos por el validador (Fase 1D.1). Toda validación de hostname, organismo, tipo de fuente permitido y jurisdicción/ámbito se deriva de aquí — el validador NO mantiene ninguna lista paralela. Un hostname oficial legítimo que falte aquí falla cerrado (genera advertencia, nunca alcanza Nivel 1) hasta que un humano añada la entrada explícitamente. 'tipos_fuente_permitidos' es deliberadamente conservador: ante la duda, se permite MENOS tipos, no más — cada entrada documenta por qué se restringió así, para revisión humana.",
   "sources": [
     {
       "id": "boe-es",
-      "hostnames": ["boe.es"],
+      "hostnames": [
+        "boe.es"
+      ],
       "organismo_canonico": "Agencia Estatal Boletín Oficial del Estado",
-      "organismo_aliases": ["Agencia Estatal BOE", "BOE", "Boletín Oficial del Estado"],
-      "jurisdicciones": ["España"],
-      "tipos_fuente_permitidos": ["NORMA_OFICIAL"],
+      "organismo_aliases": [
+        "Agencia Estatal BOE",
+        "BOE",
+        "Boletín Oficial del Estado"
+      ],
+      "jurisdicciones": [
+        "España"
+      ],
+      "tipos_fuente_permitidos": [
+        "NORMA_OFICIAL"
+      ],
       "ambito": "NACIONAL",
       "_nota": "El BOE publica normas (leyes, reales decretos), no resuelve litigios — JURISPRUDENCIA_OFICIAL corresponde al Poder Judicial (poderjudicial.es), no al BOE."
     },
     {
       "id": "poderjudicial-es",
-      "hostnames": ["poderjudicial.es"],
+      "hostnames": [
+        "poderjudicial.es"
+      ],
       "organismo_canonico": "Consejo General del Poder Judicial",
-      "organismo_aliases": ["CGPJ", "Poder Judicial de España"],
-      "jurisdicciones": ["España"],
-      "tipos_fuente_permitidos": ["JURISPRUDENCIA_OFICIAL"],
+      "organismo_aliases": [
+        "CGPJ",
+        "Poder Judicial de España"
+      ],
+      "jurisdicciones": [
+        "España"
+      ],
+      "tipos_fuente_permitidos": [
+        "JURISPRUDENCIA_OFICIAL"
+      ],
       "ambito": "NACIONAL"
     },
     {
       "id": "congreso-es",
-      "hostnames": ["congreso.es"],
+      "hostnames": [
+        "congreso.es"
+      ],
       "organismo_canonico": "Congreso de los Diputados (España)",
-      "organismo_aliases": ["Congreso de los Diputados"],
-      "jurisdicciones": ["España"],
-      "tipos_fuente_permitidos": ["NORMA_OFICIAL"],
+      "organismo_aliases": [
+        "Congreso de los Diputados"
+      ],
+      "jurisdicciones": [
+        "España"
+      ],
+      "tipos_fuente_permitidos": [
+        "NORMA_OFICIAL"
+      ],
       "ambito": "NACIONAL"
     },
     {
       "id": "senado-es",
-      "hostnames": ["senado.es"],
+      "hostnames": [
+        "senado.es"
+      ],
       "organismo_canonico": "Senado de España",
-      "organismo_aliases": ["Senado (España)"],
-      "jurisdicciones": ["España"],
-      "tipos_fuente_permitidos": ["NORMA_OFICIAL"],
+      "organismo_aliases": [
+        "Senado (España)"
+      ],
+      "jurisdicciones": [
+        "España"
+      ],
+      "tipos_fuente_permitidos": [
+        "NORMA_OFICIAL"
+      ],
       "ambito": "NACIONAL"
     },
     {
       "id": "diputados-gob-mx",
-      "hostnames": ["diputados.gob.mx"],
+      "hostnames": [
+        "diputados.gob.mx"
+      ],
       "organismo_canonico": "Cámara de Diputados (México)",
-      "organismo_aliases": ["Congreso de la Unión (México)", "H. Cámara de Diputados", "Diputados MX"],
-      "jurisdicciones": ["México"],
-      "tipos_fuente_permitidos": ["NORMA_OFICIAL"],
+      "organismo_aliases": [
+        "Congreso de la Unión (México)",
+        "H. Cámara de Diputados",
+        "Diputados MX"
+      ],
+      "jurisdicciones": [
+        "México"
+      ],
+      "tipos_fuente_permitidos": [
+        "NORMA_OFICIAL"
+      ],
       "ambito": "NACIONAL"
     },
     {
       "id": "senado-gob-mx",
-      "hostnames": ["senado.gob.mx"],
+      "hostnames": [
+        "senado.gob.mx"
+      ],
       "organismo_canonico": "Senado de la República (México)",
-      "organismo_aliases": ["Senado de México"],
-      "jurisdicciones": ["México"],
-      "tipos_fuente_permitidos": ["NORMA_OFICIAL"],
+      "organismo_aliases": [
+        "Senado de México"
+      ],
+      "jurisdicciones": [
+        "México"
+      ],
+      "tipos_fuente_permitidos": [
+        "NORMA_OFICIAL"
+      ],
       "ambito": "NACIONAL"
     },
     {
       "id": "dof-gob-mx",
-      "hostnames": ["dof.gob.mx"],
+      "hostnames": [
+        "dof.gob.mx"
+      ],
       "organismo_canonico": "Diario Oficial de la Federación (México)",
-      "organismo_aliases": ["DOF"],
-      "jurisdicciones": ["México"],
-      "tipos_fuente_permitidos": ["NORMA_OFICIAL"],
+      "organismo_aliases": [
+        "DOF"
+      ],
+      "jurisdicciones": [
+        "México"
+      ],
+      "tipos_fuente_permitidos": [
+        "NORMA_OFICIAL"
+      ],
       "ambito": "NACIONAL"
     },
     {
       "id": "scjn-gob-mx",
-      "hostnames": ["scjn.gob.mx"],
+      "hostnames": [
+        "scjn.gob.mx"
+      ],
       "organismo_canonico": "Suprema Corte de Justicia de la Nación (México)",
-      "organismo_aliases": ["SCJN"],
-      "jurisdicciones": ["México"],
-      "tipos_fuente_permitidos": ["JURISPRUDENCIA_OFICIAL"],
+      "organismo_aliases": [
+        "SCJN"
+      ],
+      "jurisdicciones": [
+        "México"
+      ],
+      "tipos_fuente_permitidos": [
+        "JURISPRUDENCIA_OFICIAL"
+      ],
       "ambito": "NACIONAL"
     },
     {
       "id": "gob-mx-generico",
-      "hostnames": ["gob.mx"],
+      "hostnames": [
+        "gob.mx"
+      ],
       "organismo_canonico": "Gobierno de México (portal genérico gob.mx)",
-      "organismo_aliases": ["Gobierno de México", "Gobierno Federal (México)"],
-      "jurisdicciones": ["México"],
-      "tipos_fuente_permitidos": ["AUTORIDAD_PUBLICA_OFICIAL"],
+      "organismo_aliases": [
+        "Gobierno de México",
+        "Gobierno Federal (México)"
+      ],
+      "jurisdicciones": [
+        "México"
+      ],
+      "tipos_fuente_permitidos": [
+        "AUTORIDAD_PUBLICA_OFICIAL"
+      ],
       "ambito": "NACIONAL",
       "_nota": "Entrada GENÉRICA de respaldo para cualquier subdominio *.gob.mx sin entrada propia (p. ej. sat.gob.mx). Deliberadamente conservadora: solo AUTORIDAD_PUBLICA_OFICIAL, nunca NORMA_OFICIAL ni JURISPRUDENCIA_OFICIAL, porque un subdominio genérico de gob.mx no es por sí mismo el Diario Oficial ni la SCJN. Un hostname más específico (dof.gob.mx, scjn.gob.mx, diputados.gob.mx, senado.gob.mx, congresoqroo.gob.mx) siempre gana sobre esta entrada genérica."
     },
     {
       "id": "congresoqroo-gob-mx",
-      "hostnames": ["congresoqroo.gob.mx"],
+      "hostnames": [
+        "congresoqroo.gob.mx"
+      ],
       "organismo_canonico": "H. Congreso del Estado de Quintana Roo",
       "organismo_aliases": [],
-      "jurisdicciones": ["México"],
-      "tipos_fuente_permitidos": ["NORMA_OFICIAL", "AUTORIDAD_PUBLICA_OFICIAL"],
+      "jurisdicciones": [
+        "México"
+      ],
+      "tipos_fuente_permitidos": [
+        "NORMA_OFICIAL",
+        "AUTORIDAD_PUBLICA_OFICIAL"
+      ],
       "ambito": "ESTATAL",
       "_nota": "Fuente legislativa oficial ESTATAL: el poder legislativo del Estado de Quintana Roo, que publica tanto el texto consolidado de sus propios códigos y leyes como material institucional de su portal (índices de decretos, historiales de legislatura, fichas). Aplicable EXCLUSIVAMENTE a normas y documentos del Estado de Quintana Roo — NO constituye autoridad federal mexicana, y una regla estatal que se apoye en esta entrada NUNCA puede presentarse como regla nacional de México ni panhispánica (falsa universalización; ver references/jurisdiction-policy.md). DOS TIPOS PERMITIDOS, SEGÚN EL DOCUMENTO CONCRETO (decisión del fundador, Ruta C, 2026-08-27): 'NORMA_OFICIAL' solo cuando la URL apunta al TEXTO NORMATIVO en sí (p. ej. el PDF consolidado del Código Civil para el Estado de Quintana Roo en /codigos/); 'AUTORIDAD_PUBLICA_OFICIAL' cuando la URL es material institucional del mismo organismo que NO es el texto de la norma (p. ej. el índice histórico de decretos en /historial/…/decretos/index.htm, que acredita al organismo pero no prueba por sí solo el contenido exacto de un decreto). Elegir el tipo es responsabilidad de quien declara la fuente: el validador comprueba que el tipo esté permitido para el organismo, NO que la URL concreta corresponda a ese tipo. AMPLIAR LOS TIPOS NO ELEVA NINGÚN NIVEL POR SÍ MISMO: el nivel de cada fuente sigue dependiendo de su URL real, su localizador y sus tres booleanos de 'verificacion_fuente'; una fuente con los tres booleanos en false se queda en Nivel 2 aunque hostname, organismo y registro sean perfectos. LÍMITE CONOCIDO DEL SCHEMA: el campo 'ambito' es documental — el validador NO lo lee ni distingue hoy autoridad estatal de federal; ambas se declaran como jurisdicción 'México' porque el registro no modela subdivisiones. Esa distinción queda a cargo de la revisión humana y del texto del claim, no del validador. Antes de esta entrada, congresoqroo.gob.mx resolvía por subdominio a la entrada genérica 'gob-mx-generico', que solo permite AUTORIDAD_PUBLICA_OFICIAL: eso obligaba a declarar el Código Civil estatal como si fuera un portal administrativo, no como la norma que es. El hostname declarado cubre, por límite real de subdominio (nunca por subcadena), los tres hostnames oficiales verificados: congresoqroo.gob.mx, www.congresoqroo.gob.mx y documentos.congresoqroo.gob.mx — no se enumeran aparte porque match_registry_entry_for_url ya resuelve subdominios y gana la entrada más específica sobre 'gob.mx'. Registrar el hostname NO sustituye verificar, fuente por fuente, el documento concreto, su vigencia y su localizador: esta entrada solo habilita que una fuente PUEDA alcanzar Nivel 1 si además declara URL real, organismo exacto, tipo permitido y los tres booleanos de 'verificacion_fuente' con base propia. Alta basada en verificación externa independiente proporcionada por Codex el 2026-08-27 (no confirmada de forma independiente por este agente — EGRESS_BLOCKED)."
     },
     {
       "id": "infoleg-gob-ar",
-      "hostnames": ["infoleg.gob.ar", "servicios.infoleg.gob.ar"],
+      "hostnames": [
+        "infoleg.gob.ar",
+        "servicios.infoleg.gob.ar"
+      ],
       "organismo_canonico": "Información Legislativa y Documental (InfoLEG, Argentina)",
-      "organismo_aliases": ["InfoLEG", "InfoLeg Argentina", "InfoLEG — Ministerio de Justicia (Argentina)"],
-      "jurisdicciones": ["Argentina"],
-      "tipos_fuente_permitidos": ["NORMA_OFICIAL"],
+      "organismo_aliases": [
+        "InfoLEG",
+        "InfoLeg Argentina",
+        "InfoLEG — Ministerio de Justicia (Argentina)"
+      ],
+      "jurisdicciones": [
+        "Argentina"
+      ],
+      "tipos_fuente_permitidos": [
+        "NORMA_OFICIAL"
+      ],
       "ambito": "NACIONAL"
     },
     {
       "id": "argentina-gob-ar-normativa",
-      "hostnames": ["argentina.gob.ar"],
+      "hostnames": [
+        "argentina.gob.ar"
+      ],
       "organismo_canonico": "Argentina.gob.ar — Normativa / Presidencia de la Nación",
       "organismo_aliases": [],
-      "jurisdicciones": ["Argentina"],
-      "tipos_fuente_permitidos": ["NORMA_OFICIAL"],
+      "jurisdicciones": [
+        "Argentina"
+      ],
+      "tipos_fuente_permitidos": [
+        "NORMA_OFICIAL"
+      ],
       "ambito": "NACIONAL",
       "_nota": "Verificación externa independiente proporcionada por Codex el 2026-08-27 (no confirmada de forma independiente por este agente en esta sesión — EGRESS_BLOCKED). Codex verificó que la sección /normativa/nacional/ del portal unificado argentina.gob.ar publica el texto actualizado de: Ley 26.994 (Código Civil y Comercial de la Nación, arts. 1897-1900, 1908-1910, 1915, 1941), Ley 20.744 (Ley de Contrato de Trabajo, arts. 10, 63, 242, 245-246) y Ley 11.179 (Código Penal, arts. 109-110). Uso exclusivo: documentos normativos oficiales de alcance nacional (NORMA_OFICIAL) — esta entrada de registro NUNCA sustituye por sí sola la verificación de URL exacta, organismo, localizador y los tres booleanos de 'verificacion_fuente' de cada fuente concreta; el registro solo habilita que una fuente ALCANCE Nivel 1 si además declara esos cuatro elementos correctamente. El schema de este registro NO admite restricción por ruta/path — 'hostnames' solo opera a nivel de hostname completo (exacto o por sufijo de subdominio, vía match_registry_entry_for_url), nunca por path_prefix. Esta entrada, por tanto, cubre TODO el hostname argentina.gob.ar para tipo_fuente=NORMA_OFICIAL bajo este organismo — no solo la sección /normativa/nacional/ — y esa ausencia de restricción por ruta queda documentada aquí explícitamente como DEUDA TÉCNICA conocida del schema, no como omisión de esta entrada. Cualquier fuente que declare este 'registro_oficial_id' fuera de /normativa/nacional/ requiere el mismo escrutinio humano que motivó esta alta."
     },
     {
       "id": "csjn-gov-ar",
-      "hostnames": ["csjn.gov.ar"],
+      "hostnames": [
+        "csjn.gov.ar"
+      ],
       "organismo_canonico": "Corte Suprema de Justicia de la Nación (Argentina)",
-      "organismo_aliases": ["CSJN"],
-      "jurisdicciones": ["Argentina"],
-      "tipos_fuente_permitidos": ["JURISPRUDENCIA_OFICIAL"],
+      "organismo_aliases": [
+        "CSJN"
+      ],
+      "jurisdicciones": [
+        "Argentina"
+      ],
+      "tipos_fuente_permitidos": [
+        "JURISPRUDENCIA_OFICIAL"
+      ],
       "ambito": "NACIONAL"
     },
     {
       "id": "boletinoficial-gob-ar",
-      "hostnames": ["boletinoficial.gob.ar"],
+      "hostnames": [
+        "boletinoficial.gob.ar"
+      ],
       "organismo_canonico": "Boletín Oficial de la República Argentina",
-      "organismo_aliases": ["Boletín Oficial (Argentina)"],
-      "jurisdicciones": ["Argentina"],
-      "tipos_fuente_permitidos": ["NORMA_OFICIAL"],
+      "organismo_aliases": [
+        "Boletín Oficial (Argentina)"
+      ],
+      "jurisdicciones": [
+        "Argentina"
+      ],
+      "tipos_fuente_permitidos": [
+        "NORMA_OFICIAL"
+      ],
       "ambito": "NACIONAL"
     },
     {
       "id": "minjus-gob-pe",
-      "hostnames": ["minjus.gob.pe"],
+      "hostnames": [
+        "minjus.gob.pe"
+      ],
       "organismo_canonico": "Ministerio de Justicia y Derechos Humanos (Perú)",
-      "organismo_aliases": ["Minjus Perú", "Ministerio de Justicia (Perú)"],
-      "jurisdicciones": ["Perú"],
-      "tipos_fuente_permitidos": ["AUTORIDAD_PUBLICA_OFICIAL"],
+      "organismo_aliases": [
+        "Minjus Perú",
+        "Ministerio de Justicia (Perú)"
+      ],
+      "jurisdicciones": [
+        "Perú"
+      ],
+      "tipos_fuente_permitidos": [
+        "AUTORIDAD_PUBLICA_OFICIAL"
+      ],
       "ambito": "NACIONAL",
       "_nota": "Entrada del ministerio en general (AUTORIDAD_PUBLICA_OFICIAL); el repositorio normativo específico es spij.minjus.gob.pe, con su propia entrada más específica que gana sobre esta."
     },
     {
       "id": "spij-minjus-gob-pe",
-      "hostnames": ["spij.minjus.gob.pe"],
+      "hostnames": [
+        "spij.minjus.gob.pe"
+      ],
       "organismo_canonico": "Sistema Peruano de Información Jurídica (SPIJ)",
-      "organismo_aliases": ["SPIJ", "SPIJ Perú", "Sistema Peruano de Información Jurídica — Minjus", "Minjus"],
-      "jurisdicciones": ["Perú"],
-      "tipos_fuente_permitidos": ["NORMA_OFICIAL"],
+      "organismo_aliases": [
+        "SPIJ",
+        "SPIJ Perú",
+        "Sistema Peruano de Información Jurídica — Minjus",
+        "Minjus"
+      ],
+      "jurisdicciones": [
+        "Perú"
+      ],
+      "tipos_fuente_permitidos": [
+        "NORMA_OFICIAL"
+      ],
       "ambito": "NACIONAL"
     },
     {
       "id": "tc-gob-pe",
-      "hostnames": ["tc.gob.pe"],
+      "hostnames": [
+        "tc.gob.pe"
+      ],
       "organismo_canonico": "Tribunal Constitucional del Perú",
-      "organismo_aliases": ["Tribunal Constitucional (Perú)"],
-      "jurisdicciones": ["Perú"],
-      "tipos_fuente_permitidos": ["JURISPRUDENCIA_OFICIAL"],
+      "organismo_aliases": [
+        "Tribunal Constitucional (Perú)"
+      ],
+      "jurisdicciones": [
+        "Perú"
+      ],
+      "tipos_fuente_permitidos": [
+        "JURISPRUDENCIA_OFICIAL"
+      ],
       "ambito": "NACIONAL"
     },
     {
       "id": "pj-gob-pe",
-      "hostnames": ["pj.gob.pe"],
+      "hostnames": [
+        "pj.gob.pe"
+      ],
       "organismo_canonico": "Poder Judicial del Perú",
-      "organismo_aliases": ["Poder Judicial (Perú)"],
-      "jurisdicciones": ["Perú"],
-      "tipos_fuente_permitidos": ["JURISPRUDENCIA_OFICIAL"],
+      "organismo_aliases": [
+        "Poder Judicial (Perú)"
+      ],
+      "jurisdicciones": [
+        "Perú"
+      ],
+      "tipos_fuente_permitidos": [
+        "JURISPRUDENCIA_OFICIAL"
+      ],
       "ambito": "NACIONAL"
     },
     {
       "id": "bcn-cl",
-      "hostnames": ["bcn.cl", "www.bcn.cl"],
+      "hostnames": [
+        "bcn.cl",
+        "www.bcn.cl"
+      ],
       "organismo_canonico": "Biblioteca del Congreso Nacional de Chile",
-      "organismo_aliases": ["BCN Chile", "Biblioteca del Congreso Nacional"],
-      "jurisdicciones": ["Chile"],
-      "tipos_fuente_permitidos": ["NORMA_OFICIAL"],
+      "organismo_aliases": [
+        "BCN Chile",
+        "Biblioteca del Congreso Nacional"
+      ],
+      "jurisdicciones": [
+        "Chile"
+      ],
+      "tipos_fuente_permitidos": [
+        "NORMA_OFICIAL"
+      ],
       "ambito": "NACIONAL"
     },
     {
       "id": "funcionpublica-gov-co",
-      "hostnames": ["funcionpublica.gov.co"],
+      "hostnames": [
+        "funcionpublica.gov.co"
+      ],
       "organismo_canonico": "Departamento Administrativo de la Función Pública (Colombia) — Gestor Normativo",
-      "organismo_aliases": ["Función Pública Colombia", "Función Pública"],
-      "jurisdicciones": ["Colombia"],
-      "tipos_fuente_permitidos": ["NORMA_OFICIAL"],
+      "organismo_aliases": [
+        "Función Pública Colombia",
+        "Función Pública"
+      ],
+      "jurisdicciones": [
+        "Colombia"
+      ],
+      "tipos_fuente_permitidos": [
+        "NORMA_OFICIAL"
+      ],
       "ambito": "NACIONAL"
     },
     {
       "id": "corteconstitucional-gov-co",
-      "hostnames": ["corteconstitucional.gov.co"],
+      "hostnames": [
+        "corteconstitucional.gov.co"
+      ],
       "organismo_canonico": "Corte Constitucional de Colombia",
-      "organismo_aliases": ["Corte Constitucional (Colombia)"],
-      "jurisdicciones": ["Colombia"],
-      "tipos_fuente_permitidos": ["JURISPRUDENCIA_OFICIAL"],
+      "organismo_aliases": [
+        "Corte Constitucional (Colombia)"
+      ],
+      "jurisdicciones": [
+        "Colombia"
+      ],
+      "tipos_fuente_permitidos": [
+        "JURISPRUDENCIA_OFICIAL"
+      ],
       "ambito": "NACIONAL"
     },
     {
       "id": "eur-lex-europa-eu",
-      "hostnames": ["eur-lex.europa.eu"],
+      "hostnames": [
+        "eur-lex.europa.eu"
+      ],
       "organismo_canonico": "EUR-Lex — Oficina de Publicaciones de la Unión Europea",
-      "organismo_aliases": ["EUR-Lex"],
-      "jurisdicciones": ["Unión Europea"],
-      "tipos_fuente_permitidos": ["NORMA_OFICIAL"],
+      "organismo_aliases": [
+        "EUR-Lex"
+      ],
+      "jurisdicciones": [
+        "Unión Europea"
+      ],
+      "tipos_fuente_permitidos": [
+        "NORMA_OFICIAL"
+      ],
       "ambito": "SUPRANACIONAL",
       "_nota": "Ámbito supranacional explícito — nunca respalda un país concreto no declarado, ni se asume que 'cubre a toda la audiencia panhispánica'."
+    },
+    {
+      "id": "aepd-es",
+      "hostnames": [
+        "aepd.es"
+      ],
+      "organismo_canonico": "Agencia Española de Protección de Datos",
+      "organismo_aliases": [
+        "AEPD",
+        "Agencia Espanola de Proteccion de Datos"
+      ],
+      "jurisdicciones": [
+        "España"
+      ],
+      "tipos_fuente_permitidos": [
+        "AUTORIDAD_PUBLICA_OFICIAL"
+      ],
+      "ambito": "NACIONAL",
+      "_nota": "Autoridad de control de proteccion de datos en Espana: emite resoluciones e informes administrativos, no normas ni jurisprudencia. NORMA_OFICIAL corresponde al BOE y JURISPRUDENCIA_OFICIAL al Poder Judicial. Entrada anadida el 2026-09-03 por orden expresa del fundador. LIMITE HONESTO: el hostname no pudo comprobarse en vivo (WebFetch EGRESS_BLOCKED en esa sesion); la entrada descansa en esa orden humana, no en una verificacion de dominio hecha por el modelo. Revisar antes de que ninguna fuente que la use alcance Nivel 1."
+    },
+    {
+      "id": "inai-org-mx",
+      "hostnames": [
+        "inai.org.mx",
+        "home.inai.org.mx"
+      ],
+      "organismo_canonico": "Instituto Nacional de Transparencia, Acceso a la Información y Protección de Datos Personales",
+      "organismo_aliases": [
+        "INAI"
+      ],
+      "jurisdicciones": [
+        "México"
+      ],
+      "tipos_fuente_permitidos": [
+        "AUTORIDAD_PUBLICA_OFICIAL"
+      ],
+      "ambito": "NACIONAL",
+      "_nota": "Autoridad mexicana de transparencia y proteccion de datos: criterios y resoluciones administrativas. ATENCION: el INAI atraviesa cambios institucionales — comprobar competencia vigente antes de citarlo como autoridad actual. Entrada anadida el 2026-09-03 por orden expresa del fundador. LIMITE HONESTO: el hostname no pudo comprobarse en vivo (WebFetch EGRESS_BLOCKED en esa sesion); la entrada descansa en esa orden humana, no en una verificacion de dominio hecha por el modelo. Revisar antes de que ninguna fuente que la use alcance Nivel 1."
+    },
+    {
+      "id": "sic-gov-co",
+      "hostnames": [
+        "sic.gov.co"
+      ],
+      "organismo_canonico": "Superintendencia de Industria y Comercio",
+      "organismo_aliases": [
+        "SIC",
+        "Superintendencia de Industria y Comercio (Colombia)"
+      ],
+      "jurisdicciones": [
+        "Colombia"
+      ],
+      "tipos_fuente_permitidos": [
+        "AUTORIDAD_PUBLICA_OFICIAL"
+      ],
+      "ambito": "NACIONAL",
+      "_nota": "Autoridad colombiana de proteccion de datos y competencia: actuaciones administrativas. Las normas colombianas se citan desde funcionpublica.gov.co. Entrada anadida el 2026-09-03 por orden expresa del fundador. LIMITE HONESTO: el hostname no pudo comprobarse en vivo (WebFetch EGRESS_BLOCKED en esa sesion); la entrada descansa en esa orden humana, no en una verificacion de dominio hecha por el modelo. Revisar antes de que ninguna fuente que la use alcance Nivel 1."
+    },
+    {
+      "id": "ilo-org",
+      "hostnames": [
+        "ilo.org",
+        "normlex.ilo.org"
+      ],
+      "organismo_canonico": "Organización Internacional del Trabajo",
+      "organismo_aliases": [
+        "OIT",
+        "ILO",
+        "International Labour Organization"
+      ],
+      "jurisdicciones": [
+        "Ámbito internacional"
+      ],
+      "tipos_fuente_permitidos": [
+        "NORMA_OFICIAL",
+        "AUTORIDAD_PUBLICA_OFICIAL"
+      ],
+      "ambito": "SUPRANACIONAL",
+      "_nota": "Convenios y recomendaciones de la OIT. LIMITE IMPORTANTE: un convenio solo obliga en un pais que lo haya RATIFICADO, y su efecto interno depende del derecho de ese pais. Esta entrada respalda el ambito internacional, NUNCA una jurisdiccion nacional concreta: para afirmar efectos en Espana o Mexico hace falta ademas la fuente nacional. Entrada anadida el 2026-09-03 por orden expresa del fundador. LIMITE HONESTO: el hostname no pudo comprobarse en vivo (WebFetch EGRESS_BLOCKED en esa sesion); la entrada descansa en esa orden humana, no en una verificacion de dominio hecha por el modelo. Revisar antes de que ninguna fuente que la use alcance Nivel 1."
     }
   ]
 }

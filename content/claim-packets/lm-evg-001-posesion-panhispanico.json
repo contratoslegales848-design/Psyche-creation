@@ -1,0 +1,145 @@
+{
+  "schema_version": "4.0",
+  "piece_id": "LM-EVG-001",
+  "claims": [
+    {
+      "nucleo_transversal": "Nucleo declarado, no verificado: quien posee reconociendo dominio ajeno lo hace a titulo precario, y esa posesion no seria apta para usucapir mientras no se invierta el titulo.",
+      "variaciones_materiales": null,
+      "jurisdicciones_revisadas": [
+        {
+          "pais": "México",
+          "fuente_ids": [
+            "SRC-EVG001-MX-CCF-791"
+          ]
+        },
+        {
+          "pais": "España",
+          "fuente_ids": [
+            "SRC-EVG001-ES-CC-432"
+          ]
+        },
+        {
+          "pais": "Argentina",
+          "fuente_ids": [
+            "SRC-EVG001-AR-CCYC-1910"
+          ]
+        }
+      ],
+      "diferencias_buscadas": "Comprobar por pais: (1) como se denomina la figura (precario, tenencia, posesion no apta); (2) si existe interversion del titulo y con que requisitos; (3) los plazos, que difieren materialmente; (4) si algun ordenamiento admite excepciones.",
+      "contraejemplos_encontrados": "NINGUNO INVESTIGADO TODAVIA. La ausencia aqui es falta de investigacion, no evidencia de convergencia.",
+      "justificacion_suficiencia_comparada": "Estructuralmente la mas solida del lote: tres paises, cada uno con fuente propia registrada y de tipo NORMA_OFICIAL. El techo sigue en REQUIERE_INVESTIGACION porque ninguna alcanza Nivel 1: falta leer los textos. Es la candidata natural a subir de estado en cuanto haya acceso a las fuentes.",
+      "confianza": "baja",
+      "riesgo_falsa_universalizacion": "medio",
+      "riesgo_asesoria": "medio",
+      "platform_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "confidentiality_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "estado": "REQUIERE_INVESTIGACION",
+      "revision_humana": {
+        "estado": "PENDIENTE",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null,
+        "contenido_hash_sha256": null
+      },
+      "gate_arte": "CERRADO",
+      "reformulacion_propuesta": {
+        "texto": null,
+        "verificada": false,
+        "nuevo_claim_id": null
+      },
+      "claim_id": "lm-evg-001-claim-1",
+      "texto_exacto": "Pagar la renta durante treinta anos no te hace dueno: el inquilino reconoce propiedad ajena y no puede adquirir el inmueble por prescripcion adquisitiva.",
+      "ubicacion": "hook",
+      "tipo": "regla",
+      "alcance": "CAPA_A_TRANSVERSAL",
+      "jurisdiccion": null,
+      "fuentes": [
+        {
+          "id": "SRC-EVG001-MX-CCF-791",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Codigo Civil Federal (Mexico) — art. 791",
+          "organismo_autor": "Cámara de Diputados (México)",
+          "url": "https://www.diputados.gob.mx/LeyesBiblio/pdf/CCF.pdf",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-09-03",
+          "localizador": "art. 791",
+          "jurisdicciones_cubiertas": [
+            "México"
+          ],
+          "registro_oficial_id": "diputados-gob-mx",
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": false,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": null,
+            "metodo_o_evidencia": null,
+            "observaciones": "No se pudo consultar el texto oficial: WebFetch permanece EGRESS_BLOCKED hacia dominios oficiales en esta sesion. Ningun booleano de verificacion puede marcarse true sin lectura real."
+          }
+        },
+        {
+          "id": "SRC-EVG001-ES-CC-432",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Codigo Civil (Espana) — art. 432",
+          "organismo_autor": "Agencia Estatal Boletín Oficial del Estado",
+          "url": "https://www.boe.es/buscar/act.php?id=BOE-A-1889-4763",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-09-03",
+          "localizador": "art. 432",
+          "jurisdicciones_cubiertas": [
+            "España"
+          ],
+          "registro_oficial_id": "boe-es",
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": false,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": null,
+            "metodo_o_evidencia": null,
+            "observaciones": "No se pudo consultar el texto oficial: WebFetch permanece EGRESS_BLOCKED hacia dominios oficiales en esta sesion. Ningun booleano de verificacion puede marcarse true sin lectura real."
+          }
+        },
+        {
+          "id": "SRC-EVG001-AR-CCYC-1910",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Codigo Civil y Comercial de la Nacion (Argentina) — art. 1910",
+          "organismo_autor": "Información Legislativa y Documental (InfoLEG, Argentina)",
+          "url": "https://servicios.infoleg.gob.ar/infolegInternet/anexos/235000-239999/235975/texact.htm",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-09-03",
+          "localizador": "art. 1910",
+          "jurisdicciones_cubiertas": [
+            "Argentina"
+          ],
+          "registro_oficial_id": "infoleg-gob-ar",
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": false,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": null,
+            "metodo_o_evidencia": null,
+            "observaciones": "No se pudo consultar el texto oficial: WebFetch permanece EGRESS_BLOCKED hacia dominios oficiales en esta sesion. Ningun booleano de verificacion puede marcarse true sin lectura real."
+          }
+        }
+      ],
+      "redaccion_prohibida": "En ningun pais el inquilino puede llegar a ser dueno del inmueble.",
+      "notas": "El plazo de 'treinta anos' del copy es la parte mas fragil: los plazos varian materialmente por pais y por tipo de posesion. Siguiente accion tecnica: leer los tres articulos y decidir si el numero se elimina del copy o se territorializa."
+    }
+  ],
+  "estado_agregado": "REQUIERE_INVESTIGACION",
+  "revisiones_pendientes": [
+    "lm-evg-001-claim-1"
+  ],
+  "gate_global_arte": "CERRADO"
+}
