@@ -19,7 +19,27 @@ SUPPORTED_VERSIONS = {"1.0"}
 CLAIM_STATES = {"APTO_PARA_NARRATIVA", "REQUIERE_INVESTIGACION", "BLOQUEADO", "PENDIENTE"}
 SOURCE_STATES = {"VERIFICADA", "PENDIENTE", "INSUFICIENTE"}
 LEGAL_GATE_STATES = {"ABIERTO", "CERRADO"}
-JURISDICTION_LAYERS = {"CAPA_A_TRANSVERSAL", "CAPA_B_VARIABLE", "CAPA_C_NACIONAL", "NO_APLICA"}
+# Las capas son las MISMAS que declara el validador canonico
+# (.claude/skills/legalmente-legal-verification/scripts/validate-claim-packet.py,
+# VALID_ALCANCE). No es una copia de cortesia: hay una prueba que compara ambos
+# conjuntos y falla si divergen.
+#
+# 'NO_DETERMINADO' faltaba aqui, y su ausencia abria una via de blanqueo. Es el
+# estado de un claim cuyo alcance todavia NO se ha establecido — exactamente el
+# de las cuatro piezas que se declararon panhispanicas con fuentes de un solo
+# pais. Al no caber en el sobre, la unica forma de exportarlas era reetiquetarlas
+# a 'NO_APLICA', que si se aceptaba y suena inofensivo. Pero significan cosas
+# opuestas: 'no sabemos que territorio cubre' frente a 'no hay territorio que
+# determinar'. Convertir la primera en la segunda es perder la duda por el
+# camino, que es la peor forma de perderla.
+#
+# Admitirla no debilita nada: 'NO_DETERMINADO' NUNCA puede viajar con el gate
+# abierto ni con elegibilidad de arte, y eso se comprueba abajo.
+JURISDICTION_LAYERS = {"CAPA_A_TRANSVERSAL", "CAPA_B_VARIABLE", "CAPA_C_NACIONAL",
+                       "NO_DETERMINADO", "NO_APLICA"}
+
+# Capas que, por si solas, jamas pueden acompanar a un gate abierto.
+LAYERS_SIN_GATE = {"NO_DETERMINADO"}
 
 
 @dataclass
@@ -77,6 +97,17 @@ def validate_envelope(data):
                            ("jurisdiction_layer", JURISDICTION_LAYERS)):
         if data.get(campo) not in validos:
             e.append(f"{campo} desconocido: {data.get(campo)!r} (validos: {sorted(validos)}).")
+
+    # Un alcance sin determinar no puede llegar con el gate abierto ni con arte
+    # elegible: si pudiera, admitir la capa habria sido una puerta, no un
+    # registro honesto de la duda.
+    if data.get("jurisdiction_layer") in LAYERS_SIN_GATE:
+        if data.get("legal_gate_state") == "ABIERTO":
+            e.append("jurisdiction_layer 'NO_DETERMINADO' con legal_gate_state ABIERTO: "
+                     "no se puede abrir el gate de un claim cuyo territorio no se conoce.")
+        if data.get("art_eligibility") not in (None, "", "NO_ELEGIBLE"):
+            e.append("jurisdiction_layer 'NO_DETERMINADO' con art_eligibility "
+                     f"{data.get('art_eligibility')!r}: solo cabe NO_ELEGIBLE.")
 
     prov = data.get("provenance")
     if not isinstance(prov, dict) or not prov.get("sources"):
