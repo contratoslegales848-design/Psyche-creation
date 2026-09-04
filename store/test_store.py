@@ -269,6 +269,31 @@ class TestLasDosBarrerasDicenLoMismo(unittest.TestCase):
         for campo in fail_closed.CAMPOS_APROBACION:
             self.assertIn(campo, MIGRACION)
 
+    def test_las_restricciones_criticas_existen_por_nombre(self):
+        """Hueco encontrado por mutacion: comprobar que los CAMPOS aparecen no
+        detecta que alguien renombre o neutralice la restriccion que los usa.
+        Se exige cada CHECK por su nombre, uno a uno."""
+        criticas = (
+            "aprobacion_completa",
+            "gate_exige_evidencia_y_aprobacion",
+            "nacional_exige_jurisdiccion",
+            "capa_a_exige_tres_jurisdicciones",
+            "verificacion_fechada",
+            "oficial_exige_localizador",
+            "publicar_exige_autorizacion",
+            "publicada_exige_url",
+            "aprendizaje_anclado",
+        )
+        for nombre in criticas:
+            with self.subTest(restriccion=nombre):
+                self.assertRegex(MIGRACION, rf"constraint {nombre} check\s*\(")
+
+    def test_ninguna_restriccion_esta_neutralizada(self):
+        """Un `check (true or ...)` pasa siempre: es una restriccion apagada
+        que sigue pareciendo una restriccion."""
+        self.assertNotRegex(MIGRACION, r"check\s*\(\s*true\s+or")
+        self.assertNotRegex(MIGRACION, r"check\s*\(\s*true\s*\)")
+
     def test_el_minimo_de_capa_a_coincide(self):
         self.assertIn(f"array_length(jurisdiccion, 1) >= {fail_closed.MINIMO_JURISDICCIONES_CAPA_A}",
                       MIGRACION)
