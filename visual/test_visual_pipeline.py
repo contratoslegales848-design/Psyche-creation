@@ -213,6 +213,17 @@ class TestCompilador(unittest.TestCase):
         self.assertEqual(meta["visual_policy_version"], POLICY.version)
         self.assertTrue(meta["prompt_compiler_version"])
 
+    def test_sin_acento_frio_no_deja_frase_rota(self):
+        """Si una politica futura no exige objeto fisico para el acento frio y el
+        brief llega sin el (el guardia de validate() es condicional, ver
+        brief.py:123), el prompt no debe terminar en 'de la escena: .'."""
+        import copy
+        pol_sin_exigencia = copy.deepcopy(POLICY)
+        pol_sin_exigencia.data["paleta"]["acento_frio_debe_ser_objeto_fisico"] = False
+        prompt, _, _, _ = compile_prompt(make_brief(acento_frio_objeto=""), pol_sin_exigencia)
+        self.assertNotIn("de la escena: .", prompt)
+        self.assertNotIn("acento azul petroleo debe proceder", prompt)
+
 
 class TestNegociacion(unittest.TestCase):
     def test_aspect_ratio_no_soportado(self):
@@ -330,6 +341,32 @@ class TestPipeline(unittest.TestCase):
         self.assertTrue(batch.items[0].run.ok)
         self.assertEqual(batch.items[1].run.receipt.status, "QA_FALLIDO")
         self.assertTrue(any("duplicado" in p for p in batch.items[1].run.receipt.qa_problemas))
+
+    def test_lote_expone_diversidad_real_de_rotacion(self):
+        """rotation.py existia, estaba probado en aislamiento, pero ningun
+        camino de ejecucion lo llamaba contra un lote real -- mismo patron
+        que negative_space. Aqui se comprueba que run_batch() ya deja el
+        dato disponible."""
+        items = [pipeline.BatchItem(PROC, make_brief(), HANDOFF),
+                 pipeline.BatchItem(PROC, make_brief(subject="otra escena distinta"), HANDOFF)]
+        batch = pipeline.run_batch(items, POLICY, FakeImageProvider())
+        reporte = batch.diversity_report()
+        self.assertEqual(reporte.total, 2)
+
+    def test_lote_expone_variacion_entre_piezas_consecutivas(self):
+        items = [pipeline.BatchItem(PROC, make_brief(), HANDOFF),
+                 pipeline.BatchItem(PROC, make_brief(subject="otra escena distinta"), HANDOFF)]
+        batch = pipeline.run_batch(items, POLICY, FakeImageProvider())
+        checks = batch.variation_checks()
+        self.assertEqual(len(checks), 2)
+        self.assertTrue(checks[0].minimo_alcanzado)  # sin pieza anterior: nada que verificar
+
+    def test_diversidad_no_cuenta_items_fallidos(self):
+        prov = FakeImageProvider("duplicate_asset")
+        items = [pipeline.BatchItem(PROC, make_brief(), HANDOFF),
+                 pipeline.BatchItem(PROC, make_brief(subject="otra escena distinta"), HANDOFF)]
+        batch = pipeline.run_batch(items, POLICY, prov)
+        self.assertEqual(batch.diversity_report().total, 1)  # el duplicado no cuenta
 
     def test_receipt_registra_procedencia_y_versiones(self):
         run = pipeline.generate_visual(PROC, make_brief(), POLICY, FakeImageProvider(), HANDOFF)

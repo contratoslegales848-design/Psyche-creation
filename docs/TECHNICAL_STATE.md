@@ -1,6 +1,6 @@
 # Estado técnico real de LegalMente
 
-**Fecha:** 2026-08-27 · **Base:** `origin/main` en `82f226e` + ramas `chore/phase1-technical-readiness` y `chore/phase1-p0-confidencialidad-procedencia`
+**Fecha:** 2026-08-27 · **Base:** `origin/main` en `3dd358b` (PR #14 y #15 fusionados) + rama `feat/source-freshness-e-inventario`
 **Semáforo global: AMARILLO** (los dos P0 quedaron cerrados; el amarillo lo sostienen ahora riesgos declarados, no huecos sin control).
 
 Este documento describe lo que **existe y se ejecuta**, no lo que está planeado.
@@ -26,7 +26,11 @@ real y una prueba que pasa.
 | Composición tipográfica / marca | 🟢 VERDE (nuevo) | `visual/compositor.py`: rasterizado real con Pillow. Métrica tipográfica real, área segura, `exact_copy` inmutable (desborda antes que mutar), marca solo sobre superficie reservada declarada y plana. 33 pruebas. |
 | Adapter de proveedor real | 🟡 AMARILLO (nuevo) | `providers/http_provider.py`: adapter HTTP real con transporte inyectable, 23 pruebas, cero llamadas externas. Sin credenciales configuradas en el workspace: no se ha ejecutado contra ningún proveedor. |
 | Contrato cross-repo | 🟢 VERDE (ambos lados) | Psyche: `contract/`, Canonical Envelope v1, 8 fixtures, 12 tests. Web: consumidor estricto implementado y probado **localmente** (18 tests), entregado como serie de patches verificada en `handoff/legalmente-web/`. Falta empujarlo: escritura remota bloqueada. |
-| Motor de producción masiva | ⚫ NO CONSTRUIDO | Contrato técnico definido (`docs/contrato-motor-masivo.md`); el motor, deliberadamente, no. |
+| Vigencia de fuentes | 🟡 AMARILLO (nuevo, era rojo implícito) | Libro mayor + control offline fail-closed (PR #16, rescatado). Abierto: nadie avisa desde fuera de que una norma cambió, y 25 de 39 fuentes siguen `UNKNOWN`. |
+| Inventario materializado | 🟢 VERDE (nuevo) | Índice determinista y regenerable; `check` detecta que está obsoleto (PR #16, rescatado). |
+| Métricas | 🟡 AMARILLO | `DUE_FOR_MEASUREMENT` consultable; las cifras siguen tecleándose a mano. |
+| Perfiles de proveedor de imagen | 🟡 AMARILLO (nuevo) | Catálogo declarativo (`visual/providers/profiles.py`) + `simulate --live`. El perfil de Gemini está `PROPUESTO_NO_VERIFICADO`: la doc oficial está bloqueada por el proxy de egress. |
+| Motor de producción masiva | ⚫ NO CONSTRUIDO | Contrato e infraestructura mínima listos (`docs/contrato-motor-masivo.md`, inventario); el motor, deliberadamente, no. |
 | Documentación vs. realidad | 🟡 AMARILLO | Dos derivas detectadas (ver §5). |
 | `legalmente-web` | 🟡 AMARILLO | Prototipo honesto, pero el repositorio es **público** y `CLAUDE.md §8` lo declara privado. |
 | Publicación automatizada | ⚫ INEXISTENTE (por diseño) | Ninguna automatización publica. Es una regla, no una carencia. |
@@ -47,13 +51,17 @@ real y una prueba que pasa.
 - `scripts/confidentiality_rules.py` — **nuevo**: control determinista de
   confidencialidad. Doce indicadores sobre los campos publicables del claim; si
   alguno dispara, la revisión humana deja de ser opcional.
-- `scripts/validate-content-provenance.py` (en la raíz) — **nuevo**: procedencia de
-  los artefactos de `content/` y controles anti-duplicados.
+- `scripts/validate-content-provenance.py` (en la raíz) — procedencia de los
+  artefactos de `content/` y controles anti-duplicados.
+- `scripts/check-source-freshness.py` — **nuevo**: vigencia de fuentes. Offline y
+  sin reloj de red; deriva el veredicto sin tocar el claim packet.
+- `scripts/inventory.py` (en la raíz) — **nuevo**: inventario materializado,
+  determinista y regenerable, con consultas y anti-duplicados v2.
 - `references/official-source-registry.json` — 22 organismos oficiales.
 - `fixtures/` — 10 positivas, 46 negativas.
 - `publication/fixtures/` — 2 cadenas válidas, 14 inválidas, 1 claim packet sintético.
 
-**Pruebas: 499, todas en verde** (Psyche). Más 23 del consumidor de web, locales.
+**Pruebas: 1001, todas en verde** (Psyche, contadas por `unittest discover` sobre las 8 suites del repositorio: `visual/` 394, `.claude/skills/legalmente-legal-verification/scripts` 301, `content/topics` 93, `scripts/` 86, `ecosystem/` 57, `content/linkedin` 33, `contract/` 27, `content/claim-packets` 10). Más 23 del consumidor de web, locales.
 | Suite | Pruebas |
 |---|---|
 | `test_validate_claim_packet` | 147 |
@@ -63,6 +71,8 @@ real y una prueba que pasa.
 | `test_validate_content_provenance` | 30 |
 | `visual/` (5 suites) | 207 |
 | `contract/test_canonical_envelope` | 12 |
+| `test_check_source_freshness` | 31 |
+| `test_inventory` | 31 |
 
 ### 2.2 Los cuatro estados no equivalentes
 
@@ -213,11 +223,15 @@ decisión del fundador, no técnica.
    Requiere permisos de escritura que las sesiones de este repo no tienen.
 
 **P2 — cuando el piloto esté medido**
-5. Detección de deriva de fuentes oficiales, fuera del validador (ver ADR 0001).
-   Es ahora el riesgo abierto de mayor consecuencia.
-6. Inventario materializado y planificación de cobertura para el motor masivo
-   (ver `docs/contrato-motor-masivo.md` §4).
-7. Detección de duplicados por paráfrasis, cuando el volumen lo justifique.
+5. ~~Inventario materializado.~~ Implementado.
+6. Vigilancia activa de cambios normativos: un proceso de research **con red y
+   fuera del validador** que marque fuentes para revisión. Es ahora el riesgo
+   abierto de mayor consecuencia (red team C6): el libro mayor solo sabe lo que un
+   humano escribió en él.
+7. Planificación de cobertura sobre el inventario (qué casillas de
+   `materia/submateria/concepto` faltan).
+8. Ingesta automatizada de métricas: hoy las cifras se teclean.
+9. Detección de duplicados por paráfrasis, cuando el volumen lo justifique.
 
 **P3 — no ahora**
 7. Integraciones externas (Grok/Manus/Gemini): los contratos están en borrador
@@ -234,3 +248,6 @@ decisión del fundador, no técnica.
 - `docs/handoff-contracts/` — contratos externos en borrador.
 - `docs/contrato-motor-masivo.md` — dónde vive cada campo del futuro motor y por qué
   no se creó ningún modelo paralelo.
+- `.claude/skills/legalmente-legal-verification/references/README-vigencia.md` — el
+  libro mayor de vigencia y por qué el veredicto se deriva en vez de almacenarse.
+- `inventory/README.md` — el índice derivado, sus consultas y sus límites.

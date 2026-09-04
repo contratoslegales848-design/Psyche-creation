@@ -1,0 +1,246 @@
+{
+  "schema_version": "4.0",
+  "piece_id": "LM-LN-REP-001",
+  "claims": [
+    {
+      "claim_id": "lm-ln-rep-001-claim-1",
+      "texto_exacto": "En la tradición jurídica hispanohablante se distinguen dos vías por las que alguien puede obligar a una sociedad frente a terceros: la representación que deriva del propio cargo de administración, cuyo ámbito fija la ley, y la representación que deriva de un poder otorgado, cuyo ámbito fija el acto de apoderamiento.",
+      "ubicacion": "descripcion_tema",
+      "tipo": "definicion",
+      "alcance": "CAPA_A_TRANSVERSAL",
+      "jurisdiccion": [
+        "España",
+        "México",
+        "Argentina"
+      ],
+      "nucleo_transversal": "La separación entre representación derivada del cargo (orgánica) y representación derivada de un poder (voluntaria) es estructural en los ordenamientos examinados, aunque el nombre de las figuras, el alcance legal del cargo y las formalidades del apoderamiento no coinciden.",
+      "variaciones_materiales": null,
+      "jurisdicciones_revisadas": [
+        {
+          "pais": "España",
+          "fuente_ids": [
+            "SRC-LNREP-ES-LSC-234"
+          ]
+        },
+        {
+          "pais": "México",
+          "fuente_ids": [
+            "SRC-LNREP-MX-CCF-2554"
+          ]
+        },
+        {
+          "pais": "Argentina",
+          "fuente_ids": [
+            "SRC-LNREP-AR-CCYCN-375"
+          ]
+        }
+      ],
+      "diferencias_buscadas": "Se buscó si el cargo de administración confiere por sí solo representación frente a terceros y con qué extensión, y si un poder otorgado en términos generales alcanza actos de disposición.",
+      "contraejemplos_encontrados": "Sí, y son decisivos para la redacción. En España el art. 234 LSC extiende la representación del administrador a todos los actos comprendidos en el objeto social y declara ineficaces frente a terceros las limitaciones, aun inscritas: ahí el cargo SÍ acredita representación dentro de ese ámbito. Ese hallazgo refuta la formulación amplia del tema editorial de origen y obliga a redactar la distinción, no la negación.",
+      "justificacion_suficiencia_comparada": "PENDIENTE. Se localizaron tres fuentes oficiales, una por jurisdicción, con URL real y localizador concreto, pero ninguna con texto leído literalmente: WebFetch está bloqueado en este entorno. Sin lectura directa no puede afirmarse que la distinción se sostiene con la misma estructura en los tres ordenamientos, ni extrapolarse al resto del ámbito hispanohablante.",
+      "fuentes": [
+        {
+          "id": "SRC-LNREP-ES-LSC-234",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Real Decreto Legislativo 1/2010, texto refundido de la Ley de Sociedades de Capital — art. 234 (ámbito del poder de representación)",
+          "organismo_autor": "Agencia Estatal Boletín Oficial del Estado",
+          "url": "https://www.boe.es/buscar/act.php?id=BOE-A-2010-10544",
+          "identificador_bibliografico": "BOE-A-2010-10544",
+          "fecha_consulta": "2026-09-04",
+          "localizador": "art. 234",
+          "jurisdicciones_cubiertas": [
+            "España"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": true,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": "2026-09-04",
+            "metodo_o_evidencia": "WebSearch restringido a boe.es localiza el texto refundido consolidado (BOE-A-2010-10544) y devuelve el contenido del art. 234 en los extractos. El hostname es boe.es y coincide con la entrada 'boe-es' del registro oficial.",
+            "observaciones": "NO se leyó el texto oficial completo: WebFetch está bloqueado por el proxy de egreso en este entorno. La vigencia de la redacción consolidada tampoco se comprobó contra la última modificación. Por eso esta fuente no alcanza Nivel 1."
+          },
+          "registro_oficial_id": "boe-es"
+        },
+        {
+          "id": "SRC-LNREP-MX-CCF-2554",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Código Civil Federal (México) — art. 2554 (poderes generales para pleitos y cobranzas, actos de administración y actos de dominio)",
+          "organismo_autor": "Cámara de Diputados (México)",
+          "url": "https://www.diputados.gob.mx/LeyesBiblio/pdf/CCF.pdf",
+          "identificador_bibliografico": "CCF, texto vigente publicado por la Cámara de Diputados",
+          "fecha_consulta": "2026-09-04",
+          "localizador": "art. 2554",
+          "jurisdicciones_cubiertas": [
+            "México"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": true,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": "2026-09-04",
+            "metodo_o_evidencia": "WebSearch restringido a diputados.gob.mx localiza el PDF del Código Civil Federal y devuelve el contenido del art. 2554 sobre las tres clases de poderes generales y la necesidad de consignar las limitaciones. El hostname coincide con la entrada 'diputados-gob-mx' del registro.",
+            "observaciones": "NO se leyó el PDF oficial: WebFetch está bloqueado. Además, el CCF es federal y la materia civil en México también es estatal: el alcance real de un poder puede variar por entidad. Esa dimensión no está resuelta."
+          },
+          "registro_oficial_id": "diputados-gob-mx"
+        },
+        {
+          "id": "SRC-LNREP-AR-CCYCN-375",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Código Civil y Comercial de la Nación (Argentina) — art. 375 (poder conferido en términos generales y facultades expresas)",
+          "organismo_autor": "Información Legislativa y Documental (InfoLEG, Argentina)",
+          "url": "https://servicios.infoleg.gob.ar/infolegInternet/anexos/235000-239999/235975/texact.htm",
+          "identificador_bibliografico": "CCyCN, texto actualizado InfoLEG id 235975",
+          "fecha_consulta": "2026-09-04",
+          "localizador": "art. 375",
+          "jurisdicciones_cubiertas": [
+            "Argentina"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": true,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": "2026-09-04",
+            "metodo_o_evidencia": "WebSearch restringido a infoleg.gob.ar localiza el texto actualizado del CCyCN y devuelve el criterio del art. 375: los poderes en términos generales solo comprenden actos de administración ordinaria, y los actos de disposición exigen facultad expresa. El hostname es servicios.infoleg.gob.ar, declarado en la entrada 'infoleg-gob-ar'.",
+            "observaciones": "NO se leyó el texto oficial: WebFetch está bloqueado. La representación orgánica societaria argentina se rige además por la Ley General de Sociedades 19.550, que no se consultó: la comparación con España queda incompleta por ese lado."
+          },
+          "registro_oficial_id": "infoleg-gob-ar"
+        }
+      ],
+      "confianza": "media",
+      "riesgo_falsa_universalizacion": "medio",
+      "riesgo_asesoria": "medio",
+      "platform_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "confidentiality_review": {
+        "required": true,
+        "status": "PENDIENTE",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": "La pieza pertenece a la superficie profesional y su pilar de origen se alimenta de experiencia práctica documentada. Aunque el texto de este claim es conceptual y no describe ninguna operación, la revisión de confidencialidad es obligatoria antes de producir arte."
+      },
+      "estado": "REQUIERE_INVESTIGACION",
+      "revision_humana": {
+        "estado": "PENDIENTE",
+        "revisor": null,
+        "fecha": null,
+        "contenido_hash_sha256": null,
+        "observaciones": null
+      },
+      "gate_arte": "CERRADO",
+      "reformulacion_propuesta": {
+        "texto": "El cargo y el poder no acreditan lo mismo: hay que saber cuál de los dos está detrás de una firma.",
+        "verificada": false,
+        "nuevo_claim_id": null
+      },
+      "redaccion_prohibida": "«El puesto no prueba facultades» como afirmación general: en España el art. 234 LSC atribuye al administrador representación por el cargo dentro del objeto social, así que la formulación amplia es incorrecta al menos en una de las tres jurisdicciones examinadas. Presentar el criterio de un país como regla panhispánica. Afirmar que una limitación de facultades es siempre oponible a terceros: en España, inscrita o no, es ineficaz frente a tercero de buena fe dentro del objeto social.",
+      "notas": "Siguiente acción: leer literalmente los tres artículos y comprobar su vigencia. Sin eso ninguna fuente pasa de Nivel 2 y el claim no puede salir de REQUIERE_INVESTIGACION."
+    },
+    {
+      "claim_id": "lm-ln-rep-001-claim-2",
+      "texto_exacto": "Un poder otorgado en términos generales no habilita por sí solo actos de disposición sobre el patrimonio: para disponer se exige que la facultad conste de manera expresa.",
+      "ubicacion": "descripcion_tema",
+      "tipo": "regla",
+      "alcance": "CAPA_C_NACIONAL",
+      "jurisdiccion": [
+        "México",
+        "Argentina"
+      ],
+      "nucleo_transversal": null,
+      "variaciones_materiales": null,
+      "jurisdicciones_revisadas": null,
+      "diferencias_buscadas": null,
+      "contraejemplos_encontrados": null,
+      "justificacion_suficiencia_comparada": null,
+      "fuentes": [
+        {
+          "id": "SRC-LNREP-MX-CCF-2554-B",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Código Civil Federal (México) — art. 2554, tercer supuesto (poderes para actos de dominio) y regla de limitaciones",
+          "organismo_autor": "Cámara de Diputados (México)",
+          "url": "https://www.diputados.gob.mx/LeyesBiblio/pdf/CCF.pdf",
+          "identificador_bibliografico": "CCF, texto vigente publicado por la Cámara de Diputados",
+          "fecha_consulta": "2026-09-04",
+          "localizador": "art. 2554",
+          "jurisdicciones_cubiertas": [
+            "México"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": true,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": "2026-09-04",
+            "metodo_o_evidencia": "WebSearch restringido a diputados.gob.mx devuelve el contenido del art. 2554: los poderes generales para actos de dominio deben darse con ese carácter, y cuando se quiera limitar las facultades debe consignarse la limitación o el poder debe ser especial.",
+            "observaciones": "NO leído literalmente. Además, la estructura mexicana es distinta de la argentina: el CCF exige que el poder se otorgue CON EL CARÁCTER de acto de dominio, no que enumere cada facultad. Presentar ambas como la misma regla sería inexacto."
+          },
+          "registro_oficial_id": "diputados-gob-mx"
+        },
+        {
+          "id": "SRC-LNREP-AR-CCYCN-375-B",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Código Civil y Comercial de la Nación (Argentina) — art. 375 (facultades expresas para actos de disposición)",
+          "organismo_autor": "Información Legislativa y Documental (InfoLEG, Argentina)",
+          "url": "https://servicios.infoleg.gob.ar/infolegInternet/anexos/235000-239999/235975/texact.htm",
+          "identificador_bibliografico": "CCyCN, texto actualizado InfoLEG id 235975",
+          "fecha_consulta": "2026-09-04",
+          "localizador": "art. 375",
+          "jurisdicciones_cubiertas": [
+            "Argentina"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": true,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": "2026-09-04",
+            "metodo_o_evidencia": "WebSearch restringido a infoleg.gob.ar devuelve el criterio del art. 375: los poderes en términos generales solo comprenden actos de administración ordinaria; los de disposición requieren facultad expresa.",
+            "observaciones": "NO leído literalmente. La lista de actos que el art. 375 exige otorgar por facultad expresa no se ha verificado artículo por artículo."
+          },
+          "registro_oficial_id": "infoleg-gob-ar"
+        }
+      ],
+      "confianza": "media",
+      "riesgo_falsa_universalizacion": "alto",
+      "riesgo_asesoria": "alto",
+      "platform_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "confidentiality_review": {
+        "required": true,
+        "status": "PENDIENTE",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": "Superficie profesional: revisión de confidencialidad obligatoria antes de arte."
+      },
+      "estado": "REQUIERE_INVESTIGACION",
+      "revision_humana": {
+        "estado": "PENDIENTE",
+        "revisor": null,
+        "fecha": null,
+        "contenido_hash_sha256": null,
+        "observaciones": null
+      },
+      "gate_arte": "CERRADO",
+      "reformulacion_propuesta": {
+        "texto": null,
+        "verificada": false,
+        "nuevo_claim_id": null
+      },
+      "redaccion_prohibida": "Declarar este claim panhispánico: solo se examinaron dos ordenamientos y su técnica no coincide. Decir «hay que enumerar cada facultad»: es el criterio argentino, no el mexicano, donde basta otorgar el poder con el carácter de actos de dominio. Convertirlo en consejo operativo («revisa que tu poder diga X»): sería asesoría individual sin conocer la jurisdicción.",
+      "notas": "España queda fuera a propósito: no se examinó el art. 1713 CC ni su relación con el art. 234 LSC. Añadir España exigiría una fuente propia; sin ella, el claim no puede ampliarse."
+    }
+  ],
+  "estado_agregado": "REQUIERE_INVESTIGACION",
+  "revisiones_pendientes": [
+    "lm-ln-rep-001-claim-1",
+    "lm-ln-rep-001-claim-2"
+  ],
+  "gate_global_arte": "CERRADO"
+}

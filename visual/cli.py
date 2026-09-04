@@ -9,10 +9,11 @@ falso.
     python3 cli.py policy
     python3 cli.py validate   <artefacto.json>
     python3 cli.py dry-run    <artefacto.json> [--handoff h.json]
-    python3 cli.py simulate   <artefacto.json> [--handoff h.json] [--out DIR]
+    python3 cli.py simulate   <artefacto.json> [--handoff h.json] [--out DIR] [--live]
     python3 cli.py batch-dry-run <dir_con_artefactos>
     python3 cli.py show-receipt   <DIR> <CONTENT_ID> <GENERATION_ID>
     python3 cli.py show-history   <DIR> <CONTENT_ID>
+    python3 cli.py route-avanzar  <CONTENT_ID> [--categoria C] [--formato F] [--matriz ruta.json]
 """
 
 import argparse
@@ -29,6 +30,8 @@ import inventory
 import pipeline
 import provider_preflight
 import resolver
+import route_engine
+import route_sync
 import runtime_config
 import topology
 import registry as registry_mod
@@ -99,9 +102,18 @@ def main(argv=None):
                     help="solo lo que LegalMente puede ejecutar AHORA sin intervencion humana.")
     s = sub.add_parser("command-center"); s.add_argument("--json", action="store_true")
     sub.add_parser("provider-preflight")
+    sub.add_parser("providers")
     sub.add_parser("provider-request")
     sub.add_parser("topology")
     s = sub.add_parser("resolve"); s.add_argument("content_id")
+    s = sub.add_parser("route-avanzar")
+    s.add_argument("content_id")
+    s.add_argument("--categoria", default=None,
+                   help="categoria de nodo elegida explicitamente; por defecto, la siguiente natural.")
+    s.add_argument("--formato", default="NO_ASIGNADO")
+    s.add_argument("--matriz", default=None,
+                   help="ruta al JSON de la matriz de rutas persistida; por defecto, la raiz "
+                        "runtime persistente (LEGALMENTE_RUNTIME_ROOT o .runtime/visual-registry).")
     for c in ("validate", "dry-run", "simulate"):
         s = sub.add_parser(c)
         s.add_argument("artefacto")
@@ -117,6 +129,16 @@ def main(argv=None):
                            help="raiz del registro de generaciones. Por defecto, la raiz runtime "
                                 "persistente (LEGALMENTE_RUNTIME_ROOT o .runtime/visual-registry), "
                                 "nunca /tmp.")
+            s.add_argument("--live", action="store_true",
+                           help="usar el proveedor HTTP real configurado por "
+                                "LEGALMENTE_IMAGE_PROVIDER_ENDPOINT/_API_KEY en vez del proveedor "
+                                "falso. Sin esto, 'simulate' SIEMPRE genera un placeholder, "
+                                "aunque haya credenciales configuradas: nunca envia una peticion "
+                                "real sin este flag explicito.")
+            s.add_argument("--proveedor", default=None,
+                           help="id del perfil de proveedor a usar con --live "
+                                "(ver 'python3 cli.py providers'). Por defecto, "
+                                "generic-http-image-v1.")
     s = sub.add_parser("batch-dry-run"); s.add_argument("directorio")
     s = sub.add_parser("show-receipt")
     s.add_argument("root"); s.add_argument("content_id"); s.add_argument("generation_id")
@@ -240,6 +262,37 @@ def main(argv=None):
             print(f"  ! {b}")
         return 0 if r.production_ready else 1
 
+    if a.cmd == "providers":
+        from providers import profiles
+        for pid, estado, nota in profiles.listar():
+            cfg = profiles.cargar(pid)
+            pre = provider_preflight.preflight(cfg)
+            marca = "por defecto" if pid == profiles.POR_DEFECTO else ""
+            print(f"  {pid} {marca}")
+            print(f"    estado de verificacion : {estado}")
+            print(f"    nota                   : {nota}")
+            print(f"    endpoint configurado   : {'si' if pre.endpoint_configured else 'NO'}")
+            print(f"    credencial presente    : {'si' if pre.auth_present else 'NO'} "
+                  f"(variable {cfg.api_key_env})")
+            print(f"    preflight              : {pre.status}"
+                  + (f" — {pre.blocking_reason}" if pre.blocking_reason else ""))
+            print()
+        return 0
+
+    if a.cmd == "route-avanzar":
+        matriz_path = Path(a.matriz) if a.matriz else runtime_config.default_registry_root() / "route-matrix.json"
+        motor = route_engine.RouteEngine.load(matriz_path)
+        resolution, filas = route_sync.avanzar_desde_content_id(
+            motor, a.content_id, categoria_elegida=a.categoria, formato=a.formato)
+        motor.save(matriz_path)
+        print(f"  content_id : {a.content_id}")
+        print(f"  matriz     : {matriz_path}")
+        for fila in filas:
+            print(f"  nodo_actual        : {fila['nodo_actual']}")
+            print(f"  siguiente_vinculo  : {fila['siguiente_vinculo']}")
+            print(f"  proxima_accion     : {fila['proxima_accion']}")
+        return 0
+
     if a.cmd == "families":
         for n in fams.names():
             print(f"  {n}")
@@ -280,8 +333,33 @@ def main(argv=None):
         brief = brief_desde(vi, policy, fams)
         out_root = a.out if (a.cmd == "simulate" and a.out) else runtime_config.default_registry_root()
         reg = registry_mod.AssetRegistry(out_root) if a.cmd == "simulate" else None
+
+        provider = FakeImageProvider()
+        if a.cmd == "simulate" and getattr(a, "live", False):
+            from providers import profiles
+            from providers.http_provider import HttpImageProvider
+            pid = getattr(a, "proveedor", None) or profiles.POR_DEFECTO
+            try:
+                cfg = profiles.cargar(pid)
+            except ValueError as exc:
+                print(f"NO SE PUEDE USAR --live: {exc}")
+                return 1
+            pre = provider_preflight.preflight(cfg)
+            if pre.status != provider_preflight.READY:
+                print(f"NO SE PUEDE USAR --live ({pid}): {pre.blocking_reason}")
+                print("Nada se envio a ningun proveedor. Revisa "
+                      "'python3 cli.py providers' para ver que variables espera este perfil.")
+                return 1
+            estado, nota = profiles.estado_de_verificacion(pid)
+            provider = HttpImageProvider(cfg)
+            print(f"--live: usando el proveedor real ({pid}).")
+            if estado != profiles.VERIFICADO:
+                print(f"  ! PERFIL {estado}: {nota}")
+                print("  ! Si la respuesta no trae imagen, el error dira que claves SI llegaron; "
+                      "con eso se corrige response_paths en providers/profiles.py.")
+
         run = pipeline.generate_visual(
-            art["procedencia"], brief, policy, FakeImageProvider(), handoff=handoff,
+            art["procedencia"], brief, policy, provider, handoff=handoff,
             family=fams.get(brief.visual_family), families_version=fams.version,
             dry_run=(a.cmd == "dry-run"), registry=reg, claim_packet=claim_packet,
             reserved_surface=surface,

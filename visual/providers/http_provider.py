@@ -59,6 +59,18 @@ class HttpProviderConfig:
         "prompt": "prompt", "negative_prompt": "negative_prompt",
         "width": "width", "height": "height", "seed": "seed", "model": "model",
     })
+    # --- forma concreta del proveedor, declarativa ---------------------
+    # Estos tres campos existen porque NO todos los proveedores hablan la
+    # forma "OpenAI-compatible". Hardcodearla dejaba fuera a cualquier API
+    # con otra autenticacion, otro cuerpo o otra ruta de respuesta (Gemini,
+    # por ejemplo). Se declaran en el perfil, nunca en el dominio.
+    auth_header: str = "Authorization"      # p.ej. "x-goog-api-key"
+    auth_prefix: str = "Bearer "            # "" si la cabecera lleva la clave cruda
+    payload_style: str = "flat"             # "flat" | "gemini"
+    # Rutas donde buscar el base64 de la imagen, en orden. Segmento "*"
+    # = recorrer una lista y quedarse con la primera coincidencia. Si esta
+    # vacio, se usan las formas habituales (data[]/images[] con b64_json).
+    response_paths: tuple = ()
 
 
 def urllib_transport(url, payload, headers, timeout):
@@ -88,6 +100,39 @@ def urllib_transport(url, payload, headers, timeout):
         raise HttpTransportError("UNAVAILABLE", f"proveedor inalcanzable: {motivo}")
     except json.JSONDecodeError as exc:
         raise HttpTransportError("TRANSPORT", f"respuesta no es JSON: {exc}")
+
+
+def _buscar_en_ruta(data, ruta):
+    """Recorre `ruta` ('a.b.0.c' o 'a.*.b') sobre `data`. None si no existe.
+
+    El segmento '*' recorre una lista y devuelve la PRIMERA rama que llega
+    hasta el final: los proveedores que devuelven varias partes suelen
+    mezclar texto e imagen en la misma lista, y solo una de ellas trae los
+    bytes. Nunca lanza: una ruta que no existe es un dato ausente, no un
+    error de programa — el llamador decide que hacer con la ausencia.
+    """
+    def _rec(nodo, segmentos):
+        if not segmentos:
+            return nodo if isinstance(nodo, str) and nodo else None
+        cabeza, resto = segmentos[0], segmentos[1:]
+        if cabeza == "*":
+            if not isinstance(nodo, list):
+                return None
+            for elem in nodo:
+                encontrado = _rec(elem, resto)
+                if encontrado:
+                    return encontrado
+            return None
+        if cabeza.isdigit():
+            if not isinstance(nodo, list):
+                return None
+            idx = int(cabeza)
+            return _rec(nodo[idx], resto) if idx < len(nodo) else None
+        if not isinstance(nodo, dict) or cabeza not in nodo:
+            return None
+        return _rec(nodo[cabeza], resto)
+
+    return _rec(data, [s for s in str(ruta).split(".") if s])
 
 
 class HttpImageProvider(ImageProvider):
@@ -122,10 +167,12 @@ class HttpImageProvider(ImageProvider):
             raise HttpTransportError(
                 "AUTH", f"falta la credencial: variable de entorno "
                         f"{self.config.api_key_env} no definida.")
-        return {"Authorization": f"Bearer {key}"}
+        return {self.config.auth_header: f"{self.config.auth_prefix}{key}"}
 
     # --- traduccion ---
     def _payload(self, request):
+        if self.config.payload_style == "gemini":
+            return self._payload_gemini(request)
         f = self.config.field_map
         p = {f["prompt"]: request.prompt,
              f["width"]: request.width,
@@ -138,6 +185,26 @@ class HttpImageProvider(ImageProvider):
             p[f["seed"]] = request.seed
         return p
 
+    def _payload_gemini(self, request):
+        """Cuerpo anidado estilo `generateContent`.
+
+        El negativo se concatena al texto porque esa familia de API no
+        expone un campo de prompt negativo propio: decirlo aqui es mas
+        honesto que declarar `supports_negative_prompt=False` y perder las
+        restricciones, o que inventar un campo que el proveedor ignoraria
+        en silencio.
+        """
+        texto = request.prompt
+        if request.negative_prompt:
+            texto = f"{texto}\n\nEvita explicitamente: {request.negative_prompt}"
+        cuerpo = {"contents": [{"parts": [{"text": texto}]}]}
+        cfg = {}
+        if request.seed is not None and self.config.supports_seed:
+            cfg["seed"] = request.seed
+        if cfg:
+            cuerpo["generationConfig"] = cfg
+        return cuerpo
+
     def _extraer_imagen(self, data):
         """Acepta las dos formas habituales: base64 embebido o URL."""
         if not isinstance(data, dict):
@@ -149,6 +216,21 @@ class HttpImageProvider(ImageProvider):
             kind = "CONTENT_REJECTED" if "safety" in msg.lower() or "policy" in msg.lower() \
                 else "INVALID_REQUEST"
             raise HttpTransportError(kind, msg)
+
+        for ruta in self.config.response_paths:
+            b64 = _buscar_en_ruta(data, ruta)
+            if b64:
+                try:
+                    return base64.b64decode(b64, validate=True)
+                except Exception as exc:
+                    raise HttpTransportError(
+                        "TRANSPORT", f"base64 invalido en la ruta '{ruta}': {exc}")
+        if self.config.response_paths:
+            raise HttpTransportError(
+                "TRANSPORT",
+                "ninguna de las rutas declaradas por el perfil contiene imagen: "
+                f"{list(self.config.response_paths)}. La respuesta llego con las "
+                f"claves de primer nivel {sorted(data)}.")
 
         items = data.get("data") or data.get("images") or []
         if not items:

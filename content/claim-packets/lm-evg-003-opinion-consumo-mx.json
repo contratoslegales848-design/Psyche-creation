@@ -1,0 +1,104 @@
+{
+  "schema_version": "4.0",
+  "piece_id": "LM-EVG-003",
+  "claims": [
+    {
+      "nucleo_transversal": null,
+      "variaciones_materiales": null,
+      "jurisdicciones_revisadas": null,
+      "diferencias_buscadas": null,
+      "contraejemplos_encontrados": null,
+      "justificacion_suficiencia_comparada": null,
+      "confianza": "baja",
+      "riesgo_falsa_universalizacion": "alto",
+      "riesgo_asesoria": "alto",
+      "platform_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "confidentiality_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "estado": "REQUIERE_INVESTIGACION",
+      "revision_humana": {
+        "estado": "PENDIENTE",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null,
+        "contenido_hash_sha256": null
+      },
+      "gate_arte": "CERRADO",
+      "reformulacion_propuesta": {
+        "texto": null,
+        "verificada": false,
+        "nuevo_claim_id": null
+      },
+      "claim_id": "lm-evg-003-claim-1",
+      "texto_exacto": "Opinar sobre un mal servicio no es difamacion: la critica veraz sobre experiencias de consumo esta protegida por la libertad de expresion frente al honor comercial.",
+      "ubicacion": "hook",
+      "tipo": "regla",
+      "alcance": "NO_DETERMINADO",
+      "jurisdiccion": null,
+      "fuentes": [
+        {
+          "id": "SRC-EVG003-MX-CPEUM",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Constitucion Politica de los Estados Unidos Mexicanos — arts. 6 y 7",
+          "organismo_autor": "Cámara de Diputados (México)",
+          "url": "https://www.diputados.gob.mx/LeyesBiblio/pdf/CPEUM.pdf",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-09-03",
+          "localizador": "arts. 6 y 7",
+          "jurisdicciones_cubiertas": [
+            "México"
+          ],
+          "registro_oficial_id": "diputados-gob-mx",
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": false,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": null,
+            "metodo_o_evidencia": null,
+            "observaciones": "No se pudo consultar el texto oficial: WebFetch permanece EGRESS_BLOCKED hacia dominios oficiales en esta sesion. Ningun booleano de verificacion puede marcarse true sin lectura real."
+          }
+        },
+        {
+          "id": "SRC-EVG003-MX-CCF-1916BIS",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Codigo Civil Federal (Mexico) — art. 1916 Bis",
+          "organismo_autor": "Cámara de Diputados (México)",
+          "url": "https://www.diputados.gob.mx/LeyesBiblio/pdf/CCF.pdf",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-09-03",
+          "localizador": "art. 1916 Bis",
+          "jurisdicciones_cubiertas": [
+            "México"
+          ],
+          "registro_oficial_id": "diputados-gob-mx",
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": false,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": null,
+            "metodo_o_evidencia": null,
+            "observaciones": "No se pudo consultar el texto oficial: WebFetch permanece EGRESS_BLOCKED hacia dominios oficiales en esta sesion. Ningun booleano de verificacion puede marcarse true sin lectura real."
+          }
+        }
+      ],
+      "redaccion_prohibida": "Cualquier resena negativa esta protegida y nunca genera responsabilidad.",
+      "notas": "El fundador declaro esta pieza como 'Panhispanico', pero TODAS las fuentes aportadas son de un solo pais. Eso es exactamente el patron de falsa universalizacion que la Capa A existe para impedir. El alcance se fija en NO_DETERMINADO —falta de investigacion, no conclusion— hasta que existan fuentes propias de al menos tres paises. Siguiente accion tecnica: investigar el equivalente en dos jurisdicciones mas, o reclasificar la pieza como CAPA_C_NACIONAL y declarar el pais en el titulo."
+    }
+  ],
+  "estado_agregado": "REQUIERE_INVESTIGACION",
+  "revisiones_pendientes": [
+    "lm-evg-003-claim-1"
+  ],
+  "gate_global_arte": "CERRADO"
+}

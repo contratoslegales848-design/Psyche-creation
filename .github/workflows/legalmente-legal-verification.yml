@@ -71,25 +71,18 @@ jobs:
           fi
           echo "Sin bytecode rastreado."
 
-      - name: Pruebas unitarias (unittest)
+      # Descubrimiento, no enumeración. Enumerar módulos dejaba fuera de CI
+      # cualquier archivo de prueba nuevo sin que nada lo señalara: así se
+      # quedaron sin ejecutar durante semanas 146 de las 355 pruebas de
+      # `visual/`, entre ellas todo el route engine y los invariantes de
+      # topología. Con `discover`, una prueba nueva entra en CI por existir.
+      - name: Pruebas de la skill jurídica (unittest discover)
         working-directory: .claude/skills/legalmente-legal-verification/scripts
-        run: python3 -m unittest test_validate_claim_packet -v
+        run: python3 -m unittest discover -p 'test_*.py' -v
 
-      - name: Pruebas unitarias del control de gobernanza del piloto (unittest)
-        working-directory: .claude/skills/legalmente-legal-verification/scripts
-        run: python3 -m unittest test_check_pilot_governance -v
-
-      - name: Pruebas unitarias de la cadena post-aprobación (unittest)
-        working-directory: .claude/skills/legalmente-legal-verification/scripts
-        run: python3 -m unittest test_validate_publication_chain -v
-
-      - name: Pruebas unitarias del control de confidencialidad (unittest)
-        working-directory: .claude/skills/legalmente-legal-verification/scripts
-        run: python3 -m unittest test_confidentiality_rules -v
-
-      - name: Pruebas unitarias de la procedencia del contenido (unittest)
+      - name: Pruebas de scripts de la raíz (unittest discover)
         working-directory: scripts
-        run: python3 -m unittest test_validate_content_provenance -v
+        run: python3 -m unittest discover -p 'test_*.py' -v
 
       - name: Fixtures positivos deben validar (exit 0)
         run: |
@@ -132,7 +125,7 @@ jobs:
       - name: Paquetes reales del piloto deben existir, validar y tener gates coherentes
         run: |
           set -e
-          REQUIRED=("pilot/claim-packets/pieza-01-reales.json" "pilot/claim-packets/pieza-02-laboral.json" "pilot/claim-packets/pieza-03-honor.json")
+          REQUIRED=("pilot/claim-packets/pieza-01-reales.json" "pilot/claim-packets/pieza-02-laboral.json" "pilot/claim-packets/pieza-03-honor.json" "pilot/claim-packets/pieza-04-laboral-basico.json")
           fail=0
           for f in "${REQUIRED[@]}"; do
             if [ ! -f "$f" ]; then
@@ -196,20 +189,61 @@ jobs:
         working-directory: .
         run: python3 scripts/validate-content-provenance.py
 
+      - name: Claim packets reales (content/claim-packets) deben validar contra el esquema
+        working-directory: .
+        run: |
+          set -e
+          shopt -s nullglob
+          files=(content/claim-packets/*.json)
+          if [ "${#files[@]}" -eq 0 ]; then
+            echo "No se encontraron claim packets en content/claim-packets/ — nada que validar."
+            exit 0
+          fi
+          echo "Claim packets encontrados: ${#files[@]}"
+          fail=0
+          for f in "${files[@]}"; do
+            if ! python3 .claude/skills/legalmente-legal-verification/scripts/validate-claim-packet.py "$f"; then
+              echo "FALLÓ (error estructural, gate simulado o aprobación inválida): $f"
+              fail=1
+            fi
+          done
+          exit $fail
+
       - name: Instalar dependencias (solo Pillow, para el compositor)
         working-directory: .
         run: python3 -m pip install --quiet -r requirements.txt
 
       - name: Pipeline visual — suite completa (proveedor falso, sin red ni créditos)
         working-directory: visual
-        run: |
-          python3 -m unittest \
-            test_visual_pipeline test_visual_advanced \
-            test_composition test_http_provider test_resolver -v
+        run: python3 -m unittest discover -p 'test_*.py' -v
+
+      - name: Ecosistema — registro, relaciones y matriz de gates (unittest discover)
+        working-directory: ecosystem
+        run: python3 -m unittest discover -p 'test_*.py' -v
+
+      - name: Motor de candidatos — barrera, diversidad y memoria (unittest)
+        working-directory: content/topics
+        run: python3 -m unittest test_topics -v
+
+      - name: Motor de candidatos — orden por rendimiento documentado (unittest)
+        working-directory: content/topics
+        run: python3 -m unittest test_rendimiento -v
+
+      - name: Superficie LinkedIn — pilares, confidencialidad y puente al motor (unittest)
+        working-directory: content/linkedin
+        run: python3 -m unittest test_linkedin -v
+
+      - name: Claim packets — brecha de investigacion (unittest)
+        working-directory: content/claim-packets
+        run: python3 -m unittest test_brecha_de_investigacion -v
+
+      - name: Almacén canónico — fail-closed, RLS y seed sintético (unittest)
+        working-directory: store
+        run: python3 -m unittest discover -p 'test_*.py' -v
 
       - name: Contrato canónico cross-repo
         working-directory: contract
-        run: python3 -m unittest test_canonical_envelope -v
+        run: python3 -m unittest discover -p 'test_*.py' -v
 
       - name: El pipeline visual no puede aprobar nada por sí solo
         working-directory: visual
@@ -224,3 +258,36 @@ jobs:
               sys.exit(1)
           print("OK: ningún status del pipeline visual significa aprobado.")
           PY
+
+      - name: Coherencia del libro mayor de vigencia de fuentes
+        run: python3 scripts/check-source-freshness.py --solo-libro-mayor
+
+      - name: Ninguna fuente desactualizada sostiene un claim aprobado (piloto, reloj real)
+        run: python3 scripts/check-source-freshness.py pilot/claim-packets/*.json
+
+      - name: Vigencia de las fixtures con gate abierto (fecha fijada)
+        # Las fixtures se comprueban con una fecha fija: su plazo de revisión es
+        # real y vencerá algún día, y una fixture no debe poner la CI en rojo por
+        # el paso del tiempo. Los paquetes reales sí usan el reloj real, arriba.
+        run: |
+          python3 scripts/check-source-freshness.py --today 2026-08-27 \
+            publication/fixtures/claim-packet-aprobado.json
+
+      - name: El inventario materializado está al día y sin duplicados
+        working-directory: .
+        run: python3 scripts/inventory.py check
+
+      # El PR original solo cubría pilot/claim-packets. Los 11 paquetes reales
+      # de content/claim-packets quedaban fuera de la comprobación de vigencia
+      # igual que estaban fuera de la validación de esquema hasta hoy.
+      - name: Vigencia de fuentes de los claim packets reales (content/claim-packets)
+        working-directory: .
+        run: |
+          set -e
+          shopt -s nullglob
+          files=(content/claim-packets/*.json)
+          if [ "${#files[@]}" -eq 0 ]; then
+            echo "No hay claim packets en content/claim-packets/ — nada que comprobar."
+            exit 0
+          fi
+          python3 .claude/skills/legalmente-legal-verification/scripts/check-source-freshness.py "${files[@]}"

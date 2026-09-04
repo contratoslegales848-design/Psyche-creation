@@ -3,7 +3,11 @@
   "descripcion": "Politica visual ejecutable de LegalMente. Solo contiene reglas que un programa puede comprobar. Las reglas de criterio (que escuela artistica toca, que metafora) viven en la skill legalmente-visual-system y NO se duplican aqui.",
   "formatos": {
     "VERTICAL_9_16": {"width": 1080, "height": 1920, "aspect_ratio": "9:16", "full_bleed": true},
-    "SOCIAL_4_5": {"width": 1080, "height": 1350, "aspect_ratio": "4:5", "full_bleed": true}
+    "SOCIAL_4_5": {"width": 1080, "height": 1350, "aspect_ratio": "4:5", "full_bleed": true},
+    "SOCIAL_1_1": {"width": 1080, "height": 1080, "aspect_ratio": "1:1", "full_bleed": true,
+                   "_para": "Feed cuadrado clasico. Es el formato del inventario historico de Facebook donde se midieron los listados y las maximas: usarlo permite comparar rendimiento contra esas piezas, no solo contra las nuevas."},
+    "HORIZONTAL_16_9": {"width": 1920, "height": 1080, "aspect_ratio": "16:9", "full_bleed": true,
+                        "_para": "Superficie profesional y portada de articulo. El feed de LinkedIn recorta el vertical; el horizontal se ve entero."}
   },
   "composicion": {
     "scene_count": 1,

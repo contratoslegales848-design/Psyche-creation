@@ -54,6 +54,18 @@ class PreflightResult:
         }
 
 
+def preflight_de_perfil(provider_id):
+    """Preflight de un perfil del catalogo (`providers/profiles.py`).
+
+    Se resuelve el perfil en el momento de llamar, no en import: el endpoint
+    y la credencial salen del entorno y pueden exportarse despues de cargar
+    el modulo.
+    """
+    from providers import profiles
+
+    return preflight(profiles.cargar(provider_id))
+
+
 def preflight(config=None):
     """Comprueba si el proveedor podria ejecutarse, sin ejecutarlo jamas.
 

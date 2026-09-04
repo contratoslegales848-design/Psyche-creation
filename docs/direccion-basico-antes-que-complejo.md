@@ -10,6 +10,14 @@ hecho todavía — el fundador pidió "repo ahora, Drive después" — y sigue v
 regla de CLAUDE.md §6: no se modifica Drive sin autorización explícita para esa acción
 concreta cuando llegue el momento.
 
+> **Implementación ejecutable (2026-09-03).** Este documento fija la dirección; quien la hace
+> cumplir es el motor de temas de `content/topics/`, descrito en
+> [`docs/motor-de-temas-transversales.md`](motor-de-temas-transversales.md). Un tema que nombra
+> un país, una ley nacional, una moneda o un plazo ya no puede entrar al catálogo: hay una
+> prueba que lo impide. Este archivo sigue siendo el canon de la decisión; el motor es su
+> ejecución, nunca al revés.
+
+
 ## 1. Principio rector
 
 El motor de LegalMente (route engine + fórmula visual + verificación jurídica) ya
@@ -18,18 +26,37 @@ contenido básico, sólido, investigado, que alimente ese motor.
 
 Hay dos capas de contenido jurídico, y el orden de producción importa:
 
-1. **Lo básico transversal** (≈ Capa A del sistema de neutralidad jurisdiccional,
-   CLAUDE.md §4): definiciones y conceptos que son esencialmente los mismos en
-   cualquier jurisdicción panhispánica porque nacen de la misma lógica jurídica —
-   qué es un hecho ilícito penal, qué es la patria potestad, qué es un contrato,
-   qué es una prescripción. Estos son los cimientos: producirlos primero.
+1. **Lo básico candidato a transversal** (≈ Capa A): conceptos que la tradición
+   jurídica hispanohablante comparte en su **estructura**, y de los que se
+   *sospecha* —no se afirma— que la distinción se sostiene en varias
+   jurisdicciones. Son los cimientos: investigarlos primero.
+
+   **Corrección 2026-09-04.** La redacción anterior decía que estos conceptos
+   «son esencialmente los mismos en cualquier jurisdicción panhispánica» y ponía
+   como ejemplos la patria potestad, el contrato, la prescripción y el hecho
+   ilícito penal. Eso era una afirmación jurídica sobre más de veinte
+   ordenamientos, escrita sin una sola fuente — justo el error que este documento
+   existe para impedir, cometido en su propia definición.
+
+   Y los cuatro ejemplos eran de los peores posibles: **patria potestad,
+   prescripción, contrato y hecho ilícito penal son instituciones de derecho
+   positivo**, no categorías lógicas. Su contenido, sus requisitos, su titularidad
+   y su extinción los fija cada legislador. Que compartan raíz romana no las hace
+   iguales: la patria potestad ha sido sustituida en varios ordenamientos por
+   figuras de responsabilidad parental con contenido distinto, y la prescripción
+   difiere no solo en plazos sino en si extingue el derecho o solo la acción.
+
+   Lo que sí puede sostenerse como candidato transversal es más modesto y más
+   sólido: **la distinción entre figuras** (poseer frente a tener; nulidad frente
+   a anulabilidad; dolo frente a culpa), no la definición de cada institución. Una
+   distinción se explica sin cifras; una institución no.
 2. **Lo que se ramifica** (≈ Capas B y C): multas, plazos, procedimientos,
    cuantías, tribunales — todo lo que varía por país o requiere una cifra/artículo
    verificable. Esto se alimenta después, con más tiempo, y siempre con
    verificación jurídica caso por caso (nunca se salta la skill
    `legalmente-legal-verification`).
 
-Enfoque actual: agotar lo básico universal en las materias con más vacío antes de
+Enfoque actual: agotar lo básico candidato a transversal en las materias con más vacío antes de
 profundizar en ramificaciones nacionales de una sola materia.
 
 ## 2. Estado real verificado (no una suposición)
@@ -83,12 +110,15 @@ contractual (pensado para LinkedIn). La lógica de contenido para contratos:
 - El análisis contractual empieza por **fecha y objeto**: eso ya da la mayor
   parte del contexto necesario (naturaleza del contrato, materia aplicable,
   riesgos típicos de esa figura).
-- Esto es contenido básico transversal igual que el resto (Capa A): los
-  requisitos de validez de un contrato no cambian sustancialmente entre
-  jurisdicciones panhispánicas por la misma razón que las definiciones civiles
-  no cambian — nace de la misma lógica jurídica. Lo que sí es Capa B/C es la
-  forma exacta en que cada país regula un tipo de contrato específico
-  (arrendamiento, compraventa, etc.) — eso se ramifica después.
+- **Corrección 2026-09-04.** Aquí se afirmaba que «los requisitos de validez de
+  un contrato no cambian sustancialmente entre jurisdicciones panhispánicas». Es
+  otra universalización sin fuente, y además dudosa: el consentimiento, el objeto
+  y la causa —o su ausencia, porque hay ordenamientos de la tradición que han
+  prescindido de la causa— son requisitos de **derecho positivo**, no verdades
+  lógicas. La redacción correcta es hipotética: *se postula* que la estructura de
+  la validez contractual es comparable, y esa hipótesis se comprueba jurisdicción
+  por jurisdicción antes de sostener nada. Lo que sí es claramente Capa B/C es la
+  regulación de cada tipo contractual concreto.
 - Técnicamente: probablemente amerite una materia propia `contratos` (o una
   submateria de `civil`) en el motor de rutas, con su propio vocabulario de
   navegación — no existe todavía. Queda como trabajo futuro, no ejecutado en
@@ -134,7 +164,40 @@ Instrucción expresa del fundador, para registrar como regla operativa:
    aplica a todo el proyecto, no solo al contenido: código, arquitectura,
    estrategia de publicación.
 
-## 7. Qué NO cambia con este documento
+## 7. Orden de descubrimiento — la pirámide como profundidad, no como jerarquía universal
+
+**Añadido el 2026-09-03 por orden del fundador.** No sustituye nada de lo anterior: precisa
+en qué orden se descubre el conocimiento.
+
+La referencia a Kelsen funciona aquí como **lógica de profundidad y dependencia**: qué hay que
+entender antes para poder entender lo siguiente. **No** afirma que derecho natural, derechos
+humanos y Derecho internacional formen una única jerarquía positiva universal. La
+aplicabilidad y la posición jerárquica de tratados y derechos internacionales **se verifica
+territorialmente; no se presume**.
+
+| | Nivel | Qué contiene |
+|---|---|---|
+| A | Persona y convivencia | Dignidad, preguntas humanas fundamentales |
+| B | Fundamentos de comprensión | Derecho natural, filosofía, historia — **nunca fuente automática de Derecho positivo** |
+| C | Derechos humanos | Marcos internacionales y obligaciones correlativas |
+| D | Conceptos transversales | Persona, capacidad, voluntad, relación jurídica, derecho, deber, obligación, objeto, tiempo, responsabilidad, prueba |
+| E | Ramas madre | Civil, familiar, laboral, mercantil, penal, administrativo, fiscal, agrario, ambiental, digital, procesal |
+| F | Submaterias e instituciones | Y las relaciones entre ramas |
+| G | Territorio | Legislación, autoridades, procedimientos, plazos, consecuencias concretas |
+| H | Especialización | Herramientas profesionales |
+
+### Prioridad
+
+```
+UTILIDAD_HUMANA × IMPORTANCIA × VACÍO_DE_COBERTURA × CAPACIDAD_DE_CONEXIÓN × VERIFICABILIDAD
+```
+
+Es un producto, no una suma: si un factor es cero, el candidato no entra por muy alto que
+puntúe en los demás. **La novedad no es un factor.** Un tema no se prioriza por ser nuevo, y se
+excluye si es trivial, de poca utilidad o prematuramente especializado mientras queden
+fundamentos importantes sin cubrir.
+
+## 8. Qué NO cambia con este documento
 
 - Ninguna afirmación jurídica se da por verificada aquí. Este documento es
   dirección editorial y de producto, no un claim jurídico.
@@ -145,7 +208,7 @@ Instrucción expresa del fundador, para registrar como regla operativa:
 - No se crea contenido nuevo de ninguna materia en este documento — es
   dirección, no producción.
 
-## 8. Siguiente paso ejecutable
+## 9. Siguiente paso ejecutable
 
 Cuando el fundador lo indique: elegir una materia de la lista de la sección 3
 (recomendado: laboral, por ser la de mayor vacío confirmado en dos fuentes
