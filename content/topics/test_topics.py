@@ -22,6 +22,11 @@ import brief as B  # noqa: E402
 import lote as L  # noqa: E402
 import transversality as T  # noqa: E402
 
+# Procedencia que acredita autoridad canonica. Se escribe en las pruebas, nunca
+# la produce el loader: ninguna lectura del repositorio puede fabricarla.
+PROCEDENCIA_OK = {"drive_file_id": "1FICTICIO", "exportado_en": "2026-09-04",
+                  "exportado_por": "fundador"}
+
 CATALOGO = T.cargar_catalogo()
 TEMAS = CATALOGO["temas"]
 REPO = AQUI.parent.parent
@@ -406,7 +411,7 @@ class TestOrdenDelPipeline(unittest.TestCase):
 class TestMemoriaAntiRepeticion(unittest.TestCase):
     def test_el_inventario_real_se_consulta(self):
         _inv, estado, _det = L.cargar_inventario()
-        self.assertEqual(estado, L.INVENTARIO_CANONICO)
+        self.assertEqual(estado, L.INVENTARIO_REPO_COMPLETO)
 
     def test_sin_inventario_no_se_declara_novedad(self):
         """La respuesta honesta cuando no se pudo comprobar no es 'es nuevo'."""
@@ -419,7 +424,8 @@ class TestMemoriaAntiRepeticion(unittest.TestCase):
         inv = [{"origen": "content/pieza-01-reales.json", "concepto": "propiedad_y_posesion",
                 "situacion_humana": "", "angulo": "", "utilidad": "", "conexion_juridica": ""}]
         r = L.evaluar_novedad({"id": "X", "concepto": "propiedad_y_posesion"},
-                              inventario=inv, estado_inventario=L.INVENTARIO_CANONICO)
+                              inventario=inv, estado_inventario=L.INVENTARIO_CANONICO,
+                              procedencia_canonica=PROCEDENCIA_OK)
         self.assertEqual(r["veredicto"], "REPETICION")
         self.assertFalse(r["puede_declararse_nuevo_globalmente"])
 
@@ -449,7 +455,7 @@ class TestBloqueosSemanticosCorregidos(unittest.TestCase):
                      "angulo": "que prueba la posesion",
                      "situacion_humana": "lleva anios ahi",
                      "utilidad": "evitar confusion", "conexion_juridica": "usucapion"}
-        r = L.evaluar_novedad(candidato, inv, L.INVENTARIO_CANONICO)
+        r = L.evaluar_novedad(candidato, inv, L.INVENTARIO_CANONICO, PROCEDENCIA_OK)
         self.assertEqual(r["veredicto"], "RAMIFICACION")
         self.assertTrue(r["puede_declararse_nuevo_globalmente"])
         self.assertIn("angulo", r["ramifica_sobre"][0]["aporta_en"])
@@ -458,7 +464,7 @@ class TestBloqueosSemanticosCorregidos(unittest.TestCase):
         base = {"concepto": "posesion", "angulo": "a", "situacion_humana": "s",
                 "utilidad": "u", "conexion_juridica": "c"}
         inv = [dict(base, origen="content/a.json")]
-        r = L.evaluar_novedad(dict(base, id="X"), inv, L.INVENTARIO_CANONICO)
+        r = L.evaluar_novedad(dict(base, id="X"), inv, L.INVENTARIO_CANONICO, PROCEDENCIA_OK)
         self.assertEqual(r["veredicto"], "REPETICION")
         self.assertFalse(r["puede_declararse_nuevo_globalmente"])
 
@@ -469,7 +475,7 @@ class TestBloqueosSemanticosCorregidos(unittest.TestCase):
                 "utilidad": "u", "conexion_juridica": "c"}
         inv = [dict(base, origen="content/a.json", forma_editorial="MITO")]
         r = L.evaluar_novedad(dict(base, id="X", forma_editorial="CARRUSEL"),
-                              inv, L.INVENTARIO_CANONICO)
+                              inv, L.INVENTARIO_CANONICO, PROCEDENCIA_OK)
         self.assertEqual(r["veredicto"], "REPETICION")
 
     def test_un_campo_vacio_no_cuenta_como_aportacion(self):
@@ -479,16 +485,17 @@ class TestBloqueosSemanticosCorregidos(unittest.TestCase):
         r = L.evaluar_novedad({"id": "X", "concepto": "c", "angulo": "",
                                "situacion_humana": "s", "utilidad": "u",
                                "conexion_juridica": "cj"},
-                              inv, L.INVENTARIO_CANONICO)
+                              inv, L.INVENTARIO_CANONICO, PROCEDENCIA_OK)
         self.assertEqual(r["veredicto"], "SIN_APORTACION_DEMOSTRABLE")
 
     # --- 3: alcance de la comprobación ------------------------------------
     def test_un_inventario_local_parcial_no_declara_novedad_global(self):
         r = L.evaluar_novedad({"id": "X", "concepto": "loquesea"},
                               [], L.INVENTARIO_LOCAL)
-        self.assertEqual(r["veredicto"], "CONCEPTO_LIBRE")
+        self.assertEqual(r["veredicto"], "NO_ENCONTRADO_EN_EL_REPOSITORIO")
         self.assertFalse(r["puede_declararse_nuevo_globalmente"])
-        self.assertIn("parcial", r["alcance_de_la_comprobacion"])
+        self.assertIn("solo el repositorio", r["alcance_de_la_comprobacion"])
+        self.assertIn("Drive NO se ha consultado", r["alcance_de_la_comprobacion"])
 
     def test_un_inventario_incompleto_tampoco(self):
         r = L.evaluar_novedad({"id": "X", "concepto": "loquesea"},
@@ -496,8 +503,8 @@ class TestBloqueosSemanticosCorregidos(unittest.TestCase):
         self.assertFalse(r["puede_declararse_nuevo_globalmente"])
 
     def test_los_tres_estados_de_inventario_son_distintos(self):
-        self.assertEqual(len({L.INVENTARIO_LOCAL, L.INVENTARIO_CANONICO,
-                              L.INVENTARIO_INCOMPLETO}), 3)
+        self.assertEqual(len({L.INVENTARIO_LOCAL, L.INVENTARIO_REPO_COMPLETO,
+                              L.INVENTARIO_CANONICO, L.INVENTARIO_INCOMPLETO}), 4)
         self.assertEqual(L.ESTADOS_QUE_PERMITEN_NOVEDAD_GLOBAL, (L.INVENTARIO_CANONICO,))
 
     # --- 4: tres jurisdicciones NO producen Capa A -------------------------
@@ -569,6 +576,106 @@ class TestBloqueosSemanticosCorregidos(unittest.TestCase):
             with self.subTest(tema=b["tema_id"]):
                 alcance = b["taxonomia"]["_alcance_de_content_type"]
                 self.assertIn("NO alimenta memoria persistente", alcance)
+
+
+class TestAutoridadDelInventario(unittest.TestCase):
+    """El inventario del repositorio no es el inventario de publicaciones.
+
+    CLAUDE.md §2 situa el inventario de publicaciones y la matriz de contenido en
+    Google Drive. El loader de este modulo lee `content/`, `claim-packets/` y
+    `visual/inventory.py`: las tres son locales. Llamar canonico a eso era
+    apropiarse de una autoridad que vive en otro sitio, y producia exactamente la
+    afirmacion que hay que evitar — 24 candidatos declarados nuevos sin haber
+    mirado nunca lo publicado.
+    """
+
+    def test_importar_visual_inventory_no_vuelve_canonico_el_inventario(self):
+        """El fallo concreto: bastaba con que el import funcionara."""
+        inv, estado, det = L.cargar_inventario()
+        self.assertTrue(det["fuentes"]["inventario_produccion"],
+                        "esta prueba exige que el import SI funcione")
+        self.assertEqual(estado, L.INVENTARIO_REPO_COMPLETO)
+        self.assertNotEqual(estado, L.INVENTARIO_CANONICO)
+
+    def test_el_loader_nunca_puede_devolver_el_estado_canonico(self):
+        """No es una omision: este modulo no lee Drive."""
+        _inv, estado, _det = L.cargar_inventario()
+        self.assertNotIn(estado, L.ESTADOS_QUE_PERMITEN_NOVEDAD_GLOBAL)
+
+    def test_el_loader_declara_lo_que_no_consulto(self):
+        _inv, _estado, det = L.cargar_inventario()
+        self.assertEqual(det["alcance"], "solo este repositorio")
+        self.assertIn("Drive", det["no_consultado"])
+
+    def test_ningun_candidato_real_se_declara_nuevo_globalmente(self):
+        """La ejecucion real: 0 de 24, no 24 de 24."""
+        inv, estado, _ = L.cargar_inventario()
+        for tema in TEMAS:
+            r = L.evaluar_novedad(tema, inv, estado)
+            with self.subTest(tema=tema["id"]):
+                self.assertFalse(r["puede_declararse_nuevo_globalmente"])
+                self.assertIn("Drive", r["alcance_de_la_comprobacion"])
+
+    def test_no_encontrado_en_el_repositorio_no_dice_no_publicado(self):
+        inv, estado, _ = L.cargar_inventario()
+        r = L.evaluar_novedad({"id": "X", "concepto": "concepto_inexistente_xyz"},
+                              inv, estado)
+        self.assertEqual(r["veredicto"], "NO_ENCONTRADO_EN_EL_REPOSITORIO")
+        self.assertIn("no se haya publicado ya fuera del repositorio", r["motivo"])
+
+    # --- el trabajo local sigue sirviendo --------------------------------
+    def test_una_coincidencia_local_se_sigue_detectando(self):
+        base = {"concepto": "posesion", "angulo": "a", "situacion_humana": "s",
+                "utilidad": "u", "conexion_juridica": "c"}
+        r = L.evaluar_novedad(dict(base, id="X"),
+                              [dict(base, origen="content/a.json")],
+                              L.INVENTARIO_REPO_COMPLETO)
+        self.assertEqual(r["veredicto"], "REPETICION")
+
+    def test_una_ramificacion_local_se_identifica_pero_no_es_novedad_global(self):
+        """Sigue siendo util saberlo; lo que no se puede es extrapolarlo."""
+        inv = [{"origen": "content/a.json", "concepto": "posesion", "angulo": "a",
+                "situacion_humana": "s", "utilidad": "u", "conexion_juridica": "c"}]
+        r = L.evaluar_novedad({"id": "X", "concepto": "posesion", "angulo": "otro",
+                               "situacion_humana": "s", "utilidad": "u",
+                               "conexion_juridica": "c"},
+                              inv, L.INVENTARIO_REPO_COMPLETO)
+        self.assertEqual(r["veredicto"], "RAMIFICACION")
+        self.assertFalse(r["puede_declararse_nuevo_globalmente"])
+
+    # --- la unica via hacia lo global ------------------------------------
+    def test_solo_un_inventario_canonico_acreditado_habilita_lo_global(self):
+        r = L.evaluar_novedad({"id": "X", "concepto": "libre"}, [],
+                              L.INVENTARIO_CANONICO, PROCEDENCIA_OK)
+        self.assertTrue(r["puede_declararse_nuevo_globalmente"])
+        self.assertEqual(r["degradacion_de_autoridad"], [])
+
+    def test_la_etiqueta_canonica_sin_procedencia_se_degrada(self):
+        """Etiquetar no es acreditar: sin origen declarado, no hay autoridad."""
+        r = L.evaluar_novedad({"id": "X", "concepto": "libre"}, [],
+                              L.INVENTARIO_CANONICO, None)
+        self.assertFalse(r["puede_declararse_nuevo_globalmente"])
+        self.assertEqual(r["estado_inventario"], L.INVENTARIO_REPO_COMPLETO)
+        self.assertTrue(r["degradacion_de_autoridad"])
+
+    def test_una_procedencia_incompleta_tambien_se_degrada(self):
+        for falta in L.CAMPOS_DE_AUTORIDAD_CANONICA:
+            proc = {c: "x" for c in L.CAMPOS_DE_AUTORIDAD_CANONICA if c != falta}
+            with self.subTest(sin=falta):
+                r = L.evaluar_novedad({"id": "X", "concepto": "libre"}, [],
+                                      L.INVENTARIO_CANONICO, proc)
+                self.assertFalse(r["puede_declararse_nuevo_globalmente"])
+
+    def test_ningun_estado_de_inventario_abre_gate_arte_ni_publicacion(self):
+        for estado in (L.INVENTARIO_LOCAL, L.INVENTARIO_REPO_COMPLETO,
+                       L.INVENTARIO_CANONICO, L.INVENTARIO_INCOMPLETO):
+            r = L.evaluar_novedad({"id": "X", "concepto": "c"}, [], estado,
+                                  PROCEDENCIA_OK)
+            with self.subTest(estado=estado):
+                texto = json.dumps(r, ensure_ascii=False).upper()
+                for prohibido in ("APROBAD", "GATE_ARTE\": \"ABIERTO",
+                                  "PUBLICADA", "AUTORIZAD"):
+                    self.assertNotIn(prohibido, texto)
 
 
 if __name__ == "__main__":

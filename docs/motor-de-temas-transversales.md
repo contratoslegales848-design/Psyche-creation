@@ -95,14 +95,40 @@ anterior de este documento decía que «viaja a la memoria». Era falso.
 Comprobar que los identificadores del lote nuevo son distintos **entre sí** no demuestra nada.
 `lote.py` compara contra el inventario real.
 
-**Tres estados de inventario, no un booleano.** Colapsarlos hacía que un inventario local
-parcial se leyera como comprobación completa:
+**Cuatro estados de inventario, y ninguna lectura del repositorio alcanza el canónico.**
+
+**Corrección 2026-09-04.** La versión anterior devolvía `INVENTORY_CANONICAL` en cuanto lograba
+importar `visual/inventory.py`. Era falso por dos motivos, y el error producía justo la
+afirmación que hay que evitar: **24 candidatos declarados nuevos sin haber mirado nunca lo
+publicado.**
+
+1. `CLAUDE.md` §2 sitúa el inventario de publicaciones y la matriz de contenido en **Google
+   Drive**. Las tres fuentes que se leían —`content/`, `claim-packets/` y `visual/inventory.py`—
+   son **locales al repositorio**. Llamar canónico a eso es apropiarse de una autoridad que vive
+   en otro sitio.
+2. `visual/inventory.py` ni siquiera aporta identidad temática: sus entradas llegaban con
+   `concepto`, `angulo`, `utilidad` y `conexion_juridica` **vacíos**, así que no podían coincidir
+   con ningún candidato ni aunque el tema fuera el mismo.
 
 | Estado | Qué se leyó | Qué permite afirmar |
 |---|---|---|
-| `INVENTORY_LOCAL` | solo el árbol de este repositorio | choques dentro del repo; **no** novedad global |
-| `INVENTORY_CANONICAL` | además el inventario de producción | novedad frente a lo producido |
-| `INVENTORY_INCOMPLETE` | alguna fuente falló | **nada**: «no aparece» significa «no aparece aquí» |
+| `INVENTORY_LOCAL` | parte del árbol del repositorio | choques encontrados; nada más |
+| `INVENTORY_REPO_COMPLETE` | **todo** el árbol del repositorio | que no hay choque **aquí** |
+| `INVENTORY_CANONICAL` | además el inventario de publicaciones de Drive | novedad frente a lo publicado |
+| `INVENTORY_INCOMPLETE` | alguna fuente falló | **nada** |
+
+**El loader nunca devuelve `INVENTORY_CANONICAL`**, y no es una omisión: no lee Drive. Lo más
+alto que alcanza es `INVENTORY_REPO_COMPLETE`.
+
+**Frontera de entrada, no infraestructura nueva.** `evaluar_novedad` acepta un
+`procedencia_canonica` con `drive_file_id`, `exportado_en` y `exportado_por`. Un inventario
+etiquetado como canónico **sin** esa procedencia **se degrada** a `INVENTORY_REPO_COMPLETE`:
+etiquetar no es acreditar. Este módulo no consulta Drive, no copia su contenido y no crea un
+segundo inventario — lo recibe, o no lo tiene.
+
+**Ejecución real hoy: `INVENTORY_REPO_COMPLETE`, 24 candidatos, 0 declarables como novedad
+global.** El veredicto pasó de `CONCEPTO_LIBRE` a `NO_ENCONTRADO_EN_EL_REPOSITORIO`, que es lo
+que de verdad se sabe: **no significa «no publicado»**.
 
 **Reutilizar un concepto es legítimo, y ahora se distingue de repetirlo.** Una materia se
 construye volviendo sobre el mismo concepto desde otro sitio. El veredicto tiene cuatro valores:

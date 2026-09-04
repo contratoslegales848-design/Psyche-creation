@@ -16,7 +16,7 @@ Canon de dirección: [`docs/direccion-basico-antes-que-complejo.md`](../../docs/
 | `transversality.py` | Barrera de anclaje nacional + cobertura real por fuentes |
 | `lote.py` | Diversidad editorial de un lote y memoria contra el inventario |
 | `brief.py` | Candidato → **ficha de investigación** (no ejecutable) |
-| `test_topics.py` | 48 pruebas |
+| `test_topics.py` | 73 pruebas |
 
 ```bash
 python3 content/topics/transversality.py     # qué pasa el filtro y qué no
@@ -35,6 +35,20 @@ escritas sin un solo topónimo y describían el derecho de un único país. La c
 
 Tres jurisdicciones con evidencia propia demuestran **cobertura comparada de esas tres**, no
 universalidad panhispánica.
+
+## El inventario del repositorio no es el inventario de publicaciones
+
+`CLAUDE.md` §2 sitúa el inventario de publicaciones y la matriz de contenido en **Google Drive**.
+Este módulo solo lee el repositorio, así que lo más alto que alcanza es
+`INVENTORY_REPO_COMPLETE` — nunca `INVENTORY_CANONICAL`.
+
+Consecuencia: hoy **0 de 24** candidatos pueden declararse novedad global.
+`NO_ENCONTRADO_EN_EL_REPOSITORIO` **no significa «no publicado»**. Lo local sigue sirviendo: las
+repeticiones y ramificaciones dentro del repo se detectan igual.
+
+Solo un inventario inyectado con procedencia acreditada (`drive_file_id`, `exportado_en`,
+`exportado_por`) habilita la afirmación global. Etiquetarlo canónico sin esa procedencia lo
+degrada.
 
 ## Lo que una ficha no es
 

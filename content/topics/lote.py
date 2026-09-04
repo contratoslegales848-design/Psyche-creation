@@ -124,15 +124,57 @@ def evaluar_diversidad(lote):
 # Memoria: contra lo que ya existe, no contra el propio lote.
 # ---------------------------------------------------------------------------
 
-# Los tres estados del inventario. Colapsarlos en un booleano hacia que un
-# inventario LOCAL parcial se leyera como comprobacion completa, y por tanto que
-# un candidato se declarara "nuevo" sin haber mirado nunca el canon.
-INVENTARIO_LOCAL = "INVENTORY_LOCAL"          # solo el arbol de este repositorio
-INVENTARIO_CANONICO = "INVENTORY_CANONICAL"   # incluye el inventario de produccion
-INVENTARIO_INCOMPLETO = "INVENTORY_INCOMPLETE"  # alguna fuente fallo al consultarse
+# Estados del inventario.
+#
+# CORRECCION 2026-09-04. La version anterior devolvia INVENTORY_CANONICAL cuando
+# lograba importar visual/inventory.py. Era falso por dos motivos, y el error era
+# grave porque producia justo la afirmacion que el fundador teme:
+#
+#   1. CLAUDE.md §2 situa el inventario de publicaciones y la matriz de contenido
+#      en Google Drive. Ninguna de las tres fuentes que se leian —content/,
+#      claim-packets/ y visual/inventory.py— esta en Drive: las tres son locales
+#      al repositorio. Llamar canonico a eso es apropiarse de una autoridad que
+#      vive en otro sitio.
+#   2. visual/inventory.py ni siquiera aporta identidad tematica: sus entradas
+#      llegaban con concepto, angulo, utilidad y conexion juridica vacios, asi que
+#      no podian coincidir con ningun candidato ni aunque el tema fuera el mismo.
+#
+# El resultado era que los 24 candidatos salian con
+# puede_declararse_nuevo_globalmente=true sin haber mirado nunca lo publicado.
+INVENTARIO_LOCAL = "INVENTORY_LOCAL"
+# El arbol del repositorio leido por completo. Es mas que LOCAL parcial y MENOS
+# que canonico: demuestra que no hay choque AQUI, y nada sobre lo publicado.
+INVENTARIO_REPO_COMPLETO = "INVENTORY_REPO_COMPLETE"
+# Reservado. Solo lo alcanza un inventario que incorpore explicitamente la fuente
+# canonica de publicaciones de Drive, o una exportacion identificada y
+# verificable de ella. Este modulo NO la consulta ni la copia: la recibe.
+INVENTARIO_CANONICO = "INVENTORY_CANONICAL"
+INVENTARIO_INCOMPLETO = "INVENTORY_INCOMPLETE"
 
-# Solo este estado permite afirmar novedad frente a TODO lo producido.
+# Solo este estado permite afirmar novedad frente a TODO lo publicado. Ninguna
+# lectura del repositorio lo alcanza, por completa que sea.
 ESTADOS_QUE_PERMITEN_NOVEDAD_GLOBAL = (INVENTARIO_CANONICO,)
+
+# Frontera de entrada, no infraestructura. Un inventario solo puede declararse
+# canonico si viene acompanado de la identificacion de su origen en Drive: id del
+# archivo, fecha de exportacion y quien la hizo. Sin eso, se degrada.
+CAMPOS_DE_AUTORIDAD_CANONICA = ("drive_file_id", "exportado_en", "exportado_por")
+
+
+def evaluar_autoridad_canonica(procedencia):
+    """Decide si una procedencia declarada basta para el estado canonico.
+
+    Es deliberadamente estricta y no consulta nada: comprueba que quien inyecta
+    el inventario haya dicho de donde sale. Un inventario sin origen declarado no
+    es canonico aunque lo diga su etiqueta.
+    """
+    if not isinstance(procedencia, dict):
+        return False, ["no se declaro procedencia del inventario"]
+    faltan = [c for c in CAMPOS_DE_AUTORIDAD_CANONICA
+              if not str(procedencia.get(c, "")).strip()]
+    if faltan:
+        return False, [f"la procedencia no declara: {faltan}"]
+    return True, []
 
 
 def cargar_inventario():
@@ -208,14 +250,23 @@ def cargar_inventario():
     except Exception as exc:  # noqa: BLE001
         fallos.append(f"inventario de produccion: {exc}")
 
+    # Este loader NUNCA devuelve INVENTARIO_CANONICO, y no es una omision: no
+    # lee Drive. Importar visual/inventory.py con exito solo demuestra que el
+    # repositorio esta completo, no que se haya mirado lo publicado.
     if fallos or not (fuentes["contenido"] and fuentes["packets"]):
         estado = INVENTARIO_INCOMPLETO
     elif fuentes["inventario_produccion"]:
-        estado = INVENTARIO_CANONICO
+        estado = INVENTARIO_REPO_COMPLETO
     else:
         estado = INVENTARIO_LOCAL
 
-    return entradas, estado, {"fuentes": fuentes, "fallos": fallos}
+    return entradas, estado, {
+        "fuentes": fuentes,
+        "fallos": fallos,
+        "alcance": "solo este repositorio",
+        "no_consultado": ("inventario de publicaciones y matriz de contenido de "
+                          "Google Drive (CLAUDE.md §2)"),
+    }
 
 
 # Dimensiones sustantivas. Coincidir en TODAS es repeticion; diferir en una sola
@@ -245,7 +296,8 @@ def aportacion_nueva(candidato, existente):
     return nuevas
 
 
-def evaluar_novedad(candidato, inventario=None, estado_inventario=None):
+def evaluar_novedad(candidato, inventario=None, estado_inventario=None,
+                    procedencia_canonica=None):
     """Que aporta este candidato frente al inventario, y con que alcance se sabe.
 
     El resultado NO es un si/no. Son tres cosas distintas que antes estaban
@@ -262,6 +314,17 @@ def evaluar_novedad(candidato, inventario=None, estado_inventario=None):
     """
     if inventario is None or estado_inventario is None:
         inventario, estado_inventario, _ = cargar_inventario()
+
+    # Unica via hacia el estado canonico: que quien inyecta el inventario
+    # acredite su origen en Drive. Etiquetarlo canonico sin procedencia no basta,
+    # y degradarlo aqui es lo que impide que una etiqueta se convierta en
+    # autoridad.
+    degradacion = []
+    if estado_inventario == INVENTARIO_CANONICO:
+        acreditado, problemas = evaluar_autoridad_canonica(procedencia_canonica)
+        if not acreditado:
+            estado_inventario = INVENTARIO_REPO_COMPLETO
+            degradacion = problemas
 
     concepto = str(candidato.get("concepto", "")).strip().casefold()
     clave = _sustantivo(candidato)
@@ -293,7 +356,9 @@ def evaluar_novedad(candidato, inventario=None, estado_inventario=None):
             "el concepto ya existe y el candidato no rellena ninguna dimension "
             "sustantiva que lo diferencie")
     else:
-        veredicto, motivo = "CONCEPTO_LIBRE", "el concepto no aparece en el inventario consultado"
+        veredicto, motivo = "NO_ENCONTRADO_EN_EL_REPOSITORIO", (
+            "el concepto no aparece en el inventario consultado; eso NO significa "
+            "que no se haya publicado ya fuera del repositorio")
 
     return {
         "candidato": candidato.get("id"),
@@ -306,10 +371,13 @@ def evaluar_novedad(candidato, inventario=None, estado_inventario=None):
         # El alcance de lo que se acaba de comprobar. Con inventario LOCAL o
         # INCOMPLETO, "no aparece" significa "no aparece AQUI", nunca "no existe".
         "puede_declararse_nuevo_globalmente": (
-            alcance_ok and veredicto in ("CONCEPTO_LIBRE", "RAMIFICACION")),
+            alcance_ok and veredicto in ("NO_ENCONTRADO_EN_EL_REPOSITORIO", "RAMIFICACION")),
         "alcance_de_la_comprobacion": (
-            "todo el inventario canonico consultado" if alcance_ok
-            else f"parcial: {estado_inventario} — no se afirma novedad global"),
+            "inventario canonico de publicaciones, con procedencia acreditada"
+            if alcance_ok else
+            f"solo el repositorio ({estado_inventario}); el inventario de "
+            "publicaciones de Drive NO se ha consultado"),
+        "degradacion_de_autoridad": degradacion,
     }
 
 
@@ -337,6 +405,11 @@ def main(argv=None):
     for n in novedades:
         if n["veredicto"] in ("REPETICION", "SIN_APORTACION_DEMOSTRABLE"):
             print(f"\n  {n['candidato']} — {n['veredicto']}: {n['motivo']}")
+    globales = sum(1 for n in novedades if n["puede_declararse_nuevo_globalmente"])
+    print(f"\ndeclarables como novedad GLOBAL: {globales} de {len(novedades)}")
+    print("El inventario de publicaciones y la matriz de contenido viven en Google")
+    print("Drive (CLAUDE.md §2) y NO se han consultado. 'No encontrado en el")
+    print("repositorio' no significa 'no publicado'.")
     print("\nOrganizar un lote no acredita derecho, no abre gates y no autoriza nada.")
     return 0
 
