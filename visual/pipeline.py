@@ -13,6 +13,7 @@ from dataclasses import dataclass, field, replace
 
 import gates
 import receipts as receipts_mod
+import rotation
 from composition import build_typography_plan, ExactCopyViolation
 from brief import PolicyError
 from compiler import compile_request
@@ -418,6 +419,34 @@ class BatchResult:
 
     def failed_items(self):
         return [i for i in self.items if i.state == FAILED]
+
+    def entradas_exitosas(self):
+        """Huella de memoria de cada item con generacion aceptada, en el
+        mismo orden del lote. Reusa _entry_desde_brief -- ni un campo nuevo
+        ni una segunda forma de construir la huella."""
+        return [_entry_desde_brief(it.content_id, it.brief, taxonomia=it.taxonomia)
+                for it in self.items if it.run is not None and it.run.ok]
+
+    def diversity_report(self):
+        """Disciplina de rotacion real del lote (visual/rotation.py).
+
+        Antes de esto, `rotation.py` tenia sus dos reglas mecanicas
+        implementadas y probadas en aislamiento, pero ningun camino de
+        ejecucion las llamaba nunca contra un lote real -- el mismo patron
+        de campo cableado a medias que ya se corrigio en `negative_space`.
+        Es diagnostico, no un gate: no bloquea, no falla el lote, no
+        decide nada; solo hace visible si el lote repite formula."""
+        return rotation.assess_batch_diversity(self.entradas_exitosas())
+
+    def variation_checks(self):
+        """Un VariationCheck por item exitoso, contra el inmediato anterior
+        del mismo lote (misma regla de `rotation.py`: minimo 3 de 5 ejes)."""
+        checks = []
+        anterior = None
+        for entrada in self.entradas_exitosas():
+            checks.append(rotation.verificar_variacion_minima(anterior, entrada))
+            anterior = entrada
+        return checks
 
 
 def run_batch(items, policy, provider, batch_id="batch-1", dry_run=False, **kw):
