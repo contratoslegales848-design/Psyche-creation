@@ -160,6 +160,34 @@ def temas(datos=None):
             for p in d["pilares"] for t in p["temas"]]
 
 
+def temas_con_rendimiento(datos=None):
+    """Los mismos temas de `temas()`, con el mismo campo
+    `_rendimiento_documentado` que usa el motor publico
+    (content/topics/rendimiento.py) -- MISMA fuente, MISMO alcance
+    declarado.
+
+    Hoy esto es honesto y poco util a la vez: el `formato_editorial` de
+    LinkedIn (POST_ANALITICO, CASO_SINTETICO, DIAGRAMA_O_CHECKLIST...) no
+    es ninguna de las formas que el inventario de Facebook cubrio con
+    cifras, asi que TODOS estos temas salen SIN_DATO_HISTORICO. Eso es
+    correcto: LinkedIn es una superficie distinta, con una audiencia
+    distinta, y no tiene historial propio todavia. Extrapolar el dato de
+    Facebook aqui seria la misma falsa universalizacion que el resto del
+    repositorio evita para el contenido juridico, aplicada al dato
+    editorial. Cuando existan cifras reales de LinkedIn, se agregan a
+    `content/topics/rendimiento.py` y esta funcion las hereda sola."""
+    import importlib
+    import sys as _sys
+    from pathlib import Path as _Path
+
+    ruta_topics = str((_Path(__file__).resolve().parent.parent / "topics"))
+    if ruta_topics not in _sys.path:
+        _sys.path.insert(0, ruta_topics)
+    rendimiento = importlib.import_module("rendimiento")
+
+    return [rendimiento.anotar(t, forma_editorial_key="formato_editorial") for t in temas(datos)]
+
+
 def cta_para(tipo_de_pieza, datos=None):
     """CTA segun la politica de Drive. Por defecto, ninguno."""
     d = datos if datos is not None else cargar_pilares()

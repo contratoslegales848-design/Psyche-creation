@@ -213,6 +213,10 @@ jobs:
         working-directory: content/linkedin
         run: python3 -m unittest test_linkedin -v
 
+      - name: Claim packets — brecha de investigacion (unittest)
+        working-directory: content/claim-packets
+        run: python3 -m unittest test_brecha_de_investigacion -v
+
       - name: Contrato canónico cross-repo
         working-directory: contract
         run: python3 -m unittest discover -p 'test_*.py' -v

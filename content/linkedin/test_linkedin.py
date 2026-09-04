@@ -75,6 +75,30 @@ class TestLosTemasVienenDeDrive(unittest.TestCase):
         self.assertEqual(len(t), len(set(t)))
 
 
+class TestRendimientoDocumentado(unittest.TestCase):
+    """LinkedIn no tiene historial propio: el dato de Facebook no se le presta."""
+
+    def test_hereda_la_misma_fuente_y_alcance_que_el_motor_publico(self):
+        sys.path.insert(0, str(AQUI.parent / "topics"))
+        import rendimiento as R
+        for t in S.temas_con_rendimiento(DATOS):
+            with self.subTest(tema=t["tema"]):
+                campo = t["_rendimiento_documentado"]
+                self.assertEqual(campo["fuente"], R.FUENTE)
+                self.assertIn("facebook", campo["alcance"].lower())
+
+    def test_ningun_tema_de_linkedin_recibe_rango_inventado(self):
+        """Los formatos de LinkedIn (POST_ANALITICO, CASO_SINTETICO...) no son
+        los que la skill cubrio con cifras de Facebook -- deben salir todos
+        sin dato, nunca con un numero adivinado."""
+        for t in S.temas_con_rendimiento(DATOS):
+            with self.subTest(tema=t["tema"]):
+                self.assertIsNone(t["_rendimiento_documentado"]["rango"])
+
+    def test_no_pierde_ni_duplica_temas(self):
+        self.assertEqual(len(S.temas_con_rendimiento(DATOS)), len(S.temas(DATOS)))
+
+
 class TestConfidencialidad(unittest.TestCase):
     """El riesgo propio del septimo pilar: nace de practica real."""
 
