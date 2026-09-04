@@ -3,6 +3,10 @@
 **Fecha:** 2026-09-03 · **Rama:** `claude/legalmente-integration-surgery-nap17t`
 **Ubicación:** `content/claim-packets/` · **Estado global:** `NOT_PUBLISHED` · 10 piezas · **13 claims** · 10/10 gates `CERRADO`
 
+> **Actualización 2026-09-04.** El directorio contiene ahora **11 piezas y 15 claims**: se añadió
+> `LM-LN-REP-001`, la primera pieza de la superficie profesional de LinkedIn. Este documento sigue
+> describiendo el lote de diez; la nueva pieza tiene su propia sección al final.
+
 Los diez temas fueron declarados por el fundador con la etiqueta «QA PASSED» y copy exacto ya
 aprobado. Ninguno lo estaba: no existían en el canon, no tenían claim packet, y los cuatro
 documentos de Drive citados como evidencia no son accesibles desde la cuenta de esta sesión.
@@ -127,3 +131,59 @@ prueba que lo impide en `scripts/test_report_blocked_packets.py`.
 
 Motivo dominante, en los 13: ninguna fuente alcanza Nivel 1 (texto no leído, vigencia no comprobada)
 y la revisión humana está `PENDIENTE`. En los cuatro monopaís se suma el alcance sin determinar.
+
+---
+
+## Primera pieza de la superficie profesional — `LM-LN-REP-001`
+
+**Fecha:** 2026-09-04 · Pilar **Representación** del banco de LinkedIn · gate `CERRADO`
+
+Tema de origen en Drive: «El puesto no prueba facultades».
+
+### El hallazgo: el tema de origen, tal como estaba redactado, es incorrecto
+
+La verificación encontró un contraejemplo decisivo en la primera jurisdicción consultada. El
+**art. 234 de la Ley de Sociedades de Capital** española extiende la representación del
+administrador a **todos los actos comprendidos en el objeto social**, y declara **ineficaces frente
+a terceros** las limitaciones de sus facultades *aunque estén inscritas* en el Registro Mercantil.
+
+Es decir: en España, para el administrador, **el cargo sí acredita representación** dentro de ese
+ámbito. La formulación amplia «el puesto no prueba facultades» es falsa al menos en uno de los tres
+ordenamientos examinados, y quedó registrada en `redaccion_prohibida`.
+
+Lo que las fuentes sí sostienen es una **distinción**, no una negación: hay dos vías por las que
+alguien puede obligar a una sociedad —la que deriva del cargo y la que deriva de un poder— y cada
+una tiene su propio alcance.
+
+### Los dos claims
+
+| Claim | Alcance | Fuentes | Estado |
+|---|---|---|---|
+| `claim-1` — dos vías de representación: la del cargo y la del poder | `CAPA_A_TRANSVERSAL` (ES · MX · AR) | LSC 234 · CCF 2554 · CCyCN 375 | `REQUIERE_INVESTIGACION` |
+| `claim-2` — un poder en términos generales no habilita actos de disposición | `CAPA_C_NACIONAL` (MX · AR) | CCF 2554 · CCyCN 375 | `REQUIERE_INVESTIGACION` |
+
+España queda **fuera** del `claim-2` a propósito: no se examinó el art. 1713 CC ni su relación con
+el art. 234 LSC. Añadirla exigiría una fuente propia.
+
+Y las técnicas mexicana y argentina **no coinciden**: el CCF exige otorgar el poder *con el carácter*
+de actos de dominio; el CCyCN exige *facultad expresa*. Presentarlas como la misma regla sería
+inexacto, y así consta en `redaccion_prohibida`.
+
+### Por qué el gate está cerrado
+
+`WebFetch` sigue bloqueado. Las tres fuentes son oficiales, con URL real, localizador concreto y
+`registro_oficial_id` coherente —`boe-es`, `diputados-gob-mx`, `infoleg-gob-ar`— pero ninguna tiene
+`texto_exacto_consultado: true`: se localizaron por `WebSearch`, no se leyeron literalmente. Sin esa
+lectura ninguna pasa de Nivel 2.
+
+La cobertura por fuentes del `claim-1` da `COBERTURA_COMPARADA_VERIFICADA` en tres jurisdicciones —
+**no universalidad panhispánica**: hay más de veinte ordenamientos hispanohablantes.
+
+Además, `confidentiality_review.required: true` en ambos claims: la superficie profesional se
+alimenta de experiencia práctica y esa revisión es obligatoria antes de producir arte, aunque el
+texto de estos claims sea conceptual.
+
+### Siguiente acción única
+
+Leer literalmente los tres artículos y comprobar su vigencia. Es lo único que separa esta pieza de
+poder someterse a revisión humana.
