@@ -95,10 +95,11 @@ def compile_request(brief, policy, family=None, capabilities=None, repetition=No
         explicacion.append(f"luminosidad: {brief.brightness_intent}")
 
     partes.append(f"Paleta: {_paleta_texto(policy)}.")
-    partes.append(
-        f"El acento azul petroleo debe proceder de un objeto fisico real de la escena: "
-        f"{brief.acento_frio_objeto}."
-    )
+    if brief.acento_frio_objeto:
+        partes.append(
+            f"El acento azul petroleo debe proceder de un objeto fisico real de la escena: "
+            f"{brief.acento_frio_objeto}."
+        )
 
     # --- marca: la politica manda, el brief pide ---
     brand_plan = build_brand_plan(policy, brief.marca_superficie,
