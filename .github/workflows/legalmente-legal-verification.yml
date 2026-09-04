@@ -125,7 +125,7 @@ jobs:
       - name: Paquetes reales del piloto deben existir, validar y tener gates coherentes
         run: |
           set -e
-          REQUIRED=("pilot/claim-packets/pieza-01-reales.json" "pilot/claim-packets/pieza-02-laboral.json" "pilot/claim-packets/pieza-03-honor.json")
+          REQUIRED=("pilot/claim-packets/pieza-01-reales.json" "pilot/claim-packets/pieza-02-laboral.json" "pilot/claim-packets/pieza-03-honor.json" "pilot/claim-packets/pieza-04-laboral-basico.json")
           fail=0
           for f in "${REQUIRED[@]}"; do
             if [ ! -f "$f" ]; then
@@ -188,6 +188,26 @@ jobs:
       - name: Todo el contenido debe declarar procedencia verificable
         working-directory: .
         run: python3 scripts/validate-content-provenance.py
+
+      - name: Claim packets reales (content/claim-packets) deben validar contra el esquema
+        working-directory: .
+        run: |
+          set -e
+          shopt -s nullglob
+          files=(content/claim-packets/*.json)
+          if [ "${#files[@]}" -eq 0 ]; then
+            echo "No se encontraron claim packets en content/claim-packets/ — nada que validar."
+            exit 0
+          fi
+          echo "Claim packets encontrados: ${#files[@]}"
+          fail=0
+          for f in "${files[@]}"; do
+            if ! python3 .claude/skills/legalmente-legal-verification/scripts/validate-claim-packet.py "$f"; then
+              echo "FALLÓ (error estructural, gate simulado o aprobación inválida): $f"
+              fail=1
+            fi
+          done
+          exit $fail
 
       - name: Instalar dependencias (solo Pillow, para el compositor)
         working-directory: .

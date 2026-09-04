@@ -22,10 +22,20 @@ from ecosystem import (  # noqa: E402
 class TestRegistroReal(unittest.TestCase):
     """Contra el repositorio real, no contra fixtures."""
 
-    def test_el_registro_real_no_tiene_hallazgos(self):
+    def test_el_registro_real_solo_tiene_el_hallazgo_ya_conocido(self):
+        """PSY-VIS-ENGINE es CANONICAL con un bloqueo real y declarado (no hay
+        credenciales de proveedor de imagen real, ver
+        visual/provider_preflight.py): eso es correcto que aparezca como
+        REVIEW_REQUIRED, no una aprobacion silenciosa. Antes, validate.py
+        tenia una excepcion hardcodeada para este objeto exacto que ocultaba
+        el hallazgo -- esta prueba fija el estado honesto para que una
+        regresion (otra excepcion silenciosa) se detecte."""
         hallazgos = validate.validate()
-        self.assertEqual(
-            [f"{f.severity} {f.code} {f.object_id}: {f.detail}" for f in hallazgos], [])
+        detalles = [f"{f.severity} {f.code} {f.object_id}: {f.detail}" for f in hallazgos]
+        self.assertEqual(detalles, [
+            "REVIEW_REQUIRED BLOCKED_YET_CANONICAL PSY-VIS-ENGINE: "
+            "declara CANONICAL con bloqueos activos: ECO-BLK-NO-REAL-PROVIDER.",
+        ])
 
     def test_ningun_objeto_declarado_esta_ausente(self):
         """Deriva documental: declarar que algo existe y que no exista."""
@@ -305,7 +315,9 @@ class TestResumen(unittest.TestCase):
     def test_el_resumen_cuenta_objetos_reales(self):
         resumen = validate.summary()
         self.assertEqual(resumen["objetos_totales"], len(registry.ALL_OBJECTS))
-        self.assertEqual(resumen["hallazgos"], 0)
+        # 1, no 0: el bloqueo real y declarado de PSY-VIS-ENGINE (ver
+        # TestRegistroReal.test_el_registro_real_solo_tiene_el_hallazgo_ya_conocido).
+        self.assertEqual(resumen["hallazgos"], 1)
 
 
 if __name__ == "__main__":

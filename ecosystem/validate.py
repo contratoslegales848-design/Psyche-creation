@@ -83,7 +83,7 @@ def _check_drift(objects) -> list[Finding]:
 def _check_blocked_not_canonical(objects) -> list[Finding]:
     findings: list[Finding] = []
     for obj in objects:
-        if obj.blockers and obj.declared_state == registry.CANONICAL and obj.object_id != "PSY-VIS-ENGINE":
+        if obj.blockers and obj.declared_state == registry.CANONICAL:
             findings.append(Finding(
                 "BLOCKED_YET_CANONICAL", REVIEW_REQUIRED, obj.object_id,
                 f"declara CANONICAL con bloqueos activos: {', '.join(obj.blockers)}."))
