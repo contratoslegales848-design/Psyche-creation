@@ -205,6 +205,10 @@ jobs:
         working-directory: content/topics
         run: python3 -m unittest test_topics -v
 
+      - name: Motor de candidatos — orden por rendimiento documentado (unittest)
+        working-directory: content/topics
+        run: python3 -m unittest test_rendimiento -v
+
       - name: Superficie LinkedIn — pilares, confidencialidad y puente al motor (unittest)
         working-directory: content/linkedin
         run: python3 -m unittest test_linkedin -v
