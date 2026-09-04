@@ -9,7 +9,7 @@ falso.
     python3 cli.py policy
     python3 cli.py validate   <artefacto.json>
     python3 cli.py dry-run    <artefacto.json> [--handoff h.json]
-    python3 cli.py simulate   <artefacto.json> [--handoff h.json] [--out DIR]
+    python3 cli.py simulate   <artefacto.json> [--handoff h.json] [--out DIR] [--live]
     python3 cli.py batch-dry-run <dir_con_artefactos>
     python3 cli.py show-receipt   <DIR> <CONTENT_ID> <GENERATION_ID>
     python3 cli.py show-history   <DIR> <CONTENT_ID>
@@ -128,6 +128,12 @@ def main(argv=None):
                            help="raiz del registro de generaciones. Por defecto, la raiz runtime "
                                 "persistente (LEGALMENTE_RUNTIME_ROOT o .runtime/visual-registry), "
                                 "nunca /tmp.")
+            s.add_argument("--live", action="store_true",
+                           help="usar el proveedor HTTP real configurado por "
+                                "LEGALMENTE_IMAGE_PROVIDER_ENDPOINT/_API_KEY en vez del proveedor "
+                                "falso. Sin esto, 'simulate' SIEMPRE genera un placeholder, "
+                                "aunque haya credenciales configuradas: nunca envia una peticion "
+                                "real sin este flag explicito.")
     s = sub.add_parser("batch-dry-run"); s.add_argument("directorio")
     s = sub.add_parser("show-receipt")
     s.add_argument("root"); s.add_argument("content_id"); s.add_argument("generation_id")
@@ -305,8 +311,21 @@ def main(argv=None):
         brief = brief_desde(vi, policy, fams)
         out_root = a.out if (a.cmd == "simulate" and a.out) else runtime_config.default_registry_root()
         reg = registry_mod.AssetRegistry(out_root) if a.cmd == "simulate" else None
+
+        provider = FakeImageProvider()
+        if a.cmd == "simulate" and getattr(a, "live", False):
+            pre = provider_preflight.preflight()
+            if pre.status != provider_preflight.READY:
+                print(f"NO SE PUEDE USAR --live: {pre.blocking_reason}")
+                print("Nada se envio a ningun proveedor. Configura "
+                      "LEGALMENTE_IMAGE_PROVIDER_ENDPOINT y LEGALMENTE_IMAGE_PROVIDER_API_KEY.")
+                return 1
+            from providers.http_provider import HttpImageProvider
+            provider = HttpImageProvider(provider_preflight.DEFAULT_PROFILE)
+            print(f"--live: usando el proveedor real ({provider_preflight.DEFAULT_PROFILE.provider_id}).")
+
         run = pipeline.generate_visual(
-            art["procedencia"], brief, policy, FakeImageProvider(), handoff=handoff,
+            art["procedencia"], brief, policy, provider, handoff=handoff,
             family=fams.get(brief.visual_family), families_version=fams.version,
             dry_run=(a.cmd == "dry-run"), registry=reg, claim_packet=claim_packet,
             reserved_surface=surface,
