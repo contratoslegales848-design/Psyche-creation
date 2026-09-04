@@ -102,6 +102,7 @@ def main(argv=None):
                     help="solo lo que LegalMente puede ejecutar AHORA sin intervencion humana.")
     s = sub.add_parser("command-center"); s.add_argument("--json", action="store_true")
     sub.add_parser("provider-preflight")
+    sub.add_parser("providers")
     sub.add_parser("provider-request")
     sub.add_parser("topology")
     s = sub.add_parser("resolve"); s.add_argument("content_id")
@@ -134,6 +135,10 @@ def main(argv=None):
                                 "falso. Sin esto, 'simulate' SIEMPRE genera un placeholder, "
                                 "aunque haya credenciales configuradas: nunca envia una peticion "
                                 "real sin este flag explicito.")
+            s.add_argument("--proveedor", default=None,
+                           help="id del perfil de proveedor a usar con --live "
+                                "(ver 'python3 cli.py providers'). Por defecto, "
+                                "generic-http-image-v1.")
     s = sub.add_parser("batch-dry-run"); s.add_argument("directorio")
     s = sub.add_parser("show-receipt")
     s.add_argument("root"); s.add_argument("content_id"); s.add_argument("generation_id")
@@ -257,6 +262,23 @@ def main(argv=None):
             print(f"  ! {b}")
         return 0 if r.production_ready else 1
 
+    if a.cmd == "providers":
+        from providers import profiles
+        for pid, estado, nota in profiles.listar():
+            cfg = profiles.cargar(pid)
+            pre = provider_preflight.preflight(cfg)
+            marca = "por defecto" if pid == profiles.POR_DEFECTO else ""
+            print(f"  {pid} {marca}")
+            print(f"    estado de verificacion : {estado}")
+            print(f"    nota                   : {nota}")
+            print(f"    endpoint configurado   : {'si' if pre.endpoint_configured else 'NO'}")
+            print(f"    credencial presente    : {'si' if pre.auth_present else 'NO'} "
+                  f"(variable {cfg.api_key_env})")
+            print(f"    preflight              : {pre.status}"
+                  + (f" — {pre.blocking_reason}" if pre.blocking_reason else ""))
+            print()
+        return 0
+
     if a.cmd == "route-avanzar":
         matriz_path = Path(a.matriz) if a.matriz else runtime_config.default_registry_root() / "route-matrix.json"
         motor = route_engine.RouteEngine.load(matriz_path)
@@ -314,15 +336,27 @@ def main(argv=None):
 
         provider = FakeImageProvider()
         if a.cmd == "simulate" and getattr(a, "live", False):
-            pre = provider_preflight.preflight()
-            if pre.status != provider_preflight.READY:
-                print(f"NO SE PUEDE USAR --live: {pre.blocking_reason}")
-                print("Nada se envio a ningun proveedor. Configura "
-                      "LEGALMENTE_IMAGE_PROVIDER_ENDPOINT y LEGALMENTE_IMAGE_PROVIDER_API_KEY.")
-                return 1
+            from providers import profiles
             from providers.http_provider import HttpImageProvider
-            provider = HttpImageProvider(provider_preflight.DEFAULT_PROFILE)
-            print(f"--live: usando el proveedor real ({provider_preflight.DEFAULT_PROFILE.provider_id}).")
+            pid = getattr(a, "proveedor", None) or profiles.POR_DEFECTO
+            try:
+                cfg = profiles.cargar(pid)
+            except ValueError as exc:
+                print(f"NO SE PUEDE USAR --live: {exc}")
+                return 1
+            pre = provider_preflight.preflight(cfg)
+            if pre.status != provider_preflight.READY:
+                print(f"NO SE PUEDE USAR --live ({pid}): {pre.blocking_reason}")
+                print("Nada se envio a ningun proveedor. Revisa "
+                      "'python3 cli.py providers' para ver que variables espera este perfil.")
+                return 1
+            estado, nota = profiles.estado_de_verificacion(pid)
+            provider = HttpImageProvider(cfg)
+            print(f"--live: usando el proveedor real ({pid}).")
+            if estado != profiles.VERIFICADO:
+                print(f"  ! PERFIL {estado}: {nota}")
+                print("  ! Si la respuesta no trae imagen, el error dira que claves SI llegaron; "
+                      "con eso se corrige response_paths en providers/profiles.py.")
 
         run = pipeline.generate_visual(
             art["procedencia"], brief, policy, provider, handoff=handoff,
