@@ -119,7 +119,61 @@ SUPERFICIES_DE_MARCA = (
     "marca de fuego", "filigrana integrada", "tampón integrado", "placa de portón",
 )
 
-FORMATO_9_16 = {"aspecto": "9:16", "ancho": 1080, "alto": 1920, "full_bleed": True}
+# Politica visual real. Las dimensiones NO se escriben aqui: se leen de
+# `visual/policy/legalmente-visual-policy-v1.json`. Antes este modulo tenia
+# `FORMATO_9_16 = {ancho: 1080, alto: 1920, ...}` a mano, asi que si la
+# politica cambiaba, el brief seguia prometiendo el formato viejo.
+POLITICA_PATH = AQUI.parent.parent / "visual" / "policy" / "legalmente-visual-policy-v1.json"
+
+# Que formato le toca a cada forma editorial, y por que. No es decoracion:
+# el formato decide cuanto texto cabe legible y como lo recorta cada feed.
+FORMATO_POR_FORMA_EDITORIAL = {
+    # Inventario cerrado y numerado: necesita altura para las lineas.
+    "LISTADO": "VERTICAL_9_16",
+    "GUIA_O_CHECKLIST": "VERTICAL_9_16",
+    "PASOS": "VERTICAL_9_16",
+    # Una sola distincion, poco texto: el cuadrado es el formato en que la
+    # pagina midio historicamente sus maximas y sus diferencias.
+    "FRASE_O_MAXIMA": "SOCIAL_1_1",
+    "DIFERENCIAS": "SOCIAL_1_1",
+    "CONCEPTO": "SOCIAL_1_1",
+    # Piezas que se leen despacio: el 4:5 ocupa mas alto de feed sin recorte.
+    "MITO": "SOCIAL_4_5",
+    "CONSECUENCIA": "SOCIAL_4_5",
+    "ERROR_FRECUENTE": "SOCIAL_4_5",
+    "PREGUNTA_COMUN": "SOCIAL_4_5",
+    "SITUACION_HUMANA": "SOCIAL_4_5",
+    "APRENDIZAJE": "SOCIAL_4_5",
+    "REFLEXION": "SOCIAL_4_5",
+    # Superficie profesional: el feed de LinkedIn recorta el vertical.
+    "PRESENTACION_INSTITUCIONAL": "HORIZONTAL_16_9",
+}
+FORMATO_POR_DEFECTO = "SOCIAL_4_5"
+
+
+def cargar_formatos(path=None):
+    p = Path(path) if path else POLITICA_PATH
+    return json.loads(p.read_text(encoding="utf-8"))["formatos"]
+
+
+def formato_para(forma_editorial, formatos=None):
+    """(nombre, dimensiones) del formato que le toca a esta forma editorial.
+
+    Si la forma no esta mapeada, cae en FORMATO_POR_DEFECTO en vez de
+    inventar dimensiones. Si el formato mapeado no existe en la politica,
+    lanza KeyError: es un error de configuracion, no algo que se deba
+    silenciar sirviendo un formato que nadie eligio.
+    """
+    fmts = formatos if formatos is not None else cargar_formatos()
+    nombre = FORMATO_POR_FORMA_EDITORIAL.get(forma_editorial, FORMATO_POR_DEFECTO)
+    if nombre not in fmts:
+        raise KeyError(
+            f"la politica visual no define el formato {nombre!r} "
+            f"(pedido por la forma editorial {forma_editorial!r}). "
+            f"Definidos: {sorted(fmts)}")
+    d = fmts[nombre]
+    return nombre, {"aspecto": d["aspect_ratio"], "ancho": d["width"],
+                    "alto": d["height"], "full_bleed": d.get("full_bleed", True)}
 
 
 def cargar_familias(path=None):
@@ -177,6 +231,7 @@ def construir_brief(tema, familias=None):
     micro = micros[_indice_estable(tema["id"] + "m", len(micros))]
     superficie = SUPERFICIES_DE_MARCA[
         _indice_estable(tema["id"] + "s", len(SUPERFICIES_DE_MARCA))]
+    nombre_formato, dimensiones = formato_para(formato)
 
     prompt_animacion = (
         "Animar esta imagen de LegalMente respetando por completo su composición y "
@@ -227,7 +282,12 @@ def construir_brief(tema, familias=None):
             "conexion_juridica": tema.get("conexion_juridica", ""),
         },
         "imagen": {
-            **FORMATO_9_16,
+            **dimensiones,
+            "formato": nombre_formato,
+            "_por_que_este_formato": (
+                "elegido por la forma editorial, no por defecto: decide cuanto "
+                "texto cabe legible y como recorta cada feed "
+                "(content/topics/brief.py: FORMATO_POR_FORMA_EDITORIAL)"),
             "familia_visual": familia,
             "escena": "una sola escena; nunca collage, grid, mosaico ni storyboard",
             "paleta": list(PALETA),

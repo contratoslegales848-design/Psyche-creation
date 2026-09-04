@@ -43,9 +43,36 @@ sys.path.insert(0, str(REPO / "visual"))
 
 PILARES_PATH = AQUI / "pilares-v1.json"
 
-# El formato de LinkedIn en el feed. Ya estaba declarado en la politica visual
-# (visual/policy/legalmente-visual-policy-v1.json): no se añade ninguno.
-FORMATO_LINKEDIN = "SOCIAL_4_5"
+# Formatos de LinkedIn. Todos declarados ya en la politica visual
+# (visual/policy/legalmente-visual-policy-v1.json): aqui no se añade ninguno,
+# solo se elige.
+#
+# Antes esto era una sola constante SOCIAL_4_5 para los 7 pilares: un unico
+# formato para un post analitico, un diagrama y una nota tecnica, que no se
+# leen igual ni se recortan igual en el feed.
+FORMATO_LINKEDIN = "SOCIAL_4_5"          # por defecto, si el pilar no mapea
+
+FORMATO_POR_FORMATO_EDITORIAL = {
+    # Un diagrama o un checklist necesita alto: son varias filas legibles.
+    "DIAGRAMA_O_CHECKLIST": "VERTICAL_9_16",
+    # Texto denso que se lee despacio: el 4:5 ocupa mas alto de feed sin recorte.
+    "POST_ANALITICO": "SOCIAL_4_5",
+    "NOTA_TECNICA": "SOCIAL_4_5",
+    "CASO_SINTETICO": "SOCIAL_4_5",
+    # Comparar dos columnas pide ancho, no alto.
+    "ANALISIS_COMPARATIVO": "HORIZONTAL_16_9",
+    # Portada de articulo: el feed la muestra entera en horizontal.
+    "ARTICULO": "HORIZONTAL_16_9",
+}
+
+
+def formato_para(formato_editorial):
+    """Nombre del formato visual que le toca a este formato editorial.
+
+    No decide nada mas: las dimensiones las resuelve la politica visual, y
+    la familia visual sigue viniendo del pilar."""
+    return FORMATO_POR_FORMATO_EDITORIAL.get(
+        str(formato_editorial or "").strip().upper(), FORMATO_LINKEDIN)
 
 # Clasificacion obligatoria de cada afirmacion. Es lo que impide que la
 # experiencia profesional se publique como si fuera norma.
@@ -266,7 +293,7 @@ def construir_brief(tema, escena, datos=None):
 
     return VisualBrief(
         content_id=tema.get("content_id", ""),
-        formato=FORMATO_LINKEDIN,
+        formato=formato_para(tema.get("formato_editorial")),
         visual_family=familia,
         subject=escena["subject"],
         environment=escena["environment"],
@@ -307,7 +334,7 @@ def evaluar_pieza(pieza, datos=None):
         "id": pieza.get("id"),
         "pilar_id": pieza.get("pilar_id"),
         "superficie": d["superficie"],
-        "formato_visual": FORMATO_LINKEDIN,
+        "formato_visual": formato_para(pieza.get("formato_editorial")),
         "afirmaciones": afirmaciones,
         "afirmaciones_con_autoridad": sum(1 for a in afirmaciones if a["puede_sostener_derecho"]),
         "cta": cta_para(pieza.get("tipo_de_pieza", ""), d),

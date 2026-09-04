@@ -75,6 +75,33 @@ class TestLosTemasVienenDeDrive(unittest.TestCase):
         self.assertEqual(len(t), len(set(t)))
 
 
+class TestVariedadDeFormato(unittest.TestCase):
+    """Antes los 7 pilares salian todos en SOCIAL_4_5: un post analitico, un
+    diagrama y un analisis comparativo con el mismo lienzo."""
+
+    def test_no_todos_los_pilares_usan_el_mismo_formato(self):
+        usados = {S.formato_para(p["formato_editorial"]) for p in DATOS["pilares"]}
+        self.assertGreater(len(usados), 1, f"todos los pilares en un solo formato: {usados}")
+
+    def test_todo_formato_elegido_existe_en_la_politica_visual(self):
+        """No se inventa ningun formato: se eligen los que la politica ya declara."""
+        politica = json.loads(
+            (AQUI.parent.parent / "visual" / "policy" /
+             "legalmente-visual-policy-v1.json").read_text(encoding="utf-8"))["formatos"]
+        for p in DATOS["pilares"]:
+            with self.subTest(pilar=p["id"]):
+                self.assertIn(S.formato_para(p["formato_editorial"]), politica)
+        self.assertIn(S.FORMATO_LINKEDIN, politica)
+
+    def test_un_formato_editorial_desconocido_cae_en_el_por_defecto(self):
+        self.assertEqual(S.formato_para("ALGO_QUE_NO_EXISTE"), S.FORMATO_LINKEDIN)
+
+    def test_el_diagrama_pide_alto_y_el_comparativo_pide_ancho(self):
+        """La eleccion responde a como se lee la pieza, no es aleatoria."""
+        self.assertEqual(S.formato_para("DIAGRAMA_O_CHECKLIST"), "VERTICAL_9_16")
+        self.assertEqual(S.formato_para("ANALISIS_COMPARATIVO"), "HORIZONTAL_16_9")
+
+
 class TestRendimientoDocumentado(unittest.TestCase):
     """LinkedIn no tiene historial propio: el dato de Facebook no se le presta."""
 

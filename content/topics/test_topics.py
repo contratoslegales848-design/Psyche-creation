@@ -238,12 +238,43 @@ class TestBriefNoAutorizaNada(unittest.TestCase):
                 self.assertIn(b["imagen"]["marca"]["superficie_sugerida"],
                               B.SUPERFICIES_DE_MARCA)
 
-    def test_el_formato_es_vertical_de_una_sola_escena(self):
+    def test_el_formato_sale_de_la_politica_y_es_de_una_sola_escena(self):
+        """El formato ya NO es 9:16 fijo: lo elige la forma editorial, porque
+        un listado numerado y una maxima de una linea no necesitan el mismo
+        alto ni los recorta igual el feed.
+
+        Lo que sigue siendo invariante, y es lo que esta prueba protege: las
+        dimensiones vienen de la politica visual real (no escritas a mano en
+        este modulo, que era el defecto anterior) y la escena es una sola,
+        nunca collage."""
+        formatos = B.cargar_formatos()
         for b in self.briefs:
             with self.subTest(tema=b["tema_id"]):
-                self.assertEqual(b["imagen"]["aspecto"], "9:16")
-                self.assertEqual((b["imagen"]["ancho"], b["imagen"]["alto"]), (1080, 1920))
+                nombre = b["imagen"]["formato"]
+                self.assertIn(nombre, formatos, "el formato tiene que existir en la politica")
+                declarado = formatos[nombre]
+                self.assertEqual(b["imagen"]["aspecto"], declarado["aspect_ratio"])
+                self.assertEqual((b["imagen"]["ancho"], b["imagen"]["alto"]),
+                                 (declarado["width"], declarado["height"]))
                 self.assertIn("collage", b["imagen"]["escena"])
+
+    def test_el_lote_no_usa_un_solo_formato(self):
+        """El motivo del cambio: 24 candidatos con el mismo formato producen
+        un feed uniforme. Si alguien vuelve a fijarlo, esto lo detecta."""
+        usados = {b["imagen"]["formato"] for b in self.briefs}
+        self.assertGreater(len(usados), 1, f"el lote entero salio en un solo formato: {usados}")
+
+    def test_una_forma_editorial_sin_mapear_no_inventa_dimensiones(self):
+        """Cae al formato por defecto declarado, nunca a un tamano inventado."""
+        nombre, dims = B.formato_para("FORMA_QUE_NO_EXISTE")
+        self.assertEqual(nombre, B.FORMATO_POR_DEFECTO)
+        self.assertEqual(dims["ancho"], B.cargar_formatos()[B.FORMATO_POR_DEFECTO]["width"])
+
+    def test_un_formato_mapeado_pero_ausente_de_la_politica_falla_claro(self):
+        """Silenciarlo serviria un formato que nadie eligio."""
+        with self.assertRaises(KeyError):
+            B.formato_para("LISTADO", formatos={"OTRO": {"aspect_ratio": "1:1",
+                                                         "width": 1, "height": 1}})
 
     def test_un_tema_no_transversal_no_recibe_brief(self):
         """Producir arte para un tema que habrá que reclasificar es gasto tirado."""
