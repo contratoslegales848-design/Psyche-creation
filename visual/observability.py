@@ -12,6 +12,10 @@ EVENTOS = (
     "visual.prompt.compiled", "visual.provider.selected", "visual.generation.started",
     "visual.generation.completed", "visual.generation.failed", "visual.qa.completed",
     "visual.regeneration.created", "visual.batch.completed",
+    # Zona tipografica reservada en el prompt antes de generar. Se registra
+    # porque cambia lo que se le pide al proveedor: sin traza, un cambio de banda
+    # seria indistinguible de un cambio de arte.
+    "visual.negative_space.derived",
 )
 
 # Claves que jamas se registran, aunque alguien las pase por descuido.

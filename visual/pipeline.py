@@ -9,11 +9,12 @@ Ningun camino de este archivo produce APROBADO_PARA_PRODUCCION. El mejor
 desenlace posible es PENDIENTE_REVISION_HUMANA.
 """
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 
 import gates
 import receipts as receipts_mod
 from composition import build_typography_plan, ExactCopyViolation
+from brief import PolicyError
 from compiler import compile_request
 from compositor import CompositionError, CompositionOverflow, compose, composition_qa
 from inspection import NoopSemanticInspector, FAIL, NEEDS_HUMAN_REVIEW
@@ -90,6 +91,46 @@ def _receipt_base(procedencia, brief, policy, families_version=""):
     )
 
 
+def _zona_ocupada_por_el_texto(typo, width, height):
+    """Banda que el texto ocupara de verdad, en porcentaje de la altura.
+
+    Se calcula desde los bloques reales del plan —cuantas lineas y de que
+    tamano— y NO desde `safe_area`. La distincion importa: el safe_area de una
+    pieza 9:16 cubre casi todo el lienzo (153..1767 de 1920), asi que usarlo
+    equivaldria a pedirle al generador que dejara vacia el 89 % de la imagen. Eso
+    no reserva una zona: mata la escena.
+
+    El interlineado se toma alto a proposito. Reservar de mas cuesta un poco de
+    escena; reservar de menos deja texto sobre un objeto, que es justo el defecto
+    que esto corrige.
+    """
+    INTERLINEADO = 1.45          # cota superior, no medida exacta
+    SEPARACION_ENTRE_BLOQUES = 28
+
+    _sx, sy, _sw, sh = typo.safe_area
+    alto_texto = 0
+    for i, b in enumerate(typo.blocks or []):
+        lineas = len(getattr(b, "lines", None) or (b.get("lines") if isinstance(b, dict) else []) or [])
+        tam = getattr(b, "size_px", None) or (b.get("size_px") if isinstance(b, dict) else 0) or 0
+        if not lineas or not tam:
+            continue
+        alto_texto += int(lineas * tam * INTERLINEADO)
+        if i:
+            alto_texto += SEPARACION_ENTRE_BLOQUES
+
+    if not alto_texto:
+        # Sin metricas de bloque no se inventa una banda estrecha: se declara que
+        # no se pudo derivar y el prompt se queda como estaba.
+        return None
+
+    y0 = sy
+    y1 = min(sy + alto_texto, sy + sh)
+    alto = max(height, 1)
+    inicio = max(0, int(100 * y0 / alto) - 2)
+    fin = min(100, int(100 * y1 / alto) + 3)
+    return 0, inicio, 100, max(fin - inicio, 1)
+
+
 def generate_visual(procedencia, brief, policy, provider, handoff=None,
                     memory=None, known_hashes=(), family=None, repetition=None,
                     inspector=None, dry_run=False, registry=None,
@@ -121,6 +162,44 @@ def generate_visual(procedencia, brief, policy, provider, handoff=None,
     # hecha, se calcula aqui. Antes este parametro se transportaba sin usarse.
     if repetition is None and memory is not None:
         repetition = memory.assess(_entry_desde_brief(base["content_id"], brief, taxonomia=taxonomia))
+
+    # 1c. Zona tipografica reservada, ANTES de compilar.
+    #
+    # El defecto que esto corrige: el plan tipografico se calculaba en el paso 8,
+    # despues de generar la imagen, asi que el prompt nunca sabia donde iba a caer
+    # el texto juridico. El generador colocaba objetos, luz y detalle justo ahi, y
+    # la copia exacta acababa montada sobre una zona ocupada. En la practica es la
+    # causa mas frecuente de "la imagen no salio bien": no es que el arte sea malo,
+    # es que compite con el texto que tiene que sostener.
+    #
+    # 'negative_space' ya existia en el brief y el compilador ya lo emitia al
+    # prompt (compiler.py). Simplemente nadie lo rellenaba nunca: ni brief_desde(),
+    # ni el brief revisado por un humano de GEN3. Aqui se deriva del layout REAL,
+    # no de una estimacion: mismas dimensiones, mismo texto exacto, misma funcion
+    # que compondra despues.
+    #
+    # Si el brief ya trae un negative_space escrito a mano, se respeta: la
+    # direccion de arte humana manda sobre la derivacion automatica.
+    if exact_copy and not brief.negative_space:
+        try:
+            _f = policy.formato(brief.formato)
+            _typo_previo = build_typography_plan(
+                exact_copy, author, _f["width"], _f["height"], content_type=content_type)
+            _zona = _zona_ocupada_por_el_texto(_typo_previo, _f["width"], _f["height"])
+            if _zona is None:
+                raise ValueError("no se pudo derivar la zona tipografica")
+            _x, _y, _w, _h = _zona
+            brief = replace(brief, negative_space=(
+                f"la banda entre el {_y}% y el {_y + _h}% de la altura, de borde a "
+                f"borde, queda en calma: fondo continuo, sin objetos, sin bordes "
+                f"marcados y sin foco. Ahi se compone despues el texto juridico y "
+                f"debe leerse sin competir con la escena"))
+            log.emit("visual.negative_space.derived", content_id=base["content_id"],
+                     banda=f"{_y}%-{_y + _h}%")
+        except (ExactCopyViolation, PolicyError, KeyError, ValueError):
+            # Derivar la zona es una mejora, no un requisito: si falla, el pipeline
+            # sigue exactamente como antes en vez de bloquear una generacion.
+            pass
 
     # 2. Compilacion.
     caps = provider.capabilities()
