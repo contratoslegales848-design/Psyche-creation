@@ -205,6 +205,14 @@ jobs:
         working-directory: content/topics
         run: python3 -m unittest test_topics -v
 
+      - name: Cola de aprobación — preparar nunca es aprobar (unittest)
+        working-directory: approval
+        run: python3 -m unittest discover -p 'test_*.py' -v
+
+      - name: Superficie profesional — clasificación y confidencialidad (unittest)
+        working-directory: surfaces
+        run: python3 -m unittest discover -p 'test_*.py' -v
+
       - name: Contrato canónico cross-repo
         working-directory: contract
         run: python3 -m unittest discover -p 'test_*.py' -v
