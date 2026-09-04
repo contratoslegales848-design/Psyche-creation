@@ -1,0 +1,153 @@
+{
+  "version": "1.0",
+  "fecha": "2026-09-04",
+  "superficie": "LINKEDIN_PROFESIONAL",
+  "_procedencia": "Drive — «LegalMente — Artefacto 05: LinkedIn Strategy» (1GWyYAZ2T7x__I-FqmRsDrbaEC7IXloo2Ycq3tcWc_I0), incluidas sus ampliaciones del 2 y 3 de septiembre de 2026. Los pilares, audiencias, promesas y el banco editorial se transcriben de ahí; NO se inventan aquí. Si el documento cambia, este archivo queda desactualizado y se corrige contra él, nunca al revés.",
+  "_clasificacion_de_la_fuente": "El cuerpo de la estrategia está clasificado en Drive como PROPUESTA / HIPÓTESIS (autor: Manus AI, documento no canónico). La ampliación de experiencia profesional está clasificada como HECHO DOCUMENTADO / BANCO DE CONOCIMIENTO. Esa diferencia se conserva: un pilar no es una afirmación jurídica ni una decisión del fundador.",
+  "_lo_que_este_archivo_no_es": "No es una autorización de publicación, no abre gates, no acredita ninguna afirmación jurídica y no sustituye la verificación por jurisdicción y vigencia. Un tema de este banco necesita el mismo claim packet y la misma revisión humana que cualquier pieza pública.",
+
+  "posicionamiento": "Abogado corporativo que traduce contratos, representación, gobierno corporativo, due diligence, evidencia documental, IA y riesgo en decisiones de negocio. Voz más sobria y selectiva que la superficie pública.",
+
+  "regla_de_privacidad": {
+    "prohibido": ["nombres de empresas", "clientes", "escrituras", "notarías", "fechas operativas", "montos", "cláusulas textuales", "datos bancarios", "estrategias internas", "nombres de proyectos"],
+    "obligatorio": "casos sintéticos o lenguaje anonimizado",
+    "atribucion": "solo se atribuyen competencias expresamente respaldadas por el documento fuente; las conclusiones jurídicas y la legislación aplicable requieren verificación de jurisdicción y vigencia",
+    "_nota": "Los nombres de proyectos reales citados en Drive NO se transcriben a este repositorio, que es público. La detección se hace por patrón —nombre propio compuesto, importe, expediente— y no por lista literal, precisamente para no traer aquí lo que hay que mantener fuera."
+  },
+
+  "politica_de_cta": {
+    "ANALISIS_DE_AUTORIDAD": "SIN_CTA",
+    "CHECKLIST_EDUCATIVO": "SOFT_CTA",
+    "PRODUCTO": "PRODUCT_CTA_SOLO_CON_PREFLIGHT_OPERATIVO",
+    "PROFESIONAL": "PROFESSIONAL_CTA_SOLO_CON_RUTA_TERRITORIAL_RESPONSABLE_Y_TERMINOS",
+    "_por_defecto": "SIN_CTA",
+    "_regla": "Hasta que exista preflight operativo, LinkedIn construye autoridad y aprende qué problemas generan conversación cualificada, sin abrir consultas por mensaje directo."
+  },
+
+  "pilares": [
+    {
+      "id": "LN-P1-CONTRATOS",
+      "nombre": "Contratos",
+      "audiencia": "founders, compras, operaciones",
+      "promesa": "detectar fricción antes de firmar",
+      "formato_editorial": "POST_ANALITICO",
+      "familia_visual_sugerida": "oleo_clasico_institucional",
+      "temas": [
+        "El contrato perfecto sobre una operación inexistente",
+        "Contratos de adhesión y margen real de negociación",
+        "NDA simple frente a NDA con propiedad intelectual",
+        "La cláusula penal como señal de alerta",
+        "Plazo y supervivencia de obligaciones",
+        "Anexos que vuelven incompleto un contrato",
+        "El contrato marco replicable",
+        "Del contrato a la decisión de negocio"
+      ]
+    },
+    {
+      "id": "LN-P2-REPRESENTACION",
+      "nombre": "Representación",
+      "audiencia": "directivos, secretarías corporativas",
+      "promesa": "saber quién puede obligar",
+      "formato_editorial": "DIAGRAMA_O_CHECKLIST",
+      "familia_visual_sugerida": "basalt_and_gold_leaf",
+      "temas": [
+        "El puesto no prueba facultades",
+        "Poder vigente no es lo mismo que papel firmado",
+        "Quién puede firmar por una sociedad",
+        "La firma no cura la falta de autoridad",
+        "Poderes y revocación",
+        "Un poder describe facultades y límites; el cargo por sí solo no prueba representación"
+      ]
+    },
+    {
+      "id": "LN-P3-DUE-DILIGENCE",
+      "nombre": "Due diligence",
+      "audiencia": "inversión, inmobiliario, corporativo",
+      "promesa": "verificar antes de confiar",
+      "formato_editorial": "CASO_SINTETICO",
+      "familia_visual_sugerida": "claroscuro_de_museo",
+      "temas": [
+        "Qué revisar en una contraparte",
+        "Due diligence de proveedor",
+        "Cómo preparar una revisión externa",
+        "La due diligence crea una línea base: documentar lo observado evita confundir problemas preexistentes con decisiones posteriores",
+        "Due diligence inmobiliario: verificar antes de diseñar y prometer"
+      ]
+    },
+    {
+      "id": "LN-P4-EVIDENCIA",
+      "nombre": "Evidencia",
+      "audiencia": "finanzas, compliance, litigio preventivo",
+      "promesa": "documentar la operación real",
+      "formato_editorial": "NOTA_TECNICA",
+      "familia_visual_sugerida": "foto_impasto",
+      "temas": [
+        "Evidencia de entrega",
+        "Materialidad y soporte de la operación",
+        "Trazabilidad de versiones",
+        "Rendición de cuentas y separación entre autorizar un gasto y manejar los fondos",
+        "Documentación para comité"
+      ]
+    },
+    {
+      "id": "LN-P5-IA",
+      "nombre": "IA aplicada a legal",
+      "audiencia": "legal ops, dirección, compliance",
+      "promesa": "automatizar sin delegar juicio",
+      "formato_editorial": "ANALISIS_COMPARATIVO",
+      "familia_visual_sugerida": "neo_editorial_dark_luxury",
+      "temas": [
+        "IA que explica pero no aprueba",
+        "Qué no subir a una herramienta",
+        "El riesgo de confiar en un resumen",
+        "Cuándo detener la automatización"
+      ]
+    },
+    {
+      "id": "LN-P6-GOBIERNO-CORPORATIVO",
+      "nombre": "Gobierno corporativo",
+      "audiencia": "accionistas y administradores",
+      "promesa": "separar propiedad, administración y firma",
+      "formato_editorial": "ARTICULO",
+      "familia_visual_sugerida": "oleo_narrativo",
+      "temas": [
+        "Dueño, administrador y representante",
+        "Objeto social y actividad real",
+        "El contrato de dirección distribuye autoridad, responsabilidad y evidencia",
+        "La independencia profesional necesita obligaciones claras de información, pago, poderes y rendición de cuentas"
+      ]
+    },
+    {
+      "id": "LN-P7-OPERACIONES-INMOBILIARIAS",
+      "nombre": "Arquitectura jurídica de operaciones inmobiliarias",
+      "audiencia": "desarrolladores, dirección de proyecto, inversión inmobiliaria",
+      "promesa": "sostener una línea de certeza desde la tierra hasta la última escritura",
+      "formato_editorial": "CASO_SINTETICO",
+      "familia_visual_sugerida": "hiperrealismo_editorial_cinematografico",
+      "_origen": "Pilar añadido el 2026-09-02 desde experiencia jurídico-operativa documentada. Es el único pilar que nace de práctica real, y por eso el que más exige anonimización.",
+      "temas": [
+        "Un desarrollo inmobiliario no empieza con el contrato",
+        "Tener escritura no significa que puedas desarrollar",
+        "Fraccionar, urbanizar y escriturar no son lo mismo",
+        "Las dos vidas de un residencial: la física y la jurídica",
+        "Por qué el abogado debe entrar antes de comprar la tierra",
+        "Del predio matriz al lote individualizado",
+        "El proyecto ejecutivo como puente entre autorización y obra",
+        "Marketing no puede prometer más de lo que el proyecto sostiene jurídicamente",
+        "Pagar un lote no siempre significa que ya pueda escriturarse",
+        "El contrato es un nodo del proyecto, no el proyecto completo",
+        "La matriz de permisos como mapa de dependencias, no como lista burocrática",
+        "La comunidad jurídica después de vender: reglamentos, cuotas, áreas comunes y administración"
+      ]
+    }
+  ],
+
+  "cadena_maestra_inmobiliaria": [
+    "INMUEBLE", "DUE_DILIGENCE", "VIABILIDAD_URBANA_Y_AMBIENTAL", "ADQUISICION_O_CONTROL",
+    "ESTRUCTURA_CORPORATIVA", "MASTER_PLAN", "FACTIBILIDADES",
+    "AUTORIZACION_DEL_DESARROLLO", "PROYECTO_EJECUTIVO", "LICENCIAS",
+    "INDIVIDUALIZACION", "COMERCIALIZACION", "URBANIZACION_O_CONSTRUCCION",
+    "TERMINACION_Y_RECEPCION", "ESCRITURACION", "ENTREGA", "COMUNIDAD_Y_POSTVENTA"
+  ],
+  "_nota_cadena": "Cada fase tiene dependencias propias. Urbanizar no es fraccionar; fraccionar no es escriturar; vender no significa que el lote ya pueda transmitirse. Las exigencias concretas cambian por estado, municipio, tipo de desarrollo y características del predio: es material de Capa C y exige verificación territorial antes de convertirse en afirmación."
+}
