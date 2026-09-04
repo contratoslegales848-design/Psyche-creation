@@ -17,6 +17,7 @@ from pathlib import Path
 AQUI = Path(__file__).resolve().parent
 sys.path.insert(0, str(AQUI))
 
+import brief as B  # noqa: E402
 import rendimiento as R  # noqa: E402
 import transversality as T  # noqa: E402
 
@@ -138,6 +139,30 @@ class TestContraElCatalogoReal(unittest.TestCase):
         idx_mito = next(i for i, f in enumerate(formas_en_orden) if f == "MITO")
         idx_concepto = next(i for i, f in enumerate(formas_en_orden) if f == "CONCEPTO")
         self.assertLess(idx_mito, idx_concepto)
+
+
+class TestIntegracionConBrief(unittest.TestCase):
+    """El brief lleva el dato de rendimiento, pero sigue sin ejecutar nada."""
+
+    def test_cada_brief_lleva_la_anotacion_de_rendimiento(self):
+        for b in B.construir_todos():
+            self.assertIn("_rendimiento_documentado", b)
+            self.assertEqual(b["_rendimiento_documentado"]["fuente"], R.FUENTE)
+
+    def test_construir_todos_prioriza_por_rendimiento(self):
+        """El primer brief con dato historico debe tener el mejor rango
+        disponible en el catalogo real, no cualquier orden del archivo."""
+        briefs = B.construir_todos()
+        con_dato = [b for b in briefs
+                    if b["_rendimiento_documentado"]["rango"] is not None]
+        self.assertTrue(con_dato)
+        rangos = [b["_rendimiento_documentado"]["rango"] for b in con_dato]
+        self.assertEqual(rangos, sorted(rangos))
+
+    def test_la_anotacion_no_afloja_ningun_gate(self):
+        for b in B.construir_todos():
+            self.assertEqual(b["gate_arte"], "CERRADO")
+            self.assertFalse(b["ejecutable"])
 
 
 if __name__ == "__main__":

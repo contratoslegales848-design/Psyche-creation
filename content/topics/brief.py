@@ -24,6 +24,7 @@ Sin red. Determinista: el mismo tema produce siempre el mismo brief.
 import json
 from pathlib import Path
 
+import rendimiento as R
 import transversality as T
 
 AQUI = Path(__file__).resolve().parent
@@ -278,6 +279,9 @@ def construir_brief(tema, familias=None):
             "advertencia_del_tema": tema["advertencia"],
             "riesgo_de_deriva_nacional": tema["riesgo_de_deriva_nacional"],
         },
+        # No decide nada de esto: solo informa a la revision humana con el
+        # patron historico documentado (ver content/topics/rendimiento.py).
+        "_rendimiento_documentado": R.anotar(tema)["_rendimiento_documentado"],
         # Invariantes. Una ficha de investigación no autoriza nada.
         "ejecutable": False,
         "etapa_del_pipeline": ETAPA_DE_ESTE_MODULO,
@@ -293,8 +297,8 @@ def construir_brief(tema, familias=None):
 
 def construir_todos(path=None):
     fams = cargar_familias()
-    return [construir_brief(t, fams)
-            for t in T.cargar_catalogo(path).get("temas", [])]
+    temas = R.ordenar_por_rendimiento(T.cargar_catalogo(path).get("temas", []))
+    return [construir_brief(t, fams) for t in temas]
 
 
 def main(argv=None):
