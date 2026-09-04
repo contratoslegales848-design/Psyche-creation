@@ -13,6 +13,7 @@ falso.
     python3 cli.py batch-dry-run <dir_con_artefactos>
     python3 cli.py show-receipt   <DIR> <CONTENT_ID> <GENERATION_ID>
     python3 cli.py show-history   <DIR> <CONTENT_ID>
+    python3 cli.py route-avanzar  <CONTENT_ID> [--categoria C] [--formato F] [--matriz ruta.json]
 """
 
 import argparse
@@ -29,6 +30,8 @@ import inventory
 import pipeline
 import provider_preflight
 import resolver
+import route_engine
+import route_sync
 import runtime_config
 import topology
 import registry as registry_mod
@@ -102,6 +105,14 @@ def main(argv=None):
     sub.add_parser("provider-request")
     sub.add_parser("topology")
     s = sub.add_parser("resolve"); s.add_argument("content_id")
+    s = sub.add_parser("route-avanzar")
+    s.add_argument("content_id")
+    s.add_argument("--categoria", default=None,
+                   help="categoria de nodo elegida explicitamente; por defecto, la siguiente natural.")
+    s.add_argument("--formato", default="NO_ASIGNADO")
+    s.add_argument("--matriz", default=None,
+                   help="ruta al JSON de la matriz de rutas persistida; por defecto, la raiz "
+                        "runtime persistente (LEGALMENTE_RUNTIME_ROOT o .runtime/visual-registry).")
     for c in ("validate", "dry-run", "simulate"):
         s = sub.add_parser(c)
         s.add_argument("artefacto")
@@ -239,6 +250,20 @@ def main(argv=None):
         for b in r.blocking:
             print(f"  ! {b}")
         return 0 if r.production_ready else 1
+
+    if a.cmd == "route-avanzar":
+        matriz_path = Path(a.matriz) if a.matriz else runtime_config.default_registry_root() / "route-matrix.json"
+        motor = route_engine.RouteEngine.load(matriz_path)
+        resolution, filas = route_sync.avanzar_desde_content_id(
+            motor, a.content_id, categoria_elegida=a.categoria, formato=a.formato)
+        motor.save(matriz_path)
+        print(f"  content_id : {a.content_id}")
+        print(f"  matriz     : {matriz_path}")
+        for fila in filas:
+            print(f"  nodo_actual        : {fila['nodo_actual']}")
+            print(f"  siguiente_vinculo  : {fila['siguiente_vinculo']}")
+            print(f"  proxima_accion     : {fila['proxima_accion']}")
+        return 0
 
     if a.cmd == "families":
         for n in fams.names():
