@@ -237,6 +237,10 @@ jobs:
         working-directory: content/claim-packets
         run: python3 -m unittest test_brecha_de_investigacion -v
 
+      - name: Almacén canónico — fail-closed, RLS y seed sintético (unittest)
+        working-directory: store
+        run: python3 -m unittest discover -p 'test_*.py' -v
+
       - name: Contrato canónico cross-repo
         working-directory: contract
         run: python3 -m unittest discover -p 'test_*.py' -v
