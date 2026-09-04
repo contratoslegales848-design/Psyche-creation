@@ -26,18 +26,37 @@ contenido básico, sólido, investigado, que alimente ese motor.
 
 Hay dos capas de contenido jurídico, y el orden de producción importa:
 
-1. **Lo básico transversal** (≈ Capa A del sistema de neutralidad jurisdiccional,
-   CLAUDE.md §4): definiciones y conceptos que son esencialmente los mismos en
-   cualquier jurisdicción panhispánica porque nacen de la misma lógica jurídica —
-   qué es un hecho ilícito penal, qué es la patria potestad, qué es un contrato,
-   qué es una prescripción. Estos son los cimientos: producirlos primero.
+1. **Lo básico candidato a transversal** (≈ Capa A): conceptos que la tradición
+   jurídica hispanohablante comparte en su **estructura**, y de los que se
+   *sospecha* —no se afirma— que la distinción se sostiene en varias
+   jurisdicciones. Son los cimientos: investigarlos primero.
+
+   **Corrección 2026-09-04.** La redacción anterior decía que estos conceptos
+   «son esencialmente los mismos en cualquier jurisdicción panhispánica» y ponía
+   como ejemplos la patria potestad, el contrato, la prescripción y el hecho
+   ilícito penal. Eso era una afirmación jurídica sobre más de veinte
+   ordenamientos, escrita sin una sola fuente — justo el error que este documento
+   existe para impedir, cometido en su propia definición.
+
+   Y los cuatro ejemplos eran de los peores posibles: **patria potestad,
+   prescripción, contrato y hecho ilícito penal son instituciones de derecho
+   positivo**, no categorías lógicas. Su contenido, sus requisitos, su titularidad
+   y su extinción los fija cada legislador. Que compartan raíz romana no las hace
+   iguales: la patria potestad ha sido sustituida en varios ordenamientos por
+   figuras de responsabilidad parental con contenido distinto, y la prescripción
+   difiere no solo en plazos sino en si extingue el derecho o solo la acción.
+
+   Lo que sí puede sostenerse como candidato transversal es más modesto y más
+   sólido: **la distinción entre figuras** (poseer frente a tener; nulidad frente
+   a anulabilidad; dolo frente a culpa), no la definición de cada institución. Una
+   distinción se explica sin cifras; una institución no.
 2. **Lo que se ramifica** (≈ Capas B y C): multas, plazos, procedimientos,
    cuantías, tribunales — todo lo que varía por país o requiere una cifra/artículo
    verificable. Esto se alimenta después, con más tiempo, y siempre con
    verificación jurídica caso por caso (nunca se salta la skill
    `legalmente-legal-verification`).
 
-Enfoque actual: agotar lo básico universal en las materias con más vacío antes de
+Enfoque actual: agotar lo básico candidato a transversal en las materias con más vacío antes de
 profundizar en ramificaciones nacionales de una sola materia.
 
 ## 2. Estado real verificado (no una suposición)
@@ -91,12 +110,15 @@ contractual (pensado para LinkedIn). La lógica de contenido para contratos:
 - El análisis contractual empieza por **fecha y objeto**: eso ya da la mayor
   parte del contexto necesario (naturaleza del contrato, materia aplicable,
   riesgos típicos de esa figura).
-- Esto es contenido básico transversal igual que el resto (Capa A): los
-  requisitos de validez de un contrato no cambian sustancialmente entre
-  jurisdicciones panhispánicas por la misma razón que las definiciones civiles
-  no cambian — nace de la misma lógica jurídica. Lo que sí es Capa B/C es la
-  forma exacta en que cada país regula un tipo de contrato específico
-  (arrendamiento, compraventa, etc.) — eso se ramifica después.
+- **Corrección 2026-09-04.** Aquí se afirmaba que «los requisitos de validez de
+  un contrato no cambian sustancialmente entre jurisdicciones panhispánicas». Es
+  otra universalización sin fuente, y además dudosa: el consentimiento, el objeto
+  y la causa —o su ausencia, porque hay ordenamientos de la tradición que han
+  prescindido de la causa— son requisitos de **derecho positivo**, no verdades
+  lógicas. La redacción correcta es hipotética: *se postula* que la estructura de
+  la validez contractual es comparable, y esa hipótesis se comprueba jurisdicción
+  por jurisdicción antes de sostener nada. Lo que sí es claramente Capa B/C es la
+  regulación de cada tipo contractual concreto.
 - Técnicamente: probablemente amerite una materia propia `contratos` (o una
   submateria de `civil`) en el motor de rutas, con su propio vocabulario de
   navegación — no existe todavía. Queda como trabajo futuro, no ejecutado en

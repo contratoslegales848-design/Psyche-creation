@@ -50,9 +50,15 @@ un solo topónimo y describían el derecho de un único país. La capa jurisdicc
 ## 4. Cobertura comparada ≠ universalidad
 
 Tres jurisdicciones con evidencia propia demuestran **cobertura comparada de esas tres**. Hay
-más de veinte ordenamientos hispanohablantes; tres no son todos. El dictamen lo emite como
-`cobertura_comparada_de: [...]` con `es_universalidad_panhispanica: false`, y añade
-«No se extrapola al resto del ámbito hispanohablante».
+más de veinte ordenamientos hispanohablantes; tres no son todos.
+
+**Corrección 2026-09-04.** Aunque el texto ya decía esto, el código lo contradecía: con tres
+jurisdicciones, `alcance_maximo_sostenible` devolvía literalmente `CAPA_A_TRANSVERSAL`. Es decir,
+tres países **sí** producían automáticamente la capa panhispánica. Ahora devuelve
+`COBERTURA_COMPARADA_VERIFICADA` y **ninguna salida de este módulo emite una capa
+jurisdiccional**: la capa la declara el claim packet y la valida la skill jurídica. La constante
+`MINIMO_JURISDICCIONES_CAPA_A` se renombró a `MINIMO_JURISDICCIONES_COMPARADAS`, porque el
+nombre invitaba a leer «tres países ⇒ Capa A».
 
 La cobertura se cuenta resolviendo cada fuente contra el registro oficial, **nunca leyendo la
 prosa**: sobre los packets del repositorio, el filtro de texto detecta 4 de los 9 mono-país; la
@@ -74,18 +80,43 @@ Ahora el vocabulario está en `content/topics/lote.py` — trece formas, de `FRA
 
 El **soporte** (carrusel, short, copy, pieza estática) es un eje aparte a propósito: el mismo
 contenido en otro soporte no es contenido nuevo, y mezclarlos en un solo eje habría permitido
-justificar repetición cambiando de envase. La forma editorial real viaja a la taxonomía
-(`content_type`); fijarlas todas como `"concepto"` borraba la única señal que permite ver que
-un lote está repitiendo formato.
+justificar repetición cambiando de envase. La forma editorial real viaja al campo `content_type`
+del brief; fijarlas todas como `"concepto"` borraba la única señal que permite ver que un lote
+está repitiendo formato.
+
+**Hasta dónde llega `content_type`, con exactitud.** Llega al brief y al control de diversidad
+de lote, que es síncrono y no persiste nada. **No alimenta memoria persistente:**
+`visual/memory.py` registra `materia` y `concepto` de una pieza real de `content/*.json`, no
+`content_type`, y solo al aceptarse un asset generado — un brief no entra ahí. Una versión
+anterior de este documento decía que «viaja a la memoria». Era falso.
 
 ## 6. Memoria contra lo ya producido
 
 Comprobar que los identificadores del lote nuevo son distintos **entre sí** no demuestra nada.
-`lote.py` compara contra el inventario real: piezas de `content/`, claim packets y
-`visual/inventory.py`.
+`lote.py` compara contra el inventario real.
 
-Cuando el inventario no puede consultarse, la respuesta honesta no es «es nuevo»: es
-`INVENTORY_NOT_CHECKED`, y **ningún candidato puede declararse nuevo**.
+**Tres estados de inventario, no un booleano.** Colapsarlos hacía que un inventario local
+parcial se leyera como comprobación completa:
+
+| Estado | Qué se leyó | Qué permite afirmar |
+|---|---|---|
+| `INVENTORY_LOCAL` | solo el árbol de este repositorio | choques dentro del repo; **no** novedad global |
+| `INVENTORY_CANONICAL` | además el inventario de producción | novedad frente a lo producido |
+| `INVENTORY_INCOMPLETE` | alguna fuente falló | **nada**: «no aparece» significa «no aparece aquí» |
+
+**Reutilizar un concepto es legítimo, y ahora se distingue de repetirlo.** Una materia se
+construye volviendo sobre el mismo concepto desde otro sitio. El veredicto tiene cuatro valores:
+
+- `CONCEPTO_LIBRE` — no aparece en el inventario consultado.
+- `RAMIFICACION` — el concepto existe, pero hay **aportación nueva demostrable** en al menos una
+  dimensión sustantiva: ángulo, situación humana, utilidad o conexión jurídica.
+- `SIN_APORTACION_DEMOSTRABLE` — el concepto existe y el candidato no rellena ninguna.
+- `REPETICION` — coinciden **todas** las dimensiones sustantivas: la misma pieza con otra ropa.
+
+La forma editorial y el soporte **no** son dimensiones sustantivas, a propósito: incluirlos
+habría dado coartada para repetir cambiando de envase. Y «demostrable» significa que el campo
+está relleno en el candidato — un campo vacío frente a uno lleno es una omisión, no una
+aportación.
 
 ## 7. Orden del pipeline
 

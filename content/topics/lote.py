@@ -124,111 +124,192 @@ def evaluar_diversidad(lote):
 # Memoria: contra lo que ya existe, no contra el propio lote.
 # ---------------------------------------------------------------------------
 
+# Los tres estados del inventario. Colapsarlos en un booleano hacia que un
+# inventario LOCAL parcial se leyera como comprobacion completa, y por tanto que
+# un candidato se declarara "nuevo" sin haber mirado nunca el canon.
+INVENTARIO_LOCAL = "INVENTORY_LOCAL"          # solo el arbol de este repositorio
+INVENTARIO_CANONICO = "INVENTORY_CANONICAL"   # incluye el inventario de produccion
+INVENTARIO_INCOMPLETO = "INVENTORY_INCOMPLETE"  # alguna fuente fallo al consultarse
+
+# Solo este estado permite afirmar novedad frente a TODO lo producido.
+ESTADOS_QUE_PERMITEN_NOVEDAD_GLOBAL = (INVENTARIO_CANONICO,)
+
+
 def cargar_inventario():
     """Lo ya producido o pendiente, leido de las fuentes reales del repositorio.
 
-    Devuelve (entradas, estado). El estado es INVENTORY_NOT_CHECKED cuando no se
-    pudo consultar, y en ese caso NINGUN candidato puede declararse nuevo.
+    Devuelve (entradas, estado, fuentes). El estado distingue tres situaciones
+    que no son equivalentes:
+
+      LOCAL       se leyo el arbol de este repositorio y nada mas. Sirve para
+                  detectar choques dentro del repo; NO para afirmar que un
+                  concepto no existe en el canon de produccion.
+      CANONICO    se leyo ademas el inventario de produccion (visual/inventory).
+      INCOMPLETO  alguna fuente fallo. La respuesta honesta no es "es nuevo".
     """
     entradas = []
-    consultado = False
+    fuentes = {"contenido": False, "packets": False, "inventario_produccion": False}
+    fallos = []
 
-    # 1. Piezas de contenido con taxonomia declarada.
     dir_contenido = REPO / "content"
     if dir_contenido.is_dir():
-        consultado = True
         for ruta in sorted(dir_contenido.glob("*.json")):
             try:
                 datos = json.loads(ruta.read_text(encoding="utf-8"))
-            except (OSError, json.JSONDecodeError):
+            except (OSError, json.JSONDecodeError) as exc:
+                fallos.append(f"content/{ruta.name}: {exc}")
                 continue
             tax = datos.get("taxonomia") or {}
             if tax:
                 entradas.append({
                     "origen": f"content/{ruta.name}",
+                    "ambito": INVENTARIO_LOCAL,
                     "concepto": tax.get("concepto", ""),
                     "materia": tax.get("materia", ""),
                     "situacion_humana": tax.get("situacion_humana", ""),
+                    "angulo": tax.get("angulo", ""),
+                    "utilidad": tax.get("utilidad", ""),
                     "forma_editorial": tax.get("content_type", ""),
                 })
+        fuentes["contenido"] = True
 
-    # 2. Claim packets: pendientes, pero ocupan concepto.
     dir_packets = REPO / "content" / "claim-packets"
     if dir_packets.is_dir():
-        consultado = True
         for ruta in sorted(dir_packets.glob("*.json")):
             try:
                 datos = json.loads(ruta.read_text(encoding="utf-8"))
-            except (OSError, json.JSONDecodeError):
+            except (OSError, json.JSONDecodeError) as exc:
+                fallos.append(f"claim-packets/{ruta.name}: {exc}")
                 continue
             for claim in datos.get("claims", []):
                 entradas.append({
                     "origen": f"claim-packets/{ruta.name}",
+                    "ambito": INVENTARIO_LOCAL,
                     "concepto": str(claim.get("concepto", "") or datos.get("tema", "")),
                     "materia": str(datos.get("materia", "")),
-                    "situacion_humana": "",
+                    "situacion_humana": "", "angulo": "", "utilidad": "",
                     "forma_editorial": "",
                 })
+        fuentes["packets"] = True
 
-    # 3. Inventario de produccion visual, si es consultable.
     try:
         sys.path.insert(0, str(REPO / "visual"))
         import inventory as _inv  # noqa: PLC0415
         for reg in _inv.build_readiness():
             entradas.append({
                 "origen": f"inventario/{reg.piece_id}",
-                "concepto": "",
-                "materia": "",
-                "situacion_humana": "",
-                "forma_editorial": "",
+                "ambito": INVENTARIO_CANONICO,
+                "concepto": "", "materia": "", "situacion_humana": "",
+                "angulo": "", "utilidad": "", "forma_editorial": "",
                 "piece_id": reg.piece_id,
                 "content_ids": list(reg.content_ids),
             })
-        consultado = True
-    except Exception as exc:  # noqa: BLE001 - cualquier fallo es "no consultado"
-        entradas.append({"origen": "inventario", "error": str(exc)})
+        fuentes["inventario_produccion"] = True
+    except Exception as exc:  # noqa: BLE001
+        fallos.append(f"inventario de produccion: {exc}")
 
-    estado = "INVENTORY_CHECKED" if consultado else T.INVENTORY_NOT_CHECKED
-    return entradas, estado
+    if fallos or not (fuentes["contenido"] and fuentes["packets"]):
+        estado = INVENTARIO_INCOMPLETO
+    elif fuentes["inventario_produccion"]:
+        estado = INVENTARIO_CANONICO
+    else:
+        estado = INVENTARIO_LOCAL
+
+    return entradas, estado, {"fuentes": fuentes, "fallos": fallos}
+
+
+# Dimensiones sustantivas. Coincidir en TODAS es repeticion; diferir en una sola
+# de forma demostrable es ramificacion legitima. La forma editorial y el soporte
+# NO estan aqui a proposito: cambiar de formato o de envase no aporta
+# conocimiento nuevo, y meterlos habria dado una coartada para repetir.
+DIMENSIONES_SUSTANTIVAS = ("angulo", "situacion_humana", "utilidad", "conexion_juridica")
+
+
+def _sustantivo(item):
+    return tuple(str(item.get(d, "")).strip().casefold() for d in DIMENSIONES_SUSTANTIVAS)
+
+
+def aportacion_nueva(candidato, existente):
+    """En que dimensiones sustantivas difiere el candidato de lo ya producido.
+
+    Devuelve la lista de dimensiones con aportacion DEMOSTRABLE: no basta con que
+    el campo sea distinto, tiene que estar relleno en el candidato. Un campo
+    vacio frente a uno lleno no es una aportacion, es una omision.
+    """
+    nuevas = []
+    for d in DIMENSIONES_SUSTANTIVAS:
+        valor = str(candidato.get(d, "")).strip().casefold()
+        previo = str(existente.get(d, "")).strip().casefold()
+        if valor and valor != previo:
+            nuevas.append(d)
+    return nuevas
 
 
 def evaluar_novedad(candidato, inventario=None, estado_inventario=None):
-    """?Este candidato aporta algo que el inventario no tenga ya?
+    """Que aporta este candidato frente al inventario, y con que alcance se sabe.
 
-    La respuesta nunca es un simple si/no: cuando el inventario no se pudo
-    consultar, decir "es nuevo" seria inventar una comprobacion que no ocurrio.
+    El resultado NO es un si/no. Son tres cosas distintas que antes estaban
+    mezcladas:
+
+      - si el CONCEPTO ya esta ocupado (dato, no veredicto);
+      - si aun asi hay APORTACION NUEVA demostrable, que legitima ramificar;
+      - hasta donde llega la comprobacion, segun el estado del inventario.
+
+    Reutilizar un concepto es normal y deseable: una materia se construye
+    volviendo sobre el mismo concepto desde otro angulo, otra situacion humana,
+    otra utilidad u otra conexion juridica. Lo que no vale es volver sobre el
+    mismo concepto sin cambiar ninguna de esas cuatro cosas.
     """
     if inventario is None or estado_inventario is None:
-        inventario, estado_inventario = cargar_inventario()
-
-    if estado_inventario == T.INVENTORY_NOT_CHECKED:
-        return {
-            "candidato": candidato.get("id"),
-            "estado_inventario": T.INVENTORY_NOT_CHECKED,
-            "puede_declararse_nuevo": False,
-            "coincidencias": [],
-            "motivo": ("no se pudo consultar el inventario vigente; sin esa "
-                       "comprobacion no se declara novedad"),
-        }
+        inventario, estado_inventario, _ = cargar_inventario()
 
     concepto = str(candidato.get("concepto", "")).strip().casefold()
-    situacion = str(candidato.get("situacion_humana", "")).strip().casefold()
-    coincidencias = []
+    clave = _sustantivo(candidato)
+
+    ocupaciones, repeticiones, ramificaciones = [], [], []
     for e in inventario:
-        if not concepto:
-            break
-        if str(e.get("concepto", "")).strip().casefold() == concepto:
-            coincidencias.append({"origen": e["origen"], "dimension": "concepto"})
-        elif situacion and str(e.get("situacion_humana", "")).strip().casefold() == situacion:
-            coincidencias.append({"origen": e["origen"], "dimension": "situacion_humana"})
+        if not concepto or str(e.get("concepto", "")).strip().casefold() != concepto:
+            continue
+        ocupaciones.append(e["origen"])
+        if _sustantivo(e) == clave:
+            repeticiones.append(e["origen"])
+        else:
+            nuevas = aportacion_nueva(candidato, e)
+            if nuevas:
+                ramificaciones.append({"origen": e["origen"], "aporta_en": nuevas})
+
+    alcance_ok = estado_inventario in ESTADOS_QUE_PERMITEN_NOVEDAD_GLOBAL
+
+    if repeticiones:
+        veredicto, motivo = "REPETICION", (
+            "coincide en todas las dimensiones sustantivas con contenido ya "
+            "existente: es la misma pieza con otra ropa")
+    elif ocupaciones and ramificaciones:
+        veredicto, motivo = "RAMIFICACION", (
+            "el concepto ya existe, pero hay aportacion nueva demostrable en "
+            + ", ".join(sorted({d for r in ramificaciones for d in r["aporta_en"]})))
+    elif ocupaciones:
+        veredicto, motivo = "SIN_APORTACION_DEMOSTRABLE", (
+            "el concepto ya existe y el candidato no rellena ninguna dimension "
+            "sustantiva que lo diferencie")
+    else:
+        veredicto, motivo = "CONCEPTO_LIBRE", "el concepto no aparece en el inventario consultado"
 
     return {
         "candidato": candidato.get("id"),
         "estado_inventario": estado_inventario,
-        "puede_declararse_nuevo": not coincidencias,
-        "coincidencias": coincidencias,
-        "motivo": ("sin coincidencias en el inventario consultado" if not coincidencias
-                   else "el concepto o la situacion humana ya estan ocupados"),
+        "veredicto": veredicto,
+        "motivo": motivo,
+        "concepto_ocupado_en": ocupaciones,
+        "repite_a": repeticiones,
+        "ramifica_sobre": ramificaciones,
+        # El alcance de lo que se acaba de comprobar. Con inventario LOCAL o
+        # INCOMPLETO, "no aparece" significa "no aparece AQUI", nunca "no existe".
+        "puede_declararse_nuevo_globalmente": (
+            alcance_ok and veredicto in ("CONCEPTO_LIBRE", "RAMIFICACION")),
+        "alcance_de_la_comprobacion": (
+            "todo el inventario canonico consultado" if alcance_ok
+            else f"parcial: {estado_inventario} — no se afirma novedad global"),
     }
 
 
@@ -238,23 +319,24 @@ def main(argv=None):
     ap.add_argument("--json", action="store_true")
     args = ap.parse_args(argv)
 
-    inventario, estado = cargar_inventario()
+    inventario, estado, detalle = cargar_inventario()
     novedades = [evaluar_novedad(t, inventario, estado)
                  for t in T.cargar_catalogo().get("temas", [])]
     if args.json:
-        print(json.dumps({"estado_inventario": estado, "novedad": novedades},
-                         ensure_ascii=False, indent=2))
+        print(json.dumps({"estado_inventario": estado, "detalle": detalle,
+                          "novedad": novedades}, ensure_ascii=False, indent=2))
         return 0
 
-    print(f"inventario            : {estado} ({len(inventario)} entradas)")
-    nuevos = [n for n in novedades if n["puede_declararse_nuevo"]]
-    print(f"candidatos            : {len(novedades)}")
-    print(f"declarables como nuevos: {len(nuevos)}")
+    from collections import Counter as _C
+    print(f"inventario : {estado} ({len(inventario)} entradas)")
+    if detalle["fallos"]:
+        print(f"  fallos   : {detalle['fallos']}")
+    print(f"candidatos : {len(novedades)}")
+    for veredicto, n in sorted(_C(x["veredicto"] for x in novedades).items()):
+        print(f"  {veredicto:<28} {n}")
     for n in novedades:
-        if n["coincidencias"]:
-            print(f"\n  {n['candidato']} — ya ocupado")
-            for c in n["coincidencias"][:3]:
-                print(f"    - {c['origen']} ({c['dimension']})")
+        if n["veredicto"] in ("REPETICION", "SIN_APORTACION_DEMOSTRABLE"):
+            print(f"\n  {n['candidato']} — {n['veredicto']}: {n['motivo']}")
     print("\nOrganizar un lote no acredita derecho, no abre gates y no autoriza nada.")
     return 0
 

@@ -201,12 +201,29 @@ def construir_brief(tema, familias=None):
             "submateria": tema.get("submateria", ""),
             "concepto": tema["concepto"],
             "situacion_humana": tema.get("situacion_humana", ""),
-            # La forma editorial real viaja a la taxonomia. Fijarlas todas como
-            # "concepto" borraba la unica senal que permite detectar que un lote
-            # esta repitiendo formato.
+            # La forma editorial real viaja aqui. Fijarlas todas como "concepto"
+            # borraba la unica senal que permite detectar que un lote esta
+            # repitiendo formato.
+            #
+            # HASTA DONDE LLEGA ESTE CAMPO, con exactitud. Llega a este brief y
+            # al control de diversidad de lote (content/topics/lote.py), que es
+            # sincrono y no persiste nada. NO llega a la memoria visual:
+            # visual/memory.py registra materia y concepto de una pieza REAL de
+            # content/*.json, no content_type, y solo al aceptarse un asset
+            # generado — un brief no entra ahi. Podria llegar a canonical.py y
+            # composition.py, que si leen taxonomia.content_type, pero solo
+            # cuando el candidato se convierta en artefacto de contenido real, lo
+            # que exige recorrer toda la cadena. Hoy no hay ninguno.
+            #
+            # Una version anterior de la documentacion afirmaba que "la forma
+            # editorial real viaja a la memoria". Era falso: viaja al brief.
             "content_type": formato,
+            "_alcance_de_content_type": (
+                "brief y control de diversidad de lote; NO alimenta memoria "
+                "persistente"),
             "angulo": tema.get("angulo", ""),
             "utilidad": tema.get("utilidad", ""),
+            "conexion_juridica": tema.get("conexion_juridica", ""),
         },
         "imagen": {
             **FORMATO_9_16,
@@ -257,7 +274,7 @@ def construir_brief(tema, familias=None):
                           "convertir el post en asesoría jurídica individual"],
         },
         "pendiente_antes_de_producir": {
-            "fuentes_oficiales_por_jurisdiccion": T.MINIMO_JURISDICCIONES_CAPA_A,
+            "jurisdicciones_comparadas_minimas": T.MINIMO_JURISDICCIONES_COMPARADAS,
             "advertencia_del_tema": tema["advertencia"],
             "riesgo_de_deriva_nacional": tema["riesgo_de_deriva_nacional"],
         },

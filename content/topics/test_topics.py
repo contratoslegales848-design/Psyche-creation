@@ -115,8 +115,8 @@ class TestCoberturaReal(unittest.TestCase):
         claim = {"claim_id": "x", "alcance": "CAPA_A_TRANSVERSAL",
                  "fuentes": [{"id": "f1", "registro_oficial_id": "dof-gob-mx"}]}
         r = T.evaluar_cobertura_de_claim(claim, self.reg)
-        self.assertFalse(r["cobertura_suficiente_para_capa_a"])
-        self.assertEqual(r["alcance_maximo_sostenible"], "CAPA_C_NACIONAL")
+        self.assertFalse(r["cobertura_comparada_suficiente"])
+        self.assertEqual(r["sostenible_por_la_evidencia"], "CAPA_C_NACIONAL")
         self.assertEqual(r["riesgo_falsa_universalizacion"], "alto")
         self.assertTrue(any("falsa universalización" in p for p in r["problemas"]))
 
@@ -126,7 +126,7 @@ class TestCoberturaReal(unittest.TestCase):
             {"id": "f2", "registro_oficial_id": "boe-es"},
             {"id": "f3", "registro_oficial_id": "infoleg-gob-ar"}]}
         r = T.evaluar_cobertura_de_claim(claim, self.reg)
-        self.assertTrue(r["cobertura_suficiente_para_capa_a"])
+        self.assertTrue(r["cobertura_comparada_suficiente"])
         self.assertEqual(len(r["paises_cubiertos_por_fuentes"]), 3)
 
     def test_una_fuente_supranacional_no_suma_jurisdiccion_nacional(self):
@@ -137,7 +137,7 @@ class TestCoberturaReal(unittest.TestCase):
             {"id": "f3", "registro_oficial_id": "corteidh-or-cr"}]}
         r = T.evaluar_cobertura_de_claim(claim, self.reg)
         self.assertEqual(r["paises_cubiertos_por_fuentes"], ["mexico"])
-        self.assertFalse(r["cobertura_suficiente_para_capa_a"])
+        self.assertFalse(r["cobertura_comparada_suficiente"])
 
     def test_una_fuente_sin_registro_no_cubre_nada(self):
         claim = {"claim_id": "x", "alcance": "CAPA_A_TRANSVERSAL",
@@ -163,7 +163,7 @@ class TestCoberturaReal(unittest.TestCase):
                     continue
                 with self.subTest(claim=r["claim_id"]):
                     self.assertTrue(
-                        r["cobertura_suficiente_para_capa_a"],
+                        r["cobertura_comparada_suficiente"],
                         f"{r['claim_id']} se declara transversal con "
                         f"{r['paises_cubiertos_por_fuentes']}")
 
@@ -304,7 +304,7 @@ class TestNoSobreafirmar(unittest.TestCase):
             {"id": "f2", "registro_oficial_id": "boe-es"},
             {"id": "f3", "registro_oficial_id": "infoleg-gob-ar"}]}
         r = T.evaluar_cobertura_de_claim(claim, reg)
-        self.assertTrue(r["cobertura_suficiente_para_capa_a"])
+        self.assertTrue(r["cobertura_comparada_suficiente"])
         self.assertFalse(r["es_universalidad_panhispanica"])
         self.assertEqual(sorted(r["cobertura_comparada_de"]),
                          ["argentina", "espana", "mexico"])
@@ -405,31 +405,170 @@ class TestOrdenDelPipeline(unittest.TestCase):
 
 class TestMemoriaAntiRepeticion(unittest.TestCase):
     def test_el_inventario_real_se_consulta(self):
-        _inv, estado = L.cargar_inventario()
-        self.assertEqual(estado, "INVENTORY_CHECKED")
+        _inv, estado, _det = L.cargar_inventario()
+        self.assertEqual(estado, L.INVENTARIO_CANONICO)
 
     def test_sin_inventario_no_se_declara_novedad(self):
         """La respuesta honesta cuando no se pudo comprobar no es 'es nuevo'."""
         r = L.evaluar_novedad({"id": "X", "concepto": "loquesea"},
-                              inventario=[], estado_inventario=T.INVENTORY_NOT_CHECKED)
-        self.assertFalse(r["puede_declararse_nuevo"])
-        self.assertEqual(r["estado_inventario"], T.INVENTORY_NOT_CHECKED)
+                              inventario=[], estado_inventario=L.INVENTARIO_INCOMPLETO)
+        self.assertFalse(r["puede_declararse_nuevo_globalmente"])
+        self.assertEqual(r["estado_inventario"], L.INVENTARIO_INCOMPLETO)
 
     def test_un_concepto_ya_ocupado_no_es_nuevo(self):
         inv = [{"origen": "content/pieza-01-reales.json", "concepto": "propiedad_y_posesion",
-                "situacion_humana": ""}]
+                "situacion_humana": "", "angulo": "", "utilidad": "", "conexion_juridica": ""}]
         r = L.evaluar_novedad({"id": "X", "concepto": "propiedad_y_posesion"},
-                              inventario=inv, estado_inventario="INVENTORY_CHECKED")
-        self.assertFalse(r["puede_declararse_nuevo"])
-        self.assertTrue(r["coincidencias"])
+                              inventario=inv, estado_inventario=L.INVENTARIO_CANONICO)
+        self.assertEqual(r["veredicto"], "REPETICION")
+        self.assertFalse(r["puede_declararse_nuevo_globalmente"])
 
     def test_ids_distintos_entre_si_no_bastan(self):
         """Comprobar que los ids del lote nuevo son distintos ENTRE SÍ no
         demuestra nada sobre lo ya producido."""
-        inv, estado = L.cargar_inventario()
+        inv, estado, _ = L.cargar_inventario()
         resultados = [L.evaluar_novedad(t_, inv, estado) for t_ in TEMAS]
         self.assertTrue(all("estado_inventario" in r for r in resultados))
         self.assertTrue(all(r["motivo"] for r in resultados))
+
+
+class TestBloqueosSemanticosCorregidos(unittest.TestCase):
+    """Las seis comprobaciones que el fundador exigió tras revertir el desvío."""
+
+    def setUp(self):
+        self.reg = T.cargar_registro()
+
+    # --- 1 y 2: reutilizar un concepto NO es repetirlo ---------------------
+    def test_mismo_concepto_con_aportacion_distinta_puede_ramificarse(self):
+        """Una materia se construye volviendo sobre el mismo concepto desde otro
+        sitio. Prohibirlo habría hecho el motor inservible."""
+        inv = [{"origen": "content/a.json", "concepto": "posesion",
+                "angulo": "separar figuras", "situacion_humana": "lleva anios ahi",
+                "utilidad": "evitar confusion", "conexion_juridica": "usucapion"}]
+        candidato = {"id": "X", "concepto": "posesion",
+                     "angulo": "que prueba la posesion",
+                     "situacion_humana": "lleva anios ahi",
+                     "utilidad": "evitar confusion", "conexion_juridica": "usucapion"}
+        r = L.evaluar_novedad(candidato, inv, L.INVENTARIO_CANONICO)
+        self.assertEqual(r["veredicto"], "RAMIFICACION")
+        self.assertTrue(r["puede_declararse_nuevo_globalmente"])
+        self.assertIn("angulo", r["ramifica_sobre"][0]["aporta_en"])
+
+    def test_misma_combinacion_sustantiva_se_detecta_como_repeticion(self):
+        base = {"concepto": "posesion", "angulo": "a", "situacion_humana": "s",
+                "utilidad": "u", "conexion_juridica": "c"}
+        inv = [dict(base, origen="content/a.json")]
+        r = L.evaluar_novedad(dict(base, id="X"), inv, L.INVENTARIO_CANONICO)
+        self.assertEqual(r["veredicto"], "REPETICION")
+        self.assertFalse(r["puede_declararse_nuevo_globalmente"])
+
+    def test_cambiar_solo_la_forma_editorial_no_evita_la_repeticion(self):
+        """La forma y el soporte NO son dimensiones sustantivas: incluirlas
+        habría dado coartada para repetir cambiando de envase."""
+        base = {"concepto": "posesion", "angulo": "a", "situacion_humana": "s",
+                "utilidad": "u", "conexion_juridica": "c"}
+        inv = [dict(base, origen="content/a.json", forma_editorial="MITO")]
+        r = L.evaluar_novedad(dict(base, id="X", forma_editorial="CARRUSEL"),
+                              inv, L.INVENTARIO_CANONICO)
+        self.assertEqual(r["veredicto"], "REPETICION")
+
+    def test_un_campo_vacio_no_cuenta_como_aportacion(self):
+        """Omitir no es aportar."""
+        inv = [{"origen": "a", "concepto": "c", "angulo": "algo",
+                "situacion_humana": "s", "utilidad": "u", "conexion_juridica": "cj"}]
+        r = L.evaluar_novedad({"id": "X", "concepto": "c", "angulo": "",
+                               "situacion_humana": "s", "utilidad": "u",
+                               "conexion_juridica": "cj"},
+                              inv, L.INVENTARIO_CANONICO)
+        self.assertEqual(r["veredicto"], "SIN_APORTACION_DEMOSTRABLE")
+
+    # --- 3: alcance de la comprobación ------------------------------------
+    def test_un_inventario_local_parcial_no_declara_novedad_global(self):
+        r = L.evaluar_novedad({"id": "X", "concepto": "loquesea"},
+                              [], L.INVENTARIO_LOCAL)
+        self.assertEqual(r["veredicto"], "CONCEPTO_LIBRE")
+        self.assertFalse(r["puede_declararse_nuevo_globalmente"])
+        self.assertIn("parcial", r["alcance_de_la_comprobacion"])
+
+    def test_un_inventario_incompleto_tampoco(self):
+        r = L.evaluar_novedad({"id": "X", "concepto": "loquesea"},
+                              [], L.INVENTARIO_INCOMPLETO)
+        self.assertFalse(r["puede_declararse_nuevo_globalmente"])
+
+    def test_los_tres_estados_de_inventario_son_distintos(self):
+        self.assertEqual(len({L.INVENTARIO_LOCAL, L.INVENTARIO_CANONICO,
+                              L.INVENTARIO_INCOMPLETO}), 3)
+        self.assertEqual(L.ESTADOS_QUE_PERMITEN_NOVEDAD_GLOBAL, (L.INVENTARIO_CANONICO,))
+
+    # --- 4: tres jurisdicciones NO producen Capa A -------------------------
+    def test_tres_jurisdicciones_no_producen_capa_a_automaticamente(self):
+        """El bloqueo real: el código devolvía literalmente CAPA_A_TRANSVERSAL
+        con tres países, aunque la documentación dijera lo contrario."""
+        claim = {"claim_id": "x", "alcance": "CAPA_A_TRANSVERSAL", "fuentes": [
+            {"id": "f1", "registro_oficial_id": "dof-gob-mx"},
+            {"id": "f2", "registro_oficial_id": "boe-es"},
+            {"id": "f3", "registro_oficial_id": "infoleg-gob-ar"}]}
+        r = T.evaluar_cobertura_de_claim(claim, self.reg)
+        self.assertEqual(r["sostenible_por_la_evidencia"], T.COBERTURA_COMPARADA_VERIFICADA)
+        self.assertNotEqual(r["sostenible_por_la_evidencia"], "CAPA_A_TRANSVERSAL")
+        self.assertFalse(r["es_universalidad_panhispanica"])
+
+    def test_ninguna_salida_del_modulo_emite_una_capa_jurisdiccional(self):
+        """Ni con cobertura verificada. La capa la declara el packet, no esto."""
+        claim = {"claim_id": "x", "alcance": "CAPA_A_TRANSVERSAL", "fuentes": [
+            {"id": f"f{i}", "registro_oficial_id": rid} for i, rid in enumerate(
+                ["dof-gob-mx", "boe-es", "infoleg-gob-ar", "bcn-cl"])]}
+        r = T.evaluar_cobertura_de_claim(claim, self.reg)
+        valores = {k: v for k, v in r.items()
+                   if not k.startswith("_") and k != "alcance_declarado"}
+        self.assertNotIn("CAPA_A_TRANSVERSAL", json.dumps(valores, ensure_ascii=False))
+
+    def test_la_constante_ya_no_promete_capa_a_en_su_nombre(self):
+        self.assertFalse(hasattr(T, "MINIMO_JURISDICCIONES_CAPA_A"))
+        self.assertEqual(T.MINIMO_JURISDICCIONES_COMPARADAS, 3)
+
+    # --- 5: el documento operativo, sin universalizaciones -----------------
+    def test_el_documento_operativo_no_universaliza_instituciones_positivas(self):
+        """Patria potestad, prescripción, contrato y hecho ilícito penal son
+        instituciones de derecho positivo: su contenido lo fija cada legislador.
+        Afirmarlas idénticas en veinte ordenamientos es falsa universalización."""
+        doc = (REPO / "docs" / "direccion-basico-antes-que-complejo.md").read_text(
+            encoding="utf-8")
+        # Las frases solo pueden sobrevivir DENTRO de la corrección que las cita.
+        for frase in ("son esencialmente los mismos en",
+                      "no cambian sustancialmente entre"):
+            with self.subTest(frase=frase):
+                for linea in doc.split("\n"):
+                    if frase in linea:
+                        self.assertTrue(
+                            "«" in linea or "»" in linea,
+                            f"universalización viva fuera de una cita: {linea!r}")
+
+    def test_el_documento_declara_que_son_instituciones_de_derecho_positivo(self):
+        doc = (REPO / "docs" / "direccion-basico-antes-que-complejo.md").read_text(
+            encoding="utf-8")
+        self.assertIn("instituciones de derecho\n   positivo", doc.replace("**", ""))
+
+    # --- 6: ningún estado técnico abre nada -------------------------------
+    def test_ningun_estado_tecnico_abre_aprobacion_arte_ni_publicacion(self):
+        for b in B.construir_todos():
+            with self.subTest(tema=b["tema_id"]):
+                self.assertEqual(b["gate_arte"], "CERRADO")
+                self.assertEqual(b["revision_humana"], "PENDIENTE")
+                self.assertEqual(b["publicacion"], "NOT_PUBLISHED")
+                self.assertFalse(b["ejecutable"])
+        r = L.evaluar_diversidad([{"forma_editorial": "MITO", "concepto": "c"}])
+        self.assertFalse(r["aprueba_claims"])
+        self.assertFalse(r["abre_gate"])
+        self.assertFalse(r["autoriza_publicacion"])
+
+    def test_content_type_declara_su_alcance_real(self):
+        """No afirma alimentar memoria persistente, porque no lo hace:
+        visual/memory.py registra materia y concepto, no content_type."""
+        for b in B.construir_todos():
+            with self.subTest(tema=b["tema_id"]):
+                alcance = b["taxonomia"]["_alcance_de_content_type"]
+                self.assertIn("NO alimenta memoria persistente", alcance)
 
 
 if __name__ == "__main__":

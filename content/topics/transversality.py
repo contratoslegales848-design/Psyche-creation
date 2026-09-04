@@ -48,11 +48,16 @@ from pathlib import Path
 AQUI = Path(__file__).resolve().parent
 CATALOGO_PATH = AQUI / "catalogo-transversal-v1.json"
 
-# Jurisdicciones mínimas para que un claim pueda declararse CAPA_A_TRANSVERSAL,
-# cada una con fuentes propias. Es el mismo umbral que aplica la skill de
-# verificación jurídica; se repite aquí para que el filtro de temas no pueda
-# quedarse por detrás de él sin que una prueba lo note.
-MINIMO_JURISDICCIONES_CAPA_A = 3
+# Jurisdicciones mínimas con fuente propia para que la cobertura comparada sea
+# siquiera evaluable. NO es un umbral que conceda capa: alcanzarlo demuestra
+# cobertura comparada en esas jurisdicciones y nada más.
+MINIMO_JURISDICCIONES_COMPARADAS = 3
+# Alias retirado a propósito: se llamaba MINIMO_JURISDICCIONES_COMPARADAS, y el
+# nombre invitaba a leer "tres países => Capa A", que es la conclusión que este
+# módulo existe para impedir.
+
+# Lo que tres jurisdicciones con fuente propia SÍ demuestran.
+COBERTURA_COMPARADA_VERIFICADA = "COBERTURA_COMPARADA_VERIFICADA"
 
 # Países y gentilicios hispanohablantes. Nombrar uno dentro de un tema lo saca de
 # la Capa A por definición: el tema pasaría a describir un ordenamiento concreto.
@@ -231,7 +236,7 @@ def evaluar_tema(tema):
         "gate_arte": "CERRADO",
         "publicacion": "NOT_PUBLISHED",
         "siguiente_accion": (
-            f"buscar fuente oficial propia en {MINIMO_JURISDICCIONES_CAPA_A} jurisdicciones"
+            f"buscar fuente oficial propia en {MINIMO_JURISDICCIONES_COMPARADAS} jurisdicciones"
             if admisible else "corregir o reclasificar: el tema no es transversal"
         ),
     }
@@ -321,31 +326,41 @@ def evaluar_cobertura_de_claim(claim, registro=None):
     """
     declarado = claim.get("alcance")
     paises, notas = cobertura_por_fuentes(claim.get("fuentes"), registro)
-    suficiente = len(paises) >= MINIMO_JURISDICCIONES_CAPA_A
+    suficiente = len(paises) >= MINIMO_JURISDICCIONES_COMPARADAS
     problemas = list(notas)
     if declarado == "CAPA_A_TRANSVERSAL" and not suficiente:
         problemas.insert(0, (
             f"declara CAPA_A_TRANSVERSAL pero sus fuentes solo cubren {paises!r} "
-            f"({len(paises)} de {MINIMO_JURISDICCIONES_CAPA_A} jurisdicciones mínimas) "
-            "— esto es falsa universalización"))
+            f"({len(paises)} de {MINIMO_JURISDICCIONES_COMPARADAS} jurisdicciones "
+            "comparadas mínimas) — esto es falsa universalización"))
+
+    # Lo que la cobertura permite sostener. NUNCA una capa jurisdiccional: tres
+    # jurisdicciones con fuente propia demuestran cobertura comparada EN ESAS
+    # TRES, no una regla del ámbito hispanohablante. Hay más de veinte
+    # ordenamientos; concederle CAPA_A a un mínimo de tres seria la misma falsa
+    # universalizacion con el listón tres veces más alto.
+    if suficiente:
+        maximo = COBERTURA_COMPARADA_VERIFICADA
+    elif len(paises) == 1:
+        maximo = "CAPA_C_NACIONAL"
+    else:
+        maximo = "NO_DETERMINADO"
+
     return {
         "claim_id": claim.get("claim_id"),
         "alcance_declarado": declarado,
         "paises_cubiertos_por_fuentes": paises,
-        "cobertura_suficiente_para_capa_a": suficiente,
-        # Precision deliberada: lo que tres jurisdicciones con fuente propia
-        # demuestran es cobertura comparada DE ESAS TRES. Hay mas de veinte
-        # ordenamientos hispanohablantes; tres no son todos. Llamar "panhispanico"
-        # a un minimo de tres seria la misma falsa universalizacion, solo que con
-        # el liston tres veces mas alto.
+        "cobertura_comparada_suficiente": suficiente,
         "cobertura_comparada_de": list(paises),
         "es_universalidad_panhispanica": False,
         "_nota_alcance": (
             f"Evidencia comparada en {len(paises)} jurisdiccion(es): {paises}. "
             "No se extrapola al resto del ambito hispanohablante."),
-        "alcance_maximo_sostenible": (
-            "CAPA_A_TRANSVERSAL" if suficiente
-            else ("CAPA_C_NACIONAL" if len(paises) == 1 else "NO_DETERMINADO")),
+        "sostenible_por_la_evidencia": maximo,
+        "_capa_no_se_concede_aqui": (
+            "Ni siquiera con cobertura comparada verificada este modulo emite "
+            "CAPA_A_TRANSVERSAL. La capa la declara el claim packet y la valida "
+            "la skill juridica; aqui solo se dice hasta donde llega la evidencia."),
         "problemas": problemas,
         "riesgo_falsa_universalizacion": (
             "alto" if declarado == "CAPA_A_TRANSVERSAL" and not suficiente
