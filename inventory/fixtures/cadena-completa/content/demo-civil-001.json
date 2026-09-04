@@ -1,0 +1,32 @@
+{
+  "id": "demo-civil-001",
+  "titulo": "Comodato y mutuo",
+  "frase": "En el comodato se devuelve la misma cosa; en el mutuo se devuelve otro tanto equivalente.",
+  "remate": "Derecho civil comparado",
+  "marca": "LegalMente",
+  "imagen": "assets/images/ejemplo.jpg",
+  "audio": null,
+  "duracionSegundos": 10,
+  "procedencia": {
+    "modo": "GOBERNADO",
+    "content_id": "LM-DEMO-CIVIL-001",
+    "publicable": true,
+    "handoff_id": "HO-DEMO-001",
+    "piece_id": "pub-fixture-comodato",
+    "claims": [
+      {
+        "claim_id": "pub-fixture-claim-1",
+        "approved_claim_hash": "ad11199d278c913ce1c5eb3cf94d5d52cdb2c3eb19878818fff2b3fffffad465"
+      }
+    ],
+    "jurisdiction_layer": "CAPA_A_TRANSVERSAL",
+    "production_status": "APROBADO_QA"
+  },
+  "taxonomia": {
+    "materia": "Civil",
+    "submateria": "Contratos",
+    "concepto": "Comodato frente a mutuo",
+    "situacion_humana": "Prestar algo y no saber qué hay que devolver",
+    "content_type": "DIFERENCIA"
+  }
+}

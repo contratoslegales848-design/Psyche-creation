@@ -254,3 +254,36 @@ jobs:
               sys.exit(1)
           print("OK: ningún status del pipeline visual significa aprobado.")
           PY
+
+      - name: Coherencia del libro mayor de vigencia de fuentes
+        run: python3 scripts/check-source-freshness.py --solo-libro-mayor
+
+      - name: Ninguna fuente desactualizada sostiene un claim aprobado (piloto, reloj real)
+        run: python3 scripts/check-source-freshness.py pilot/claim-packets/*.json
+
+      - name: Vigencia de las fixtures con gate abierto (fecha fijada)
+        # Las fixtures se comprueban con una fecha fija: su plazo de revisión es
+        # real y vencerá algún día, y una fixture no debe poner la CI en rojo por
+        # el paso del tiempo. Los paquetes reales sí usan el reloj real, arriba.
+        run: |
+          python3 scripts/check-source-freshness.py --today 2026-08-27 \
+            publication/fixtures/claim-packet-aprobado.json
+
+      - name: El inventario materializado está al día y sin duplicados
+        working-directory: .
+        run: python3 scripts/inventory.py check
+
+      # El PR original solo cubría pilot/claim-packets. Los 11 paquetes reales
+      # de content/claim-packets quedaban fuera de la comprobación de vigencia
+      # igual que estaban fuera de la validación de esquema hasta hoy.
+      - name: Vigencia de fuentes de los claim packets reales (content/claim-packets)
+        working-directory: .
+        run: |
+          set -e
+          shopt -s nullglob
+          files=(content/claim-packets/*.json)
+          if [ "${#files[@]}" -eq 0 ]; then
+            echo "No hay claim packets en content/claim-packets/ — nada que comprobar."
+            exit 0
+          fi
+          python3 .claude/skills/legalmente-legal-verification/scripts/check-source-freshness.py "${files[@]}"
