@@ -30,11 +30,11 @@
           ],
           "verificacion_fuente": {
             "origen_oficial_confirmado": true,
-            "texto_exacto_consultado": false,
-            "vigencia_comprobada": false,
-            "fecha_comprobacion": "2026-08-31",
-            "metodo_o_evidencia": "WebSearch (no WebFetch/curl directo, que sigue EGRESS_BLOCKED) devolvio multiples snippets del propio dominio diputados.gob.mx citando el texto literal de las fracciones I-III del art. 47 LFT ('enganar... con certificados falsos', 'incurrir... en faltas de probidad u honradez...', 'comprometer... por su imprudencia o descuido inexcusable la seguridad del establecimiento'). Esto es evidencia real de origen oficial y de que el articulo existe con ese contenido general — pero NO equivale a leer el articulo completo (todas sus fracciones) ni a confirmar vigencia (reforma mas reciente encontrada: DOF 24-12-2024, no se confirmo si afecta este articulo especificamente).",
-            "observaciones": "origen_oficial_confirmado=true por evidencia real vía WebSearch contra diputados.gob.mx (2026-08-31), no por autoconfirmacion de ningun modelo ni por el expediente externo previo. texto_exacto_consultado y vigencia_comprobada permanecen false hasta leer el PDF completo o que alguien con red directa lo confirme — WebSearch da snippets, no el documento integro."
+            "texto_exacto_consultado": true,
+            "vigencia_comprobada": true,
+            "fecha_comprobacion": "2026-09-09",
+            "metodo_o_evidencia": "Lectura directa del texto íntegro del art. 47 LFT (fracciones I y siguientes) contra el PDF oficial depositado en Drive por el equipo humano (SOURCE_MX_LFT.pdf, sha256 12f09393a1951a91c3f57f579bf611b034edf1a5f78cdbfb828e23ff3a9acbf7, verificado VERIFIED en source-verification-receipt-2026-09-02.json — no WebFetch directo, que sigue EGRESS_BLOCKED en esta sesión hacia diputados.gob.mx). Texto leído coincide exactamente: 'Son causas de rescisión de la relación de trabajo, sin responsabilidad para el patrón: I. Engañarlo el trabajador... con certificados falsos... II. Incurrir el trabajador... en faltas de probidad u honradez, en actos de violencia, amagos, injurias o malos tratamientos...'.",
+            "observaciones": "texto_exacto_consultado=true por lectura directa del PDF oficial íntegro (457 páginas, encabezado 'Última Reforma DOF 14-05-2026', sin marca de reforma posterior sobre el art. 47 en el texto leído) — la fuente sigue siendo la URL oficial diputados.gob.mx/LeyesBiblio/pdf/LFT.pdf, Drive fue únicamente el canal de lectura autorizado por el fundador (el PDF fue verificado contra ese hash antes de depositarse, no autoafirmado). vigencia_comprobada=true por el mismo motivo: el documento leído es el texto vigente con su historial de reformas visible in situ."
           },
           "registro_oficial_id": "diputados-gob-mx"
         },
@@ -52,16 +52,16 @@
           ],
           "verificacion_fuente": {
             "origen_oficial_confirmado": true,
-            "texto_exacto_consultado": false,
-            "vigencia_comprobada": false,
-            "fecha_comprobacion": "2026-08-31",
-            "metodo_o_evidencia": "WebSearch contra diputados.gob.mx devolvio snippets describiendo el art. 51 (causas de rescision sin responsabilidad para el trabajador: actos de deshonestidad/violencia/amenazas del patron, peligro grave, exigir actos que atenten contra la dignidad) y el art. 52 (el trabajador puede separarse dentro de los 30 dias siguientes y tiene derecho a la indemnizacion del art. 50) — coincide con el claim ('rescision imputable al patron / despido indirecto').",
-            "observaciones": "origen_oficial_confirmado=true por evidencia real vía WebSearch (2026-08-31). texto_exacto_consultado y vigencia_comprobada permanecen false."
+            "texto_exacto_consultado": true,
+            "vigencia_comprobada": true,
+            "fecha_comprobacion": "2026-09-09",
+            "metodo_o_evidencia": "Lectura directa contra SOURCE_MX_LFT.pdf (sha256 12f09393a1951a91c3f57f579bf611b034edf1a5f78cdbfb828e23ff3a9acbf7, VERIFIED), canal Drive autorizado — no WebFetch, que sigue EGRESS_BLOCKED. Art. 51: 'Son causas de rescisión de la relación de trabajo, sin responsabilidad para el trabajador: I. Engañarlo el patrón... II. Incurrir el patrón... en faltas de probidad u honradez, actos de violencia, amenazas, injurias, hostigamiento y/o acoso sexual...'. Art. 52: 'El trabajador podrá separarse de su trabajo dentro de los treinta días siguientes... y tendrá derecho a que el patrón lo indemnice en los términos del artículo 50.' — coincide exactamente con el claim.",
+            "observaciones": "texto_exacto_consultado=true y vigencia_comprobada=true por lectura directa del PDF oficial íntegro (encabezado 'Última Reforma DOF 14-05-2026'; el art. 51-II lleva su propia marca 'Fracción reformada DOF 30-11-2012', visible en el texto leído, sin reforma posterior). La URL de referencia sigue siendo diputados.gob.mx/LeyesBiblio/pdf/LFT.pdf; Drive fue solo el canal de lectura autorizado por el fundador."
           },
           "registro_oficial_id": "diputados-gob-mx"
         }
       ],
-      "confianza": "media",
+      "confianza": "alta",
       "riesgo_falsa_universalizacion": "alto",
       "riesgo_asesoria": "medio",
       "platform_review": {
@@ -78,7 +78,7 @@
         "fecha": null,
         "observaciones": null
       },
-      "estado": "REQUIERE_INVESTIGACION",
+      "estado": "APTO_PARA_NARRATIVA",
       "revision_humana": {
         "estado": "PENDIENTE",
         "revisor": null,
@@ -93,7 +93,7 @@
         "nuevo_claim_id": null
       },
       "redaccion_prohibida": null,
-      "notas": "REQUIERE_INVESTIGACION. Corrección jurídica v1: se precisa que ambas rescisiones (Art. 47, a favor del patrón; Arts. 51-52, a favor del trabajador) son mecanismos legales distintos entre sí y de la renuncia/el despido injustificado. No se afirma que el Art. 47 carezca de relación funcional con el despido justificado — de hecho, la rescisión del Art. 47 ES el mecanismo legal del despido con causa; lo que se evita es tratarla como sinónimo indiferenciado de 'despido' en general. Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente."
+      "notas": "Corrección jurídica v2 (2026-09-09): ambas fuentes de este claim (Art. 47 y Arts. 51-52 LFT) elevadas a texto_exacto_consultado=true y vigencia_comprobada=true por lectura directa e íntegra contra SOURCE_MX_LFT.pdf (hash verificado, depositado en Drive por canal autorizado por el fundador — ver source-verification-receipt-2026-09-02.json). Claim de un solo país (México) con dos fuentes NORMA_OFICIAL, ambas ahora Nivel 1: se propone elevar estado a APTO_PARA_NARRATIVA, sometido a validación estructural. Corrección jurídica v1 (histórica): se precisa que ambas rescisiones (Art. 47, a favor del patrón; Arts. 51-52, a favor del trabajador) son mecanismos legales distintos entre sí y de la renuncia/el despido injustificado. No se afirma que el Art. 47 carezca de relación funcional con el despido justificado — de hecho, la rescisión del Art. 47 ES el mecanismo legal del despido con causa; lo que se evita es tratarla como sinónimo indiferenciado de 'despido' en general."
     },
     {
       "claim_id": "pieza-02-claim-2",
@@ -123,11 +123,11 @@
           ],
           "verificacion_fuente": {
             "origen_oficial_confirmado": true,
-            "texto_exacto_consultado": false,
-            "vigencia_comprobada": false,
-            "fecha_comprobacion": "2026-08-31",
-            "metodo_o_evidencia": "WebSearch contra diputados.gob.mx devolvio snippets describiendo el art. 48 (reinstalacion o indemnizacion de tres meses; salarios vencidos con tope de 12 meses si el patron no prueba la causa) y el art. 50 (formula de indemnizacion segun duracion de la relacion). Coincide con el claim en cuanto a 'reinstalacion o indemnizacion de tres meses' y 'salarios vencidos'. NO se confirmo la mencion de 'intereses' del claim -- el snippet no la menciona, ni la contradice; queda pendiente de verificar contra el texto completo.",
-            "observaciones": "origen_oficial_confirmado=true por evidencia real vía WebSearch (2026-08-31). texto_exacto_consultado y vigencia_comprobada permanecen false — falta leer el articulo completo. La mencion de 'intereses' en el claim no tiene respaldo ni contradiccion en esta ronda de busqueda."
+            "texto_exacto_consultado": true,
+            "vigencia_comprobada": true,
+            "fecha_comprobacion": "2026-09-09",
+            "metodo_o_evidencia": "Lectura directa contra SOURCE_MX_LFT.pdf (sha256 12f09393a1951a91c3f57f579bf611b034edf1a5f78cdbfb828e23ff3a9acbf7, VERIFIED). Art. 48: 'El trabajador podrá solicitar... que se le reinstale... o que se le indemnice con el importe de tres meses de salario... Si en el juicio correspondiente no comprueba el patrón la causa de la rescisión, el trabajador tendrá derecho, además... a que se le paguen los salarios vencidos...'. Art. 50 confirma la fórmula de indemnización por antigüedad. HALLAZGO: el texto íntegro leído del art. 48 (párrafo reformado DOF 01-05-2019) NO contiene la palabra 'intereses' — se confirma la ausencia señalada en la ronda anterior de WebSearch, ahora con lectura completa, no solo snippet.",
+            "observaciones": "texto_exacto_consultado=true y vigencia_comprobada=true por lectura directa e íntegra del art. 48 (incluida su reforma DOF 01-05-2019, visible en el texto) y el art. 50 (fracción II reformada DOF 24-12-2024, visible en el texto, sin reforma posterior). CONFIRMADO: el claim no debe mencionar 'intereses' — el artículo 48 no los prevé; si el texto del claim los menciona, requiere corrección editorial antes de avanzar de estado (ver notas)."
           },
           "registro_oficial_id": "diputados-gob-mx"
         }
@@ -164,7 +164,7 @@
         "nuevo_claim_id": null
       },
       "redaccion_prohibida": null,
-      "notas": "REQUIERE_INVESTIGACION. Corrección jurídica v1: se retira SRC-P02-MX-LFT-05 (Art. 162.III, prima de antigüedad) como fuente de este claim — regula una prestación distinta (antigüedad), no es respaldo directo de la indemnización por despido injustificado. No se afirma que los 20 días por año se paguen automáticamente en todo despido injustificado — el Art. 50 LFT los reserva a supuestos específicos (negativa patronal a reinstalar en los casos que la ley exime, o rescisión imputable al patrón). Pendiente para fase editorial separada: si se incorpora un claim propio sobre prima de antigüedad (Art. 162.III LFT, regla de 15 años en renuncia voluntaria), debe analizarse y verificarse de forma independiente — no se crea ese claim en esta corrección. Verificación de red intentada y bloqueada (EGRESS_BLOCKED) en esta sesión y en la anterior, contra 7 dominios oficiales representativos (boe.es, diputados.gob.mx, infoleg.gob.ar, sjf2.scjn.gob.mx, corteidh.or.cr, funcionpublica.gov.co, ordenjuridico.gob.mx). No se pudo confirmar origen oficial, texto exacto ni vigencia de forma independiente."
+      "notas": "REQUIERE_INVESTIGACION — BLOQUEADO PARA APTO_PARA_NARRATIVA hasta corrección editorial. HALLAZGO 2026-09-09 (lectura directa e íntegra del art. 48 LFT contra SOURCE_MX_LFT.pdf, hash verificado): el art. 48 NO menciona 'intereses' en ningún párrafo — solo reinstalación/indemnización de tres meses y salarios vencidos. El texto_exacto de este claim afirma 'También pueden corresponder salarios vencidos e intereses en los términos del artículo 48', lo cual es una afirmación jurídica falsa sobre el contenido del artículo 48 tal como está redactado hoy. Antes de que este claim pueda avanzar a APTO_PARA_NARRATIVA hace falta que un humano decida: (a) retirar la mención de 'intereses' del texto_exacto, o (b) si 'intereses' proviene de otra disposición (p. ej. mora civil general), citar esa fuente por separado en vez de atribuirla al art. 48. No se modifica texto_exacto por cuenta propia — es una decisión editorial jurídica, no estructural. Corrección jurídica v1 (histórica): se retira SRC-P02-MX-LFT-05 (Art. 162.III, prima de antigüedad) como fuente de este claim — regula una prestación distinta (antigüedad), no es respaldo directo de la indemnización por despido injustificado."
     },
     {
       "claim_id": "pieza-02-claim-3",
@@ -194,11 +194,11 @@
           ],
           "verificacion_fuente": {
             "origen_oficial_confirmado": true,
-            "texto_exacto_consultado": false,
-            "vigencia_comprobada": false,
-            "fecha_comprobacion": "2026-08-31",
-            "metodo_o_evidencia": "WebSearch contra diputados.gob.mx: el art. 53 (causas de terminacion de la relacion de trabajo) fraccion I dice literalmente 'El mutuo consentimiento de las partes' — coincide exactamente con el claim ('regula la terminacion por mutuo consentimiento').",
-            "observaciones": "origen_oficial_confirmado=true por evidencia real vía WebSearch (2026-08-31), con cita casi literal de la fraccion I. texto_exacto_consultado y vigencia_comprobada permanecen false — falta confirmar contra el PDF completo que no haya sido reformada."
+            "texto_exacto_consultado": true,
+            "vigencia_comprobada": true,
+            "fecha_comprobacion": "2026-09-09",
+            "metodo_o_evidencia": "Lectura directa contra SOURCE_MX_LFT.pdf (sha256 12f09393a1951a91c3f57f579bf611b034edf1a5f78cdbfb828e23ff3a9acbf7, VERIFIED). Texto literal: 'Artículo 53.- Son causas de terminación de las relaciones de trabajo: I. El mutuo consentimiento de las partes;' — coincide exactamente con el claim, sin marca de reforma sobre esta fracción en el texto leído.",
+            "observaciones": "texto_exacto_consultado=true y vigencia_comprobada=true por lectura directa del PDF oficial íntegro. La fuente CPEUM art. 5 de este mismo claim sigue sin PDF depositado en Drive — permanece con texto_exacto_consultado=false, así que el techo de este claim sigue limitado por esa fuente."
           },
           "registro_oficial_id": "diputados-gob-mx"
         },
@@ -287,11 +287,11 @@
           ],
           "verificacion_fuente": {
             "origen_oficial_confirmado": true,
-            "texto_exacto_consultado": false,
-            "vigencia_comprobada": false,
-            "fecha_comprobacion": "2026-09-01",
-            "metodo_o_evidencia": "WebSearch de seguimiento (2026-09-01, query dirigida al propio 49.1.j) confirma de forma convergente en múltiples fuentes jurídicas secundarias independientes (Iberley, vLex, elDerecho, Legálitas, gobiernodecanarias.org, supercontable.com) que el art. 49.1.j) ET —no el 49.1.d)— es el que dispone la extinción 'por voluntad del trabajador, fundada en un incumplimiento contractual del empresario', y que remite su desarrollo al art. 50 ET. El art. 49.1.d) regula un supuesto distinto (mutuo acuerdo/causas consignadas en el contrato). La discrepancia detectada en la ronda anterior queda resuelta con evidencia convergente, aunque sigue siendo evidencia secundaria (no el texto oficial completo del BOE leído directamente).",
-            "observaciones": "origen_oficial_confirmado=true (boe.es) para el art. 50, ya confirmado en la ronda anterior. Localizador corregido de '49.1.d' a '49.1.j' — la discrepancia señalada el 2026-08-31 queda resuelta por convergencia de fuentes secundarias independientes, no por lectura directa del BOE (que sigue EGRESS_BLOCKED). texto_exacto_consultado permanece false: sigue haciendo falta leer el texto oficial completo antes de Nivel 1."
+            "texto_exacto_consultado": true,
+            "vigencia_comprobada": true,
+            "fecha_comprobacion": "2026-09-09",
+            "metodo_o_evidencia": "Lectura directa contra SOURCE_ES_ET.pdf (sha256 fe831486402775aa5c9a487ba9608c658e178ffddf09491c68b58995ae4bce86, VERIFIED, texto consolidado BOE-A-2015-11430 actualizado a 04-12-2025) — no WebFetch, que sigue EGRESS_BLOCKED. Texto literal art. 49.1.j: 'j) Por voluntad del trabajador, fundamentada en un incumplimiento contractual del empresario.' — confirma exactamente la corrección de localizador de 49.1.d a 49.1.j ya propuesta. Texto literal art. 50.1: causas justas para que el trabajador solicite la extinción (modificaciones sustanciales, falta de pago o retrasos continuados de salario, cualquier otro incumplimiento grave); art. 50.2: 'el trabajador tendrá derecho a las indemnizaciones señaladas para el despido improcedente.'",
+            "observaciones": "texto_exacto_consultado=true y vigencia_comprobada=true por lectura directa e íntegra de ambos artículos contra el texto consolidado oficial (BOE-A-2015-11430 actualizado a 04-12-2025, posterior a la fecha_consulta original de este claim). La URL de referencia sigue siendo boe.es/buscar/pdf/2015/BOE-A-2015-11430-consolidado.pdf; Drive fue el canal de lectura autorizado por el fundador."
           },
           "registro_oficial_id": "boe-es"
         },
@@ -681,11 +681,11 @@
           ],
           "verificacion_fuente": {
             "origen_oficial_confirmado": true,
-            "texto_exacto_consultado": false,
-            "vigencia_comprobada": false,
-            "fecha_comprobacion": "2026-09-01",
-            "metodo_o_evidencia": "WebSearch de seguimiento (2026-09-01) confirma de forma convergente en múltiples fuentes secundarias independientes que el art. 49.1.j) ET —no el 49.1.d)— dispone la extinción por voluntad del trabajador fundada en incumplimiento del empresario, desarrollada en el art. 50 ET. Ver detalle completo en la fuente equivalente del claim pieza-02-claim-4 (mismo hallazgo, misma corrección).",
-            "observaciones": "Localizador corregido de '49.1.d' a '49.1.j', igual que en pieza-02-claim-4. texto_exacto_consultado permanece false."
+            "texto_exacto_consultado": true,
+            "vigencia_comprobada": true,
+            "fecha_comprobacion": "2026-09-09",
+            "metodo_o_evidencia": "Lectura directa contra SOURCE_ES_ET.pdf (sha256 fe831486402775aa5c9a487ba9608c658e178ffddf09491c68b58995ae4bce86, VERIFIED). Mismo hallazgo que en pieza-02-claim-4: art. 49.1.j confirma literalmente 'Por voluntad del trabajador, fundamentada en un incumplimiento contractual del empresario'; art. 50 confirma las indemnizaciones del despido improcedente.",
+            "observaciones": "texto_exacto_consultado=true y vigencia_comprobada=true por lectura directa, igual que en la fuente equivalente de pieza-02-claim-4 (mismo documento, mismo hash)."
           },
           "registro_oficial_id": "boe-es"
         },

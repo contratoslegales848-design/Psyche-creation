@@ -45,11 +45,11 @@
           "jurisdicciones_cubiertas": ["México"],
           "verificacion_fuente": {
             "origen_oficial_confirmado": true,
-            "texto_exacto_consultado": false,
-            "vigencia_comprobada": false,
-            "fecha_comprobacion": "2026-09-01",
-            "metodo_o_evidencia": "WebSearch devolvió lo que se presenta como el texto completo de los tres párrafos del art. 20 LFT (definición de relación de trabajo, definición de contrato individual de trabajo, y equivalencia de efectos entre ambos), citado de forma consistente por múltiples fuentes secundarias independientes (vLex, leyes-mx.com, sesamehr.mx) y coincidente con el propio dominio oficial diputados.gob.mx en los resultados de búsqueda.",
-            "observaciones": "origen_oficial_confirmado=true por convergencia de evidencia vía WebSearch contra diputados.gob.mx (2026-09-01) — no por autoconfirmación de ningún modelo. texto_exacto_consultado y vigencia_comprobada permanecen false: WebFetch sigue EGRESS_BLOCKED hacia diputados.gob.mx en esta sesión, así que no leí yo mismo el PDF íntegro ni confirmé que no haya reforma posterior a la fecha de consulta."
+            "texto_exacto_consultado": true,
+            "vigencia_comprobada": true,
+            "fecha_comprobacion": "2026-09-09",
+            "metodo_o_evidencia": "Lectura directa contra SOURCE_MX_LFT.pdf (sha256 12f09393a1951a91c3f57f579bf611b034edf1a5f78cdbfb828e23ff3a9acbf7, VERIFIED, depositado en Drive por canal autorizado por el fundador) — no WebFetch, que sigue EGRESS_BLOCKED hacia diputados.gob.mx en esta sesión. Texto literal art. 20: 'Se entiende por relación de trabajo, cualquiera que sea el acto que le dé origen, la prestación de un trabajo personal subordinado a una persona, mediante el pago de un salario. Contrato individual de trabajo, cualquiera que sea su forma o denominación, es aquel por virtud del cual una persona se obliga a prestar a otra un trabajo personal subordinado, mediante el pago de un salario. La prestación de un trabajo a que se refiere el párrafo primero y el contrato celebrado producen los mismos efectos.' — coincide exactamente con el claim y con nucleo_transversal declarado.",
+            "observaciones": "texto_exacto_consultado=true y vigencia_comprobada=true por lectura directa del PDF oficial íntegro (encabezado 'Última Reforma DOF 14-05-2026', sin marca de reforma posterior sobre el art. 20 en el texto leído). La URL de referencia sigue siendo diputados.gob.mx/LeyesBiblio/pdf/LFT.pdf."
           },
           "registro_oficial_id": "diputados-gob-mx"
         },
@@ -105,11 +105,11 @@
           "jurisdicciones_cubiertas": ["España"],
           "verificacion_fuente": {
             "origen_oficial_confirmado": true,
-            "texto_exacto_consultado": false,
-            "vigencia_comprobada": false,
-            "fecha_comprobacion": "2026-09-01",
-            "metodo_o_evidencia": "WebSearch devolvió el texto del art. 1.1 ET: la presunción de contrato de trabajo entre quien presta un servicio por cuenta y dentro del ámbito de organización y dirección de otro (subordinación), y quien lo recibe a cambio de una retribución (remuneración) — coincide con el mismo esquema de tres elementos hallado en los otros tres países. Coincidencia entre múltiples resultados de búsqueda, incluido el propio dominio boe.es.",
-            "observaciones": "origen_oficial_confirmado=true por evidencia real vía WebSearch (2026-09-01) contra boe.es, ya registrado (registro_oficial_id='boe-es', usado también en pieza-02-laboral). texto_exacto_consultado y vigencia_comprobada permanecen false: WebFetch sigue EGRESS_BLOCKED hacia boe.es en esta sesión."
+            "texto_exacto_consultado": true,
+            "vigencia_comprobada": true,
+            "fecha_comprobacion": "2026-09-09",
+            "metodo_o_evidencia": "Lectura directa contra SOURCE_ES_ET.pdf (sha256 fe831486402775aa5c9a487ba9608c658e178ffddf09491c68b58995ae4bce86, VERIFIED, texto consolidado BOE-A-2015-11430 actualizado a 04-12-2025) — no WebFetch, que sigue EGRESS_BLOCKED hacia boe.es en esta sesión. Texto literal art. 1.1: 'Esta ley será de aplicación a los trabajadores que voluntariamente presten sus servicios retribuidos por cuenta ajena y dentro del ámbito de organización y dirección de otra persona, física o jurídica, denominada empleador o empresario.' — coincide exactamente con el esquema de tres elementos (servicio personal + subordinación + remuneración) declarado en nucleo_transversal.",
+            "observaciones": "texto_exacto_consultado=true y vigencia_comprobada=true por lectura directa del texto consolidado oficial (actualizado a 04-12-2025, posterior a la fecha_consulta original del claim). La URL de referencia sigue siendo boe.es/buscar/pdf/2015/BOE-A-2015-11430-consolidado.pdf."
           },
           "registro_oficial_id": "boe-es"
         }
