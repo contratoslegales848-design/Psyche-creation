@@ -10,6 +10,17 @@ para que estas dos piezas puedan avanzar. Generado por
 falte trabajo — es que solo un humano (o una sesión con red distinta) puede
 abrir estas URLs y confirmar.
 
+**Reconfirmado el 2026-09-09** (sesión distinta, mismo resultado): `WebFetch`
+contra `www.diputados.gob.mx`, `www.boe.es` y `www.oas.org` devuelve
+`EGRESS_BLOCKED` en los tres casos. El bloqueo no es intermitente ni exclusivo
+de una sesión anterior — es sistemático contra dominios oficiales de al menos
+México, España y OEA. No se intentó sustituir esto con `WebSearch` (snippets):
+como ya documenta `pieza-02-claim-1`, un snippet no satisface
+`texto_exacto_consultado` ni `vigencia_comprobada` — sería un booleano
+autoafirmado, prohibido por CLAUDE.md §4 ("ninguna cita se acepta sin fuente
+verificable de nivel fail-closed"). Ninguna fuente de esta lista avanzó de
+estado en esta sesión.
+
 **Qué hacer con cada fuente**: abrir la URL, localizar el artículo/sentencia
 exacto, y confirmar tres cosas:
 1. **origen oficial** — ¿la URL es realmente del organismo que dice ser?
