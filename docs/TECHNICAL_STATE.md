@@ -103,11 +103,23 @@ La CI solo corre en el PR. No es un fallo, pero conviene saberlo: una rama puede
 acumular commits sin que nada la valide hasta que se abre el PR.
 
 ### 2.5 Piloto
+
+Tabla reverificada el 2026-09-09 corriendo `validate-claim-packet.py` contra cada
+paquete real (no por documentación). Suite completa de la skill: **245 passed, 180
+subtests passed**.
+
 | Pieza | Claims | Estado agregado | Gate |
 |---|---|---|---|
-| `pieza-01-reales.json` | 3 (1, 2, 4) | APTO_PARA_NARRATIVA | CERRADO |
+| `pieza-01-reales.json` | 3 (1, 2, 4) | APTO_PARA_NARRATIVA | ABIERTO |
 | `pieza-02-laboral.json` | 7 | REQUIERE_INVESTIGACION | CERRADO |
 | `pieza-03-honor.json` | 7 | REQUIERE_INVESTIGACION | CERRADO |
+| `pieza-04-laboral-basico.json` | 1 (`pieza-04-claim-1`) | OK ESTRUCTURAL — PENDIENTE HUMANO | CERRADO (a la espera de revisión humana de `pieza-04-claim-1`) |
+
+`pieza-04-laboral-basico.json` es nueva desde el corte del 2026-08-27 de este
+documento (PR #31, #32): primer claim Capa A transversal de la materia laboral
+básica descrita en `docs/direccion-basico-antes-que-complejo.md`. No confundir
+"OK ESTRUCTURAL" con verificado — el validador no encontró errores de forma, pero
+el claim sigue sin la firma humana que abriría el gate.
 
 La Pieza 1 tiene aprobación humana expresa registrada en la rama
 `claude/legalmente-pieza-01-aprobacion-humana-final-v1` (commit `e7bb82f`), **sin
