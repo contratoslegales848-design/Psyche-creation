@@ -31,11 +31,14 @@ class TestResolucionReal(unittest.TestCase):
         self.assertTrue(all(len(t) == 3 for t in ids))
 
     def test_gate_summary_no_reinterpreta_estados(self):
-        # 4 piezas reales en pilot/claim-packets/ desde pieza-04-laboral-basico
-        # (laboral básico transversal, Capa A) — orden expresa del fundador,
-        # documentada en docs/direccion-basico-antes-que-complejo.md.
+        # 8 piezas reales en pilot/claim-packets/: las 4 originales (incluida
+        # pieza-04-laboral-basico, orden expresa del fundador documentada en
+        # docs/direccion-basico-antes-que-complejo.md) más las 4 del Microlote 01
+        # / Release 01 (LM-R01-001/006/011/014), autorizadas por el fundador
+        # el 2026-09-10 ("opción b") sobre la fuente de verdad de
+        # legallmente-alt/legalmente-web@chatgpt/legalmente-release-01.
         filas = resolver.gate_summary()
-        self.assertEqual(len(filas), 4)
+        self.assertEqual(len(filas), 8)
         for f in filas:
             # VISUAL_READY jamas dice SI mientras el gate canonico este cerrado.
             if f["ART_GATE"] != "ABIERTO":

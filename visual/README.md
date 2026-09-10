@@ -7,6 +7,14 @@ final. No sustituye a `legalmente-visual-system`: esa skill conserva el criterio
 artístico (qué escuela toca, qué metáfora). Aquí vive lo que un programa puede
 comprobar y bloquear.
 
+## Política de dirección artística vigente
+
+[`docs/direccion-artistica-adaptativa-v1.2.md`](../docs/direccion-artistica-adaptativa-v1.2.md)
+— autorizada por el fundador el 2026-09-10, copia sincronizada del documento de
+Drive. Es criterio editorial, no un cambio de código: su propia sección 14
+distingue "guardar el documento" (hecho) de "implementar bajo revisión" (pendiente,
+gaps registrados en la nota de incorporación al final del archivo).
+
 ## Principio
 
 LegalMente posee el contenido, las reglas, la intención visual, el prompt compilado,

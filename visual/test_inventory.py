@@ -21,11 +21,15 @@ import review_semantics  # noqa: E402
 class TestInventarioReal(unittest.TestCase):
     """Contra el canon real: PIEZA-01-REALES abierta, 02 y 03 cerradas."""
 
-    def test_las_cuatro_piezas_del_piloto_aparecen(self):
+    def test_las_ocho_piezas_del_piloto_aparecen(self):
+        # Las 4 originales + las 4 del Microlote 01 / Release 01
+        # (LM-R01-001/006/011/014), autorizadas por el fundador el 2026-09-10.
         filas = inventory.build_readiness()
         self.assertEqual({r.piece_id for r in filas},
                           {"PIEZA-01-REALES", "PIEZA-02-LABORAL", "PIEZA-03-HONOR",
-                           "PIEZA-04-LABORAL-BASICO"})
+                           "PIEZA-04-LABORAL-BASICO",
+                           "LM-R01-001-FINIQUITO-MX", "LM-R01-006-FACULTADES-FIRMA-MX",
+                           "LM-R01-011-DATOS-IA-EU", "LM-R01-014-EVIDENCIA-DIGITAL-MX"})
 
     def test_piezas_requieren_investigacion_bloquean_por_esa_razon(self):
         filas = {r.piece_id: r for r in inventory.build_readiness()}
