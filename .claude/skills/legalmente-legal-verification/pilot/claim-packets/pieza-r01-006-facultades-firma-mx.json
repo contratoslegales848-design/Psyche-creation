@@ -56,11 +56,11 @@
       },
       "estado": "APTO_CON_MATICES",
       "revision_humana": {
-        "estado": "PENDIENTE",
-        "revisor": null,
-        "fecha": null,
-        "observaciones": null,
-        "contenido_hash_sha256": null
+        "estado": "APROBADO",
+        "revisor": "Raymundo",
+        "fecha": "2026-09-10",
+        "observaciones": "Confirmado el texto_exacto tal como está redactado (sin cambios), vía chat de sesión de Claude Code, 2026-09-10.",
+        "contenido_hash_sha256": "c4da4ad7a7a39d29a96f7dba78d8ed0b12cc494e6a9aba4485ee6c44f4aa703b"
       },
       "gate_arte": "CERRADO",
       "reformulacion_propuesta": {
