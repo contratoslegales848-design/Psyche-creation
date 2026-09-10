@@ -989,9 +989,15 @@ class TestPilotClaimPacketsReales(unittest.TestCase):
     # 9. Pieza 4 (laboral básico transversal, Capa A) se suma tras orden expresa
     #    del fundador — ver CLAUDE.md §6, "salvo orden expresa del fundador" —
     #    documentada en docs/direccion-basico-antes-que-complejo.md.
-    def test_las_cuatro_piezas_reales_pasan_validacion_estructural(self):
+    # 10. Cuatro piezas del Microlote 01 / Release 01 (LM-R01-001, -006, -011,
+    #     -014) se suman tras autorización expresa del fundador ("opción b",
+    #     2026-09-10) para trabajar sobre la fuente de verdad de
+    #     legallmente-alt/legalmente-web@chatgpt/legalmente-release-01
+    #     (docs/RELEASE_01_EXECUTION_V1.md y RELEASE_01_MICROLOT_01_RESEARCH_V1.md
+    #     en ese repo). Ninguna alcanza Nivel 1 en esta ronda (EGRESS_BLOCKED).
+    def test_las_ocho_piezas_reales_pasan_validacion_estructural(self):
         piezas = sorted(self.PILOT_DIR.glob("*.json"))
-        self.assertEqual(len(piezas), 4, f"se esperaban 4 piezas reales, se encontraron {len(piezas)}: {piezas}")
+        self.assertEqual(len(piezas), 8, f"se esperaban 8 piezas reales, se encontraron {len(piezas)}: {piezas}")
         for path in piezas:
             with self.subTest(pieza=path.name):
                 piece = json.loads(path.read_text(encoding="utf-8"))

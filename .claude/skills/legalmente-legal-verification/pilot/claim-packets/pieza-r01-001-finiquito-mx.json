@@ -1,0 +1,118 @@
+{
+  "schema_version": "4.0",
+  "piece_id": "LM-R01-001-FINIQUITO-MX",
+  "claims": [
+    {
+      "claim_id": "lm-r01-001-claim-1",
+      "texto_exacto": "En México, al terminar una relación laboral, el finiquito debería reflejar, cuando procedan, al menos estos conceptos: el salario de los días efectivamente trabajados y no pagados, los días de vacaciones proporcionales no disfrutados, la prima vacacional sobre esos días (no menor al 25%), y el aguinaldo proporcional a los meses trabajados en el año. Un finiquito no es lo mismo que una liquidación por despido: el finiquito corresponde a prestaciones ya devengadas, con independencia de la causa de la terminación.",
+      "ubicacion": "hook",
+      "tipo": "dato",
+      "alcance": "CAPA_C_NACIONAL",
+      "jurisdiccion": "México",
+      "nucleo_transversal": null,
+      "variaciones_materiales": null,
+      "jurisdicciones_revisadas": null,
+      "diferencias_buscadas": null,
+      "contraejemplos_encontrados": null,
+      "justificacion_suficiencia_comparada": null,
+      "fuentes": [
+        {
+          "id": "SRC-LMR01-001-MX-LFT-80",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Ley Federal del Trabajo (México) — art. 80 (prima vacacional, mínimo 25%)",
+          "organismo_autor": "H. Cámara de Diputados",
+          "url": "https://www.diputados.gob.mx/LeyesBiblio/pdf/LFT.pdf",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-09-10",
+          "localizador": "art. 80",
+          "jurisdicciones_cubiertas": ["México"],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": true,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": "2026-09-10",
+            "metodo_o_evidencia": "WebSearch devolvió de forma convergente (SDV Asesores, Centro de Conciliación Laboral Jalisco, y referencias generales) el contenido del art. 80 LFT: prima no menor de 25% sobre los salarios que correspondan durante el periodo de vacaciones.",
+            "observaciones": "texto_exacto_consultado y vigencia_comprobada permanecen false: WebFetch sigue EGRESS_BLOCKED hacia diputados.gob.mx en esta sesión. Ninguna fuente secundaria citó el texto literal completo del artículo, solo su contenido normativo parafraseado de forma consistente."
+          },
+          "registro_oficial_id": "diputados-gob-mx"
+        },
+        {
+          "id": "SRC-LMR01-001-MX-LFT-87",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Ley Federal del Trabajo (México) — art. 87 (aguinaldo anual, mínimo 15 días)",
+          "organismo_autor": "H. Cámara de Diputados",
+          "url": "https://www.diputados.gob.mx/LeyesBiblio/pdf/LFT.pdf",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-09-10",
+          "localizador": "art. 87",
+          "jurisdicciones_cubiertas": ["México"],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": true,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": "2026-09-10",
+            "metodo_o_evidencia": "WebSearch devolvió de forma convergente el contenido del art. 87 LFT: aguinaldo anual de al menos 15 días de salario, pagadero antes del 20 de diciembre; el prorrateo para quien no laboró el año completo es una consecuencia operativa ampliamente citada por fuentes secundarias (calculadoras de nómina), no localizada como texto literal del artículo en esta ronda.",
+            "observaciones": "texto_exacto_consultado=false: no se leyó el PDF íntegro. La regla de proporcionalidad requiere localizar su fundamento textual exacto (art. 87, párrafo relativo) antes de citarla como norma y no solo como práctica de cálculo."
+          },
+          "registro_oficial_id": "diputados-gob-mx"
+        },
+        {
+          "id": "SRC-LMR01-001-MX-PROFEDET-01",
+          "tipo_fuente": "AUTORIDAD_PUBLICA_OFICIAL",
+          "titulo": "PROFEDET — ¿Qué hacer si te despiden? Profedet defiende tus derechos laborales",
+          "organismo_autor": "Gobierno de México (portal genérico gob.mx)",
+          "url": "https://www.gob.mx/profedet/articulos/que-hacer-si-te-despiden-profedet-defiende-tus-derechos-laborales?idiom=es",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-09-09",
+          "localizador": "artículo completo",
+          "jurisdicciones_cubiertas": ["México"],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": true,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": "2026-09-09",
+            "metodo_o_evidencia": "Identificada en el research pass previo (legallmente-alt/legalmente-web@chatgpt/legalmente-release-01, docs/RELEASE_01_MICROLOT_01_RESEARCH_V1.md) como fuente oficial explicativa (gob.mx/profedet). No se releyó el contenido íntegro en esta sesión: WebFetch está EGRESS_BLOCKED hacia www.gob.mx (confirmado 2026-09-10).",
+            "observaciones": "Fuente explicativa oficial (recomienda no firmar si el monto ofrecido es menor al que corresponde y acudir a PROFEDET), no un texto normativo con artículos citables — útil para el ángulo editorial, no para fundamentar montos exactos. El hostname www.gob.mx sí está registrado bajo el id genérico 'gob-mx-generico' (Gobierno de México, portal genérico) — se usa ese id porque PROFEDET no tiene entrada propia todavía en references/official-source-registry.json; no se inventó un id nuevo."
+          },
+          "registro_oficial_id": "gob-mx-generico"
+        }
+      ],
+      "confianza": "media",
+      "riesgo_falsa_universalizacion": "alto",
+      "riesgo_asesoria": "alto",
+      "platform_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "confidentiality_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "estado": "REQUIERE_INVESTIGACION",
+      "revision_humana": {
+        "estado": "PENDIENTE",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null,
+        "contenido_hash_sha256": null
+      },
+      "gate_arte": "CERRADO",
+      "reformulacion_propuesta": {
+        "texto": null,
+        "verificada": false,
+        "nuevo_claim_id": null
+      },
+      "redaccion_prohibida": "El finiquito debe incluir exactamente estos montos y ningún otro, sin importar el caso concreto (evitar que un listado general se lea como cálculo aplicable a cualquier persona).",
+      "notas": "Pieza del Release 01 / Microlote 01 (lane PUBLIC_GENERAL), prioridad 1. REQUIERE_INVESTIGACION (no APTO_CON_MATICES como lm-r01-006) porque falta el fundamento textual exacto del prorrateo de aguinaldo y porque el art. 76 (vacaciones proporcionales, reforma 'Vacaciones Dignas' DOF 27-12-2022) no se investigó todavía en esta ronda con la misma profundidad. Riesgo de asesoría marcado 'alto': el hook editorial linda con dar una lista que el lector podría tomar como su cálculo personal — la nota de la investigación previa ya advertía evitar 'convertir una lista general en cálculo individual'. Siguiente paso concreto: localizar art. 76 (vacaciones proporcionales) y el fundamento exacto del prorrateo de aguinaldo antes de reintentar el gate."
+    }
+  ],
+  "estado_agregado": "REQUIERE_INVESTIGACION",
+  "revisiones_pendientes": ["lm-r01-001-claim-1"],
+  "gate_global_arte": "CERRADO"
+}

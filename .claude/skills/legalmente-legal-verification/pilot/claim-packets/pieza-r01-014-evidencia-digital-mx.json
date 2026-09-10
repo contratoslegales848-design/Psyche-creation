@@ -1,0 +1,98 @@
+{
+  "schema_version": "4.0",
+  "piece_id": "LM-R01-014-EVIDENCIA-DIGITAL-MX",
+  "claims": [
+    {
+      "claim_id": "lm-r01-014-claim-1",
+      "texto_exacto": "En México, bajo el Código Nacional de Procedimientos Civiles y Familiares, una captura de pantalla, video o fotografía puede admitirse como prueba en un procedimiento civil o familiar, sujeta a las mismas reglas de objeción, impugnación y fiabilidad que cualquier otro medio de convicción — no prueba un hecho por sí sola, por el solo hecho de existir o de mostrarse. Además, la aplicación de este Código es gradual: no opera todavía de manera idéntica en todos los tribunales del país.",
+      "ubicacion": "hook",
+      "tipo": "definicion",
+      "alcance": "CAPA_C_NACIONAL",
+      "jurisdiccion": "México",
+      "nucleo_transversal": null,
+      "variaciones_materiales": null,
+      "jurisdicciones_revisadas": null,
+      "diferencias_buscadas": null,
+      "contraejemplos_encontrados": null,
+      "justificacion_suficiencia_comparada": null,
+      "fuentes": [
+        {
+          "id": "SRC-LMR01-014-MX-CNPCF-308",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Código Nacional de Procedimientos Civiles y Familiares (México) — art. 308 (equivalencia funcional, neutralidad tecnológica)",
+          "organismo_autor": "H. Cámara de Diputados",
+          "url": "https://www.diputados.gob.mx/LeyesBiblio/pdf/CNPCF.pdf",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-09-10",
+          "localizador": "art. 308",
+          "jurisdicciones_cubiertas": ["México"],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": true,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": "2026-09-10",
+            "metodo_o_evidencia": "WebSearch devolvió el texto citado como literal del art. 308: 'Las pruebas documentales, físicas o electrónicas recibirán el mismo trato, atendiendo los principios de equivalencia funcional y neutralidad tecnológica', con la instrucción de aplicar las reglas generales/especiales de objeción, impugnación o fiabilidad según su naturaleza. Citado consistentemente por Justia México (mexico.justia.com), fuente de sistematización jurídica reconocida.",
+            "observaciones": "origen_oficial_confirmado=true por convergencia vía WebSearch, no por lectura directa: WebFetch sigue EGRESS_BLOCKED hacia diputados.gob.mx. texto_exacto_consultado=false porque la única cita textual proviene de una fuente secundaria (Justia), no del PDF oficial mismo."
+          },
+          "registro_oficial_id": "diputados-gob-mx"
+        },
+        {
+          "id": "SRC-LMR01-014-MX-CNPCF-335",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Código Nacional de Procedimientos Civiles y Familiares (México) — art. 335 (otros medios de prueba: video, fotografía, información electrónica)",
+          "organismo_autor": "H. Cámara de Diputados",
+          "url": "https://www.diputados.gob.mx/LeyesBiblio/pdf/CNPCF.pdf",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-09-10",
+          "localizador": "art. 335",
+          "jurisdicciones_cubiertas": ["México"],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": true,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": "2026-09-10",
+            "metodo_o_evidencia": "WebSearch (vía Justia México) describe el art. 335 admitiendo videos, fotografías, grabaciones, copias digitales e impresiones de documentos electrónicos, entre otros medios, 'que puedan producir convicción en el ánimo del juzgador' — coincide con lo ya registrado en el research pass previo de legallmente-alt/legalmente-web.",
+            "observaciones": "texto_exacto_consultado=false: la cita es un resumen de Justia, no el texto oficial íntegro leído directamente."
+          },
+          "registro_oficial_id": "diputados-gob-mx"
+        }
+      ],
+      "confianza": "media",
+      "riesgo_falsa_universalizacion": "alto",
+      "riesgo_asesoria": "medio",
+      "platform_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "confidentiality_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "estado": "REQUIERE_INVESTIGACION",
+      "revision_humana": {
+        "estado": "PENDIENTE",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null,
+        "contenido_hash_sha256": null
+      },
+      "gate_arte": "CERRADO",
+      "reformulacion_propuesta": {
+        "texto": null,
+        "verificada": false,
+        "nuevo_claim_id": null
+      },
+      "redaccion_prohibida": "Una captura de pantalla es prueba automática y suficiente de lo que muestra en cualquier tribunal de México.",
+      "notas": "Pieza del Release 01 / Microlote 01 (lane RADAR_CURRENT), prioridad 5. REQUIERE_INVESTIGACION: el límite crítico ya identificado en el research pass previo (docs/RELEASE_01_MICROLOT_01_RESEARCH_V1.md) es la entrada en vigor GRADUAL del Código Nacional por declaratorias federales/locales, con fecha límite transitoria al 1 de abril de 2027 — esto no se confirmó de forma independiente en esta sesión (EGRESS_BLOCKED) y es el dato que más cambia el alcance real del claim: en un estado donde el Código aún no entra en vigor, sigue aplicando la legislación procesal local anterior, no el CNPCF. No publicar sin resolver ese punto de vigencia territorial."
+    }
+  ],
+  "estado_agregado": "REQUIERE_INVESTIGACION",
+  "revisiones_pendientes": ["lm-r01-014-claim-1"],
+  "gate_global_arte": "CERRADO"
+}

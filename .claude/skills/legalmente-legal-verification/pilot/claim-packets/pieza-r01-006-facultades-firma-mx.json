@@ -1,0 +1,78 @@
+{
+  "schema_version": "4.0",
+  "piece_id": "LM-R01-006-FACULTADES-FIRMA-MX",
+  "claims": [
+    {
+      "claim_id": "lm-r01-006-claim-1",
+      "texto_exacto": "En México, la representación de una sociedad mercantil corresponde a su administrador o administradores, quienes pueden realizar las operaciones inherentes al objeto social salvo lo que expresamente limiten la ley y el contrato social. Que una persona ocupe un cargo dentro de la empresa no basta por sí solo para saber si puede obligarla: hay que verificar si tiene esa facultad conforme al contrato social y, en su caso, el poder correspondiente.",
+      "ubicacion": "hook",
+      "tipo": "definicion",
+      "alcance": "CAPA_C_NACIONAL",
+      "jurisdiccion": "México",
+      "nucleo_transversal": null,
+      "variaciones_materiales": null,
+      "jurisdicciones_revisadas": null,
+      "diferencias_buscadas": null,
+      "contraejemplos_encontrados": null,
+      "justificacion_suficiencia_comparada": null,
+      "fuentes": [
+        {
+          "id": "SRC-LMR01-006-MX-LGSM-10",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Ley General de Sociedades Mercantiles (México) — art. 10 (representación de la sociedad mercantil)",
+          "organismo_autor": "H. Cámara de Diputados",
+          "url": "https://www.diputados.gob.mx/LeyesBiblio/pdf/LGSM.pdf",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-09-10",
+          "localizador": "art. 10",
+          "jurisdicciones_cubiertas": ["México"],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": true,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": "2026-09-10",
+            "metodo_o_evidencia": "WebSearch devolvió el texto del art. 10 LGSM ('La representación de toda sociedad mercantil corresponderá a su administrador o administradores, quienes podrán realizar todas las operaciones inherentes al objeto de la sociedad, salvo lo que expresamente establezcan la Ley y el contrato social') de forma idéntica en dos búsquedas independientes, citado por vLex México, Justia México, leyes-mx.com y conceptosjuridicos.com, con el propio dominio diputados.gob.mx presente entre los resultados como fuente primaria del documento (LGSM.pdf).",
+            "observaciones": "origen_oficial_confirmado=true por convergencia de evidencia vía WebSearch (2026-09-10) contra diputados.gob.mx. texto_exacto_consultado y vigencia_comprobada permanecen false: WebFetch sigue EGRESS_BLOCKED hacia diputados.gob.mx en esta sesión (reconfirmado el mismo día contra 10 dominios oficiales distintos, ver docs/pieza-02-03-verificacion-pendiente.md). No se leyó el PDF íntegro ni se confirmó ausencia de reforma posterior a la fecha de consulta."
+          },
+          "registro_oficial_id": "diputados-gob-mx"
+        }
+      ],
+      "confianza": "media",
+      "riesgo_falsa_universalizacion": "alto",
+      "riesgo_asesoria": "medio",
+      "platform_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "confidentiality_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "estado": "APTO_CON_MATICES",
+      "revision_humana": {
+        "estado": "PENDIENTE",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null,
+        "contenido_hash_sha256": null
+      },
+      "gate_arte": "CERRADO",
+      "reformulacion_propuesta": {
+        "texto": null,
+        "verificada": false,
+        "nuevo_claim_id": null
+      },
+      "redaccion_prohibida": "El cargo que ocupa una persona en una empresa (director, gerente, CEO) demuestra por sí solo que puede firmar y obligar a la sociedad.",
+      "notas": "Pieza del Release 01 / Microlote 01 (lane FOUNDER_LINKEDIN), investigación previa en legallmente-alt/legalmente-web@chatgpt/legalmente-release-01 (docs/RELEASE_01_MICROLOT_01_RESEARCH_V1.md). Alcance CAPA_C_NACIONAL: no se investigaron equivalentes en otras jurisdicciones panhispánicas en esta ronda — no universalizar. APTO_CON_MATICES es el techo alcanzable: fuente NORMA_OFICIAL con hostname/organismo verificados por convergencia WebSearch, pero sin texto_exacto_consultado=true por EGRESS_BLOCKED. Pendiente además: el art. 10 LGSM cubre solo el supuesto del administrador; el hook editorial también implica apoderados (poder notarial), que requiere fuente adicional (Código Civil Federal, poderes) antes de expandir el claim más allá del administrador."
+    }
+  ],
+  "estado_agregado": "APTO_CON_MATICES",
+  "revisiones_pendientes": ["lm-r01-006-claim-1"],
+  "gate_global_arte": "CERRADO"
+}

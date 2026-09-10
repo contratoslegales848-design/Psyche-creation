@@ -1,0 +1,98 @@
+{
+  "schema_version": "4.0",
+  "piece_id": "LM-R01-011-DATOS-IA-EU",
+  "claims": [
+    {
+      "claim_id": "lm-r01-011-claim-1",
+      "texto_exacto": "Bajo el RGPD de la Unión Europea, un dato personal es toda información sobre una persona física identificada o identificable — directa o indirectamente, por ejemplo mediante un nombre, un número de identificación, datos de localización o un identificador en línea. Que ese dato entre a un sistema de inteligencia artificial (para entrenarlo, para que lo procese, o como parte de su salida) no lo saca de esa protección: sigue siendo un tratamiento de datos personales sujeto al RGPD, y puede además activar obligaciones específicas del Reglamento de IA (UE) 2024/1689 si el sistema califica como de riesgo alto u otra categoría regulada.",
+      "ubicacion": "hook",
+      "tipo": "definicion",
+      "alcance": "CAPA_C_NACIONAL",
+      "jurisdiccion": "Unión Europea",
+      "nucleo_transversal": null,
+      "variaciones_materiales": null,
+      "jurisdicciones_revisadas": null,
+      "diferencias_buscadas": null,
+      "contraejemplos_encontrados": null,
+      "justificacion_suficiencia_comparada": null,
+      "fuentes": [
+        {
+          "id": "SRC-LMR01-011-EU-RGPD-4",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Reglamento (UE) 2016/679 (RGPD) — art. 4.1 (definición de 'datos personales')",
+          "organismo_autor": "EUR-Lex",
+          "url": "https://eur-lex.europa.eu/eli/reg/2016/679/oj?locale=es",
+          "identificador_bibliografico": "CELEX 32016R0679",
+          "fecha_consulta": "2026-09-10",
+          "localizador": "art. 4.1",
+          "jurisdicciones_cubiertas": ["Unión Europea"],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": true,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": "2026-09-10",
+            "metodo_o_evidencia": "WebSearch devolvió una cita presentada como texto literal del art. 4.1: '\"datos personales\": toda información sobre una persona física identificada o identificable (\"el interesado\"); se considerará persona física identificable toda persona cuya identidad pueda determinarse, directa o indirectamente, en particular mediante un identificador, como por ejemplo un nombre, un número de identificación, datos de localización, un identificador en línea o uno o varios elementos propios de la identidad física, fisiológica, genética, psíquica, económica, cultural o social de dicha persona'. Coincide en estructura y contenido con múltiples fuentes secundarias (Iberley, dpoitlaw, databitlaw), pero ninguna es EUR-Lex mismo leído directamente en esta sesión.",
+            "observaciones": "texto_exacto_consultado=false: WebFetch sigue EGRESS_BLOCKED hacia eur-lex.europa.eu (confirmado 2026-09-10). No se confirmó versión consolidada vigente ni posibles modificaciones posteriores al RGPD."
+          },
+          "registro_oficial_id": "eur-lex-europa-eu"
+        },
+        {
+          "id": "SRC-LMR01-011-EU-AIACT-01",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Reglamento (UE) 2024/1689 (AI Act)",
+          "organismo_autor": "EUR-Lex",
+          "url": "https://eur-lex.europa.eu/eli/reg/2024/1689/oj/spa",
+          "identificador_bibliografico": "CELEX 32024R1689",
+          "fecha_consulta": "2026-09-09",
+          "localizador": "pendiente de identificar artículo/considerando específico",
+          "jurisdicciones_cubiertas": ["Unión Europea"],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": true,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": "2026-09-09",
+            "metodo_o_evidencia": "Identificada en el research pass previo (legallmente-alt/legalmente-web@chatgpt/legalmente-release-01) como fuente candidata. No se investigó en esta sesión el artículo/considerando concreto que fundamente 'obligaciones específicas' ni la categoría de riesgo aplicable — el claim la menciona en términos generales ('puede además activar'), lo cual es insuficiente para Nivel 1 y arriesga imprecisión sobre cuándo aplica realmente.",
+            "observaciones": "Gap más grave del claim: falta localizar el artículo exacto del AI Act que sustente la frase 'obligaciones específicas... si el sistema califica como de riesgo alto'."
+          },
+          "registro_oficial_id": "eur-lex-europa-eu"
+        }
+      ],
+      "confianza": "baja",
+      "riesgo_falsa_universalizacion": "alto",
+      "riesgo_asesoria": "medio",
+      "platform_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "confidentiality_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "estado": "REQUIERE_INVESTIGACION",
+      "revision_humana": {
+        "estado": "PENDIENTE",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null,
+        "contenido_hash_sha256": null
+      },
+      "gate_arte": "CERRADO",
+      "reformulacion_propuesta": {
+        "texto": null,
+        "verificada": false,
+        "nuevo_claim_id": null
+      },
+      "redaccion_prohibida": "Esta misma regla del RGPD aplica igual en México, Argentina, Colombia o España fuera del marco de la Unión Europea, o a cualquier ley panhispánica de protección de datos por analogía automática.",
+      "notas": "Pieza del Release 01 / Microlote 01 (lane RADAR_CURRENT), prioridad 4 — el propio ranking del microlote ya la condiciona: 'solo si source gate cierra por territorio'. No cierra: (1) falta el fundamento textual exacto del AI Act para la frase de 'obligaciones específicas'; (2) riesgo editorial estructural, no solo de fuente — LegalMente es una marca panhispánica y este claim es 100% derecho de la Unión Europea; publicarlo sin un marco explícito de 'esto es UE, no aplica igual en México/España-fuera-de-UE/Argentina/Colombia' es exactamente el tipo de falsa universalización que CLAUDE.md §4 prohíbe, incluso siendo jurídicamente correcto dentro de su propio territorio. Recomendación operativa: si se produce, la pieza debe declarar el territorio en el título/hook de forma visible (p. ej. 'en la Unión Europea'), no solo en el claim packet."
+    }
+  ],
+  "estado_agregado": "REQUIERE_INVESTIGACION",
+  "revisiones_pendientes": ["lm-r01-011-claim-1"],
+  "gate_global_arte": "CERRADO"
+}
