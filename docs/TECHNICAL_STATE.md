@@ -1,6 +1,6 @@
 # Estado técnico real de LegalMente
 
-**Fecha:** 2026-08-27 · **Base:** `origin/main` en `82f226e` + ramas `chore/phase1-technical-readiness` y `chore/phase1-p0-confidencialidad-procedencia`
+**Fecha:** 2026-08-27 (última verificación de suites y cruce con Drive: 2026-09-11) · **Base:** `origin/main` en `ef7ffdd` (incluye ya pieza-04-laboral-basico, PR #32)
 **Semáforo global: AMARILLO** (los dos P0 quedaron cerrados; el amarillo lo sostienen ahora riesgos declarados, no huecos sin control).
 
 Este documento describe lo que **existe y se ejecuta**, no lo que está planeado.
@@ -53,7 +53,10 @@ real y una prueba que pasa.
 - `fixtures/` — 10 positivas, 46 negativas.
 - `publication/fixtures/` — 2 cadenas válidas, 14 inválidas, 1 claim packet sintético.
 
-**Pruebas: 499, todas en verde** (Psyche). Más 23 del consumidor de web, locales.
+**Pruebas: 651, todas en verde** (Psyche, reejecutadas el 2026-09-11 con `unittest discover`;
+requiere `pip install Pillow` para `visual/`, tal como documenta `requirements.txt` — sin eso,
+11 pruebas de `visual/` fallan por `ModuleNotFoundError`, no por regresión de código). Más 23
+del consumidor de web, locales, no reejecutadas esta sesión.
 | Suite | Pruebas |
 |---|---|
 | `test_validate_claim_packet` | 147 |
@@ -61,8 +64,13 @@ real y una prueba que pasa.
 | `test_validate_publication_chain` | 41 |
 | `test_confidentiality_rules` | 20 |
 | `test_validate_content_provenance` | 30 |
-| `visual/` (5 suites) | 207 |
-| `contract/test_canonical_envelope` | 12 |
+| `test_check_unittest_main_guard_position` | 4 |
+| `visual/` (14 archivos `test_*.py`, `discover`) | 355 |
+| `contract/test_canonical_envelope` | 17 |
+
+El número de `visual/` y `contract/` creció frente a la última medición (207 y 12
+respectivamente): son suites activas, no un error de conteo — verificado corriendo
+`python3 -m unittest discover` sobre cada carpeta el 2026-09-11.
 
 ### 2.2 Los cuatro estados no equivalentes
 
@@ -105,9 +113,10 @@ acumular commits sin que nada la valide hasta que se abre el PR.
 ### 2.5 Piloto
 | Pieza | Claims | Estado agregado | Gate |
 |---|---|---|---|
-| `pieza-01-reales.json` | 3 (1, 2, 4) | APTO_PARA_NARRATIVA | CERRADO |
+| `pieza-01-reales.json` | 3 (1, 2, 4) | APTO_PARA_NARRATIVA | CERRADO (gate global; el claim individual con aprobación humana está ABIERTO) |
 | `pieza-02-laboral.json` | 7 | REQUIERE_INVESTIGACION | CERRADO |
 | `pieza-03-honor.json` | 7 | REQUIERE_INVESTIGACION | CERRADO |
+| `pieza-04-laboral-basico.json` | 1 (Capa A transversal) | APTO_CON_MATICES | CERRADO — pendiente `revision_humana` de `pieza-04-claim-1` |
 
 La Pieza 1 tiene aprobación humana expresa registrada en la rama
 `claude/legalmente-pieza-01-aprobacion-humana-final-v1` (commit `e7bb82f`), **sin
@@ -166,6 +175,39 @@ bundle de Remotion falla con exit 1.
 3. **Pruebas congeladas obsoletas** — dos pruebas afirmaban que los paquetes del
    piloto siguen PENDIENTE con gates CERRADO. Hacían fallar la suite ante cualquier
    aprobación humana legítima. Sustituidas por pruebas de coherencia en esta rama.
+4. **El gateway de Drive ("00 LEER PRIMERO") y el Índice v18 citan
+   `docs/auditoria-editorial.md` y `docs/auditoria-editorial-50-conceptos.md` como
+   "en el repositorio".** Verificado el 2026-09-11 (`find` sobre el árbol completo
+   de `Psyche-creation`, incluidas todas las ramas remotas relevantes): ninguno de
+   los dos archivos existe. Es el mismo patrón que advierte `CLAUDE.md §2`, en la
+   dirección inversa — una mención en Drive tampoco es, por sí sola, un archivo real
+   en el repo. Requiere que el fundador o quien mantenga el Índice v18 corrija la
+   referencia, o que alguien cargue esos documentos con su contenido real; ninguna
+   sesión técnica debe inventar su contenido para "completar" la mención.
+5. **Rama sin fusionar `claude/openhands-local-setup-ns163n`** (5 commits por
+   delante de `main`, no en la lista de ramas activas conocidas): contiene los
+   claim packets del Microlote 01 / Release 01 (`LM-R01-001`, `006`, `011`, `014`)
+   que el handoff de Drive (`CLAUDE_DIRECT_HANDOFF_RELEASE01.md`,
+   `RELEASE01_MICROLOT_STATUS.json`) pedía crear, y que **no existen todavía en
+   `main` ni en esta rama** — el `canonical_validator_executed: false` que registra
+   ese JSON de estado en Drive sigue siendo cierto para `main`. Esa rama también
+   registra una `revision_humana.estado: "APROBADO"` para `LM-R01-006` con
+   `revisor: "Raymundo"`, justificada en el commit como "confirmado vía chat de
+   sesión de Claude Code" — exactamente el patrón que la propia skill señala como
+   no verificable en su sección "Límite honesto sobre la aprobación humana" (un
+   modelo puede escribir ese campo con la misma facilidad que un humano; el nombre
+   no prueba autoría). No se fusionó ni se replicó ese patrón en esta sesión.
+   **Pendiente de decisión del fundador**: (a) si esa aprobación es legítima y cómo
+   autenticarla fuera de este mecanismo antes de confiar en ella, y (b) si/cómo
+   fusionar esa rama — evaluando también que trae un commit de dirección artística
+   adaptativa v1.2 que aún no pasó por este `main`. Hasta entonces, Release 01 sigue
+   sin artefactos en `main`.
+6. **`EGRESS_BLOCKED` reconfirmado el 2026-09-11** contra `www.diputados.gob.mx`
+   (LFT) desde esta sesión, con `WebFetch` disponible como herramienta — no es que
+   faltara intentarlo: el bloqueo de red persiste igual que documenta
+   `docs/pieza-02-03-verificacion-pendiente.md`. La verificación de fuentes
+   pendientes de PIEZA-02/03 y del Microlote 01 sigue requiriendo un humano o una
+   sesión con salida de red distinta.
 
 ---
 
@@ -211,6 +253,15 @@ decisión del fundador, no técnica.
 6. **Cerrar los PR #26 y #28 de `legalmente-web` como SUPERSEDED.** Verificado que
    el HEAD de #25 (`48d846f`) ya contiene íntegramente el hardening de #28.
    Requiere permisos de escritura que las sesiones de este repo no tienen.
+7. **Decisión del fundador sobre la rama `claude/openhands-local-setup-ns163n`**
+   (Release 01 / Microlote 01): si la aprobación humana registrada para
+   `LM-R01-006` es legítima y cómo autenticarla, y si/cómo fusionar los cuatro
+   claim packets de esa rama a `main`. Ver §5.5 arriba. Sin esto, Release 01 no
+   avanza en el repositorio canónico.
+8. **Corregir en Drive** la referencia del Índice v18 a
+   `docs/auditoria-editorial.md` / `docs/auditoria-editorial-50-conceptos.md`
+   como "en el repositorio" — no existen ahí. Ver §5.4. Esto lo decide quien
+   mantiene el Índice v18, no una sesión técnica; esta sesión no modificó Drive.
 
 **P2 — cuando el piloto esté medido**
 5. Detección de deriva de fuentes oficiales, fuera del validador (ver ADR 0001).
