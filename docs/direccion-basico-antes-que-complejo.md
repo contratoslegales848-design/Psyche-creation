@@ -65,6 +65,18 @@ En este orden, salvo instrucción expresa en contrario del fundador:
 4. **Digital y datos**
 5. **Contractual** (civil → contratos) — ver sección 4, tiene reglas propias.
 
+**Actualización 2026-09-11 (instrucción expresa del fundador, canal LinkedIn
+Raymundo):** existe ahora un banco de 18 temas de experiencia profesional
+real y anonimizada del fundador para el pilar de Inmobiliario, documentado en
+`docs/linkedin-raymundo-inmobiliario.md`. Es semilla para el **canal LinkedIn
+Raymundo específicamente** (modo D del Índice v18 de Drive), no una
+reordenación de la cola general de LegalMente: el orden de esta sección sigue
+vigente para el feed general. Se añadió también la entrada `"inmobiliario"` a
+`VOCABULARIO_POR_MATERIA` en `visual/route_engine.py` (vocabulario de
+navegación, no una afirmación jurídica) para que el motor de rutas pueda
+recibir contenido de esta materia cuando exista. Ningún tema de ese banco
+está verificado ni tiene claim packet todavía.
+
 Cada materia nueva necesita, como mínimo: entrada en `VOCABULARIO_POR_MATERIA`
 (o `VOCABULARIO_POR_SUBMATERIA` si hace falta una anulación más específica, como
 ya ocurrió con civil/derechos_reales en el fix de vocabulario de CAUSA), y piezas

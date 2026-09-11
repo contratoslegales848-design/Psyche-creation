@@ -115,6 +115,21 @@ VOCABULARIO_POR_MATERIA = {
         CAT_REPARACION: "Reparación / indemnización",
         CAT_PREVENCION: "Prevención laboral",
     },
+    # "inmobiliario" no tenia entrada (docs/direccion-basico-antes-que-complejo.md
+    # S3 lo marca como vacio, prioridad 3). Vocabulario de NAVEGACION generico
+    # sobre la operacion inmobiliaria (adquisicion, desarrollo, escrituracion) --
+    # no afirma una regla de ningun pais, igual que el resto de esta tabla.
+    "inmobiliario": {
+        CAT_CAUSA: "Irregularidad en la operación inmobiliaria",
+        CAT_BIEN_JURIDICO: "Seguridad jurídica del inmueble",
+        CAT_CONSECUENCIA: "Afectación a la titularidad o al desarrollo",
+        CAT_RESPONSABILIDAD: "Responsabilidad contractual o registral",
+        CAT_PRUEBA: "Prueba documental y registral",
+        CAT_PROCEDIMIENTO: "Proceso registral o judicial",
+        CAT_DEFENSA: "Defensa",
+        CAT_REPARACION: "Reparación / saneamiento",
+        CAT_PREVENCION: "Due diligence inmobiliaria",
+    },
 }
 
 # Anulaciones mas especificas por (materia, submateria): la tabla de arriba

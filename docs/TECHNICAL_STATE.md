@@ -202,7 +202,18 @@ bundle de Remotion falla con exit 1.
    fusionar esa rama — evaluando también que trae un commit de dirección artística
    adaptativa v1.2 que aún no pasó por este `main`. Hasta entonces, Release 01 sigue
    sin artefactos en `main`.
-6. **`EGRESS_BLOCKED` reconfirmado el 2026-09-11** contra `www.diputados.gob.mx`
+6. **Drive describe `LM-PC-013`, `LM-PC-031` y `LM-PC-065` como
+   `CORE_LINKED_AND_READY_FOR_INTEGRATION`** (claims aprobados, fuentes
+   mexicanas, copy, visuales 9:16/4:5, web brief y QA) en varios documentos de
+   "agent contribution" no producidos por sesiones de este repositorio.
+   Verificado el 2026-09-11 con `grep -r "LM-PC-01[35]\|LM-PC-065"` sobre todo
+   el árbol de trabajo: **ninguno de esos tres IDs existe en `Psyche-creation`**
+   — ni como claim packet, ni como contenido, ni en ninguna rama. Es el mismo
+   patrón que el punto 4 de esta lista: una narrativa de "listo para integrar"
+   en Drive, sin el archivo real detrás en el repositorio que sería su fuente
+   de verdad técnica. No se puede confirmar ni negar el estado jurídico de esas
+   tres piezas desde este repositorio — solo que no están aquí.
+7. **`EGRESS_BLOCKED` reconfirmado el 2026-09-11** contra `www.diputados.gob.mx`
    (LFT) desde esta sesión, con `WebFetch` disponible como herramienta — no es que
    faltara intentarlo: el bloqueo de red persiste igual que documenta
    `docs/pieza-02-03-verificacion-pendiente.md`. La verificación de fuentes
@@ -262,6 +273,16 @@ decisión del fundador, no técnica.
    `docs/auditoria-editorial.md` / `docs/auditoria-editorial-50-conceptos.md`
    como "en el repositorio" — no existen ahí. Ver §5.4. Esto lo decide quien
    mantiene el Índice v18, no una sesión técnica; esta sesión no modificó Drive.
+9. **Aclarar el estado real de `LM-PC-013`/`031`/`065`** — Drive los describe
+   como listos para integrar a `legalmente-web`, pero no existen en ningún
+   repositorio verificado desde aquí. Ver §5.6. Quien tenga acceso a
+   `legalmente-web` y a los documentos originales de esas piezas debe
+   confirmar si existen en otro lugar o si la narrativa de Drive está
+   adelantada a la implementación real.
+10. **Founder LinkedIn — 18 candidatos de experiencia real, sin verificar.**
+    Ver `docs/linkedin-raymundo-inmobiliario.md` (nuevo, 2026-09-11). Ninguno
+    tiene claim packet; el fundador debe elegir cuáles avanzan primero, y cada
+    uno recorre `legalmente-legal-verification` antes de cualquier copy o arte.
 
 **P2 — cuando el piloto esté medido**
 5. Detección de deriva de fuentes oficiales, fuera del validador (ver ADR 0001).
@@ -285,3 +306,7 @@ decisión del fundador, no técnica.
 - `docs/handoff-contracts/` — contratos externos en borrador.
 - `docs/contrato-motor-masivo.md` — dónde vive cada campo del futuro motor y por qué
   no se creó ningún modelo paralelo.
+- `docs/direccion-basico-antes-que-complejo.md` — prioridad de materias para
+  contenido básico transversal.
+- `docs/linkedin-raymundo-inmobiliario.md` — banco de 18 temas de experiencia
+  profesional real del fundador para LinkedIn (Inmobiliario), sin verificar.
