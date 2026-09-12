@@ -193,9 +193,27 @@ validados con `scripts/validate-claim-packet.py` y
     la pieza completa no avanza hasta que se retire o repare el claim
     bloqueado, y ya está reparado vía reformulación (claim 3).
 
-**Ningún packet tiene `revision_humana.estado: APROBADO`** — nace `PENDIENTE`
-en los 8, como exige la skill. **Ningún gate está `ABIERTO`.** Nada de esto
-puede pasar a `legalmente-visual-system` todavía.
+### 3.2 Primera aprobación humana real (2026-09-12)
+
+El fundador aprobó por chat `linkedin-ray-16-claim-1-mandato` y
+`linkedin-ray-16-claim-3-administrador-vs-otros-cargos`. Registrado en Drive
+(["LegalMente — Registro de aprobación humana — LinkedIn Raymundo claim-1 y
+claim-3 (2026-09-12)"](https://docs.google.com/document/d/1YhXjLyJlHz5DmXq5r1W4aQuvTDjZDHga70jNkFH0u-o/edit),
+con el límite honesto del mecanismo explicado ahí mismo — ver "Límite honesto
+sobre la aprobación humana" en la skill) y en los dos claims
+(`revision_humana.estado: APROBADO`, hash canónico verificado).
+
+**Esto NO abre el gate de arte de ninguno de los dos.** `gate_arte` exige
+`estado = APTO_PARA_NARRATIVA`; ambos claims están en `APTO_CON_MATICES`
+(Nivel 2 — fuentes confirmadas por convergencia de `WebSearch`, sin lectura
+directa por `EGRESS_BLOCKED`). La aprobación humana y el techo de la
+evidencia son controles independientes: aprobar no compensa una fuente
+insuficiente. El `estado_agregado` de la pieza sigue en `BLOQUEADO` por
+`linkedin-ray-16-claim-2-cargo-no-acredita`, sin cambios.
+
+`linkedin-ray-16-claim-2-cargo-no-acredita` y los otros 6 packets
+(`linkedin-ray-01/04/05/12/13/14/17`) siguen `PENDIENTE`, como exige la
+skill.
 
 ## 4. Siguiente paso ejecutable (para cada candidato, en orden)
 

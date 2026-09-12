@@ -149,11 +149,11 @@
       },
       "estado": "APTO_CON_MATICES",
       "revision_humana": {
-        "estado": "PENDIENTE",
-        "revisor": null,
-        "fecha": null,
-        "observaciones": null,
-        "contenido_hash_sha256": null
+        "estado": "APROBADO",
+        "revisor": "Raymundo Acevedo",
+        "fecha": "2026-09-12",
+        "observaciones": "Aprobación recibida por chat en esta sesión de Claude Code (2026-09-12): \"Apruebo linkedin-ray-16-claim-1-mandato y claim-3\", seguida de \"Regístralo en Drive y avísame cuando esté\". Registrada en Drive: https://docs.google.com/document/d/1YhXjLyJlHz5DmXq5r1W4aQuvTDjZDHga70jNkFH0u-o/edit -- ese documento incluye, de forma explícita, el límite honesto de este mecanismo de aprobación (no hay autenticación criptográfica ni sesión firmada, solo esta conversación registrada con fecha y hash). Esta aprobación NO abre el gate de arte por sí sola: el estado del claim es APTO_CON_MATICES (Nivel 2 de fuente, techado por EGRESS_BLOCKED), y gate_arte exige estado=APTO_PARA_NARRATIVA.",
+        "contenido_hash_sha256": "28430b929390f8c1c6035493984ea046df417867922c76c072b49ec97f689698"
       },
       "gate_arte": "CERRADO",
       "reformulacion_propuesta": {
@@ -473,11 +473,11 @@
       },
       "estado": "APTO_CON_MATICES",
       "revision_humana": {
-        "estado": "PENDIENTE",
-        "revisor": null,
-        "fecha": null,
-        "observaciones": null,
-        "contenido_hash_sha256": null
+        "estado": "APROBADO",
+        "revisor": "Raymundo Acevedo",
+        "fecha": "2026-09-12",
+        "observaciones": "Aprobación recibida por chat en esta sesión de Claude Code (2026-09-12): \"Apruebo linkedin-ray-16-claim-1-mandato y claim-3\", seguida de \"Regístralo en Drive y avísame cuando esté\". Registrada en Drive: https://docs.google.com/document/d/1YhXjLyJlHz5DmXq5r1W4aQuvTDjZDHga70jNkFH0u-o/edit -- ese documento incluye, de forma explícita, el límite honesto de este mecanismo de aprobación (no hay autenticación criptográfica ni sesión firmada, solo esta conversación registrada con fecha y hash). Esta aprobación NO abre el gate de arte por sí sola: el estado del claim es APTO_CON_MATICES (Nivel 2 de fuente, techado por EGRESS_BLOCKED), y gate_arte exige estado=APTO_PARA_NARRATIVA.",
+        "contenido_hash_sha256": "4bb43d360108c01b2cd3914381b9a2bb9d62852362dcf907e42473c5c32314f3"
       },
       "gate_arte": "CERRADO",
       "reformulacion_propuesta": {
