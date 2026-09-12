@@ -339,3 +339,12 @@ decisión del fundador, no técnica.
   18 definiciones, tres horizontes (presente/tendencia/prospectiva, nunca prospectiva
   como hecho), prohibición de PII/perfiles, fail-closed, trazabilidad a fuente, y la
   conexión conceptual con el sistema existente. Contrato, Radar NO construido (2026-09-12).
+- `docs/contrato-topic-candidate.md` + `docs/topic-candidates-calibracion.json` —
+  contrato documental del objeto `TopicCandidate` (unidad intermedia entre señal/hueco
+  y claim; captura una oportunidad temática sin volverla afirmación jurídica). Cumple el
+  hueco anticipado en `contrato-motor-masivo.md §4.1` y `auditoria §3.2`. Diez
+  separaciones, estados de ciclo de vida, control de repetición (marca lo que existe vs.
+  no: semántico/ángulo/narrativa aún no existen), principio de valor cualitativo (sin
+  puntuaciones inventadas), y 4 ejemplos de calibración (consumo, sucesiones,
+  responsabilidad médica, arrendamiento) como casos de prueba, no prioridades. Objeto NO
+  implementado (2026-09-12).

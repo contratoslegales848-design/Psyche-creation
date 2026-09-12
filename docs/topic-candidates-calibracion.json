@@ -1,0 +1,172 @@
+{
+  "_meta": {
+    "titulo": "Calibración de TopicCandidate — 4 ejemplos",
+    "fecha": "2026-09-12",
+    "estado": "CALIBRACIÓN / NO PRODUCCIÓN / NO IMPLEMENTA NADA",
+    "que_es": "4 ejemplos del objeto TopicCandidate definido en docs/contrato-topic-candidate.md, uno por hueco detectado en la calibración de frontera (docs/piloto-capa-necesidad.json → calibracion_frontera_v1). CASOS DE PRUEBA, NO prioridades definitivas (instrucción del fundador). Construidos solo con lo ya documentado; no se inventa derecho ni fuentes. No es un esquema validado por CI, no vive en pilot/claim-packets/, no posee verdad jurídica.",
+    "nota_estados": "Los cuatro quedan LISTO_PARA_VERIFICACION con estado_verificacion=SIN_CLAIM_VERIFICADO: tienen una pregunta jurídica formulable pero ninguna fuente verificada en el repo. La uniformidad refleja que los cuatro nacieron como huecos de verificación; la variedad de estados aparece a lo largo del ciclo de vida de un candidato, no en un lote del mismo origen.",
+    "horizonte_de_los_cuatro": "PRESENTE en los cuatro: no hay datos de serie temporal que permitan llamar a ninguno TENDENCIA o PROSPECTIVA (contrato-legalmente-radar.md §0 y §3)."
+  },
+  "candidatos": [
+    {
+      "topic_candidate_id": "TC-consumo-cobro-tras-cancelar",
+      "origen": "piloto/capa_de_necesidad (F-01-suscripcion-cobro-tras-cancelar)",
+      "fecha_deteccion": "2026-09-12",
+      "horizonte": "PRESENTE",
+      "materia_juridica_probable": "consumo / contractual (PROBABLE, no confirmada)",
+      "problema_o_necesidad": "Personas a las que se les sigue cobrando una suscripción que creen haber cancelado, sin claridad de si el cobro es exigible.",
+      "preocupacion_observable_agregada": "Cobros recurrentes tras una cancelación percibida; duda sobre exigibilidad.",
+      "pregunta_juridica_candidata": "¿Es exigible un cobro posterior a una cancelación válida en una relación de consumo? (CANDIDATA, sin responder)",
+      "razon_de_interes": "Situación cotidiana en cualquier relación de consumo digital; el repositorio no tiene ningún soporte jurídico sobre ello. Valor potencial alto en utilidad, aún sin datos que lo midan.",
+      "tipo_de_oportunidad": "hueco_verificacion",
+      "evidencia_disponible": [
+        "Caso de frontera F-01 documentado en el piloto de la capa de necesidad."
+      ],
+      "fuentes_disponibles": [],
+      "fuentes_faltantes": [
+        "Normativa de protección al consumidor de cada país panhispánico aplicable (categoría de fuente; su contenido NO se afirma aquí)."
+      ],
+      "estado_verificacion": "SIN_CLAIM_VERIFICADO",
+      "nivel_de_incertidumbre": "Alta: de clasificación (depende de un hecho procedimental) y de fuente (ninguna en el repo).",
+      "limite": "No afirma si un cobro es indebido; varía por país (probable Capa C). El candidato solo abre la pregunta.",
+      "riesgo_de_sobreinterpretacion": "Tratar 'me siguen cobrando' como 'cobro ilegal' antes de verificar. La emoción de sentirse estafado no determina la conclusión.",
+      "necesidad_de_revision_humana": true,
+      "posible_destino": "verificacion",
+      "razones_para_descartar": [
+        "Si al verificar resulta demasiado país-dependiente para una pieza transversal.",
+        "Si el ángulo se solapa con contenido futuro de contratos."
+      ],
+      "duplicados_o_similares": [
+        "Ninguno en el repo. Adyacente conceptual: 'contratos' (materia futura, docs/direccion-basico-antes-que-complejo.md §4), pero con ángulo distinto (cancelación/cobro vs. validez del contrato)."
+      ],
+      "antecedente_en_historial": "Ninguno: no hay claim ni pieza sobre consumo.",
+      "vigencia": "Vigente mientras el hueco temático de consumo siga sin claim (finita; valor concreto a calibrar con datos inexistentes).",
+      "estado_del_candidato": "LISTO_PARA_VERIFICACION",
+      "trazabilidad": {
+        "origen_senal": "F-01 (piloto capa de necesidad)",
+        "cadena": "preocupación observable agregada → pregunta jurídica candidata → (pendiente) claim → (pendiente) fuente verificada",
+        "sin_fuente_todavia": true
+      }
+    },
+    {
+      "topic_candidate_id": "TC-sucesiones-promesa-verbal-herencia",
+      "origen": "piloto/capa_de_necesidad (F-02-promesa-verbal-herencia-casa)",
+      "fecha_deteccion": "2026-09-12",
+      "horizonte": "PRESENTE",
+      "materia_juridica_probable": "familiar / sucesiones (PROBABLE, no confirmada)",
+      "problema_o_necesidad": "Expectativas sobre herencias basadas en promesas verbales, en disputa familiar, sin claridad sobre su efecto o sobre instrumentos formales.",
+      "preocupacion_observable_agregada": "Promesa verbal de transmisión familiar disputada; duda sobre su efecto jurídico.",
+      "pregunta_juridica_candidata": "¿Qué efecto tiene una promesa verbal de herencia, y qué papel juega la existencia (o no) de un instrumento formal? (CANDIDATA, sin responder)",
+      "razon_de_interes": "Confusión pública frecuente sobre herencias; materia marcada como vacío en docs/direccion-basico-antes-que-complejo.md. Alto potencial educativo, sin datos que lo midan.",
+      "tipo_de_oportunidad": "hueco_verificacion",
+      "evidencia_disponible": [
+        "Caso de frontera F-02 documentado en el piloto; ambas ramas quedaron jurídicas-no-verificadas."
+      ],
+      "fuentes_disponibles": [],
+      "fuentes_faltantes": [
+        "Normativa sucesoria de cada país panhispánico (categoría; contenido NO afirmado). Probablemente Capa C fuerte."
+      ],
+      "estado_verificacion": "SIN_CLAIM_VERIFICADO",
+      "nivel_de_incertidumbre": "Alta y bilateral: incluso resolver el hecho mínimo no produce opción sin fuente.",
+      "limite": "No afirma si la promesa vale ni a quién corresponde el bien; sucesiones varían mucho por país.",
+      "riesgo_de_sobreinterpretacion": "Convertir el miedo a 'quedarse sin nada' en una expectativa jurídica. El temor no crea un derecho.",
+      "necesidad_de_revision_humana": true,
+      "posible_destino": "verificacion",
+      "razones_para_descartar": [
+        "Si por su fuerte dependencia nacional no encaja en el enfoque básico transversal actual.",
+        "Si requiere más recursos de verificación de los disponibles."
+      ],
+      "duplicados_o_similares": [
+        "Ninguno en el repo. Adyacente: pieza-01 (derechos reales, propiedad/posesión) toca 'bienes' pero con ángulo distinto (dominio/posesión, no transmisión sucesoria)."
+      ],
+      "antecedente_en_historial": "Ninguno: no hay claim ni pieza sobre sucesiones.",
+      "vigencia": "Vigente mientras sucesiones siga como hueco (finita; a calibrar).",
+      "estado_del_candidato": "LISTO_PARA_VERIFICACION",
+      "trazabilidad": {
+        "origen_senal": "F-02 (piloto capa de necesidad)",
+        "cadena": "preocupación agregada → pregunta candidata → (pendiente) claim → (pendiente) fuente",
+        "sin_fuente_todavia": true
+      }
+    },
+    {
+      "topic_candidate_id": "TC-responsabilidad-medica-resultado-adverso",
+      "origen": "piloto/capa_de_necesidad (F-03-resultado-adverso-cirugia)",
+      "fecha_deteccion": "2026-09-12",
+      "horizonte": "PRESENTE",
+      "materia_juridica_probable": "responsabilidad médica (PROBABLE, no confirmada)",
+      "problema_o_necesidad": "Personas con un resultado adverso tras un procedimiento médico que dudan si hubo responsabilidad, sin distinguir un mal resultado de un ilícito.",
+      "preocupacion_observable_agregada": "Resultado adverso percibido como error médico; duda sobre responsabilidad.",
+      "pregunta_juridica_candidata": "¿Cuándo un resultado adverso de un procedimiento médico da lugar a responsabilidad (estándar de cuidado / consentimiento informado)? (CANDIDATA, sin responder)",
+      "razon_de_interes": "Confusión pública alta (mal resultado ≠ mala praxis) con fuerte carga emocional; valioso educativamente por lo mismo que es delicado. Sin datos que lo midan.",
+      "tipo_de_oportunidad": "hueco_verificacion",
+      "evidencia_disponible": [
+        "Caso de frontera F-03 documentado; el hecho mínimo es pericial-médico, fuera del alcance de LegalMente."
+      ],
+      "fuentes_disponibles": [],
+      "fuentes_faltantes": [
+        "Marco jurídico de responsabilidad médica por país (categoría; contenido NO afirmado). Además, la determinación individual exige pericia médica externa a LegalMente."
+      ],
+      "estado_verificacion": "SIN_CLAIM_VERIFICADO",
+      "nivel_de_incertidumbre": "Máxima entre los cuatro: el hecho mínimo del caso individual ni siquiera es de naturaleza jurídica (es pericial).",
+      "limite": "A nivel de TEMA la pregunta jurídica es verificable; a nivel de CASO individual requiere pericia que LegalMente no provee. El candidato solo cubre el tema educativo, nunca el caso.",
+      "riesgo_de_sobreinterpretacion": "El mayor de los cuatro: leer 'quedé peor' o 'indignación' como 'hubo mala praxis'. Riesgo reputacional y jurídico si el contenido insinúa culpa.",
+      "necesidad_de_revision_humana": true,
+      "posible_destino": "verificacion",
+      "razones_para_descartar": [
+        "Si el riesgo de que el público lo lea como asesoría individual es demasiado alto para el canal.",
+        "Si no puede enmarcarse sin insinuar culpa."
+      ],
+      "duplicados_o_similares": [
+        "Ninguno en el repo. Sin materia adyacente cubierta."
+      ],
+      "antecedente_en_historial": "Ninguno: no hay claim ni pieza sobre responsabilidad médica.",
+      "vigencia": "Vigente mientras el hueco siga (finita; a calibrar).",
+      "estado_del_candidato": "LISTO_PARA_VERIFICACION",
+      "trazabilidad": {
+        "origen_senal": "F-03 (piloto capa de necesidad)",
+        "cadena": "preocupación agregada → pregunta candidata → (pendiente) claim → (pendiente) fuente; nota: hecho individual requiere pericia médica",
+        "sin_fuente_todavia": true
+      }
+    },
+    {
+      "topic_candidate_id": "TC-arrendamiento-ingreso-sin-aviso",
+      "origen": "piloto/capa_de_necesidad (PC-05-arrendador-entra-sin-aviso)",
+      "fecha_deteccion": "2026-09-12",
+      "horizonte": "PRESENTE",
+      "materia_juridica_probable": "arrendamiento / inmobiliario (PROBABLE, no confirmada)",
+      "problema_o_necesidad": "Inquilinos cuyo arrendador ingresa al inmueble sin aviso, sin claridad sobre si eso es admisible.",
+      "preocupacion_observable_agregada": "Ingreso del arrendador sin aviso; duda sobre su admisibilidad.",
+      "pregunta_juridica_candidata": "¿Puede el arrendador ingresar al inmueble arrendado sin aviso ni consentimiento del inquilino? (CANDIDATA, sin responder)",
+      "razon_de_interes": "Duda cotidiana en cualquier arrendamiento; inmobiliario está entre los vacíos priorizados (docs/direccion-basico-antes-que-complejo.md §3). Sin datos que lo midan.",
+      "tipo_de_oportunidad": "hueco_verificacion",
+      "evidencia_disponible": [
+        "Caso PC-05 documentado en el piloto (materia jurídica clara, sin claim verificado)."
+      ],
+      "fuentes_disponibles": [],
+      "fuentes_faltantes": [
+        "Normativa de arrendamiento / inviolabilidad del inmueble arrendado por país (categoría; contenido NO afirmado)."
+      ],
+      "estado_verificacion": "SIN_CLAIM_VERIFICADO",
+      "nivel_de_incertidumbre": "Media: la clasificación jurídica es clara (ES_MATERIA); la incertidumbre es de fuente (ninguna en el repo).",
+      "limite": "No responde la pregunta; varía por país. Solo la abre para verificación.",
+      "riesgo_de_sobreinterpretacion": "Afirmar 'el arrendador nunca puede entrar' o 'siempre puede' sin fuente. Ninguno de los absolutos está verificado.",
+      "necesidad_de_revision_humana": true,
+      "posible_destino": "verificacion",
+      "razones_para_descartar": [
+        "Si se decide priorizar otra sub-área de inmobiliario primero."
+      ],
+      "duplicados_o_similares": [
+        "PC-03 / pieza-01 (inquilino y propiedad) son ADYACENTES pero de ÁNGULO DISTINTO: usucapión/dominio, no inviolabilidad del inmueble. NO es duplicado.",
+        "docs/linkedin-raymundo-inmobiliario.md cubre inmobiliario pero con ángulo profesional/operaciones de desarrollo, no derecho del inquilino. NO es duplicado."
+      ],
+      "antecedente_en_historial": "pieza-01 (derechos reales) es lo más cercano en el historial, con ángulo distinto; no cubre esta pregunta.",
+      "vigencia": "Vigente mientras arrendamiento siga sin claim sobre esta pregunta (finita; a calibrar).",
+      "estado_del_candidato": "LISTO_PARA_VERIFICACION",
+      "trazabilidad": {
+        "origen_senal": "PC-05 (piloto capa de necesidad)",
+        "cadena": "preocupación agregada → pregunta candidata → (pendiente) claim → (pendiente) fuente",
+        "sin_fuente_todavia": true
+      }
+    }
+  ]
+}
