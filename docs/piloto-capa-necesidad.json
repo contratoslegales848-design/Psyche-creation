@@ -2,23 +2,32 @@
   "_meta": {
     "titulo": "Piloto — capa de interpretación de necesidad humana",
     "fecha": "2026-09-12",
+    "revision": "v2 (2026-09-12): incorpora la modificación del fundador — estado explícito FRONTERA_INDETERMINADO (no se fuerza la clasificación; se identifica el hecho mínimo faltante) y registros como preocupación observable + contexto funcional en vez de taxonomía psicológica.",
     "estado": "PRUEBA MÍNIMA / NO PRODUCCIÓN / NO IMPLEMENTA NADA",
-    "que_es": "5 casos documentados de extremo a extremo para probar la política de docs/politica-capa-necesidad.md. Cada opción es una VISTA derivada de un claim packet ya verificado — este archivo no posee verdad jurídica, no es un esquema nuevo, no lo valida el CI de claim packets, y no vive en pilot/claim-packets/ para no confundirse con un canon.",
-    "reglas_de_lectura": [
-      "registro_emocional se clasifica por la superficie de lo expresado; NO es diagnóstico ni inferencia de estado mental (Principio 1).",
-      "Una opción nunca muestra más certeza que su claim de origen (Principio 2).",
-      "es_materia_juridica=false y claim_ref=null significan cosas distintas: el primero es 'no hay pregunta jurídica'; el segundo, dentro de es_materia_juridica=true, es 'sí la hay pero no está verificada' → fail-closed, sin opción."
+    "que_es": "6 casos documentados de extremo a extremo para probar la política de docs/politica-capa-necesidad.md. Cada opción es una VISTA derivada de un claim packet ya verificado — este archivo no posee verdad jurídica, no es un esquema nuevo, no lo valida el CI de claim packets, y no vive en pilot/claim-packets/ para no confundirse con un canon.",
+    "clasificacion_materia_estados": [
+      "ES_MATERIA_JURIDICA — hay una pregunta jurídica formulable.",
+      "NO_ES_MATERIA_JURIDICA — no hay pregunta jurídica; se declara, no se fabrica una.",
+      "FRONTERA_INDETERMINADO — no se puede decidir todavía. NO se fuerza la clasificación: se identifica el hecho mínimo faltante que permitiría decidir, y se enruta a verificación cuando corresponda."
     ],
-    "registros_emocionales_usados": ["ALIVIO", "CERTEZA_ANTES_DE_DECIDIR", "CURIOSIDAD", "DESAMPARO", "GRAVEDAD"]
+    "reglas_de_lectura": [
+      "El registro NO es un diagnóstico psicológico. Se anota la preocupación OBSERVABLE que el usuario expresa y su CONTEXTO FUNCIONAL (la situación, no la persona). El registro_comunicativo es una propiedad del TONO de la respuesta, no una etiqueta sobre quién pregunta.",
+      "Finalidad futura declarada por el fundador (aún NO implementada, CLAUDE.md §2): en agregado, estas preocupaciones observables alimentan la detección de patrones de necesidad — LegalMente Radar — para priorizar verificación y descubrir temas/herramientas útiles. Nunca para diagnosticar ni perfilar personas.",
+      "Una opción nunca muestra más certeza que su claim de origen.",
+      "Tres formas distintas de 'no hay opción': NO_ES_MATERIA_JURIDICA (no hay pregunta), FRONTERA_INDETERMINADO (no se puede decidir sin un hecho mínimo), y ES_MATERIA_JURIDICA sin claim verificado (hay pregunta pero no hay fuente → cola de verificación)."
+    ]
   },
   "casos": [
     {
       "caso_id": "PC-01-relacion-laboral-sin-contrato",
       "canal": "general",
       "preocupacion_como_se_expresa": "Trabajé casi un año pero nunca firmé un contrato; siento que no tengo cómo defenderme.",
-      "registro_emocional": "ALIVIO",
-      "nota_registro_emocional": "Clasificado por la frase, no por un juicio sobre la persona. Solo elige tono cálido y sesgo de estilo; no entra al análisis jurídico.",
-      "es_materia_juridica": true,
+      "preocupacion_observable": "Teme no tener derechos laborales por no haber firmado un contrato escrito.",
+      "contexto_funcional": "Trabajador con relación laboral en curso, sin contrato escrito.",
+      "registro_comunicativo": "tranquilizador con fuente",
+      "nota_registro": "Preocupación observable + contexto funcional, no diagnóstico. Elige tono cálido del output; no entra al análisis jurídico ni perfila a la persona.",
+      "clasificacion_materia": "ES_MATERIA_JURIDICA",
+      "hecho_minimo_faltante": null,
       "necesidad_concreta": "Entender si la relación laboral existe por los hechos o por la firma del papel.",
       "pregunta_juridica": "¿Existe relación laboral cuando no se firmó un contrato escrito?",
       "estado_capa": "EMITE_OPCION",
@@ -33,7 +42,7 @@
         }
       ],
       "puente_no_juridico": null,
-      "separacion_emocion_derecho": "El alivio buscado no altera la respuesta: la opción diría lo mismo con o sin la carga emocional. La emoción solo elige que el estilo sea cálido, no amenazante.",
+      "separacion_emocion_derecho": "El alivio buscado no altera la respuesta: la opción diría lo mismo con o sin la carga emocional. El registro solo elige que el tono sea cálido, no amenazante.",
       "que_queda_fuera": [
         "Calcular el finiquito o los montos del caso.",
         "Decir si en TU caso concreto se cumplen los tres elementos.",
@@ -44,9 +53,12 @@
       "caso_id": "PC-02-cargo-representa-empresa",
       "canal": "linkedin",
       "preocupacion_como_se_expresa": "Alguien va a firmar por la empresa y no sé si su cargo basta para obligarla; me da inseguridad avanzar.",
-      "registro_emocional": "CERTEZA_ANTES_DE_DECIDIR",
-      "nota_registro_emocional": "Registro de decisor, no desamparo. Elige sobriedad institucional; no infiere nada sobre quién pregunta.",
-      "es_materia_juridica": true,
+      "preocupacion_observable": "Duda si un cargo, por sí solo, permite representar a una sociedad al firmar.",
+      "contexto_funcional": "Persona por firmar (o recibir una firma) en representación de una sociedad, antes de decidir.",
+      "registro_comunicativo": "sereno institucional",
+      "nota_registro": "Registro de decisión, no de desamparo. Elige sobriedad del output; no infiere nada sobre quién pregunta.",
+      "clasificacion_materia": "ES_MATERIA_JURIDICA",
+      "hecho_minimo_faltante": null,
       "necesidad_concreta": "Entender si un cargo, por sí solo, acredita la representación de una sociedad.",
       "pregunta_juridica": "¿El cargo que ocupa una persona acredita, por sí solo, que puede representar a la sociedad?",
       "estado_capa": "EMITE_OPCION",
@@ -72,9 +84,12 @@
       "caso_id": "PC-03-inquilino-tiempo-propiedad",
       "canal": "general",
       "preocupacion_como_se_expresa": "Llevo años rentando la misma casa; me dijeron que 'ya es mía por el tiempo' y me preocupa no saber si es verdad.",
-      "registro_emocional": "CURIOSIDAD",
-      "nota_registro_emocional": "Duda tranquila, no angustia. Elige tono editorial sereno.",
-      "es_materia_juridica": true,
+      "preocupacion_observable": "Duda si rentar por mucho tiempo lo convierte en dueño del inmueble.",
+      "contexto_funcional": "Inquilino de largo plazo que oyó una afirmación sobre adquirir por el tiempo.",
+      "registro_comunicativo": "editorial sereno",
+      "nota_registro": "Duda tranquila, no angustia. Elige tono editorial del output.",
+      "clasificacion_materia": "ES_MATERIA_JURIDICA",
+      "hecho_minimo_faltante": null,
       "necesidad_concreta": "Entender si rentar por mucho tiempo convierte al inquilino en dueño.",
       "pregunta_juridica": "¿Quien posee un bien reconociendo dueño ajeno adquiere la propiedad por el solo transcurso del tiempo?",
       "estado_capa": "EMITE_OPCION",
@@ -89,7 +104,7 @@
         }
       ],
       "puente_no_juridico": null,
-      "separacion_emocion_derecho": "Se responde sin ni falso alivio ('ya es tuya') ni falsa alarma ('nunca'): la certeza mostrada es exactamente la del claim.",
+      "separacion_emocion_derecho": "Se responde sin falso alivio ('ya es tuya') ni falsa alarma ('nunca'): la certeza mostrada es exactamente la del claim.",
       "que_queda_fuera": [
         "Decir si en TU caso hubo ese cambio jurídicamente relevante.",
         "Los plazos concretos de usucapión de cada país."
@@ -99,16 +114,19 @@
       "caso_id": "PC-04-desconfianza-socio-NO-ES-JURIDICO",
       "canal": "general",
       "preocupacion_como_se_expresa": "Siento que mi socio ya no confía en mí y eso me tiene mal.",
-      "registro_emocional": "DESAMPARO",
-      "nota_registro_emocional": "La emoción es real y válida; se nombra, no se diagnostica. No se infiere por qué el socio actúa así ni el estado mental de nadie (Principio 1).",
-      "es_materia_juridica": false,
+      "preocupacion_observable": "Expresa deterioro de confianza con un socio, sin mencionar ningún acto, documento ni decisión.",
+      "contexto_funcional": "Relación entre socios en curso; no se describe ningún hecho con relevancia jurídica.",
+      "registro_comunicativo": "acompañamiento sobrio, sin diagnóstico",
+      "nota_registro": "La preocupación es observable y válida; se nombra, no se diagnostica. No se infiere por qué el socio actúa así ni el estado mental de nadie (Principio 1).",
+      "clasificacion_materia": "NO_ES_MATERIA_JURIDICA",
+      "hecho_minimo_faltante": null,
       "necesidad_concreta": "No se fuerza una necesidad jurídica. La necesidad real es de confianza/relación, no de derecho — y así se declara.",
       "pregunta_juridica": null,
       "estado_capa": "NO_ES_MATERIA_JURIDICA",
       "claim_ref": null,
       "opciones": [],
       "puente_no_juridico": "La ley entra solo si aparece un acto concreto. Tres preguntas generales que revelarían si detrás hay una pregunta jurídica: (a) ¿se tomó una decisión de la sociedad sin tu voto o sin avisarte? (b) ¿se firmó, transfirió o gravó algo a tu nombre o en tu contra? (c) ¿cambió quién puede firmar por la empresa? Si alguna es 'sí', ahí sí hay materia jurídica — y ahí sí se verifica con fuente.",
-      "separacion_emocion_derecho": "Caso central del piloto: la emoción abrió la puerta, pero detrás no hay (todavía) pregunta jurídica. LegalMente no convierte un sentimiento en un reclamo legal. El puente es general y sin PII; no pide datos ni el caso.",
+      "separacion_emocion_derecho": "La emoción abrió la puerta, pero detrás no hay pregunta jurídica. LegalMente no convierte un sentimiento en un reclamo legal. El puente es general y sin PII; no pide datos ni el caso. (Distinto de FRONTERA: aquí, tal como se expresa, no hay ambigüedad — no hay ningún acto.)",
       "que_queda_fuera": [
         "Diagnosticar la relación o la confianza.",
         "Aconsejar sobre cómo sentirse o actuar emocionalmente.",
@@ -120,22 +138,49 @@
       "caso_id": "PC-05-arrendador-entra-sin-aviso-JURIDICO-NO-VERIFICADO",
       "canal": "general",
       "preocupacion_como_se_expresa": "Mi arrendador entró a mi departamento sin avisar y me sentí invadido en mi espacio.",
-      "registro_emocional": "GRAVEDAD",
-      "nota_registro_emocional": "El 'sentirse invadido' es la emoción (real, no se diagnostica). La pregunta jurídica es separable y distinta de ese sentimiento.",
-      "es_materia_juridica": true,
+      "preocupacion_observable": "Reporta un hecho concreto (el arrendador ingresó sin aviso) y duda si eso es admisible.",
+      "contexto_funcional": "Arrendamiento en curso; hay un hecho concreto descrito (ingreso sin aviso).",
+      "registro_comunicativo": "grave y sobrio",
+      "nota_registro": "El 'sentirse invadido' es la parte emocional (real, no se diagnostica). La pregunta jurídica es separable y distinta de ese sentimiento.",
+      "clasificacion_materia": "ES_MATERIA_JURIDICA",
+      "hecho_minimo_faltante": null,
       "necesidad_concreta": "Entender si el arrendador puede entrar al inmueble arrendado sin aviso ni consentimiento del inquilino.",
       "pregunta_juridica": "¿Puede el arrendador ingresar al inmueble arrendado sin aviso ni consentimiento del inquilino?",
       "estado_capa": "EN_COLA_DE_VERIFICACION",
       "claim_ref": null,
       "opciones": [],
       "puente_no_juridico": null,
-      "separacion_emocion_derecho": "Segundo tipo de 'no hay opción', distinto del PC-04: aquí SÍ hay pregunta jurídica legítima, pero NO existe un claim verificado en el repositorio que la sostenga. Fail-closed idéntico al del resto del sistema: sin fuente verificada, no se emite opción, aunque la preocupación sea grave y real. No se consuela afirmando algo no verificado. El registro GRAVEDAD elegiría el tono si hubiera opción; nunca responde la pregunta por sí mismo.",
+      "separacion_emocion_derecho": "Hay pregunta jurídica legítima (clasificación clara: ES_MATERIA), pero NO existe un claim verificado en el repositorio que la sostenga. Fail-closed idéntico al del resto del sistema: sin fuente verificada, no se emite opción, aunque la preocupación sea grave y real. No se consuela afirmando algo no verificado. El registro grave elegiría el tono si hubiera opción; nunca responde la pregunta.",
       "que_queda_fuera": [
         "Responder la pregunta sin una fuente verificada (prohibido).",
         "Dar por hecho una regla nacional como si fuera panhispánica.",
         "Consolar con una afirmación no verificada."
       ],
-      "siguiente_paso_de_la_capa": "Enrutar la pregunta jurídica a la skill legalmente-legal-verification (crear claim packet sobre arrendamiento / derecho del inquilino a la inviolabilidad del inmueble arrendado). Solo cuando ese claim llegue al menos a APTO_CON_MATICES, este caso pasa a EMITE_OPCION."
+      "siguiente_paso_de_la_capa": "Enrutar la pregunta jurídica a la skill legalmente-legal-verification (crear claim packet sobre inviolabilidad del inmueble arrendado / derecho del inquilino). Solo cuando ese claim llegue al menos a APTO_CON_MATICES, este caso pasa a EMITE_OPCION."
+    },
+    {
+      "caso_id": "PC-06-cambio-de-puesto-FRONTERA",
+      "canal": "general",
+      "preocupacion_como_se_expresa": "Mi jefe me cambió de puesto de un día para otro y no sé si eso está bien o si puedo hacer algo.",
+      "preocupacion_observable": "Percibe un cambio de puesto no consensuado y duda si tiene relevancia jurídica.",
+      "contexto_funcional": "Trabajador con relación laboral en curso, ante un cambio de puesto cuyo alcance no está descrito.",
+      "registro_comunicativo": "neutro, sin adelantar conclusión",
+      "nota_registro": "Preocupación observable clara; el tono NO debe insinuar una respuesta en ningún sentido mientras la clasificación siga indeterminada.",
+      "clasificacion_materia": "FRONTERA_INDETERMINADO",
+      "hecho_minimo_faltante": "Si el cambio afectó salario, categoría o condiciones esenciales (posible modificación sustancial) o fue un cambio lateral con las mismas condiciones. Sin ese hecho no puede decidirse si existe pregunta jurídica.",
+      "necesidad_concreta": "Aún no determinable: primero hace falta el hecho mínimo. No se fuerza una necesidad jurídica ni se descarta.",
+      "pregunta_juridica": null,
+      "estado_capa": "FRONTERA_INDETERMINADO",
+      "claim_ref": null,
+      "opciones": [],
+      "puente_no_juridico": null,
+      "separacion_emocion_derecho": "Caso que ejerce la modificación del fundador: NO se fuerza a SÍ ni a NO. La capa nombra el hecho mínimo faltante en vez de adivinar. Si ese hecho aparece y hubo cambio de condiciones esenciales → pasa a ES_MATERIA_JURIDICA y se enruta a verificación (modificación sustancial de condiciones laborales); si fue lateral con las mismas condiciones → probablemente NO_ES_MATERIA. La emoción no decide la clasificación en ninguna dirección.",
+      "que_queda_fuera": [
+        "Forzar la clasificación (ni hacia el derecho ni en su contra).",
+        "Pedir el caso o datos personales para 'resolverlo'.",
+        "Responder sin el hecho mínimo y sin fuente verificada."
+      ],
+      "siguiente_paso_de_la_capa": "Formular al usuario, de forma general y sin intake, la pregunta que revela el hecho mínimo (¿cambiaron salario, categoría o condiciones esenciales?). Según la respuesta: enrutar a verificación o cerrar como no jurídico. La capa no adivina la clasificación."
     }
   ]
 }

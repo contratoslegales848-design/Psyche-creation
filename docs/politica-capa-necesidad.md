@@ -15,16 +15,21 @@ jurídicas trazables** — o la declaración honesta de que no hay materia jurí
 ```
 [emoción = ENTRADA]  →  necesidad concreta  →  pregunta jurídica  →  [OPCIÓN(es) = SALIDA]
                                                                        cada una: fuente + límite + incertidumbre
-                              (si detrás no hay pregunta jurídica → se dice; no se fabrica una)
+   · si detrás no hay pregunta jurídica → se dice; no se fabrica una
+   · si no se puede decidir → FRONTERA/INDETERMINADO: se nombra el hecho mínimo faltante, no se fuerza
 ```
 
 ## Principios obligatorios
 
-1. **La emoción no es dato jurídico.** No se diagnostica, no se infieren
-   intenciones ni estado psicológico. El registro emocional se clasifica por la
-   **superficie de lo expresado** (una etiqueta de una lista cerrada), solo para
-   elegir tono y estilo visual — nunca entra como insumo del análisis jurídico ni
-   se guarda como una afirmación sobre la persona.
+1. **La emoción no es dato jurídico, y no se construye una taxonomía psicológica.**
+   No se diagnostica a nadie, no se infieren intenciones ni estado mental. Lo que
+   se registra es la **preocupación observable** que el usuario expresa y su
+   **contexto funcional** (la situación, no la persona). Ese registro elige el tono
+   y el estilo del *output* y —en agregado— alimenta la detección de patrones de
+   necesidad (finalidad futura declarada por el fundador, aún **no** implementada,
+   `CLAUDE.md §2`: **LegalMente Radar** — priorizar verificación, descubrir temas y
+   herramientas útiles). Nunca entra como insumo del análisis jurídico ni se guarda
+   como un perfil de la persona.
 2. **Toda salida incluye fuente, límite y margen de incertidumbre.** Sin las tres,
    no hay salida. Una opción nunca muestra más certeza que su claim.
 3. **La preocupación se traduce en necesidad concreta y en pregunta jurídica.** Si
@@ -48,18 +53,33 @@ preocupación → pregunta jurídica) y **después** de la verificación (salida
 = read-model, como `visual/source_verification.py` lee sin escribir). No inventa un
 segundo canon (`docs/contrato-motor-masivo.md`).
 
-## Regla fail-closed (idéntica a la del resto del sistema)
+## Clasificación de la preocupación — tres estados, sin forzar
 
-- **Hay pregunta jurídica + claim verificado** (`APTO_PARA_NARRATIVA` /
+Toda preocupación cae en uno de tres estados. **La ambigüedad no se resuelve
+forzando la clasificación** (modificación del fundador, 2026-09-12 — sustituye la
+regla anterior de "fallar hacia el derecho"):
+
+1. **`ES_MATERIA_JURIDICA`** — hay una pregunta jurídica formulable.
+2. **`NO_ES_MATERIA_JURIDICA`** — no hay pregunta jurídica; se declara, no se fabrica
+   una.
+3. **`FRONTERA_INDETERMINADO`** — no se puede decidir todavía. **No se fuerza a SÍ ni
+   a NO.** Se identifica el **hecho mínimo faltante** que permitiría decidir, se
+   nombra de forma general (sin intake ni PII), y se enruta a verificación **cuando
+   corresponda** (solo si al aparecer ese hecho la preocupación resulta jurídica). La
+   emoción nunca decide la clasificación.
+
+## Regla fail-closed sobre la opción (idéntica a la del resto del sistema)
+
+- **`ES_MATERIA_JURIDICA` + claim verificado** (`APTO_PARA_NARRATIVA` /
   `APTO_CON_MATICES`) → se emite opción, con su certidumbre y límite reales.
-- **Hay pregunta jurídica pero sin claim verificado** (`REQUIERE_INVESTIGACION`,
+- **`ES_MATERIA_JURIDICA` sin claim verificado** (`REQUIERE_INVESTIGACION`,
   `BLOQUEADO`, o inexistente) → **no hay opción.** Va a cola de verificación. No se
   consuela afirmando algo no verificado.
-- **No hay pregunta jurídica** → se declara "no es materia jurídica", se separa la
-  emoción del derecho, y se ofrece un puente general (no un dead-end), **sin PII y
-  sin intake de caso** — nunca "cuéntame tu caso".
-- **Ante la duda de si es materia jurídica**, se trata como que **sí** lo es y se
-  enruta a verificación (se falla hacia el derecho, no en su contra).
+- **`NO_ES_MATERIA_JURIDICA`** → se separa la emoción del derecho y se ofrece un
+  puente general (no un dead-end), **sin PII y sin intake de caso** — nunca "cuéntame
+  tu caso".
+- **`FRONTERA_INDETERMINADO`** → **no hay opción** mientras siga indeterminado; la
+  salida es el hecho mínimo faltante, no una respuesta jurídica.
 
 ## Qué NO hace esta capa (fuera de alcance, explícito)
 
@@ -74,7 +94,10 @@ segundo canon (`docs/contrato-motor-masivo.md`).
 
 ## Piloto
 
-5 casos reales documentados de extremo a extremo en
+6 casos reales documentados de extremo a extremo en
 `docs/piloto-capa-necesidad.json`, anclados solo en claims ya verificados. Cubre
-las tres ramas del fail-closed, incluidos un caso que **no es materia jurídica** y
-uno que **sí lo es pero aún no está verificado**.
+los tres estados de clasificación y las ramas del fail-closed: opción emitida (con
+matices / con aprobación / gate abierto), **no es materia jurídica** (PC-04), materia
+jurídica **sin claim verificado** (PC-05, cola de verificación) y
+**`FRONTERA_INDETERMINADO`** (PC-06, cambio de puesto — se nombra el hecho mínimo
+faltante en vez de forzar la clasificación).

@@ -328,5 +328,7 @@ decisión del fundador, no técnica.
   a la emoción (sin candado rígido), medible cuando existan métricas (2026-09-12).
 - `docs/politica-capa-necesidad.md` + `docs/piloto-capa-necesidad.json` — política
   operativa corta de la capa de interpretación de necesidad (emoción como puerta de
-  entrada, no salida) y piloto de 5 casos de extremo a extremo, uno no-jurídico y
-  uno jurídico-no-verificado. No implementa nada (2026-09-12).
+  entrada, no salida) y piloto de 6 casos de extremo a extremo (v2, 2026-09-12):
+  clasificación en tres estados con `FRONTERA_INDETERMINADO` (no se fuerza; hecho
+  mínimo faltante) y registros como preocupación observable + contexto funcional
+  (no taxonomía psicológica; agregan a la futura LegalMente Radar). No implementa nada.
