@@ -4,7 +4,7 @@
     "fecha": "2026-09-12",
     "revision": "v2 (2026-09-12): incorpora la modificación del fundador — estado explícito FRONTERA_INDETERMINADO (no se fuerza la clasificación; se identifica el hecho mínimo faltante) y registros como preocupación observable + contexto funcional en vez de taxonomía psicológica.",
     "estado": "PRUEBA MÍNIMA / NO PRODUCCIÓN / NO IMPLEMENTA NADA",
-    "que_es": "6 casos documentados de extremo a extremo para probar la política de docs/politica-capa-necesidad.md. Cada opción es una VISTA derivada de un claim packet ya verificado — este archivo no posee verdad jurídica, no es un esquema nuevo, no lo valida el CI de claim packets, y no vive en pilot/claim-packets/ para no confundirse con un canon.",
+    "que_es": "6 casos base (clave 'casos') + 3 casos de calibración de frontera (clave 'calibracion_frontera_v1', OBJETIVO A del fundador). Todos documentados de extremo a extremo para probar la política de docs/politica-capa-necesidad.md. Cada opción es una VISTA derivada de un claim packet ya verificado — este archivo no posee verdad jurídica, no es un esquema nuevo, no lo valida el CI de claim packets, y no vive en pilot/claim-packets/ para no confundirse con un canon.",
     "clasificacion_materia_estados": [
       "ES_MATERIA_JURIDICA — hay una pregunta jurídica formulable.",
       "NO_ES_MATERIA_JURIDICA — no hay pregunta jurídica; se declara, no se fabrica una.",
@@ -182,5 +182,82 @@
       ],
       "siguiente_paso_de_la_capa": "Formular al usuario, de forma general y sin intake, la pregunta que revela el hecho mínimo (¿cambiaron salario, categoría o condiciones esenciales?). Según la respuesta: enrutar a verificación o cerrar como no jurídico. La capa no adivina la clasificación."
     }
-  ]
+  ],
+  "calibracion_frontera_v1": {
+    "_nota": "OBJETIVO A (fundador 2026-09-12): 3 casos adicionales FRONTERA_INDETERMINADO, en ámbitos distintos, elegidos por su capacidad de estresar la clasificación. Estructura de 18 campos pedida por el fundador. NO se inventa doctrina, legislación, hechos ni fuentes: cada rama A nombra el TIPO de pregunta jurídica y la enruta a verificación, nunca la responde. RESULTADO DEL PILOTO visible: el repositorio NO tiene claim verificado en ninguno de los tres ámbitos (consumo, sucesiones, responsabilidad médica) — todas las ramas jurídicas caen en EN_COLA_DE_VERIFICACION. Ese hueco es el hallazgo, no un defecto del ejercicio.",
+    "casos": [
+      {
+        "caso_id": "F-01-suscripcion-cobro-tras-cancelar",
+        "ambito": "consumo / contractual",
+        "preocupacion_observable": "Le siguen cobrando una suscripción que cree haber cancelado.",
+        "contexto_funcional": "Relación de consumo con cobro recurrente; el usuario afirma haber cancelado; no consta cómo ni cuándo se hizo la cancelación ni qué decían los términos.",
+        "hechos_conocidos": [
+          "Hay cobros recurrentes que continúan.",
+          "El usuario afirma que canceló.",
+          "No se conoce el medio ni la fecha de la cancelación, ni las condiciones de cancelación del servicio."
+        ],
+        "clasificacion_inicial": "FRONTERA_INDETERMINADO",
+        "hecho_minimo_faltante": "Si la cancelación se completó por el medio y en el plazo que el propio servicio/contrato exige, y cómo se relacionan esas fechas con las de los cobros. Dependiendo de eso, hay cobro potencialmente indebido o un trámite que el usuario no completó.",
+        "pregunta_minima_necesaria": "¿Se completó la cancelación por el medio que el servicio exige, y en qué fecha respecto de los cobros que siguieron?",
+        "rama_A_si_se_confirma": "Si hubo cancelación válida y aun así se cobró después: EXISTE una pregunta jurídica (¿es exigible un cobro posterior a una cancelación válida en una relación de consumo?). Se enruta a verificación; NO se responde aquí.",
+        "rama_B_si_no_se_confirma": "Si la cancelación no se completó según los términos: probablemente no hay (todavía) pregunta jurídica de cobro indebido; la necesidad es informativa/procedimental (cómo cancelar de forma válida), no un reclamo. Sigue sin afirmarse ninguna regla.",
+        "necesidad_juridica_potencial": "Exigibilidad de un cobro tras la cancelación en una relación de consumo (solo en rama A).",
+        "estado_verificacion": "SIN_CLAIM_VERIFICADO",
+        "fuente_disponible": "Ninguna en el repositorio: no existe claim verificado sobre derecho del consumidor / cancelación de suscripciones. Hueco temático visible.",
+        "limite": "La capa no puede decir si el cobro es indebido: eso depende del hecho faltante y de una fuente que no existe aún. Varía por país (Capa B/C).",
+        "incertidumbre": "Doble: (1) de clasificación (no se sabe si hay pregunta jurídica hasta conocer el hecho); (2) de verificación (aunque la haya, no hay fuente).",
+        "salida_permitida": "Nombrar el hecho mínimo faltante y la pregunta mínima, de forma general y sin PII; señalar que, según la respuesta, se enruta a verificación o se cierra como informativo.",
+        "salida_prohibida": "Afirmar que el cobro es indebido o legal; dar por hecho un derecho de reembolso; pedir datos de la cuenta o del cobro (intake/PII).",
+        "criterio_anti_emocion": "El 'sentirse estafado' NO clasifica: la clasificación depende de un hecho verificable (cómo y cuándo se canceló), no del sentimiento. La indignación no crea la pregunta jurídica ni la resuelve."
+      },
+      {
+        "caso_id": "F-02-promesa-verbal-herencia-casa",
+        "ambito": "familiar / sucesiones",
+        "preocupacion_observable": "Un padre le dijo de palabra que una casa sería para el usuario; hermanos lo niegan.",
+        "contexto_funcional": "Expectativa sobre una herencia/transmisión familiar; solo se menciona una manifestación verbal; no consta ningún instrumento formal.",
+        "hechos_conocidos": [
+          "Hubo una manifestación verbal del padre.",
+          "Los hermanos la niegan.",
+          "No se menciona testamento, escritura, donación ni ningún acto formal."
+        ],
+        "clasificacion_inicial": "FRONTERA_INDETERMINADO",
+        "hecho_minimo_faltante": "Si existe algún instrumento jurídico formal (testamento, escritura, donación) o solo la promesa verbal.",
+        "pregunta_minima_necesaria": "¿Existe un documento o acto formal (testamento, escritura, donación), o únicamente lo dicho de palabra?",
+        "rama_A_si_se_confirma": "Si existe un instrumento formal: EXISTE una pregunta jurídica sobre su validez y efectos. Se enruta a verificación; NO se responde aquí.",
+        "rama_B_si_no_se_confirma": "Si solo hay promesa verbal: NO colapsa a 'no es materia jurídica'. Surge una segunda pregunta jurídica distinta — si una promesa verbal de herencia tiene algún efecto — que TAMBIÉN requiere verificación. Hallazgo: ambas ramas quedan jurídicas-no-verificadas; la capa no puede cerrar el caso en ninguna dirección con lo que hay en el repositorio.",
+        "necesidad_juridica_potencial": "Validez/efectos de un instrumento sucesorio (rama A) o efecto de una promesa verbal de herencia (rama B).",
+        "estado_verificacion": "SIN_CLAIM_VERIFICADO",
+        "fuente_disponible": "Ninguna en el repositorio: no existe claim verificado sobre sucesiones/herencia (materia marcada como vacío en docs/direccion-basico-antes-que-complejo.md). Hueco temático visible.",
+        "limite": "La capa no dice si la casa 'le toca' ni si la promesa vale: ambas cosas exigen fuente inexistente y varían fuertemente por país (Capa C probable).",
+        "incertidumbre": "Alta y bilateral: incluso resolver el hecho mínimo no produce una opción, porque ninguna rama tiene fuente verificada.",
+        "salida_permitida": "Nombrar el hecho mínimo (¿hay instrumento formal?) y advertir que, exista o no, hoy no hay fuente verificada para responder; registrar el hueco temático.",
+        "salida_prohibida": "Afirmar que la casa le corresponde o que no; afirmar que una promesa verbal vale o no vale; pedir datos familiares o del patrimonio (PII).",
+        "criterio_anti_emocion": "El 'miedo a quedarse sin nada' es intenso pero NO clasifica ni decide. La existencia (o no) de un acto formal es lo único que mueve la clasificación; el temor no crea un derecho."
+      },
+      {
+        "caso_id": "F-03-resultado-adverso-cirugia",
+        "ambito": "responsabilidad médica",
+        "preocupacion_observable": "Tras una cirugía quedó peor y cree que el médico hizo algo mal.",
+        "contexto_funcional": "Resultado adverso de un procedimiento médico; el usuario atribuye el resultado a un error; no consta información sobre estándar de cuidado ni consentimiento informado.",
+        "hechos_conocidos": [
+          "Hubo una cirugía.",
+          "El resultado fue peor de lo esperado por el usuario.",
+          "No consta si hubo desviación del estándar de cuidado ni si el consentimiento informado cubría el riesgo materializado."
+        ],
+        "clasificacion_inicial": "FRONTERA_INDETERMINADO",
+        "hecho_minimo_faltante": "Si el resultado adverso provino de una desviación del estándar de cuidado o de falta de consentimiento informado, frente a un riesgo conocido que se materializó pese a una atención correcta. HALLAZGO ARQUITECTÓNICO: este hecho no solo falta, sino que requiere pericia médica externa — no es determinable por la capa ni por LegalMente.",
+        "pregunta_minima_necesaria": "¿Hay algún indicio de desviación del estándar de cuidado o de consentimiento informado insuficiente, según criterio médico/pericial?",
+        "rama_A_si_se_confirma": "Si hay indicio de desviación o de consentimiento insuficiente: EXISTE una pregunta jurídica (responsabilidad médica). Se enruta a verificación jurídica Y se señala que la determinación del hecho exige pericia médica que LegalMente no provee. NO se responde aquí.",
+        "rama_B_si_no_se_confirma": "Si fue un riesgo conocido materializado con atención correcta y consentimiento adecuado: probablemente NO hay materia jurídica de responsabilidad — un mal resultado no es, por sí solo, un ilícito. No se afirma ninguna regla; se nombra el límite.",
+        "necesidad_juridica_potencial": "Responsabilidad médica por el resultado adverso (solo rama A).",
+        "estado_verificacion": "SIN_CLAIM_VERIFICADO",
+        "fuente_disponible": "Ninguna en el repositorio: no existe claim verificado sobre responsabilidad médica. Hueco temático visible. Además, dependencia de pericia médica externa fuera del alcance de LegalMente.",
+        "limite": "La capa no puede decir si hubo mala praxis: exige (a) un hecho pericial médico que no obtiene y (b) una fuente jurídica que no existe. Frontera doble: pericial y de verificación.",
+        "incertidumbre": "Máxima entre los tres casos: el hecho mínimo ni siquiera es de naturaleza jurídica (es médico-pericial).",
+        "salida_permitida": "Separar el resultado de salud (hecho médico) de la eventual pregunta jurídica; nombrar que hace falta criterio pericial y, si lo hubiera, verificación jurídica; registrar el hueco temático.",
+        "salida_prohibida": "Afirmar que hubo o no mala praxis; deducir culpa del mal resultado; sugerir demandar; pedir el expediente clínico o datos de salud (PII sensible).",
+        "criterio_anti_emocion": "Caso límite del principio: 'indignación' y 'quedé peor' son precisamente las señales que NO deben leerse como 'hubo mala praxis'. Un resultado adverso es un hecho de salud, no una conclusión jurídica; la emoción, aquí intensísima, es el mayor riesgo de sesgo y por eso el criterio se aplica con más fuerza."
+      }
+    ]
+  }
 }

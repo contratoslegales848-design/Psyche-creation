@@ -328,7 +328,14 @@ decisión del fundador, no técnica.
   a la emoción (sin candado rígido), medible cuando existan métricas (2026-09-12).
 - `docs/politica-capa-necesidad.md` + `docs/piloto-capa-necesidad.json` — política
   operativa corta de la capa de interpretación de necesidad (emoción como puerta de
-  entrada, no salida) y piloto de 6 casos de extremo a extremo (v2, 2026-09-12):
-  clasificación en tres estados con `FRONTERA_INDETERMINADO` (no se fuerza; hecho
-  mínimo faltante) y registros como preocupación observable + contexto funcional
-  (no taxonomía psicológica; agregan a la futura LegalMente Radar). No implementa nada.
+  entrada, no salida) y piloto de 6 casos base + 3 casos de calibración de frontera
+  (`calibracion_frontera_v1`, 2026-09-12): clasificación en tres estados con
+  `FRONTERA_INDETERMINADO` (no se fuerza; hecho mínimo faltante) y registros como
+  preocupación observable + contexto funcional (no taxonomía psicológica). Los 3
+  casos de calibración (consumo, sucesiones, responsabilidad médica) muestran huecos
+  temáticos reales: el repo no tiene claim verificado en esos ámbitos. No implementa nada.
+- `docs/contrato-legalmente-radar.md` — contrato documental de la futura capa
+  LegalMente Radar (señales agregadas → prioridad; no predictor, no perfilador).
+  18 definiciones, tres horizontes (presente/tendencia/prospectiva, nunca prospectiva
+  como hecho), prohibición de PII/perfiles, fail-closed, trazabilidad a fuente, y la
+  conexión conceptual con el sistema existente. Contrato, Radar NO construido (2026-09-12).
