@@ -127,7 +127,7 @@ necesita fuente/jurisdicción antes de redactarse.
 | 13 | Due diligence inmobiliario: verificar antes de diseñar y prometer. | SAFE_EDITORIAL_FRAME | Marco. | `linkedin-ray-13-due-diligence-antes-de-prometer.json` — REQUIERE_INVESTIGACION |
 | 14 | La matriz de permisos como mapa de dependencias, no como lista burocrática. | SAFE_EDITORIAL_FRAME | Marco. | `linkedin-ray-14-matriz-permisos-dependencias.json` — REQUIERE_INVESTIGACION |
 | 15 | La comunidad jurídica después de vender: reglamentos, cuotas, áreas comunes y administración. | REVIEW_REQUIRED | Depende del régimen de propiedad en condominio de cada país. | — |
-| 16 | Un poder debe describir facultades y límites; el cargo por sí solo no prueba representación. | SAFE_EDITORIAL_FRAME | Extiende a Representación (pilar ya existente en Artefacto 05). | `linkedin-ray-16-poder-facultades-y-limites.json` — 2 claims: mandato/poder (APTO_CON_MATICES, Capa A, 4 países vía WebSearch) + corolario societario (REQUIERE_INVESTIGACION); agregado de la pieza REQUIERE_INVESTIGACION |
+| 16 | Un poder debe describir facultades y límites; el cargo por sí solo no prueba representación. | SAFE_EDITORIAL_FRAME | Extiende a Representación (pilar ya existente en Artefacto 05); la segunda mitad resultó una falsa universalización (ver §3.1). | `linkedin-ray-16-poder-facultades-y-limites.json` — 3 claims: mandato/poder (APTO_CON_MATICES), corolario original "el cargo no prueba representación" (BLOQUEADO — falso para el cargo de administrador), reformulación corregida (APTO_CON_MATICES); agregado de la pieza BLOQUEADO |
 | 17 | La due diligence crea una línea base: documentar lo observado evita confundir problemas preexistentes con decisiones posteriores. | SAFE_EDITORIAL_FRAME | Marco. | `linkedin-ray-17-due-diligence-linea-base.json` — REQUIERE_INVESTIGACION |
 | 18 | Una cláusula de no competencia exige revisar alcance, territorio, duración y compensación. | REVIEW_REQUIRED | Validez de la cláusula varía por país — necesita fuente antes de un hook normativo. | — |
 
@@ -166,13 +166,32 @@ validados con `scripts/validate-claim-packet.py` y
     Nivel 2 en los 4 países — ninguna fuente tiene `texto_exacto_consultado`
     en `true` porque `WebFetch` no pudo leer el documento íntegro).
   - `linkedin-ray-16-claim-2-cargo-no-acredita`: el corolario societario ("el
-    cargo no prueba representación") no está enunciado con esa literalidad en
-    las 4 fuentes de mandato civil — necesita fuentes propias de derecho
-    societario/mercantil (representación orgánica vs. apoderados), que esta
-    ronda no investigó. Queda `REQUIERE_INVESTIGACION`.
-  - El agregado de la pieza es `REQUIERE_INVESTIGACION` (un claim en ese
-    estado frena toda la pieza, por diseño del validador) aunque el primer
-    claim ya llegó a `APTO_CON_MATICES`.
+    cargo no prueba representación") sí se investigó en una segunda ronda
+    (2026-09-12) contra la ley societaria/mercantil de los mismos 4 países —
+    Ley General de Sociedades Mercantiles (México, art. 10), Ley de
+    Sociedades de Capital (España, art. 233), Ley General de Sociedades
+    19.550 (Argentina, art. 58) y Código de Comercio (Colombia, art. 196).
+    **Resultado: la formulación original es una falsa universalización.**
+    Las 4 leyes coinciden en que el cargo *formalmente designado* de
+    administrador (o representante legal equivalente) **sí** confiere
+    representación por sí solo, por ley — sin poder aparte. Lo que
+    necesita un poder expreso es *otro* cargo distinto (gerente en México,
+    apoderado en España), no "el cargo" en general. Por eso este claim
+    queda `alcance: CAPA_A_TRANSVERSAL` / `estado: BLOQUEADO` (la
+    investigación concluyó algo firme, no una duda) con una
+    `reformulacion_propuesta` verificada que apunta a un nuevo claim
+    corregido.
+  - `linkedin-ray-16-claim-3-administrador-vs-otros-cargos` (nuevo, añadido
+    en esta ronda): la versión corregida y sí sostenida por las 4 fuentes —
+    "la representación de una sociedad corresponde por ley a quien ocupa el
+    cargo formalmente designado de administrador; cualquier otro cargo
+    necesita un poder expreso". Capa A, `APTO_CON_MATICES` (mismo techo
+    Nivel 2 que los demás claims de esta pieza, por `EGRESS_BLOCKED`).
+  - El agregado de la pieza es `BLOQUEADO` (un claim bloqueado bloquea toda
+    la pieza, máxima prioridad en el cálculo) — a pesar de que dos de sus
+    tres claims llegaron a `APTO_CON_MATICES`. Esto es correcto y esperado:
+    la pieza completa no avanza hasta que se retire o repare el claim
+    bloqueado, y ya está reparado vía reformulación (claim 3).
 
 **Ningún packet tiene `revision_humana.estado: APROBADO`** — nace `PENDIENTE`
 en los 8, como exige la skill. **Ningún gate está `ABIERTO`.** Nada de esto

@@ -169,16 +169,292 @@
       "texto_exacto": "El cargo o puesto que ocupa una persona, por sí solo, no acredita que tenga facultades de representación legal de una sociedad o entidad.",
       "ubicacion": "hook",
       "tipo": "consejo",
-      "alcance": "NO_DETERMINADO",
+      "alcance": "CAPA_A_TRANSVERSAL",
       "jurisdiccion": null,
       "nucleo_transversal": null,
       "variaciones_materiales": null,
-      "jurisdicciones_revisadas": null,
-      "diferencias_buscadas": null,
-      "contraejemplos_encontrados": null,
-      "justificacion_suficiencia_comparada": null,
-      "fuentes": [],
-      "confianza": "baja",
+      "jurisdicciones_revisadas": [
+        {
+          "pais": "México",
+          "fuente_ids": [
+            "SRC-LR16C2-MX-LGSM-10"
+          ]
+        },
+        {
+          "pais": "España",
+          "fuente_ids": [
+            "SRC-LR16C2-ES-LSC-233"
+          ]
+        },
+        {
+          "pais": "Argentina",
+          "fuente_ids": [
+            "SRC-LR16C2-AR-LGS-58"
+          ]
+        },
+        {
+          "pais": "Colombia",
+          "fuente_ids": [
+            "SRC-LR16C2-CO-CCOM-196"
+          ]
+        }
+      ],
+      "diferencias_buscadas": "Se investigó si, en derecho societario/mercantil (no en el mandato civil general del claim 1), el cargo formalmente designado de administrador o representante legal confiere representación de la sociedad por sí solo, o si en los cuatro países también requiere un poder aparte.",
+      "contraejemplos_encontrados": "Contraejemplo firme en los cuatro países: quien ocupa el cargo formalmente designado y registrado de administrador (o representante que la ley/el contrato social designan) SÍ tiene representación de la sociedad por esa sola designación, sin necesitar un poder aparte -- México, LGSM art. 10 ('La representación de toda sociedad mercantil corresponderá a su administrador o administradores'); España, LSC art. 233 ('el poder de representación corresponde a los administradores'); Argentina, LGS art. 58 ('El administrador o el representante que de acuerdo con el contrato o por disposición de la ley tenga la representación de la sociedad, obliga a ésta...'); Colombia, CCom art. 196 (la representación corresponde a 'las personas que representan a la sociedad' según el contrato social). La formulación original de este claim, leída en forma literal y sin distinguir el cargo de administrador de cualquier otro puesto, es una falsa universalización -- queda BLOQUEADO, no REQUIERE_INVESTIGACION, porque la investigación sí concluyó algo firme (Etapa 2: 'si la investigación concluyó algo firme, usa NO_APLICA/BLOQUEADO, nunca NO_DETERMINADO').",
+      "justificacion_suficiencia_comparada": "Cuatro leyes societarias/mercantiles independientes (México: LGSM 1934; España: LSC, texto refundido por RDL 1/2010; Argentina: LGS 19.550; Colombia: Código de Comercio, Decreto 410 de 1971), cada una con fuente oficial propia y artículo concreto, coinciden en que el cargo formalmente designado de administrador/representante SÍ confiere representación por ley, sin poder aparte -- lo contrario de lo que afirmaba la formulación original de este claim. Nivel 2 en los 4 países (sin lectura directa por EGRESS_BLOCKED), pero suficiente para BLOQUEAR una afirmación que las 4 fuentes contradicen de forma consistente.",
+      "fuentes": [
+        {
+          "id": "SRC-LR16C2-MX-LGSM-10",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Ley General de Sociedades Mercantiles (México) -- arts. 10 (representación del administrador) y 146 (facultades expresas de los gerentes)",
+          "organismo_autor": "H. Cámara de Diputados",
+          "url": "https://www.diputados.gob.mx/LeyesBiblio/pdf/LGSM.pdf",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-09-12",
+          "localizador": "arts. 10 y 146",
+          "jurisdicciones_cubiertas": [
+            "México"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": true,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": "2026-09-12",
+            "metodo_o_evidencia": "WebSearch (2026-09-12) devolvió el texto del art. 10 LGSM ('La representación de toda sociedad mercantil corresponderá a su administrador o administradores...') y del art. 146 (los gerentes solo tienen las facultades que se les confieran expresamente), con diputados.gob.mx entre los resultados y citado también por fuentes secundarias (CEG Legal, conceptosjuridicos.com).",
+            "observaciones": "origen_oficial_confirmado=true por convergencia de evidencia vía WebSearch (2026-09-12) contra www.diputados.gob.mx, ya registrado (registro_oficial_id='diputados-gob-mx'). texto_exacto_consultado y vigencia_comprobada quedan en false: WebFetch sigue EGRESS_BLOCKED en esta sesión -- no se leyó el texto íntegro."
+          },
+          "registro_oficial_id": "diputados-gob-mx"
+        },
+        {
+          "id": "SRC-LR16C2-ES-LSC-233",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Ley de Sociedades de Capital (España), texto refundido por RDL 1/2010 -- art. 233 (atribución del poder de representación a los administradores)",
+          "organismo_autor": "Agencia Estatal BOE",
+          "url": "https://www.boe.es/buscar/pdf/2010/BOE-A-2010-10544-consolidado.pdf",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-09-12",
+          "localizador": "art. 233",
+          "jurisdicciones_cubiertas": [
+            "España"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": true,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": "2026-09-12",
+            "metodo_o_evidencia": "WebSearch (2026-09-12) devolvió el texto del art. 233 LSC ('el poder de representación de la sociedad corresponde a los administradores en la forma determinada por los estatutos'), con boe.es (BOE-A-2010-10544) entre los resultados y citado por fuentes secundarias (Iberley, Almacén de Derecho), que también distinguen expresamente administradores de apoderados.",
+            "observaciones": "origen_oficial_confirmado=true por convergencia de evidencia vía WebSearch (2026-09-12) contra www.boe.es, ya registrado (registro_oficial_id='boe-es'). texto_exacto_consultado y vigencia_comprobada quedan en false: WebFetch sigue EGRESS_BLOCKED en esta sesión -- no se leyó el texto íntegro."
+          },
+          "registro_oficial_id": "boe-es"
+        },
+        {
+          "id": "SRC-LR16C2-AR-LGS-58",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Ley General de Sociedades N.º 19.550 (Argentina) -- art. 58 (régimen de representación)",
+          "organismo_autor": "InfoLEG — Ministerio de Justicia (Argentina)",
+          "url": "https://servicios.infoleg.gob.ar/infolegInternet/anexos/25000-29999/25553/texact.htm",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-09-12",
+          "localizador": "art. 58",
+          "jurisdicciones_cubiertas": [
+            "Argentina"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": true,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": "2026-09-12",
+            "metodo_o_evidencia": "WebSearch (2026-09-12) devolvió el texto del art. 58 LGS ('El administrador o el representante que de acuerdo con el contrato o por disposición de la ley tenga la representación de la sociedad, obliga a ésta por todos los actos que no sean notoriamente extraños al objeto social'), con servicios.infoleg.gob.ar entre los resultados.",
+            "observaciones": "origen_oficial_confirmado=true por convergencia de evidencia vía WebSearch (2026-09-12) contra servicios.infoleg.gob.ar, ya registrado (registro_oficial_id='infoleg-gob-ar'). texto_exacto_consultado y vigencia_comprobada quedan en false: WebFetch sigue EGRESS_BLOCKED en esta sesión -- no se leyó el texto íntegro."
+          },
+          "registro_oficial_id": "infoleg-gob-ar"
+        },
+        {
+          "id": "SRC-LR16C2-CO-CCOM-196",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Código de Comercio (Colombia), Decreto 410 de 1971 -- art. 196 (funciones y limitaciones de los administradores)",
+          "organismo_autor": "Secretaría del Senado (Colombia)",
+          "url": "http://www.secretariasenado.gov.co/senado/basedoc/codigo_comercio_pr006.html",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-09-12",
+          "localizador": "art. 196",
+          "jurisdicciones_cubiertas": [
+            "Colombia"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": true,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": "2026-09-12",
+            "metodo_o_evidencia": "WebSearch (2026-09-12) devolvió el texto del art. 196 CCom (la representación de la sociedad se ajusta al contrato social; a falta de estipulación, se entiende que las personas que representan a la sociedad pueden celebrar los actos comprendidos en el objeto social), con secretariasenado.gov.co entre los resultados.",
+            "observaciones": "origen_oficial_confirmado=true por convergencia de evidencia vía WebSearch (2026-09-12) contra www.secretariasenado.gov.co, ya registrado (registro_oficial_id='secretariasenado-gov-co'). texto_exacto_consultado y vigencia_comprobada quedan en false: WebFetch sigue EGRESS_BLOCKED en esta sesión -- no se leyó el texto íntegro."
+          },
+          "registro_oficial_id": "secretariasenado-gov-co"
+        }
+      ],
+      "confianza": "alta",
+      "riesgo_falsa_universalizacion": "alto",
+      "riesgo_asesoria": "bajo",
+      "platform_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "confidentiality_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "estado": "BLOQUEADO",
+      "revision_humana": {
+        "estado": "PENDIENTE",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null,
+        "contenido_hash_sha256": null
+      },
+      "gate_arte": "CERRADO",
+      "reformulacion_propuesta": {
+        "texto": "En las jurisdicciones panhispánicas revisadas, la representación de una sociedad corresponde por ley a quien ocupa el cargo formalmente designado de administrador (o representante legal equivalente); cualquier otro cargo o puesto dentro de la sociedad necesita un poder expreso para poder representarla.",
+        "verificada": true,
+        "nuevo_claim_id": "linkedin-ray-16-claim-3-administrador-vs-otros-cargos"
+      },
+      "redaccion_prohibida": "Ningún cargo o puesto, en ningún país, otorga jamás facultades de representación bajo ninguna circunstancia.",
+      "notas": "Corolario práctico del tema original #16. La investigación societaria (LGSM, LSC, LGS 19.550, CCom) que faltaba en la primera ronda (ver nota anterior) SÍ se hizo en esta ronda y encontró un contraejemplo firme y consistente en los 4 países: el cargo de administrador/representante legal formalmente designado SÍ confiere representación por sí solo, por ley -- lo contrario de lo que afirmaba este claim de forma literal. No se fuerza REQUIERE_INVESTIGACION ni NO_APLICA: la skill exige BLOQUEADO cuando la investigación concluye algo firme. La versión corregida, que sí sostienen las 4 fuentes, vive en linkedin-ray-16-claim-3-administrador-vs-otros-cargos -- no hereda este estado ni estas fuentes automáticamente aunque estén basadas en la misma investigación, conforme a la regla de reformulación de la skill."
+    },
+    {
+      "claim_id": "linkedin-ray-16-claim-3-administrador-vs-otros-cargos",
+      "texto_exacto": "En las jurisdicciones panhispánicas revisadas, la representación de una sociedad corresponde por ley a quien ocupa el cargo formalmente designado de administrador (o representante legal equivalente); cualquier otro cargo o puesto dentro de la sociedad necesita un poder expreso para poder representarla.",
+      "ubicacion": "hook",
+      "tipo": "definicion",
+      "alcance": "CAPA_A_TRANSVERSAL",
+      "jurisdiccion": null,
+      "nucleo_transversal": "La representación de una sociedad nace, por ley, del cargo formalmente designado de administrador o representante legal equivalente -- no de cualquier puesto interno. Un cargo distinto (gerente, director de área, apoderado) necesita un poder expreso propio. Presente, con la misma lógica y artículos propios, en México, España, Argentina y Colombia.",
+      "variaciones_materiales": "Difieren el nombre del órgano/cargo (administrador único, administradores solidarios/mancomunados o consejo de administración en España; administrador o representante en Argentina y México; 'las personas que representan a la sociedad' según el contrato social en Colombia), la forma en que varios administradores deben actuar conjuntamente, y el tratamiento de los gerentes/apoderados como figura distinta con facultades expresamente conferidas (explícito en México, LGSM art. 146, y en España, donde la regla de mancomunidad del art. 233.c no aplica a los apoderados).",
+      "jurisdicciones_revisadas": [
+        {
+          "pais": "México",
+          "fuente_ids": [
+            "SRC-LR16C3-MX-LGSM-10"
+          ]
+        },
+        {
+          "pais": "España",
+          "fuente_ids": [
+            "SRC-LR16C3-ES-LSC-233"
+          ]
+        },
+        {
+          "pais": "Argentina",
+          "fuente_ids": [
+            "SRC-LR16C3-AR-LGS-58"
+          ]
+        },
+        {
+          "pais": "Colombia",
+          "fuente_ids": [
+            "SRC-LR16C3-CO-CCOM-196"
+          ]
+        }
+      ],
+      "diferencias_buscadas": "Mismas fuentes que respaldan el claim 2 (misma investigación); se buscó explícitamente si el cargo de administrador confiere representación por ley en los 4 países, y si existe una figura distinta (gerente/apoderado) que sí necesite poder expreso.",
+      "contraejemplos_encontrados": "Ninguno: los 4 países coinciden en que el cargo de administrador/representante formalmente designado confiere representación por ley, y que otros cargos (gerentes en México, apoderados en España) requieren facultades expresamente conferidas.",
+      "justificacion_suficiencia_comparada": "Misma base comparada que linkedin-ray-16-claim-2 (LGSM México, LSC España, LGS Argentina, CCom Colombia): 4 leyes societarias independientes, cada una con artículo concreto, coinciden sin contraejemplo. Techo Nivel 2/APTO_CON_MATICES en los 4 países: WebSearch dio convergencia real con el hostname oficial, pero EGRESS_BLOCKED impidió la lectura directa del texto íntegro -- mismo límite que pieza-04 y que linkedin-ray-16-claim-1.",
+      "fuentes": [
+        {
+          "id": "SRC-LR16C3-MX-LGSM-10",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Ley General de Sociedades Mercantiles (México) -- art. 10 (representación del administrador)",
+          "organismo_autor": "H. Cámara de Diputados",
+          "url": "https://www.diputados.gob.mx/LeyesBiblio/pdf/LGSM.pdf",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-09-12",
+          "localizador": "art. 10",
+          "jurisdicciones_cubiertas": [
+            "México"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": true,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": "2026-09-12",
+            "metodo_o_evidencia": "Misma evidencia de WebSearch (2026-09-12) que SRC-LR16C2-MX-LGSM-10.",
+            "observaciones": "origen_oficial_confirmado=true por convergencia de evidencia vía WebSearch (2026-09-12) contra www.diputados.gob.mx, ya registrado (registro_oficial_id='diputados-gob-mx'). texto_exacto_consultado y vigencia_comprobada quedan en false: WebFetch sigue EGRESS_BLOCKED en esta sesión -- no se leyó el texto íntegro."
+          },
+          "registro_oficial_id": "diputados-gob-mx"
+        },
+        {
+          "id": "SRC-LR16C3-ES-LSC-233",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Ley de Sociedades de Capital (España), texto refundido por RDL 1/2010 -- art. 233",
+          "organismo_autor": "Agencia Estatal BOE",
+          "url": "https://www.boe.es/buscar/pdf/2010/BOE-A-2010-10544-consolidado.pdf",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-09-12",
+          "localizador": "art. 233",
+          "jurisdicciones_cubiertas": [
+            "España"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": true,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": "2026-09-12",
+            "metodo_o_evidencia": "Misma evidencia de WebSearch (2026-09-12) que SRC-LR16C2-ES-LSC-233.",
+            "observaciones": "origen_oficial_confirmado=true por convergencia de evidencia vía WebSearch (2026-09-12) contra www.boe.es, ya registrado (registro_oficial_id='boe-es'). texto_exacto_consultado y vigencia_comprobada quedan en false: WebFetch sigue EGRESS_BLOCKED en esta sesión -- no se leyó el texto íntegro."
+          },
+          "registro_oficial_id": "boe-es"
+        },
+        {
+          "id": "SRC-LR16C3-AR-LGS-58",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Ley General de Sociedades N.º 19.550 (Argentina) -- art. 58",
+          "organismo_autor": "InfoLEG — Ministerio de Justicia (Argentina)",
+          "url": "https://servicios.infoleg.gob.ar/infolegInternet/anexos/25000-29999/25553/texact.htm",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-09-12",
+          "localizador": "art. 58",
+          "jurisdicciones_cubiertas": [
+            "Argentina"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": true,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": "2026-09-12",
+            "metodo_o_evidencia": "Misma evidencia de WebSearch (2026-09-12) que SRC-LR16C2-AR-LGS-58.",
+            "observaciones": "origen_oficial_confirmado=true por convergencia de evidencia vía WebSearch (2026-09-12) contra servicios.infoleg.gob.ar, ya registrado (registro_oficial_id='infoleg-gob-ar'). texto_exacto_consultado y vigencia_comprobada quedan en false: WebFetch sigue EGRESS_BLOCKED en esta sesión -- no se leyó el texto íntegro."
+          },
+          "registro_oficial_id": "infoleg-gob-ar"
+        },
+        {
+          "id": "SRC-LR16C3-CO-CCOM-196",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Código de Comercio (Colombia), Decreto 410 de 1971 -- art. 196",
+          "organismo_autor": "Secretaría del Senado (Colombia)",
+          "url": "http://www.secretariasenado.gov.co/senado/basedoc/codigo_comercio_pr006.html",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-09-12",
+          "localizador": "art. 196",
+          "jurisdicciones_cubiertas": [
+            "Colombia"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": true,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": "2026-09-12",
+            "metodo_o_evidencia": "Misma evidencia de WebSearch (2026-09-12) que SRC-LR16C2-CO-CCOM-196.",
+            "observaciones": "origen_oficial_confirmado=true por convergencia de evidencia vía WebSearch (2026-09-12) contra www.secretariasenado.gov.co, ya registrado (registro_oficial_id='secretariasenado-gov-co'). texto_exacto_consultado y vigencia_comprobada quedan en false: WebFetch sigue EGRESS_BLOCKED en esta sesión -- no se leyó el texto íntegro."
+          },
+          "registro_oficial_id": "secretariasenado-gov-co"
+        }
+      ],
+      "confianza": "media",
       "riesgo_falsa_universalizacion": "medio",
       "riesgo_asesoria": "bajo",
       "platform_review": {
@@ -195,7 +471,7 @@
         "fecha": null,
         "observaciones": null
       },
-      "estado": "REQUIERE_INVESTIGACION",
+      "estado": "APTO_CON_MATICES",
       "revision_humana": {
         "estado": "PENDIENTE",
         "revisor": null,
@@ -209,14 +485,15 @@
         "verificada": false,
         "nuevo_claim_id": null
       },
-      "redaccion_prohibida": "Ningún cargo o puesto, en ningún país, otorga jamás facultades de representación bajo ninguna circunstancia.",
-      "notas": "Corolario práctico del tema original #16, separado de linkedin-ray-16-claim-1 (Etapa 1: no hereda fuentes ni estado del claim de mandato). Es un principio muy citado en la práctica de derecho corporativo/societario ('representante legal' vs. 'apoderado'), pero las 4 fuentes de mandato civil investigadas en el claim 1 no lo enuncian con esta literalidad -- hacen falta fuentes propias sobre representación de sociedades (p. ej. facultades del administrador vs. apoderados, en la ley mercantil/societaria de cada país), que esta sesión no investigó por no confundir mandato civil con representación orgánica societaria sin evidencia distinta para cada una. Queda NO_DETERMINADO/REQUIERE_INVESTIGACION hasta esa investigación societaria específica -- no por EGRESS_BLOCKED únicamente, sino porque la investigación correcta es otra."
+      "redaccion_prohibida": "El cargo por sí solo nunca prueba representación en ningún país -- ni siquiera para quien ocupa el cargo de administrador.",
+      "notas": "Reformulación de linkedin-ray-16-claim-2 (nuevo_claim_id declarado ahí), corregida tras encontrar que la versión original era una falsa universalización (bloqueada, no aprobada por el mero hecho de reformularla). Distingue el cargo de administrador (representación por ley) de cualquier otro puesto (necesita poder expreso) -- la distinción real que las 4 fuentes societarias sostienen, más precisa que la formulación original del banco de LinkedIn."
     }
   ],
-  "estado_agregado": "REQUIERE_INVESTIGACION",
+  "estado_agregado": "BLOQUEADO",
   "revisiones_pendientes": [
     "linkedin-ray-16-claim-1-mandato",
-    "linkedin-ray-16-claim-2-cargo-no-acredita"
+    "linkedin-ray-16-claim-2-cargo-no-acredita",
+    "linkedin-ray-16-claim-3-administrador-vs-otros-cargos"
   ],
   "gate_global_arte": "CERRADO"
 }
