@@ -21,11 +21,22 @@ import review_semantics  # noqa: E402
 class TestInventarioReal(unittest.TestCase):
     """Contra el canon real: PIEZA-01-REALES abierta, 02 y 03 cerradas."""
 
-    def test_las_cuatro_piezas_del_piloto_aparecen(self):
+    def test_las_piezas_del_piloto_aparecen(self):
+        # 8 piezas del banco LinkedIn del fundador (Inmobiliario,
+        # SAFE_EDITORIAL_FRAME) se suman a las 4 anteriores tras orden expresa
+        # del fundador — ver docs/linkedin-raymundo-inmobiliario.md.
         filas = inventory.build_readiness()
         self.assertEqual({r.piece_id for r in filas},
                           {"PIEZA-01-REALES", "PIEZA-02-LABORAL", "PIEZA-03-HONOR",
-                           "PIEZA-04-LABORAL-BASICO"})
+                           "PIEZA-04-LABORAL-BASICO",
+                           "LINKEDIN-RAY-01-NO-EMPIEZA-CONTRATO",
+                           "LINKEDIN-RAY-04-DOS-VIDAS-RESIDENCIAL",
+                           "LINKEDIN-RAY-05-ABOGADO-INTEGRADOR",
+                           "LINKEDIN-RAY-12-CONTRATO-NODO-PROYECTO",
+                           "LINKEDIN-RAY-13-DUE-DILIGENCE-ANTES-DE-PROMETER",
+                           "LINKEDIN-RAY-14-MATRIZ-PERMISOS-DEPENDENCIAS",
+                           "LINKEDIN-RAY-16-PODER-FACULTADES-Y-LIMITES",
+                           "LINKEDIN-RAY-17-DUE-DILIGENCE-LINEA-BASE"})
 
     def test_piezas_requieren_investigacion_bloquean_por_esa_razon(self):
         filas = {r.piece_id: r for r in inventory.build_readiness()}

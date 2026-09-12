@@ -1,0 +1,222 @@
+{
+  "schema_version": "4.0",
+  "piece_id": "LINKEDIN-RAY-16-PODER-FACULTADES-Y-LIMITES",
+  "claims": [
+    {
+      "claim_id": "linkedin-ray-16-claim-1-mandato",
+      "texto_exacto": "En las jurisdicciones panhispánicas revisadas, la facultad de representar a una persona o una sociedad en actos jurídicos nace de un acto de apoderamiento o mandato que define su propio alcance -- no de ocupar, por sí solo, un cargo, puesto o cualidad.",
+      "ubicacion": "hook",
+      "tipo": "definicion",
+      "alcance": "CAPA_A_TRANSVERSAL",
+      "jurisdiccion": null,
+      "nucleo_transversal": "La representación voluntaria (mandato/poder/apoderamiento) tiene como fuente un acto jurídico específico que fija su propio alcance y sus propios límites -- una lógica distinta de derivar la representación de la sola investidura de un cargo -- presente, con nombres propios de cada país, en México, España, Argentina y Colombia.",
+      "variaciones_materiales": null,
+      "jurisdicciones_revisadas": [
+        {
+          "pais": "México",
+          "fuente_ids": [
+            "SRC-LR16-MX-CCF-2554"
+          ]
+        },
+        {
+          "pais": "España",
+          "fuente_ids": [
+            "SRC-LR16-ES-CC-1709"
+          ]
+        },
+        {
+          "pais": "Argentina",
+          "fuente_ids": [
+            "SRC-LR16-AR-CCYC-362"
+          ]
+        },
+        {
+          "pais": "Colombia",
+          "fuente_ids": [
+            "SRC-LR16-CO-CC-2142"
+          ]
+        }
+      ],
+      "diferencias_buscadas": "Se buscó si el nombre de la figura (mandato / poder / apoderamiento / representación voluntaria), la exigencia de que el acto defina su propio alcance, y la oponibilidad de los límites frente a terceros cambian entre los cuatro países.",
+      "contraejemplos_encontrados": "Los cuatro ordenamientos usan nombres distintos para la figura y regulan matices propios de forma (México exige escritura pública o poder ante dos testigos con firma ratificada en ciertos casos; Argentina hace depender la forma del poder de la forma exigida para el acto encomendado; Colombia admite formas más flexibles, incluida la verbal) y de oponibilidad frente a terceros (Argentina lo hace explícito en el art. 362; los otros tres no lo separan con la misma literalidad en los artículos revisados). Ninguno de los cuatro contradice que la representación nazca del acto de apoderamiento/mandato -- con su propio alcance -- y no de ocupar un cargo por sí solo.",
+      "justificacion_suficiencia_comparada": "Cuatro códigos civiles/civil-comerciales independientes (México: Código Civil Federal 1928; España: Código Civil 1889; Argentina: Código Civil y Comercial 2014/2015; Colombia: Código Civil, vigente desde el s. XIX con reformas), cada uno con fuente oficial propia y localizador de artículo concreto, coinciden en que la representación voluntaria nace de un acto de apoderamiento/mandato con alcance propio. No se declara 'panhispánico completo': solo se investigaron 4 países, y ninguna de las 4 fuentes tiene aquí texto_exacto_consultado ni vigencia_comprobada en true (EGRESS_BLOCKED impidió la lectura directa del documento íntegro en esta sesión, solo hubo convergencia de evidencia por WebSearch) -- por eso el techo de este claim es APTO_CON_MATICES, no APTO_PARA_NARRATIVA, igual que ocurrió en pieza-04-laboral-basico bajo la misma limitación de red.",
+      "fuentes": [
+        {
+          "id": "SRC-LR16-MX-CCF-2554",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Código Civil Federal (México) -- arts. 2554 y 2555 (facultades comprendidas en el poder y forma del mandato)",
+          "organismo_autor": "H. Cámara de Diputados",
+          "url": "https://www.diputados.gob.mx/LeyesBiblio/pdf/CCF.pdf",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-09-12",
+          "localizador": "arts. 2554 y 2555",
+          "jurisdicciones_cubiertas": [
+            "México"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": true,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": "2026-09-12",
+            "metodo_o_evidencia": "WebSearch (2026-09-12) devolvió el texto de los arts. 2554 (qué facultades se entienden conferidas en un poder general de pleitos y cobranzas, de administración, o de dominio) y 2555 (forma del poder) del Código Civil Federal, con diputados.gob.mx (donde se aloja el PDF oficial del CCF) entre los resultados de búsqueda, y citado de forma consistente por fuentes secundarias independientes (Justia México, conceptosjuridicos.com).",
+            "observaciones": "origen_oficial_confirmado=true por convergencia de evidencia vía WebSearch (2026-09-12) contra www.diputados.gob.mx, ya registrado en references/official-source-registry.json (registro_oficial_id='diputados-gob-mx'). texto_exacto_consultado y vigencia_comprobada quedan en false: WebFetch reconfirmó EGRESS_BLOCKED en esta misma sesión (contra www.diputados.gob.mx y es.wikipedia.org) -- no se leyó el texto íntegro ni se confirmó ausencia de reforma posterior."
+          },
+          "registro_oficial_id": "diputados-gob-mx"
+        },
+        {
+          "id": "SRC-LR16-ES-CC-1709",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Código Civil (España) -- art. 1709 (naturaleza y forma del contrato de mandato)",
+          "organismo_autor": "Agencia Estatal BOE",
+          "url": "https://www.boe.es/buscar/pdf/1889/BOE-A-1889-4763-consolidado.pdf",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-09-12",
+          "localizador": "art. 1709",
+          "jurisdicciones_cubiertas": [
+            "España"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": true,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": "2026-09-12",
+            "metodo_o_evidencia": "WebSearch (2026-09-12) devolvió el texto del art. 1709 CC ('Por el contrato de mandato se obliga una persona a prestar algún servicio o hacer alguna cosa, por cuenta o encargo de otra'), con el propio dominio boe.es (texto consolidado del Código Civil, BOE-A-1889-4763) entre los resultados, y citado por fuentes secundarias (Iberley, Dialnet, vLex España).",
+            "observaciones": "origen_oficial_confirmado=true por convergencia de evidencia vía WebSearch (2026-09-12) contra www.boe.es, ya registrado en references/official-source-registry.json (registro_oficial_id='boe-es'). texto_exacto_consultado y vigencia_comprobada quedan en false: WebFetch reconfirmó EGRESS_BLOCKED en esta misma sesión (contra www.diputados.gob.mx y es.wikipedia.org) -- no se leyó el texto íntegro ni se confirmó ausencia de reforma posterior."
+          },
+          "registro_oficial_id": "boe-es"
+        },
+        {
+          "id": "SRC-LR16-AR-CCYC-362",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Código Civil y Comercial de la Nación (Argentina), Ley 26.994 -- arts. 362 y 363 (caracteres y forma de la representación voluntaria)",
+          "organismo_autor": "InfoLEG — Ministerio de Justicia (Argentina)",
+          "url": "https://servicios.infoleg.gob.ar/infolegInternet/anexos/235000-239999/235975/texact.htm",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-09-12",
+          "localizador": "arts. 362 y 363",
+          "jurisdicciones_cubiertas": [
+            "Argentina"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": true,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": "2026-09-12",
+            "metodo_o_evidencia": "WebSearch (2026-09-12) confirmó que servicios.infoleg.gob.ar aloja el texto actualizado del CCyC (Ley 26.994) y devolvió el texto de los arts. 362 ('La representación voluntaria comprende sólo los actos que el representado puede otorgar por sí mismo. Los límites de la representación... son oponibles a terceros si éstos han tomado conocimiento...') y 363 (forma del apoderamiento), citados también por fuentes secundarias (leyfacil.com.ar, codigocivilonline.com.ar).",
+            "observaciones": "origen_oficial_confirmado=true por convergencia de evidencia vía WebSearch (2026-09-12) contra servicios.infoleg.gob.ar, ya registrado en references/official-source-registry.json (registro_oficial_id='infoleg-gob-ar'). texto_exacto_consultado y vigencia_comprobada quedan en false: WebFetch reconfirmó EGRESS_BLOCKED en esta misma sesión (contra www.diputados.gob.mx y es.wikipedia.org) -- no se leyó el texto íntegro ni se confirmó ausencia de reforma posterior."
+          },
+          "registro_oficial_id": "infoleg-gob-ar"
+        },
+        {
+          "id": "SRC-LR16-CO-CC-2142",
+          "tipo_fuente": "NORMA_OFICIAL",
+          "titulo": "Código Civil (Colombia) -- art. 2142 (definición del contrato de mandato)",
+          "organismo_autor": "Secretaría del Senado (Colombia)",
+          "url": "http://www.secretariasenado.gov.co/senado/basedoc/codigo_civil_pr066.html",
+          "identificador_bibliografico": null,
+          "fecha_consulta": "2026-09-12",
+          "localizador": "art. 2142",
+          "jurisdicciones_cubiertas": [
+            "Colombia"
+          ],
+          "verificacion_fuente": {
+            "origen_oficial_confirmado": true,
+            "texto_exacto_consultado": false,
+            "vigencia_comprobada": false,
+            "fecha_comprobacion": "2026-09-12",
+            "metodo_o_evidencia": "WebSearch (2026-09-12) devolvió el texto del art. 2142 CC ('El mandato es un contrato en que una persona confía la gestión de uno o más negocios a otra, que se hace cargo de ellos por cuenta y riesgo de la primera...'), con secretariasenado.gov.co (base de datos 'Leyes desde 1992', misma que ya respalda el registro secretariasenado-gov-co) entre los resultados, y citado también por fuentes secundarias (leyes.co).",
+            "observaciones": "origen_oficial_confirmado=true por convergencia de evidencia vía WebSearch (2026-09-12) contra www.secretariasenado.gov.co, ya registrado en references/official-source-registry.json (registro_oficial_id='secretariasenado-gov-co'). texto_exacto_consultado y vigencia_comprobada quedan en false: WebFetch reconfirmó EGRESS_BLOCKED en esta misma sesión (contra www.diputados.gob.mx y es.wikipedia.org) -- no se leyó el texto íntegro ni se confirmó ausencia de reforma posterior."
+          },
+          "registro_oficial_id": "secretariasenado-gov-co"
+        }
+      ],
+      "confianza": "media",
+      "riesgo_falsa_universalizacion": "medio",
+      "riesgo_asesoria": "bajo",
+      "platform_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "confidentiality_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "estado": "APTO_CON_MATICES",
+      "revision_humana": {
+        "estado": "PENDIENTE",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null,
+        "contenido_hash_sha256": null
+      },
+      "gate_arte": "CERRADO",
+      "reformulacion_propuesta": {
+        "texto": null,
+        "verificada": false,
+        "nuevo_claim_id": null
+      },
+      "redaccion_prohibida": "En todos los países panhispánicos un poder siempre debe otorgarse en escritura pública para ser válido.",
+      "notas": "Origen: docs/linkedin-raymundo-inmobiliario.md #16, mitad verificable del tema original ('un poder debe describir facultades y límites'). Separado en Etapa 1 del corolario práctico ('el cargo por sí solo no prueba representación'), que queda como linkedin-ray-16-claim-2 -- ninguna de las 4 fuentes aquí citadas lo enuncia con esa literalidad, así que no hereda este estado ni estas fuentes (regla explícita de la skill para claims que mezclan dos afirmaciones). APTO_CON_MATICES es el techo alcanzable: 4 fuentes NORMA_OFICIAL con hostname y organismo verificados vía convergencia de WebSearch, pero ninguna con texto_exacto_consultado=true porque WebFetch sigue EGRESS_BLOCKED en esta sesión (reconfirmado contra www.diputados.gob.mx y es.wikipedia.org) -- mismo patrón y misma limitación que pieza-04-laboral-basico."
+    },
+    {
+      "claim_id": "linkedin-ray-16-claim-2-cargo-no-acredita",
+      "texto_exacto": "El cargo o puesto que ocupa una persona, por sí solo, no acredita que tenga facultades de representación legal de una sociedad o entidad.",
+      "ubicacion": "hook",
+      "tipo": "consejo",
+      "alcance": "NO_DETERMINADO",
+      "jurisdiccion": null,
+      "nucleo_transversal": null,
+      "variaciones_materiales": null,
+      "jurisdicciones_revisadas": null,
+      "diferencias_buscadas": null,
+      "contraejemplos_encontrados": null,
+      "justificacion_suficiencia_comparada": null,
+      "fuentes": [],
+      "confianza": "baja",
+      "riesgo_falsa_universalizacion": "medio",
+      "riesgo_asesoria": "bajo",
+      "platform_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "confidentiality_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "estado": "REQUIERE_INVESTIGACION",
+      "revision_humana": {
+        "estado": "PENDIENTE",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null,
+        "contenido_hash_sha256": null
+      },
+      "gate_arte": "CERRADO",
+      "reformulacion_propuesta": {
+        "texto": null,
+        "verificada": false,
+        "nuevo_claim_id": null
+      },
+      "redaccion_prohibida": "Ningún cargo o puesto, en ningún país, otorga jamás facultades de representación bajo ninguna circunstancia.",
+      "notas": "Corolario práctico del tema original #16, separado de linkedin-ray-16-claim-1 (Etapa 1: no hereda fuentes ni estado del claim de mandato). Es un principio muy citado en la práctica de derecho corporativo/societario ('representante legal' vs. 'apoderado'), pero las 4 fuentes de mandato civil investigadas en el claim 1 no lo enuncian con esta literalidad -- hacen falta fuentes propias sobre representación de sociedades (p. ej. facultades del administrador vs. apoderados, en la ley mercantil/societaria de cada país), que esta sesión no investigó por no confundir mandato civil con representación orgánica societaria sin evidencia distinta para cada una. Queda NO_DETERMINADO/REQUIERE_INVESTIGACION hasta esa investigación societaria específica -- no por EGRESS_BLOCKED únicamente, sino porque la investigación correcta es otra."
+    }
+  ],
+  "estado_agregado": "REQUIERE_INVESTIGACION",
+  "revisiones_pendientes": [
+    "linkedin-ray-16-claim-1-mandato",
+    "linkedin-ray-16-claim-2-cargo-no-acredita"
+  ],
+  "gate_global_arte": "CERRADO"
+}

@@ -989,9 +989,18 @@ class TestPilotClaimPacketsReales(unittest.TestCase):
     # 9. Pieza 4 (laboral básico transversal, Capa A) se suma tras orden expresa
     #    del fundador — ver CLAUDE.md §6, "salvo orden expresa del fundador" —
     #    documentada en docs/direccion-basico-antes-que-complejo.md.
-    def test_las_cuatro_piezas_reales_pasan_validacion_estructural(self):
+    # 10. 8 piezas del banco LinkedIn del fundador (Inmobiliario, SAFE_EDITORIAL_FRAME)
+    #     se suman tras orden expresa del fundador ("Empieza por los 8
+    #     SAFE_EDITORIAL_FRAME") — ver docs/linkedin-raymundo-inmobiliario.md.
+    #     Todas quedan REQUIERE_INVESTIGACION/gate CERRADO: la mayoría son
+    #     marcos de proceso sin fuente aplicable (NO_DETERMINADO); la única con
+    #     contenido jurídico verificable (linkedin-ray-16, mandato/poder) llega
+    #     a APTO_CON_MATICES en su propio claim vía WebSearch convergente, pero
+    #     un segundo claim de la misma pieza (el corolario societario) sigue
+    #     REQUIERE_INVESTIGACION y frena el agregado de la pieza.
+    def test_las_piezas_reales_pasan_validacion_estructural(self):
         piezas = sorted(self.PILOT_DIR.glob("*.json"))
-        self.assertEqual(len(piezas), 4, f"se esperaban 4 piezas reales, se encontraron {len(piezas)}: {piezas}")
+        self.assertEqual(len(piezas), 12, f"se esperaban 12 piezas reales, se encontraron {len(piezas)}: {piezas}")
         for path in piezas:
             with self.subTest(pieza=path.name):
                 piece = json.loads(path.read_text(encoding="utf-8"))

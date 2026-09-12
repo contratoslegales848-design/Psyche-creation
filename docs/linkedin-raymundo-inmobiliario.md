@@ -110,26 +110,73 @@ norma, un plazo o una consecuencia jurídica concreta. `REVIEW_REQUIRED`
 significa que el hook, tal como está, ya roza una afirmación territorial y
 necesita fuente/jurisdicción antes de redactarse.
 
-| # | Tema | Estado declarado en Drive | Nota |
-|---|---|---|---|
-| 1 | Un desarrollo inmobiliario no empieza con el contrato. | SAFE_EDITORIAL_FRAME | Marco de proceso. |
-| 2 | Tener escritura no significa que puedas desarrollar. | REVIEW_REQUIRED | Hook fuerte; necesita jurisdicción/vigencia antes de publicarse. |
-| 3 | Fraccionar, urbanizar y escriturar no son lo mismo. | REVIEW_REQUIRED | Distinción útil; necesita fuente/territorio. |
-| 4 | Las dos vidas de un residencial: física y jurídica. | SAFE_EDITORIAL_FRAME | Marco, sin conclusión legal. |
-| 5 | El abogado de dirección como integrador de áreas, no sustituto del equipo técnico. | SAFE_EDITORIAL_FRAME | Posicionamiento profesional; sin credenciales más allá de la fuente. |
-| 6 | Marketing, proyecto autorizado y contrato deben describir la misma realidad. | REVIEW_REQUIRED | Principio operativo; evitar garantía universal. |
-| 7 | Por qué el abogado debe entrar antes de comprar la tierra. | SAFE_EDITORIAL_FRAME | Extiende el tema 1. |
-| 8 | Del predio matriz al lote individualizado. | REVIEW_REQUIRED | Requiere describir el procedimiento sin fijarlo a un solo país. |
-| 9 | Qué conecta una licencia de fraccionamiento con la urbanización. | REVIEW_REQUIRED | Term. técnico varía por país — Capa B/C, no Capa A. |
-| 10 | El proyecto ejecutivo como puente entre autorización y obra. | SAFE_EDITORIAL_FRAME | Marco de proceso. |
-| 11 | Pagar un lote no siempre significa que ya pueda escriturarse. | REVIEW_REQUIRED | Afirmación con riesgo de falsa universalización. |
-| 12 | El contrato es un nodo del proyecto, no el proyecto completo. | SAFE_EDITORIAL_FRAME | Marco. |
-| 13 | Due diligence inmobiliario: verificar antes de diseñar y prometer. | SAFE_EDITORIAL_FRAME | Marco. |
-| 14 | La matriz de permisos como mapa de dependencias, no como lista burocrática. | SAFE_EDITORIAL_FRAME | Marco. |
-| 15 | La comunidad jurídica después de vender: reglamentos, cuotas, áreas comunes y administración. | REVIEW_REQUIRED | Depende del régimen de propiedad en condominio de cada país. |
-| 16 | Un poder debe describir facultades y límites; el cargo por sí solo no prueba representación. | SAFE_EDITORIAL_FRAME | Extiende a Representación (pilar ya existente en Artefacto 05). |
-| 17 | La due diligence crea una línea base: documentar lo observado evita confundir problemas preexistentes con decisiones posteriores. | SAFE_EDITORIAL_FRAME | Marco. |
-| 18 | Una cláusula de no competencia exige revisar alcance, territorio, duración y compensación. | REVIEW_REQUIRED | Validez de la cláusula varía por país — necesita fuente antes de un hook normativo. |
+| # | Tema | Estado declarado en Drive | Nota | Claim packet (2026-09-12) |
+|---|---|---|---|---|
+| 1 | Un desarrollo inmobiliario no empieza con el contrato. | SAFE_EDITORIAL_FRAME | Marco de proceso. | `linkedin-ray-01-no-empieza-contrato.json` — REQUIERE_INVESTIGACION |
+| 2 | Tener escritura no significa que puedas desarrollar. | REVIEW_REQUIRED | Hook fuerte; necesita jurisdicción/vigencia antes de publicarse. | — |
+| 3 | Fraccionar, urbanizar y escriturar no son lo mismo. | REVIEW_REQUIRED | Distinción útil; necesita fuente/territorio. | — |
+| 4 | Las dos vidas de un residencial: física y jurídica. | SAFE_EDITORIAL_FRAME | Marco, sin conclusión legal. | `linkedin-ray-04-dos-vidas-residencial.json` — REQUIERE_INVESTIGACION |
+| 5 | El abogado de dirección como integrador de áreas, no sustituto del equipo técnico. | SAFE_EDITORIAL_FRAME | Posicionamiento profesional; sin credenciales más allá de la fuente. | `linkedin-ray-05-abogado-integrador.json` — REQUIERE_INVESTIGACION |
+| 6 | Marketing, proyecto autorizado y contrato deben describir la misma realidad. | REVIEW_REQUIRED | Principio operativo; evitar garantía universal. | — |
+| 7 | Por qué el abogado debe entrar antes de comprar la tierra. | SAFE_EDITORIAL_FRAME | Extiende el tema 1. | — (no estaba en la lista de 8 elegida) |
+| 8 | Del predio matriz al lote individualizado. | REVIEW_REQUIRED | Requiere describir el procedimiento sin fijarlo a un solo país. | — |
+| 9 | Qué conecta una licencia de fraccionamiento con la urbanización. | REVIEW_REQUIRED | Term. técnico varía por país — Capa B/C, no Capa A. | — |
+| 10 | El proyecto ejecutivo como puente entre autorización y obra. | SAFE_EDITORIAL_FRAME | Marco de proceso. | — (no estaba en la lista de 8 elegida) |
+| 11 | Pagar un lote no siempre significa que ya pueda escriturarse. | REVIEW_REQUIRED | Afirmación con riesgo de falsa universalización. | — |
+| 12 | El contrato es un nodo del proyecto, no el proyecto completo. | SAFE_EDITORIAL_FRAME | Marco. | `linkedin-ray-12-contrato-nodo-proyecto.json` — REQUIERE_INVESTIGACION |
+| 13 | Due diligence inmobiliario: verificar antes de diseñar y prometer. | SAFE_EDITORIAL_FRAME | Marco. | `linkedin-ray-13-due-diligence-antes-de-prometer.json` — REQUIERE_INVESTIGACION |
+| 14 | La matriz de permisos como mapa de dependencias, no como lista burocrática. | SAFE_EDITORIAL_FRAME | Marco. | `linkedin-ray-14-matriz-permisos-dependencias.json` — REQUIERE_INVESTIGACION |
+| 15 | La comunidad jurídica después de vender: reglamentos, cuotas, áreas comunes y administración. | REVIEW_REQUIRED | Depende del régimen de propiedad en condominio de cada país. | — |
+| 16 | Un poder debe describir facultades y límites; el cargo por sí solo no prueba representación. | SAFE_EDITORIAL_FRAME | Extiende a Representación (pilar ya existente en Artefacto 05). | `linkedin-ray-16-poder-facultades-y-limites.json` — 2 claims: mandato/poder (APTO_CON_MATICES, Capa A, 4 países vía WebSearch) + corolario societario (REQUIERE_INVESTIGACION); agregado de la pieza REQUIERE_INVESTIGACION |
+| 17 | La due diligence crea una línea base: documentar lo observado evita confundir problemas preexistentes con decisiones posteriores. | SAFE_EDITORIAL_FRAME | Marco. | `linkedin-ray-17-due-diligence-linea-base.json` — REQUIERE_INVESTIGACION |
+| 18 | Una cláusula de no competencia exige revisar alcance, territorio, duración y compensación. | REVIEW_REQUIRED | Validez de la cláusula varía por país — necesita fuente antes de un hook normativo. | — |
+
+### 3.1 Qué pasó al correr los 8 `SAFE_EDITORIAL_FRAME` por la skill (2026-09-12)
+
+Instrucción del fundador: "Empieza por los 8 SAFE_EDITORIAL_FRAME". Los 8
+temas (#1, 4, 5, 12, 13, 14, 16, 17) ahora tienen claim packet real en
+`.claude/skills/legalmente-legal-verification/pilot/claim-packets/`, todos
+validados con `scripts/validate-claim-packet.py` y
+`scripts/check_pilot_governance.py` — 0 errores estructurales, gate
+`CERRADO` en los 8 (correcto: ninguno tiene revisión humana todavía).
+
+- **7 de los 8** (todo menos #16) resultaron ser marcos de proceso/metodología
+  profesional, no afirmaciones sobre lo que exige la ley de ningún país — al
+  extraerlos como claim (Etapa 1-2), ninguno pasó la prueba de "esto es una
+  proposición verificable con una fuente" que exige la skill. Quedan
+  `alcance: NO_DETERMINADO` / `estado: REQUIERE_INVESTIGACION`, `fuentes: []`
+  — no por `EGRESS_BLOCKED`, sino porque no hay una fuente que pudiera
+  confirmarlos o refutarlos: son recomendaciones profesionales, no hechos. Lo
+  que falta no es investigación jurídica externa: es que el fundador confirme
+  que cada formulación describe honestamente su práctica real y no desliza,
+  sin decirlo, un requisito legal país-dependiente. Cada packet lo explica en
+  su campo `notas`.
+- **#16 sí tenía contenido jurídico real** ("un poder debe describir
+  facultades y límites") — la Etapa 1 lo separó en dos claims, como exige la
+  skill cuando una afirmación mezcla dos cosas:
+  - `linkedin-ray-16-claim-1-mandato`: investigado de verdad vía `WebSearch`
+    (WebFetch confirmó de nuevo `EGRESS_BLOCKED`, esta vez también contra
+    `es.wikipedia.org`, no solo dominios `.gob.mx`) contra 4 fuentes oficiales
+    reales — Código Civil Federal de México (`diputados.gob.mx`, arts.
+    2554-2555), Código Civil de España (`boe.es`, art. 1709), Código Civil y
+    Comercial de Argentina (`servicios.infoleg.gob.ar`, arts. 362-363) y
+    Código Civil de Colombia (`secretariasenado.gov.co`, art. 2142). Las
+    cuatro convergen en que la representación nace de un acto de
+    apoderamiento con alcance propio. Techo: `APTO_CON_MATICES` (Capa A,
+    Nivel 2 en los 4 países — ninguna fuente tiene `texto_exacto_consultado`
+    en `true` porque `WebFetch` no pudo leer el documento íntegro).
+  - `linkedin-ray-16-claim-2-cargo-no-acredita`: el corolario societario ("el
+    cargo no prueba representación") no está enunciado con esa literalidad en
+    las 4 fuentes de mandato civil — necesita fuentes propias de derecho
+    societario/mercantil (representación orgánica vs. apoderados), que esta
+    ronda no investigó. Queda `REQUIERE_INVESTIGACION`.
+  - El agregado de la pieza es `REQUIERE_INVESTIGACION` (un claim en ese
+    estado frena toda la pieza, por diseño del validador) aunque el primer
+    claim ya llegó a `APTO_CON_MATICES`.
+
+**Ningún packet tiene `revision_humana.estado: APROBADO`** — nace `PENDIENTE`
+en los 8, como exige la skill. **Ningún gate está `ABIERTO`.** Nada de esto
+puede pasar a `legalmente-visual-system` todavía.
 
 ## 4. Siguiente paso ejecutable (para cada candidato, en orden)
 

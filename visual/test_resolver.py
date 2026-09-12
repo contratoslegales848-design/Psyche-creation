@@ -31,11 +31,12 @@ class TestResolucionReal(unittest.TestCase):
         self.assertTrue(all(len(t) == 3 for t in ids))
 
     def test_gate_summary_no_reinterpreta_estados(self):
-        # 4 piezas reales en pilot/claim-packets/ desde pieza-04-laboral-basico
-        # (laboral básico transversal, Capa A) — orden expresa del fundador,
-        # documentada en docs/direccion-basico-antes-que-complejo.md.
+        # 12 piezas reales en pilot/claim-packets/: las 4 de siempre mas las 8
+        # del banco LinkedIn del fundador (Inmobiliario, SAFE_EDITORIAL_FRAME)
+        # — orden expresa del fundador, documentada en
+        # docs/linkedin-raymundo-inmobiliario.md.
         filas = resolver.gate_summary()
-        self.assertEqual(len(filas), 4)
+        self.assertEqual(len(filas), 12)
         for f in filas:
             # VISUAL_READY jamas dice SI mientras el gate canonico este cerrado.
             if f["ART_GATE"] != "ABIERTO":

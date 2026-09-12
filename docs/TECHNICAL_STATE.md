@@ -117,6 +117,16 @@ acumular commits sin que nada la valide hasta que se abre el PR.
 | `pieza-02-laboral.json` | 7 | REQUIERE_INVESTIGACION | CERRADO |
 | `pieza-03-honor.json` | 7 | REQUIERE_INVESTIGACION | CERRADO |
 | `pieza-04-laboral-basico.json` | 1 (Capa A transversal) | APTO_CON_MATICES | CERRADO — pendiente `revision_humana` de `pieza-04-claim-1` |
+| `linkedin-ray-01/04/05/12/13/14/17-*.json` (7 piezas) | 1 c/u | REQUIERE_INVESTIGACION | CERRADO — marcos de proceso sin fuente aplicable, `alcance: NO_DETERMINADO` |
+| `linkedin-ray-16-poder-facultades-y-limites.json` | 2 | REQUIERE_INVESTIGACION | CERRADO — claim 1 (mandato/poder, Capa A, 4 países vía WebSearch) en APTO_CON_MATICES; claim 2 (corolario societario) frena el agregado |
+
+Las 8 piezas `linkedin-ray-*` nacieron el 2026-09-12 por instrucción expresa
+del fundador ("Empieza por los 8 SAFE_EDITORIAL_FRAME") sobre el banco de
+`docs/linkedin-raymundo-inmobiliario.md §3.1` — detalle completo del resultado
+ahí. `pilot/claim-packets/` tiene ahora **12** piezas reales (antes 4);
+`test_las_piezas_reales_pasan_validacion_estructural`,
+`visual/test_inventory.py` y `visual/test_resolver.py` se actualizaron para
+reflejarlo (651 pruebas totales siguen en verde).
 
 La Pieza 1 tiene aprobación humana expresa registrada en la rama
 `claude/legalmente-pieza-01-aprobacion-humana-final-v1` (commit `e7bb82f`), **sin

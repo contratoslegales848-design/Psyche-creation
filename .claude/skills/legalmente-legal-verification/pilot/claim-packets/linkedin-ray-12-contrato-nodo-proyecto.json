@@ -1,0 +1,59 @@
+{
+  "schema_version": "4.0",
+  "piece_id": "LINKEDIN-RAY-12-CONTRATO-NODO-PROYECTO",
+  "claims": [
+    {
+      "claim_id": "linkedin-ray-12-claim-1",
+      "texto_exacto": "El contrato es un nodo del proyecto inmobiliario, no el proyecto completo: antes y después de él hay due diligence, autorizaciones, permisos y escrituración que también sostienen la operación.",
+      "ubicacion": "hook",
+      "tipo": "definicion",
+      "alcance": "NO_DETERMINADO",
+      "jurisdiccion": null,
+      "nucleo_transversal": null,
+      "variaciones_materiales": null,
+      "jurisdicciones_revisadas": null,
+      "diferencias_buscadas": null,
+      "contraejemplos_encontrados": null,
+      "justificacion_suficiencia_comparada": null,
+      "fuentes": [],
+      "confianza": "baja",
+      "riesgo_falsa_universalizacion": "bajo",
+      "riesgo_asesoria": "bajo",
+      "platform_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "confidentiality_review": {
+        "required": false,
+        "status": "NO_APLICA",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null
+      },
+      "estado": "REQUIERE_INVESTIGACION",
+      "revision_humana": {
+        "estado": "PENDIENTE",
+        "revisor": null,
+        "fecha": null,
+        "observaciones": null,
+        "contenido_hash_sha256": null
+      },
+      "gate_arte": "CERRADO",
+      "reformulacion_propuesta": {
+        "texto": null,
+        "verificada": false,
+        "nuevo_claim_id": null
+      },
+      "redaccion_prohibida": "Un contrato bien redactado basta por sí solo para garantizar que la operación inmobiliaria se complete sin riesgo.",
+      "notas": "Origen: docs/linkedin-raymundo-inmobiliario.md #12 (banco de temas LinkedIn Raymundo, pilar Derecho Aplicado / Arquitectura Jurídica de Operaciones Inmobiliarias), marcado SAFE_EDITORIAL_FRAME en el material fuente de Drive. Es un marco de proceso/metodología profesional derivado de la experiencia real y anonimizada del fundador, no una afirmación sobre lo que exige la ley de ningún país -- por eso 'alcance' queda NO_DETERMINADO en vez de forzar NO_APLICA sin que un humano confirme esa lectura. No se usó la memoria del modelo ni ningún WebSearch/WebFetch como fuente: no hay una fuente identificable que 'confirme' o 'refute' una recomendación profesional de este tipo, y la skill prohíbe aceptar la propia memoria del modelo como fuente. Lo que falta para avanzar a NO_APLICA + APTO_PARA_NARRATIVA no es investigación jurídica externa: es que el fundador confirme que la formulación describe honestamente su práctica real (Etapa 5: no promete resultado, no es asesoría individual) y no desliza, sin decirlo, un requisito legal país-dependiente (Etapa 4). Una vez confirmado, se abre un nuevo claim (via reformulacion_propuesta) con alcance=NO_APLICA. Nunca declarar 'alcance: NO_APLICA' ni 'estado: APTO_PARA_NARRATIVA' directamente sobre este claim sin que exista un nuevo_claim_id real que documente la confirmación humana -- reformular, no reescribir encima del estado REQUIERE_INVESTIGACION ya calculado."
+    }
+  ],
+  "estado_agregado": "REQUIERE_INVESTIGACION",
+  "revisiones_pendientes": [
+    "linkedin-ray-12-claim-1"
+  ],
+  "gate_global_arte": "CERRADO"
+}
