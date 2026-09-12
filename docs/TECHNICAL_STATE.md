@@ -323,3 +323,6 @@ decisión del fundador, no técnica.
 - `docs/auditoria-automatizacion-segura.md` — auditoría de todo el pipeline
   para automatización segura, priorizada en estandarización → automatización
   → ejecución continua con puertas de control (2026-09-12).
+- `docs/direccion-trazabilidad-emocional.md` — dirección de producto: preocupación
+  → necesidad → opciones con fuente, certidumbre y límite; estilo artístico acorde
+  a la emoción (sin candado rígido), medible cuando existan métricas (2026-09-12).
