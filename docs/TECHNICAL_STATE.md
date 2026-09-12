@@ -339,6 +339,11 @@ decisión del fundador, no técnica.
   18 definiciones, tres horizontes (presente/tendencia/prospectiva, nunca prospectiva
   como hecho), prohibición de PII/perfiles, fail-closed, trazabilidad a fuente, y la
   conexión conceptual con el sistema existente. Contrato, Radar NO construido (2026-09-12).
+- `docs/mapa-capa-inteligencia.md` — documento-índice único de la cadena
+  preocupación → necesidad → clasificación → TopicCandidate → verificación → claim →
+  opción → Radar → prioridad → contenido, con el estado real de cada eslabón, el
+  "flujo real hoy" (solo el tramo claim→asset gated respira, y a mano) y los cuellos
+  de botella ordenados por dependencia. Mapa, no contrato (2026-09-12).
 - `docs/contrato-topic-candidate.md` + `docs/topic-candidates-calibracion.json` —
   contrato documental del objeto `TopicCandidate` (unidad intermedia entre señal/hueco
   y claim; captura una oportunidad temática sin volverla afirmación jurídica). Cumple el
