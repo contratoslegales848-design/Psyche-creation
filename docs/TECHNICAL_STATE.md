@@ -326,3 +326,7 @@ decisión del fundador, no técnica.
 - `docs/direccion-trazabilidad-emocional.md` — dirección de producto: preocupación
   → necesidad → opciones con fuente, certidumbre y límite; estilo artístico acorde
   a la emoción (sin candado rígido), medible cuando existan métricas (2026-09-12).
+- `docs/politica-capa-necesidad.md` + `docs/piloto-capa-necesidad.json` — política
+  operativa corta de la capa de interpretación de necesidad (emoción como puerta de
+  entrada, no salida) y piloto de 5 casos de extremo a extremo, uno no-jurídico y
+  uno jurídico-no-verificado. No implementa nada (2026-09-12).

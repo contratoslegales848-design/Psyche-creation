@@ -1,0 +1,141 @@
+{
+  "_meta": {
+    "titulo": "Piloto — capa de interpretación de necesidad humana",
+    "fecha": "2026-09-12",
+    "estado": "PRUEBA MÍNIMA / NO PRODUCCIÓN / NO IMPLEMENTA NADA",
+    "que_es": "5 casos documentados de extremo a extremo para probar la política de docs/politica-capa-necesidad.md. Cada opción es una VISTA derivada de un claim packet ya verificado — este archivo no posee verdad jurídica, no es un esquema nuevo, no lo valida el CI de claim packets, y no vive en pilot/claim-packets/ para no confundirse con un canon.",
+    "reglas_de_lectura": [
+      "registro_emocional se clasifica por la superficie de lo expresado; NO es diagnóstico ni inferencia de estado mental (Principio 1).",
+      "Una opción nunca muestra más certeza que su claim de origen (Principio 2).",
+      "es_materia_juridica=false y claim_ref=null significan cosas distintas: el primero es 'no hay pregunta jurídica'; el segundo, dentro de es_materia_juridica=true, es 'sí la hay pero no está verificada' → fail-closed, sin opción."
+    ],
+    "registros_emocionales_usados": ["ALIVIO", "CERTEZA_ANTES_DE_DECIDIR", "CURIOSIDAD", "DESAMPARO", "GRAVEDAD"]
+  },
+  "casos": [
+    {
+      "caso_id": "PC-01-relacion-laboral-sin-contrato",
+      "canal": "general",
+      "preocupacion_como_se_expresa": "Trabajé casi un año pero nunca firmé un contrato; siento que no tengo cómo defenderme.",
+      "registro_emocional": "ALIVIO",
+      "nota_registro_emocional": "Clasificado por la frase, no por un juicio sobre la persona. Solo elige tono cálido y sesgo de estilo; no entra al análisis jurídico.",
+      "es_materia_juridica": true,
+      "necesidad_concreta": "Entender si la relación laboral existe por los hechos o por la firma del papel.",
+      "pregunta_juridica": "¿Existe relación laboral cuando no se firmó un contrato escrito?",
+      "estado_capa": "EMITE_OPCION",
+      "claim_ref": "pieza-04-claim-1 (pieza-04-laboral-basico.json)",
+      "opciones": [
+        {
+          "texto_derivado": "En los países revisados, la relación laboral existe por tres hechos —servicio personal, subordinación y salario—, no por la firma de un contrato.",
+          "deriva_de_claim": "pieza-04-claim-1",
+          "fuente": "LFT (México), LCT (Argentina), CST (Colombia), ET (España) — NORMA_OFICIAL con registro_oficial_id real.",
+          "certidumbre": "Con matices (APTO_CON_MATICES, Nivel 2): confirmado por búsqueda convergente, sin lectura directa del texto íntegro por bloqueo de red. Revisión humana del claim: PENDIENTE.",
+          "limite": "Los tres elementos son transversales (Capa A). Plazos, montos, prima de antigüedad y procedimientos cambian por país y NO están en esta opción."
+        }
+      ],
+      "puente_no_juridico": null,
+      "separacion_emocion_derecho": "El alivio buscado no altera la respuesta: la opción diría lo mismo con o sin la carga emocional. La emoción solo elige que el estilo sea cálido, no amenazante.",
+      "que_queda_fuera": [
+        "Calcular el finiquito o los montos del caso.",
+        "Decir si en TU caso concreto se cumplen los tres elementos.",
+        "Cualquier plazo nacional específico."
+      ]
+    },
+    {
+      "caso_id": "PC-02-cargo-representa-empresa",
+      "canal": "linkedin",
+      "preocupacion_como_se_expresa": "Alguien va a firmar por la empresa y no sé si su cargo basta para obligarla; me da inseguridad avanzar.",
+      "registro_emocional": "CERTEZA_ANTES_DE_DECIDIR",
+      "nota_registro_emocional": "Registro de decisor, no desamparo. Elige sobriedad institucional; no infiere nada sobre quién pregunta.",
+      "es_materia_juridica": true,
+      "necesidad_concreta": "Entender si un cargo, por sí solo, acredita la representación de una sociedad.",
+      "pregunta_juridica": "¿El cargo que ocupa una persona acredita, por sí solo, que puede representar a la sociedad?",
+      "estado_capa": "EMITE_OPCION",
+      "claim_ref": "linkedin-ray-16-claim-1-mandato y linkedin-ray-16-claim-3-administrador-vs-otros-cargos",
+      "opciones": [
+        {
+          "texto_derivado": "La representación nace de un acto de apoderamiento con alcance propio. El cargo formalmente designado de administrador (o representante legal equivalente) sí representa por ley; cualquier otro cargo necesita un poder expreso.",
+          "deriva_de_claim": "linkedin-ray-16-claim-1-mandato + linkedin-ray-16-claim-3-administrador-vs-otros-cargos",
+          "fuente": "Códigos Civiles (mandato/poder) + leyes societarias (LGSM, LSC, LGS 19.550, C. de Comercio) de México, España, Argentina y Colombia.",
+          "certidumbre": "Con matices (APTO_CON_MATICES, Nivel 2), CON aprobación humana registrada el 2026-09-12 (Drive + revision_humana firmada por hash).",
+          "limite": "No dice qué facultades tiene un poder concreto ni si una firma específica obliga: eso es caso individual. La formulación 'el cargo nunca prueba representación' está BLOQUEADA por falsa universalización (claim-2)."
+        }
+      ],
+      "puente_no_juridico": null,
+      "separacion_emocion_derecho": "La inseguridad de decidir no cambia el derecho; la opción reduce la incertidumbre con fuente, no tranquiliza afirmando de más.",
+      "que_queda_fuera": [
+        "Revisar un poder específico.",
+        "Decir si una firma concreta obliga a la empresa.",
+        "Estructurar la operación."
+      ]
+    },
+    {
+      "caso_id": "PC-03-inquilino-tiempo-propiedad",
+      "canal": "general",
+      "preocupacion_como_se_expresa": "Llevo años rentando la misma casa; me dijeron que 'ya es mía por el tiempo' y me preocupa no saber si es verdad.",
+      "registro_emocional": "CURIOSIDAD",
+      "nota_registro_emocional": "Duda tranquila, no angustia. Elige tono editorial sereno.",
+      "es_materia_juridica": true,
+      "necesidad_concreta": "Entender si rentar por mucho tiempo convierte al inquilino en dueño.",
+      "pregunta_juridica": "¿Quien posee un bien reconociendo dueño ajeno adquiere la propiedad por el solo transcurso del tiempo?",
+      "estado_capa": "EMITE_OPCION",
+      "claim_ref": "pieza-01-claim-4 (pieza-01-reales.json)",
+      "opciones": [
+        {
+          "texto_derivado": "Quien detenta un bien reconociendo el dominio ajeno no adquiere la propiedad por el simple transcurso del tiempo mientras conserve esa calidad. Para poder usucapir debe producirse y probarse un cambio jurídicamente relevante hacia la posesión en concepto de propietario.",
+          "deriva_de_claim": "pieza-01-claim-4",
+          "fuente": "Códigos Civiles de México, España y Argentina (fuentes oficiales del claim, verificadas).",
+          "certidumbre": "Confirmado en las fuentes revisadas, con aprobación humana; gate de arte ABIERTO (el estado más alto del piloto: APTO_PARA_NARRATIVA).",
+          "limite": "Capa B: la formulación técnica y los plazos varían entre México, España y Argentina. Redacción prohibida por el claim: 'El inquilino jamás puede adquirir la casa por prescripción' — el absoluto contrario también sería falso; depende de que ocurra ese cambio relevante."
+        }
+      ],
+      "puente_no_juridico": null,
+      "separacion_emocion_derecho": "Se responde sin ni falso alivio ('ya es tuya') ni falsa alarma ('nunca'): la certeza mostrada es exactamente la del claim.",
+      "que_queda_fuera": [
+        "Decir si en TU caso hubo ese cambio jurídicamente relevante.",
+        "Los plazos concretos de usucapión de cada país."
+      ]
+    },
+    {
+      "caso_id": "PC-04-desconfianza-socio-NO-ES-JURIDICO",
+      "canal": "general",
+      "preocupacion_como_se_expresa": "Siento que mi socio ya no confía en mí y eso me tiene mal.",
+      "registro_emocional": "DESAMPARO",
+      "nota_registro_emocional": "La emoción es real y válida; se nombra, no se diagnostica. No se infiere por qué el socio actúa así ni el estado mental de nadie (Principio 1).",
+      "es_materia_juridica": false,
+      "necesidad_concreta": "No se fuerza una necesidad jurídica. La necesidad real es de confianza/relación, no de derecho — y así se declara.",
+      "pregunta_juridica": null,
+      "estado_capa": "NO_ES_MATERIA_JURIDICA",
+      "claim_ref": null,
+      "opciones": [],
+      "puente_no_juridico": "La ley entra solo si aparece un acto concreto. Tres preguntas generales que revelarían si detrás hay una pregunta jurídica: (a) ¿se tomó una decisión de la sociedad sin tu voto o sin avisarte? (b) ¿se firmó, transfirió o gravó algo a tu nombre o en tu contra? (c) ¿cambió quién puede firmar por la empresa? Si alguna es 'sí', ahí sí hay materia jurídica — y ahí sí se verifica con fuente.",
+      "separacion_emocion_derecho": "Caso central del piloto: la emoción abrió la puerta, pero detrás no hay (todavía) pregunta jurídica. LegalMente no convierte un sentimiento en un reclamo legal. El puente es general y sin PII; no pide datos ni el caso.",
+      "que_queda_fuera": [
+        "Diagnosticar la relación o la confianza.",
+        "Aconsejar sobre cómo sentirse o actuar emocionalmente.",
+        "Recibir el caso o datos personales.",
+        "Fabricar una pregunta jurídica donde no la hay."
+      ]
+    },
+    {
+      "caso_id": "PC-05-arrendador-entra-sin-aviso-JURIDICO-NO-VERIFICADO",
+      "canal": "general",
+      "preocupacion_como_se_expresa": "Mi arrendador entró a mi departamento sin avisar y me sentí invadido en mi espacio.",
+      "registro_emocional": "GRAVEDAD",
+      "nota_registro_emocional": "El 'sentirse invadido' es la emoción (real, no se diagnostica). La pregunta jurídica es separable y distinta de ese sentimiento.",
+      "es_materia_juridica": true,
+      "necesidad_concreta": "Entender si el arrendador puede entrar al inmueble arrendado sin aviso ni consentimiento del inquilino.",
+      "pregunta_juridica": "¿Puede el arrendador ingresar al inmueble arrendado sin aviso ni consentimiento del inquilino?",
+      "estado_capa": "EN_COLA_DE_VERIFICACION",
+      "claim_ref": null,
+      "opciones": [],
+      "puente_no_juridico": null,
+      "separacion_emocion_derecho": "Segundo tipo de 'no hay opción', distinto del PC-04: aquí SÍ hay pregunta jurídica legítima, pero NO existe un claim verificado en el repositorio que la sostenga. Fail-closed idéntico al del resto del sistema: sin fuente verificada, no se emite opción, aunque la preocupación sea grave y real. No se consuela afirmando algo no verificado. El registro GRAVEDAD elegiría el tono si hubiera opción; nunca responde la pregunta por sí mismo.",
+      "que_queda_fuera": [
+        "Responder la pregunta sin una fuente verificada (prohibido).",
+        "Dar por hecho una regla nacional como si fuera panhispánica.",
+        "Consolar con una afirmación no verificada."
+      ],
+      "siguiente_paso_de_la_capa": "Enrutar la pregunta jurídica a la skill legalmente-legal-verification (crear claim packet sobre arrendamiento / derecho del inquilino a la inviolabilidad del inmueble arrendado). Solo cuando ese claim llegue al menos a APTO_CON_MATICES, este caso pasa a EMITE_OPCION."
+    }
+  ]
+}
