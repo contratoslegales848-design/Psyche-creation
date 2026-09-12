@@ -320,3 +320,6 @@ decisión del fundador, no técnica.
   contenido básico transversal.
 - `docs/linkedin-raymundo-inmobiliario.md` — banco de 18 temas de experiencia
   profesional real del fundador para LinkedIn (Inmobiliario), sin verificar.
+- `docs/auditoria-automatizacion-segura.md` — auditoría de todo el pipeline
+  para automatización segura, priorizada en estandarización → automatización
+  → ejecución continua con puertas de control (2026-09-12).
