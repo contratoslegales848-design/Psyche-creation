@@ -68,11 +68,83 @@ Todo lo marcado IMPLEMENTADO aquí tiene archivo real y prueba que pasa.
 (LM-151~152, LM-063~050, LM-077~079): misma materia, preguntas distintas —
 justo lo que el canon prohíbe bloquear.
 
+### IMPLEMENTADO Y PROBADO — FASE 3 (calibración Founder, saturación, territorio, generador)
+
+| Componente | Archivo | Pruebas | Estado |
+|---|---|---|---|
+| Hoja de revisión Founder + incorporación trazable | `visual/founder_review.py` | 20 | IMPLEMENTADO Y PROBADO |
+| Enriquecimiento de concepto_nucleo/pregunta_resuelta | `visual/corpus_enrichment.py` | 20 | IMPLEMENTADO Y PROBADO |
+| Saturación editorial (distinta de repetición semántica) | `visual/editorial_saturation.py` | 9 | IMPLEMENTADO Y PROBADO |
+| Territory Explorer (novelty/coverage/opportunity) | `visual/territory_explorer.py` | 18 | IMPLEMENTADO Y PROBADO |
+| Subfunciones de `caso_cotidiano` | `corpus_analysis.analizar_caso_cotidiano` | 8 | IMPLEMENTADO Y PROBADO |
+| Generador multi-factor con hard gates | `visual/generator.py` | 25 | IMPLEMENTADO Y PROBADO |
+| Founder Selection Rate por eje | `visual/founder_metrics.py` | 12 | IMPLEMENTADO Y PROBADO |
+| `corpus/eval-umbral-candidato.json` → revisión Founder | pendiente de respuesta | — | **ESPERANDO AL FOUNDER** |
+
+**El umbral sigue calibrado sólo con etiquetas del agente.** `founder_review.py`
+genera la hoja de revisión y la incorpora sin destruir el original
+(`corpus/eval-umbral-founder.json`, ausente hasta que el Founder responda);
+`calibration.py` ya prefiere ese fichero cuando exista, con fallback
+transparente al del agente. Nadie ha respondido todavía — **acción pendiente
+para el Founder**, no un hueco técnico.
+
+**Dos controles separados, verificados como independientes** (`test_generator.
+TestHardGates.test_saturacion_alta_bloquea_aunque_sea_semanticamente_nueva`):
+repetición semántica (¿ya dijimos esto?, contra el corpus entero) y saturación
+editorial (¿hemos usado demasiado esta función últimamente?, sólo contra
+producción reciente — HISTORICA queda fuera para no prohibir `caso_cotidiano`
+para siempre). Una pieza puede pasar la primera y ser rechazada por la
+segunda.
+
+**Territory Explorer, alcance declarado:** traza la malla MATERIA × FAMILIA
+EDITORIAL en detalle (77/1.160 combinaciones sobre el seed original, **77/1.508**
+tras incorporar `migracion` y `cultura_y_literatura_juridica` — coverage
+global **5,11%**); los otros cinco ejes (necesidad, ángulo, rol, contexto,
+profundidad) se informan como cobertura marginal, no como malla completa de 8
+dimensiones — con los datos actuales esa malla sería casi toda vacía por
+escasez, no por vacío editorial real.
+
+**Hallazgo de la Fase 6:** de las 85 piezas `caso_cotidiano`, **42 (49%)**
+tienen subestructura léxica detectable (omisión no actuada, alcance
+extendido, apariencia engañosa, relato explícito…) que mapea a
+advertencia/consecuencia/riesgo/error/explicación. Las otras 43 quedan
+honestamente sin marcador — no se fuerza una subfunción donde no hay
+evidencia. Confirma parcialmente la hipótesis del Founder: una parte real del
+48% sí era un problema de clasificación, no sólo de producción.
+
+**El generador (Fase 7) tiene tres hard gates**, no penalización blanda:
+repetición semántica, saturación editorial ALTA, y cuota de materia agotada
+(`00 LEER PRIMERO` §3.A). Seis factores con evidencia real entran en el score
+compuesto (semantic_novelty, editorial_diversity, territory_coverage,
+utility, emotional_fit, recent_cooldown); tres se declaran **PENDIENTE** en
+vez de fabricarse: `legal_support` (no hay verificación jurídica sobre un
+candidato combinatorio todavía), `human_interest` (0 métricas reales, y el
+texto de `pregunta_resuelta` es plantilla fija — un proxy léxico sería ruido
+constante, no señal) y `visual_distance` (sin plan visual en esta etapa).
+
+**Defecto real encontrado y corregido durante esta fase:** el ajuste de
+afinidad del Founder (`ajuste_afinidad_founder`) se sumaba al score y se
+recortaba a `[0,1]` — pero con territorio muy virgen (el caso normal: 5,11%
+de cobertura) casi todos los candidatos ya tocan el techo de 1.0 por pura
+novedad, así que el recorte volvía el ajuste invisible justo cuando más
+importa. El desempate en `generator.seleccionar_lote` ahora usa el valor SIN
+recortar como criterio secundario — verificado con
+`test_lote_posterior_a_una_curaduria_refleja_la_preferencia`: sin el fix, el
+lote posterior a una curaduría no heredaba ninguna preferencia (0/10); con
+el fix, todas las piezas heredan afinidad de los ejes coincidentes cuando el
+material está disponible.
+
 ### PENDIENTE / NO CONECTADO — declarado, no implementado
 - Métricas de rendimiento: **0 entradas**. `selection_rate` sigue siendo la única
   señal real de aprendizaje.
 - Repositorio histórico de Remotion (guiones completos): **inaccesible**.
-- El conjunto de calibración está **etiquetado por el agente**, no por el Founder.
+- El conjunto de calibración está **etiquetado por el agente**, no por el Founder
+  — hoja de revisión lista en `founder_review.generar_hoja_revision()`.
+- `direccion_artistica` y `hook` por candidato: no existen en la etapa
+  combinatoria (`universe.TopicCandidate`); nacen en `brief.py`/`pipeline.py`,
+  después de la verificación jurídica. `founder_metrics.py` ya declara estos
+  ejes como `EJES_PENDIENTES` en vez de fabricar una tasa sobre datos
+  inexistentes.
 
 ### PILOTO / PROPUESTA
 - Piezas 01–03 del piloto: `pieza-01-reales` en `APTO_PARA_NARRATIVA` con gate CERRADO;

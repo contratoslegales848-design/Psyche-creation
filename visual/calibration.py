@@ -11,15 +11,20 @@ DOS FUENTES DE VERDAD, deliberadamente separadas porque no valen lo mismo:
    así que la etiqueta no es un juicio: es la regla. Un umbral que no bloquea
    estos casos está roto por definición.
 
-2. PARES ETIQUETADOS (`corpus/eval-umbral-candidato.json`). Los etiquetó el
-   AGENTE leyendo los guiones, no el Founder. Sirven para detectar falsos
-   positivos — bloquear cosas legítimamente distintas — pero NO acreditan
-   certeza estadística. El fichero lo dice y este módulo lo repite en cada
-   informe: no se presenta como ground truth humano.
+2. PARES ETIQUETADOS. Dos posibles ficheros, en orden de preferencia:
 
-Los pares MUY_PROXIMO se excluyen del cómputo: son la zona gris donde ni el
-agente ni, previsiblemente, el Founder tienen una respuesta única. Contarlos
-en un sentido u otro inflaría artificialmente la métrica elegida.
+   `corpus/eval-umbral-founder.json`   — GROUND TRUTH real. Lo produce
+       `founder_review.incorporar_decisiones()` a partir de las respuestas
+       que el Founder da a la hoja de `founder_review.generar_hoja_revision()`.
+       Si existe, este módulo lo usa y lo dice en el informe.
+   `corpus/eval-umbral-candidato.json` — lo etiquetó el AGENTE leyendo los
+       guiones, no el Founder. Sirve de respaldo mientras no exista el
+       fichero Founder. NO acredita certeza estadística, y cada informe lo
+       repite explícitamente.
+
+Los pares en zona gris (MUY_PROXIMO del agente; SIN_INFO o sin responder del
+Founder) se excluyen del cómputo: ni el agente ni el Founder tienen ahí una
+respuesta única, y contarlos en un sentido u otro inflaría la métrica.
 """
 
 import json
@@ -29,11 +34,20 @@ from pathlib import Path
 import corpus_import
 from semantic_fingerprint import SemanticFingerprint
 
-EVAL_PATH = Path(__file__).resolve().parent.parent / "corpus" / "eval-umbral-candidato.json"
+_CORPUS_DIR = Path(__file__).resolve().parent.parent / "corpus"
+EVAL_PATH = _CORPUS_DIR / "eval-umbral-candidato.json"
+FOUNDER_EVAL_PATH = _CORPUS_DIR / "eval-umbral-founder.json"
 
-BLOQUEAR = ("EQUIVALENTE",)
-NO_BLOQUEAR = ("RELACIONADO_DISTINTO", "DISTINTO")
-ZONA_GRIS = ("MUY_PROXIMO",)
+# Traduce CUALQUIERA de los dos vocabularios (el del agente y el que usa
+# founder_review) a una sola pregunta: ¿este par DEBE bloquearse? None marca
+# zona gris — se excluye, nunca se cuenta en ningún sentido.
+BLOQUEO_POR_ETIQUETA = {
+    # vocabulario del agente
+    "EQUIVALENTE": True, "MUY_PROXIMO": None,
+    "RELACIONADO_DISTINTO": False, "DISTINTO": False,
+    # vocabulario Founder (founder_label_mapped)
+    "BLOQUEAR": True, "COEXISTIR": False, "DISTINTA": False, "SIN_INFO": None,
+}
 
 UMBRALES = (0.10, 0.15, 0.20, 0.25, 0.30, 0.35, 0.40, 0.45, 0.50, 0.60)
 
@@ -57,10 +71,30 @@ def derivados_canonicos(registros, cuantos=25):
     return pares
 
 
+def _etiqueta_de(par):
+    """Un par del fichero Founder trae 'founder_label_mapped'; uno del agente
+    trae 'etiqueta'. Sin decisión Founder (SIN_DECISION) se trata como zona
+    gris: no hay con qué evaluar ese par todavía."""
+    if "founder_label_mapped" in par:
+        return par.get("founder_label_mapped") or "SIN_INFO"
+    return par.get("etiqueta")
+
+
 def cargar_pares_etiquetados(registros, path=None):
-    p = Path(path or EVAL_PATH)
+    """Prefiere el fichero Founder si `path` no se especifica y existe."""
+    fuente = "AGENTE"
+    p = Path(path) if path else None
+    if p is None:
+        if FOUNDER_EVAL_PATH.is_file():
+            p, fuente = FOUNDER_EVAL_PATH, "FOUNDER"
+        else:
+            p = EVAL_PATH
+    elif p == FOUNDER_EVAL_PATH:
+        fuente = "FOUNDER"
+
     if not p.is_file():
-        return [], {}
+        return [], {"fuente_etiquetas": fuente, "encontrado": False}
+
     data = json.loads(p.read_text(encoding="utf-8"))
     por_id = {r.content_id: r for r in registros}
     fuera, pares = [], []
@@ -69,8 +103,11 @@ def cargar_pares_etiquetados(registros, path=None):
         if a is None or b is None:
             fuera.append(par)
             continue
-        pares.append((a.fingerprint(), b.fingerprint(), par["etiqueta"], par.get("razon", "")))
-    meta = {"estado": data.get("estado"), "aviso": data.get("aviso"),
+        etiqueta = _etiqueta_de(par)
+        razon = par.get("founder_razon") or par.get("razon", "")
+        pares.append((a.fingerprint(), b.fingerprint(), etiqueta, razon))
+    meta = {"fuente_etiquetas": fuente, "encontrado": True, "ruta": str(p),
+            "estado": data.get("estado"), "aviso": data.get("aviso"),
             "pares_no_resueltos": fuera}
     return pares, meta
 
@@ -106,10 +143,11 @@ def evaluar_umbral(umbral, canonicos, etiquetados):
             fallos.append(f"FN canónico: {base.content_id} no reconoce su propio disfraz")
 
     for a, b, etiqueta, _ in etiquetados:
-        if etiqueta in ZONA_GRIS:
-            continue
+        debe_bloquear = BLOQUEO_POR_ETIQUETA.get(etiqueta)
+        if debe_bloquear is None:
+            continue                         # zona gris: no se cuenta en ningún sentido
         bloquea = a.equivalente_a(b, umbral=umbral)
-        if etiqueta in BLOQUEAR:
+        if debe_bloquear:
             if bloquea:
                 tp += 1
             else:
@@ -135,8 +173,7 @@ def barrido(registros=None, umbrales=UMBRALES, path=None):
     canonicos = derivados_canonicos(registros)
     etiquetados, meta = cargar_pares_etiquetados(registros, path)
     puntos = [evaluar_umbral(u, canonicos, etiquetados) for u in umbrales]
+    en_zona_gris = [e for e in etiquetados if BLOQUEO_POR_ETIQUETA.get(e[2]) is None]
     return puntos, meta, {"canonicos": len(canonicos),
-                          "etiquetados_computados": len([e for e in etiquetados
-                                                         if e[2] not in ZONA_GRIS]),
-                          "zona_gris_excluida": len([e for e in etiquetados
-                                                     if e[2] in ZONA_GRIS])}
+                          "etiquetados_computados": len(etiquetados) - len(en_zona_gris),
+                          "zona_gris_excluida": len(en_zona_gris)}

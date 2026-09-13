@@ -116,5 +116,62 @@ class TestZonasSinExplorar(AnalisisBase):
         self.assertNotIn("sucesorio", self.z["materias_del_seed_sin_una_sola_pieza"])
 
 
+class TestSubfuncionCasoCotidiano(AnalisisBase):
+    """Fase 6: ¿son 85 piezas haciendo lo mismo, o la categoría es ancha?"""
+
+    def setUp(self):
+        self.r = ca.analizar_caso_cotidiano(self.regs)
+
+    def test_analiza_las_85_piezas_reales(self):
+        self.assertEqual(self.r["total_piezas"], 85)
+
+    def test_encuentra_subestructura_real(self):
+        """Parte del 48% SÍ es un problema de clasificación, no sólo de
+        producción — la hipótesis del Founder, confirmada con evidencia."""
+        self.assertGreater(self.r["con_subfuncion_detectada"], 0)
+
+    def test_no_fuerza_subestructura_donde_no_la_hay(self):
+        """El resto queda honestamente sin marcador: no toda pieza narrativa
+        tiene una subfunción detectable, y fingir que la tiene sería el
+        mismo error que produjo la categoría demasiado ancha."""
+        self.assertGreater(self.r["sin_subfuncion_detectada"], 0)
+
+    def test_los_totales_cuadran(self):
+        self.assertEqual(self.r["con_subfuncion_detectada"] + self.r["sin_subfuncion_detectada"],
+                         self.r["total_piezas"])
+
+    def test_mapea_a_vocabulario_del_founder_sin_forzarlo(self):
+        """El mapeo es informativo: usa el vocabulario sugerido cuando
+        encaja, pero el detector no lo busca a ciegas."""
+        vocabulario_founder = {"advertencia", "consecuencia", "error", "prevencion",
+                               "caso", "dilema", "explicacion", "riesgo", "decision",
+                               "conflicto", "reparacion"}
+        for encontrado in self.r["mapeo_a_vocabulario_founder"]:
+            self.assertIn(encontrado, vocabulario_founder)
+
+    def test_no_toca_la_familia_editorial_original(self):
+        """Es un descubrimiento aditivo: no reclasifica en silencio."""
+        antes = [(r.content_id, r.familia_editorial) for r in self.regs
+                if r.familia_editorial == "caso_cotidiano"]
+        ca.analizar_caso_cotidiano(self.regs)
+        despues = [(r.content_id, r.familia_editorial) for r in self.regs
+                  if r.familia_editorial == "caso_cotidiano"]
+        self.assertEqual(antes, despues)
+
+    def test_es_determinista(self):
+        r2 = ca.analizar_caso_cotidiano(self.regs)
+        self.assertEqual(self.r["frecuencia_subfuncion"], r2["frecuencia_subfuncion"])
+
+    def test_detalle_trae_una_fila_por_pieza(self):
+        self.assertEqual(len(self.r["detalle"]), 85)
+
+    def test_omision_no_actuada_es_la_subfuncion_mas_frecuente(self):
+        """Verificación puntual del hallazgo, para que la prueba falle si el
+        detector cambia de comportamiento sin que nadie se entere."""
+        if self.r["frecuencia_subfuncion"]:
+            top = max(self.r["frecuencia_subfuncion"], key=self.r["frecuencia_subfuncion"].get)
+            self.assertEqual(top, "omision_no_actuada")
+
+
 if __name__ == "__main__":
     unittest.main()

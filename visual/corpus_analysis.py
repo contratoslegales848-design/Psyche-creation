@@ -161,3 +161,67 @@ def zonas_sin_explorar(registros, universo=None, materias=None):
         "combinaciones_posibles_sobre_materias_ya_abiertas": len(usadas_mat) * len(universo),
         "muestra_de_huecos": huecos[:25],
     }
+
+
+# --- Fase 6: subfunción real dentro de "caso_cotidiano" ---------------------
+#
+# 85 de 174 piezas cayeron en la misma familia editorial inferida. La
+# pregunta del Founder es exacta: ¿son 85 piezas haciendo LO MISMO, o la
+# categoría "caso_cotidiano" es demasiado ancha y esconde funciones distintas
+# que `clasificar_familia_editorial` no tenía vocabulario para nombrar?
+#
+# Este es un DESCUBRIMIENTO estructural sobre el propio slug — no una
+# reclasificación automática. No toca `familia_editorial`: es una etiqueta
+# ADITIVA (subfuncion_caso) que se reporta aparte. Una pieza puede no
+# encajar en ningún marcador — "sin_subfuncion_detectada" es un resultado
+# legítimo, no un fallo del detector: no toda pieza narrativa necesita una
+# subestructura.
+MARCADORES_SUBFUNCION = (
+    # (regex sobre el slug, subfuncion descubierta, mapeo aproximado a la
+    #  lista de subfunciones que sugirió el Founder)
+    (r"nadie-\w+$|nadie-lo-\w+", "omision_no_actuada", "advertencia"),
+    (r"no-se-\w+(o|aron)$", "omision_no_actuada", "advertencia"),
+    (r"-tambien-", "alcance_extendido", "consecuencia"),
+    (r"-tarde$|-tarde-", "extemporaneo", "riesgo"),
+    (r"-dos-veces$", "duplicidad", "conflicto"),
+    (r"-no-era-", "apariencia_enganosa", "error"),
+    (r"^el-\w+-que-si-|^la-\w+-que-si-", "contra_expectativa", "explicacion"),
+    (r"crece-sola$|corre-sin-avisar$|vencia-en", "riesgo_acumulativo", "riesgo"),
+    (r"-perdio$|-perdió$", "consecuencia_adversa", "consecuencia"),
+    (r"^narrativa-|^historia-", "relato_explicito", "explicacion"),
+    (r"-caduca$|-caduc", "vencimiento", "riesgo"),
+    (r"que-trae-deudas$|deuda-que-", "carga_heredada", "consecuencia"),
+)
+
+
+def analizar_caso_cotidiano(registros, familia="caso_cotidiano"):
+    """Subfunciones reales dentro de una familia editorial demasiado ancha.
+    No fuerza el vocabulario del Founder: lo usa sólo como mapeo INFORMATIVO
+    de lo que el detector encuentra, nunca como filtro de lo que busca."""
+    import re
+    piezas = [r for r in registros if r.familia_editorial == familia]
+    detalle, frecuencia, mapeo_founder = [], {}, {}
+    sin_marcador = 0
+
+    for r in piezas:
+        slug = (r.guion or "").lower()
+        encontrados = []
+        for patron, sub, mapeo in MARCADORES_SUBFUNCION:
+            if re.search(patron, slug):
+                encontrados.append(sub)
+                frecuencia[sub] = frecuencia.get(sub, 0) + 1
+                mapeo_founder[mapeo] = mapeo_founder.get(mapeo, 0) + 1
+        if not encontrados:
+            sin_marcador += 1
+        detalle.append({"content_id": r.content_id, "guion": r.guion,
+                        "titular": r.titular, "subfunciones": encontrados})
+
+    return {
+        "familia_analizada": familia,
+        "total_piezas": len(piezas),
+        "con_subfuncion_detectada": len(piezas) - sin_marcador,
+        "sin_subfuncion_detectada": sin_marcador,
+        "frecuencia_subfuncion": dict(sorted(frecuencia.items(), key=lambda kv: -kv[1])),
+        "mapeo_a_vocabulario_founder": dict(sorted(mapeo_founder.items(), key=lambda kv: -kv[1])),
+        "detalle": detalle,
+    }

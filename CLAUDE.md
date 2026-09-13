@@ -68,6 +68,17 @@ Ante un conflicto, gana el nivel más alto disponible.
   (`visual/batch_qa.py`), carriles LinkedIn (`visual/lanes.py`) y el ciclo vertical
   (`visual/organism.py`). Demostración: `cd visual && python3 demo_ciclo.py`.
   Ninguno verifica Derecho ni abre gates: producen candidatos `NO_VERIFICADO`.
+- Memoria histórica y generador multi-factor (2026-09-13, misma fuente): 174 piezas del
+  banco v3 migradas de forma idempotente (`visual/corpus_import.py`, snapshot inmutable en
+  `corpus/`), enriquecimiento de concepto/pregunta con niveles de confianza
+  (`visual/corpus_enrichment.py`), saturación editorial separada de repetición semántica
+  (`visual/editorial_saturation.py`), Territory Explorer — novelty/coverage/opportunity sobre
+  materia×familia (`visual/territory_explorer.py`), generador con tres hard gates y seis
+  factores reales (`visual/generator.py`), Founder Selection Rate por eje con muestra visible
+  (`visual/founder_metrics.py`), y la hoja de revisión Founder del umbral de equivalencia
+  (`visual/founder_review.py` — **respuesta del Founder pendiente**, ver
+  `corpus/eval-umbral-candidato.json`). Demostración: `cd visual && python3
+  demo_founder_loop.py`.
 - No implementados todavía: `legalmente-story-engine`, `legalmente-confidentiality`, los 6 agentes (`legal-researcher`, `legal-auditor`, `narrative-editor`, `visual-director`, `privacy-reviewer`, `growth-analyst`), y los 4 hooks (PRE-NARRATIVA, PRE-ARTE, PRE-PUBLICACIÓN, POST-PUBLICACIÓN). No dar por hecho que existen solo porque están descritos en Drive.
 
 ## 8. Límites entre repositorios
