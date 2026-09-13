@@ -306,6 +306,10 @@ CODIGOS_COMPOSICION = {
                   "resolverlo con una caja opaca: se resuelve con la luz de la escena."),
     "TEXT_OVER_BRAND_SURFACE": (
         BLOQUEA, "hay texto sobre el objeto de marca; la regla vigente lo prohibe."),
+    "TEXT_OVER_BUSY_AREA": (
+        REVISION, "el texto cae sobre la parte mas cargada de la escena, que es donde suelen estar "
+                  "el rostro, las manos o el objeto de la revelacion. La medida no reconoce que hay "
+                  "debajo: decide una persona."),
     "BRAND_CONTRAST_BELOW_MINIMUM": (
         REVISION, "la marca no se lee sobre la superficie elegida."),
     "BRAND_SURFACE_OUTSIDE_VISIBLE_AREA": (

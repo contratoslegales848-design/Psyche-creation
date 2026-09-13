@@ -38,7 +38,7 @@ import io
 from dataclasses import dataclass, field, asdict
 from pathlib import Path
 
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFilter, ImageFont, ImageStat
 
 COMPOSITOR_VERSION = "1.2"
 
@@ -194,6 +194,7 @@ class CompositionResult:
     reason_codes: list = field(default_factory=list)
     # Medidas de detalle artistico: contraste real por bloque y de la marca.
     text_contrast: dict = field(default_factory=dict)
+    text_busyness: dict = field(default_factory=dict)
     brand_contrast: dict = field(default_factory=dict)
 
     def to_dict(self):
@@ -279,6 +280,38 @@ def contraste_sobre_region(img, box, color_texto,
     return {"min": round(min(valores), 2),
             "medio": round(sum(valores) / len(valores), 2),
             "celdas": cols * fils}
+
+
+def energia_de_borde(img, box=None):
+    """Densidad de detalle de una region: energia de borde media.
+
+    No es percepcion. No sabe que hay un rostro. Mide cuanta estructura fina
+    tiene una zona, que es lo que compite con el texto puesto encima. Un
+    degradado fuerte tambien sube el valor: por eso solo escala a revision, y
+    la comparacion es SIEMPRE relativa al resto de la imagen, nunca absoluta.
+    """
+    region = img.crop(box) if box else img
+    if region.width < 4 or region.height < 4:
+        return None
+    gris = region.convert("L")
+    # Se submuestrea a lo ancho de una pantalla de movil: el detalle que importa
+    # es el que se ve al publicar, no el del pixel.
+    if gris.width > 540:
+        gris = gris.resize((540, max(1, int(gris.height * 540 / gris.width))), Image.BOX)
+    bordes = gris.filter(ImageFilter.FIND_EDGES)
+    # El filtro deja un marco artificial en el borde del recorte: se descarta.
+    if bordes.width > 6 and bordes.height > 6:
+        bordes = bordes.crop((2, 2, bordes.width - 2, bordes.height - 2))
+    return round(ImageStat.Stat(bordes).mean[0], 3)
+
+
+def detalle_relativo(img, box):
+    """Cuanto mas cargada esta la region que la imagen entera. 1.0 = igual."""
+    region = energia_de_borde(img, box)
+    entera = energia_de_borde(img)
+    if region is None or not entera:
+        return None
+    return round(region / entera, 3)
 
 
 def _solapan(a, b):
@@ -470,7 +503,8 @@ def compose(raw_bytes, typography_plan, brand_plan=None, reserved_surface=None,
     fonts_used, warnings, reason_codes = {}, list(typography_plan.warnings), []
     contraste_minimo = float(getattr(typography_plan, "contraste_minimo", 0.0) or 0.0)
     contraste_ideal = float(getattr(typography_plan, "contraste_ideal", 0.0) or 0.0)
-    medidas_contraste = {}
+    umbral_detalle = float(getattr(typography_plan, "detalle_maximo_relativo", 0.0) or 0.0)
+    medidas_contraste, medidas_detalle = {}, {}
 
     # --- tipografia ---
     y = sy
@@ -517,6 +551,16 @@ def compose(raw_bytes, typography_plan, brand_plan=None, reserved_surface=None,
         color = _color_de_bloque(b)
         caja = (sx, top, sx + sw, top + len(lineas) * int(size * interlineado))
         medida = contraste_sobre_region(img, caja, color)
+        carga = detalle_relativo(img, caja)
+        if carga is not None:
+            medidas_detalle[b.role] = carga
+            if umbral_detalle and carga > umbral_detalle:
+                reason_codes.append("TEXT_OVER_BUSY_AREA")
+                warnings.append(
+                    f"el bloque {b.role} cae sobre la parte mas cargada de la escena "
+                    f"({carga}x el detalle medio de la imagen). Ahi es donde suelen estar el "
+                    "rostro, las manos o el objeto de la revelacion, y la regla vigente prohibe "
+                    "poner texto encima. La medida no reconoce que hay debajo: lo mira una persona.")
         if medida:
             medidas_contraste[b.role] = medida
             if contraste_minimo and medida["min"] < contraste_minimo:
@@ -664,6 +708,7 @@ def compose(raw_bytes, typography_plan, brand_plan=None, reserved_surface=None,
         warnings=warnings,
         reason_codes=sorted(set(reason_codes)),
         text_contrast=medidas_contraste,
+        text_busyness=medidas_detalle,
         brand_contrast=brand_contrast,
     )
 

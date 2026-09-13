@@ -1,6 +1,6 @@
 # Auditoría de detalle artístico — pipeline visual
 
-**Fecha**: 2026-09-13 · **Alcance**: `visual/` (política, familias, compilador, tipografía, compositor, inspección) y `src/` (render de video Remotion) · **Resultado**: 41 hallazgos; 31 corregidos en código, 10 abiertos que exigen decisión humana (uno de ellos, el contraste del video, ya medido: ver §3.8).
+**Fecha**: 2026-09-13 · **Alcance**: `visual/` (política, familias, compilador, tipografía, compositor, inspección) y `src/` (render de video Remotion) · **Resultado**: 42 hallazgos; 33 corregidos en código, 9 abiertos. De los abiertos, dos dejaron de ser opiniones y pasaron a ser medidas: el contraste del video (§3.8) y el texto sobre zonas cargadas (T10).
 
 No es una propuesta ni una asesoría: es el registro de lo que se auditó, lo que se
 arregló y lo que quedó abierto. La regla que gobernó toda la auditoría:
@@ -53,6 +53,7 @@ Tres formas concretas de ese patrón, y las tres se repetían:
 | T7 | **Líneas huérfanas sin control.** Última línea de una sola palabra. | — | Reparto por caja más estrecha (hasta −30 %, una línea extra si cabe en el máximo). El texto no se toca; si no hay reparto, se señala. |
 | T8 | **Texto sobre el objeto de marca.** Prohibido por la skill §6, no se comprobaba. | — | Colisión de rectángulos en el compositor → `TEXT_OVER_BRAND_SURFACE`, que la auditoría trata como bloqueo. |
 | T9 | **Texto fuera de la banda visible del feed.** Sin comprobación. | — | `formatos.VERTICAL_9_16.zona_visible_tras_recorte` + `TEXTO_FUERA_DE_LA_ZONA_VISIBLE` (bloqueo). |
+| T10 | **Texto sobre rostros, manos decisivas o el objeto de la revelación.** La skill lo prohíbe y reconocerlos exige visión, que no hay. | — | Se mide lo que sí se puede: la **energía de borde** bajo cada bloque comparada con la de la imagen entera. Un rostro, unas manos o el objeto de la revelación son casi siempre lo más cargado del encuadre. Por encima de 1,35× → `TEXT_OVER_BUSY_AREA` y revisión humana. Medido **antes** de dibujar (si no, el propio texto dispararía el aviso en toda pieza) y siempre relativo, nunca absoluto. Comprobado contra el fotograma real de la pieza de ejemplo: 0,31× donde hoy cae el texto, 1,68× en la franja del rostro donde caería un copy largo. |
 
 ### Dirección de arte (skill §3, §4, §5 → política `direccion_de_arte`, `escuelas`)
 
@@ -152,7 +153,10 @@ Ninguna medida de píxeles rechaza por sí sola: todas escalan a revisión human
 9. **El texto del video se ancla arriba sin saber qué hay debajo.** Con copy
    largo cae sobre el rostro de la escena, y §6 prohíbe poner texto sobre
    rostros o manos decisivas. Comprobado en el fotograma de prueba con 262
-   caracteres. Sin visión no es automatizable: hoy lo evita el copy corto.
+   caracteres. La imagen fija ya lo detecta por densidad de detalle (T10); el
+   render de video **no**, porque no compone por bloques medibles sino por
+   layout de CSS. Trasladar esa medida al video es trabajo pendiente; hoy lo
+   evita el copy corto. Reconocer el rostro en sí sigue exigiendo visión.
 10. **El asset de ejemplo acumula cuatro recursos quemados.**
     `assets/images/ejemplo.jpg` tiene balanza, mazo, columnas y un hombre solo
     ante un escritorio. Es `EJEMPLO_TECNICO` y no publicable, pero es el modelo

@@ -211,7 +211,9 @@
         "indice": 0
       }
     },
-    "nota_fuera_de_tabla": "Mas de 140 caracteres en el bloque principal queda FUERA de la tabla de la skill: no hay cuerpo minimo declarado para ese caso. Se aplica el minimo aprobado mas bajo (60 px) y la pieza se marca para decision humana (reencuadre, otro formato o carrusel). Nunca se degrada en silencio el cuerpo principal al tamaño de un pie de foto para que quepa."
+    "nota_fuera_de_tabla": "Mas de 140 caracteres en el bloque principal queda FUERA de la tabla de la skill: no hay cuerpo minimo declarado para ese caso. Se aplica el minimo aprobado mas bajo (60 px) y la pieza se marca para decision humana (reencuadre, otro formato o carrusel). Nunca se degrada en silencio el cuerpo principal al tamaño de un pie de foto para que quepa.",
+    "detalle_maximo_relativo_bajo_texto": 1.35,
+    "nota_detalle_bajo_texto": "La skill §6 prohibe poner texto sobre rostros, manos decisivas o el objeto de marca. Rostros y manos no se pueden reconocer aqui: no hay vision. Lo que si se mide es cuanto detalle tiene la zona bajo el texto comparada con el resto de la imagen — un rostro, unas manos o el objeto de la revelacion son casi siempre lo mas cargado del encuadre. Por encima de este multiplo se pide revision humana; nunca se rechaza, y un degradado fuerte tambien puede subirlo. Umbral provisional hasta tener arte real con que calibrarlo."
   },
   "direccion_de_arte": {
     "fuente": "legalmente-visual-system §3 (nucleo de marca) y §5 (checklist de rotacion)",

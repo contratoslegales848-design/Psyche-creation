@@ -295,6 +295,87 @@ class TestContrasteYMarcaEnElCompositor(unittest.TestCase):
         self.assertAlmostEqual(compositor.ratio_contraste((10, 10, 10), (10, 10, 10)), 1.0, places=3)
 
 
+def png_con_franja_cargada(alto_franja=(290, 900), paso=6):
+    """PNG oscuro con una franja de rayas finas: mucha estructura, como un
+    rostro o un encaje, en el sitio donde el compositor pondra el texto."""
+    import io
+
+    from PIL import Image, ImageDraw
+    img = Image.new("RGB", (1080, 1920), (30, 20, 18))
+    d = ImageDraw.Draw(img)
+    for y in range(alto_franja[0], alto_franja[1], paso):
+        d.line([(0, y), (1080, y)], fill=(150, 140, 130), width=2)
+    buf = io.BytesIO()
+    img.save(buf, format="PNG")
+    return buf.getvalue()
+
+
+class TestDetalleBajoElTexto(unittest.TestCase):
+    """La skill prohibe texto sobre rostros y manos decisivas. Reconocer un
+    rostro es imposible aqui; medir si el texto cae sobre la zona mas cargada
+    de la escena, no."""
+
+    def plan(self):
+        return composition.build_typography_plan(FRASE, AUTOR, 1080, 1920, "maxima")
+
+    def test_el_plan_transporta_el_umbral_de_la_politica(self):
+        self.assertEqual(self.plan().detalle_maximo_relativo,
+                         POLICY.data["tipografia"]["detalle_maximo_relativo_bajo_texto"])
+
+    def test_superficie_plana_no_tiene_energia_de_borde(self):
+        from PIL import Image
+        plana = Image.new("RGB", (400, 400), (30, 20, 18))
+        self.assertAlmostEqual(compositor.energia_de_borde(plana), 0.0, places=3)
+
+    def test_la_zona_cargada_mide_mas_que_la_calmada(self):
+        import io
+
+        from PIL import Image
+        img = Image.open(io.BytesIO(png_con_franja_cargada())).convert("RGB")
+        cargada = compositor.detalle_relativo(img, (80, 300, 1000, 880))
+        calmada = compositor.detalle_relativo(img, (80, 1000, 1000, 1600))
+        self.assertGreater(cargada, 1.35)
+        self.assertLess(calmada, 1.0)
+
+    def test_texto_sobre_zona_cargada_pide_revision(self):
+        r = compositor.compose(png_con_franja_cargada(), self.plan(), BRAND,
+                               compositor.ReservedSurface(120, 1450, 500, 90))
+        self.assertIn("TEXT_OVER_BUSY_AREA", r.reason_codes)
+        self.assertTrue(any("mas cargada de la escena" in w for w in r.warnings))
+        self.assertGreater(r.text_busyness["QUOTE"], 1.35)
+
+    def test_texto_sobre_fondo_limpio_no_avisa(self):
+        """La carga esta abajo; el texto cae en la zona despejada de arriba."""
+        raw = png_con_franja_cargada(alto_franja=(1100, 1600))
+        r = compositor.compose(raw, self.plan(), BRAND,
+                               compositor.ReservedSurface(120, 1000, 500, 90))
+        self.assertNotIn("TEXT_OVER_BUSY_AREA", r.reason_codes)
+        self.assertLess(r.text_busyness["QUOTE"], 1.0)
+
+    def test_la_medida_es_del_fondo_no_del_texto_ya_pintado(self):
+        """Si se midiera despues de dibujar, el propio texto dispararia el aviso
+        en cualquier pieza y la medida no valdria nada."""
+        raw = png_con_franja_cargada(alto_franja=(1100, 1600))
+        r = compositor.compose(raw, self.plan(), BRAND,
+                               compositor.ReservedSurface(120, 1000, 500, 90))
+        self.assertLess(r.text_busyness["QUOTE"], 0.5)
+
+    def test_imagen_sin_detalle_no_produce_proporcion_inventada(self):
+        """Sobre un color solido no hay detalle medio con que comparar: la
+        medida no existe y no se finge una."""
+        r = compositor.compose(png_bytes(1080, 1920, (30, 20, 18)), self.plan(), BRAND,
+                               compositor.ReservedSurface(120, 1450, 500, 90))
+        self.assertEqual(r.text_busyness, {})
+        self.assertNotIn("TEXT_OVER_BUSY_AREA", r.reason_codes)
+
+    def test_se_traduce_a_hallazgo_de_direccion_de_arte(self):
+        r = compositor.compose(png_con_franja_cargada(), self.plan(), BRAND,
+                               compositor.ReservedSurface(120, 1450, 500, 90))
+        rep = art_direction.auditar_composicion(r, POLICY)
+        self.assertIn("TEXT_OVER_BUSY_AREA", codigos(rep))
+        self.assertTrue(rep.sin_bloqueos)      # escala a humano, nunca rechaza
+
+
 class TestInspectorDeDetalle(unittest.TestCase):
     def setUp(self):
         self.insp = inspection.ArtDetailInspector(POLICY)

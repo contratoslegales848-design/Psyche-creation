@@ -76,6 +76,7 @@ class TypographyPlan:
     max_lineas: int = 0
     contraste_minimo: float = 0.0
     contraste_ideal: float = 0.0
+    detalle_maximo_relativo: float = 0.0
     safe_area_origen: str = ""       # "politica" | "ratio_por_defecto"
     typography_policy_version: str = ""
 
@@ -323,6 +324,7 @@ def build_typography_plan(exact_copy, author, width, height, content_type="", co
         max_lineas=max_lineas,
         contraste_minimo=float(tip.get("contraste_minimo", 0.0)),
         contraste_ideal=float(tip.get("contraste_ideal", 0.0)),
+        detalle_maximo_relativo=float(tip.get("detalle_maximo_relativo_bajo_texto", 0.0)),
         safe_area_origen=origen_safe,
         typography_policy_version=pol.version)
     assert_exact_copy_preserved(exact_copy, plan)
