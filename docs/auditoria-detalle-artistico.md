@@ -140,16 +140,36 @@ Ninguna medida de píxeles rechaza por sí sola: todas escalan a revisión human
    determinista). El video no declara superficie reservada. **No se tocó**: o se
    declara una excepción expresa para video, o el video adopta el mismo esquema.
    Es decisión del fundador, no del código.
-8. **El contraste del video se resuelve con un degradado oscuro y una sombra de
-   texto**, no con la luz de la escena, que es lo que exige §6. Ya no es una
-   suposición: `scripts/audit-video-legibility.py` lo mide sobre el fotograma
-   real. En la pieza de ejemplo el trazo da **17,45:1 de mediana** (p05 8,05:1)
-   y solo el **0,23 %** queda por debajo de 4,5:1 — bordes de antialias. Es
-   decir: hoy el video cumple el mínimo con holgura, **degradado incluido**.
-   Lo que sigue abierto es si ese margen viene de la luz de la escena o del
-   degradado, y eso se responde retirándolo y volviendo a medir. No se retiró
-   aquí porque cambia el aspecto de todas las piezas y es decisión del fundador,
-   pero ahora la decisión se toma con un número delante.
+8. **El degradado y la sombra del video: medidos, y hacen otra cosa de la que
+   parecía.** La pregunta era si el margen de contraste lo daba la luz de la
+   escena o las dos muletas. Se midió la misma escena y el mismo fotograma en
+   tres variantes:
+
+   | Variante | mediana | p05 | bajo 4,5:1 | detalle bajo el bloque inferior |
+   |---|---|---|---|---|
+   | A · como está (degradado + sombra) | 17,45:1 | 8,05:1 | 0,23 % | 1,20× |
+   | B · sin degradado | 16,93:1 | 7,96:1 | 0,40 % | **1,42×** |
+   | C · sin degradado ni sombra | 16,93:1 | 7,96:1 | 0,36 % | 1,42× |
+
+   Tres lecturas:
+   - **Para el contraste, el degradado aporta medio punto de mediana**: el
+     margen lo da la luz de la propia escena, que es exactamente lo que §6 pide.
+   - **La sombra de texto no aporta nada medible** (B y C son idénticas hasta el
+     tercer decimal). Es la muleta que podría irse sin perder legibilidad.
+   - **El degradado sí hace un trabajo real, pero otro**: calma el fondo bajo el
+     remate y la marca. Sin él, esa banda pasa de 1,20× a 1,42× el detalle medio
+     de la imagen y cruzaría el umbral de "texto sobre la zona más cargada"
+     (T10). No sostiene el contraste: sostiene el silencio visual del pie.
+
+   Reproducible: quitar el `AbsoluteFill` del degradado y/o el `textShadow` en
+   `src/compositions/LegalMenteQuote.tsx` y volver a correr
+   `python3 scripts/audit-video-legibility.py`.
+
+   **Límite de esta medida**: una sola escena, porque `assets/images/` solo tiene
+   la imagen de ejemplo. Sobre una imagen clara el degradado podría ser
+   estructural. Por eso la medida corre por pieza y no una vez para siempre.
+   Qué hacer con las dos muletas sigue siendo decisión del fundador: cambia el
+   aspecto de todas las piezas.
 9. **El texto del video se ancla arriba sin saber qué hay debajo.** Con copy
    largo cae sobre el rostro de la escena, y §6 prohíbe poner texto sobre
    rostros o manos decisivas. Comprobado en el fotograma de prueba con 262
