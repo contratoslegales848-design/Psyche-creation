@@ -200,12 +200,14 @@ jobs:
         working-directory: .
         run: python3 -m pip install --quiet -r requirements.txt
 
-      - name: Pipeline visual — suite completa (proveedor falso, sin red ni créditos)
+      # Por descubrimiento, no por lista a mano: la lista anterior nombraba 5
+      # de las 17 suites que ya existían, así que memoria, rotación, motor de
+      # rutas e inventario nunca se ejecutaban en CI. Una suite que no corre no
+      # protege nada, y la lista se desactualiza en silencio con cada módulo
+      # nuevo. `discover` no puede derivar.
+      - name: Pipeline visual y motor editorial — suite completa por descubrimiento
         working-directory: visual
-        run: |
-          python3 -m unittest \
-            test_visual_pipeline test_visual_advanced \
-            test_composition test_http_provider test_resolver -v
+        run: python3 -m unittest discover -p "test_*.py" -v
 
       - name: Contrato canónico cross-repo
         working-directory: contract

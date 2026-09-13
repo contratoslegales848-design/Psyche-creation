@@ -1,0 +1,245 @@
+{
+  "registry_version": "1.0",
+  "nota": "Semilla de materias, NUNCA techo (Drive: 'un banco o catálogo es una semilla operacional; nunca es el universo completo'). Las submaterias son etiquetas de NAVEGACIÓN para combinar candidatos, no afirmaciones jurídicas: ninguna entrada de este archivo afirma qué dice la ley de ningún país. La verificación sigue siendo exclusiva de legalmente-legal-verification. 'cuota_max_por_lote_10' implementa '00 LEER PRIMERO' §3.A: máximo 2 piezas de una misma materia, y digital/datos máximo 1 de 10 salvo petición expresa.",
+  "materias": {
+    "civil": {
+      "cuota_max_por_lote_10": 2,
+      "submaterias": [
+        "derechos_reales",
+        "obligaciones",
+        "contratos",
+        "responsabilidad_civil",
+        "posesion",
+        "servidumbres",
+        "donacion"
+      ]
+    },
+    "familiar": {
+      "cuota_max_por_lote_10": 2,
+      "submaterias": [
+        "matrimonio",
+        "divorcio",
+        "filiacion",
+        "alimentos",
+        "patria_potestad",
+        "regimen_patrimonial",
+        "tutela"
+      ]
+    },
+    "sucesorio": {
+      "cuota_max_por_lote_10": 2,
+      "submaterias": [
+        "testamento",
+        "herencia_intestada",
+        "legitima",
+        "albacea",
+        "aceptacion_de_herencia"
+      ]
+    },
+    "laboral": {
+      "cuota_max_por_lote_10": 2,
+      "submaterias": [
+        "contrato_de_trabajo",
+        "jornada",
+        "salario",
+        "terminacion",
+        "riesgos_laborales",
+        "representacion_colectiva"
+      ]
+    },
+    "penal": {
+      "cuota_max_por_lote_10": 2,
+      "submaterias": [
+        "tipicidad",
+        "culpabilidad",
+        "tentativa",
+        "legitima_defensa",
+        "delitos_patrimoniales",
+        "penas"
+      ]
+    },
+    "procesal": {
+      "cuota_max_por_lote_10": 2,
+      "submaterias": [
+        "prueba",
+        "recursos",
+        "medidas_cautelares",
+        "competencia",
+        "plazos_procesales",
+        "cosa_juzgada"
+      ]
+    },
+    "mercantil": {
+      "cuota_max_por_lote_10": 2,
+      "submaterias": [
+        "sociedades",
+        "titulos_de_credito",
+        "insolvencia",
+        "representacion_organica",
+        "fusiones"
+      ]
+    },
+    "corporativo_compliance": {
+      "cuota_max_por_lote_10": 2,
+      "submaterias": [
+        "gobierno_corporativo",
+        "deber_de_diligencia",
+        "canal_de_denuncias",
+        "conflicto_de_interes"
+      ]
+    },
+    "administrativo": {
+      "cuota_max_por_lote_10": 2,
+      "submaterias": [
+        "acto_administrativo",
+        "silencio_administrativo",
+        "sancion",
+        "contratacion_publica",
+        "recurso"
+      ]
+    },
+    "constitucional": {
+      "cuota_max_por_lote_10": 2,
+      "submaterias": [
+        "derechos_fundamentales",
+        "control_de_constitucionalidad",
+        "amparo",
+        "division_de_poderes"
+      ]
+    },
+    "inmobiliario": {
+      "cuota_max_por_lote_10": 2,
+      "submaterias": [
+        "arrendamiento",
+        "compraventa_de_inmueble",
+        "hipoteca",
+        "registro_de_la_propiedad",
+        "copropiedad"
+      ]
+    },
+    "notarial_registral": {
+      "cuota_max_por_lote_10": 2,
+      "submaterias": [
+        "fe_publica",
+        "escritura_publica",
+        "inscripcion",
+        "poder_notarial"
+      ]
+    },
+    "consumo": {
+      "cuota_max_por_lote_10": 2,
+      "submaterias": [
+        "clausulas_abusivas",
+        "garantia",
+        "desistimiento",
+        "publicidad_enganosa",
+        "sobreendeudamiento"
+      ]
+    },
+    "fiscal": {
+      "cuota_max_por_lote_10": 2,
+      "submaterias": [
+        "obligacion_tributaria",
+        "prescripcion_fiscal",
+        "comprobantes",
+        "domicilio_fiscal"
+      ]
+    },
+    "seguridad_social": {
+      "cuota_max_por_lote_10": 2,
+      "submaterias": [
+        "cotizacion",
+        "prestaciones",
+        "incapacidad",
+        "pension"
+      ]
+    },
+    "salud_medico_legal": {
+      "cuota_max_por_lote_10": 2,
+      "submaterias": [
+        "consentimiento_informado",
+        "expediente_clinico",
+        "peritaje_medico",
+        "responsabilidad_sanitaria"
+      ]
+    },
+    "criminalistica_forense": {
+      "cuota_max_por_lote_10": 2,
+      "submaterias": [
+        "cadena_de_custodia",
+        "indicio",
+        "dactiloscopia",
+        "balistica",
+        "entomologia_forense",
+        "documentoscopia"
+      ]
+    },
+    "propiedad_intelectual": {
+      "cuota_max_por_lote_10": 2,
+      "submaterias": [
+        "derecho_de_autor",
+        "marca",
+        "patente",
+        "obra_derivada",
+        "dominio_publico"
+      ]
+    },
+    "transito": {
+      "cuota_max_por_lote_10": 2,
+      "submaterias": [
+        "responsabilidad_en_accidente",
+        "seguro_obligatorio",
+        "infraccion",
+        "atestado"
+      ]
+    },
+    "ambiental": {
+      "cuota_max_por_lote_10": 2,
+      "submaterias": [
+        "licencia_ambiental",
+        "dano_ambiental",
+        "principio_precautorio",
+        "responsabilidad_por_contaminacion"
+      ]
+    },
+    "internacional_privado": {
+      "cuota_max_por_lote_10": 2,
+      "submaterias": [
+        "ley_aplicable",
+        "competencia_judicial_internacional",
+        "exequatur",
+        "apostilla"
+      ]
+    },
+    "historia_del_derecho": {
+      "cuota_max_por_lote_10": 2,
+      "submaterias": [
+        "derecho_romano",
+        "codificacion",
+        "instituciones_historicas",
+        "juristas",
+        "costumbre_historica"
+      ]
+    },
+    "teoria_y_filosofia": {
+      "cuota_max_por_lote_10": 2,
+      "submaterias": [
+        "fuentes_del_derecho",
+        "interpretacion",
+        "principios",
+        "validez_y_eficacia",
+        "justicia"
+      ]
+    },
+    "digital_datos": {
+      "cuota_max_por_lote_10": 1,
+      "submaterias": [
+        "proteccion_de_datos",
+        "evidencia_digital",
+        "identidad_digital",
+        "plataformas",
+        "firma_electronica"
+      ]
+    }
+  }
+}

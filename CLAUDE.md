@@ -60,6 +60,14 @@ Ante un conflicto, gana el nivel más alto disponible.
 - Bloqueado por autorización pendiente: Instagram.
 - Skill operativa: `legalmente-visual-system` (sincronizada, global).
 - Skill operativa: `legalmente-legal-verification` (local de este repo, ver `.claude/skills/`).
+- Motor editorial implementado (2026-09-13, ver `docs/arquitectura-real-2026-09-13.md`):
+  huella semántica de 22 campos (`visual/semantic_fingerprint.py`), universo editorial abierto
+  de 58 familias (`visual/editorial.py`), reserva combinatoria y selección con cuotas
+  (`visual/universe.py`), motor emocional (`visual/emotion.py`), memoria semántica con estados
+  y aprendizaje desde la curaduría (`visual/semantic_memory.py`), QA de lote y telemetría
+  (`visual/batch_qa.py`), carriles LinkedIn (`visual/lanes.py`) y el ciclo vertical
+  (`visual/organism.py`). Demostración: `cd visual && python3 demo_ciclo.py`.
+  Ninguno verifica Derecho ni abre gates: producen candidatos `NO_VERIFICADO`.
 - No implementados todavía: `legalmente-story-engine`, `legalmente-confidentiality`, los 6 agentes (`legal-researcher`, `legal-auditor`, `narrative-editor`, `visual-director`, `privacy-reviewer`, `growth-analyst`), y los 4 hooks (PRE-NARRATIVA, PRE-ARTE, PRE-PUBLICACIÓN, POST-PUBLICACIÓN). No dar por hecho que existen solo porque están descritos en Drive.
 
 ## 8. Límites entre repositorios
