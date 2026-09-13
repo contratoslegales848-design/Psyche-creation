@@ -1,6 +1,6 @@
 {
   "registry_version": "1.0",
-  "nota": "Semilla de materias, NUNCA techo (Drive: 'un banco o catálogo es una semilla operacional; nunca es el universo completo'). Las submaterias son etiquetas de NAVEGACIÓN para combinar candidatos, no afirmaciones jurídicas: ninguna entrada de este archivo afirma qué dice la ley de ningún país. La verificación sigue siendo exclusiva de legalmente-legal-verification. 'cuota_max_por_lote_10' implementa '00 LEER PRIMERO' §3.A: máximo 2 piezas de una misma materia, y digital/datos máximo 1 de 10 salvo petición expresa.",
+  "nota": "Semilla de materias, NUNCA techo (Drive: 'un banco o catálogo es una semilla operacional; nunca es el universo completo'). Las submaterias son etiquetas de NAVEGACIÓN para combinar candidatos, no afirmaciones jurídicas: ninguna entrada de este archivo afirma qué dice la ley de ningún país. La verificación sigue siendo exclusiva de legalmente-legal-verification. 'cuota_max_por_lote_10' implementa '00 LEER PRIMERO' §3.A: máximo 2 piezas de una misma materia, y digital/datos máximo 1 de 10 salvo petición expresa. Altas 2026-09-13: 'migracion' y 'cultura_y_literatura_juridica' se incorporan porque el corpus histórico (banco v3, temas MIGRACION y LITERATURA-JURIDICA) demuestra que fueron zonas de producción real ausentes de esta semilla.",
   "materias": {
     "civil": {
       "cuota_max_por_lote_10": 2,
@@ -239,6 +239,27 @@
         "identidad_digital",
         "plataformas",
         "firma_electronica"
+      ]
+    },
+    "migracion": {
+      "cuota_max_por_lote_10": 2,
+      "submaterias": [
+        "visa_y_permiso_de_trabajo",
+        "residencia",
+        "arraigo",
+        "documentacion_migratoria",
+        "reunificacion_familiar",
+        "expulsion_y_retorno"
+      ]
+    },
+    "cultura_y_literatura_juridica": {
+      "cuota_max_por_lote_10": 2,
+      "submaterias": [
+        "derecho_en_la_literatura",
+        "derecho_en_el_cine",
+        "proceso_como_relato",
+        "figura_del_abogado",
+        "justicia_en_la_cultura_popular"
       ]
     }
   }

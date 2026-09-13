@@ -1,0 +1,174 @@
+LM-001 | administrativo-concepto-silencio-administrativo | A | realismo severo de Ribera | sala de máquinas | cenital | azul petróleo | radiografía contra una ventana | canto grabado de una moneda | 9:16
+LM-002 | el-acto-que-nadie-notifico | A | naturalismo de Zurbarán | patio de vecindad | detalle de manos | latón viejo | huella que borra la marea | matasellos | 4:5
+LM-003 | el-permiso-condicionado-que-nadie-leyo | A | fresco renacentista | taller de imprenta | vista a través de un marco interior | latón viejo | tinta que se seca | chapa numerada | 1:1
+LM-004 | la-multa-que-nunca-se-cobro | A | panel Art Nouveau | cocina familiar | plano general | nogal profundo | luz que cruza una grieta | orla de cianotipo con inscripción | 9:16
+LM-005 | la-responsabilidad-que-no-se-delega | A | manierismo alargado de El Greco | imprenta de valores y documentos oficiales | contrapicado | marfil editorial | sedimento que se asienta | guarda marmoleada de libro encuadernado | 4:5
+LM-006 | presto-el-coche-llego-la-multa | A | aguada sepia de archivo notarial | mercado al amanecer | plano holandés | latón viejo | limaduras que un imán ordena | placa de latón | 1:1
+LM-007 | quien-controla-el-plazo-negocia | A | retrato cortesano de Velázquez | sala de máquinas | plano largo descentrado | azul petróleo | espejo empañado | monograma bordado | 9:16
+LM-008 | diez-pruebas-forenses-que-deciden-casos | A | detalle prerrafaelita | garita de aduana | cenital | latón viejo | huella que borra la marea | orla grabada estilo billete | 4:5
+LM-009 | diferencia-perito-testigo | A | fresco renacentista | taller mecánico | detalle de manos | azul petróleo | tinta que se seca | sello seco | 1:1
+LM-010 | el-testigo-honesto-que-recuerda-mal | A | vitral gótico | vagón nocturno | vista a través de un marco interior | latón viejo | humo de un sello | sello de lacre | 9:16
+LM-011 | la-declaracion-del-que-tambien-es-parte | A | bodegón flamenco monocromo | imprenta de valores y documentos oficiales | contrapicado | marfil editorial | sedimento que se asienta | marca de fuego | 4:5
+LM-012 | lo-que-el-perito-no-puede-decir | A | cartel litográfico Belle Époque | obra parada | plano medio | nogal profundo | radiografía contra una ventana | placa de latón | 1:1
+LM-013 | situacion-odontologia-forense | A | grabado en acero de orla numismática | aula vacía | primer plano | marfil editorial | luz que cruza una grieta | chapa numerada | 9:16
+LM-014 | comparacion-garantia-vs-devolucion | B | bodegón fotográfico de producto | notaría de pueblo | plano general | latón viejo | limaduras que un imán ordena | matasellos | 4:5
+LM-015 | consumidor-consejo-producto-defectuoso-online | B | cianotipo de archivo técnico | mercado al amanecer | macro extremo | latón viejo | huella que borra la marea | monograma bordado | 1:1
+LM-016 | el-consumidor-que-no-era-consumidor | B | fotografía industrial de Lewis Hine | garita de aduana | detalle de manos | azul petróleo | tinta que se seca | orla grabada estilo billete | 9:16
+LM-017 | el-descuento-que-no-era-descuento | B | fotografía cinematográfica de foco único | taller mecánico | plano largo descentrado | azul petróleo | espejo empañado | marca de fuego | 4:5
+LM-018 | el-plazo-de-la-garantia-legal | B | linograbado de taller | cocina familiar | cenital | nogal profundo | radiografía contra una ventana | placa de latón | 1:1
+LM-019 | la-garantia-que-solo-cubria-defectos | B | daguerrotipo de estudio | sala de máquinas | primer plano | latón viejo | humo de un sello | guarda marmoleada de libro encuadernado | 9:16
+LM-020 | la-letra-chica-que-si-se-lee | B | infografía de museo | notaría de pueblo | plano medio | marfil editorial | luz que cruza una grieta | sello de lacre | 4:5
+LM-021 | la-oferta-que-no-podia-retirarse | B | macro científico | mercado al amanecer | contrapicado | nogal profundo | limaduras que un imán ordena | ex libris | 1:1
+LM-022 | lo-que-debe-una-aerolinea | B | documental de calle | garita de aduana | macro extremo | azul petróleo | tinta que se seca | cinta de canto dorado de libro | 9:16
+LM-023 | pasos-reclamar-garantia-producto | B | bodegón fotográfico de producto | patio de vecindad | detalle de manos | nogal profundo | sedimento que se asienta | orla de cianotipo con inscripción | 4:5
+LM-024 | claridad-en-contratos | A | claroscuro rembrandtiano | taller mecánico | plano largo descentrado | marfil editorial | espejo empañado | matasellos | 1:1
+LM-025 | clausula-en-la-pagina-cuarenta | A | retrato cortesano de Velázquez | vagón nocturno | plano holandés | azul petróleo | radiografía contra una ventana | marca de fuego | 9:16
+LM-026 | depositos-que-no-son-lo-mismo | A | panel Art Nouveau | imprenta de valores y documentos oficiales | primer plano | azul petróleo | luz que cruza una grieta | placa de latón | 4:5
+LM-027 | depositos-vs-fianzas | A | tenebrismo caravaggista | obra parada | contrapicado | latón viejo | humo de un sello | orla grabada estilo billete | 1:1
+LM-028 | el-anticipo-que-no-se-devolvia | A | placa de colodión húmedo | notaría de pueblo | plano general | nogal profundo | tinta que se seca | sello seco | 9:16
+LM-029 | el-contrato-mas-corto-que-funciono | A | detalle prerrafaelita | cocina familiar | detalle de manos | marfil editorial | limaduras que un imán ordena | guarda marmoleada de libro encuadernado | 4:5
+LM-030 | el-contrato-que-se-cumplio-solo-a-medias | A | simbolismo de umbral | taller mecánico | plano medio | latón viejo | espejo empañado | cinta de canto dorado de libro | 1:1
+LM-031 | el-silencio-tambien-responde | A | metafísica de sombra larga | estudio fotográfico de principios de siglo | vista a través de un marco interior | nogal profundo | radiografía contra una ventana | matasellos | 9:16
+LM-032 | historia-founder-demo | A | tapiz flamenco narrativo | taller de imprenta | cenital | latón viejo | luz que cruza una grieta | filigrana al trasluz | 4:5
+LM-033 | la-clausula-penal-que-era-excesiva | A | encuadernación en cuero repujado | patio de vecindad | contrapicado | nogal profundo | sedimento que se asienta | marca de fuego | 1:1
+LM-034 | la-obra-que-quedo-a-medias | A | aguafuerte de Rembrandt | gabinete de mapas y cartografía | plano holandés | azul petróleo | humo de un sello | chapa numerada | 9:16
+LM-035 | linkedin-consecuencia-clausula-terminacion-no-revisada | A | naturalismo de Zurbarán | garita de aduana | primer plano | azul petróleo | huella que borra la marea | placa de vidrio esmerilado | 4:5
+LM-036 | linkedin-nda-antes-de-firmar | A | realismo social de Millet y Courbet | notaría de pueblo | plano medio | nogal profundo | limaduras que un imán ordena | sello seco | 1:1
+LM-037 | mito-contrato-sin-papel | A | cartografía histórica iluminada | obra parada | plano general | marfil editorial | tinta que se seca | guarda marmoleada de libro encuadernado | 9:16
+LM-038 | narrativa-catorce-contratos-antes-del-desayuno | A | metafísica de sombra larga | mercado al amanecer | cenital | marfil editorial | luz que cruza una grieta | placa de latón | 4:5
+LM-039 | narrativa-podra-no-es-debera | A | tapiz flamenco narrativo | vagón nocturno | contrapicado | nogal profundo | espejo empañado | marca de fuego | 1:1
+LM-040 | pasos-antes-de-firmar | A | muralismo mexicano | imprenta de valores y documentos oficiales | macro extremo | latón viejo | radiografía contra una ventana | orla grabada estilo billete | 9:16
+LM-041 | concepto-cadena-de-custodia | A | bodegón flamenco monocromo | gabinete de mapas y cartografía | vista a través de un marco interior | azul petróleo | huella que borra la marea | chapa numerada | 4:5
+LM-042 | consejo-preservar-escena-del-hecho | A | bajorrelieve en bronce | aula vacía | primer plano | marfil editorial | sedimento que se asienta | sello seco | 1:1
+LM-043 | la-copia-que-no-era-el-original | A | panel Art Nouveau | cocina familiar | plano medio | azul petróleo | limaduras que un imán ordena | monograma bordado | 9:16
+LM-044 | lo-que-una-fecha-cambia-en-un-documento | A | naturalismo de Zurbarán | taller mecánico | plano holandés | latón viejo | humo de un sello | orla de cianotipo con inscripción | 4:5
+LM-045 | lo-que-una-fotografia-prueba | A | aguada sepia de archivo notarial | estudio fotográfico de principios de siglo | cenital | azul petróleo | luz que cruza una grieta | filigrana al trasluz | 1:1
+LM-046 | mito-huella-dactilar-infalible | A | interior holandés de Vermeer | patio de vecindad | macro extremo | latón viejo | espejo empañado | cinta de canto dorado de libro | 9:16
+LM-047 | pregunta-una-sola-prueba-condena | A | detalle prerrafaelita | mercado al amanecer | vista a través de un marco interior | nogal profundo | radiografía contra una ventana | canto grabado de una moneda | 4:5
+LM-048 | concepto-consentimiento-informado-datos | B | cianotipo de archivo técnico | imprenta de valores y documentos oficiales | primer plano | latón viejo | huella que borra la marea | placa de vidrio esmerilado | 1:1
+LM-049 | el-consentimiento-que-caduca | B | linograbado de taller | vagón nocturno | plano general | nogal profundo | sedimento que se asienta | sello de lacre | 9:16
+LM-050 | el-dato-que-nunca-debio-pedirse | B | ilustración editorial de gouache y tinta | obra parada | plano largo descentrado | latón viejo | limaduras que un imán ordena | guarda marmoleada de libro encuadernado | 4:5
+LM-051 | el-dato-que-viajo-a-otro-pais | B | fotografía cinematográfica de foco único | gabinete de mapas y cartografía | detalle de manos | marfil editorial | tinta que se seca | matasellos | 1:1
+LM-052 | la-firma-electronica-que-no-era-la-misma | B | macro científico | sala de máquinas | macro extremo | marfil editorial | espejo empañado | orla de cianotipo con inscripción | 9:16
+LM-053 | la-huella-digital-que-dejas-al-comprar | B | fotografía industrial de Lewis Hine | patio de vecindad | plano holandés | marfil editorial | luz que cruza una grieta | sello seco | 4:5
+LM-054 | declarar-no-es-confesar | A | encuadernación en cuero repujado | notaría de pueblo | plano medio | nogal profundo | radiografía contra una ventana | placa de latón | 1:1
+LM-055 | detenido-no-es-condenado | A | aguada sepia de archivo notarial | garita de aduana | vista a través de un marco interior | nogal profundo | humo de un sello | monograma bordado | 9:16
+LM-056 | la-prueba-que-se-obtuvo-mal | A | simbolismo de umbral | taller mecánico | cenital | nogal profundo | limaduras que un imán ordena | sello de lacre | 4:5
+LM-057 | penal-mito-detenido-es-culpable | A | retrato cortesano de Velázquez | gabinete de mapas y cartografía | contrapicado | latón viejo | tinta que se seca | cinta de canto dorado de libro | 1:1
+LM-058 | constitucional-concepto-accion-de-amparo | A | atmósfera disuelta de Turner | imprenta de valores y documentos oficiales | detalle de manos | azul petróleo | espejo empañado | ex libris | 9:16
+LM-059 | el-derecho-a-ser-oido-antes | A | muralismo mexicano | mercado al amanecer | primer plano | azul petróleo | huella que borra la marea | canto grabado de una moneda | 4:5
+LM-060 | el-derecho-que-no-se-puede-renunciar | A | realismo severo de Ribera | estudio fotográfico de principios de siglo | plano holandés | azul petróleo | radiografía contra una ventana | placa de vidrio esmerilado | 1:1
+LM-061 | pregunta-derecho-a-la-defensa | A | cartel litográfico Belle Époque | azotea urbana | plano general | marfil editorial | sedimento que se asienta | marca de fuego | 9:16
+LM-062 | digital-concepto-responsable-del-tratamiento | B | infografía de museo | cocina familiar | cenital | latón viejo | humo de un sello | orla de cianotipo con inscripción | 4:5
+LM-063 | el-dato-que-pediste-borrar | B | cianotipo de archivo técnico | sala de máquinas | plano medio | marfil editorial | limaduras que un imán ordena | chapa numerada | 1:1
+LM-064 | el-video-que-grabaste-sin-avisar | B | linograbado de taller | patio de vecindad | detalle de manos | nogal profundo | luz que cruza una grieta | placa de latón | 9:16
+LM-065 | la-informacion-que-dejo-de-ser-secreta | B | fotografía industrial de Lewis Hine | gabinete de mapas y cartografía | contrapicado | nogal profundo | espejo empañado | guarda marmoleada de libro encuadernado | 4:5
+LM-066 | la-notificacion-por-correo-electronico | B | fotografía cinematográfica de foco único | mercado al amanecer | plano holandés | nogal profundo | radiografía contra una ventana | orla grabada estilo billete | 1:1
+LM-067 | mito-firma-electronica-no-vale | B | macro científico | obra parada | vista a través de un marco interior | latón viejo | huella que borra la marea | cinta de canto dorado de libro | 9:16
+LM-068 | narrativa-un-mensaje-tambien-obliga | B | ilustración editorial de gouache y tinta | cocina familiar | macro extremo | azul petróleo | humo de un sello | filigrana al trasluz | 4:5
+LM-069 | firmar-no-es-el-momento-decisivo | A | luminismo de Sorolla | azotea urbana | plano medio | azul petróleo | sedimento que se asienta | sello de lacre | 1:1
+LM-070 | la-carta-de-intencion-que-si-obligaba | A | panel Art Nouveau | vagón nocturno | detalle de manos | azul petróleo | limaduras que un imán ordena | placa de vidrio esmerilado | 9:16
+LM-071 | linkedin-due-diligence-inmobiliario | A | encuadernación en cuero repujado | imprenta de valores y documentos oficiales | primer plano | marfil editorial | luz que cruza una grieta | ex libris | 4:5
+LM-072 | linkedin-mito-due-diligence-rapida | A | bodegón flamenco monocromo | taller de imprenta | cenital | nogal profundo | radiografía contra una ventana | sello seco | 1:1
+LM-073 | lo-que-se-perdio-por-no-inventariar | A | naturalismo de Zurbarán | estudio fotográfico de principios de siglo | contrapicado | latón viejo | tinta que se seca | matasellos | 9:16
+LM-074 | concepto-patria-potestad | A | atmósfera disuelta de Turner | mercado al amanecer | plano holandés | marfil editorial | huella que borra la marea | guarda marmoleada de libro encuadernado | 4:5
+LM-075 | el-acuerdo-verbal-entre-hermanos | A | grabado en acero de orla numismática | azotea urbana | plano medio | azul petróleo | humo de un sello | orla grabada estilo billete | 1:1
+LM-076 | el-menor-que-tambien-opina | A | bajorrelieve en bronce | cocina familiar | plano general | marfil editorial | limaduras que un imán ordena | placa de latón | 9:16
+LM-077 | el-testamento-que-nadie-encontro | A | encuadernación en cuero repujado | vagón nocturno | detalle de manos | latón viejo | sedimento que se asienta | chapa numerada | 4:5
+LM-078 | familia-pregunta-abuelo-puede-pedir-custodia | A | grabado calcográfico de Piranesi | patio de vecindad | vista a través de un marco interior | marfil editorial | luz que cruza una grieta | placa de vidrio esmerilado | 1:1
+LM-079 | historia-herencia-sin-testamento | A | pastel de Degas | gabinete de mapas y cartografía | plano largo descentrado | marfil editorial | espejo empañado | matasellos | 9:16
+LM-080 | la-donacion-que-tenia-condiciones | A | tapiz flamenco narrativo | garita de aduana | primer plano | nogal profundo | huella que borra la marea | monograma bordado | 4:5
+LM-081 | la-herencia-aceptada-sin-inventario | A | panel Art Nouveau | taller de imprenta | contrapicado | azul petróleo | tinta que se seca | guarda marmoleada de libro encuadernado | 1:1
+LM-082 | la-herencia-que-tambien-trae-deudas | A | bajorrelieve en bronce | cocina familiar | plano medio | nogal profundo | radiografía contra una ventana | marca de fuego | 9:16
+LM-083 | fiscal-mito-no-declarar-es-multa-menor | A | romanticismo sublime de Friedrich | azotea urbana | macro extremo | latón viejo | limaduras que un imán ordena | chapa numerada | 4:5
+LM-084 | la-deuda-fiscal-que-crece-sola | A | aguafuerte de Rembrandt | estudio fotográfico de principios de siglo | plano holandés | marfil editorial | humo de un sello | canto grabado de una moneda | 1:1
+LM-085 | la-devolucion-que-llego-tarde | A | realismo severo de Ribera | mercado al amanecer | cenital | marfil editorial | sedimento que se asienta | cinta de canto dorado de libro | 9:16
+LM-086 | la-factura-que-no-ampara-nada | A | pintura negra de Goya | imprenta de valores y documentos oficiales | detalle de manos | azul petróleo | espejo empañado | placa de latón | 4:5
+LM-087 | el-arrendamiento-que-siguio-solo | B | linograbado de taller | patio de vecindad | primer plano | marfil editorial | huella que borra la marea | matasellos | 1:1
+LM-088 | el-muro-que-es-de-los-dos | B | macro científico | aula vacía | vista a través de un marco interior | latón viejo | radiografía contra una ventana | orla grabada estilo billete | 9:16
+LM-089 | historia-cliente-arrendamiento | B | infografía de museo | azotea urbana | plano largo descentrado | nogal profundo | luz que cruza una grieta | sello de lacre | 4:5
+LM-090 | inmobiliario-tecnicismo-servidumbre | B | daguerrotipo de estudio | estudio fotográfico de principios de siglo | plano medio | latón viejo | humo de un sello | filigrana al trasluz | 1:1
+LM-091 | la-casa-que-se-vendio-dos-veces | B | fotografía cinematográfica de foco único | vagón nocturno | plano general | latón viejo | limaduras que un imán ordena | marca de fuego | 9:16
+LM-092 | la-habitacion-de-hotel-no-es-tuya | B | cianotipo de archivo técnico | gabinete de mapas y cartografía | plano holandés | azul petróleo | tinta que se seca | ex libris | 4:5
+LM-093 | la-servidumbre-que-nacio-del-uso | B | linograbado de taller | taller mecánico | detalle de manos | latón viejo | espejo empañado | placa de latón | 1:1
+LM-094 | linkedin-consejo-adquisiciones-inmobiliarias | B | documental de calle | notaría de pueblo | primer plano | marfil editorial | sedimento que se asienta | cinta de canto dorado de libro | 9:16
+LM-095 | lo-que-el-condominio-si-puede-decidir | B | bodegón fotográfico de producto | cocina familiar | contrapicado | nogal profundo | radiografía contra una ventana | guarda marmoleada de libro encuadernado | 4:5
+LM-096 | que-compras-en-preventa | B | macro científico | estudio fotográfico de principios de siglo | vista a través de un marco interior | azul petróleo | humo de un sello | orla grabada estilo billete | 1:1
+LM-097 | terreno-antes-de-comprar | B | ilustración editorial de gouache y tinta | obra parada | plano general | nogal profundo | huella que borra la marea | placa de vidrio esmerilado | 9:16
+LM-098 | veinte-anos-pagando-renta | B | fotografía industrial de Lewis Hine | garita de aduana | plano largo descentrado | latón viejo | limaduras que un imán ordena | sello seco | 4:5
+LM-099 | dos-paises-una-misma-operacion | A | panel Art Nouveau | gabinete de mapas y cartografía | plano medio | marfil editorial | luz que cruza una grieta | marca de fuego | 1:1
+LM-100 | dos-versiones-del-mismo-contrato | A | interior holandés de Vermeer | sala de máquinas | plano holandés | latón viejo | tinta que se seca | canto grabado de una moneda | 9:16
+LM-101 | el-acuerdo-que-no-se-registro | A | encáustica funeraria de Fayum | imprenta de valores y documentos oficiales | primer plano | marfil editorial | sedimento que se asienta | monograma bordado | 4:5
+LM-102 | internacional-concepto-tratado-vs-ley-interna | A | romanticismo sublime de Friedrich | taller de imprenta | detalle de manos | latón viejo | humo de un sello | chapa numerada | 1:1
+LM-103 | comparacion-fiscal-defensor | A | encuadernación en cuero repujado | notaría de pueblo | macro extremo | marfil editorial | radiografía contra una ventana | ex libris | 9:16
+LM-104 | el-plazo-que-corre-sin-avisar | A | vitral gótico | cocina familiar | plano largo descentrado | latón viejo | limaduras que un imán ordena | orla grabada estilo billete | 4:5
+LM-105 | el-plazo-que-vencia-en-dia-inhabil | A | cartel litográfico Belle Époque | taller mecánico | cenital | latón viejo | huella que borra la marea | placa de latón | 1:1
+LM-106 | ganar-mas-caro-que-perder | A | muralismo mexicano | vagón nocturno | contrapicado | nogal profundo | espejo empañado | orla de cianotipo con inscripción | 9:16
+LM-107 | historia-el-testigo-que-cambio-de-version | A | interior holandés de Vermeer | imprenta de valores y documentos oficiales | plano holandés | azul petróleo | sedimento que se asienta | sello de lacre | 4:5
+LM-108 | la-medida-que-se-pidio-tarde | A | metafísica de sombra larga | patio de vecindad | plano medio | marfil editorial | luz que cruza una grieta | filigrana al trasluz | 1:1
+LM-109 | la-prueba-que-llego-despues-del-cierre | A | romanticismo sublime de Friedrich | estudio fotográfico de principios de siglo | primer plano | latón viejo | humo de un sello | marca de fuego | 9:16
+LM-110 | la-sentencia-que-nadie-ejecuto | A | manierismo alargado de El Greco | garita de aduana | plano general | azul petróleo | tinta que se seca | guarda marmoleada de libro encuadernado | 4:5
+LM-111 | lo-que-se-pierde-al-no-contestar-una-demanda | A | encáustica funeraria de Fayum | sala de máquinas | vista a través de un marco interior | nogal profundo | limaduras que un imán ordena | chapa numerada | 1:1
+LM-112 | narrativa-tenia-razon-y-perdio | A | cartel litográfico Belle Époque | aula vacía | macro extremo | latón viejo | radiografía contra una ventana | cinta de canto dorado de libro | 9:16
+LM-113 | pasos-dentro-de-un-juicio-penal | A | panel Art Nouveau | taller de imprenta | detalle de manos | latón viejo | espejo empañado | sello seco | 4:5
+LM-114 | quien-guarda-el-original-tiene-ventaja | A | miniatura de manuscrito iluminado | taller mecánico | plano largo descentrado | nogal profundo | huella que borra la marea | orla de cianotipo con inscripción | 1:1
+LM-115 | consecuencia-despido-sin-liquidar | B | linograbado de taller | estudio fotográfico de principios de siglo | contrapicado | marfil editorial | humo de un sello | filigrana al trasluz | 9:16
+LM-116 | diferencia-despido-justificado-injustificado | B | fotografía cinematográfica de foco único | mercado al amanecer | plano general | marfil editorial | tinta que se seca | placa de latón | 4:5
+LM-117 | la-clausula-de-no-competencia-sin-limites | B | infografía de museo | gabinete de mapas y cartografía | plano medio | nogal profundo | luz que cruza una grieta | placa de vidrio esmerilado | 1:1
+LM-118 | la-jornada-que-nadie-registro | B | documental de calle | vagón nocturno | plano holandés | latón viejo | sedimento que se asienta | sello de lacre | 9:16
+LM-119 | la-orden-verbal-que-nadie-dio | B | fotografía industrial de Lewis Hine | imprenta de valores y documentos oficiales | vista a través de un marco interior | marfil editorial | espejo empañado | marca de fuego | 4:5
+LM-120 | la-renuncia-que-firmo-al-salir | B | ilustración editorial de gouache y tinta | obra parada | plano largo descentrado | marfil editorial | radiografía contra una ventana | sello seco | 1:1
+LM-121 | laboral-tecnicismo-indemnizacion | B | linograbado de taller | garita de aduana | contrapicado | marfil editorial | humo de un sello | matasellos | 9:16
+LM-122 | listado-derechos-al-firmar-contrato-trabajo | B | cianotipo de archivo técnico | mercado al amanecer | detalle de manos | latón viejo | huella que borra la marea | orla grabada estilo billete | 4:5
+LM-123 | seis-anos-pagados-en-efectivo | B | fotografía cinematográfica de foco único | taller mecánico | plano medio | latón viejo | limaduras que un imán ordena | ex libris | 1:1
+LM-124 | trabajar-desde-casa-sigue-siendo-trabajar | B | bodegón fotográfico de producto | aula vacía | cenital | nogal profundo | sedimento que se asienta | cinta de canto dorado de libro | 9:16
+LM-125 | cita-el-proceso-kafka | A | encuadernación en cuero repujado | sala de máquinas | vista a través de un marco interior | latón viejo | luz que cruza una grieta | canto grabado de una moneda | 4:5
+LM-126 | el-expediente-que-nadie-abrio | A | pastel de Degas | patio de vecindad | macro extremo | marfil editorial | radiografía contra una ventana | placa de vidrio esmerilado | 1:1
+LM-127 | el-juicio-que-duro-mas-que-el-conflicto | A | grabado en acero de orla numismática | vagón nocturno | plano largo descentrado | nogal profundo | tinta que se seca | sello seco | 9:16
+LM-128 | el-personaje-que-nunca-tuvo-abogado | A | claroscuro rembrandtiano | obra parada | primer plano | latón viejo | espejo empañado | orla de cianotipo con inscripción | 4:5
+LM-129 | tecnicismo-corpus-delicti | A | pintura negra de Goya | imprenta de valores y documentos oficiales | contrapicado | marfil editorial | huella que borra la marea | ex libris | 1:1
+LM-130 | el-arraigo-que-nadie-documento | A | muralismo mexicano | gabinete de mapas y cartografía | plano medio | latón viejo | sedimento que se asienta | cinta de canto dorado de libro | 9:16
+LM-131 | el-documento-que-caduca-antes-del-cierre | A | aguada sepia de archivo notarial | taller mecánico | vista a través de un marco interior | latón viejo | humo de un sello | placa de latón | 4:5
+LM-132 | la-visa-no-es-el-permiso-de-trabajo | A | detalle prerrafaelita | patio de vecindad | detalle de manos | marfil editorial | limaduras que un imán ordena | sello de lacre | 1:1
+LM-133 | migracion-consejo-antes-de-solicitar-visa-trabajo | A | realismo social de Millet y Courbet | sala de máquinas | plano largo descentrado | latón viejo | tinta que se seca | chapa numerada | 9:16
+LM-134 | anatomia-de-una-firma | A | acuarela de atlas naturalista | taller de imprenta | cenital | nogal profundo | radiografía contra una ventana | canto grabado de una moneda | 4:5
+LM-135 | civil-concepto-obligacion-dar-hacer-no-hacer | A | fresco renacentista | notaría de pueblo | plano general | azul petróleo | huella que borra la marea | matasellos | 1:1
+LM-136 | el-acta-que-no-se-levanto | A | metafísica de sombra larga | cocina familiar | plano medio | marfil editorial | espejo empañado | placa de vidrio esmerilado | 9:16
+LM-137 | el-domicilio-que-quedo-desactualizado | A | cartel litográfico Belle Époque | azotea urbana | vista a través de un marco interior | azul petróleo | sedimento que se asienta | placa de latón | 4:5
+LM-138 | el-letrero-que-no-exime | A | placa de colodión húmedo | vagón nocturno | macro extremo | azul petróleo | luz que cruza una grieta | cinta de canto dorado de libro | 1:1
+LM-139 | el-pago-a-quien-no-debia-cobrar | A | muralismo mexicano | patio de vecindad | plano largo descentrado | nogal profundo | tinta que se seca | marca de fuego | 9:16
+LM-140 | la-cuenta-conjunta-que-no-era-mitad-y-mitad | A | acuarela de atlas naturalista | gabinete de mapas y cartografía | plano holandés | nogal profundo | limaduras que un imán ordena | sello seco | 4:5
+LM-141 | la-deuda-que-cambio-de-acreedor | A | manierismo alargado de El Greco | garita de aduana | cenital | latón viejo | radiografía contra una ventana | canto grabado de una moneda | 1:1
+LM-142 | la-maleta-que-nadie-reclamo | A | estampa ukiyo-e | taller mecánico | primer plano | marfil editorial | huella que borra la marea | chapa numerada | 9:16
+LM-143 | la-mora-que-empieza-sin-reclamo | A | naturalismo de Zurbarán | obra parada | detalle de manos | azul petróleo | sedimento que se asienta | monograma bordado | 4:5
+LM-144 | narrativa-firmo-como-aval-sin-saberlo | A | aguafuerte de Rembrandt | aula vacía | macro extremo | azul petróleo | luz que cruza una grieta | orla de cianotipo con inscripción | 1:1
+LM-145 | concepto-buena-fe | A | pastel de Degas | mercado al amanecer | vista a través de un marco interior | azul petróleo | tinta que se seca | guarda marmoleada de libro encuadernado | 9:16
+LM-146 | cumplio-la-letra-y-fue-mala-fe | A | bajorrelieve en bronce | sala de máquinas | contrapicado | nogal profundo | espejo empañado | cinta de canto dorado de libro | 4:5
+LM-147 | diez-principios-juridicos | A | fresco renacentista | gabinete de mapas y cartografía | cenital | marfil editorial | radiografía contra una ventana | placa de latón | 1:1
+LM-148 | el-error-que-invalida-el-consentimiento | A | manierismo alargado de El Greco | imprenta de valores y documentos oficiales | plano holandés | marfil editorial | limaduras que un imán ordena | sello seco | 9:16
+LM-149 | la-buena-fe-del-que-compro-sin-saber | A | grabado calcográfico de Piranesi | garita de aduana | plano largo descentrado | azul petróleo | sedimento que se asienta | chapa numerada | 4:5
+LM-150 | la-foto-es-tuya-el-permiso-no | A | acuarela de atlas naturalista | azotea urbana | plano general | nogal profundo | luz que cruza una grieta | placa de vidrio esmerilado | 1:1
+LM-151 | la-marca-parecida-que-si-confunde | A | pastel de Degas | cocina familiar | vista a través de un marco interior | marfil editorial | humo de un sello | sello de lacre | 9:16
+LM-152 | la-marca-que-nadie-registro | A | aguafuerte de Rembrandt | obra parada | contrapicado | nogal profundo | huella que borra la marea | matasellos | 4:5
+LM-153 | la-obra-de-un-empleado-de-quien-es | A | naturalismo de Zurbarán | notaría de pueblo | primer plano | azul petróleo | tinta que se seca | canto grabado de una moneda | 1:1
+LM-154 | la-obra-derivada-que-no-pidio-permiso | A | estampa ukiyo-e | patio de vecindad | cenital | latón viejo | espejo empañado | ex libris | 9:16
+LM-155 | propiedad-intelectual-diferencia-marca-patente | A | tenebrismo caravaggista | garita de aduana | macro extremo | azul petróleo | radiografía contra una ventana | cinta de canto dorado de libro | 4:5
+LM-156 | el-cheque-que-se-fue-en-blanco | A | aguada sepia de archivo notarial | taller de imprenta | plano largo descentrado | nogal profundo | sedimento que se asienta | orla de cianotipo con inscripción | 1:1
+LM-157 | el-que-callo-un-defecto-al-vender | A | realismo severo de Ribera | mercado al amanecer | plano general | nogal profundo | limaduras que un imán ordena | monograma bordado | 9:16
+LM-158 | el-tercero-que-nadie-invito | A | luminismo de Sorolla | estudio fotográfico de principios de siglo | vista a través de un marco interior | azul petróleo | luz que cruza una grieta | chapa numerada | 4:5
+LM-159 | incumplimiento-contractual-vs-penal | A | grabado calcográfico de Piranesi | azotea urbana | primer plano | latón viejo | humo de un sello | sello seco | 1:1
+LM-160 | la-garantia-que-el-vendedor-dio-de-mas | A | bajorrelieve en bronce | imprenta de valores y documentos oficiales | plano medio | azul petróleo | tinta que se seca | canto grabado de una moneda | 9:16
+LM-161 | el-acuerdo-de-junta-que-nadie-anoto | A | muralismo mexicano | aula vacía | detalle de manos | marfil editorial | huella que borra la marea | cinta de canto dorado de libro | 4:5
+LM-162 | el-poder-que-sobrevivio-a-su-motivo | A | aguada sepia de archivo notarial | taller mecánico | plano holandés | azul petróleo | radiografía contra una ventana | orla de cianotipo con inscripción | 1:1
+LM-163 | el-que-firmo-por-la-empresa-y-quedo-obligado | A | naturalismo de Zurbarán | cocina familiar | plano general | latón viejo | sedimento que se asienta | orla grabada estilo billete | 9:16
+LM-164 | la-empresa-que-firmo-sin-poder | A | grabado en acero de orla numismática | gabinete de mapas y cartografía | vista a través de un marco interior | nogal profundo | espejo empañado | placa de latón | 4:5
+LM-165 | la-sociedad-que-nunca-repartio-utilidades | A | estampa ukiyo-e | obra parada | cenital | marfil editorial | limaduras que un imán ordena | guarda marmoleada de libro encuadernado | 1:1
+LM-166 | linkedin-facultades-para-firmar | A | encuadernación en cuero repujado | vagón nocturno | contrapicado | marfil editorial | luz que cruza una grieta | matasellos | 9:16
+LM-167 | linkedin-listado-documentos-apoderado | A | manierismo alargado de El Greco | azotea urbana | plano largo descentrado | latón viejo | humo de un sello | filigrana al trasluz | 4:5
+LM-168 | mercantil-consejo-antes-de-constituir-sociedad | A | interior holandés de Vermeer | sala de máquinas | plano medio | latón viejo | radiografía contra una ventana | sello seco | 1:1
+LM-169 | narrativa-socio-que-desaparecio | A | muralismo mexicano | mercado al amanecer | plano general | azul petróleo | huella que borra la marea | orla de cianotipo con inscripción | 9:16
+LM-170 | construir-primero-y-preguntar-despues | B | daguerrotipo de estudio | cocina familiar | primer plano | marfil editorial | tinta que se seca | ex libris | 4:5
+LM-171 | el-permiso-que-se-pide-tarde | B | documental de calle | estudio fotográfico de principios de siglo | vista a través de un marco interior | latón viejo | sedimento que se asienta | marca de fuego | 1:1
+LM-172 | escritura-no-es-licencia | B | linograbado de taller | garita de aduana | contrapicado | latón viejo | luz que cruza una grieta | placa de vidrio esmerilado | 9:16
+LM-173 | la-licencia-que-no-se-transmite | B | fotografía cinematográfica de foco único | aula vacía | plano largo descentrado | marfil editorial | humo de un sello | chapa numerada | 4:5
+LM-174 | la-obra-que-invadio-un-metro | B | cianotipo de archivo técnico | taller mecánico | detalle de manos | marfil editorial | espejo empañado | cinta de canto dorado de libro | 1:1

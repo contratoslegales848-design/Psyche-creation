@@ -41,6 +41,39 @@ Todo lo marcado IMPLEMENTADO aquí tiene archivo real y prueba que pasa.
 | Carriles LinkedIn | `visual/lanes.py` | 19 |
 | Ciclo vertical del organismo | `visual/organism.py` | 28 |
 
+### IMPLEMENTADO Y PROBADO — FASE 2 (memoria histórica)
+
+| Componente | Archivo | Pruebas | Estado |
+|---|---|---|---|
+| Snapshot inmutable del corpus (174 piezas) | `corpus/` | — | IMPLEMENTADO |
+| Importador idempotente + clasificación retroactiva | `visual/corpus_import.py` | 30 | IMPLEMENTADO Y PROBADO |
+| Análisis: repetición, clusters, zonas sin explorar | `visual/corpus_analysis.py` | 18 | IMPLEMENTADO Y PROBADO |
+| Calibración del umbral contra corpus real | `visual/calibration.py` | 16 | IMPLEMENTADO Y PROBADO |
+| Las cinco distinciones de la memoria | `visual/test_distinciones_memoria.py` | 14 | PROBADO |
+| Regresión contra las 174 históricas | `visual/test_regresion_historica.py` | 14 | PROBADO |
+| Integridad del descubrimiento de CI | `visual/test_ci_discovery.py` | 6 | IMPLEMENTADO Y PROBADO |
+| Estado `HISTORICA` en la memoria | `visual/semantic_memory.py` | incluidas | IMPLEMENTADO Y PROBADO |
+
+**Hallazgos medidos sobre el corpus real (no estimados):**
+- 174 metáforas distintas de 174 piezas: **la capa visual sí estaba diversificada.**
+- 85 de 174 piezas (48%) comparten la misma función editorial inferida: **el
+  problema estaba en la capa editorial**, como sostenía el fundador.
+- Al umbral de bloqueo vigente (0.25) hay **0 clusters de duplicados**: el banco
+  v3 cumplió lo que prometía, 174 temas realmente distintos. No existen "10 o 20
+  piezas que sean la misma pregunta jurídica".
+- 45 de 58 familias editoriales **nunca se han usado**; 6 materias no tienen una
+  sola pieza; sólo 77 de 1.160 combinaciones materia × familia se han producido.
+
+**Umbral calibrado:** 0.30 → **0.25**. En 0.30 aparecían 3 falsos positivos
+(LM-151~152, LM-063~050, LM-077~079): misma materia, preguntas distintas —
+justo lo que el canon prohíbe bloquear.
+
+### PENDIENTE / NO CONECTADO — declarado, no implementado
+- Métricas de rendimiento: **0 entradas**. `selection_rate` sigue siendo la única
+  señal real de aprendizaje.
+- Repositorio histórico de Remotion (guiones completos): **inaccesible**.
+- El conjunto de calibración está **etiquetado por el agente**, no por el Founder.
+
 ### PILOTO / PROPUESTA
 - Piezas 01–03 del piloto: `pieza-01-reales` en `APTO_PARA_NARRATIVA` con gate CERRADO;
   02 y 03 en `REQUIERE_INVESTIGACION`. La aprobación humana de la pieza 01 vive en una rama

@@ -69,9 +69,54 @@ EJES_TEXTO_LIBRE = {
     "metafora", "escena", "objeto_protagonista", "composicion", "hook",
 }
 
-# Por debajo de esta distancia semántica, dos piezas son el mismo contenido
-# con otra ropa. Calibrado en test_semantic_fingerprint.py contra pares reales.
-UMBRAL_EQUIVALENCIA = 0.30
+# Por debajo de esta distancia semántica, dos piezas son el mismo contenido con
+# otra ropa.
+#
+# CALIBRADO CONTRA EL CORPUS HISTÓRICO REAL (174 piezas), no elegido a ojo.
+# Barrido en `calibration.py`, reproducible con `python3 demo_corpus.py`:
+#
+#   umbral  TP  FP  FN   precision  recall     F1
+#     0.25  25   0   1      1.0     0.9615  0.9804
+#     0.30  25   3   1     0.8929   0.9615  0.9259
+#
+# Los 3 falsos positivos que aparecen en 0.30 son pares de la MISMA materia y
+# familia que resuelven preguntas distintas (LM-151~LM-152 marcas, LM-063~LM-050
+# datos, LM-077~LM-079 sucesión). Bloquearlos es justo lo que el canon prohíbe:
+# "mismo tema + nueva función útil" es contenido legítimo. 0.25 los libera sin
+# dejar pasar ni uno solo de los 25 disfraces canónicos.
+#
+# LÍMITE HONESTO: el recall lo sostienen 25 positivos canónicos (misma pieza con
+# otro hook/estilo), que son fáciles por construcción. El único equivalente REAL
+# del corpus (LM-026~LM-027) NO se detecta a ningún umbral, porque el corpus
+# histórico no declara concepto_nucleo ni pregunta_resuelta y sus slugs apenas
+# comparten vocabulario. Eso es una carencia de DATOS, no de umbral, y ningún
+# valor la arregla. Ver corpus/eval-umbral-candidato.json (pendiente de revisión
+# del Founder): las etiquetas las puso el agente, no una persona.
+UMBRAL_EQUIVALENCIA = 0.25
+
+
+# Palabras vacías del español. Sin este filtro, "el anticipo que no se devolvia"
+# y "el contrato que se cumplio solo a medias" comparten "el/que/no/se" y puntúan
+# como parecidos siendo asuntos jurídicos distintos. Medido sobre el corpus
+# histórico: el filtro es lo que separa parecido REAL de coincidencia gramatical.
+STOPWORDS = frozenset("""
+a al algo alguna algunas alguno algunos ante antes aquel aquella aquellas aquello
+aquellos cada como con contra cual cuales cuando de del desde donde dos el ella
+ellas ello ellos en entre era eran es esa esas ese eso esos esta estaba estan
+estas este esto estos fue fueron ha habia han hasta hay la las le les lo los mas
+me mi mis mucho muy nada ni no nos nuestra nuestro o otra otras otro otros para
+pero poco por porque que quien quienes se ser si sin sobre solo son su sus
+tambien tan tanto te tiene tienen todo todos tras tu tus un una uno unos y ya
+""".split())
+
+
+def _tokens(texto_normalizado):
+    """Tokens significativos: sin palabras vacías y sin fragmentos de una letra.
+    Si al filtrar no queda nada, se devuelven los tokens originales — un texto
+    formado sólo por palabras vacías no puede compararse, pero vaciarlo lo haría
+    parecer ausente, que es una afirmación distinta."""
+    t = [w for w in texto_normalizado.split() if len(w) > 1 and w not in STOPWORDS]
+    return set(t) if t else set(texto_normalizado.split())
 
 
 def _similitud(a, b, texto_libre):
@@ -85,7 +130,7 @@ def _similitud(a, b, texto_libre):
         return 1.0
     if not texto_libre:
         return 0.0                       # vocabulario cerrado: o es el mismo valor o no
-    ta, tb = set(na.split()), set(nb.split())
+    ta, tb = _tokens(na), _tokens(nb)
     union = ta | tb
     return len(ta & tb) / len(union) if union else 0.0
 

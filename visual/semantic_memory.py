@@ -37,23 +37,32 @@ from semantic_fingerprint import SemanticFingerprint, mas_similar, UMBRAL_EQUIVA
 
 SEMANTIC_MEMORY_SCHEMA_VERSION = "1.0"
 
+HISTORICA = "HISTORICA"
 GENERADA = "GENERADA"
 PRESELECCIONADA = "PRESELECCIONADA"
 APROBADA = "APROBADA"
 PUBLICADA = "PUBLICADA"
 DESCARTADA = "DESCARTADA"
 
-ESTADOS = (GENERADA, PRESELECCIONADA, APROBADA, PUBLICADA, DESCARTADA)
+ESTADOS = (HISTORICA, GENERADA, PRESELECCIONADA, APROBADA, PUBLICADA, DESCARTADA)
 
 # Ventana de cooldown por estado, en número de registros recientes.
 # El descarte tiene la ventana más corta a propósito (ver docstring).
 COOLDOWN = {
+    # El corpus histórico es el REGISTRO ACUMULADO de lo ya contado, no
+    # producción reciente. Con la ventana de GENERADA (40) el motor sólo veía
+    # las últimas 40 de 174 piezas y volvía a "descubrir" las otras 134 como
+    # nuevas — exactamente el defecto que esta fase venía a cerrar.
+    HISTORICA: 100000,
     PUBLICADA: 200,
     APROBADA: 200,
     PRESELECCIONADA: 100,
     GENERADA: 40,
     DESCARTADA: 20,
 }
+# HISTORICA NO es memoria fuerte: que algo se produjera en el pasado no
+# significa que el Founder lo eligiera. Bloquea la repetición, pero no cuenta
+# como señal positiva de preferencia (ver `preferencias`).
 MEMORIA_FUERTE = (APROBADA, PUBLICADA, PRESELECCIONADA)
 
 
@@ -135,7 +144,8 @@ class SemanticMemory:
             return Veredicto(False, "memoria vacía: nada con que comparar.", 1.0)
 
         peor = Veredicto(False, "ningún registro reciente es semánticamente equivalente.", 1.0)
-        for estado in (PUBLICADA, APROBADA, PRESELECCIONADA, GENERADA, DESCARTADA):
+        for estado in (PUBLICADA, APROBADA, PRESELECCIONADA, HISTORICA,
+                       GENERADA, DESCARTADA):
             ventana = [e for e in self._entries if e.estado == estado][:COOLDOWN[estado]]
             if not ventana:
                 continue
@@ -152,6 +162,10 @@ class SemanticMemory:
                         f"Cooldown corto de {COOLDOWN[DESCARTADA]} registros: la materia, la "
                         "familia editorial y el concepto siguen disponibles por otro ángulo — "
                         "sólo se evita repetir este mismo enfoque de inmediato.")
+                elif estado == HISTORICA:
+                    motivo = (f"equivalente a {cid!r}, que LegalMente YA CONTÓ "
+                              f"(corpus histórico, distancia {d.valor}). No es una "
+                              "señal de gusto del Founder: es memoria de lo producido.")
                 elif estado in MEMORIA_FUERTE:
                     motivo = (f"equivalente a {cid!r}, ya en memoria fuerte como {estado} "
                               f"(distancia {d.valor}). Señal positiva: ya se contó bien.")

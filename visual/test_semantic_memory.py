@@ -6,7 +6,7 @@ from pathlib import Path
 
 from semantic_memory import (
     SemanticMemory, SemanticMemoryError, GENERADA, PRESELECCIONADA, APROBADA,
-    PUBLICADA, DESCARTADA, COOLDOWN, MEMORIA_FUERTE, ESTADOS,
+    PUBLICADA, DESCARTADA, HISTORICA, COOLDOWN, MEMORIA_FUERTE, ESTADOS,
 )
 from semantic_fingerprint import SemanticFingerprint
 
@@ -31,7 +31,12 @@ def otra_rama(cid):
 class TestEstados(unittest.TestCase):
     def test_estados_canonicos(self):
         self.assertEqual(set(ESTADOS),
-                         {GENERADA, PRESELECCIONADA, APROBADA, PUBLICADA, DESCARTADA})
+                         {HISTORICA, GENERADA, PRESELECCIONADA, APROBADA,
+                          PUBLICADA, DESCARTADA})
+
+    def test_historica_no_es_señal_de_gusto_del_founder(self):
+        """Que algo se produjera en el pasado no significa que se eligiera."""
+        self.assertNotIn(HISTORICA, MEMORIA_FUERTE)
 
     def test_rechaza_estado_inventado(self):
         with self.assertRaises(SemanticMemoryError):
@@ -62,9 +67,18 @@ class TestCooldown(unittest.TestCase):
         for fuerte in MEMORIA_FUERTE:
             self.assertGreater(COOLDOWN[fuerte], COOLDOWN[DESCARTADA])
 
-    def test_aprobada_y_publicada_son_la_memoria_mas_larga(self):
-        self.assertEqual(COOLDOWN[APROBADA], max(COOLDOWN.values()))
-        self.assertEqual(COOLDOWN[PUBLICADA], max(COOLDOWN.values()))
+    def test_aprobada_y_publicada_son_la_memoria_de_curaduria_mas_larga(self):
+        """Entre los estados que expresan una DECISIÓN sobre la pieza."""
+        curaduria = {e: COOLDOWN[e] for e in
+                     (GENERADA, PRESELECCIONADA, APROBADA, PUBLICADA, DESCARTADA)}
+        self.assertEqual(COOLDOWN[APROBADA], max(curaduria.values()))
+        self.assertEqual(COOLDOWN[PUBLICADA], max(curaduria.values()))
+
+    def test_el_corpus_historico_se_ve_entero(self):
+        """HISTORICA es registro acumulado, no producción reciente: su ventana
+        debe cubrir todo el corpus o el motor redescubre lo ya contado."""
+        self.assertEqual(COOLDOWN[HISTORICA], max(COOLDOWN.values()))
+        self.assertGreater(COOLDOWN[HISTORICA], 174)
 
 
 class TestEvaluar(unittest.TestCase):
