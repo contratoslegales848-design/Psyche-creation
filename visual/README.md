@@ -2,7 +2,7 @@
 
 **Estado: arquitectura completa, probada con proveedor falso. Ningún adapter real implementado.**
 
-**Politica visual 1.2 / familias 1.1 / compilador 2.1 / compositor 1.1**: el
+**Politica visual 1.2 / familias 1.1 / compilador 2.1 / compositor 1.2**: el
 detalle artistico (escuela unica, mecanismo de revelacion, profundidad de campo,
 acabado, imperfeccion, escalon tipografico, contraste real, marca grabada) ya es
 comprobable por codigo, no solo criterio escrito en la skill.
@@ -58,7 +58,7 @@ artefacto de content/ + ProductionHandoff
 | `qa.py` | QA estructural |
 | `inspection.py` | contrato semántico + heurísticas de píxel honestas |
 | `composition.py` | `TypographyPlan`, `BrandCompositionPlan` (parametros de la politica, no numeros magicos) |
-| `compositor.py` | rasterizado determinista con Pillow + medida de contraste real |
+| `compositor.py` | rasterizado determinista con Pillow, contraste real medido y marca sobre el plano declarado (recto, girado o en perspectiva) |
 | `art_direction.py` | auditoria de detalle artistico: BLOQUEA / REVISION_HUMANA / AVISO |
 | `rotation.py` | variacion minima, diversidad de lote y rotacion de escuela |
 | `feedback.py` | códigos de feedback → cambios controlados de brief |

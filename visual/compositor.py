@@ -12,11 +12,16 @@ Canva podra ser en el futuro un destino de exportacion; nunca la fuente de verda
 Dependencia: Pillow (MIT-CMU), la unica del repositorio. Justificada en
 docs/adr/0003-dependencia-pillow-compositor.md.
 
-Limites declarados de la V1:
-- Solo compone marca sobre una superficie reservada PLANA o casi plana, y sus
-  coordenadas deben venir DECLARADAS: no hay vision que las detecte.
-- Ante superficie compleja, ausente o no declarada -> NEEDS_HUMAN_REVIEW.
-  Nunca degrada a watermark, logo flotante ni firma en una esquina.
+Limites declarados:
+- La superficie de marca debe venir DECLARADA: no hay vision que la detecte.
+  Puede declararse como rectangulo, como rectangulo con angulo, o como las
+  cuatro esquinas reales que tiene en la escena; con las esquinas, la marca
+  sigue la perspectiva del objeto en vez de quedar pegada de frente.
+- Lo que sigue sin hacerse: deducir esa geometria mirando la imagen, y componer
+  sobre una superficie que NO sea un plano (un lacre con relieve, una botella).
+- Ante superficie compleja, ausente, no declarada o mal declarada ->
+  NEEDS_HUMAN_REVIEW. Nunca degrada a watermark, logo flotante ni firma en una
+  esquina.
 
 Detalle artistico que SI se comprueba aqui (skill §6, politica `tipografia`):
 - El contraste real entre cada bloque de texto y los pixeles que quedan debajo,
@@ -35,7 +40,7 @@ from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageFont
 
-COMPOSITOR_VERSION = "1.1"
+COMPOSITOR_VERSION = "1.2"
 
 # Rejilla de muestreo del fondo bajo cada bloque de texto. Suficiente para
 # detectar una zona clara bajo texto claro; barata y determinista.
@@ -74,9 +79,24 @@ COMPOSED = "COMPOSED"
 class ReservedSurface:
     """Region fisica declarada donde vive la marca.
 
-    Debe declararse: no existe deteccion visual en este repositorio. `flat`
-    indica que la superficie es plana o casi plana; si no lo es, la V1 no
-    intenta fingir perspectiva.
+    Debe declararse: no existe deteccion visual en este repositorio. Nada de
+    esto se adivina mirando la imagen — lo escribe una persona que sabe donde
+    puso la placa.
+
+    Tres formas de declararla, de menos a mas expresiva:
+
+    1. Rectangulo (x, y, width, height): la placa mira a camara.
+    2. Rectangulo + `rotation_deg`: la placa esta girada en el plano de la
+       imagen. El angulo lo declara un humano, asi que no se finge nada.
+    3. `quad`: las cuatro esquinas reales (arriba-izq, arriba-der, abajo-der,
+       abajo-izq) de la superficie tal como se ven en la escena. Es lo que
+       permite que la marca siga la perspectiva de un lomo, una placa inclinada
+       o un umbral visto de lado, en vez de quedar pegada de frente encima.
+
+    `flat=False` significa que la superficie NO es un plano (un lacre con
+    relieve, una botella). Un quad describe un plano, asi que declarar las dos
+    cosas a la vez es contradictorio y se rechaza: preferimos decirlo a componer
+    una marca que se despega del objeto.
     """
 
     x: int
@@ -85,14 +105,75 @@ class ReservedSurface:
     height: int
     flat: bool = True
     rotation_deg: float = 0.0
+    quad: tuple = ()          # ((x,y) x4) en orden TL, TR, BR, BL
 
     def to_dict(self):
-        return asdict(self)
+        d = asdict(self)
+        d["quad"] = [list(p) for p in (self.quad or ())]
+        return d
+
+    # --- geometria declarada ---
+
+    @property
+    def quad_declarado(self):
+        """¿Se intento declarar un plano? Aunque venga mal escrito."""
+        return bool(self.quad)
+
+    @property
+    def tiene_quad(self):
+        return bool(self.quad) and len(self.quad) == 4
+
+    @property
+    def quad_valido(self):
+        """Cuatro puntos que forman un cuadrilatero convexo con area real.
+
+        Un quad degenerado (puntos repetidos, colineales, o en orden cruzado)
+        produciria una transformacion sin solucion o una marca retorcida. Se
+        rechaza antes de intentarlo.
+        """
+        if not self.tiene_quad:
+            return False
+        try:
+            pts = [(float(x), float(y)) for x, y in self.quad]
+        except (TypeError, ValueError):
+            return False
+        if abs(_area_poligono(pts)) < 16:      # menos de 16 px2 no es una placa
+            return False
+        return _es_convexo(pts)
+
+    @property
+    def plano_declarado(self):
+        """Las cuatro esquinas sobre las que se compone, vengan de donde vengan.
+
+        Sin quad, el rectangulo (girado si se declaro angulo) es el plano.
+        """
+        if self.tiene_quad:
+            return tuple((float(x), float(y)) for x, y in self.quad)
+        return _rect_rotado(self.x, self.y, self.width, self.height, self.rotation_deg)
+
+    @property
+    def caja(self):
+        """Rectangulo que envuelve al plano declarado."""
+        pts = self.plano_declarado
+        xs, ys = [p[0] for p in pts], [p[1] for p in pts]
+        return (int(min(xs)), int(min(ys)), int(max(xs)) + 1, int(max(ys)) + 1)
+
+    @property
+    def en_perspectiva(self):
+        """¿Hace falta deformar, o basta con dibujar de frente?"""
+        return self.tiene_quad or abs(self.rotation_deg) > 3.0
 
     @property
     def usable(self):
-        return (self.flat and abs(self.rotation_deg) <= 3.0
-                and self.width > 0 and self.height > 0)
+        if self.width <= 0 or self.height <= 0:
+            return False
+        if self.quad_declarado:
+            # Un quad describe un plano; con flat=False la declaracion se
+            # contradice a si misma. Y un quad mal escrito (tres puntos, area
+            # nula, esquinas cruzadas) NO degrada en silencio al rectangulo:
+            # alguien quiso declarar un plano y hay que decirle que no vale.
+            return self.flat and self.quad_valido
+        return self.flat
 
 
 @dataclass
@@ -228,6 +309,81 @@ def _color_de_bloque(b):
     return COLOR_RESERVA.get(b.role, COLOR_RESERVA_OTROS)
 
 
+# --- geometria declarada del plano de marca -------------------------------
+
+def _area_poligono(pts):
+    """Area con signo (formula del cordon). El signo da la orientacion."""
+    n = len(pts)
+    return sum(pts[i][0] * pts[(i + 1) % n][1] - pts[(i + 1) % n][0] * pts[i][1]
+               for i in range(n)) / 2.0
+
+
+def _es_convexo(pts):
+    """Convexo y sin cruces: todos los productos cruzados con el mismo signo."""
+    n, signos = len(pts), set()
+    for i in range(n):
+        ax, ay = pts[i]
+        bx, by = pts[(i + 1) % n]
+        cx, cy = pts[(i + 2) % n]
+        cruz = (bx - ax) * (cy - by) - (by - ay) * (cx - bx)
+        if abs(cruz) < 1e-9:
+            continue          # tres puntos alineados: tolerado, no decide
+        signos.add(cruz > 0)
+    return len(signos) == 1
+
+
+def _rect_rotado(x, y, w, h, grados):
+    """Las cuatro esquinas del rectangulo girado sobre su centro."""
+    import math
+    cx, cy = x + w / 2.0, y + h / 2.0
+    r = math.radians(grados)
+    cos, sin = math.cos(r), math.sin(r)
+    esquinas = ((x, y), (x + w, y), (x + w, y + h), (x, y + h))
+    return tuple((cx + (px - cx) * cos - (py - cy) * sin,
+                  cy + (px - cx) * sin + (py - cy) * cos) for px, py in esquinas)
+
+
+def _resolver(matriz, terminos):
+    """Gauss con pivoteo parcial. Devuelve None si el sistema es singular.
+
+    Ocho ecuaciones y ocho incognitas no justifican traer numpy a un repositorio
+    que tiene una sola dependencia (ADR 0003), y un sistema singular es
+    exactamente la señal de que el quad declarado no describe un plano.
+    """
+    n = len(matriz)
+    m = [fila[:] + [terminos[i]] for i, fila in enumerate(matriz)]
+    for col in range(n):
+        piv = max(range(col, n), key=lambda r: abs(m[r][col]))
+        if abs(m[piv][col]) < 1e-9:
+            return None
+        m[col], m[piv] = m[piv], m[col]
+        for fila in range(n):
+            if fila == col:
+                continue
+            factor = m[fila][col] / m[col][col]
+            if factor:
+                for k in range(col, n + 1):
+                    m[fila][k] -= factor * m[col][k]
+    return [m[i][n] / m[i][i] for i in range(n)]
+
+
+def coeficientes_perspectiva(destino, origen):
+    """Coeficientes de PIL.Image.PERSPECTIVE: mapean DESTINO -> ORIGEN.
+
+    Pillow recorre los pixeles de salida y pregunta de donde sacarlos, asi que
+    la transformacion se resuelve en ese sentido. `destino` son las cuatro
+    esquinas en el lienzo de salida y `origen` las de la capa plana de marca.
+    Devuelve None si no hay solucion: el quad no describe un plano.
+    """
+    filas, terminos = [], []
+    for (dx, dy), (sx, sy) in zip(destino, origen):
+        filas.append([dx, dy, 1, 0, 0, 0, -dx * sx, -dy * sx])
+        terminos.append(sx)
+        filas.append([0, 0, 0, dx, dy, 1, -dx * sy, -dy * sy])
+        terminos.append(sy)
+    return _resolver(filas, terminos)
+
+
 def _contenido_en(caja, marco):
     """¿El rectangulo `caja` cabe entero dentro de `marco`?"""
     return (caja[0] >= marco[0] and caja[1] >= marco[1]
@@ -248,6 +404,28 @@ def _dibujar_grabado(draw, origen, texto, font, color, size):
     draw.text((x - d, y - d), texto, font=font, fill=sombra)
     draw.text((x + d, y + d), texto, font=font, fill=luz)
     draw.text((x, y), texto, font=font, fill=color)
+
+
+def _colocar_en_el_plano(capa, rs):
+    """Lleva la capa plana de marca al plano declarado de la escena.
+
+    Devuelve (parche RGBA, esquina donde pegarlo) o None si el plano declarado
+    no admite transformacion. El parche se calcula solo sobre la caja del plano,
+    no sobre el lienzo entero: no hay motivo para deformar dos millones de
+    pixeles para colocar una placa.
+    """
+    x0, y0, x1, y1 = rs.caja
+    ancho, alto = x1 - x0, y1 - y0
+    if ancho <= 0 or alto <= 0:
+        return None
+    destino_local = tuple((px - x0, py - y0) for px, py in rs.plano_declarado)
+    origen = ((0, 0), (capa.width, 0), (capa.width, capa.height), (0, capa.height))
+    coef = coeficientes_perspectiva(destino_local, origen)
+    if coef is None:
+        return None
+    parche = capa.transform((ancho, alto), Image.PERSPECTIVE, coef,
+                            resample=Image.BICUBIC)
+    return parche, (x0, y0)
 
 
 def _validar_recursos(img, textos):
@@ -331,11 +509,9 @@ def compose(raw_bytes, typography_plan, brand_plan=None, reserved_surface=None,
     # --- detalle artistico: contraste real y colision con la marca ---
     # Se mide ANTES de dibujar: lo que decide la legibilidad es el fondo que
     # queda debajo, no el resultado ya pintado.
-    caja_marca = None
-    if reserved_surface is not None:
-        caja_marca = (reserved_surface.x, reserved_surface.y,
-                      reserved_surface.x + reserved_surface.width,
-                      reserved_surface.y + reserved_surface.height)
+    # La caja de marca es la del PLANO DECLARADO: con la placa girada o en
+    # perspectiva, su rectangulo recto ya no dice donde esta de verdad.
+    caja_marca = reserved_surface.caja if reserved_surface is not None else None
 
     for b, font, lineas, size, top, interlineado in bloques_render:
         color = _color_de_bloque(b)
@@ -406,7 +582,7 @@ def compose(raw_bytes, typography_plan, brand_plan=None, reserved_surface=None,
             else:
                 from composition import hex_a_rgb, zona_visible_tras_recorte
                 color = hex_a_rgb(brand_plan.get("text_color_hex")) or COLOR_RESERVA_OTROS
-                caja_rs = (rs.x, rs.y, rs.x + rs.width, rs.y + rs.height)
+                caja_rs = rs.caja
 
                 # La marca tambien tiene que LEERSE sobre su superficie. Si no
                 # contrasta, no se recolorea por cuenta propia (el laton viejo
@@ -432,15 +608,37 @@ def compose(raw_bytes, typography_plan, brand_plan=None, reserved_surface=None,
                         "la superficie de marca cae total o parcialmente fuera de la banda que el "
                         "feed deja ver: la marca puede quedar recortada. Reencuadre humano.")
 
+                # La marca se compone SIEMPRE sobre una capa plana propia y
+                # luego se lleva al plano declarado. Asi el grabado se calcula
+                # una sola vez y la perspectiva no es un caso aparte: cuando la
+                # placa mira a camara, la transformacion es la identidad.
+                capa = Image.new("RGBA", (rs.width, rs.height), (0, 0, 0, 0))
                 bbox = font.getbbox(texto)
-                origen = (rs.x + (rs.width - w) // 2 - bbox[0],
-                          rs.y + (rs.height - h) // 2 - bbox[1])
+                origen_local = ((rs.width - w) // 2 - bbox[0], (rs.height - h) // 2 - bbox[1])
+                dibujo_capa = ImageDraw.Draw(capa)
                 if brand_plan.get("engraved", True):
-                    _dibujar_grabado(draw, origen, texto, font, color, size)
+                    _dibujar_grabado(dibujo_capa, origen_local, texto, font, color, size)
                 else:
-                    draw.text(origen, texto, font=font, fill=color)
-                fonts_used["BRAND"] = nombre
-                brand_applied = True
+                    dibujo_capa.text(origen_local, texto, font=font, fill=color)
+
+                if not rs.en_perspectiva:
+                    img.paste(capa, (rs.x, rs.y), capa)
+                    brand_applied = True
+                else:
+                    colocada = _colocar_en_el_plano(capa, rs)
+                    if colocada is None:
+                        reason_codes.append("BRAND_SURFACE_NOT_FLAT")
+                        warnings.append(
+                            "las cuatro esquinas declaradas para la marca no describen un plano: "
+                            "no hay transformacion posible y no se finge una. Revision humana.")
+                        estado = NEEDS_HUMAN_REVIEW
+                    else:
+                        parche, destino = colocada
+                        img.paste(parche, destino, parche)
+                        brand_applied = True
+
+                if brand_applied:
+                    fonts_used["BRAND"] = nombre
 
     out = io.BytesIO()
     img.save(out, format="PNG", optimize=False)

@@ -207,6 +207,13 @@ def main(argv=None):
         s.add_argument("--reserved-surface", metavar="X,Y,W,H",
                        help="superficie fisica reservada para la marca, en pixeles del lienzo. "
                             "Sin esto la marca no se compone (NEEDS_HUMAN_REVIEW), nunca watermark.")
+        s.add_argument("--brand-rotation", type=float, default=0.0, metavar="GRADOS",
+                       help="angulo de la placa en el plano de la imagen. Lo declara una persona; "
+                            "el compositor no lo deduce.")
+        s.add_argument("--brand-quad", metavar="X1,Y1;X2,Y2;X3,Y3;X4,Y4",
+                       help="las cuatro esquinas reales de la superficie en la escena (arriba-izq, "
+                            "arriba-der, abajo-der, abajo-izq). Con ellas la marca sigue la "
+                            "perspectiva del objeto en vez de quedar pegada de frente.")
         s.add_argument("--inspector", choices=("noop", "heuristic", "art_detail"),
                        default="noop",
                        help="QA semantica sobre los pixels del asset. 'noop' (por defecto) no mira "
@@ -381,7 +388,21 @@ def main(argv=None):
         surface = None
         if a.reserved_surface:
             x, y, w, h = (int(n) for n in a.reserved_surface.split(","))
-            surface = compositor.ReservedSurface(x, y, w, h)
+            quad = ()
+            if a.brand_quad:
+                try:
+                    quad = tuple(tuple(int(v) for v in par.split(","))
+                                 for par in a.brand_quad.split(";"))
+                except ValueError:
+                    print("RECHAZADO: --brand-quad mal escrito; se esperan cuatro pares X,Y "
+                          "separados por ';'.")
+                    return 1
+            surface = compositor.ReservedSurface(x, y, w, h, quad=quad,
+                                                 rotation_deg=a.brand_rotation)
+        elif a.brand_quad or a.brand_rotation:
+            print("RECHAZADO: --brand-quad y --brand-rotation describen una superficie reservada; "
+                  "hace falta declararla con --reserved-surface.")
+            return 1
 
         brief = brief_desde(vi, policy, fams)
         inspector = None

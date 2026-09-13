@@ -127,7 +127,9 @@
     "evitar_superficie_repetida": true,
     "ventana_no_repetir_superficie": 5,
     "acabado_grabado": true,
-    "nota_acabado": "La marca compuesta despues se rasteriza como GRABADO (sombra hundida + luz de canto), no como texto plano pegado: la skill exige integracion fisica real, y un texto plano sobre la superficie delata el montaje. Si la superficie no permite grabado legible -> revision humana."
+    "nota_acabado": "La marca compuesta despues se rasteriza como GRABADO (sombra hundida + luz de canto), no como texto plano pegado: la skill exige integracion fisica real, y un texto plano sobre la superficie delata el montaje. Si la superficie no permite grabado legible -> revision humana.",
+    "plano_declarado_permitido": true,
+    "nota_plano_declarado": "La superficie de marca puede declararse como rectangulo, como rectangulo con angulo, o como las cuatro esquinas reales (quad) que tiene en la escena. Con esas esquinas la marca sigue la perspectiva del objeto en lugar de quedar pegada de frente encima. Sigue sin haber vision: las esquinas las declara una persona. Un quad mal formado o contradictorio (con flat=false) no degrada al rectangulo, se rechaza."
   },
   "texto": {
     "modos_permitidos": [

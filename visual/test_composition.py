@@ -166,10 +166,77 @@ class TestMarcaCompositor(unittest.TestCase):
         self.assertEqual(r.state, compositor.NEEDS_HUMAN_REVIEW)
         self.assertIn("BRAND_SURFACE_NOT_FLAT", r.reason_codes)
 
-    def test_superficie_muy_rotada_pide_revision(self):
-        s = compositor.ReservedSurface(120, 1650, 500, 90, rotation_deg=25)
+    def test_superficie_girada_ya_se_compone_girada(self):
+        """El limite se movio: un angulo DECLARADO por un humano no es fingir
+        perspectiva, es usar la que la escena ya tiene."""
+        s = compositor.ReservedSurface(120, 1450, 500, 90, rotation_deg=25)
         r = compositor.compose(raw(), plan(), BRAND, s)
-        self.assertEqual(r.state, compositor.NEEDS_HUMAN_REVIEW)
+        self.assertTrue(r.brand_applied)
+        self.assertNotIn("BRAND_SURFACE_NOT_FLAT", r.reason_codes)
+
+    def test_superficie_girada_difiere_de_la_recta(self):
+        recta = compositor.compose(raw(), plan(), BRAND,
+                                   compositor.ReservedSurface(120, 1450, 500, 90))
+        girada = compositor.compose(raw(), plan(), BRAND,
+                                    compositor.ReservedSurface(120, 1450, 500, 90,
+                                                               rotation_deg=25))
+        self.assertNotEqual(recta.composed_sha256, girada.composed_sha256)
+
+    def test_marca_en_perspectiva_con_las_cuatro_esquinas(self):
+        """Un lomo o una placa inclinada: la marca sigue el plano de la escena."""
+        quad = ((140, 1420), (620, 1460), (600, 1560), (150, 1520))
+        r = compositor.compose(raw(), plan(), BRAND,
+                               compositor.ReservedSurface(140, 1420, 480, 140, quad=quad))
+        self.assertTrue(r.brand_applied)
+        self.assertEqual(r.state, compositor.COMPOSED)
+
+    def test_perspectiva_determinista(self):
+        quad = ((140, 1420), (620, 1460), (600, 1560), (150, 1520))
+        s = compositor.ReservedSurface(140, 1420, 480, 140, quad=quad)
+        a = compositor.compose(raw(), plan(), BRAND, s)
+        b = compositor.compose(raw(), plan(), BRAND, s)
+        self.assertEqual(a.composed_sha256, b.composed_sha256)
+
+    def test_quad_degenerado_no_se_compone(self):
+        """Puntos cruzados, colineales o sin area: no hay plano que seguir."""
+        casos = {
+            "cruzado": ((140, 1420), (620, 1460), (150, 1520), (600, 1560)),
+            "colineal": ((140, 1420), (340, 1420), (540, 1420), (740, 1420)),
+            "sin area": ((140, 1420), (141, 1420), (141, 1421), (140, 1421)),
+            "tres puntos": ((140, 1420), (620, 1460), (600, 1560)),
+        }
+        for nombre, quad in casos.items():
+            r = compositor.compose(raw(), plan(), BRAND,
+                                   compositor.ReservedSurface(140, 1420, 480, 140, quad=quad))
+            self.assertFalse(r.brand_applied, nombre)
+            self.assertEqual(r.state, compositor.NEEDS_HUMAN_REVIEW, nombre)
+            self.assertIn("BRAND_SURFACE_NOT_FLAT", r.reason_codes, nombre)
+
+    def test_quad_sobre_superficie_no_plana_es_contradictorio(self):
+        """Un quad describe un plano; declarar ademas que no lo es se rechaza."""
+        quad = ((140, 1420), (620, 1460), (600, 1560), (150, 1520))
+        r = compositor.compose(raw(), plan(), BRAND,
+                               compositor.ReservedSurface(140, 1420, 480, 140,
+                                                          flat=False, quad=quad))
+        self.assertFalse(r.brand_applied)
+        self.assertIn("BRAND_SURFACE_NOT_FLAT", r.reason_codes)
+
+    def test_superficie_no_plana_sin_quad_sigue_rechazando(self):
+        """Lo que NO cambia: sin plano declarado no se inventa uno."""
+        r = compositor.compose(raw(), plan(), BRAND,
+                               compositor.ReservedSurface(120, 1450, 500, 90, flat=False))
+        self.assertFalse(r.brand_applied)
+        self.assertIn("BRAND_SURFACE_NOT_FLAT", r.reason_codes)
+
+    def test_la_marca_girada_cae_donde_dice_el_plano(self):
+        """La caja de la marca es la del plano declarado, no la del rectangulo."""
+        recta = compositor.ReservedSurface(120, 1450, 500, 90)
+        girada = compositor.ReservedSurface(120, 1450, 500, 90, rotation_deg=25)
+        self.assertEqual(recta.caja, (120, 1450, 621, 1541))
+        gx0, gy0, gx1, gy1 = girada.caja
+        # Una placa ancha y baja, al girar, gana alto y pierde ancho.
+        self.assertGreater(gy1 - gy0, 90)
+        self.assertNotEqual(girada.plano_declarado[0], (120.0, 1450.0))
 
     def test_nunca_degrada_a_watermark(self):
         """Sin superficie usable NO se pinta la marca en ninguna esquina."""

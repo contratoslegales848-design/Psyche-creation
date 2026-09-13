@@ -11,7 +11,7 @@ arregló y lo que quedó abierto. La regla que gobernó toda la auditoría:
 > política visual. Lo que faltaba era que fuera **comprobable**, no que existiera.
 
 Versiones tras la auditoría: política visual **1.2**, registro de familias **1.1**,
-compilador de prompt **2.1**, compositor **1.1**, esquema de memoria visual **1.1**.
+compilador de prompt **2.1**, compositor **1.2**, esquema de memoria visual **1.1**.
 
 ---
 
@@ -78,6 +78,7 @@ Tres formas concretas de ese patrón, y las tres se repetían:
 | M1 | **La marca se pegaba como texto plano.** Una palabra plana sobre una placa delata el montaje; lo que hace creíble la integración física es el canto. | Grabado determinista: sombra del corte arriba-izquierda, luz del bisel abajo-derecha, ambas derivadas del mismo latón de la paleta. Desplazamiento en función del cuerpo, reproducible. |
 | M2 | **La marca podía quedar ilegible sobre su superficie** (latón sobre latón). | Contraste WCAG medido sobre la superficie reservada → `BRAND_CONTRAST_BELOW_MINIMUM` + revisión humana. No se recolorea la marca ni se añade caja. |
 | M3 | **La marca podía caer en la franja que el feed recorta.** | `BRAND_SURFACE_OUTSIDE_VISIBLE_AREA`. |
+| M4 | **La marca solo se componía de frente.** Cualquier placa girada más de 3° o vista en ángulo se rechazaba: la integración física quedaba limitada a superficies que miran a cámara, que es justo lo que hace que una marca parezca pegada. | La superficie se declara como rectángulo, como rectángulo con ángulo o como sus **cuatro esquinas reales**; la marca se graba en una capa plana y se lleva a ese plano con una transformación en perspectiva (solucionador de 8 coeficientes en Python puro, sin añadir dependencias). Un quad mal formado, contradictorio (`flat=False`) o sin área **no degrada al rectángulo**: se rechaza. Sigue sin haber visión: las esquinas las declara una persona. |
 
 ### Render de video (`src/`, skill §3 y §6)
 
@@ -124,8 +125,11 @@ Ninguna medida de píxeles rechaza por sí sola: todas escalan a revisión human
    quedan anotados como tales en la política.
 4. **`SOCIAL_4_5` no tiene zona segura medida en el feed.** Se usa el margen
    proporcional por defecto y el plan lo declara. No se inventó una medida.
-5. **Perspectiva de marca sobre superficie no plana**: sigue sin implementarse
-   (límite declarado de la V1). Superficie no plana → revisión humana.
+5. **Perspectiva de marca**: resuelto para superficies planas declaradas (ver
+   M4) — recta, girada o en perspectiva por sus cuatro esquinas. Lo que sigue
+   abierto es lo que no es un plano: un lacre con relieve, una botella, una
+   tela. Ahí no hay transformación honesta y la pieza va a revisión humana.
+   Tampoco hay visión que deduzca la geometría mirando la imagen.
 6. **No hay comprensión visual.** Manos con seis dedos, collages, si la marca
    está *bien* integrada: nada de eso lo ve este código, y no se finge que sí.
 7. **La marca en el video es un wordmark de esquina.** `LegalMenteQuote` dibuja

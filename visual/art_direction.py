@@ -313,7 +313,9 @@ CODIGOS_COMPOSICION = {
     "BRAND_SURFACE_NOT_DECLARED": (
         REVISION, "no se declaro superficie reservada: la marca no se compuso."),
     "BRAND_SURFACE_NOT_FLAT": (
-        REVISION, "la superficie de marca no es plana: la V1 no finge perspectiva."),
+        REVISION, "el plano de la marca no es utilizable: o la superficie se declaro no plana sin "
+                  "dar sus cuatro esquinas, o las esquinas dadas no describen un plano. No se "
+                  "inventa una perspectiva."),
     "BRAND_DOES_NOT_FIT": (
         REVISION, "la marca no cabe en la superficie reservada."),
     "BRAND_DELEGATED_TO_GENERATOR": (
