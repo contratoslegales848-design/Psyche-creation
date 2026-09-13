@@ -2,10 +2,12 @@
 
 **Estado: arquitectura completa, probada con proveedor falso. Ningún adapter real implementado.**
 
-**Politica visual 1.2 / familias 1.1 / compilador 2.1 / compositor 1.2**: el
+**Politica visual 1.3 / familias 1.1 / compilador 2.1 / compositor 1.3**: el
 detalle artistico (escuela unica, mecanismo de revelacion, profundidad de campo,
 acabado, imperfeccion, escalon tipografico, contraste real, marca grabada) ya es
-comprobable por codigo, no solo criterio escrito en la skill.
+comprobable por codigo, no solo criterio escrito en la skill. Y desde la 1.3 hay
+composicion editorial: comilla colgante, filete de laton, versalitas y anclaje
+del texto decidido midiendo la imagen. Ver `docs/diseno-editorial-v1.md`.
 
 La capa que faltaba entre `ProductionHandoff` (fin de la cadena jurídica) y el arte
 final. No sustituye a `legalmente-visual-system`: esa skill conserva el criterio

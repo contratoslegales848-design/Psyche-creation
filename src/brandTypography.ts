@@ -77,3 +77,31 @@ export const cuerpoSegundoNivel = (principal: number): number =>
 export const cuerpoSecundario = tipografia.secundario.px_min;
 
 export const maxLineas = tipografia.max_lineas;
+
+/**
+ * Recursos de composición editorial (política 1.3): comilla colgante, filete de
+ * latón y versalitas. Son los mismos que usa el compositor de imagen fija, para
+ * que el video y la pieza fija se lean como la misma marca y no como dos.
+ */
+const ornamentos = tipografia.ornamentos;
+
+export const comillas = {
+  usar: ornamentos.comillas_en_citas,
+  apertura: ornamentos.comillas.apertura,
+  cierre: ornamentos.comillas.cierre,
+  escala: ornamentos.comillas.escala,
+  opacidad: ornamentos.comillas.opacidad,
+};
+
+export const filete = {
+  visible: ornamentos.filete.visible,
+  grosorPx: ornamentos.filete.grosor_px,
+  ancho: Math.round(zonaSegura.width * ornamentos.filete.ancho_relativo),
+  aireEm: ornamentos.filete.aire_em,
+};
+
+/** Tracking en em: abierto en versalitas, ligeramente cerrado en display. */
+export const tracking = {
+  versalitas: ornamentos.tracking_versalitas_em,
+  display: ornamentos.tracking_display_em,
+};

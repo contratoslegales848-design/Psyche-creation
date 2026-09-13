@@ -24,6 +24,7 @@ real y una prueba que pasa.
 | Anti-duplicados | 🟡 AMARILLO (nuevo) | Controles literales implementados; la paráfrasis sigue sin detectarse. |
 | Motor de generación visual | 🟢 VERDE (para su alcance) | `visual/`, 405 pruebas. Gate fail-closed, adapter canónico, familias, memoria anti-repetición, compilador explicable, dry-run, lotes, reintento selectivo, regeneración, registro. Decisión de marca aplicada (ADR 0002). |
 | Composición tipográfica / marca | 🟢 VERDE | `visual/compositor.py`: rasterizado real con Pillow. Métrica tipográfica real, `exact_copy` inmutable (desborda antes que mutar), marca solo sobre plano declarado (recto, girado o por sus cuatro esquinas en perspectiva; nunca deducido de la imagen). Desde la política 1.2: zona segura **medida** del feed, escalones de cuerpo aprobados, máximo de líneas, color desde la paleta, contraste WCAG medido celda a celda bajo cada bloque y marca grabada (no pegada). |
+| Composición editorial | 🟡 AMARILLO (nuevo) | `tipografia.ornamentos` (política 1.3): comilla colgante en el margen, filete de latón, versalitas con tracking y anclaje del texto decidido midiendo la imagen bloque a bloque. Fijado por prueba que los adornos **no mueven el texto**. Amarillo porque son decisiones de diseño nuevas, no transcripción de la skill: esperan confirmación del fundador. Ver `docs/diseno-editorial-v1.md`. |
 | Dirección de arte (detalle artístico) | 🟡 AMARILLO (nuevo) | `visual/art_direction.py` + política 1.2 + familias 1.1: recursos quemados en la escena descrita, una escuela por pieza con rotación de 5, mecanismo de revelación, presencia humana, escenario, superficie de marca, escalón tipográfico y contraste real. Corta **antes** de llamar al proveedor (`ARTE_BLOQUEADO`). Amarillo porque sigue sin existir comprensión visual: dedos, collage o integración real de marca los ve una persona. Ver `docs/auditoria-detalle-artistico.md`. |
 | Adapter de proveedor real | 🟡 AMARILLO (nuevo) | `providers/http_provider.py`: adapter HTTP real con transporte inyectable, 23 pruebas, cero llamadas externas. Sin credenciales configuradas en el workspace: no se ha ejecutado contra ningún proveedor. |
 | Contrato cross-repo | 🟢 VERDE (ambos lados) | Psyche: `contract/`, Canonical Envelope v1, 8 fixtures, 12 tests. Web: consumidor estricto implementado y probado **localmente** (18 tests), entregado como serie de patches verificada en `handoff/legalmente-web/`. Falta empujarlo: escritura remota bloqueada. |
@@ -237,3 +238,6 @@ decisión del fundador, no técnica.
   no se creó ningún modelo paralelo.
 - `docs/auditoria-detalle-artistico.md` — auditoría de detalle artístico: qué se
   arregló, qué quedó abierto y qué exige decisión humana.
+- `docs/diseno-editorial-v1.md` — composición editorial (comilla colgante, filete,
+  versalitas, anclaje medido): decisiones de diseño NUEVAS, pendientes de
+  confirmación del fundador.

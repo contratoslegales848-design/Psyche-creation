@@ -60,6 +60,11 @@ class TextBlock:
     max_size_px: int = 0
     color_hex: str = ""          # derivado de la paleta institucional, nunca inventado
     line_height: float = LINE_HEIGHT
+    # --- composicion editorial (politica 1.3) ---
+    tracking_em: float = 0.0     # espaciado entre letras, en fracciones de cuerpo
+    versalitas: bool = False     # se dibuja en mayusculas con tracking abierto
+    indent_px: int = 0           # sangria del bloque; la comilla cuelga en ese hueco
+    rule_after: bool = False     # filete de laton debajo del bloque
 
 
 @dataclass
@@ -79,6 +84,13 @@ class TypographyPlan:
     detalle_maximo_relativo: float = 0.0
     safe_area_origen: str = ""       # "politica" | "ratio_por_defecto"
     typography_policy_version: str = ""
+    # --- composicion editorial (politica 1.3) ---
+    anchor: str = "AUTO"             # AUTO | SUPERIOR | INFERIOR
+    quotes: tuple = ()               # ("«", "»") si la pieza es una cita
+    quote_scale: float = 1.15
+    quote_opacity: float = 0.55
+    rule_thickness: int = 0
+    rule_width: int = 0
 
     def to_dict(self):
         d = asdict(self)
@@ -271,10 +283,27 @@ def build_typography_plan(exact_copy, author, width, height, content_type="", co
     size = max(1, int(px_max * escala))
     piso = max(1, int(px_min * escala))
 
+    # --- recursos de composicion editorial (politica 1.3) ---
+    orn = tip.get("ornamentos", {}) or {}
+    comillas = tuple()
+    if orn.get("comillas_en_citas") and layout in ("SHORT_QUOTE", "LONG_QUOTE"):
+        c = orn.get("comillas", {}) or {}
+        comillas = (c.get("apertura", "«"), c.get("cierre", "»"))
+    filete = orn.get("filete", {}) or {}
+
+    # La comilla de apertura CUELGA EN EL MARGEN, fuera de la columna de texto.
+    # Esa es la puntuacion colgante de verdad: el texto conserva toda su medida y
+    # la primera linea arranca alineada con las demas. Sangrar el bloque para
+    # hacerle sitio (el error de la primera version) estrecha la columna, añade
+    # una linea y empuja el resto de la pieza sobre lo que haya debajo.
+    def sangria_para(cuerpo):
+        return 0
+
     # Aproximacion tipografica: ~0.52 em de ancho medio por caracter. El
     # compositor vuelve a medir con la metrica real de la fuente.
     def corta(cuerpo):
-        return _wrap(exact_copy, max(8, int(safe[2] / (cuerpo * 0.52))), max_lineas=max_lineas)
+        util = safe[2] - sangria_para(cuerpo)
+        return _wrap(exact_copy, max(8, int(util / (cuerpo * 0.52))), max_lineas=max_lineas)
 
     alto_reservado = int((sec_max * escala) * 2.6) if author else 0
     alto_disponible = safe[3] - alto_reservado
@@ -299,9 +328,15 @@ def build_typography_plan(exact_copy, author, width, height, content_type="", co
             "la ultima linea del bloque principal queda con una sola palabra (huerfana) y no hay "
             "reparto posible sin tocar el texto: ajustar encuadre o cuerpo en revision humana.")
 
-    blocks = [TextBlock("QUOTE", exact_copy, "serif_display", size, safe[2], lineas,
+    sangria = 0
+    ancho_cita = safe[2]
+
+    blocks = [TextBlock("QUOTE", exact_copy, "serif_display", size, ancho_cita, lineas,
                         min_size_px=piso, max_size_px=max(1, int(px_max * escala)),
-                        color_hex=color_de_rol("QUOTE", pol))]
+                        color_hex=color_de_rol("QUOTE", pol),
+                        tracking_em=float(orn.get("tracking_display_em", 0.0)),
+                        indent_px=sangria,
+                        rule_after=bool(author and filete.get("visible"))) ]
     if author:
         cuerpo_autor = max(int(sec_min * escala),
                            min(int(sec_max * escala), int(size * 0.42)))
@@ -309,7 +344,9 @@ def build_typography_plan(exact_copy, author, width, height, content_type="", co
             "AUTHOR", author, "sans_caption", cuerpo_autor, safe[2],
             _wrap(author, max(10, int(safe[2] / (cuerpo_autor * 0.52)))),
             min_size_px=int(sec_min * escala), max_size_px=int(sec_max * escala),
-            color_hex=color_de_rol("AUTHOR", pol)))
+            color_hex=color_de_rol("AUTHOR", pol),
+            versalitas=bool(orn.get("versalitas_en_autor")),
+            tracking_em=float(orn.get("tracking_versalitas_em", 0.0))))
     if context:
         cuerpo_ctx = int(sec_min * escala)
         blocks.append(TextBlock(
@@ -326,7 +363,13 @@ def build_typography_plan(exact_copy, author, width, height, content_type="", co
         contraste_ideal=float(tip.get("contraste_ideal", 0.0)),
         detalle_maximo_relativo=float(tip.get("detalle_maximo_relativo_bajo_texto", 0.0)),
         safe_area_origen=origen_safe,
-        typography_policy_version=pol.version)
+        typography_policy_version=pol.version,
+        anchor=("AUTO" if orn.get("anclaje_automatico") else "SUPERIOR"),
+        quotes=comillas,
+        quote_scale=float((orn.get("comillas", {}) or {}).get("escala", 1.15)),
+        quote_opacity=float((orn.get("comillas", {}) or {}).get("opacidad", 0.55)),
+        rule_thickness=int(filete.get("grosor_px", 0)) if filete.get("visible") else 0,
+        rule_width=int(safe[2] * float(filete.get("ancho_relativo", 0.14))))
     assert_exact_copy_preserved(exact_copy, plan)
     return plan
 

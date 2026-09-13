@@ -15,9 +15,12 @@ import {
 import type {LegalMentePiece} from '../types';
 import {
   colores,
+  comillas,
   cuerpoPrincipal,
   cuerpoSecundario,
   cuerpoSegundoNivel,
+  filete,
+  tracking,
   zonaSegura,
 } from '../brandTypography';
 
@@ -89,7 +92,9 @@ export const LegalMenteQuote: React.FC<LegalMentePiece> = ({
           paddingRight: zonaSegura.right,
           justifyContent: 'space-between',
           color: colores.texto,
-          textShadow: '0 4px 20px rgba(0,0,0,0.8)',
+          // Sin sombra de texto: se midió sobre el fotograma real y no aportaba
+          // nada al contraste (variantes B y C idénticas hasta el tercer
+          // decimal). Una muleta que no sostiene nada solo ensucia el trazo.
           fontFamily: textFont,
         }}
       >
@@ -105,14 +110,27 @@ export const LegalMenteQuote: React.FC<LegalMentePiece> = ({
               fontSize: cuerpoTitulo,
               fontWeight: 600,
               lineHeight: 1.08,
-              letterSpacing: 0.3,
+              letterSpacing: `${tracking.display}em`,
             }}
           >
             {titulo}
           </div>
+          {filete.visible && frase ? (
+            <div
+              style={{
+                marginTop: Math.round(cuerpoTitulo * filete.aireEm * 0.5),
+                width: filete.ancho,
+                height: filete.grosorPx,
+                backgroundColor: colores.secundario,
+                opacity: 0.92,
+              }}
+            />
+          ) : null}
+
           <div
             style={{
-              marginTop: 28,
+              position: 'relative',
+              marginTop: Math.round(cuerpoTitulo * filete.aireEm * 0.5),
               maxWidth: zonaSegura.width,
               fontSize: cuerpoFrase,
               fontWeight: 400,
@@ -120,7 +138,37 @@ export const LegalMenteQuote: React.FC<LegalMentePiece> = ({
               lineHeight: 1.18,
             }}
           >
+            {comillas.usar ? (
+              <span
+                style={{
+                  // Cuelga en el margen óptico: el texto conserva toda su medida
+                  // y la primera línea arranca alineada con las demás.
+                  position: 'absolute',
+                  left: -Math.round(cuerpoFrase * comillas.escala * 0.62),
+                  top: 0,
+                  fontSize: Math.round(cuerpoFrase * comillas.escala),
+                  fontStyle: 'normal',
+                  color: colores.secundario,
+                  opacity: comillas.opacidad,
+                }}
+              >
+                {comillas.apertura}
+              </span>
+            ) : null}
             {frase}
+            {comillas.usar ? (
+              <span
+                style={{
+                  fontSize: Math.round(cuerpoFrase * comillas.escala),
+                  fontStyle: 'normal',
+                  color: colores.secundario,
+                  opacity: comillas.opacidad,
+                }}
+              >
+                {'\u2009'}
+                {comillas.cierre}
+              </span>
+            ) : null}
           </div>
         </div>
 
@@ -141,7 +189,7 @@ export const LegalMenteQuote: React.FC<LegalMentePiece> = ({
               // Mínimo legible declarado para autor / fuente / contexto.
               fontSize: cuerpoSecundario,
               fontWeight: 600,
-              letterSpacing: 5.5,
+              letterSpacing: `${tracking.versalitas}em`,
               lineHeight: 1.3,
               textTransform: 'uppercase',
             }}

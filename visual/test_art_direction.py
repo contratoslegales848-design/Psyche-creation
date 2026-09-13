@@ -315,11 +315,17 @@ class TestDetalleBajoElTexto(unittest.TestCase):
     rostro es imposible aqui; medir si el texto cae sobre la zona mas cargada
     de la escena, no."""
 
-    def plan(self):
-        return composition.build_typography_plan(FRASE, AUTOR, 1080, 1920, "maxima")
+    def plan(self, anchor="SUPERIOR"):
+        """Anclaje fijado a proposito: aqui se prueba LA MEDIDA. Que el anclaje
+        automatico huya de la zona cargada se prueba aparte, en
+        TestComposicionEditorial."""
+        p = composition.build_typography_plan(FRASE, AUTOR, 1080, 1920, "maxima")
+        p.anchor = anchor
+        return p
 
     def test_el_plan_transporta_el_umbral_de_la_politica(self):
-        self.assertEqual(self.plan().detalle_maximo_relativo,
+        self.assertEqual(composition.build_typography_plan(
+            FRASE, AUTOR, 1080, 1920, "maxima").detalle_maximo_relativo,
                          POLICY.data["tipografia"]["detalle_maximo_relativo_bajo_texto"])
 
     def test_superficie_plana_no_tiene_energia_de_borde(self):
@@ -369,11 +375,103 @@ class TestDetalleBajoElTexto(unittest.TestCase):
         self.assertNotIn("TEXT_OVER_BUSY_AREA", r.reason_codes)
 
     def test_se_traduce_a_hallazgo_de_direccion_de_arte(self):
-        r = compositor.compose(png_con_franja_cargada(), self.plan(), BRAND,
+        r = compositor.compose(png_con_franja_cargada(), self.plan("SUPERIOR"), BRAND,
                                compositor.ReservedSurface(120, 1450, 500, 90))
         rep = art_direction.auditar_composicion(r, POLICY)
         self.assertIn("TEXT_OVER_BUSY_AREA", codigos(rep))
         self.assertTrue(rep.sin_bloqueos)      # escala a humano, nunca rechaza
+
+
+class TestComposicionEditorial(unittest.TestCase):
+    """Politica 1.3: comillas colgantes, filete, versalitas y anclaje medido.
+
+    La regla que gobierna todo esto: un adorno que desplaza el texto no es un
+    adorno. La primera version de este sistema sangraba la columna para hacer
+    sitio a la comilla, el texto ganaba una linea y el autor terminaba sobre el
+    rostro de la escena con 1,34:1 de contraste. Se midio y se corrigio.
+    """
+
+    def sin_ornamentos(self):
+        import copy
+        pol = VisualPolicy(version=POLICY.version, data=copy.deepcopy(POLICY.data))
+        pol.data["tipografia"]["ornamentos"] = {}
+        return pol
+
+    def plan(self, policy=None, texto=FRASE, autor=AUTOR, ct="maxima"):
+        return composition.build_typography_plan(texto, autor, 1080, 1920, ct,
+                                                 policy=policy or POLICY)
+
+    def test_los_ornamentos_no_mueven_el_texto(self):
+        con, sin = self.plan(), self.plan(self.sin_ornamentos())
+        self.assertEqual(con.blocks[0].lines, sin.blocks[0].lines)
+        self.assertEqual(con.blocks[0].size_px, sin.blocks[0].size_px)
+        self.assertEqual(con.safe_area, sin.safe_area)
+        self.assertEqual(con.blocks[0].indent_px, 0)
+
+    def test_los_ornamentos_no_cambian_ni_una_medida_de_la_pieza(self):
+        """Mismo fondo, mismas cajas: el contraste y la carga medidos deben ser
+        identicos con y sin adornos. Si cambian, algo se movio."""
+        raw = png_con_franja_cargada(alto_franja=(1200, 1500))
+        s = compositor.ReservedSurface(120, 1000, 400, 80)
+        con = compositor.compose(raw, self.plan(), BRAND, s)
+        sin = compositor.compose(raw, self.plan(self.sin_ornamentos()), BRAND, s)
+        self.assertEqual(con.text_contrast, sin.text_contrast)
+        self.assertEqual(con.text_busyness, sin.text_busyness)
+        self.assertNotEqual(con.composed_sha256, sin.composed_sha256)   # pero se ven distintas
+
+    def test_comillas_solo_en_citas(self):
+        self.assertEqual(self.plan().quotes, ("«", "»"))
+        self.assertEqual(self.plan(ct="concepto").quotes, ())
+        self.assertEqual(self.plan(ct="mito").quotes, ())
+
+    def test_las_comillas_no_son_texto(self):
+        """Son ornamento dibujado aparte: el texto exacto no las lleva dentro."""
+        p = self.plan()
+        self.assertEqual(p.rendered_text(), FRASE)
+        self.assertNotIn("«", p.blocks[0].text)
+        composition.assert_exact_copy_preserved(FRASE, p)
+
+    def test_autor_en_versalitas_con_tracking(self):
+        autor = self.plan().blocks[1]
+        self.assertTrue(autor.versalitas)
+        self.assertGreater(autor.tracking_em, 0)
+        # El texto del bloque NO se altera: las mayusculas son de dibujo.
+        self.assertEqual(autor.text, AUTOR)
+
+    def test_el_filete_se_dibuja_en_laton(self):
+        from PIL import Image
+        import io
+        r = compositor.compose(png_bytes(1080, 1920, (20, 14, 12)), self.plan(), BRAND,
+                               compositor.ReservedSurface(620, 1500, 380, 90))
+        img = Image.open(io.BytesIO(r.composed_bytes)).convert("RGB")
+        laton = sum(1 for x in range(80, 80 + self.plan().rule_width)
+                    for y in range(290, 1630)
+                    if img.getpixel((x, y))[0] > 120 and img.getpixel((x, y))[2] < 130)
+        self.assertGreater(laton, 100, "no se encontro el filete de laton")
+
+    def test_anclaje_elige_la_posicion_menos_cargada(self):
+        """Carga arriba, calma abajo: el texto baja. Antes caia siempre arriba."""
+        raw = png_con_franja_cargada(alto_franja=(290, 1000))
+        r = compositor.compose(raw, self.plan(), BRAND,
+                               compositor.ReservedSurface(620, 200, 380, 80))
+        self.assertEqual(r.anchor, "INFERIOR")
+        self.assertLess(r.anchor_metrics["evaluacion"]["INFERIOR"]["peor_detalle"],
+                        r.anchor_metrics["evaluacion"]["SUPERIOR"]["peor_detalle"])
+
+    def test_empate_conserva_la_lectura_natural(self):
+        r = compositor.compose(png_bytes(1080, 1920, (30, 20, 18)), self.plan(), BRAND,
+                               compositor.ReservedSurface(620, 1500, 380, 90))
+        self.assertEqual(r.anchor, "SUPERIOR")
+
+    def test_el_anclaje_se_decide_por_el_peor_bloque(self):
+        """Promediar la banda entera dejaba el autor sobre un rostro con la banda
+        'limpia' de media. Se evalua bloque a bloque."""
+        raw = png_con_franja_cargada(alto_franja=(290, 1000))
+        r = compositor.compose(raw, self.plan(), BRAND,
+                               compositor.ReservedSurface(620, 200, 380, 80))
+        for posicion in ("SUPERIOR", "INFERIOR"):
+            self.assertIn("peor_detalle", r.anchor_metrics["evaluacion"][posicion])
+            self.assertIn("peor_contraste", r.anchor_metrics["evaluacion"][posicion])
 
 
 class TestInspectorDeDetalle(unittest.TestCase):

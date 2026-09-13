@@ -1,5 +1,5 @@
 {
-  "policy_version": "1.2",
+  "policy_version": "1.3",
   "descripcion": "Politica visual ejecutable de LegalMente. Solo contiene reglas que un programa puede comprobar. Las reglas de criterio (que escuela artistica toca, que metafora) viven en la skill legalmente-visual-system y NO se duplican aqui: lo que si se transcribe son sus PARAMETROS comprobables (zona segura, escalones tipograficos, contraste minimo, ventana de no repeticion de escuela, banco de escuelas), citando la seccion de origen en cada bloque.",
   "formatos": {
     "VERTICAL_9_16": {
@@ -213,7 +213,33 @@
     },
     "nota_fuera_de_tabla": "Mas de 140 caracteres en el bloque principal queda FUERA de la tabla de la skill: no hay cuerpo minimo declarado para ese caso. Se aplica el minimo aprobado mas bajo (60 px) y la pieza se marca para decision humana (reencuadre, otro formato o carrusel). Nunca se degrada en silencio el cuerpo principal al tamaño de un pie de foto para que quepa.",
     "detalle_maximo_relativo_bajo_texto": 1.35,
-    "nota_detalle_bajo_texto": "La skill §6 prohibe poner texto sobre rostros, manos decisivas o el objeto de marca. Rostros y manos no se pueden reconocer aqui: no hay vision. Lo que si se mide es cuanto detalle tiene la zona bajo el texto comparada con el resto de la imagen — un rostro, unas manos o el objeto de la revelacion son casi siempre lo mas cargado del encuadre. Por encima de este multiplo se pide revision humana; nunca se rechaza, y un degradado fuerte tambien puede subirlo. Umbral provisional hasta tener arte real con que calibrarlo."
+    "nota_detalle_bajo_texto": "La skill §6 prohibe poner texto sobre rostros, manos decisivas o el objeto de marca. Rostros y manos no se pueden reconocer aqui: no hay vision. Lo que si se mide es cuanto detalle tiene la zona bajo el texto comparada con el resto de la imagen — un rostro, unas manos o el objeto de la revelacion son casi siempre lo mas cargado del encuadre. Por encima de este multiplo se pide revision humana; nunca se rechaza, y un degradado fuerte tambien puede subirlo. Umbral provisional hasta tener arte real con que calibrarlo.",
+    "ornamentos": {
+      "estado": "DISEÑO EDITORIAL v1 — implementado y medido, pendiente de confirmacion del fundador. A diferencia del resto de esta politica, estos parametros NO transcriben la skill: son decisiones de diseño nuevas, tomadas a peticion expresa del fundador ('nos falta mas diseño artistico'). Se declaran aparte para que se vea cuales son.",
+      "comillas_en_citas": true,
+      "comillas": {
+        "apertura": "«",
+        "cierre": "»",
+        "escala": 1.15,
+        "opacidad": 0.55,
+        "nota": "solo en layouts de cita (SHORT_QUOTE / LONG_QUOTE). Un concepto o un mito no se entrecomillan: no son cita de nadie."
+      },
+      "sangria_colgante": true,
+      "nota_sangria_colgante": "La comilla de apertura cuelga fuera del bloque de texto y el texto arranca alineado consigo mismo. Sin esto, la primera linea parece desplazada: es el defecto tipografico mas visible de una cita.",
+      "filete": {
+        "visible": true,
+        "grosor_px": 2,
+        "ancho_relativo": 0.14,
+        "aire_em": 0.75,
+        "nota": "filete de laton entre la cita y su autor. Separa sin caja, que es lo que la marca permite: la caja opaca esta prohibida."
+      },
+      "versalitas_en_autor": true,
+      "tracking_versalitas_em": 0.16,
+      "tracking_display_em": -0.01,
+      "anclaje_automatico": true,
+      "nota_anclaje": "El bloque de texto ya no cae siempre arriba: se mide que banda de la imagen esta mas limpia (energia de borde) y mas contrastada, y el texto va ahi. Es la decision de composicion que mas cambia una pieza, y hasta ahora estaba fijada a 'arriba' por omision, no por criterio.",
+      "margen_de_decision_anclaje": 1.12
+    }
   },
   "direccion_de_arte": {
     "fuente": "legalmente-visual-system §3 (nucleo de marca) y §5 (checklist de rotacion)",
