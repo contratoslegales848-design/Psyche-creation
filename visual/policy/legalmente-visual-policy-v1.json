@@ -1,5 +1,5 @@
 {
-  "policy_version": "1.3",
+  "policy_version": "1.4",
   "descripcion": "Politica visual ejecutable de LegalMente. Solo contiene reglas que un programa puede comprobar. Las reglas de criterio (que escuela artistica toca, que metafora) viven en la skill legalmente-visual-system y NO se duplican aqui: lo que si se transcribe son sus PARAMETROS comprobables (zona segura, escalones tipograficos, contraste minimo, ventana de no repeticion de escuela, banco de escuelas), citando la seccion de origen en cada bloque.",
   "formatos": {
     "VERTICAL_9_16": {
@@ -215,7 +215,7 @@
     "detalle_maximo_relativo_bajo_texto": 1.35,
     "nota_detalle_bajo_texto": "La skill §6 prohibe poner texto sobre rostros, manos decisivas o el objeto de marca. Rostros y manos no se pueden reconocer aqui: no hay vision. Lo que si se mide es cuanto detalle tiene la zona bajo el texto comparada con el resto de la imagen — un rostro, unas manos o el objeto de la revelacion son casi siempre lo mas cargado del encuadre. Por encima de este multiplo se pide revision humana; nunca se rechaza, y un degradado fuerte tambien puede subirlo. Umbral provisional hasta tener arte real con que calibrarlo.",
     "ornamentos": {
-      "estado": "DISEÑO EDITORIAL v1 — implementado y medido, pendiente de confirmacion del fundador. A diferencia del resto de esta politica, estos parametros NO transcriben la skill: son decisiones de diseño nuevas, tomadas a peticion expresa del fundador ('nos falta mas diseño artistico'). Se declaran aparte para que se vea cuales son.",
+      "estado": "DISEÑO EDITORIAL v1 — APROBADO POR EL FUNDADOR el 2026-09-13, en la sesion que lo encargo ('nos falta mas diseño artistico') y lo autorizo tras ver las comparativas medidas. A diferencia del resto de esta politica, estos parametros NO transcriben la skill: son decisiones de diseño propias, y por eso siguen viviendo en su propio bloque, que se apaga poniendolo a {} sin tocar codigo.",
       "comillas_en_citas": true,
       "comillas": {
         "apertura": "«",
@@ -349,5 +349,32 @@
       "inmobiliario"
     ],
     "nota_carriles": "Carril A es el ancla de marca (frases, maximas, conceptos). Carril B se usa donde el oleo se siente ajeno. La eleccion es criterio humano/skill; aqui solo se comprueba que la escuela declarada exista y sea UNA."
+  },
+  "carrusel": {
+    "fuente": "legalmente-visual-system §2 (definicion fija de carrusel) y §6 (tipografia)",
+    "max_paginas": 10,
+    "min_paginas": 2,
+    "nota_definicion": "UN solo documento con exactamente N paginas, no N documentos de una pagina. Cada pagina 1080x1920 a sangre. El ensamblado final es humano (Canva); aqui se produce el reparto y la composicion de cada pagina.",
+    "corte": {
+      "solo_en_frontera_de_frase": true,
+      "terminadores": [
+        ".",
+        ";",
+        ":",
+        "?",
+        "!",
+        "…"
+      ],
+      "nota": "El texto aprobado no se toca NUNCA: solo se reparte. Y se reparte por frontera de frase, jamas a media frase ni a media palabra — partir una afirmacion juridica por la mitad cambia lo que dice, y eso ya no seria reparto sino reescritura."
+    },
+    "autor_solo_en_la_ultima": true,
+    "folio": {
+      "visible": true,
+      "formato": "{n}/{total}",
+      "posicion": "inferior_derecha",
+      "versalitas": true,
+      "nota": "El folio orienta al lector dentro del carrusel y es de composicion determinista, como la marca: el generador no escribe ni una letra."
+    },
+    "aviso_misma_imagen": "Repetir la misma imagen en todas las paginas aplana el carrusel entero. Si no hay arte por pagina, se compone igual pero se avisa."
   }
 }

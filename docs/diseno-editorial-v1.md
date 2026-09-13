@@ -1,6 +1,6 @@
 # Diseño editorial v1 — composición de la pieza
 
-**Fecha**: 2026-09-13 · **Encargo**: «mejora LegalMente en todo lo que puedas, nos falta más diseño artístico» (fundador) · **Estado**: implementado y medido, **pendiente de confirmación del fundador**.
+**Fecha**: 2026-09-13 · **Encargo**: «mejora LegalMente en todo lo que puedas, nos falta más diseño artístico» (fundador) · **Estado**: implementado, medido y **aprobado por el fundador** (2026-09-13).
 
 A diferencia de `docs/auditoria-detalle-artistico.md`, este documento **no** transcribe
 reglas ya aprobadas: son decisiones de diseño nuevas. Por eso viven en un bloque
@@ -72,19 +72,65 @@ hace un trabajo real, aunque no el que parecía (calma el fondo bajo el pie).
 
 ---
 
-## 5. Qué necesita tu confirmación
+## 5. Estado de las decisiones
 
-1. **Los cinco recursos de arriba**, como sistema. Están en `tipografia.ornamentos`
-   y se apagan poniendo ese bloque a `{}` — la pieza vuelve exactamente a como
-   estaba, sin tocar código.
-2. **Quitar la sombra del video** ya está hecho, respaldado por medida y es
-   reversible en una línea.
-3. Lo que **no** se tocó porque es decisión de marca: el wordmark de esquina del
-   video frente al ADR 0002, y el degradado.
+1. **Los cinco recursos, como sistema**: aprobados por el fundador el 2026-09-13.
+   Siguen en `tipografia.ornamentos` y se apagan poniendo ese bloque a `{}` — la
+   pieza vuelve exactamente a como estaba, sin tocar código.
+2. **Quitar la sombra del video**: aprobado, respaldado por medida, reversible en
+   una línea.
+3. **Sigue sin decidirse** (y sigue sin tocarse): el wordmark de esquina del video
+   frente al ADR 0002. El ADR dice que la marca se integra en una superficie
+   física de la escena; el video la pone flotando en una esquina. Son
+   incompatibles y ninguna medida puede resolverlo: es identidad de marca.
 
-## 6. Cómo verlo
+## 6. Carrusel: repartir sin reescribir
+
+El texto aprobado de `LM-PIEZA-01-REALES` (262 caracteres) **no era componible**:
+10 líneas frente a un máximo de 6. Era el único bloqueo real de producción, y la
+respuesta de la propia skill a un texto largo es el carrusel — un solo documento
+con N páginas.
+
+`composition.build_carousel_plan()` lo reparte. Tres reglas duras:
+
+1. **Solo se corta en frontera de frase.** Partir una afirmación jurídica por la
+   mitad cambia lo que dice, y eso ya no sería repartir sino reescribir.
+2. **Una frase que no cabe entera no se parte**: se deja completa y se avisa.
+   Acortarla es decisión editorial y exige nueva verificación jurídica.
+3. **La unión de todas las páginas devuelve el texto aprobado palabra por
+   palabra**, comprobado por invariante (`assert_exact_copy_preserved_across_pages`).
+
+El autor cierra en la última página y cada página lleva su folio (1/2, 2/2)
+compuesto de forma determinista, como la marca: el generador no escribe ni una
+letra. Si se reutiliza la misma imagen en todas las páginas se avisa — repetirla
+aplana la serie entera.
+
+Sobre PIEZA-01 el resultado es honesto: pasa de "imposible" a **dos páginas**, y
+la primera sigue arrastrando una frase de 193 caracteres que nadie puede partir
+sin cambiar lo que afirma. El sistema lo dice y para ahí.
+
+### Cuerpo adaptativo
+
+Una segunda decisión, de la misma familia: el cuerpo **ya no se fija al máximo
+del escalón por costumbre**. Se prueba de mayor a menor dentro del rango aprobado
+(100 %, 92 %, 85 %, 78 %, 72 %) y se conserva el mayor que deja todos los bloques
+por encima del contraste mínimo — nunca por debajo del piso del escalón, que es
+regla. Es lo que hace un diseñador cuando la escena no da: bajar un punto antes
+que publicar algo que no se lee.
+
+Medido en la página 2 del carrusel sobre la imagen real: al 100 % el mejor
+encuadre daba **2,82:1** (ilegible); el sistema probó cinco maquetas y se quedó en
+el 72 %, que da **4,60:1** y pasa el mínimo. La reducción se declara en el receipt.
+
+Y el anclaje aprendió una jerarquía: **legibilidad primero, composición después**.
+El contraste mínimo es regla dura y aprobada; "que el texto no caiga sobre la zona
+cargada" es preferencia. Si solo una posición llega al mínimo, gana esa aunque la
+otra componga mejor.
+
+## 7. Cómo verlo
 
 ```bash
-cd visual && python3 -m unittest test_art_direction -v    # 66 pruebas
+cd visual && python3 -m unittest test_art_direction -v    # 81 pruebas
+python3 cli.py carousel ../content/pieza-01-reales.json   # el reparto, sin componer
 python3 scripts/audit-video-legibility.py                 # contraste del video
 ```

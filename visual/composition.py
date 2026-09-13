@@ -374,6 +374,151 @@ def build_typography_plan(exact_copy, author, width, height, content_type="", co
     return plan
 
 
+# ------------------------------------------------------------------ carrusel
+
+@dataclass
+class CarouselPage:
+    numero: int
+    total: int
+    texto: str
+    plan: "TypographyPlan"
+    folio: str = ""
+    lleva_autor: bool = False
+
+    def to_dict(self):
+        return {"numero": self.numero, "total": self.total, "texto": self.texto,
+                "folio": self.folio, "lleva_autor": self.lleva_autor,
+                "plan": self.plan.to_dict()}
+
+
+@dataclass
+class CarouselPlan:
+    pages: list = field(default_factory=list)
+    exact_copy: str = ""
+    warnings: list = field(default_factory=list)
+
+    @property
+    def total(self):
+        return len(self.pages)
+
+    def rendered_text(self):
+        return " ".join(p.plan.rendered_text() for p in self.pages).strip()
+
+    def to_dict(self):
+        return {"total": self.total, "exact_copy": self.exact_copy,
+                "warnings": list(self.warnings),
+                "pages": [p.to_dict() for p in self.pages]}
+
+
+def dividir_en_frases(texto, terminadores=(".", ";", ":", "?", "!", "…")):
+    """Corta por frontera de frase conservando el terminador y los espacios.
+
+    No es un analizador de lenguaje: es un corte por puntuacion. Lo que importa
+    es que la union de las piezas devuelva EXACTAMENTE el texto normalizado de
+    partida, y eso se comprueba.
+    """
+    frases, actual = [], ""
+    for caracter in texto:
+        actual += caracter
+        if caracter in terminadores:
+            frases.append(actual.strip())
+            actual = ""
+    if actual.strip():
+        frases.append(actual.strip())
+    return [f for f in frases if f]
+
+
+def repartir_en_paginas(exact_copy, limite_caracteres, max_paginas, terminadores):
+    """Reparte el texto aprobado en paginas SIN tocar un solo caracter.
+
+    Regla dura: solo se corta en frontera de frase. Una frase que por si sola no
+    cabe en el limite NO se parte — se deja entera y se avisa, porque partir una
+    afirmacion juridica por la mitad cambia lo que dice.
+    """
+    frases = dividir_en_frases(" ".join(exact_copy.split()), terminadores)
+    paginas, actual, avisos = [], "", []
+    for frase in frases:
+        if len(frase) > limite_caracteres:
+            avisos.append(
+                f"una frase de {len(frase)} caracteres supera el limite de pagina "
+                f"({limite_caracteres}): se deja entera. Partirla cambiaria lo que afirma. "
+                "Acortarla es decision editorial, y exige nueva verificacion juridica.")
+        candidata = f"{actual} {frase}".strip()
+        if actual and len(candidata) > limite_caracteres:
+            paginas.append(actual)
+            actual = frase
+        else:
+            actual = candidata
+    if actual:
+        paginas.append(actual)
+
+    if len(paginas) > max_paginas:
+        avisos.append(
+            f"el texto necesita {len(paginas)} paginas y el maximo declarado es {max_paginas}: "
+            "decision humana (dividir la pieza en dos publicaciones o acortar en la fuente).")
+    return paginas, avisos
+
+
+def build_carousel_plan(exact_copy, author, width, height, content_type="", policy=None,
+                        context=""):
+    """Plan de carrusel: N paginas del MISMO documento, cada una con su plan.
+
+    El texto aprobado no se reescribe ni se acorta: se reparte. El autor cierra
+    en la ultima pagina, como en cualquier pieza impresa, y cada pagina lleva su
+    folio compuesto de forma determinista.
+    """
+    if exact_copy is None:
+        raise ExactCopyViolation("no hay exact_copy que repartir.")
+
+    pol = _politica(policy)
+    car = pol.data.get("carrusel", {}) or {}
+    tip = pol.data.get("tipografia", {}) or {}
+    escalones = tip.get("escalones_principal") or []
+    limite = int(escalones[-1]["max_caracteres"]) if escalones else 140
+    max_paginas = int(car.get("max_paginas", 10))
+    terminadores = tuple((car.get("corte", {}) or {}).get("terminadores",
+                                                          (".", ";", ":", "?", "!", "…")))
+
+    textos, avisos = repartir_en_paginas(exact_copy, limite, max_paginas, terminadores)
+    folio_cfg = car.get("folio", {}) or {}
+    autor_al_final = bool(car.get("autor_solo_en_la_ultima", True))
+
+    paginas = []
+    for i, texto in enumerate(textos, start=1):
+        es_ultima = (i == len(textos))
+        autor_pagina = author if (author and (es_ultima or not autor_al_final)) else ""
+        plan = build_typography_plan(texto, autor_pagina, width, height,
+                                     content_type=content_type, policy=pol,
+                                     context=context if es_ultima else "")
+        folio = ""
+        if folio_cfg.get("visible") and len(textos) > 1:
+            folio = str(folio_cfg.get("formato", "{n}/{total}")).format(n=i, total=len(textos))
+        paginas.append(CarouselPage(i, len(textos), texto, plan, folio,
+                                    lleva_autor=bool(autor_pagina)))
+
+    if len(textos) < int(car.get("min_paginas", 2)):
+        avisos.append(
+            "el texto cabe en una sola pagina: no hace falta carrusel. Un carrusel de una pagina "
+            "no es un carrusel.")
+
+    carrusel = CarouselPlan(pages=paginas, exact_copy=exact_copy, warnings=avisos)
+    assert_exact_copy_preserved_across_pages(exact_copy, carrusel)
+    return carrusel
+
+
+def assert_exact_copy_preserved_across_pages(exact_copy, carrusel):
+    """Invariante del carrusel: repartir no es reescribir.
+
+    La union de todas las paginas tiene que devolver el texto aprobado, palabra
+    por palabra. Si no, alguien perdio, duplico o cambio algo al repartir.
+    """
+    if " ".join(exact_copy.split()) != carrusel.rendered_text():
+        raise ExactCopyViolation(
+            "el reparto en paginas altera el texto exacto aprobado. Repartir es distribuir, "
+            "nunca reescribir: el texto juridico aprobado por un humano no se toca.")
+    return True
+
+
 def assert_exact_copy_preserved(exact_copy, plan):
     """Invariante no negociable: el compositor no parafrasea para hacer caber texto."""
     if " ".join(exact_copy.split()) != plan.rendered_text():

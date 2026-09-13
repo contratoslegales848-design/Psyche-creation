@@ -111,7 +111,13 @@ Ninguna medida de píxeles rechaza por sí sola: todas escalan a revisión human
 
 ## 3. Lo que la auditoría dejó abierto (decisión humana)
 
-1. **`LM-PIEZA-01-REALES` no es componible con la tipografía aprobada.** Su
+1. **`LM-PIEZA-01-REALES`: resuelto a medias por el carrusel.** El reparto en
+   páginas (ver `docs/diseno-editorial-v1.md` §6) la convierte en dos páginas sin
+   tocar una letra. Lo que queda abierto es más pequeño y más claro: la primera
+   página arrastra una frase de 193 caracteres que nadie puede partir sin cambiar
+   lo que afirma. Acortarla es decisión editorial y exige nueva verificación
+   jurídica. El texto original del hallazgo, para memoria:
+   **`LM-PIEZA-01-REALES` no es componible con la tipografía aprobada.** Su
    `exact_copy` tiene 262 caracteres: fuera de la tabla (máximo declarado 140) y
    10 líneas frente a un máximo de 6. Las salidas posibles son carrusel,
    reencuadre u **acortar el texto en la fuente** — y esto último exige volver a

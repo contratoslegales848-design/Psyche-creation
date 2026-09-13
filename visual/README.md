@@ -2,7 +2,7 @@
 
 **Estado: arquitectura completa, probada con proveedor falso. Ningún adapter real implementado.**
 
-**Politica visual 1.3 / familias 1.1 / compilador 2.1 / compositor 1.3**: el
+**Politica visual 1.4 / familias 1.1 / compilador 2.1 / compositor 1.4**: el
 detalle artistico (escuela unica, mecanismo de revelacion, profundidad de campo,
 acabado, imperfeccion, escalon tipografico, contraste real, marca grabada) ya es
 comprobable por codigo, no solo criterio escrito en la skill. Y desde la 1.3 hay
@@ -120,6 +120,7 @@ python3 cli.py dry-run       content/ejemplo.json --handoff h.json
 python3 cli.py simulate      content/ejemplo.json --handoff h.json --out artifacts/visual
 python3 cli.py show-history  artifacts/visual LM-TEST-001
 python3 cli.py audit-art                       # todo content/
+python3 cli.py carousel ../content/pieza-01-reales.json --asset foto.png --out out/
 python3 cli.py audit-art ../content/pieza-01-reales.json
 python3 cli.py audit-art --asset ../artifacts/human-review/.../gen-xxxx.png
 ```

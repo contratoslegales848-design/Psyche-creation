@@ -474,6 +474,130 @@ class TestComposicionEditorial(unittest.TestCase):
             self.assertIn("peor_contraste", r.anchor_metrics["evaluacion"][posicion])
 
 
+LARGO = ("En los ordenamientos examinados, la propiedad o dominio atribuye facultades amplias de "
+         "aprovechamiento, goce y disposicion sobre una cosa, siempre dentro de los limites "
+         "establecidos por la ley. La formulacion tecnica no es identica en Mexico, Espana y "
+         "Argentina.")
+
+
+class TestCarrusel(unittest.TestCase):
+    """Repartir no es reescribir.
+
+    El texto juridico aprobado no se acorta para que quepa: se reparte en
+    paginas, y solo por frontera de frase. Partir una afirmacion por la mitad
+    cambia lo que dice, y eso ya no seria reparto.
+    """
+
+    def carrusel(self, texto=LARGO, autor="LegalMente", ct="concepto"):
+        return composition.build_carousel_plan(texto, autor, 1080, 1920, ct, policy=POLICY)
+
+    def test_el_texto_aprobado_sobrevive_intacto(self):
+        car = self.carrusel()
+        self.assertEqual(car.rendered_text(), " ".join(LARGO.split()))
+        composition.assert_exact_copy_preserved_across_pages(LARGO, car)
+
+    def test_solo_se_corta_en_frontera_de_frase(self):
+        car = self.carrusel()
+        for pagina in car.pages[:-1]:
+            self.assertTrue(pagina.texto.rstrip()[-1] in ".;:?!…",
+                            f"la pagina {pagina.numero} no termina en frontera de frase")
+
+    def test_una_frase_larga_no_se_parte(self):
+        """Aunque no quepa. Se deja entera y se avisa: acortarla es decision
+        editorial y exige nueva verificacion juridica."""
+        frase = "Una sola frase de " + "muchisimas palabras " * 20 + "sin punto final aqui."
+        car = composition.build_carousel_plan(frase, "", 1080, 1920, "concepto", policy=POLICY)
+        self.assertEqual(car.total, 1)
+        self.assertTrue(any("supera el limite" in w for w in car.warnings))
+
+    def test_el_autor_cierra_en_la_ultima_pagina(self):
+        car = self.carrusel()
+        self.assertTrue(car.pages[-1].lleva_autor)
+        for pagina in car.pages[:-1]:
+            self.assertFalse(pagina.lleva_autor)
+
+    def test_folio_en_cada_pagina(self):
+        car = self.carrusel()
+        self.assertEqual([p.folio for p in car.pages],
+                         [f"{i}/{car.total}" for i in range(1, car.total + 1)])
+
+    def test_una_sola_pagina_no_es_carrusel(self):
+        car = composition.build_carousel_plan("Nadie da lo que no tiene.", "", 1080, 1920,
+                                              "aforismo", policy=POLICY)
+        self.assertEqual(car.total, 1)
+        self.assertTrue(any("no hace falta carrusel" in w for w in car.warnings))
+        self.assertEqual(car.pages[0].folio, "")
+
+    def test_un_reparto_que_pierde_texto_se_detecta(self):
+        car = self.carrusel()
+        car.pages.pop()          # alguien pierde una pagina por el camino
+        with self.assertRaises(composition.ExactCopyViolation):
+            composition.assert_exact_copy_preserved_across_pages(LARGO, car)
+
+    def test_compone_todas_las_paginas(self):
+        car = self.carrusel()
+        raw = png_bytes(1080, 1920, (30, 20, 18))
+        res = compositor.compose_carousel(raw, car, BRAND,
+                                          compositor.ReservedSurface(620, 1500, 380, 90))
+        self.assertEqual(len(res), car.total)
+        self.assertTrue(all(r.composed_bytes for r in res))
+        self.assertTrue(all("FOLIO" in r.fonts_used for r in res))
+
+    def test_repetir_la_misma_imagen_se_avisa(self):
+        car = self.carrusel()
+        raw = png_bytes(1080, 1920, (30, 20, 18))
+        res = compositor.compose_carousel(raw, car, BRAND)
+        self.assertTrue(any("aplana la serie" in w for r in res for w in r.warnings))
+
+    def test_un_asset_por_pagina_no_avisa(self):
+        car = self.carrusel()
+        raws = [png_bytes(1080, 1920, (30, 20, 18)) for _ in car.pages]
+        res = compositor.compose_carousel(raws, car, BRAND)
+        self.assertFalse(any("aplana la serie" in w for r in res for w in r.warnings))
+
+    def test_cuentas_de_assets_que_no_cuadran(self):
+        car = self.carrusel()
+        with self.assertRaises(compositor.CompositionError):
+            compositor.compose_carousel([png_bytes(64, 64, (0, 0, 0))], car, BRAND)
+
+
+class TestCuerpoAdaptativo(unittest.TestCase):
+    """El cuerpo no se fija al maximo por costumbre: baja dentro del rango
+    aprobado antes que dejar el texto ilegible, y nunca por debajo del piso."""
+
+    def plan(self):
+        return composition.build_typography_plan(FRASE, AUTOR, 1080, 1920, "maxima")
+
+    def test_sobre_fondo_dificil_baja_el_cuerpo_y_gana_contraste(self):
+        claro = png_bytes(1080, 1920, (210, 205, 195))
+        r = compositor.compose(claro, self.plan(), BRAND,
+                               compositor.ReservedSurface(620, 1500, 380, 90))
+        intentos = r.anchor_metrics["cuerpo"]["intentos"]
+        self.assertGreater(len(intentos), 1, "no intento ningun cuerpo menor")
+        self.assertGreaterEqual(intentos[-1]["peor_contraste"], intentos[0]["peor_contraste"])
+
+    def test_nunca_baja_del_piso_aprobado(self):
+        claro = png_bytes(1080, 1920, (210, 205, 195))
+        plan = self.plan()
+        compositor.compose(claro, plan, BRAND, compositor.ReservedSurface(620, 1500, 380, 90))
+        piso = plan.blocks[0].min_size_px
+        for factor in compositor.FACTORES_DE_CUERPO:
+            self.assertGreaterEqual(max(piso, int(plan.blocks[0].size_px * factor)), piso)
+
+    def test_si_el_maximo_ya_contrasta_no_se_toca(self):
+        r = compositor.compose(png_bytes(1080, 1920, (20, 14, 12)), self.plan(), BRAND,
+                               compositor.ReservedSurface(620, 1500, 380, 90))
+        self.assertEqual(r.anchor_metrics["cuerpo"]["factor_aplicado"], 1.0)
+        self.assertEqual(len(r.anchor_metrics["cuerpo"]["intentos"]), 1)
+
+    def test_la_reduccion_se_declara(self):
+        claro = png_bytes(1080, 1920, (210, 205, 195))
+        r = compositor.compose(claro, self.plan(), BRAND,
+                               compositor.ReservedSurface(620, 1500, 380, 90))
+        if r.anchor_metrics["cuerpo"]["factor_aplicado"] < 1.0:
+            self.assertTrue(any("se redujo al" in w for w in r.warnings))
+
+
 class TestInspectorDeDetalle(unittest.TestCase):
     def setUp(self):
         self.insp = inspection.ArtDetailInspector(POLICY)

@@ -40,7 +40,7 @@ from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageFilter, ImageFont, ImageStat
 
-COMPOSITOR_VERSION = "1.3"
+COMPOSITOR_VERSION = "1.4"
 
 # Rejilla de muestreo del fondo bajo cada bloque de texto. Suficiente para
 # detectar una zona clara bajo texto claro; barata y determinista.
@@ -439,7 +439,8 @@ def ancho_con_tracking(texto, font, tracking_px):
     return sum(measure(c, font)[0] for c in texto) + tracking_px * (len(texto) - 1)
 
 
-def elegir_anclaje(img, safe_area, cajas_relativas, colores, margen=1.12):
+def elegir_anclaje(img, safe_area, cajas_relativas, colores, margen=1.12,
+                   contraste_minimo=0.0):
     """¿Arriba o abajo? Donde cada bloque se lea, no donde la banda promedie bien.
 
     Hasta la politica 1.3 el texto caia siempre arriba — por omision, no por
@@ -472,14 +473,45 @@ def elegir_anclaje(img, safe_area, cajas_relativas, colores, margen=1.12):
                               "peor_contraste": round(peor_contraste, 2)}
 
     arriba, abajo = evaluacion["SUPERIOR"], evaluacion["INFERIOR"]
+
+    # Jerarquia deliberada: LEGIBILIDAD primero, composicion despues.
+    # El contraste minimo es una regla dura y aprobada; "que el texto no caiga
+    # sobre la zona cargada" es una preferencia de la marca. Una pieza ilegible
+    # es peor que una pieza con el texto sobre un fondo movido, asi que si solo
+    # una posicion llega al minimo, gana esa aunque la otra componga mejor.
+    if contraste_minimo:
+        llega_arriba = arriba["peor_contraste"] >= contraste_minimo
+        llega_abajo = abajo["peor_contraste"] >= contraste_minimo
+        if llega_arriba != llega_abajo:
+            elegido = "SUPERIOR" if llega_arriba else "INFERIOR"
+            return elegido, {"evaluacion": evaluacion, "elegido": elegido,
+                             "criterio": "contraste minimo: solo una posicion lo alcanza"}
+
+    # Empatadas en legibilidad (las dos llegan, o ninguna): decide la composicion.
     elegido = "SUPERIOR"
-    # Menos carga gana; con carga pareja (dentro del margen), decide el contraste.
+    criterio = "empate: se conserva la lectura natural"
     if abajo["peor_detalle"] * margen < arriba["peor_detalle"]:
-        elegido = "INFERIOR"
-    elif arriba["peor_detalle"] * margen >= abajo["peor_detalle"] * margen \
-            and abajo["peor_contraste"] > arriba["peor_contraste"] * margen:
-        elegido = "INFERIOR"
-    return elegido, {"evaluacion": evaluacion, "elegido": elegido}
+        elegido, criterio = "INFERIOR", "menos carga de detalle bajo el texto"
+    elif abajo["peor_contraste"] > arriba["peor_contraste"] * margen:
+        elegido, criterio = "INFERIOR", "mejor contraste con carga pareja"
+    return elegido, {"evaluacion": evaluacion, "elegido": elegido, "criterio": criterio}
+
+
+# Escala de intentos de cuerpo, de mayor a menor. Son pasos tipograficos, no
+# una busqueda continua: una pieza no cambia de tamaño por decimas.
+FACTORES_DE_CUERPO = (1.0, 0.92, 0.85, 0.78, 0.72)
+
+
+def peor_contraste_de(img, bloques_render, sx, sw):
+    """El contraste del bloque peor parado de la maqueta. Es el que decide."""
+    peor = 99.0
+    for fila in bloques_render:
+        b, _font, lineas, size, top, interlineado, sangria = fila[0], fila[1], fila[2], fila[3], fila[4], fila[5], fila[6]
+        caja = (sx + sangria, top, sx + sw, top + len(lineas) * int(size * interlineado))
+        medida = contraste_sobre_region(img, caja, _color_de_bloque(b))
+        if medida:
+            peor = min(peor, medida["min"])
+    return peor
 
 
 def _contenido_en(caja, marco):
@@ -537,7 +569,7 @@ def _validar_recursos(img, textos):
 
 
 def compose(raw_bytes, typography_plan, brand_plan=None, reserved_surface=None,
-            target_size=None):
+            target_size=None, folio=""):
     """Compone el asset final. NO modifica el raw: trabaja sobre una copia.
 
     Devuelve CompositionResult. Lanza CompositionOverflow si el texto exacto no
@@ -576,84 +608,118 @@ def compose(raw_bytes, typography_plan, brand_plan=None, reserved_surface=None,
     # Primera pasada: cuerpo definitivo, cortes reales y ALTURA de cada bloque,
     # todavia sin decidir donde empieza la columna. El alto total es lo que
     # permite anclarla arriba o abajo sin recalcular nada.
-    y = sy
-    bloques_render = []
-    for b in typography_plan.blocks:
-        size = b.size_px
-        # Cada bloque tiene su propio piso aprobado (skill §6): el cuerpo
-        # principal no baja al tamaño de un pie de foto para hacer sitio.
-        piso = int(getattr(b, "min_size_px", 0) or typography_plan.minimum_readable_size)
-        interlineado = float(getattr(b, "line_height", 1.32) or 1.32)
-        sangria = int(getattr(b, "indent_px", 0) or 0)
-        tracking_em = float(getattr(b, "tracking_em", 0.0) or 0.0)
-        versalitas = bool(getattr(b, "versalitas", False))
-        ancho_util = sw - sangria
-        texto = b.text.upper() if versalitas else b.text
-        font, nombre = _font(b.font_role, size)
-        fonts_used[b.role] = nombre
-
-        def _corta(f, cuerpo):
-            t = int(cuerpo * tracking_em)
-            if not t:
-                return wrap_to_width(texto, f, ancho_util)
-            palabras, lineas_, actual = texto.split(), [], ""
-            for w_ in palabras:
-                cand = f"{actual} {w_}".strip()
-                if ancho_con_tracking(cand, f, t) <= ancho_util or not actual:
-                    actual = cand
-                else:
-                    lineas_.append(actual)
-                    actual = w_
-            if actual:
-                lineas_.append(actual)
-            return lineas_
-
-        lineas = _corta(font, size)
-
-        def _cabe(f, cuerpo, ls):
-            t = int(cuerpo * tracking_em)
-            return all(ancho_con_tracking(l, f, t) <= ancho_util for l in ls)
-
-        # Reduce hasta ese piso; por debajo, desborda y se declara.
-        while size > piso:
-            alto = len(lineas) * int(size * interlineado)
-            if y + alto <= sy + sh and _cabe(font, size, lineas):
-                break
-            size = max(piso, int(size * 0.92))
+    # El cuerpo no se fija al maximo del escalon por costumbre: se prueba de
+    # mayor a menor DENTRO del rango aprobado y se conserva el mayor que deja
+    # todos los bloques por encima del contraste minimo. Es lo que hace un
+    # diseñador cuando la escena no da: bajar un punto antes que publicar algo
+    # que no se lee. Nunca por debajo del piso del escalon, que es regla.
+    intentos, elegido = [], None
+    for factor in FACTORES_DE_CUERPO:
+        y = sy
+        bloques_render = []
+        for b in typography_plan.blocks:
+            size = max(int(getattr(b, "min_size_px", 0) or 1), int(b.size_px * factor))
+            # Cada bloque tiene su propio piso aprobado (skill §6): el cuerpo
+            # principal no baja al tamaño de un pie de foto para hacer sitio.
+            piso = int(getattr(b, "min_size_px", 0) or typography_plan.minimum_readable_size)
+            interlineado = float(getattr(b, "line_height", 1.32) or 1.32)
+            sangria = int(getattr(b, "indent_px", 0) or 0)
+            tracking_em = float(getattr(b, "tracking_em", 0.0) or 0.0)
+            versalitas = bool(getattr(b, "versalitas", False))
+            ancho_util = sw - sangria
+            texto = b.text.upper() if versalitas else b.text
             font, nombre = _font(b.font_role, size)
+            fonts_used[b.role] = nombre
+
+            def _corta(f, cuerpo):
+                t = int(cuerpo * tracking_em)
+                if not t:
+                    return wrap_to_width(texto, f, ancho_util)
+                palabras, lineas_, actual = texto.split(), [], ""
+                for w_ in palabras:
+                    cand = f"{actual} {w_}".strip()
+                    if ancho_con_tracking(cand, f, t) <= ancho_util or not actual:
+                        actual = cand
+                    else:
+                        lineas_.append(actual)
+                        actual = w_
+                if actual:
+                    lineas_.append(actual)
+                return lineas_
+
             lineas = _corta(font, size)
 
-        alto = len(lineas) * int(size * interlineado)
-        desborda = (y + alto > sy + sh) or not _cabe(font, size, lineas)
-        if desborda:
-            raise CompositionOverflow(
-                f"COMPOSITION_OVERFLOW: el bloque {b.role} no cabe en el area segura "
-                f"al cuerpo minimo aprobado para su escalon ({piso}px). "
-                "El texto exacto aprobado NO se acorta, reformula ni reescribe: "
-                "la pieza necesita otro formato o decision humana."
-            )
-        bloques_render.append([b, font, lineas, size, y, interlineado, sangria,
-                               int(size * tracking_em), versalitas])
-        # El filete NO añade altura: se dibuja centrado en el aire que ya existe
-        # entre bloques. Un adorno que desplaza el texto sobre un rostro no es
-        # un adorno, es un defecto — medido en la primera version de esto.
-        y += alto + int(size * 0.5)
+            def _cabe(f, cuerpo, ls):
+                t = int(cuerpo * tracking_em)
+                return all(ancho_con_tracking(l, f, t) <= ancho_util for l in ls)
 
-    # Segunda pasada: ¿arriba o abajo? La columna entera se desplaza, no se
-    # recompone: el corte del texto no depende de donde caiga.
-    cajas = [(fila[4] - sy, len(fila[2]) * int(fila[3] * fila[5])) for fila in bloques_render]
-    colores_bloque = [_color_de_bloque(fila[0]) for fila in bloques_render]
-    alto_columna = max((d + a for d, a in cajas), default=1)
-    anclaje = getattr(typography_plan, "anchor", "SUPERIOR") or "SUPERIOR"
-    metricas_anclaje = {}
-    if anclaje == "AUTO":
-        anclaje, metricas_anclaje = elegir_anclaje(
-            img, (sx, sy, sw, sh), cajas, colores_bloque,
-            margen=float(getattr(typography_plan, "anchor_margin", 0) or 1.12))
-    if anclaje == "INFERIOR":
-        desplazamiento = max(0, sh - alto_columna)
-        for fila in bloques_render:
-            fila[4] += desplazamiento
+            # Reduce hasta ese piso; por debajo, desborda y se declara.
+            while size > piso:
+                alto = len(lineas) * int(size * interlineado)
+                if y + alto <= sy + sh and _cabe(font, size, lineas):
+                    break
+                size = max(piso, int(size * 0.92))
+                font, nombre = _font(b.font_role, size)
+                lineas = _corta(font, size)
+
+            alto = len(lineas) * int(size * interlineado)
+            desborda = (y + alto > sy + sh) or not _cabe(font, size, lineas)
+            if desborda:
+                raise CompositionOverflow(
+                    f"COMPOSITION_OVERFLOW: el bloque {b.role} no cabe en el area segura "
+                    f"al cuerpo minimo aprobado para su escalon ({piso}px). "
+                    "El texto exacto aprobado NO se acorta, reformula ni reescribe: "
+                    "la pieza necesita otro formato o decision humana."
+                )
+            bloques_render.append([b, font, lineas, size, y, interlineado, sangria,
+                                   int(size * tracking_em), versalitas])
+            # El filete NO añade altura: se dibuja centrado en el aire que ya existe
+            # entre bloques. Un adorno que desplaza el texto sobre un rostro no es
+            # un adorno, es un defecto — medido en la primera version de esto.
+            y += alto + int(size * 0.5)
+
+        # Segunda pasada: ¿arriba o abajo? La columna entera se desplaza, no se
+        # recompone: el corte del texto no depende de donde caiga.
+        cajas = [(fila[4] - sy, len(fila[2]) * int(fila[3] * fila[5])) for fila in bloques_render]
+        colores_bloque = [_color_de_bloque(fila[0]) for fila in bloques_render]
+        alto_columna = max((d + a for d, a in cajas), default=1)
+        anclaje = getattr(typography_plan, "anchor", "SUPERIOR") or "SUPERIOR"
+        metricas_anclaje = {}
+        if anclaje == "AUTO":
+            anclaje, metricas_anclaje = elegir_anclaje(
+                img, (sx, sy, sw, sh), cajas, colores_bloque,
+                margen=float(getattr(typography_plan, "anchor_margin", 0) or 1.12),
+                contraste_minimo=contraste_minimo)
+        if anclaje == "INFERIOR":
+            desplazamiento = max(0, sh - alto_columna)
+            for fila in bloques_render:
+                fila[4] += desplazamiento
+
+        peor = peor_contraste_de(img, bloques_render, sx, sw)
+        intentos.append({"factor": factor, "peor_contraste": peor, "anclaje": anclaje})
+        elegido = elegido or None
+        candidato = {"bloques": bloques_render, "anclaje": anclaje,
+                     "metricas": metricas_anclaje, "factor": factor, "peor": peor}
+        if elegido is None or peor > elegido["peor"]:
+            elegido = candidato
+        if not contraste_minimo or peor >= contraste_minimo:
+            elegido = candidato
+            break
+        # Si el bloque ya esta en su piso aprobado, bajar mas no es una opcion.
+        if all(fila[3] <= int(getattr(fila[0], "min_size_px", 0) or 1)
+               for fila in bloques_render):
+            break
+
+    bloques_render = elegido["bloques"]
+    anclaje = elegido["anclaje"]
+    metricas_anclaje = dict(elegido["metricas"] or {})
+    metricas_anclaje["cuerpo"] = {"factor_aplicado": elegido["factor"],
+                                  "intentos": intentos}
+    if elegido["factor"] < 1.0:
+        warnings.append(
+            f"el cuerpo del texto se redujo al {int(elegido['factor'] * 100)}% del maximo de su "
+            "escalon (sin bajar del minimo aprobado) porque la escena no daba contraste suficiente "
+            "al tamaño mayor.")
 
     # --- detalle artistico: contraste real y colision con la marca ---
     # Se mide ANTES de dibujar: lo que decide la legibilidad es el fondo que
@@ -746,6 +812,20 @@ def compose(raw_bytes, typography_plan, brand_plan=None, reserved_surface=None,
                 [sx + sangria, base, sx + sangria + typography_plan.rule_width,
                  base + typography_plan.rule_thickness - 1],
                 fill=laton + (235,))
+
+    # Folio del carrusel: orienta al lector dentro de la serie. Composicion
+    # determinista, como la marca — el generador no escribe ni una letra.
+    if folio:
+        cuerpo_folio = max(10, int(min(b.size_px for b in typography_plan.blocks) * 0.62))
+        fuente_folio, nombre_folio = _font("sans_caption", cuerpo_folio)
+        tracking_folio = int(cuerpo_folio * 0.16)
+        texto_folio = str(folio).upper()
+        ancho_folio = ancho_con_tracking(texto_folio, fuente_folio, tracking_folio)
+        dibujar_con_tracking(
+            dibujo_orn,
+            (sx + sw - ancho_folio, sy + sh - int(cuerpo_folio * 1.4)),
+            texto_folio, fuente_folio, COLOR_RESERVA_OTROS + (215,), tracking_folio)
+        fonts_used["FOLIO"] = nombre_folio
 
     img = Image.alpha_composite(img.convert("RGBA"), ornamentos).convert("RGB")
     draw = ImageDraw.Draw(img)
@@ -875,6 +955,45 @@ def compose(raw_bytes, typography_plan, brand_plan=None, reserved_surface=None,
         anchor_metrics=metricas_anclaje,
         brand_contrast=brand_contrast,
     )
+
+
+def compose_carousel(raws, carousel_plan, brand_plan=None, reserved_surfaces=None):
+    """Compone las N paginas del carrusel. Una pieza, N assets, un solo texto.
+
+    `raws` puede ser un unico asset (se reutiliza en todas las paginas y se
+    avisa: repetir la misma imagen aplana el carrusel entero) o una lista con un
+    asset por pagina. `reserved_surfaces` sigue la misma regla.
+
+    Devuelve la lista de CompositionResult, en orden. No concatena nada ni
+    produce un PDF: el ensamblado del documento final es humano (Canva), como
+    dice la skill.
+    """
+    paginas = carousel_plan.pages
+    if not paginas:
+        raise CompositionError("el plan de carrusel no tiene paginas.")
+
+    lista_raws = list(raws) if isinstance(raws, (list, tuple)) else [raws] * len(paginas)
+    if len(lista_raws) != len(paginas):
+        raise CompositionError(
+            f"hay {len(lista_raws)} assets para {len(paginas)} paginas: uno por pagina, "
+            "o uno solo para todas.")
+    repetida = not isinstance(raws, (list, tuple)) and len(paginas) > 1
+
+    superficies = reserved_surfaces
+    if superficies is None or not isinstance(superficies, (list, tuple)):
+        superficies = [reserved_surfaces] * len(paginas)
+
+    resultados = []
+    for pagina, raw, superficie in zip(paginas, lista_raws, superficies):
+        r = compose(raw, pagina.plan, brand_plan, reserved_surface=superficie,
+                    folio=pagina.folio)
+        if repetida:
+            r.warnings.append(
+                f"pagina {pagina.numero}/{pagina.total}: se reutiliza la misma imagen en todo el "
+                "carrusel. Repetirla aplana la serie entera; el criterio de la marca es una escena "
+                "por pagina.")
+        resultados.append(r)
+    return resultados
 
 
 def composition_qa(result, raw_bytes, typography_plan, expected_text):

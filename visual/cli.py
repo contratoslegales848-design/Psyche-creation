@@ -14,6 +14,7 @@ falso.
     python3 cli.py show-receipt   <DIR> <CONTENT_ID> <GENERATION_ID>
     python3 cli.py show-history   <DIR> <CONTENT_ID>
     python3 cli.py audit-art      [artefacto.json] [--asset img.png] [--json]
+    python3 cli.py carousel       <artefacto.json> [--asset img.png] [--out DIR]
 
     (legibilidad del render de video, desde la raiz del repositorio:
      python3 scripts/audit-video-legibility.py)
@@ -107,6 +108,58 @@ def _brief_para_auditar(art, policy, fams):
     vi = canonical.VisualInput(content_id=cid, provenance_mode=proc.get("modo", ""),
                                jurisdiction_layer="", publicable=False)
     return brief_desde(vi, policy, fams), "brief PLACEHOLDER de CLI (la pieza no tiene brief real)"
+
+
+def _carousel(a, policy):
+    """Reparte una pieza larga en paginas del MISMO documento y, si hay imagen,
+    las compone. El texto aprobado no se acorta jamas: se reparte."""
+    import composition
+    import compositor as comp_mod
+
+    art = _load(a.artefacto)
+    frase = art.get("frase") or ""
+    if not frase:
+        print("RECHAZADO: el artefacto no trae texto que repartir.")
+        return 1
+
+    car = composition.build_carousel_plan(
+        frase, art.get("remate", ""), 1080, 1920,
+        content_type=(art.get("taxonomia") or {}).get("content_type", ""), policy=policy)
+
+    if a.json:
+        print(json.dumps(car.to_dict(), ensure_ascii=False, indent=2))
+    else:
+        print(f"{art.get('procedencia', {}).get('content_id', '?')} -> {car.total} pagina(s)")
+        for pagina in car.pages:
+            bloque = pagina.plan.blocks[0]
+            print(f"\n  [{pagina.folio or '1/1'}] {len(pagina.texto)} caracteres, "
+                  f"{len(bloque.lines)} lineas, cuerpo {bloque.size_px}px"
+                  f"{'  (cierra con autor)' if pagina.lleva_autor else ''}")
+            print(f"      {pagina.texto}")
+            for w in pagina.plan.warnings:
+                print(f"      ! {w}")
+        for w in car.warnings:
+            print(f"\n  ! {w}")
+
+    if a.asset:
+        raw = Path(a.asset).read_bytes()
+        marca = composition.build_brand_plan(policy, "placa de laton").to_dict()
+        resultados = comp_mod.compose_carousel(raw, car, marca)
+        destino = Path(a.out) if a.out else Path(runtime_config.default_registry_root()) / "carrusel"
+        destino.mkdir(parents=True, exist_ok=True)
+        print()
+        for pagina, r in zip(car.pages, resultados):
+            ruta = destino / f"pagina-{pagina.numero:02d}.png"
+            ruta.write_bytes(r.composed_bytes)
+            cuerpo = r.anchor_metrics.get("cuerpo", {})
+            print(f"  {ruta}  anclaje={r.anchor} cuerpo={int(cuerpo.get('factor_aplicado', 1) * 100)}% "
+                  f"contraste={ {k: v['min'] for k, v in r.text_contrast.items()} }")
+            for w in r.warnings:
+                print(f"      ! {w}")
+
+    print("\nRepartir no es aprobar: el texto sigue siendo el aprobado y la pieza sigue "
+          "necesitando revision humana.")
+    return 0
 
 
 def _audit_art(a, policy, fams):
@@ -228,6 +281,12 @@ def main(argv=None):
     s.add_argument("artefacto", nargs="?",
                    help="artefacto de content/. Si se omite, se auditan todos.")
     s.add_argument("--asset", help="imagen a medir con el inspector de detalle artistico.")
+    s.add_argument("--json", action="store_true")
+
+    s = sub.add_parser("carousel", help="reparte una pieza larga en paginas sin tocar el texto.")
+    s.add_argument("artefacto")
+    s.add_argument("--asset", help="imagen de fondo. Sin ella solo se muestra el reparto.")
+    s.add_argument("--out", help="directorio donde dejar las paginas compuestas.")
     s.add_argument("--json", action="store_true")
 
     s = sub.add_parser("batch-dry-run"); s.add_argument("directorio")
@@ -432,6 +491,9 @@ def main(argv=None):
 
     if a.cmd == "audit-art":
         return _audit_art(a, policy, fams)
+
+    if a.cmd == "carousel":
+        return _carousel(a, policy)
 
     if a.cmd == "batch-dry-run":
         items = []
