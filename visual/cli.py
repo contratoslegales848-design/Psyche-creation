@@ -14,6 +14,9 @@ falso.
     python3 cli.py show-receipt   <DIR> <CONTENT_ID> <GENERATION_ID>
     python3 cli.py show-history   <DIR> <CONTENT_ID>
     python3 cli.py audit-art      [artefacto.json] [--asset img.png] [--json]
+
+    (legibilidad del render de video, desde la raiz del repositorio:
+     python3 scripts/audit-video-legibility.py)
 """
 
 import argparse
@@ -204,6 +207,11 @@ def main(argv=None):
         s.add_argument("--reserved-surface", metavar="X,Y,W,H",
                        help="superficie fisica reservada para la marca, en pixeles del lienzo. "
                             "Sin esto la marca no se compone (NEEDS_HUMAN_REVIEW), nunca watermark.")
+        s.add_argument("--inspector", choices=("noop", "heuristic", "art_detail"),
+                       default="noop",
+                       help="QA semantica sobre los pixels del asset. 'noop' (por defecto) no mira "
+                            "nada y lo dice; 'art_detail' mide negros empastados, acento frio, "
+                            "adherencia de paleta y rango tonal contra la politica. Ninguno aprueba.")
         if c == "simulate":
             s.add_argument("--out", default=None,
                            help="raiz del registro de generaciones. Por defecto, la raiz runtime "
@@ -376,13 +384,20 @@ def main(argv=None):
             surface = compositor.ReservedSurface(x, y, w, h)
 
         brief = brief_desde(vi, policy, fams)
+        inspector = None
+        if a.inspector == "heuristic":
+            from inspection import HeuristicSemanticInspector
+            inspector = HeuristicSemanticInspector()
+        elif a.inspector == "art_detail":
+            from inspection import ArtDetailInspector
+            inspector = ArtDetailInspector(policy)
         out_root = a.out if (a.cmd == "simulate" and a.out) else runtime_config.default_registry_root()
         reg = registry_mod.AssetRegistry(out_root) if a.cmd == "simulate" else None
         run = pipeline.generate_visual(
             art["procedencia"], brief, policy, FakeImageProvider(), handoff=handoff,
             family=fams.get(brief.visual_family), families_version=fams.version,
             dry_run=(a.cmd == "dry-run"), registry=reg, claim_packet=claim_packet,
-            reserved_surface=surface,
+            reserved_surface=surface, inspector=inspector,
             exact_copy=vi.exact_copy, author=vi.author, content_type=vi.content_type)
         print(f"status={run.receipt.status} generation_id={run.receipt.generation_id}")
         if run.plan:

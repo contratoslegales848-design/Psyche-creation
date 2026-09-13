@@ -1,6 +1,6 @@
 # Auditoría de detalle artístico — pipeline visual
 
-**Fecha**: 2026-09-13 · **Alcance**: `visual/` (política, familias, compilador, tipografía, compositor, inspección) y `src/` (render de video Remotion) · **Resultado**: 41 hallazgos; 31 corregidos en código, 10 abiertos que exigen decisión humana.
+**Fecha**: 2026-09-13 · **Alcance**: `visual/` (política, familias, compilador, tipografía, compositor, inspección) y `src/` (render de video Remotion) · **Resultado**: 41 hallazgos; 31 corregidos en código, 10 abiertos que exigen decisión humana (uno de ellos, el contraste del video, ya medido: ver §3.8).
 
 No es una propuesta ni una asesoría: es el registro de lo que se auditó, lo que se
 arregló y lo que quedó abierto. La regla que gobernó toda la auditoría:
@@ -136,10 +136,15 @@ Ninguna medida de píxeles rechaza por sí sola: todas escalan a revisión human
    declara una excepción expresa para video, o el video adopta el mismo esquema.
    Es decisión del fundador, no del código.
 8. **El contraste del video se resuelve con un degradado oscuro y una sombra de
-   texto**, no con la luz de la escena, que es lo que exige §6. Quitarlos sin
-   medir dejaría texto ilegible sobre imágenes claras; la salida correcta es
-   medir el contraste real del fotograma, como ya hace el compositor de imagen
-   fija. No se hizo aquí para no cambiar la legibilidad a ciegas.
+   texto**, no con la luz de la escena, que es lo que exige §6. Ya no es una
+   suposición: `scripts/audit-video-legibility.py` lo mide sobre el fotograma
+   real. En la pieza de ejemplo el trazo da **17,45:1 de mediana** (p05 8,05:1)
+   y solo el **0,23 %** queda por debajo de 4,5:1 — bordes de antialias. Es
+   decir: hoy el video cumple el mínimo con holgura, **degradado incluido**.
+   Lo que sigue abierto es si ese margen viene de la luz de la escena o del
+   degradado, y eso se responde retirándolo y volviendo a medir. No se retiró
+   aquí porque cambia el aspecto de todas las piezas y es decisión del fundador,
+   pero ahora la decisión se toma con un número delante.
 9. **El texto del video se ancla arriba sin saber qué hay debajo.** Con copy
    largo cae sobre el rostro de la escena, y §6 prohíbe poner texto sobre
    rostros o manos decisivas. Comprobado en el fotograma de prueba con 262
@@ -165,9 +170,15 @@ Y para el video:
 
 ```bash
 npm run typecheck
-npx remotion still src/index.ts ejemplo out.png --frame=60 \
-  --chromium-options="--no-sandbox --disable-setuid-sandbox"
+python3 scripts/audit-video-legibility.py            # contraste real, medido
+python3 -m unittest -v scripts.test_audit_video_legibility  # desde scripts/
 ```
+
+`audit-video-legibility.py` renderiza dos veces cada composición —con texto y
+con el texto vacío— y compara: los píxeles que cambian y coinciden con un color
+de la paleta son el trazo, y el segundo fotograma es el fondo exacto que tienen
+debajo. La sombra de texto y el antialias quedan fuera a propósito: contarlos
+maquillaría la medida. Corre en el workflow de render, donde ya hay Chromium.
 
 `audit-art` sale con código 1 si hay algún BLOQUEA, y corre en CI. Una auditoría
 sin bloqueos **no** es una aprobación: la aprobación visual sigue siendo humana,

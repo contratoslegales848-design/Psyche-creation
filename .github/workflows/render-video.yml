@@ -70,6 +70,11 @@ jobs:
       - name: Validar TypeScript
         run: npm run typecheck
 
+      - name: Legibilidad real del texto sobre la imagen (contraste medido)
+        run: |
+          python3 -m pip install --quiet -r requirements.txt
+          python3 scripts/audit-video-legibility.py
+
       - name: Renderizar composición solicitada
         if: ${{ inputs.composition_id != '' }}
         env:

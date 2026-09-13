@@ -211,6 +211,10 @@ jobs:
         working-directory: contract
         run: python3 -m unittest test_canonical_envelope -v
 
+      - name: Pruebas unitarias de la medida de legibilidad del video (unittest)
+        working-directory: scripts
+        run: python3 -m unittest test_audit_video_legibility -v
+
       - name: La auditoría de detalle artístico corre sobre el contenido real
         working-directory: visual
         run: python3 cli.py audit-art
