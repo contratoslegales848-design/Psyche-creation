@@ -2,6 +2,11 @@
 
 **Estado: arquitectura completa, probada con proveedor falso. Ningún adapter real implementado.**
 
+**Politica visual 1.2 / familias 1.1 / compilador 2.1 / compositor 1.1**: el
+detalle artistico (escuela unica, mecanismo de revelacion, profundidad de campo,
+acabado, imperfeccion, escalon tipografico, contraste real, marca grabada) ya es
+comprobable por codigo, no solo criterio escrito en la skill.
+
 La capa que faltaba entre `ProductionHandoff` (fin de la cadena jurídica) y el arte
 final. No sustituye a `legalmente-visual-system`: esa skill conserva el criterio
 artístico (qué escuela toca, qué metáfora). Aquí vive lo que un programa puede
@@ -23,6 +28,7 @@ artefacto de content/ + ProductionHandoff
    → brief + policy + family             VisualBrief / VisualPolicy / VisualFamily
    → memory.assess()                     riesgo de repetición determinista
    → compiler.compile_request()          CompiledVisualRequest + explicación
+   → art_direction.auditar_brief()       detalle artístico ANTES de gastar créditos
    → GenerationPlan                      serializable y hasheable
    → providers.selection.evaluate()      ACCEPT / ADAPT / REJECT
    → [DRY RUN corta aquí: 0 llamadas]
@@ -30,6 +36,8 @@ artefacto de content/ + ProductionHandoff
    → qa.structural_qa()                  MIME real, dimensiones, duplicados
    → inspection                          NOT_EVALUATED por defecto; nunca finge
    → composition                         TypographyPlan + BrandCompositionPlan
+   → compositor                          rasteriza y MIDE contraste real
+   → art_direction.auditar()             tipografia y composicion ya hechas
    → receipts.GenerationReceipt          en TODOS los desenlaces
    → registry.AssetRegistry              ficheros, sin base de datos
    → [GATE HUMANO]                       el código se detiene aquí, siempre
@@ -49,7 +57,10 @@ artefacto de content/ + ProductionHandoff
 | `providers/` | interfaz, negociación, selección, `FakeImageProvider` |
 | `qa.py` | QA estructural |
 | `inspection.py` | contrato semántico + heurísticas de píxel honestas |
-| `composition.py` | `TypographyPlan`, `BrandCompositionPlan` |
+| `composition.py` | `TypographyPlan`, `BrandCompositionPlan` (parametros de la politica, no numeros magicos) |
+| `compositor.py` | rasterizado determinista con Pillow + medida de contraste real |
+| `art_direction.py` | auditoria de detalle artistico: BLOQUEA / REVISION_HUMANA / AVISO |
+| `rotation.py` | variacion minima, diversidad de lote y rotacion de escuela |
 | `feedback.py` | códigos de feedback → cambios controlados de brief |
 | `registry.py` | assets, receipts, decisiones humanas, seguridad de rutas |
 | `receipts.py` | `GenerationReceipt` v2 + `HumanReviewPacket` |
@@ -65,8 +76,11 @@ artefacto de content/ + ProductionHandoff
 - **No entiende imágenes.** El inspector por defecto devuelve `NOT_EVALUATED`. Las
   heurísticas de píxel (luminancia, contraste, dominancia cálida) son medidas
   reales y escalan a revisión humana; nunca rechazan solas.
-- **No rasteriza texto.** No hay Pillow en el repositorio. `TypographyPlan` y
-  `BrandCompositionPlan` son contratos que un compositor externo ejecuta.
+- **No juzga el arte.** `art_direction.py` comprueba lo que la politica declara
+  (recursos quemados en la escena, una escuela por pieza, escalon tipografico,
+  contraste real, texto sobre la marca). Qué escuela toca, qué metafora y si la
+  pieza es buena siguen siendo de la skill y de una persona. Una auditoria sin
+  bloqueos **no** es una aprobacion.
 - **No crea un `ContentUnit` paralelo.** `docs/contrato-motor-masivo.md` §1–§2 ya
   repartió esos campos; duplicarlos habría cambiado el `contenido_hash_sha256`.
 
@@ -84,14 +98,15 @@ anotada; nunca llega al proveedor. Ver `docs/adr/0002-marca-composicion-determin
 ## Pruebas
 
 ```bash
-cd visual && python3 -m unittest test_visual_pipeline test_visual_advanced -v
+cd visual && python3 -m unittest discover -p "test_*.py"
 ```
 
-121 pruebas. Gate fail-closed, adapter canónico, familias, memoria/repetición,
+405 pruebas. Gate fail-closed, adapter canónico, familias, memoria/repetición,
 compilador, marca (red-team), composición, inspección, negociación, contrato de
 proveedor, dry-run, lotes, reintento selectivo, regeneración, idempotencia,
 registro, seguridad de rutas, integridad de receipts, escalamiento de autoridad y
-observabilidad.
+observabilidad, detalle artistico (auditoria, tipografia aprobada, contraste
+medido, grabado de marca).
 
 ## CLI
 
@@ -102,7 +117,13 @@ python3 cli.py validate      content/ejemplo.json
 python3 cli.py dry-run       content/ejemplo.json --handoff h.json
 python3 cli.py simulate      content/ejemplo.json --handoff h.json --out artifacts/visual
 python3 cli.py show-history  artifacts/visual LM-TEST-001
+python3 cli.py audit-art                       # todo content/
+python3 cli.py audit-art ../content/pieza-01-reales.json
+python3 cli.py audit-art --asset ../artifacts/human-review/.../gen-xxxx.png
 ```
+
+`audit-art` sale con codigo 1 si hay algun BLOQUEA: es la unica parte de esta
+capa pensada para correr en CI como guardia.
 
 ## Añadir un proveedor real
 

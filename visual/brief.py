@@ -6,6 +6,7 @@ LegalMente y no del proveedor de turno (mandato §1).
 """
 
 import json
+import unicodedata
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -21,6 +22,16 @@ class PolicyError(ValueError):
 
 class BriefError(ValueError):
     pass
+
+
+def normaliza_escuela(texto):
+    """Compara escuelas por concepto, no por cadena: sin tildes, sin mayusculas,
+    sin espacios de mas. 'Tenebrismo Caravaggista' == 'tenebrismo caravaggista'."""
+    if not texto:
+        return ""
+    t = unicodedata.normalize("NFKD", str(texto).strip().lower())
+    t = "".join(c for c in t if not unicodedata.combining(c))
+    return " ".join(t.replace("-", " ").replace("_", " ").split())
 
 
 @dataclass
@@ -52,6 +63,22 @@ class VisualPolicy:
         return list(self.data.get("familias_visuales", []))
 
     @property
+    def banco_escuelas(self):
+        """Conjunto normalizado de escuelas admitidas (carril A + carril B)."""
+        esc = self.data.get("escuelas", {})
+        return {normaliza_escuela(x)
+                for carril in ("carril_a", "carril_b")
+                for x in esc.get(carril, [])}
+
+    def carril_de(self, escuela):
+        esc = self.data.get("escuelas", {})
+        n = normaliza_escuela(escuela)
+        for carril, etiqueta in (("carril_a", "A"), ("carril_b", "B")):
+            if n in {normaliza_escuela(x) for x in esc.get(carril, [])}:
+                return etiqueta
+        return ""
+
+    @property
     def marca_escribe_generador(self):
         """'SI' | 'NO' | 'NO_RESUELTO'. NO_RESUELTO bloquea (conflicto abierto)."""
         return self.data.get("marca", {}).get("texto_marca_lo_escribe_el_generador", "NO_RESUELTO")
@@ -73,6 +100,10 @@ class VisualBrief:
     brightness_intent: str = ""
     acento_frio_objeto: str = ""     # objeto fisico real que aporta el azul petroleo
     marca_superficie: str = ""       # superficie fisica donde vive la marca
+    # --- direccion de arte (skill legalmente-visual-system §4 y §5) ---
+    escuela: str = ""                # UNA sola escuela del banco. Nunca dos referentes.
+    mecanismo_revelacion: str = ""   # el fenomeno fisico que hace visible la idea
+    justificacion_presencia_humana: str = ""  # obligatoria si hay rostro o cuerpo entero
     marca_texto_en_imagen: bool = False   # ¿debe el GENERADOR escribir "LegalMente"?
     constraints: list = field(default_factory=list)
     negative_constraints: list = field(default_factory=list)
@@ -141,6 +172,29 @@ class VisualBrief:
         # 2026-08-31), el compilador la convierte a composicion posterior y lo deja
         # anotado; la peticion nunca llega al proveedor. Solo un valor desconocido
         # en la politica bloquea, porque entonces el estado no es legible.
+        # --- escuela artistica ---
+        # Una escuela DECLARADA tiene que existir en el banco y ser UNA sola:
+        # "nombrar varios artistas en un mismo prompt no da variedad, da promedio"
+        # (skill §4, error que aplano el feed). No declararla no bloquea aqui —
+        # lo señala la auditoria de direccion de arte, que sabe escalar a humano.
+        if str(self.escuela or "").strip():
+            banco = policy.banco_escuelas
+            if banco:
+                declaradas = [x.strip() for x in str(self.escuela).replace(";", ",").split(",")
+                              if x.strip()]
+                if len(declaradas) > 1:
+                    e.append(
+                        f"se declaran {len(declaradas)} escuelas artisticas para una sola pieza "
+                        f"({declaradas}); la regla vigente es UNA escuela por pieza: nombrar varios "
+                        "referentes no da variedad, da promedio."
+                    )
+                for d in declaradas:
+                    if normaliza_escuela(d) not in banco:
+                        e.append(
+                            f"escuela artistica {d!r} fuera del banco declarado en la politica "
+                            "(carril A / carril B de legalmente-visual-system §4)."
+                        )
+
         if self.marca_texto_en_imagen and policy.marca_escribe_generador not in ("SI", "NO"):
             e.append(
                 "estado de marca no legible en la politica "

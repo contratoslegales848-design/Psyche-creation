@@ -28,6 +28,10 @@ STATUS = (
     "GENERACION_FALLIDA",
     "QA_FALLIDO",
     "COMPOSICION_DESBORDADA",
+    # La direccion de arte contradice una prohibicion expresa (recurso quemado en
+    # la escena, dos escuelas, presencia humana sin justificar). Se corta ANTES de
+    # llamar al proveedor: un defecto de arte detectable no se paga en creditos.
+    "ARTE_BLOQUEADO",
     "PENDIENTE_REVISION_HUMANA",
 )
 
@@ -67,6 +71,7 @@ class GenerationReceipt:
     procedencia: dict = field(default_factory=dict)
     structural_qa: dict = field(default_factory=dict)
     semantic_qa: dict = field(default_factory=dict)
+    art_direction: dict = field(default_factory=dict)
     qa_problemas: list = field(default_factory=list)
     qa_avisos: list = field(default_factory=list)
     motivos: list = field(default_factory=list)

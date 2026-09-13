@@ -15,7 +15,7 @@ from dataclasses import dataclass, field, asdict
 from composition import build_brand_plan
 from plan import canonical_hash
 
-COMPILER_VERSION = "2.0"
+COMPILER_VERSION = "2.1"
 
 
 @dataclass
@@ -70,29 +70,73 @@ def compile_request(brief, policy, family=None, capabilities=None, repetition=No
     partes = [
         f"Una sola escena. {brief.subject}.",
         f"Entorno: {brief.environment}.",
-        f"Camara: {brief.camera}. Punto focal: {brief.focal_point}.",
-        f"Familia visual: {brief.visual_family.replace('_', ' ')}.",
     ]
+
+    # El mecanismo de revelacion es el ARGUMENTO VISUAL (skill §5.3): el fenomeno
+    # fisico que hace visible la idea. Va antes de la camara porque decide que se
+    # encuadra; sin el, la escena describe objetos y no dice nada.
+    if brief.mecanismo_revelacion:
+        partes.append(f"Mecanismo de revelacion: {brief.mecanismo_revelacion}.")
+        explicacion.append(f"mecanismo de revelacion: {brief.mecanismo_revelacion}")
+
+    partes.append(f"Camara: {brief.camera}. Punto focal: {brief.focal_point}.")
+
+    # UNA sola escuela por pieza. El brief la valida contra el banco; aqui solo
+    # se nombra, nunca se acompaña de un segundo referente (skill §4).
+    if brief.escuela:
+        carril = policy.carril_de(brief.escuela)
+        partes.append(f"Escuela artistica (una sola, sin mezclar referentes): {brief.escuela}.")
+        explicacion.append(
+            f"escuela: {brief.escuela}" + (f" (carril {carril})" if carril else ""))
+
+    partes.append(f"Familia visual: {brief.visual_family.replace('_', ' ')}.")
     explicacion.append(f"familia visual: {brief.visual_family}")
 
     lighting = brief.key_light or ""
+    detalle = []
     if family is not None:
         if not lighting:
             lighting = family.lighting_intent
             explicacion.append(f"luz tomada de la familia: {family.lighting_intent}")
         if family.material_vocabulary:
             partes.append("Vocabulario material: " + ", ".join(family.material_vocabulary) + ".")
+        # --- detalle artistico de la familia (registro >= 1.1) ---
+        # Sin esto el prompt decia QUE hay en la escena pero no COMO esta hecha.
+        if family.depth_of_field:
+            detalle.append(f"Profundidad de campo: {family.depth_of_field}")
+        if family.surface_finish:
+            detalle.append(f"Acabado de superficie: {family.surface_finish}")
+        if family.imperfection_signature:
+            detalle.append("Imperfeccion que prueba que es materia real: "
+                           + ", ".join(family.imperfection_signature))
+        if family.color_temperature:
+            detalle.append(f"Temperatura de color: {family.color_temperature}")
+        if family.contrast_curve:
+            detalle.append(f"Curva de contraste: {family.contrast_curve}")
+        if family.grain:
+            detalle.append(f"Grano/textura: {family.grain}")
+        if detalle:
+            explicacion.append(
+                f"detalle artistico tomado de la familia ({len(detalle)} ejes)")
 
     if brief.metaphor:
         partes.append(f"Metafora visual: {brief.metaphor}.")
-    if brief.negative_space:
-        partes.append(f"Espacio negativo reservado: {brief.negative_space}.")
+
+    espacio_negativo = brief.negative_space
+    if not espacio_negativo and family is not None and family.composition_bias:
+        espacio_negativo = family.composition_bias
+        explicacion.append(f"composicion tomada de la familia: {family.composition_bias}")
+    if espacio_negativo:
+        partes.append(f"Espacio negativo reservado: {espacio_negativo}.")
     partes.append(
-        f"Luz: {lighting or 'clave definida'}. Intencion de luminosidad: "
+        f"Luz: {lighting or 'clave definida'} — una sola fuente dramatica justificada dentro de "
+        f"la escena. Intencion de luminosidad: "
         f"{brief.brightness_intent or 'legible, sin empastar los negros'}."
     )
     if brief.brightness_intent:
         explicacion.append(f"luminosidad: {brief.brightness_intent}")
+    if detalle:
+        partes.append("Detalle artistico: " + ". ".join(detalle) + ".")
 
     partes.append(f"Paleta: {_paleta_texto(policy)}.")
     partes.append(
@@ -133,6 +177,12 @@ def compile_request(brief, policy, family=None, capabilities=None, repetition=No
     negativos = list(comp.get("prohibido", []))
     negativos += list(policy.data.get("paleta", {}).get("prohibida", []))
     negativos += list(policy.data.get("marca", {}).get("prohibido", []))
+    # Recursos quemados: prohibicion explicita EN CADA prompt (skill §5). Estaban
+    # solo en forbidden_tropes de algunas familias, asi que una familia sin el
+    # tropo listado dejaba pasar la balanza o el mazo.
+    negativos += list(policy.data.get("direccion_de_arte", {}).get("recursos_quemados", []))
+    if policy.data.get("direccion_de_arte", {}).get("nunca_dos_referentes_en_el_mismo_prompt"):
+        negativos.append("mezcla de varios estilos o referentes artisticos en la misma imagen")
     negativos += list(brief.negative_constraints)
     if family is not None:
         negativos += [f"tropo gastado: {t}" for t in family.forbidden_tropes]

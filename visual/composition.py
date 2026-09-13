@@ -1,13 +1,19 @@
 """Planes de composicion posterior: tipografia y marca.
 
-Estado honesto: estos son CONTRATOS EJECUTABLES + PLANES DETERMINISTAS. El
-rasterizado real NO esta implementado — el repositorio no tiene Pillow ni
-ninguna dependencia de imagen, y fabricar un rasterizador tipografico a mano
-seria peor que declarar el limite.
+Aqui vive el PLAN (medidas, escalones, cortes, color, jerarquia); el rasterizado
+real lo ejecuta `compositor.py` con Pillow (ADR 0003), o un compositor externo
+que reciba este mismo plan. La separacion importa: el plan es auditable sin
+abrir un solo pixel.
 
-Lo que si es real y probado aqui: el plan que un compositor (Canva, script con
-Pillow, o quien sea) debe ejecutar, y la garantia de que `exact_copy` no se
-altera jamas para hacer caber el texto.
+Garantia no negociable: `exact_copy` no se altera jamas para hacer caber el
+texto.
+
+Los parametros tipograficos NO se inventan aqui. Vienen del bloque `tipografia`
+de la politica visual, que transcribe la seccion §6 de la skill
+legalmente-visual-system: zona segura real del feed, escalones de cuerpo por
+longitud, maximo de lineas, contraste minimo y color por rol tomado de la paleta
+institucional. Antes estaban dispersos como numeros magicos en este archivo y en
+el compositor, y habian derivado de lo que la marca tiene aprobado.
 """
 
 from dataclasses import dataclass, field, asdict
@@ -20,11 +26,20 @@ LAYOUT_TYPES = {
 # Umbral de caracteres que separa cita corta de cita larga.
 UMBRAL_CITA_CORTA = 90
 
-# Margen seguro como fraccion del lado. Nada de texto fuera de esta caja.
+# Margen seguro como fraccion del lado, SOLO para formatos sin zona segura
+# medida en la politica. Nada de texto fuera de esta caja.
 SAFE_AREA_RATIO = 0.08
 
-# Tamaño minimo legible en movil, en px sobre el lienzo de 1080 de ancho.
+# Piso absoluto de legibilidad en movil, en px sobre el lienzo de 1080 de ancho.
+# No es el minimo de cada bloque: cada escalon tipografico trae el suyo, mayor.
 MIN_READABLE_PX = 34
+
+# Interlineado y avance entre bloques, en múltiplos del cuerpo.
+LINE_HEIGHT = 1.32
+BLOQUE_GAP = 0.5
+
+
+_POLICY_CACHE = None
 
 
 class ExactCopyViolation(ValueError):
@@ -39,6 +54,12 @@ class TextBlock:
     size_px: int
     max_width_px: int
     lines: list = field(default_factory=list)
+    # Cada bloque trae su propio piso: el cuerpo principal no puede caer al
+    # tamaño de un pie de foto solo porque el texto es largo (skill §6).
+    min_size_px: int = MIN_READABLE_PX
+    max_size_px: int = 0
+    color_hex: str = ""          # derivado de la paleta institucional, nunca inventado
+    line_height: float = LINE_HEIGHT
 
 
 @dataclass
@@ -51,6 +72,12 @@ class TypographyPlan:
     minimum_readable_size: int = MIN_READABLE_PX
     line_break_strategy: str = "PALABRA_COMPLETA"
     warnings: list = field(default_factory=list)
+    # --- parametros de la skill que el compositor debe respetar y el auditor comprobar ---
+    max_lineas: int = 0
+    contraste_minimo: float = 0.0
+    contraste_ideal: float = 0.0
+    safe_area_origen: str = ""       # "politica" | "ratio_por_defecto"
+    typography_policy_version: str = ""
 
     def to_dict(self):
         d = asdict(self)
@@ -81,7 +108,7 @@ def infer_layout_type(content_type, exact_copy):
     return "SHORT_QUOTE" if len(exact_copy or "") <= UMBRAL_CITA_CORTA else "LONG_QUOTE"
 
 
-def _wrap(texto, max_chars):
+def _wrap_simple(texto, max_chars):
     """Corte por palabra completa. NUNCA parte ni abrevia una palabra."""
     palabras, lineas, actual = texto.split(), [], ""
     for p in palabras:
@@ -96,47 +123,208 @@ def _wrap(texto, max_chars):
     return lineas
 
 
-def build_typography_plan(exact_copy, author, width, height, content_type="", context=""):
+def es_huerfana(lineas):
+    """Ultima linea de una sola palabra teniendo mas de una linea: defecto
+    tipografico clasico. Arruina el bloque aunque cada linea sea legible."""
+    return len(lineas) > 1 and len(lineas[-1].split()) == 1
+
+
+def _wrap(texto, max_chars, evitar_huerfana=True, max_lineas=0):
+    """Corte por palabra completa, reequilibrando la ultima linea.
+
+    Si la ultima linea queda con una sola palabra se reintenta con la caja
+    ligeramente mas estrecha (hasta un 30%): el texto NO se toca, solo cambia
+    donde cae el corte. Se admite una linea de mas siempre que siga dentro del
+    maximo aprobado. Si no hay reparto posible, se devuelve el mejor intento y
+    quien audita lo marca — jamas se resuelve acortando la frase.
+    """
+    lineas = _wrap_simple(texto, max_chars)
+    if not evitar_huerfana or not es_huerfana(lineas):
+        return lineas
+    techo = len(lineas) + 1 if (not max_lineas or len(lineas) < max_lineas) else len(lineas)
+    piso = max(8, int(max_chars * 0.70))
+    for ancho in range(max_chars - 1, piso - 1, -1):
+        cand = _wrap_simple(texto, ancho)
+        if len(cand) <= techo and not es_huerfana(cand):
+            return cand
+    return lineas
+
+
+def _politica(policy=None):
+    """Politica visual vigente. Se carga perezosamente para no obligar a cada
+    llamador a pasarla, pero nunca se inventa un valor si falta el bloque."""
+    global _POLICY_CACHE
+    if policy is not None:
+        return policy
+    if _POLICY_CACHE is None:
+        from brief import VisualPolicy
+        _POLICY_CACHE = VisualPolicy.load()
+    return _POLICY_CACHE
+
+
+def safe_area_para(width, height, policy=None):
+    """Zona segura real, no un margen inventado.
+
+    La skill mide el recorte del feed SOLO en 9:16 (x 80-1000, y 290-1630 sobre
+    1080x1920). Ese rectangulo se escala proporcionalmente a cualquier lienzo de
+    la misma relacion. Para el resto de formatos se usa el margen proporcional
+    por defecto y se declara el origen: no hay medida de recorte comprobada y no
+    se va a fabricar una.
+    """
+    tip = _politica(policy).data.get("tipografia", {})
+    for zona in (tip.get("zona_segura_declarada") or {}).values():
+        bw, bh = zona.get("lienzo", [0, 0])
+        if bw and bh and abs((width / height) - (bw / bh)) < 0.01:
+            ex, ey = width / bw, height / bh
+            x, y = int(zona["x"] * ex), int(zona["y"] * ey)
+            return (x, y, int(zona["x2"] * ex) - x, int(zona["y2"] * ey) - y), "politica"
+    ratio = float(tip.get("zona_segura_ratio_por_defecto", SAFE_AREA_RATIO))
+    mx, my = int(width * ratio), int(height * ratio)
+    return (mx, my, width - 2 * mx, height - 2 * my), "ratio_por_defecto"
+
+
+def zona_visible_tras_recorte(width, height, policy=None):
+    """Banda que el feed deja ver, escalada al lienzo. None si no hay medida.
+
+    Solo existe para los formatos donde la skill midio el recorte real. Para el
+    resto se devuelve None y quien audita lo dice: no hay medida, no hay juicio.
+    """
+    for fmt in (_politica(policy).data.get("formatos") or {}).values():
+        zona = fmt.get("zona_visible_tras_recorte")
+        if not zona:
+            continue
+        bw, bh = fmt.get("width", 0), fmt.get("height", 0)
+        if bw and bh and abs((width / height) - (bw / bh)) < 0.01:
+            ex, ey = width / bw, height / bh
+            return (int(zona["x"] * ex), int(zona["y"] * ey),
+                    int(zona["x2"] * ex), int(zona["y2"] * ey))
+    return None
+
+
+def escalon_para(n_caracteres, policy=None):
+    """(px_min, px_max, dentro_de_tabla) del bloque principal segun longitud."""
+    tip = _politica(policy).data.get("tipografia", {})
+    escalones = tip.get("escalones_principal") or []
+    for esc in escalones:
+        if n_caracteres <= int(esc["max_caracteres"]):
+            return int(esc["px_min"]), int(esc["px_max"]), True
+    # Fuera de tabla no hay minimo aprobado: se aplica el MAS BAJO de los
+    # aprobados (nunca el piso absoluto, que es para pies de foto) y la pieza
+    # queda marcada. Degradar en silencio el cuerpo principal a tamaño de
+    # leyenda seria resolver un problema de edicion con un defecto de arte.
+    if escalones:
+        return int(escalones[-1]["px_min"]), int(escalones[-1]["px_max"]), False
+    return int(tip.get("piso_absoluto_px", MIN_READABLE_PX)), 82, False
+
+
+def color_de_rol(rol, policy=None):
+    """Color del rol tomado de la PALETA institucional. Sin hexadecimales sueltos."""
+    pol = _politica(policy)
+    tip = pol.data.get("tipografia", {})
+    ref = (tip.get("colores_por_rol") or {}).get(rol)
+    if not ref:
+        return ""
+    tonos = (pol.data.get("paleta", {}).get("requerida", {}) or {}).get(ref.get("paleta"), [])
+    idx = int(ref.get("indice", 0))
+    return tonos[idx] if idx < len(tonos) else (tonos[0] if tonos else "")
+
+
+def hex_a_rgb(valor):
+    v = str(valor or "").strip().lstrip("#")
+    if len(v) != 6:
+        return None
+    try:
+        return tuple(int(v[i:i + 2], 16) for i in (0, 2, 4))
+    except ValueError:
+        return None
+
+
+def build_typography_plan(exact_copy, author, width, height, content_type="", context="",
+                          policy=None):
     """Plan determinista. `exact_copy` se transporta intacto: se comprueba al final."""
     if exact_copy is None:
         raise ExactCopyViolation("no hay exact_copy que componer.")
 
+    pol = _politica(policy)
+    tip = pol.data.get("tipografia", {})
     layout = infer_layout_type(content_type, exact_copy)
-    mx = int(width * SAFE_AREA_RATIO)
-    my = int(height * SAFE_AREA_RATIO)
-    safe = (mx, my, width - 2 * mx, height - 2 * my)
+    safe, origen_safe = safe_area_para(width, height, pol)
+
+    max_lineas = int(tip.get("max_lineas", 6))
+    sec = tip.get("secundario", {}) or {}
+    sec_min = int(sec.get("px_min", MIN_READABLE_PX))
+    sec_max = int(sec.get("px_max", 44))
 
     largo = len(exact_copy)
-    size = 96 if largo <= 40 else 78 if largo <= UMBRAL_CITA_CORTA else 60 if largo <= 180 else 46
+    px_min, px_max, en_tabla = escalon_para(largo, pol)
     warnings = []
-    if size < MIN_READABLE_PX:
-        size = MIN_READABLE_PX
-    # Aproximacion tipografica: ~0.52 em de ancho medio por caracter.
-    max_chars = max(8, int(safe[2] / (size * 0.52)))
-    lineas = _wrap(exact_copy, max_chars)
-
-    # Si no cabe en la caja segura, se AVISA y se escala hasta el minimo legible.
-    # Por debajo del minimo se marca para revision humana; jamas se parafrasea.
-    alto_disponible = safe[3] - (140 if author else 0)
-    while len(lineas) * int(size * 1.32) > alto_disponible and size > MIN_READABLE_PX:
-        size = max(MIN_READABLE_PX, int(size * 0.92))
-        max_chars = max(8, int(safe[2] / (size * 0.52)))
-        lineas = _wrap(exact_copy, max_chars)
-    if len(lineas) * int(size * 1.32) > alto_disponible:
+    if not en_tabla:
         warnings.append(
-            "el texto exacto no cabe en el area segura al tamaño minimo legible: "
-            "requiere revision humana (reencuadre o cambio de formato). NO se parafrasea."
-        )
+            f"el texto principal tiene {largo} caracteres y queda FUERA de la tabla tipografica "
+            f"aprobada (maximo declarado: 140). No hay cuerpo minimo aprobado para ese caso: la "
+            "pieza necesita decision humana (reencuadre, otro formato o carrusel). "
+            "NO se parafrasea ni se reduce el texto.")
 
-    blocks = [TextBlock("QUOTE", exact_copy, "serif_display", size, safe[2], lineas)]
+    # Escala de referencia: los escalones estan medidos sobre 1080 px de ancho.
+    escala = width / 1080.0
+    size = max(1, int(px_max * escala))
+    piso = max(1, int(px_min * escala))
+
+    # Aproximacion tipografica: ~0.52 em de ancho medio por caracter. El
+    # compositor vuelve a medir con la metrica real de la fuente.
+    def corta(cuerpo):
+        return _wrap(exact_copy, max(8, int(safe[2] / (cuerpo * 0.52))), max_lineas=max_lineas)
+
+    alto_reservado = int((sec_max * escala) * 2.6) if author else 0
+    alto_disponible = safe[3] - alto_reservado
+    lineas = corta(size)
+    # Se reduce el cuerpo mientras no quepa o exceda el maximo de lineas. Reducir
+    # mete mas caracteres por linea, asi que ambas cosas mejoran a la vez.
+    while (len(lineas) * int(size * LINE_HEIGHT) > alto_disponible
+           or len(lineas) > max_lineas) and size > piso:
+        size = max(piso, int(size * 0.92))
+        lineas = corta(size)
+
+    if len(lineas) * int(size * LINE_HEIGHT) > alto_disponible:
+        warnings.append(
+            "el texto exacto no cabe en el area segura al cuerpo minimo aprobado para su escalon: "
+            "requiere revision humana (reencuadre o cambio de formato). NO se parafrasea.")
+    if len(lineas) > max_lineas:
+        warnings.append(
+            f"el bloque principal ocupa {len(lineas)} lineas y el maximo aprobado es {max_lineas}: "
+            "decision humana (dividir en carrusel o acortar el texto EN LA FUENTE, nunca aqui).")
+    if es_huerfana(lineas):
+        warnings.append(
+            "la ultima linea del bloque principal queda con una sola palabra (huerfana) y no hay "
+            "reparto posible sin tocar el texto: ajustar encuadre o cuerpo en revision humana.")
+
+    blocks = [TextBlock("QUOTE", exact_copy, "serif_display", size, safe[2], lineas,
+                        min_size_px=piso, max_size_px=max(1, int(px_max * escala)),
+                        color_hex=color_de_rol("QUOTE", pol))]
     if author:
-        blocks.append(TextBlock("AUTHOR", author, "sans_caption", max(MIN_READABLE_PX, int(size * 0.42)),
-                                safe[2], _wrap(author, max(10, int(safe[2] / (size * 0.42 * 0.52))))))
+        cuerpo_autor = max(int(sec_min * escala),
+                           min(int(sec_max * escala), int(size * 0.42)))
+        blocks.append(TextBlock(
+            "AUTHOR", author, "sans_caption", cuerpo_autor, safe[2],
+            _wrap(author, max(10, int(safe[2] / (cuerpo_autor * 0.52)))),
+            min_size_px=int(sec_min * escala), max_size_px=int(sec_max * escala),
+            color_hex=color_de_rol("AUTHOR", pol)))
     if context:
-        blocks.append(TextBlock("CONTEXT", context, "sans_caption", MIN_READABLE_PX,
-                                safe[2], _wrap(context, 60)))
+        cuerpo_ctx = int(sec_min * escala)
+        blocks.append(TextBlock(
+            "CONTEXT", context, "sans_caption", cuerpo_ctx, safe[2],
+            _wrap(context, max(10, int(safe[2] / (cuerpo_ctx * 0.52)))),
+            min_size_px=cuerpo_ctx, max_size_px=int(sec_max * escala),
+            color_hex=color_de_rol("CONTEXT", pol)))
 
-    plan = TypographyPlan(layout, (width, height), safe, blocks=blocks, warnings=warnings)
+    plan = TypographyPlan(
+        layout, (width, height), safe, blocks=blocks, warnings=warnings,
+        minimum_readable_size=piso if en_tabla else max(1, int(MIN_READABLE_PX * escala)),
+        max_lineas=max_lineas,
+        contraste_minimo=float(tip.get("contraste_minimo", 0.0)),
+        contraste_ideal=float(tip.get("contraste_ideal", 0.0)),
+        safe_area_origen=origen_safe,
+        typography_policy_version=pol.version)
     assert_exact_copy_preserved(exact_copy, plan)
     return plan
 
@@ -162,6 +350,10 @@ class BrandCompositionPlan:
     material_integration_required: bool = True
     generator_writes_text: bool = False
     coercion_note: str = ""
+    # --- acabado (politica `marca`) ---
+    engraved: bool = True          # grabado con sombra y luz de canto, no texto plano pegado
+    text_color_hex: str = ""       # laton viejo de la paleta; nunca un dorado inventado
+    contraste_minimo: float = 0.0  # la marca tambien tiene que leerse
 
     def to_dict(self):
         return asdict(self)
@@ -190,4 +382,7 @@ def build_brand_plan(policy, surface, requested_generator_text=False):
         placement_region="superficie fisica reservada en la escena",
         generator_writes_text=bool(permite and requested_generator_text),
         coercion_note=nota,
+        engraved=bool(marca.get("acabado_grabado", True)),
+        text_color_hex=color_de_rol("LABEL", policy),
+        contraste_minimo=float(policy.data.get("tipografia", {}).get("contraste_minimo", 0.0)),
     )

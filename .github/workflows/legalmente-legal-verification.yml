@@ -205,11 +205,15 @@ jobs:
         run: |
           python3 -m unittest \
             test_visual_pipeline test_visual_advanced \
-            test_composition test_http_provider test_resolver -v
+            test_composition test_art_direction test_http_provider test_resolver -v
 
       - name: Contrato canónico cross-repo
         working-directory: contract
         run: python3 -m unittest test_canonical_envelope -v
+
+      - name: La auditoría de detalle artístico corre sobre el contenido real
+        working-directory: visual
+        run: python3 cli.py audit-art
 
       - name: El pipeline visual no puede aprobar nada por sí solo
         working-directory: visual

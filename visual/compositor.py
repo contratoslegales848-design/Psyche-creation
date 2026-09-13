@@ -17,6 +17,15 @@ Limites declarados de la V1:
   coordenadas deben venir DECLARADAS: no hay vision que las detecte.
 - Ante superficie compleja, ausente o no declarada -> NEEDS_HUMAN_REVIEW.
   Nunca degrada a watermark, logo flotante ni firma en una esquina.
+
+Detalle artistico que SI se comprueba aqui (skill §6, politica `tipografia`):
+- El contraste real entre cada bloque de texto y los pixeles que quedan debajo,
+  medido en celdas (WCAG). Por debajo del minimo aprobado la pieza escala a
+  revision humana. NUNCA se resuelve pintando una caja opaca detras del texto:
+  la skill exige resolverlo con la luz de la propia escena.
+- Que ningun bloque de texto caiga sobre la superficie de marca.
+- La marca se rasteriza como GRABADO (sombra hundida + luz de canto), no como
+  texto plano pegado, y solo si contrasta con su superficie.
 """
 
 import hashlib
@@ -26,7 +35,12 @@ from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageFont
 
-COMPOSITOR_VERSION = "1.0"
+COMPOSITOR_VERSION = "1.1"
+
+# Rejilla de muestreo del fondo bajo cada bloque de texto. Suficiente para
+# detectar una zona clara bajo texto claro; barata y determinista.
+CONTRASTE_COLUMNAS = 8
+CONTRASTE_FILAS = 4
 
 # Limites de recursos (§44). No es DRM: evita fallos triviales y bombas obvias.
 MAX_DIMENSION = 8192
@@ -97,6 +111,9 @@ class CompositionResult:
     brand_applied: bool = False
     warnings: list = field(default_factory=list)
     reason_codes: list = field(default_factory=list)
+    # Medidas de detalle artistico: contraste real por bloque y de la marca.
+    text_contrast: dict = field(default_factory=dict)
+    brand_contrast: dict = field(default_factory=dict)
 
     def to_dict(self):
         d = asdict(self)
@@ -143,6 +160,96 @@ def _sha(b):
     return hashlib.sha256(b).hexdigest()
 
 
+def luminancia_relativa(rgb):
+    """Luminancia relativa sRGB (WCAG 2.1). Linealiza antes de ponderar."""
+    def canal(v):
+        v = v / 255.0
+        return v / 12.92 if v <= 0.04045 else ((v + 0.055) / 1.055) ** 2.4
+    r, g, b = (canal(c) for c in rgb[:3])
+    return 0.2126 * r + 0.7152 * g + 0.0722 * b
+
+
+def ratio_contraste(rgb_a, rgb_b):
+    """Razon de contraste WCAG entre dos colores. 1.0 = invisible, 21 = maximo."""
+    la, lb = luminancia_relativa(rgb_a), luminancia_relativa(rgb_b)
+    hi, lo = max(la, lb), min(la, lb)
+    return (hi + 0.05) / (lo + 0.05)
+
+
+def contraste_sobre_region(img, box, color_texto,
+                           columnas=CONTRASTE_COLUMNAS, filas=CONTRASTE_FILAS):
+    """Contraste del texto contra el fondo REAL, celda a celda.
+
+    Promediar toda la region esconde el caso que arruina la pieza: un texto
+    claro legible salvo donde cruza una ventana encendida. Se devuelve el
+    minimo por celda, que es el que decide la legibilidad.
+    """
+    x0, y0, x1, y1 = (int(v) for v in box)
+    x0, y0 = max(0, x0), max(0, y0)
+    x1, y1 = min(img.width, x1), min(img.height, y1)
+    if x1 <= x0 or y1 <= y0:
+        return None
+    cols = max(1, min(columnas, x1 - x0))
+    fils = max(1, min(filas, y1 - y0))
+    celdas = img.crop((x0, y0, x1, y1)).convert("RGB").resize((cols, fils), Image.BOX)
+    px = celdas.load()
+    valores = [ratio_contraste(color_texto, px[cx, cy])
+               for cy in range(fils) for cx in range(cols)]
+    return {"min": round(min(valores), 2),
+            "medio": round(sum(valores) / len(valores), 2),
+            "celdas": cols * fils}
+
+
+def _solapan(a, b):
+    """¿Se cruzan dos rectangulos (x0, y0, x1, y1)?"""
+    return not (a[2] <= b[0] or b[2] <= a[0] or a[3] <= b[1] or b[3] <= a[1])
+
+
+def _tono(rgb, factor):
+    """Version mas clara (>1) o mas oscura (<1) del MISMO color institucional.
+    No introduce un color nuevo: solo modula el que la paleta ya aprobo."""
+    return tuple(max(0, min(255, int(round(c * factor)))) for c in rgb[:3])
+
+
+# Colores de reserva si el plan no trae color (planes anteriores a la politica
+# 1.2). Son EXACTAMENTE los tonos de la paleta institucional: marfil editorial
+# para el cuerpo, laton viejo para el resto.
+COLOR_RESERVA = {"QUOTE": (252, 250, 242)}
+COLOR_RESERVA_OTROS = (197, 160, 89)
+
+
+def _color_de_bloque(b):
+    """Color del bloque: el que declara el plan (derivado de la paleta) o el de
+    reserva. Nunca un color inventado en el rasterizador."""
+    from composition import hex_a_rgb
+    rgb = hex_a_rgb(getattr(b, "color_hex", ""))
+    if rgb:
+        return rgb
+    return COLOR_RESERVA.get(b.role, COLOR_RESERVA_OTROS)
+
+
+def _contenido_en(caja, marco):
+    """¿El rectangulo `caja` cabe entero dentro de `marco`?"""
+    return (caja[0] >= marco[0] and caja[1] >= marco[1]
+            and caja[2] <= marco[2] and caja[3] <= marco[3])
+
+
+def _dibujar_grabado(draw, origen, texto, font, color, size):
+    """Marca GRABADA, no pegada.
+
+    Una palabra plana sobre una placa delata el montaje: lo que hace creible una
+    marca fisica es el canto. Se dibuja la sombra del corte arriba-izquierda y la
+    luz del bisel abajo-derecha, ambas derivadas del MISMO laton de la paleta, y
+    encima el relleno. Determinista: el desplazamiento sale del cuerpo de letra.
+    """
+    x, y = origen
+    d = max(1, int(round(size / 28.0)))
+    sombra, luz = _tono(color, 0.42), _tono(color, 1.35)
+    draw.text((x - d, y - d), texto, font=font, fill=sombra)
+    draw.text((x + d, y + d), texto, font=font, fill=luz)
+    draw.text((x, y), texto, font=font, fill=color)
+
+
 def _validar_recursos(img, textos):
     if img.width > MAX_DIMENSION or img.height > MAX_DIMENSION:
         raise CompositionError(f"imagen demasiado grande: {img.width}x{img.height}")
@@ -183,46 +290,87 @@ def compose(raw_bytes, typography_plan, brand_plan=None, reserved_surface=None,
     draw = ImageDraw.Draw(img)
     sx, sy, sw, sh = typography_plan.safe_area
     fonts_used, warnings, reason_codes = {}, list(typography_plan.warnings), []
+    contraste_minimo = float(getattr(typography_plan, "contraste_minimo", 0.0) or 0.0)
+    contraste_ideal = float(getattr(typography_plan, "contraste_ideal", 0.0) or 0.0)
+    medidas_contraste = {}
 
     # --- tipografia ---
     y = sy
     bloques_render = []
     for b in typography_plan.blocks:
         size = b.size_px
+        # Cada bloque tiene su propio piso aprobado (skill §6): el cuerpo
+        # principal no baja al tamaño de un pie de foto para hacer sitio.
+        piso = int(getattr(b, "min_size_px", 0) or typography_plan.minimum_readable_size)
+        interlineado = float(getattr(b, "line_height", 1.32) or 1.32)
         font, nombre = _font(b.font_role, size)
         fonts_used[b.role] = nombre
         lineas = wrap_to_width(b.text, font, sw)
 
-        # Reduce hasta el minimo legible; por debajo, desborda y se declara.
-        while size > typography_plan.minimum_readable_size:
-            alto = len(lineas) * int(size * 1.32)
+        # Reduce hasta ese piso; por debajo, desborda y se declara.
+        while size > piso:
+            alto = len(lineas) * int(size * interlineado)
             if y + alto <= sy + sh and all(measure(l, font)[0] <= sw for l in lineas):
                 break
-            size = max(typography_plan.minimum_readable_size, int(size * 0.92))
+            size = max(piso, int(size * 0.92))
             font, nombre = _font(b.font_role, size)
             lineas = wrap_to_width(b.text, font, sw)
 
-        alto = len(lineas) * int(size * 1.32)
+        alto = len(lineas) * int(size * interlineado)
         desborda = (y + alto > sy + sh) or any(measure(l, font)[0] > sw for l in lineas)
         if desborda:
             raise CompositionOverflow(
                 f"COMPOSITION_OVERFLOW: el bloque {b.role} no cabe en el area segura "
-                f"al tamaño minimo legible ({typography_plan.minimum_readable_size}px). "
+                f"al cuerpo minimo aprobado para su escalon ({piso}px). "
                 "El texto exacto aprobado NO se acorta, reformula ni reescribe: "
                 "la pieza necesita otro formato o decision humana."
             )
-        bloques_render.append((b, font, lineas, size, y))
+        bloques_render.append((b, font, lineas, size, y, interlineado))
         y += alto + int(size * 0.5)
 
-    for b, font, lineas, size, top in bloques_render:
-        color = (252, 250, 242) if b.role == "QUOTE" else (197, 160, 89)
+    # --- detalle artistico: contraste real y colision con la marca ---
+    # Se mide ANTES de dibujar: lo que decide la legibilidad es el fondo que
+    # queda debajo, no el resultado ya pintado.
+    caja_marca = None
+    if reserved_surface is not None:
+        caja_marca = (reserved_surface.x, reserved_surface.y,
+                      reserved_surface.x + reserved_surface.width,
+                      reserved_surface.y + reserved_surface.height)
+
+    for b, font, lineas, size, top, interlineado in bloques_render:
+        color = _color_de_bloque(b)
+        caja = (sx, top, sx + sw, top + len(lineas) * int(size * interlineado))
+        medida = contraste_sobre_region(img, caja, color)
+        if medida:
+            medidas_contraste[b.role] = medida
+            if contraste_minimo and medida["min"] < contraste_minimo:
+                reason_codes.append("TEXT_CONTRAST_BELOW_MINIMUM")
+                warnings.append(
+                    f"el bloque {b.role} cae sobre un fondo que deja un contraste minimo de "
+                    f"{medida['min']}:1, por debajo del {contraste_minimo}:1 exigido. "
+                    "No se pinta caja opaca detras del texto (prohibido): el contraste se "
+                    "resuelve con la luz de la escena, asi que la pieza necesita revision humana.")
+            elif contraste_ideal and medida["min"] < contraste_ideal:
+                warnings.append(
+                    f"el bloque {b.role} cumple el minimo pero no el contraste ideal "
+                    f"({medida['min']}:1 frente a {contraste_ideal}:1).")
+        if caja_marca and _solapan(caja, caja_marca):
+            reason_codes.append("TEXT_OVER_BRAND_SURFACE")
+            warnings.append(
+                f"el bloque {b.role} se superpone a la superficie de marca declarada; la regla "
+                "vigente prohibe texto sobre el objeto de marca. No se desplaza el texto por "
+                "cuenta propia: lo decide una persona.")
+
+    for b, font, lineas, size, top, interlineado in bloques_render:
+        color = _color_de_bloque(b)
         yy = top
         for linea in lineas:
             draw.text((sx, yy), linea, font=font, fill=color)
-            yy += int(size * 1.32)
+            yy += int(size * interlineado)
 
     # --- marca ---
     brand_applied = False
+    brand_contrast = {}
     estado = COMPOSED
     if brand_plan is not None and brand_plan.get("required"):
         if brand_plan.get("generator_writes_text"):
@@ -256,10 +404,41 @@ def compose(raw_bytes, typography_plan, brand_plan=None, reserved_surface=None,
                 warnings.append("la marca no cabe en la superficie reservada declarada.")
                 estado = NEEDS_HUMAN_REVIEW
             else:
+                from composition import hex_a_rgb, zona_visible_tras_recorte
+                color = hex_a_rgb(brand_plan.get("text_color_hex")) or COLOR_RESERVA_OTROS
+                caja_rs = (rs.x, rs.y, rs.x + rs.width, rs.y + rs.height)
+
+                # La marca tambien tiene que LEERSE sobre su superficie. Si no
+                # contrasta, no se recolorea por cuenta propia (el laton viejo
+                # es paleta aprobada): la escena tiene que cambiar.
+                medida = contraste_sobre_region(img, caja_rs, color, columnas=4, filas=2)
+                if medida:
+                    brand_contrast = medida
+                    minimo = float(brand_plan.get("contraste_minimo") or 0.0)
+                    if minimo and medida["min"] < minimo:
+                        reason_codes.append("BRAND_CONTRAST_BELOW_MINIMUM")
+                        warnings.append(
+                            f"la marca queda a {medida['min']}:1 sobre su superficie, por debajo "
+                            f"del {minimo}:1 exigido: sobre ese material no se lee. No se cambia "
+                            "el color de marca ni se añade caja; lo decide una persona.")
+                        estado = NEEDS_HUMAN_REVIEW
+
+                # Lo que el feed recorta no existe. Si la superficie de marca cae
+                # fuera de la banda visible, la integracion fisica se pierde.
+                visible = zona_visible_tras_recorte(img.width, img.height)
+                if visible and not _contenido_en(caja_rs, visible):
+                    reason_codes.append("BRAND_SURFACE_OUTSIDE_VISIBLE_AREA")
+                    warnings.append(
+                        "la superficie de marca cae total o parcialmente fuera de la banda que el "
+                        "feed deja ver: la marca puede quedar recortada. Reencuadre humano.")
+
                 bbox = font.getbbox(texto)
-                draw.text((rs.x + (rs.width - w) // 2 - bbox[0],
-                           rs.y + (rs.height - h) // 2 - bbox[1]),
-                          texto, font=font, fill=(197, 160, 89))
+                origen = (rs.x + (rs.width - w) // 2 - bbox[0],
+                          rs.y + (rs.height - h) // 2 - bbox[1])
+                if brand_plan.get("engraved", True):
+                    _dibujar_grabado(draw, origen, texto, font, color, size)
+                else:
+                    draw.text(origen, texto, font=font, fill=color)
                 fonts_used["BRAND"] = nombre
                 brand_applied = True
 
@@ -285,7 +464,9 @@ def compose(raw_bytes, typography_plan, brand_plan=None, reserved_surface=None,
         fonts_used=fonts_used,
         brand_applied=brand_applied,
         warnings=warnings,
-        reason_codes=reason_codes,
+        reason_codes=sorted(set(reason_codes)),
+        text_contrast=medidas_contraste,
+        brand_contrast=brand_contrast,
     )
 
 

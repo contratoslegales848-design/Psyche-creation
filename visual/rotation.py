@@ -6,12 +6,15 @@ se integra lo que es una comprobacion mecanica de variedad visual/tematica.
 Nada aqui produce, verifica ni infiere una afirmacion juridica — eso sigue
 exigiendo la skill legalmente-legal-verification, sin excepcion.
 
-Dos reglas mecanicas reales:
+Tres reglas mecanicas reales:
   1. Entre dos piezas consecutivas, al menos 3 de 5 variables deben cambiar
      (escuela, escenario, mecanismo de revelacion/metafora, encuadre,
      presencia humana) — evita "solo cambie el fondo".
   2. Un lote debe cubrir un minimo de materias, escuelas visuales y
      encuadres distintos — evita que un lote entero use la misma formula.
+  3. Una escuela artistica no se repite dentro de las ultimas N piezas
+     (N declarado en la politica visual, hoy 5). Es la regla central del motor
+     de rotacion: el feed se aplano justamente por repetir escuela.
 """
 
 from dataclasses import dataclass, field
@@ -121,3 +124,40 @@ def assess_batch_diversity(entries, min_materias=None, min_familias=None, min_en
         incumplidos.append(f"encuadres distintos: {len(encuadres)} < minimo {minimos['encuadres']}.")
 
     return BatchDiversityReport(n, len(materias), len(familias), len(encuadres), minimos, incumplidos)
+
+
+# --- regla 3: rotacion de escuela artistica ---------------------------------
+
+@dataclass
+class EscuelaCheck:
+    escuela: str
+    ventana: int
+    repetida: bool
+    posicion: int          # 1 = la pieza inmediatamente anterior; 0 = no aparece
+    detalle: str
+
+    def to_dict(self):
+        return {"escuela": self.escuela, "ventana": self.ventana,
+                "repetida": self.repetida, "posicion": self.posicion,
+                "detalle": self.detalle}
+
+
+def verificar_rotacion_de_escuela(escuela, entries_recientes, ventana=5):
+    """¿Se repite la escuela dentro de la ventana de no repeticion?
+
+    `entries_recientes` va de la mas reciente a la mas antigua (el orden que
+    devuelve VisualMemory.recent()). Una escuela ausente no se juzga: sin dato
+    declarado no se puede afirmar ni cumplimiento ni incumplimiento.
+    """
+    objetivo = normaliza(escuela)
+    if not objetivo:
+        return EscuelaCheck("", int(ventana), False, 0,
+                            "no se declaro escuela artistica: nada que comprobar.")
+    for i, e in enumerate(list(entries_recientes)[:int(ventana)], start=1):
+        if normaliza(getattr(e, "escuela", "")) == objetivo:
+            return EscuelaCheck(
+                escuela, int(ventana), True, i,
+                f"la escuela {escuela!r} se uso hace {i} pieza(s), dentro de la ventana de "
+                f"{int(ventana)}.")
+    return EscuelaCheck(escuela, int(ventana), False, 0,
+                        f"la escuela {escuela!r} no aparece en las ultimas {int(ventana)} piezas.")

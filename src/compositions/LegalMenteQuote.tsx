@@ -13,6 +13,13 @@ import {
   useVideoConfig,
 } from 'remotion';
 import type {LegalMentePiece} from '../types';
+import {
+  colores,
+  cuerpoPrincipal,
+  cuerpoSecundario,
+  cuerpoSegundoNivel,
+  zonaSegura,
+} from '../brandTypography';
 
 const textFont = 'EB Garamond';
 
@@ -33,6 +40,10 @@ export const LegalMenteQuote: React.FC<LegalMentePiece> = ({
   const frame = useCurrentFrame();
   const {fps, durationInFrames} = useVideoConfig();
 
+  // Cuerpos de letra derivados de la política visual, no fijados a ojo.
+  const cuerpoTitulo = cuerpoPrincipal(titulo);
+  const cuerpoFrase = cuerpoSegundoNivel(cuerpoTitulo);
+
   const entrance = interpolate(frame, [0.5 * fps, 1.5 * fps], [0, 1], {
     extrapolateLeft: 'clamp',
     extrapolateRight: 'clamp',
@@ -50,7 +61,7 @@ export const LegalMenteQuote: React.FC<LegalMentePiece> = ({
   });
 
   return (
-    <AbsoluteFill style={{backgroundColor: '#100d0b', overflow: 'hidden'}}>
+    <AbsoluteFill style={{backgroundColor: colores.fondo, overflow: 'hidden'}}>
       <Img
         src={staticFile(assetPath(imagen))}
         style={{
@@ -70,23 +81,28 @@ export const LegalMenteQuote: React.FC<LegalMentePiece> = ({
 
       <AbsoluteFill
         style={{
-          padding: '130px 78px 90px',
+          // Zona segura medida del feed: fuera de ella el título y el remate
+          // se publicaban recortados (el feed corta ~240 px arriba y abajo).
+          paddingTop: zonaSegura.top,
+          paddingBottom: zonaSegura.bottom,
+          paddingLeft: zonaSegura.left,
+          paddingRight: zonaSegura.right,
           justifyContent: 'space-between',
-          color: '#F4EBD8',
-          fontFamily: textFont,
+          color: colores.texto,
           textShadow: '0 4px 20px rgba(0,0,0,0.8)',
+          fontFamily: textFont,
         }}
       >
         <div
           style={{
             opacity: textOpacity,
             transform: `translateY(${translateY}px)`,
-            maxWidth: 900,
+            maxWidth: zonaSegura.width,
           }}
         >
           <div
             style={{
-              fontSize: 62,
+              fontSize: cuerpoTitulo,
               fontWeight: 600,
               lineHeight: 1.08,
               letterSpacing: 0.3,
@@ -97,8 +113,8 @@ export const LegalMenteQuote: React.FC<LegalMentePiece> = ({
           <div
             style={{
               marginTop: 28,
-              maxWidth: 820,
-              fontSize: 44,
+              maxWidth: zonaSegura.width,
+              fontSize: cuerpoFrase,
               fontWeight: 400,
               fontStyle: 'italic',
               lineHeight: 1.18,
@@ -122,7 +138,8 @@ export const LegalMenteQuote: React.FC<LegalMentePiece> = ({
             style={{
               maxWidth: 620,
               paddingBottom: 10,
-              fontSize: 25,
+              // Mínimo legible declarado para autor / fuente / contexto.
+              fontSize: cuerpoSecundario,
               fontWeight: 600,
               letterSpacing: 5.5,
               lineHeight: 1.3,
@@ -133,7 +150,7 @@ export const LegalMenteQuote: React.FC<LegalMentePiece> = ({
           </div>
           <div
             style={{
-              color: '#E6C879',
+              color: colores.secundario,
               fontFamily: `${wordmarkFont}, Georgia, serif`,
               fontSize: 50,
               fontWeight: 700,

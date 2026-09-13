@@ -1,15 +1,48 @@
 {
-  "policy_version": "1.1",
-  "descripcion": "Politica visual ejecutable de LegalMente. Solo contiene reglas que un programa puede comprobar. Las reglas de criterio (que escuela artistica toca, que metafora) viven en la skill legalmente-visual-system y NO se duplican aqui.",
+  "policy_version": "1.2",
+  "descripcion": "Politica visual ejecutable de LegalMente. Solo contiene reglas que un programa puede comprobar. Las reglas de criterio (que escuela artistica toca, que metafora) viven en la skill legalmente-visual-system y NO se duplican aqui: lo que si se transcribe son sus PARAMETROS comprobables (zona segura, escalones tipograficos, contraste minimo, ventana de no repeticion de escuela, banco de escuelas), citando la seccion de origen en cada bloque.",
   "formatos": {
-    "VERTICAL_9_16": {"width": 1080, "height": 1920, "aspect_ratio": "9:16", "full_bleed": true},
-    "SOCIAL_4_5": {"width": 1080, "height": 1350, "aspect_ratio": "4:5", "full_bleed": true}
+    "VERTICAL_9_16": {
+      "width": 1080,
+      "height": 1920,
+      "aspect_ratio": "9:16",
+      "full_bleed": true,
+      "zona_visible_tras_recorte": {
+        "x": 0,
+        "y": 240,
+        "x2": 1080,
+        "y2": 1680,
+        "fuente": "legalmente-visual-system §6: el feed recorta aproximadamente 240 px arriba y abajo",
+        "nota": "Lo que queda fuera de esta banda puede no verse en el feed. La imagen se sigue generando a sangre; lo que no puede quedar fuera es aquello de lo que depende la pieza: el texto y la superficie de marca."
+      }
+    },
+    "SOCIAL_4_5": {
+      "width": 1080,
+      "height": 1350,
+      "aspect_ratio": "4:5",
+      "full_bleed": true
+    }
   },
   "composicion": {
     "scene_count": 1,
-    "prohibido": ["collage", "grid", "storyboard", "multiples escenas", "split screen", "diptico", "triptico",
-      "neon", "estetica hacker", "persona sola frente a columnas",
-      "libros o pergaminos apilados sobre escritorio oscuro", "objeto forense sobre pergamino"]
+    "prohibido": [
+      "collage",
+      "grid",
+      "storyboard",
+      "multiples escenas",
+      "split screen",
+      "diptico",
+      "triptico",
+      "neon",
+      "estetica hacker",
+      "persona sola frente a columnas",
+      "libros o pergaminos apilados sobre escritorio oscuro",
+      "objeto forense sobre pergamino",
+      "mosaico",
+      "iconos de call to action",
+      "texto ilegible",
+      "texto inventado"
+    ]
   },
   "familias_visuales": [
     "hiperrealismo_editorial_cinematografico",
@@ -23,10 +56,22 @@
   ],
   "paleta": {
     "requerida": {
-      "nogal_profundo": ["#2B1B17", "#1E1412"],
-      "marfil_editorial": ["#FCFAF2", "#F4EFE1"],
-      "azul_petroleo": ["#0F2537", "#16324F"],
-      "laton_oro_viejo": ["#C5A059", "#B38F4D"]
+      "nogal_profundo": [
+        "#2B1B17",
+        "#1E1412"
+      ],
+      "marfil_editorial": [
+        "#FCFAF2",
+        "#F4EFE1"
+      ],
+      "azul_petroleo": [
+        "#0F2537",
+        "#16324F"
+      ],
+      "laton_oro_viejo": [
+        "#C5A059",
+        "#B38F4D"
+      ]
     },
     "prohibida": [
       "sepia dominante",
@@ -35,27 +80,60 @@
       "negros sin detalle",
       "pieza excesivamente oscura"
     ],
-    "acento_frio_debe_ser_objeto_fisico": true
+    "acento_frio_debe_ser_objeto_fisico": true,
+    "adherencia": {
+      "tolerancia_rgb": 64,
+      "minimo_pixeles_en_paleta": 0.35,
+      "acento_frio_minimo_pixeles": 0.005,
+      "negro_empastado_maximo": 0.12,
+      "nota": "Umbrales de la QA de pixeles (inspection.ArtDetailInspector). PROVISIONALES: todavia no existe arte real generado por un proveedor de verdad contra el que calibrarlos, asi que se fijan con criterio conservador y se ajustan cuando haya lote real medido. Ninguna heuristica rechaza sola: todas escalan a revision humana."
+    }
   },
   "marca": {
     "integracion_fisica_requerida": true,
     "superficies_permitidas": [
-      "lomo de libro", "carpeta", "placa de laton", "placa de bronce", "vidrio", "piedra",
-      "madera", "sello de lacre", "cuaderno", "chapa numerada", "matasellos", "metal"
+      "lomo de libro",
+      "carpeta",
+      "placa de laton",
+      "placa de bronce",
+      "vidrio",
+      "piedra",
+      "madera",
+      "sello de lacre",
+      "cuaderno",
+      "chapa numerada",
+      "matasellos",
+      "metal",
+      "ex libris",
+      "filigrana al trasluz",
+      "marca de fuego",
+      "sello seco",
+      "monograma bordado",
+      "canto grabado de moneda"
     ],
     "prohibido": [
-      "watermark", "logo flotante", "branding sobrepuesto arbitrariamente",
-      "branding de esquina ajeno a la escena", "overlay aleatorio",
+      "watermark",
+      "logo flotante",
+      "branding sobrepuesto arbitrariamente",
+      "branding de esquina ajeno a la escena",
+      "overlay aleatorio",
       "texto de marca escrito por el generador"
     ],
     "texto_marca_lo_escribe_el_generador": "NO",
     "generator_writes_brand_text": false,
     "post_composite_brand_text": true,
     "brand_text": "LegalMente",
-    "nota_texto_marca": "DECIDIDO por el fundador (2026-08-31): el generador NO escribe ninguna letra, tampoco la marca. La integracion fisica de marca SIGUE siendo obligatoria — la escena reserva una superficie fisica real (placa, laton, lomo, sello...) con perspectiva, material y luz correctos, y la palabra 'LegalMente' se compone despues de forma determinista. Ver docs/adr/0002-marca-composicion-determinista.md."
+    "nota_texto_marca": "DECIDIDO por el fundador (2026-08-31): el generador NO escribe ninguna letra, tampoco la marca. La integracion fisica de marca SIGUE siendo obligatoria — la escena reserva una superficie fisica real (placa, laton, lomo, sello...) con perspectiva, material y luz correctos, y la palabra 'LegalMente' se compone despues de forma determinista. Ver docs/adr/0002-marca-composicion-determinista.md.",
+    "evitar_superficie_repetida": true,
+    "ventana_no_repetir_superficie": 5,
+    "acabado_grabado": true,
+    "nota_acabado": "La marca compuesta despues se rasteriza como GRABADO (sombra hundida + luz de canto), no como texto plano pegado: la skill exige integracion fisica real, y un texto plano sobre la superficie delata el montaje. Si la superficie no permite grabado legible -> revision humana."
   },
   "texto": {
-    "modos_permitidos": ["IMAGE_ONLY", "POST_COMPOSITE"],
+    "modos_permitidos": [
+      "IMAGE_ONLY",
+      "POST_COMPOSITE"
+    ],
     "modo_nativo_requiere_capacidad_demostrada": true,
     "contenido_juridico_exige_post_composite": true,
     "marca_nunca_usa_native_text": true,
@@ -66,5 +144,180 @@
     "evitar_escena_repetida": true,
     "evitar_objeto_repetido": true,
     "evitar_composicion_repetida": true
+  },
+  "tipografia": {
+    "fuente": "legalmente-visual-system §6 (tipografia dentro de la imagen)",
+    "zona_segura_declarada": {
+      "VERTICAL_9_16": {
+        "lienzo": [
+          1080,
+          1920
+        ],
+        "x": 80,
+        "y": 290,
+        "x2": 1000,
+        "y2": 1630,
+        "motivo": "el feed recorta aproximadamente 240 px arriba y abajo"
+      }
+    },
+    "zona_segura_ratio_por_defecto": 0.08,
+    "nota_zona_segura": "Solo 9:16 tiene zona segura medida en la skill. Para cualquier otro formato se usa el margen proporcional por defecto y se declara que no hay medida de recorte: no se inventa una zona segura que nadie ha comprobado en el feed.",
+    "escalones_principal": [
+      {
+        "max_caracteres": 80,
+        "px_min": 68,
+        "px_max": 96
+      },
+      {
+        "max_caracteres": 140,
+        "px_min": 60,
+        "px_max": 82
+      }
+    ],
+    "secundario": {
+      "px_min": 34,
+      "px_max": 44,
+      "roles": [
+        "AUTHOR",
+        "CONTEXT",
+        "LABEL"
+      ]
+    },
+    "piso_absoluto_px": 34,
+    "max_lineas": 6,
+    "contraste_minimo": 4.5,
+    "contraste_ideal": 7.0,
+    "contraste_se_resuelve_con_la_luz_de_la_escena": true,
+    "prohibido_caja_opaca": true,
+    "prohibido_texto_sobre_superficie_de_marca": true,
+    "prohibido_huerfana_de_una_palabra": true,
+    "colores_por_rol": {
+      "QUOTE": {
+        "paleta": "marfil_editorial",
+        "indice": 0
+      },
+      "AUTHOR": {
+        "paleta": "laton_oro_viejo",
+        "indice": 0
+      },
+      "CONTEXT": {
+        "paleta": "marfil_editorial",
+        "indice": 1
+      },
+      "LABEL": {
+        "paleta": "laton_oro_viejo",
+        "indice": 0
+      }
+    },
+    "nota_fuera_de_tabla": "Mas de 140 caracteres en el bloque principal queda FUERA de la tabla de la skill: no hay cuerpo minimo declarado para ese caso. Se aplica el minimo aprobado mas bajo (60 px) y la pieza se marca para decision humana (reencuadre, otro formato o carrusel). Nunca se degrada en silencio el cuerpo principal al tamaño de un pie de foto para que quepa."
+  },
+  "direccion_de_arte": {
+    "fuente": "legalmente-visual-system §3 (nucleo de marca) y §5 (checklist de rotacion)",
+    "una_escuela_por_pieza": true,
+    "nunca_dos_referentes_en_el_mismo_prompt": true,
+    "ventana_no_repetir_escuela": 5,
+    "minimo_ejes_cambiados": 3,
+    "mecanismo_revelacion_requerido": true,
+    "nota_mecanismo_revelacion": "El fenomeno fisico que hace visible la idea (luz que cruza una grieta, tinta que se seca, sedimento que se asienta). La skill lo llama el argumento visual, no un adorno.",
+    "escenario_cotidiano_preferido": true,
+    "entornos_juridicos_gastados": [
+      "despacho",
+      "bufete",
+      "notaria",
+      "juzgado",
+      "tribunal",
+      "sala de vistas",
+      "archivo",
+      "biblioteca juridica",
+      "gabinete",
+      "oficina de abogados"
+    ],
+    "presencia_humana": {
+      "por_defecto": "objeto, gesto o rastro",
+      "prohibido_sin_justificacion": [
+        "rostro completo",
+        "cuerpo entero",
+        "retrato frontal"
+      ],
+      "excepcion_requiere_justificacion_explicita": true
+    },
+    "fuente_de_luz": {
+      "unica": true,
+      "justificada_en_escena": true
+    },
+    "recursos_quemados": [
+      "balanza de la justicia",
+      "mazo de juez",
+      "martillo de juez",
+      "persona sola frente a un edificio de columnas",
+      "libros o pergaminos apilados sobre escritorio de madera oscura",
+      "objeto forense sobre pergamino"
+    ],
+    "recursos_quemados_terminos": {
+      "nota": "Terminos detectables EN EL PROPIO BRIEF. Ponerlos en el prompt negativo no sirve de nada si la escena positiva los describe: el generador obedece a la descripcion. Bloqueantes = recurso quemado sin lectura posible. Dudosos = puede ser legitimo segun el contexto, decide una persona.",
+      "bloqueantes": [
+        "balanza",
+        "mazo de juez",
+        "mazo del juez",
+        "martillo de juez",
+        "diosa de la justicia",
+        "justicia con los ojos vendados",
+        "peluca judicial",
+        "columnas griegas",
+        "sala de tribunal americana"
+      ],
+      "dudosos": [
+        "pergamino",
+        "libros apilados",
+        "pergaminos apilados",
+        "escritorio oscuro",
+        "codigo abierto sobre el escritorio",
+        "pluma de ave"
+      ]
+    }
+  },
+  "escuelas": {
+    "fuente": "legalmente-visual-system §4 (motor de rotacion de estilo)",
+    "regla": "UNA sola escuela por pieza, rotando entre piezas. Nombrar varios artistas en un mismo prompt no da variedad: da promedio. No mezclar carriles dentro de una serie.",
+    "carril_a": [
+      "tenebrismo caravaggista",
+      "claroscuro rembrandtiano",
+      "naturalismo de zurbaran",
+      "realismo severo de ribera",
+      "interior holandes de vermeer",
+      "bodegon flamenco monocromo",
+      "romanticismo sublime de friedrich",
+      "atmosfera disuelta de turner",
+      "pintura negra de goya",
+      "luminismo de sorolla",
+      "realismo social de millet y courbet",
+      "detalle prerrafaelita",
+      "simbolismo de umbral",
+      "panel art nouveau",
+      "grabado calcografico de piranesi",
+      "xilografia de gubia",
+      "estampa ukiyo-e",
+      "cartel litografico belle epoque",
+      "fresco renacentista",
+      "vitral gotico",
+      "miniatura de manuscrito iluminado",
+      "placa de colodion humedo",
+      "metafisica de sombra larga",
+      "bajorrelieve en bronce"
+    ],
+    "carril_b": [
+      "fotografia cinematografica de foco unico",
+      "documental de calle",
+      "bodegon fotografico de producto",
+      "ilustracion editorial de gouache y tinta",
+      "infografia de museo",
+      "macro cientifico"
+    ],
+    "carril_b_materias": [
+      "laboral",
+      "digital",
+      "inmobiliario"
+    ],
+    "nota_carriles": "Carril A es el ancla de marca (frases, maximas, conceptos). Carril B se usa donde el oleo se siente ajeno. La eleccion es criterio humano/skill; aqui solo se comprueba que la escuela declarada exista y sea UNA."
   }
 }

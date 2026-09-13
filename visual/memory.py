@@ -13,7 +13,10 @@ import unicodedata
 from dataclasses import dataclass, field, asdict
 from pathlib import Path
 
-MEMORY_SCHEMA_VERSION = "1.0"
+MEMORY_SCHEMA_VERSION = "1.1"
+# 1.1 solo AÑADE el eje `escuela` con valor por defecto, asi que una memoria 1.0
+# se lee sin riesgo de malinterpretarla. Cualquier otra version se ignora.
+MEMORY_SCHEMAS_COMPATIBLES = ("1.0", "1.1")
 
 # Pesos del score. Suman 100 con todos los ejes repetidos y recientes.
 PESO_ESCENA = 30
@@ -59,6 +62,7 @@ class VisualMemoryEntry:
     content_id: str
     generation_id: str
     visual_family: str = ""
+    escuela: str = ""       # escuela artistica de la pieza (skill §4): rota cada 5 piezas
     scene_type: str = ""
     main_subject: str = ""
     secondary_objects: list = field(default_factory=list)
@@ -129,7 +133,7 @@ class VisualMemory:
         if not p.is_file():
             return cls(ventana=ventana)
         data = json.loads(p.read_text(encoding="utf-8"))
-        if data.get("schema_version") != MEMORY_SCHEMA_VERSION:
+        if data.get("schema_version") not in MEMORY_SCHEMAS_COMPATIBLES:
             # Version desconocida: se ignora la memoria en vez de malinterpretarla.
             # Perder memoria degrada la variedad; malinterpretarla corrompe el score.
             return cls(ventana=ventana)

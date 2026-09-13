@@ -22,8 +22,9 @@ real y una prueba que pasa.
 | Confidencialidad | 🟡 AMARILLO (era rojo) | Control determinista fail-closed implementado; queda el contenido identificable sin marcadores léxicos (red team B5). |
 | Pipeline de video (Remotion) | 🟢 VERDE (nuevo) | Renderiza, y ya no puede renderizar contenido publicable sin origen verificable. |
 | Anti-duplicados | 🟡 AMARILLO (nuevo) | Controles literales implementados; la paráfrasis sigue sin detectarse. |
-| Motor de generación visual | 🟢 VERDE (para su alcance) | `visual/`, 124 pruebas. Gate fail-closed, adapter canónico, familias, memoria anti-repetición, compilador explicable, dry-run, lotes, reintento selectivo, regeneración, registro. Decisión de marca aplicada (ADR 0002). |
-| Composición tipográfica / marca | 🟢 VERDE (nuevo) | `visual/compositor.py`: rasterizado real con Pillow. Métrica tipográfica real, área segura, `exact_copy` inmutable (desborda antes que mutar), marca solo sobre superficie reservada declarada y plana. 33 pruebas. |
+| Motor de generación visual | 🟢 VERDE (para su alcance) | `visual/`, 405 pruebas. Gate fail-closed, adapter canónico, familias, memoria anti-repetición, compilador explicable, dry-run, lotes, reintento selectivo, regeneración, registro. Decisión de marca aplicada (ADR 0002). |
+| Composición tipográfica / marca | 🟢 VERDE | `visual/compositor.py`: rasterizado real con Pillow. Métrica tipográfica real, `exact_copy` inmutable (desborda antes que mutar), marca solo sobre superficie reservada declarada y plana. Desde la política 1.2: zona segura **medida** del feed, escalones de cuerpo aprobados, máximo de líneas, color desde la paleta, contraste WCAG medido celda a celda bajo cada bloque y marca grabada (no pegada). |
+| Dirección de arte (detalle artístico) | 🟡 AMARILLO (nuevo) | `visual/art_direction.py` + política 1.2 + familias 1.1: recursos quemados en la escena descrita, una escuela por pieza con rotación de 5, mecanismo de revelación, presencia humana, escenario, superficie de marca, escalón tipográfico y contraste real. Corta **antes** de llamar al proveedor (`ARTE_BLOQUEADO`). Amarillo porque sigue sin existir comprensión visual: dedos, collage o integración real de marca los ve una persona. Ver `docs/auditoria-detalle-artistico.md`. |
 | Adapter de proveedor real | 🟡 AMARILLO (nuevo) | `providers/http_provider.py`: adapter HTTP real con transporte inyectable, 23 pruebas, cero llamadas externas. Sin credenciales configuradas en el workspace: no se ha ejecutado contra ningún proveedor. |
 | Contrato cross-repo | 🟢 VERDE (ambos lados) | Psyche: `contract/`, Canonical Envelope v1, 8 fixtures, 12 tests. Web: consumidor estricto implementado y probado **localmente** (18 tests), entregado como serie de patches verificada en `handoff/legalmente-web/`. Falta empujarlo: escritura remota bloqueada. |
 | Motor de producción masiva | ⚫ NO CONSTRUIDO | Contrato técnico definido (`docs/contrato-motor-masivo.md`); el motor, deliberadamente, no. |
@@ -234,3 +235,5 @@ decisión del fundador, no técnica.
 - `docs/handoff-contracts/` — contratos externos en borrador.
 - `docs/contrato-motor-masivo.md` — dónde vive cada campo del futuro motor y por qué
   no se creó ningún modelo paralelo.
+- `docs/auditoria-detalle-artistico.md` — auditoría de detalle artístico: qué se
+  arregló, qué quedó abierto y qué exige decisión humana.

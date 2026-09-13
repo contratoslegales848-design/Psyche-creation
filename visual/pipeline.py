@@ -1,9 +1,10 @@
 """Orquestador del pipeline visual.
 
     canonical input -> gate -> brief/policy/family -> memoria -> compilador
-    -> plan -> seleccion y negociacion de proveedor -> [DRY RUN corta aqui]
-    -> generacion -> QA estructural -> QA semantica -> planes de composicion
-    -> receipt -> registro -> [GATE HUMANO]
+    -> AUDITORIA DE DIRECCION DE ARTE -> plan -> seleccion y negociacion de
+    proveedor -> [DRY RUN corta aqui] -> generacion -> QA estructural
+    -> QA semantica -> planes de composicion -> auditoria de arte sobre lo
+    compuesto -> receipt -> registro -> [GATE HUMANO]
 
 Ningun camino de este archivo produce APROBADO_PARA_PRODUCCION. El mejor
 desenlace posible es PENDIENTE_REVISION_HUMANA.
@@ -11,6 +12,7 @@ desenlace posible es PENDIENTE_REVISION_HUMANA.
 
 from dataclasses import dataclass, field
 
+import art_direction
 import gates
 import receipts as receipts_mod
 from composition import build_typography_plan, ExactCopyViolation
@@ -52,7 +54,7 @@ class VisualRun:
         if s == "PENDIENTE_REVISION_HUMANA":
             return NEEDS_REVIEW
         if s in ("GATE_CERRADO", "BRIEF_INVALIDO", "PROVEEDOR_INCOMPATIBLE",
-                 "COMPOSICION_DESBORDADA"):
+                 "COMPOSICION_DESBORDADA", "ARTE_BLOQUEADO"):
             return BLOCKED
         return FAILED
 
@@ -67,7 +69,8 @@ def _entry_desde_brief(content_id, brief, generation_id="", taxonomia=None):
     tax = taxonomia or {}
     return VisualMemoryEntry(
         content_id=content_id, generation_id=generation_id,
-        visual_family=brief.visual_family, scene_type=brief.environment,
+        visual_family=brief.visual_family, escuela=getattr(brief, "escuela", ""),
+        scene_type=brief.environment,
         main_subject=brief.subject, camera_angle=brief.camera,
         metaphor=brief.metaphor, brand_surface=brief.marca_superficie,
         secondary_objects=[brief.acento_frio_objeto] if brief.acento_frio_objeto else [],
@@ -145,6 +148,21 @@ def generate_visual(procedencia, brief, policy, provider, handoff=None,
         text_mode=compiled.text_mode,
         explanation=list(compiled.explanation),
     )
+
+    # 2b. Auditoria de direccion de arte. Va ANTES del proveedor a proposito:
+    # un recurso quemado o dos escuelas en el mismo prompt son defectos que ya
+    # se pueden ver sin generar nada, y generarlos cuesta creditos y tiempo.
+    arte = art_direction.auditar_brief(
+        brief, policy, family=family,
+        memoria_reciente=(memory.recent() if memory is not None else ()))
+    base["art_direction"] = arte.to_dict()
+    log.emit("visual.art.audited", content_id=base["content_id"],
+             bloqueos=len(arte.bloqueos), revisiones=len(arte.revisiones))
+    if arte.bloqueos:
+        log.emit("visual.art.blocked", content_id=base["content_id"],
+                 codigos=[h.codigo for h in arte.bloqueos])
+        return VisualRun(fin("ARTE_BLOQUEADO", motivos=arte.motivos()),
+                         compiled=compiled, events=log.to_list())
 
     request = NormalizedImageRequest(
         content_id=base["content_id"],
@@ -247,6 +265,7 @@ def generate_visual(procedencia, brief, policy, provider, handoff=None,
     # LegalMente, nunca el proveedor. El raw jamas se modifica.
     composed_bytes = b""
     comp_avisos = []
+    comp_result = None
     if typo is not None and compose_asset:
         try:
             comp = compose(result.image_bytes, typo, compiled.brand_plan,
@@ -266,6 +285,7 @@ def generate_visual(procedencia, brief, policy, provider, handoff=None,
                              compiled=compiled, qa_report=rep, semantic=sem,
                              typography_plan=typo, events=log.to_list())
 
+        comp_result = comp
         composed_bytes = comp.composed_bytes
         comp_avisos = list(comp.warnings)
         base.update(
@@ -277,12 +297,29 @@ def generate_visual(procedencia, brief, policy, provider, handoff=None,
                 base["content_id"] + "|composed", comp.composed_sha256),
         )
 
+    # 8c. Auditoria de arte sobre lo realmente compuesto: escalon tipografico,
+    # lineas, zona visible y contraste medido contra los pixels de debajo.
+    arte_final = art_direction.auditar(
+        policy=policy, typography_plan=typo, composition_result=comp_result,
+        exact_copy=exact_copy)
+    if arte_final.hallazgos or arte_final.comprobado:
+        combinado = dict(base.get("art_direction") or {})
+        combinado["post_composicion"] = arte_final.to_dict()
+        base["art_direction"] = combinado
+
     motivos = gates.requires_human_visual_review(rep)
     motivos.extend(comp_avisos)
+    motivos.extend(arte.motivos())
+    motivos.extend(arte_final.motivos())
     if sem.state == NEEDS_HUMAN_REVIEW:
         motivos.append(f"heuristicas visuales: {sem.reason_codes}")
     if typo is not None and typo.warnings:
         motivos.extend(typo.warnings)
+
+    # El mismo aviso puede llegar por tres caminos (plan tipografico, avisos del
+    # compositor y auditoria de arte). Un receipt que repite el motivo tres veces
+    # es mas dificil de leer para quien tiene que decidir, y decidir es el punto.
+    motivos = list(dict.fromkeys(motivos))
 
     receipt = fin("PENDIENTE_REVISION_HUMANA",
                   asset_id=receipts_mod.asset_id_for(base["content_id"], rep.asset_sha256),

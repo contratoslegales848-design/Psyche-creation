@@ -83,8 +83,22 @@ class TestCanonicalAdapter(unittest.TestCase):
 
 class TestFamilias(unittest.TestCase):
     def test_registro_carga(self):
-        self.assertEqual(FAMS.version, "1.0")
+        # La version se declara y se transporta, pero no se fija en la prueba:
+        # el registro esta pensado para crecer (1.0 -> 1.1 añadio detalle).
+        self.assertTrue(FAMS.version)
         self.assertIn("claroscuro_de_museo", FAMS.names())
+
+    def test_toda_familia_aporta_detalle_artistico(self):
+        """Sin detalle, el prompt dice QUE hay en la escena pero no COMO esta
+        hecha, que es donde se pierde el arte. Ninguna familia puede quedarse
+        solo con tema y encuadre."""
+        for nombre in FAMS.names():
+            f = FAMS.get(nombre)
+            self.assertTrue(f.tiene_detalle_artistico, nombre)
+            self.assertTrue(f.depth_of_field, nombre)
+            self.assertTrue(f.surface_finish, nombre)
+            self.assertTrue(f.imperfection_signature, nombre)
+            self.assertIn(f.carril, ("A", "B"), nombre)
 
     def test_familia_desconocida(self):
         with self.assertRaises(FamilyError):

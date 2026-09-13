@@ -12,6 +12,8 @@ EVENTOS = (
     "visual.prompt.compiled", "visual.provider.selected", "visual.generation.started",
     "visual.generation.completed", "visual.generation.failed", "visual.qa.completed",
     "visual.regeneration.created", "visual.batch.completed",
+    # Auditoria de direccion de arte: se emite siempre, tanto si bloquea como si no.
+    "visual.art.audited", "visual.art.blocked",
 )
 
 # Claves que jamas se registran, aunque alguien las pase por descuido.

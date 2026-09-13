@@ -13,6 +13,7 @@ falso.
     python3 cli.py batch-dry-run <dir_con_artefactos>
     python3 cli.py show-receipt   <DIR> <CONTENT_ID> <GENERATION_ID>
     python3 cli.py show-history   <DIR> <CONTENT_ID>
+    python3 cli.py audit-art      [artefacto.json] [--asset img.png] [--json]
 """
 
 import argparse
@@ -22,6 +23,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
+import art_direction
 import canonical
 import command_center
 import compositor
@@ -84,6 +86,96 @@ def brief_desde(vi, policy, fams):
     )
 
 
+def _brief_para_auditar(art, policy, fams):
+    """El brief mas real disponible para este artefacto.
+
+    Para LM-PIEZA-01-REALES existe un brief reconstruible desde el review packet
+    comitado; para el resto solo hay el placeholder de CLI, y eso se dice en voz
+    alta en la salida: auditar un placeholder no es auditar la direccion de arte
+    de la pieza.
+    """
+    proc = art.get("procedencia", {})
+    cid = proc.get("content_id", "")
+    if cid == "LM-PIEZA-01-REALES":
+        try:
+            return gen3_brief_pieza01(policy, fams), "brief reconstruido de GEN3 (review packet)"
+        except Exception:
+            pass
+    vi = canonical.VisualInput(content_id=cid, provenance_mode=proc.get("modo", ""),
+                               jurisdiction_layer="", publicable=False)
+    return brief_desde(vi, policy, fams), "brief PLACEHOLDER de CLI (la pieza no tiene brief real)"
+
+
+def _audit_art(a, policy, fams):
+    """Auditoria de detalle artistico. Nunca aprueba: solo dice que falla y que
+    no se puede comprobar."""
+    import composition
+
+    if a.asset:
+        from inspection import ArtDetailInspector
+        datos = Path(a.asset).read_bytes()
+        rep = ArtDetailInspector(policy).inspect(datos)
+        if a.json:
+            print(json.dumps({"asset": a.asset, "state": rep.state,
+                              "reason_codes": rep.reason_codes, "metrics": rep.metrics},
+                             ensure_ascii=False, indent=2))
+        else:
+            print(f"{a.asset}\n  estado  {rep.state}  ({rep.inspector})")
+            for c in rep.reason_codes:
+                print(f"  ! {c}")
+            for k, v in sorted(rep.metrics.items()):
+                print(f"    {k:24} {v}")
+        return 0
+
+    rutas = [Path(a.artefacto)] if a.artefacto else sorted(
+        (resolver.REPO / "content").glob("*.json"))
+    salida, bloqueos_totales = [], 0
+
+    for ruta in rutas:
+        art = _load(ruta)
+        proc = art.get("procedencia", {})
+        if not proc.get("content_id"):
+            continue
+        brief, origen = _brief_para_auditar(art, policy, fams)
+        familia = fams.get(brief.visual_family)
+        rep = art_direction.auditar_brief(brief, policy, family=familia)
+
+        frase = art.get("frase") or ""
+        if frase:
+            plan = composition.build_typography_plan(
+                frase, art.get("remate", ""), 1080, 1920,
+                content_type=(art.get("taxonomia") or {}).get("content_type", ""),
+                policy=policy)
+            tipo = art_direction.auditar_tipografia(plan, policy, frase)
+            rep.hallazgos.extend(tipo.hallazgos)
+            rep.comprobado.extend(tipo.comprobado)
+            rep.no_comprobable.extend(tipo.no_comprobable)
+
+        bloqueos_totales += len(rep.bloqueos)
+        salida.append({"content_id": proc["content_id"], "artefacto": str(ruta),
+                       "origen_del_brief": origen, "auditoria": rep.to_dict()})
+
+    if a.json:
+        print(json.dumps(salida, ensure_ascii=False, indent=2))
+    else:
+        for item in salida:
+            rep = item["auditoria"]
+            print(f"\n{item['content_id']}  ({item['origen_del_brief']})")
+            print(f"  bloqueos {rep['bloqueos']}  revisiones {rep['revisiones']}  "
+                  f"avisos {rep['avisos']}")
+            for h in rep["hallazgos"]:
+                print(f"  [{h['severidad']}] {h['codigo']}")
+                print(f"      {h['mensaje']}")
+                if h["fuente"]:
+                    print(f"      fuente: {h['fuente']}")
+            for c in rep["comprobado"]:
+                print(f"  · comprobado: {c}")
+            for c in rep["no_comprobable"]:
+                print(f"  ? sin dato para comprobar: {c}")
+        print("\nUna auditoria sin bloqueos NO es una aprobacion: la aprobacion visual es humana.")
+    return 1 if bloqueos_totales else 0
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(description="Pipeline visual de LegalMente (proveedor falso).")
     sub = ap.add_subparsers(dest="cmd", required=True)
@@ -117,6 +209,12 @@ def main(argv=None):
                            help="raiz del registro de generaciones. Por defecto, la raiz runtime "
                                 "persistente (LEGALMENTE_RUNTIME_ROOT o .runtime/visual-registry), "
                                 "nunca /tmp.")
+    s = sub.add_parser("audit-art", help="auditoria de detalle artistico (no aprueba nada).")
+    s.add_argument("artefacto", nargs="?",
+                   help="artefacto de content/. Si se omite, se auditan todos.")
+    s.add_argument("--asset", help="imagen a medir con el inspector de detalle artistico.")
+    s.add_argument("--json", action="store_true")
+
     s = sub.add_parser("batch-dry-run"); s.add_argument("directorio")
     s = sub.add_parser("show-receipt")
     s.add_argument("root"); s.add_argument("content_id"); s.add_argument("generation_id")
@@ -295,6 +393,9 @@ def main(argv=None):
         for m in run.receipt.motivos:
             print(f"  ! {m}")
         return 0 if run.receipt.status in ("DRY_RUN", "PENDIENTE_REVISION_HUMANA") else 1
+
+    if a.cmd == "audit-art":
+        return _audit_art(a, policy, fams)
 
     if a.cmd == "batch-dry-run":
         items = []
