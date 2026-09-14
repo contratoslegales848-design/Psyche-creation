@@ -42,8 +42,19 @@ class TestBarrido(CalBase):
         self.assertEqual(len(self.puntos), len(cal.UMBRALES))
 
     def test_la_zona_gris_se_excluye(self):
-        """Contar los MUY_PROXIMO en un sentido u otro inflaría la métrica."""
-        self.assertGreater(self.conteo["zona_gris_excluida"], 0)
+        """Contar los MUY_PROXIMO en un sentido u otro inflaría la métrica.
+
+        El fichero por defecto ahora es el Founder real (GROUND_TRUTH_FOUNDER):
+        respondió los 18 pares con B/C decisivos, cero SIN_INFO, así que aquí
+        la zona gris real es 0 — no hay nada que excluir porque no hay
+        ambigüedad, no porque el mecanismo de exclusión no funcione. Ese
+        mecanismo se sigue probando contra el fichero AGENTE, que sí tiene
+        MUY_PROXIMO (zona gris real, sin resolver por un humano)."""
+        self.assertEqual(self.conteo["zona_gris_excluida"], 0)
+        self.assertEqual(self.meta["fuente_etiquetas"], "FOUNDER")
+
+        puntos_agente, _, conteo_agente = cal.barrido(self.regs, path=cal.EVAL_PATH)
+        self.assertGreater(conteo_agente["zona_gris_excluida"], 0)
 
     def test_el_umbral_vigente_no_produce_falsos_positivos(self):
         self.assertEqual(self.por_umbral[UMBRAL_EQUIVALENCIA].fp, 0)
@@ -73,11 +84,23 @@ class TestBarrido(CalBase):
 
 
 class TestHonestidadDelConjunto(CalBase):
-    def test_el_conjunto_se_declara_candidato_no_ground_truth(self):
-        self.assertEqual(self.meta["estado"], "CANDIDATO_PENDIENTE_REVISION_FOUNDER")
+    """`eval-umbral-founder.json` ahora existe de verdad (Founder respondió
+    los 18 pares el 2026-09-14) y `cargar_pares_etiquetados`/`barrido` sin
+    `path` explícito lo PREFIEREN sobre el candidato del agente — así que
+    `self.meta` aquí describe el fichero Founder, no el del agente. El
+    fichero del agente sigue existiendo y sigue siendo honesto sobre sí
+    mismo; se prueba aparte, explícitamente, más abajo."""
 
-    def test_el_aviso_dice_quien_etiqueto(self):
-        aviso = (self.meta.get("aviso") or "").lower()
+    def test_el_conjunto_por_defecto_es_ground_truth_founder(self):
+        self.assertEqual(self.meta["estado"], "GROUND_TRUTH_FOUNDER")
+        self.assertEqual(self.meta["fuente_etiquetas"], "FOUNDER")
+
+    def test_el_fichero_agente_sigue_declarandose_candidato_no_ground_truth(self):
+        """El fichero AGENTE no desapareció ni se reescribió: sigue siendo
+        honesto sobre su propio origen cuando se le pide explícitamente."""
+        _, meta_agente = cal.cargar_pares_etiquetados(self.regs, path=cal.EVAL_PATH)
+        self.assertEqual(meta_agente["estado"], "CANDIDATO_PENDIENTE_REVISION_FOUNDER")
+        aviso = (meta_agente.get("aviso") or "").lower()
         self.assertIn("agente", aviso)
         self.assertIn("no son ground truth humano", aviso)
 
@@ -90,13 +113,32 @@ class TestHonestidadDelConjunto(CalBase):
             self.assertIn(par["etiqueta"], data["etiquetas"])
             self.assertTrue(par["razon"].strip())
 
-    def test_el_unico_equivalente_real_sigue_sin_detectarse(self):
-        """Límite honesto y documentado: LM-026~LM-027 son la misma pregunta y
-        ningún umbral los detecta, porque el corpus no declara concepto_nucleo
-        ni pregunta_resuelta. Es carencia de DATOS, no de umbral. Si algún día
-        esta prueba falla, significa que el corpus mejoró — actualízala."""
+    def test_la_correccion_founder_sobre_lm026_lm027_queda_registrada(self):
+        """Límite anterior, ahora cerrado por el Founder mismo, no por una
+        mejora de datos: el agente había etiquetado LM-026~LM-027 como
+        EQUIVALENTE (debía bloquearse); el Founder respondió 'B' — COEXISTIR,
+        no la misma pregunta ('ambas distinguen depósito de fianza: es la
+        misma pregunta con dos titulares' es su razón textual, pero la
+        decisión es que coexisten, no que se bloqueen). Por eso NINGÚN umbral
+        debe reportar ya un fallo 'FN' sobre este par: ya no se espera que
+        lo bloqueen — el corpus no cambió, la etiqueta correcta sí."""
+        data = json.loads(Path(cal.FOUNDER_EVAL_PATH).read_text(encoding="utf-8"))
+        par = next(p for p in data["pares"] if {p["a"], p["b"]} == {"LM-026", "LM-027"})
+        self.assertEqual(par["cambio"], "CORRIGE_AGENTE")
+        self.assertEqual(par["founder_label_mapped"], "COEXISTIR")
         for p in self.puntos:
-            self.assertTrue([f for f in p.fallos if "LM-026" in f], p.umbral)
+            self.assertFalse([f for f in p.fallos if "LM-026" in f], p.umbral)
+
+    def test_no_hay_todavia_ningun_positivo_real_confirmado_por_el_founder(self):
+        """De los 18 pares reales, 0 son A (bloquear): 10 B + 8 C, todos
+        negativos. Por eso RECALL sobre datos 100% reales queda indefinido
+        sin un positivo — exactamente la razón por la que existe
+        calibration_positive_set.py / equivalence_calibration.py: el
+        positivo tiene que ser sintético y declarado como tal mientras no
+        exista uno real."""
+        data = json.loads(Path(cal.FOUNDER_EVAL_PATH).read_text(encoding="utf-8"))
+        bloquear = [p for p in data["pares"] if p["founder_label_mapped"] == "BLOQUEAR"]
+        self.assertEqual(bloquear, [])
 
 
 if __name__ == "__main__":
