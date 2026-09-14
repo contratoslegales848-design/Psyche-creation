@@ -154,6 +154,38 @@ def validar_candidato(candidato, carril, profile_fact=None):
     return LaneVerdict(not motivos, carril, motivos or ["admitido en el carril."])
 
 
+# Hueco encontrado al reconciliar contra legalmente-web
+# (src/lib/editorial-engine/channel-strategy.ts): ese código exige que, en un
+# lote de LinkedIn LegalMente con 4+ piezas, al menos 75% usen una escena
+# OPERATIVA (proceso, activo, gobierno, evidencia) y no un lote entero
+# resuelto por metáfora. lanes.py restringía la familia editorial admitida,
+# pero no medía esta proporción a nivel de lote. Implementación propia, mismo
+# principio: FAMILIAS_OPERATIVAS vive en art_direction.py (ya distingue
+# escena concreta de metáfora) — aquí sólo se aplica la proporción.
+MINIMO_LOTE_PARA_EXIGIR_RATIO = 4
+RATIO_OPERATIVO_MINIMO = 0.75
+
+
+def escena_operativa(familia_editorial):
+    from art_direction import FAMILIAS_OPERATIVAS
+    return normaliza(familia_editorial) in {normaliza(f) for f in FAMILIAS_OPERATIVAS}
+
+
+def verificar_ratio_operativo(candidatos, carril=LINKEDIN_LEGALMENTE):
+    """Sólo se aplica al carril institucional y sólo desde 4 piezas — con
+    menos, un solo caso metafórico ya haría fallar la proporción sin que eso
+    signifique nada real."""
+    if carril != LINKEDIN_LEGALMENTE or len(candidatos) < MINIMO_LOTE_PARA_EXIGIR_RATIO:
+        return True, ""
+    operativas = sum(1 for c in candidatos if escena_operativa(c.familia_editorial))
+    ratio = operativas / len(candidatos)
+    if ratio < RATIO_OPERATIVO_MINIMO:
+        return False, (f"LinkedIn LegalMente exige {RATIO_OPERATIVO_MINIMO:.0%} de escenas "
+                       f"operativas en lotes de {MINIMO_LOTE_PARA_EXIGIR_RATIO}+; este lote "
+                       f"tiene {operativas}/{len(candidatos)} ({ratio:.0%}).")
+    return True, ""
+
+
 class LaneMemories:
     """Una memoria semántica por carril. Independientes por diseño.
 

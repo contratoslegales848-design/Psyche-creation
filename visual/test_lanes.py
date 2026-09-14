@@ -133,5 +133,43 @@ class TestMemoriasSeparadas(unittest.TestCase):
             lanes.LaneMemories()["TIKTOK"]
 
 
+class TestRatioOperativo(unittest.TestCase):
+    """Fase de reconciliación con legalmente-web: LinkedIn LegalMente exige
+    75% de escenas operativas en lotes de 4+ (channel-strategy.ts,
+    LINKEDIN_OPERATIONAL_STRATEGIES)."""
+
+    def test_no_se_aplica_con_menos_de_cuatro(self):
+        candidatos = [candidato(familia_editorial="mito") for _ in range(3)]
+        ok, motivo = lanes.verificar_ratio_operativo(candidatos, lanes.LINKEDIN_LEGALMENTE)
+        self.assertTrue(ok)
+        self.assertEqual(motivo, "")
+
+    def test_no_se_aplica_fuera_del_carril_institucional(self):
+        candidatos = [candidato(familia_editorial="mito") for _ in range(6)]
+        ok, _ = lanes.verificar_ratio_operativo(candidatos, lanes.LEGALMENTE_GENERAL)
+        self.assertTrue(ok)
+
+    def test_lote_todo_metaforico_falla(self):
+        candidatos = [candidato(familia_editorial="mito") for _ in range(5)]
+        ok, motivo = lanes.verificar_ratio_operativo(candidatos, lanes.LINKEDIN_LEGALMENTE)
+        self.assertFalse(ok)
+        self.assertIn("75%", motivo)
+
+    def test_lote_mayormente_operativo_pasa(self):
+        candidatos = ([candidato(familia_editorial="proceso") for _ in range(3)] +
+                      [candidato(familia_editorial="checklist")] +
+                      [candidato(familia_editorial="mito")])
+        ok, _ = lanes.verificar_ratio_operativo(candidatos, lanes.LINKEDIN_LEGALMENTE)
+        self.assertTrue(ok)
+
+    def test_escena_operativa_reconoce_familias_de_proceso_y_evidencia(self):
+        for fam in ("proceso", "documento_clave", "carga_de_la_prueba", "cumplimiento_compliance"):
+            self.assertTrue(lanes.escena_operativa(fam), fam)
+
+    def test_escena_operativa_no_marca_familias_metaforicas(self):
+        for fam in ("mito", "maxima_aforismo", "rareza_juridica"):
+            self.assertFalse(lanes.escena_operativa(fam), fam)
+
+
 if __name__ == "__main__":
     unittest.main()

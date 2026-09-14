@@ -240,3 +240,94 @@ puede dejar ninguna huella en `APROBADA` ni `PUBLICADA` — probado en
    marcadores léxicos (hueco conocido, red team B5). Este trabajo no lo toca.
 5. El motor combinatorio puede producir combinaciones jurídicamente vacías; por eso todo
    candidato nace `NO_VERIFICADO` y la verificación jurídica sigue siendo obligatoria.
+
+---
+
+## 6. Reconciliación con la línea ChatGPT (2026-09-14)
+
+**Aclaración estructural primero, porque cambia la forma de "reconciliar":**
+las dos líneas viven en **repositorios distintos, cuentas distintas**:
+
+| | Repositorio | Cuenta | Rama | SHA |
+|---|---|---|---|---|
+| Esta línea | `Psyche-creation` | `contratoslegales848-design` | `claude/legalmente-architecture-reconciliation-xojn4i` | `57baf5b0c21f2bcbeec7ba250d0bc363a46299ce` (antes de esta sesión) |
+| Línea ChatGPT | `legalmente-web` | `legallmente-alt` | `chatgpt/image-generator-reconciliation-v2-2026-09-13` | `27df096e54e9ca4c5552eb26bbe60319d4ef70d5` (confirmado) |
+
+`CLAUDE.md §8` ya lo declara: sesiones de este repo pueden **leer y trabajar
+`legalmente-web` en local**, pero no hacer push ni operar sus PRs. Por tanto
+esta reconciliación es de **ontología y contrato**, no de historial git: no
+se copia código TypeScript a este repo ni se toca `legalmente-web`. Se leyó
+el diff real (58 archivos, +4896/-204 líneas contra `merge-base
+46948a0`), se instalaron sus dependencias y se **ejecutó de verdad** su
+suite — `npm run test:convergence`: **62/62 tests reales, 0 fallos**
+(19 production-policy + 9 visual-argument + 8 visual-factory + 6
+image-generator + 6 production-learning + 7 production-runtime + 7
+release-readiness); `npx tsc --noEmit` limpio. No se asumió el reporte de
+la otra línea: se verificó.
+
+### Matriz de reconciliación
+
+| Capacidad | Esta línea (Python) | Línea ChatGPT (TS) | Solapamiento | Conflicto | Decisión | Implementación final |
+|---|---|---|---|---|---|---|
+| Repetición semántica | `semantic_memory.py`, corpus histórico incluido | `production-policy`: `productionContentFingerprint`, memoria fuerte/corta | Alto — mismo principio, mismos 3 estados fuerte/2 cortos | No | **KEEP_CLAUDE** | Sin cambios; ya cubre HISTORICA, ausente en TS |
+| Saturación editorial | `editorial_saturation.py` (Fase 3, esta sesión) | No existe como control separado — TS mezcla familia dentro de `batch.ts` (sólo diversidad de lote) | Parcial | No | **KEEP_CLAUDE** | Sin cambios; es una distinción que la línea TS no hace |
+| Territory Explorer | `territory_explorer.py` novelty/coverage/opportunity | No existe | Ninguno | No | **KEEP_CLAUDE** | Sin cambios |
+| Enriquecimiento histórico | `corpus_enrichment.py`, 5 niveles de confianza | No existe (no hay corpus histórico cargado en TS) | Ninguno | No | **KEEP_CLAUDE** | Sin cambios |
+| Calibración Founder (umbral) | `founder_review.py`, hoja de 18 pares, pendiente de respuesta | No existe | Ninguno | No | **KEEP_CLAUDE** | Sin cambios |
+| Founder learning / explotación | `generator.ajuste_afinidad_founder`, acotado, 0 sin curaduría | `learning.ts`: `founderSelectionMetrics` por eje, sin sesgo de selección hacia el generador | Parcial — TS mide, no realimenta la selección | No | **MERGE_CONCEPTS** | Se conserva el sesgo acotado de Python; `founder_metrics.py` ya iguala el desglose por eje de `learning.ts` |
+| Emoción → tratamiento visual | `emotion.py` causal (composición/cámara/luz nacen del perfil) | `IMAGE_GENERATOR_INVARIANTS.emotionChangesVisualTreatment: true` **declarado, no aplicado** — `emotion` es un string libre sin derivación | Nominal únicamente | **Sí — hallazgo real** | **KEEP_CLAUDE** | Sin cambios en emotion.py; se añadió `art_direction.py` con prueba causal explícita (`test_la_imagen_nunca_se_genera_exactamente_igual_bajo_otra_emocion`) |
+| Argumento visual (qué hace la imagen) | No existía | `visual-argument/index.ts`: 11 `VISUAL_FUNCTIONS`, `SceneStrategy`, validación de lote | Ninguno antes de esta sesión | No | **REIMPLEMENT_CLEANLY** | `art_direction.py` (nuevo): mismo vocabulario de 11 funciones, implementación propia en Python, mapeo por familia editorial/necesidad con procedencia declarada |
+| Brief de generación de imagen | `brief.py` (`VisualBrief`, preexistente, canónico) | `image-generator/types.ts` (`ImageGenerationBrief`) | Conceptual — campos equivalentes, nombres distintos | No (son contratos de capas distintas: Python aún no verifica; TS asume verificación previa) | **DEFER** | `art_direction.draft_visual_brief` produce un BORRADOR pre-verificación, explícitamente no autorizado; conectar con `brief.py` real exige que exista primero un `ProductionHandoff` — fuera de alcance de esta sesión |
+| Dirección artística / familia visual | `families.py` (8 familias, catálogo **cerrado**) | `artStyleRegistryIsOpen: true`, string libre | Bajo | **Sí — techo real** | **CONFLICT_REQUIRES_FOUNDER** | `art_direction.verificar_diversidad_de_estilos` usa `min(8, n)` como techo honesto, documentado; ampliar el catálogo a 10+ familias es decisión de contenido/arte, no técnica |
+| Memoria visual / distancia visual | `memory.py` (score ponderado 0-100) | `production-policy`: distancia estricta 8 dimensiones, mínimo 5 cambiadas, 3 vecinos por ámbito (lote/historia) | Ejes parcialmente distintos | No | **MERGE_CONCEPTS** | `visual_distance.py` (nuevo): la regla estricta de TS, implementación propia en Python sobre los mismos campos de `VisualMemoryEntry` — no sustituye a `memory.py`, lo complementa |
+| Lote QA — diversidad | `batch_qa.py`, `rotation.py` | `batch.ts`: máx. 2/materia, máx.1 digital, `imageVisualFingerprint` único por lote | Alto | No | **KEEP_CLAUDE** | Cuotas ya vivían en `universe.py`/`generator.py` con la misma proporción |
+| Marca física, nunca overlay | `policy/legalmente-visual-policy-v1.json` (`integracion_fisica_requerida: true`) | `production-policy`: `brandIntegration !== "PHYSICAL_SCENE"` es error | Idéntico | No | **KEEP_CLAUDE** | Ya implementado, ambas líneas coinciden sin ajuste |
+| Copy exacto no confiado al generador | `policy`: `texto_marca_lo_escribe_el_generador: "NO"`, composición posterior determinista | `validation.ts`: prohíbe que `artDirection` sustituya al argumento de imagen; `baseArtContainsNoFinalCopy: true` | Idéntico en espíritu | No | **KEEP_CLAUDE** | Ya implementado |
+| Neutralidad panhispánica | Jurisdicción por defecto conceptual/comparada (CLAUDE.md §4) | `territoryMode: "PANHISPANIC_NEUTRAL" \| "VERIFIED_LOCAL"`, explícito en el prompt | Alto | No | **DEFER** | El principio ya rige; una bandera explícita por pieza (`territoryMode`) sólo tiene sentido cuando exista generación real — se deja para esa fase |
+| Gate de proveedor prohibido | No existía | `runtime.ts`: bloquea "higgs"+"field" antes de generar, fail-closed | Ninguno antes de esta sesión | **Sí — hallazgo real** | **REIMPLEMENT_CLEANLY** | `provider_gate.py` (nuevo): mismo principio, denylist propia en Python |
+| Carriles LinkedIn | `lanes.py` (3 carriles, memorias separadas) | `channel-strategy.ts` (4 canales, perfiles de estilo, regla de 75% escenas operativas) | Parcial | No | **MERGE_CONCEPTS** | `lanes.verificar_ratio_operativo` (nuevo): la regla del 75% portada a Python |
+| CI | `unittest discover` sobre `visual/` | `production-policy-ci.yml`, scoped por paths, incluye build+typecheck+lint | Ninguno (repos distintos) | No | **DEFER** | Cada repo mantiene su propio CI; no hay CI cruzado posible sin permisos de push a `legalmente-web` |
+| Telemetría / Founder Selection Rate | `founder_metrics.py`: por materia/familia/necesidad/emoción, muestra visible | `learning.ts`: por matter/editorialFamily/emotion/artDirection/need, `lowSample` | Alto | No | **KEEP_CLAUDE** | Ya cubre los mismos ejes; se añadió aviso textual donde TS sólo marca un booleano |
+
+### Hallazgos reales (no reportados por ninguna de las dos líneas hasta ahora)
+
+1. **`emotionChangesVisualTreatment: true` está declarado y no aplicado** en
+   la línea ChatGPT — es exactamente el patrón que `CLAUDE.md §2` advierte
+   ("una mención no es una capacidad implementada"), esta vez encontrado en
+   el otro repositorio. La línea Python sí lo cumple y ahora lo prueba
+   causalmente (`test_art_direction.TestPruebaCausal`).
+2. **El catálogo de familias visuales de este repo es cerrado (8), el de la
+   línea ChatGPT se declara abierto.** Ningún lado lo había señalado como
+   conflicto. Documentado como `CONFLICT_REQUIRES_FOUNDER`: ampliar el
+   catálogo es una decisión de dirección artística, no un fix de código.
+3. **No existía gate de proveedor prohibido en Python** pese a que "No usar
+   Higgsfield" es regla escrita en el Índice maestro v18 desde antes de esta
+   sesión. Cerrado con `provider_gate.py`.
+4. **La distancia visual estricta (8 dimensiones, ≥5 cambiadas, 3 vecinos
+   por ámbito) de la línea ChatGPT es más rigurosa que el score ponderado de
+   `memory.py`.** Portada a `visual_distance.py`. Aplicada al lote de
+   reconciliación, es **honesta sobre su propio límite**: con escena y
+   metáfora todavía `PENDIENTE_CONTENIDO`, las 30 comparaciones del lote de
+   prueba dan `EVIDENCIA_INCOMPLETA` — nunca un PASS fabricado.
+
+### Módulos nuevos de esta fase
+
+| Componente | Archivo | Pruebas | Estado |
+|---|---|---|---|
+| Argumento visual + borrador de brief | `visual/art_direction.py` | 17 | IMPLEMENTADO, PROBADO, CONECTADO |
+| Distancia visual estricta (8 dim.) | `visual/visual_distance.py` | 13 | IMPLEMENTADO, PROBADO — no conectado a producción real (falta escena/metáfora) |
+| Gate de proveedor prohibido | `visual/provider_gate.py` | 8 | IMPLEMENTADO, PROBADO — no conectado a ningún proveedor real todavía |
+| Ratio operativo LinkedIn | `visual/lanes.py` (extensión) | 7 | IMPLEMENTADO, PROBADO, CONECTADO |
+| Cadena end-to-end reconciliada | `visual/demo_reconciliation.py` | 8 | PROBADO |
+
+**Issue #57** (`legallmente-alt/legalmente-web`, "implementar especificación
+operativa del sistema vivo") queda como **punto de seguimiento** de esta
+reconciliación — no como canon nuevo ni como autorización de merge.
+
+### Lo que esta reconciliación NO hace
+
+- No toca `legalmente-web`: cero commits, cero push, cero PR en ese repositorio.
+- No genera imágenes reales ni llama a ningún proveedor.
+- No amplía el catálogo de familias visuales (decisión pendiente del Founder).
+- No conecta `visual_distance.py` a un flujo de producción real: falta que
+  exista escena/metáfora concretas, que siguen siendo contenido, no infraestructura.
