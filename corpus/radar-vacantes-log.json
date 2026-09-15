@@ -1,0 +1,34 @@
+{
+  "schema_version": "1.0",
+  "corridas": [
+    {
+      "fecha": "2026-09-15T19:33:57.185084+00:00",
+      "fuente": "Indeed MX, búsqueda en vivo 15-sep-2026 — \"abogado\" (Cancún, Quintana Roo); \"abogado laboral\", \"abogado inmobiliario\", \"oficial de cumplimiento PLD\", \"abogado protección de datos\" (Ciudad de México).",
+      "total_vacantes": 28,
+      "clasificadas": 21,
+      "sin_materia_reconocida": [
+        "Legal Escalations Specialist",
+        "Legal Assistant (LATAM - Remote)",
+        "Remote Family Law Paralegal",
+        "Abogados Senior con Amplia Experiencia",
+        "ABOGADO SR INFRAESTRUCTURA",
+        "Money Laundering Reporting Officer (MLRO), Mexico - Global Payment",
+        "Facilitador de proyecto especial en Protección - Villahermosa - Tabasco"
+      ],
+      "senales_por_materia": {
+        "penal": 3,
+        "civil": 2,
+        "mercantil": 5,
+        "notarial_registral": 1,
+        "procesal": 1,
+        "laboral": 2,
+        "inmobiliario": 3,
+        "administrativo": 2,
+        "corporativo_compliance": 7,
+        "fiscal": 1
+      },
+      "candidatos_nuevos": [],
+      "candidatos_a_depurar": []
+    }
+  ]
+}
