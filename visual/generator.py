@@ -60,6 +60,16 @@ antes de cualquier curaduría, `preferencias()` está vacío y el ajuste es
 exactamente 0 — el sistema no puede explotar un gusto que todavía no conoce.
 El acotamiento es la mitad de la EXPLORACIÓN: un ajuste sin techo encerraría
 al motor en lo ya premiado, justo lo que el mandato prohíbe.
+
+SEÑAL DE MERCADO REAL (mandato "Fase post-implementación", 16-sep-2026,
+Parte VI): mismo patrón exacto que la afinidad del Founder — un ajuste
+PEQUEÑO y ACOTADO (`AJUSTE_SENAL_MERCADO_MAX`), nunca la ponderación base,
+y exactamente 0.0 sin evidencia. La evidencia es `market_signal.py`
+(vacantes reales clasificadas y agrupadas) — `professional_demand` real
+sobre conteo observado, nunca una predicción de "viral" o "tendencia": el
+mandato lo prohíbe explícitamente ("no confundir 'popular' con 'viral'").
+Sin `señales_mercado` (parámetro opcional en todo este módulo), el
+comportamiento es idéntico al de antes de esta fase.
 """
 
 from dataclasses import dataclass, field
@@ -91,6 +101,14 @@ EJES_AFINIDAD = ("materia", "familia_editorial", "necesidad", "angulo", "emocion
 AJUSTE_AFINIDAD_MAX = 0.12
 AJUSTE_AFINIDAD_ESCALA = 0.03
 
+# Señal de mercado real (Parte VI, 16-sep-2026): ajuste acotado por
+# demanda profesional observada (vacantes reales), a nivel de MATERIA —
+# `market_signal.py` no siempre resuelve un concepto más fino que eso (el
+# título de una vacante real casi nunca lo declara), y este ajuste no finge
+# una precisión que la fuente no tiene.
+AJUSTE_SENAL_MERCADO_MAX = 0.08
+PESO_DEMANDA = {"ALTA": 1.0, "MEDIA": 0.5, "BAJA": 0.0}
+
 
 @dataclass
 class CandidateScore:
@@ -107,6 +125,7 @@ class CandidateScore:
     visual_distance: str = NO_DISPONIBLE_EN_ESTA_ETAPA
     recent_cooldown: float = 0.0
     ajuste_afinidad_founder: float = 0.0
+    ajuste_senal_mercado: float = 0.0
     score_compuesto: float = 0.0
     explicacion: list = field(default_factory=list)
 
@@ -123,6 +142,7 @@ class CandidateScore:
                 "visual_distance": self.visual_distance,
                 "recent_cooldown": self.recent_cooldown,
                 "ajuste_afinidad_founder": self.ajuste_afinidad_founder,
+                "ajuste_senal_mercado": self.ajuste_senal_mercado,
                 "score_compuesto": self.score_compuesto,
                 "explicacion": list(self.explicacion)}
 
@@ -183,13 +203,37 @@ def ajuste_afinidad_founder(candidato, memoria):
     return round(ajuste, 4), razon
 
 
+def ajuste_senal_mercado(candidato, señales_mercado):
+    """Traduce la demanda profesional real (`market_signal.agrupar_por_concepto`)
+    en un ajuste pequeño y acotado, igual patrón que `ajuste_afinidad_founder`.
+
+    Empareja por MATERIA (`legal_area`), no por concepto granular: la
+    mayoría de señales reales observadas hoy sólo resuelven a ese nivel
+    (ver `market_signal.py`), y emparejar por un concepto más fino que el
+    dato real sostiene sería fabricar precisión. Sin señales -> 0.0 exacto.
+    """
+    if not señales_mercado:
+        return 0.0, "sin señales de mercado para esta corrida."
+    mat = normaliza(getattr(candidato, "materia", "") or "")
+    fila = next((f for f in señales_mercado if normaliza(f.get("legal_area", "")) == mat), None)
+    if fila is None:
+        return 0.0, f"ninguna señal de mercado reciente coincide con la materia {candidato.materia!r}."
+    peso = PESO_DEMANDA.get(fila.get("professional_demand", ""), 0.0)
+    ajuste = round(AJUSTE_SENAL_MERCADO_MAX * peso, 4)
+    razon = (f"demanda profesional {fila.get('professional_demand')} en materia "
+            f"{candidato.materia!r} ({fila.get('frequency')} señal(es) real(es) de mercado): "
+            f"ajuste +{ajuste}.")
+    return ajuste, razon
+
+
 def _cuota_materia(materia, n, materias):
     base = materias.get(materia, {}).get("cuota_max_por_lote_10", 2)
     return max(1, round(base * n / 10.0))
 
 
 def puntuar_candidato(candidato, memoria, mapa_territorio, universo=None,
-                      lote_en_progreso=(), materias=None, n_lote=10):
+                      lote_en_progreso=(), materias=None, n_lote=10,
+                      señales_mercado=None):
     """Puntúa un candidato. Aplica los hard gates ANTES de calcular el resto:
     un candidato rechazado no necesita un ranking, necesita un motivo."""
     import universe as uni
@@ -256,19 +300,23 @@ def puntuar_candidato(candidato, memoria, mapa_territorio, universo=None,
 
     afinidad, razon_afinidad = ajuste_afinidad_founder(candidato, memoria)
     explicacion.append(f"afinidad Founder (explotación acotada): {afinidad:+.4f} — {razon_afinidad}")
-    score_compuesto = round(max(0.0, min(1.0, score_base + afinidad)), 4)
+
+    senal_mercado, razon_senal = ajuste_senal_mercado(candidato, señales_mercado)
+    explicacion.append(f"señal de mercado (acotada): {senal_mercado:+.4f} — {razon_senal}")
+
+    score_compuesto = round(max(0.0, min(1.0, score_base + afinidad + senal_mercado)), 4)
 
     return CandidateScore(
         candidate_id=candidato.candidate_id, hard_gates_pasados=True,
         semantic_novelty=semantic_novelty, editorial_diversity=diversidad,
         territory_coverage=territorio.opportunity, utility=valor_utilidad,
         emotional_fit=emocional, recent_cooldown=cooldown,
-        ajuste_afinidad_founder=afinidad,
+        ajuste_afinidad_founder=afinidad, ajuste_senal_mercado=senal_mercado,
         score_compuesto=score_compuesto, explicacion=explicacion)
 
 
 def seleccionar_lote(candidatos, memoria, mapa_territorio, universo=None, n=10,
-                     materias=None):
+                     materias=None, señales_mercado=None):
     """Selecciona iterativamente: puntúa contra el lote parcial (para que
     `editorial_diversity` reaccione a lo ya elegido), toma el mejor
     superviviente de los hard gates, repite. Nunca rellena con un candidato
@@ -284,21 +332,23 @@ def seleccionar_lote(candidatos, memoria, mapa_territorio, universo=None, n=10,
         mejor, mejor_score = None, None
         for c in restantes:
             s = puntuar_candidato(c, memoria, mapa_territorio, universo, seleccion,
-                                  materias=materias, n_lote=n)
+                                  materias=materias, n_lote=n, señales_mercado=señales_mercado)
             if not s.hard_gates_pasados:
                 rechazados.append((c.candidate_id, s.motivo_bloqueo))
                 continue
-            # Desempate por afinidad Founder. En territorio muy virgen (la fase
-            # inicial real: pocas celdas materia×familia tocadas) es normal que
-            # muchos candidatos empaten en score_compuesto=1.0 — novelty,
-            # territorio y utilidad ya tocan el techo por sí solos. Comparar
-            # sólo `score_compuesto` (recortado a [0,1] para que sea legible)
-            # dejaría el ajuste de afinidad invisible justo cuando más importa:
-            # exactamente el caso que exige la Fase 9. `clave` usa el valor SIN
-            # recortar como desempate, nunca como criterio principal.
-            clave = (s.score_compuesto, s.score_compuesto + s.ajuste_afinidad_founder)
+            # Desempate por afinidad Founder + señal de mercado. En territorio
+            # muy virgen (la fase inicial real: pocas celdas materia×familia
+            # tocadas) es normal que muchos candidatos empaten en
+            # score_compuesto=1.0 — novelty, territorio y utilidad ya tocan el
+            # techo por sí solos. Comparar sólo `score_compuesto` (recortado a
+            # [0,1] para que sea legible) dejaría ambos ajustes invisibles
+            # justo cuando más importan. `clave` usa el valor SIN recortar
+            # como desempate, nunca como criterio principal.
+            clave = (s.score_compuesto,
+                    s.score_compuesto + s.ajuste_afinidad_founder + s.ajuste_senal_mercado)
             mejor_clave = ((mejor_score.score_compuesto,
-                           mejor_score.score_compuesto + mejor_score.ajuste_afinidad_founder)
+                           mejor_score.score_compuesto + mejor_score.ajuste_afinidad_founder
+                           + mejor_score.ajuste_senal_mercado)
                           if mejor_score is not None else None)
             if mejor_clave is None or clave > mejor_clave:
                 mejor, mejor_score = c, s

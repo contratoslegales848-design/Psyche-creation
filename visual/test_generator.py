@@ -294,5 +294,70 @@ class TestExplotacionEnLote(GenBase):
                         "una materia descartada nunca debe volverse un hard gate")
 
 
+class TestSenalDeMercado(GenBase):
+    """Parte VI del mandato "Fase post-implementación" (16-sep-2026): ajuste
+    acotado por demanda profesional real, mismo patrón que la afinidad del
+    Founder — sin evidencia, exactamente 0.0."""
+
+    def test_sin_senales_ajuste_es_cero(self):
+        ajuste, razon = generator.ajuste_senal_mercado(
+            type("C", (), {"materia": "mercantil"})(), None)
+        self.assertEqual(ajuste, 0.0)
+        self.assertIn("sin señales", razon)
+
+    def test_materia_sin_coincidencia_ajuste_es_cero(self):
+        señales = [{"legal_area": "penal", "professional_demand": "ALTA", "frequency": 9}]
+        ajuste, _ = generator.ajuste_senal_mercado(
+            type("C", (), {"materia": "mercantil"})(), señales)
+        self.assertEqual(ajuste, 0.0)
+
+    def test_demanda_alta_da_el_ajuste_maximo(self):
+        señales = [{"legal_area": "mercantil", "professional_demand": "ALTA", "frequency": 14}]
+        ajuste, razon = generator.ajuste_senal_mercado(
+            type("C", (), {"materia": "mercantil"})(), señales)
+        self.assertEqual(ajuste, generator.AJUSTE_SENAL_MERCADO_MAX)
+        self.assertIn("mercantil", razon)
+
+    def test_demanda_media_da_la_mitad_del_ajuste_maximo(self):
+        señales = [{"legal_area": "laboral", "professional_demand": "MEDIA", "frequency": 3}]
+        ajuste, _ = generator.ajuste_senal_mercado(
+            type("C", (), {"materia": "laboral"})(), señales)
+        self.assertEqual(ajuste, round(generator.AJUSTE_SENAL_MERCADO_MAX * 0.5, 4))
+
+    def test_demanda_baja_da_cero(self):
+        señales = [{"legal_area": "fiscal", "professional_demand": "BAJA", "frequency": 1}]
+        ajuste, _ = generator.ajuste_senal_mercado(
+            type("C", (), {"materia": "fiscal"})(), señales)
+        self.assertEqual(ajuste, 0.0)
+
+    def test_puntuar_candidato_sin_señales_mercado_es_identico_a_antes(self):
+        """Backward-compat explícito: no pasar señales_mercado (el default)
+        no cambia nada de lo que ya dependía de puntuar_candidato."""
+        c = universe.build_reserve(objetivo_lote=1, seed=1)[0]
+        s = generator.puntuar_candidato(c, SemanticMemory(), self.mapa, self.universo)
+        self.assertEqual(s.ajuste_senal_mercado, 0.0)
+
+    def test_puntuar_candidato_con_señal_real_suma_al_score(self):
+        c = universe.build_reserve(objetivo_lote=1, seed=1)[0]
+        señales = [{"legal_area": c.materia, "professional_demand": "ALTA", "frequency": 10}]
+        s_sin = generator.puntuar_candidato(c, SemanticMemory(), self.mapa, self.universo)
+        s_con = generator.puntuar_candidato(c, SemanticMemory(), self.mapa, self.universo,
+                                            señales_mercado=señales)
+        self.assertEqual(s_con.ajuste_senal_mercado, generator.AJUSTE_SENAL_MERCADO_MAX)
+        self.assertGreaterEqual(s_con.score_compuesto, s_sin.score_compuesto)
+
+    def test_seleccionar_lote_acepta_señales_mercado_sin_romper_cuotas(self):
+        reserva = universe.build_reserve(objetivo_lote=10, seed=5, factor=14)
+        señales = [{"legal_area": "mercantil", "professional_demand": "ALTA", "frequency": 14}]
+        sel, pts, _ = generator.seleccionar_lote(reserva, SemanticMemory(), self.mapa,
+                                                 universo=self.universo, n=10,
+                                                 materias=self.materias,
+                                                 señales_mercado=señales)
+        self.assertLessEqual(len(sel), 10)
+        for c, p in zip(sel, pts):
+            self.assertGreaterEqual(p.score_compuesto, 0.0)
+            self.assertLessEqual(p.score_compuesto, 1.0)
+
+
 if __name__ == "__main__":
     unittest.main()
