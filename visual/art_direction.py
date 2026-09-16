@@ -35,10 +35,25 @@ dos existe todavía para un TopicCandidate. Tampoco inventa METÁFORA ni
 ESCENA concretas: son contenido creativo verificable, no infraestructura, y
 seguirán PENDIENTES hasta que alguien (persona o pipeline posterior) las
 redacte sobre una pieza ya verificada.
+
+CORRECCIÓN DE LA DESCONEXIÓN (mandato "Fase post-implementación", Parte
+XII, 16-sep-2026): hasta esta fase, "LENGUAJE ARTÍSTICO" en el ORDEN
+OBLIGATORIO de arriba se resolvía con `elegir_familia_visual()` sobre
+`families.py` — el registro de 8 familias reducidas que el mandato
+ANTERIOR ("Súper Prompt — dirección artística") ya había diagnosticado
+como Hallazgo 3 de monotonía visual y reemplazado por el catálogo maestro
+de 767 módulos (`visual_fingerprint.py`). Esa sustitución nunca llegó
+hasta aquí: `draft_visual_brief()` seguía leyendo el catálogo viejo.
+Ahora usa `visual_fingerprint.seleccionar_huella()` — real, con las 10
+dimensiones del catálogo maestro y anti-repetición calibrada. `families.py`
+no se elimina: `elegir_familia_visual()` sigue siendo la fuente real y
+correcta para UNA cosa distinta, no visual: qué superficie física de marca
+sugerir (eso nunca fue parte del hallazgo de monotonía).
 """
 
 from dataclasses import dataclass, field
 
+import visual_fingerprint as vf
 from memory import normaliza
 
 # Vocabulario abierto — mismo espíritu que VISUAL_FUNCTIONS en
@@ -146,9 +161,16 @@ class VisualBriefDraft:
     content_id: str = ""
     visual_function: str = ""
     razon_funcion: str = ""
-    familia_visual: str = ""
-    material_sugerido: str = ""
-    superficie_marca_sugerida: str = ""
+    familia_visual: str = ""          # etiqueta legible derivada de la huella (ver to_dict)
+    primary_direction: str = ""       # catálogo maestro — visual_fingerprint.py
+    secondary_direction: str = ""
+    medium: str = ""
+    palette: str = ""
+    camera_optics: str = ""
+    realism: str = ""
+    visual_mechanism: str = ""
+    material_sugerido: str = ""       # = huella.materiality
+    superficie_marca_sugerida: str = ""  # de families.py — eje de marca, no de monotonía visual
     composicion: str = ""
     camara: str = ""
     luz: str = ""
@@ -168,45 +190,80 @@ class VisualBriefDraft:
 PENDIENTE_CONTENIDO = "PENDIENTE_CONTENIDO — requiere redacción humana o de pipeline posterior sobre pieza ya verificada."
 
 
-def verificar_diversidad_de_estilos(drafts, registro_familias, n_esperado=None):
+def verificar_diversidad_de_estilos(drafts, catalogo_maestro=None, n_esperado=None,
+                                    registro_familias=None):
     """Hueco encontrado al reconciliar: legalmente-web exige 10 estilos
     distintos en un lote independiente de 10 piezas
     (`tenDistinctArtStylesForIndependentGeneralPieces`), con un catálogo de
     estilo declarado ABIERTO (`artStyleRegistryIsOpen: true`) — un string
     libre, validado sólo por unicidad.
 
-    El registro de familias visuales de este repo (`families.py`) es
-    CERRADO: hoy tiene 8 entradas, no un catálogo abierto. Exigir 10
-    distintas sobre 8 posibles sería fabricar un requisito que los datos no
-    pueden sostener — el mismo error que ya se corrigió en el motor
-    editorial (ver corpus_analysis / territory_explorer). El techo real es
-    `min(len(registro), n)`, y se documenta como límite, no se esconde.
+    CORREGIDO (Parte XII, 16-sep-2026): el techo real ya NO es
+    `min(8, n)` — esa cifra era el registro de 8 familias reducidas
+    (`families.py`), exactamente el catálogo cerrado que este mismo
+    hallazgo señalaba como el síntoma. El techo real hoy es
+    `min(total_direcciones_del_catalogo_maestro, n)` — 504 direcciones,
+    así que para cualquier lote realista (n<=504) el techo es `n`: la
+    "biblioteca artística abierta" que antes era aspiracional ya existe.
+    `registro_familias` se acepta solo por compatibilidad retroactiva de
+    llamadas antiguas — usar `catalogo_maestro` siempre que sea posible.
     """
     n_esperado = n_esperado if n_esperado is not None else len(drafts)
-    techo = min(len(registro_familias.names()), n_esperado)
+    if catalogo_maestro is not None:
+        total = sum(len(v) for v in catalogo_maestro.direcciones.values())
+        fuente = f"catálogo maestro: {total} direcciones en {len(catalogo_maestro.direcciones)} categorías"
+    elif registro_familias is not None:
+        total = len(registro_familias.names())
+        fuente = f"catálogo actual: {total} familias (compatibilidad retroactiva, families.py)"
+    else:
+        raise ValueError("verificar_diversidad_de_estilos requiere catalogo_maestro o, "
+                         "por compatibilidad, registro_familias.")
+    techo = min(total, n_esperado)
     distintos = {normaliza(d.familia_visual) for d in drafts if d.familia_visual}
-    detalle = (f"{len(distintos)}/{techo} estilos distintos "
-              f"(catálogo actual: {len(registro_familias.names())} familias; "
-              f"'biblioteca artística abierta' sigue siendo aspiracional, no implementada).")
+    detalle = f"{len(distintos)}/{techo} estilos distintos ({fuente})."
     return len(distintos) >= techo, detalle
 
 
-def draft_visual_brief(candidato, perfil_emocional, registro_familias,
+def draft_visual_brief(candidato, perfil_emocional, catalogo_maestro=None,
+                       memoria_huellas=None, canal="", registro_familias=None,
                        memoria_visual=None, evitar_familias=()):
     """Construye el borrador. `perfil_emocional` es el dict que ya trae el
     candidato (`candidato.perfil_emocional`, poblado por emotion.py) — no se
     vuelve a derivar aquí: una capa posterior nunca reinfiere lo que una
-    capa anterior ya decidió (mandato Paso 3)."""
-    funcion, razon = derivar_funcion_visual(candidato.familia_editorial, candidato.necesidad)
-    familia = elegir_familia_visual(registro_familias, memoria_visual, evitar_familias)
+    capa anterior ya decidió (mandato Paso 3).
 
-    material = familia.material_vocabulary[0] if familia.material_vocabulary else ""
-    superficie = familia.brand_surface_preferences[0] if familia.brand_surface_preferences else ""
+    `catalogo_maestro` (`visual_fingerprint.MasterCatalog`) y
+    `memoria_huellas` (`visual_fingerprint.FingerprintMemory`) son la
+    fuente real de "LENGUAJE ARTÍSTICO" desde la Parte XII (16-sep-2026) —
+    ver docstring del módulo. Si se omite `catalogo_maestro`, se carga el
+    catálogo real por defecto (`MasterCatalog.load()`): nunca cae de vuelta
+    al registro de 8 familias reducidas para la dirección artística.
+
+    `registro_familias`/`memoria_visual`/`evitar_familias` sólo aportan
+    `superficie_marca_sugerida` ahora (un eje de marca, no de monotonía
+    visual) — se aceptan por compatibilidad, y son opcionales: sin ellos,
+    `superficie_marca_sugerida` queda vacía en vez de forzar un valor.
+    """
+    funcion, razon = derivar_funcion_visual(candidato.familia_editorial, candidato.necesidad)
+
+    catalogo_maestro = catalogo_maestro or vf.MasterCatalog.load()
+    memoria_huellas = memoria_huellas if memoria_huellas is not None else vf.FingerprintMemory()
+    huella = vf.seleccionar_huella(candidato.candidate_id, catalogo=catalogo_maestro,
+                                   memoria=memoria_huellas, canal=canal)
+
+    superficie = ""
+    if registro_familias is not None:
+        familia_marca = elegir_familia_visual(registro_familias, memoria_visual, evitar_familias)
+        superficie = (familia_marca.brand_surface_preferences[0]
+                     if familia_marca.brand_surface_preferences else "")
 
     return VisualBriefDraft(
         content_id=candidato.candidate_id, visual_function=funcion, razon_funcion=razon,
-        familia_visual=familia.name, material_sugerido=material,
-        superficie_marca_sugerida=superficie,
+        familia_visual=f"{huella.primary_direction} ({huella.medium.replace('_', ' ')})",
+        primary_direction=huella.primary_direction, secondary_direction=huella.secondary_direction,
+        medium=huella.medium, palette=huella.palette, camera_optics=huella.camera_optics,
+        realism=huella.realism, visual_mechanism=huella.visual_mechanism,
+        material_sugerido=huella.materiality, superficie_marca_sugerida=superficie,
         composicion=perfil_emocional.get("composicion", ""),
         camara=perfil_emocional.get("camara", ""),
         luz=perfil_emocional.get("luz", ""),

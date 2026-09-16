@@ -37,6 +37,7 @@ import provider_gate
 import territory_explorer as te
 import universe
 import visual_distance as vdist
+import visual_fingerprint as vf
 from art_direction import draft_visual_brief, verificar_diversidad_de_estilos
 from memory import VisualMemory, VisualMemoryEntry
 from semantic_fingerprint import mas_similar
@@ -91,33 +92,39 @@ def mostrar_pieza(i, c, draft, puntuacion, historicas, por_id_enr):
          f"(ajuste afinidad Founder: {puntuacion.ajuste_afinidad_founder:+.4f})")
 
 
-def producir_y_dirigir(reserva_seed, memoria, mapa, universo, materias, registro_familias, n=10):
+def producir_y_dirigir(reserva_seed, memoria, mapa, universo, materias, registro_familias, n=10,
+                       catalogo_maestro=None):
     """Un ciclo completo: reserva → selección multi-factor → dirección de
-    arte (borrador) para cada seleccionada."""
+    arte (borrador, huella del catálogo maestro — Parte XII) para cada
+    seleccionada."""
     reserva = universe.build_reserve(objetivo_lote=n, seed=reserva_seed, factor=14)
     seleccion, puntuaciones, rechazados = generator.seleccionar_lote(
         reserva, memoria, mapa, universo=universo, n=n, materias=materias)
 
-    # La memoria visual se ACUMULA según se van dirigiendo las piezas: sin
-    # esto, elegir_familia_visual(memoria_visual=None) siempre devuelve la
-    # misma familia (determinista sin memoria) y las 10 piezas de un lote
-    # saldrían con idéntica dirección artística — el propio defecto que esta
-    # reconciliación existe para cerrar.
+    catalogo_maestro = catalogo_maestro or vf.MasterCatalog.load()
+    # La huella se ACUMULA según se van dirigiendo las piezas: sin esto,
+    # seleccionar_huella() sin memoria puede repetir dirección en dos
+    # piezas seguidas — el propio defecto que la Parte XII existe para
+    # cerrar (antes: elegir_familia_visual(memoria_visual=None) sin
+    # memoria SIEMPRE devolvía la misma familia).
+    memoria_huellas = vf.FingerprintMemory()
     memoria_visual = VisualMemory()
     drafts = []
     for c in seleccion:
-        d = draft_visual_brief(c, c.perfil_emocional, registro_familias,
-                               memoria_visual=memoria_visual)
+        d = draft_visual_brief(c, c.perfil_emocional, catalogo_maestro,
+                               memoria_huellas=memoria_huellas,
+                               registro_familias=registro_familias, memoria_visual=memoria_visual)
         drafts.append(d)
         memoria_visual.record(draft_a_entry_visual(c, d))
     return reserva, seleccion, puntuaciones, drafts, rechazados
 
 
-def qa_de_lote(seleccion, drafts, registro_familias, memoria):
+def qa_de_lote(seleccion, drafts, registro_familias, memoria, catalogo_maestro=None):
     """QA de lote extendido con los tres cierres de esta reconciliación."""
     problemas = []
 
-    ok_estilos, detalle_estilos = verificar_diversidad_de_estilos(drafts, registro_familias,
+    catalogo_maestro = catalogo_maestro or vf.MasterCatalog.load()
+    ok_estilos, detalle_estilos = verificar_diversidad_de_estilos(drafts, catalogo_maestro,
                                                                    n_esperado=len(seleccion))
     print(f"\n  [diversidad de estilos] {'OK' if ok_estilos else 'INSUFICIENTE'} — {detalle_estilos}")
     if not ok_estilos:
@@ -223,7 +230,8 @@ def main():
 
     print("\n  problemas abiertos declarados explícitamente:")
     print("  - visual_distance estricta no puede certificarse antes de que exista escena/metáfora real.")
-    print("  - diversidad de estilos: techo real de 8 familias registradas, no las 10 de la referencia TS.")
+    print("  - diversidad de estilos: resuelto (Parte XII, 16-sep-2026) — el techo ya es el catálogo "
+         "maestro de 504 direcciones, no las 8 familias reducidas de antes.")
     print("  - hook y copy exacto siguen sin generarse (contenido, no infraestructura).")
     print("  - ningún candidato ha pasado legalmente-legal-verification: todos NO_VERIFICADO.")
 

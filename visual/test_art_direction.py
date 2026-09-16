@@ -11,6 +11,7 @@ import art_direction as ad
 import emotion
 import families
 import universe
+import visual_fingerprint as vf
 from memory import VisualMemory, VisualMemoryEntry
 
 
@@ -70,6 +71,7 @@ class TestElegirFamiliaVisual(unittest.TestCase):
 class TestDraftVisualBrief(unittest.TestCase):
     def setUp(self):
         self.registro = families.VisualFamilyRegistry.load()
+        self.catalogo = vf.MasterCatalog.load()
 
     def candidato(self, **kw):
         base = dict(candidate_id="X", materia="civil", submateria="s",
@@ -82,7 +84,7 @@ class TestDraftVisualBrief(unittest.TestCase):
     def test_produce_los_campos_declarados(self):
         c = self.candidato()
         perfil = emotion.derivar(necesidad=c.necesidad, familia_editorial=c.familia_editorial)
-        d = ad.draft_visual_brief(c, perfil.to_dict(), self.registro)
+        d = ad.draft_visual_brief(c, perfil.to_dict(), self.catalogo, registro_familias=self.registro)
         self.assertEqual(d.content_id, "X")
         self.assertTrue(d.visual_function)
         self.assertTrue(d.familia_visual)
@@ -92,7 +94,7 @@ class TestDraftVisualBrief(unittest.TestCase):
     def test_nunca_esta_autorizado(self):
         c = self.candidato()
         perfil = emotion.derivar(necesidad=c.necesidad, familia_editorial=c.familia_editorial)
-        d = ad.draft_visual_brief(c, perfil.to_dict(), self.registro)
+        d = ad.draft_visual_brief(c, perfil.to_dict(), self.catalogo, registro_familias=self.registro)
         self.assertFalse(d.autorizado)
 
     def test_escena_y_metafora_quedan_pendientes_de_contenido(self):
@@ -100,7 +102,7 @@ class TestDraftVisualBrief(unittest.TestCase):
         creativo verificable, no infraestructura."""
         c = self.candidato()
         perfil = emotion.derivar(necesidad=c.necesidad, familia_editorial=c.familia_editorial)
-        d = ad.draft_visual_brief(c, perfil.to_dict(), self.registro)
+        d = ad.draft_visual_brief(c, perfil.to_dict(), self.catalogo, registro_familias=self.registro)
         self.assertEqual(d.escena, ad.PENDIENTE_CONTENIDO)
         self.assertEqual(d.metafora, ad.PENDIENTE_CONTENIDO)
 
@@ -109,7 +111,7 @@ class TestDraftVisualBrief(unittest.TestCase):
         c = self.candidato()
         perfil = emotion.derivar(necesidad="actuar", familia_editorial="plazo_prescripcion",
                                  consecuencia="se pierde el derecho")
-        d = ad.draft_visual_brief(c, perfil.to_dict(), self.registro)
+        d = ad.draft_visual_brief(c, perfil.to_dict(), self.catalogo, registro_familias=self.registro)
         self.assertEqual(d.composicion, perfil.composicion)
         self.assertEqual(d.camara, perfil.camara)
         self.assertEqual(d.luz, perfil.luz)
@@ -121,6 +123,7 @@ class TestPruebaCausal(unittest.TestCase):
 
     def setUp(self):
         self.registro = families.VisualFamilyRegistry.load()
+        self.catalogo = vf.MasterCatalog.load()
 
     def draft_para(self, necesidad, familia, consecuencia=""):
         c = universe.TopicCandidate(
@@ -130,7 +133,8 @@ class TestPruebaCausal(unittest.TestCase):
             pregunta_resuelta="p", consecuencia=consecuencia)
         perfil = emotion.derivar(necesidad=necesidad, familia_editorial=familia,
                                  consecuencia=consecuencia)
-        return ad.draft_visual_brief(c, perfil.to_dict(), self.registro), perfil
+        return ad.draft_visual_brief(c, perfil.to_dict(), self.catalogo,
+                                     registro_familias=self.registro), perfil
 
     def test_emociones_distintas_producen_composicion_distinta(self):
         d1, p1 = self.draft_para("reflexionar", "doctrina")
@@ -162,22 +166,46 @@ class TestPruebaCausal(unittest.TestCase):
 class TestDiversidadDeEstilos(unittest.TestCase):
     def setUp(self):
         self.registro = families.VisualFamilyRegistry.load()
+        self.catalogo = vf.MasterCatalog.load()
 
     def draft(self, familia_visual):
         return ad.VisualBriefDraft(content_id="x", familia_visual=familia_visual)
 
-    def test_techo_real_es_el_tamano_del_registro_no_diez(self):
-        """Con 8 familias registradas, el techo de un lote de 10 es 8, no 10
-        — exigir 10 sería fabricar un requisito que los datos no sostienen."""
+    def test_compatibilidad_retroactiva_con_registro_de_familias(self):
+        """El techo por families.py (8 familias) se conserva vía
+        registro_familias= sólo para compatibilidad de llamadas antiguas."""
         drafts = [self.draft(n) for n in self.registro.names()]
-        ok, detalle = ad.verificar_diversidad_de_estilos(drafts, self.registro, n_esperado=10)
+        ok, detalle = ad.verificar_diversidad_de_estilos(
+            drafts, n_esperado=10, registro_familias=self.registro)
         self.assertTrue(ok, detalle)
         self.assertIn(f"{len(self.registro.names())}/{len(self.registro.names())}", detalle)
 
     def test_detecta_concentracion_de_estilo(self):
         drafts = [self.draft(self.registro.names()[0]) for _ in range(5)]
-        ok, detalle = ad.verificar_diversidad_de_estilos(drafts, self.registro, n_esperado=5)
+        ok, detalle = ad.verificar_diversidad_de_estilos(
+            drafts, n_esperado=5, registro_familias=self.registro)
         self.assertFalse(ok, detalle)
+
+    def test_con_catalogo_maestro_el_techo_real_es_n_no_ocho(self):
+        """CORRECCIÓN CENTRAL de la Parte XII: con el catálogo maestro real
+        (504 direcciones), el techo de un lote de 10 ya no es 8 — es 10.
+        La 'biblioteca artística abierta' que antes era aspiracional
+        (ver commit anterior, families.py de 8 entradas) ya existe."""
+        drafts = [self.draft(f"estilo-{i}") for i in range(10)]
+        ok, detalle = ad.verificar_diversidad_de_estilos(drafts, self.catalogo, n_esperado=10)
+        self.assertTrue(ok, detalle)
+        self.assertIn("10/10", detalle)
+        self.assertIn("504", detalle)
+
+    def test_con_catalogo_maestro_sigue_detectando_concentracion_real(self):
+        drafts = [self.draft("mismo-estilo-repetido") for _ in range(10)]
+        ok, detalle = ad.verificar_diversidad_de_estilos(drafts, self.catalogo, n_esperado=10)
+        self.assertFalse(ok, detalle)
+        self.assertIn("1/10", detalle)
+
+    def test_sin_ninguna_fuente_lanza_error_explicito(self):
+        with self.assertRaises(ValueError):
+            ad.verificar_diversidad_de_estilos([self.draft("x")], n_esperado=1)
 
 
 if __name__ == "__main__":

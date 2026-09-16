@@ -41,6 +41,7 @@ import provider_gate
 import territory_explorer as te
 import universe
 import visual_distance as vdist
+import visual_fingerprint as vf
 from art_direction import PENDIENTE_CONTENIDO, draft_visual_brief, verificar_diversidad_de_estilos
 from memory import VisualMemory, VisualMemoryEntry
 from semantic_memory import SemanticMemory
@@ -65,21 +66,27 @@ def draft_a_entry_visual(candidato, draft):
 
 
 def producir_y_dirigir(reserva_seed, memoria, mapa, universo, materias, registro_familias,
-                       n=10, factor_reserva=14):
+                       n=10, factor_reserva=14, catalogo_maestro=None, señales_mercado=None):
     """Reserva real ≥ RESERVA_MINIMA (factor=14, n=10 -> 140) → selección
     multi-factor (territorio ya incluido en el score, no aparte) → dirección
-    de arte acumulando memoria visual entre piezas del mismo lote."""
+    de arte acumulando huella visual (catálogo maestro, Parte XII) entre
+    piezas del mismo lote."""
     reserva = universe.build_reserve(objetivo_lote=n, seed=reserva_seed, factor=factor_reserva)
     assert len(reserva) >= RESERVA_MINIMA, (
         f"reserva de {len(reserva)} < mínimo exigido {RESERVA_MINIMA}: sube factor_reserva.")
 
     seleccion, puntuaciones, rechazados = generator.seleccionar_lote(
-        reserva, memoria, mapa, universo=universo, n=n, materias=materias)
+        reserva, memoria, mapa, universo=universo, n=n, materias=materias,
+        señales_mercado=señales_mercado)
 
+    catalogo_maestro = catalogo_maestro or vf.MasterCatalog.load()
+    memoria_huellas = vf.FingerprintMemory()
     memoria_visual = VisualMemory()
     drafts = []
     for c in seleccion:
-        d = draft_visual_brief(c, c.perfil_emocional, registro_familias, memoria_visual=memoria_visual)
+        d = draft_visual_brief(c, c.perfil_emocional, catalogo_maestro,
+                               memoria_huellas=memoria_huellas,
+                               registro_familias=registro_familias, memoria_visual=memoria_visual)
         drafts.append(d)
         memoria_visual.record(draft_a_entry_visual(c, d))
     return reserva, seleccion, puntuaciones, drafts, rechazados
@@ -221,7 +228,7 @@ def _prueba_titulos_ocultos(drafts):
     return ok, detalle
 
 
-def qa_dos_ejes(seleccion, drafts, registro_familias, historicas_visuales=()):
+def qa_dos_ejes(seleccion, drafts, catalogo_maestro=None, historicas_visuales=()):
     fps = [c.fingerprint() for c in seleccion]
 
     ejes_intelectuales = ("materia", "familia_editorial", "necesidad", "angulo", "emocion")
@@ -229,8 +236,9 @@ def qa_dos_ejes(seleccion, drafts, registro_familias, historicas_visuales=()):
                 for eje in ejes_intelectuales}
     intelectual_ok = all(v >= 2 for v in distintos.values())
 
+    catalogo_maestro = catalogo_maestro or vf.MasterCatalog.load()
     ok_estilos, detalle_estilos = verificar_diversidad_de_estilos(
-        drafts, registro_familias, n_esperado=len(seleccion))
+        drafts, catalogo_maestro, n_esperado=len(seleccion))
     entries = [draft_a_entry_visual(c, d) for c, d in zip(seleccion, drafts)]
     verificacion = vdist.verificar_lote_contra_historia(entries, historia=list(historicas_visuales))
 
@@ -270,7 +278,7 @@ def ejecutar(seed_lote1=9101, seed_lote2=9102, elegidos_idx=(0, 4, 8)):
 
     balance = balance_exploracion(sel1, pts1)
     briefs = [construir_brief(c, d) for c, d in zip(sel1, drafts1)]
-    qa = qa_dos_ejes(sel1, drafts1, ctx["registro_familias"])
+    qa = qa_dos_ejes(sel1, drafts1)
 
     for c in sel1:
         provider_gate.verificar_proveedor_permitido("generic-http-image-v1")
