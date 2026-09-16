@@ -71,7 +71,7 @@ class VisualBrief:
     negative_space: str = ""
     key_light: str = ""
     brightness_intent: str = ""
-    acento_frio_objeto: str = ""     # objeto fisico real que aporta el azul petroleo
+    acento_objeto: str = ""          # objeto fisico real que aporta el acento de color de la direccion artistica (color NO fijo: lo determina la huella visual o la familia, nunca un valor hardcodeado)
     marca_superficie: str = ""       # superficie fisica donde vive la marca
     marca_texto_en_imagen: bool = False   # ¿debe el GENERADOR escribir "LegalMente"?
     constraints: list = field(default_factory=list)
@@ -120,10 +120,10 @@ class VisualBrief:
                 )
 
         paleta = policy.data.get("paleta", {})
-        if paleta.get("acento_frio_debe_ser_objeto_fisico") and not str(self.acento_frio_objeto).strip():
+        if paleta.get("acento_debe_ser_objeto_fisico") and not str(self.acento_objeto).strip():
             e.append(
-                "la politica exige que el acento azul petroleo lo produzca un objeto fisico real de la escena; "
-                "'acento_frio_objeto' esta vacio."
+                "la politica exige que el acento de color de la direccion artistica lo produzca un "
+                "objeto fisico real de la escena; 'acento_objeto' esta vacio."
             )
 
         marca = policy.data.get("marca", {})

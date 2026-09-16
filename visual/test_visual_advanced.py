@@ -785,7 +785,7 @@ class TestFeedbackDebilidadMetafora(unittest.TestCase):
         from brief import VisualBrief
         b = VisualBrief(content_id="x", formato="VERTICAL_9_16", visual_family="oleo_narrativo",
                         subject="s", environment="archivo notarial", camera="c", focal_point="f",
-                        acento_frio_objeto="o", marca_superficie="piedra", metaphor="algo debil")
+                        acento_objeto="o", marca_superficie="piedra", metaphor="algo debil")
         nuevo, cambios = feedback.apply_feedback(b, ["WEAK_VISUAL_METAPHOR"])
         self.assertEqual(nuevo.metaphor, "")
         self.assertIn("metaphor", cambios)
@@ -795,7 +795,7 @@ class TestFeedbackDebilidadMetafora(unittest.TestCase):
         from brief import VisualBrief
         b = VisualBrief(content_id="LM-X", formato="VERTICAL_9_16", visual_family="oleo_narrativo",
                         subject="s", environment="e", camera="c", focal_point="f",
-                        acento_frio_objeto="o", marca_superficie="piedra")
+                        acento_objeto="o", marca_superficie="piedra")
         nuevo, _ = feedback.apply_feedback(b, ["WEAK_VISUAL_METAPHOR", "TOO_GENERIC"])
         self.assertEqual(nuevo.content_id, "LM-X")
         self.assertEqual(nuevo.formato, "VERTICAL_9_16")

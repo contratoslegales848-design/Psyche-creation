@@ -55,7 +55,7 @@ def make_brief(**kw):
         environment="despacho en penumbra al amanecer",
         camera="35mm, ligeramente picada",
         focal_point="el lacre sin sellar",
-        acento_frio_objeto="un tintero de vidrio azul petroleo",
+        acento_objeto="un tintero de vidrio azul petroleo",
         marca_superficie="sello de lacre",
     )
     campos.update(kw)
@@ -139,8 +139,8 @@ class TestBriefYPolitica(unittest.TestCase):
     def test_formato_no_permitido(self):
         self.assertTrue(make_brief(formato="CUADRADO_1_1").validate(POLICY))
 
-    def test_acento_frio_debe_ser_objeto_fisico(self):
-        e = make_brief(acento_frio_objeto="").validate(POLICY)
+    def test_acento_debe_ser_objeto_fisico(self):
+        e = make_brief(acento_objeto="").validate(POLICY)
         self.assertTrue(any("objeto fisico" in x for x in e))
 
     def test_marca_exige_superficie_permitida(self):

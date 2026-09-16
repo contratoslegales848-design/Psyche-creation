@@ -147,7 +147,7 @@ class TestAplicarABrief(unittest.TestCase):
         from brief import VisualPolicy
         pol = VisualPolicy.load()
         b = self.brief()
-        b.acento_frio_objeto = "placa de acero azulado"
+        b.acento_objeto = "placa de acero azulado"
         b.marca_superficie = sorted(pol.data["marca"]["superficies_permitidas"])[0]
         b.formato = sorted(pol.data["formatos"])[0]
         b.visual_family = pol.familias[0]

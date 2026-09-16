@@ -70,7 +70,7 @@ def _entry_desde_brief(content_id, brief, generation_id="", taxonomia=None):
         visual_family=brief.visual_family, scene_type=brief.environment,
         main_subject=brief.subject, camera_angle=brief.camera,
         metaphor=brief.metaphor, brand_surface=brief.marca_superficie,
-        secondary_objects=[brief.acento_frio_objeto] if brief.acento_frio_objeto else [],
+        secondary_objects=[brief.acento_objeto] if brief.acento_objeto else [],
         materia=str(tax.get("materia") or ""), concepto=str(tax.get("concepto") or ""))
 
 
@@ -97,7 +97,8 @@ def generate_visual(procedencia, brief, policy, provider, handoff=None,
                     claim_packet=None,
                     allow_regeneration=False,
                     exact_copy="", author="", content_type="", families_version="",
-                    reserved_surface=None, compose_asset=True, taxonomia=None):
+                    reserved_surface=None, compose_asset=True, taxonomia=None,
+                    fingerprint=None):
     """Ejecuta el pipeline. Con dry_run=True no se llama al proveedor (0 llamadas)."""
     log = EventLog()
     base = _receipt_base(procedencia, brief, policy, families_version)
@@ -126,7 +127,7 @@ def generate_visual(procedencia, brief, policy, provider, handoff=None,
     caps = provider.capabilities()
     try:
         compiled = compile_request(brief, policy, family=family, capabilities=caps,
-                                   repetition=repetition)
+                                   repetition=repetition, fingerprint=fingerprint)
     except ValueError as exc:
         return VisualRun(fin("BRIEF_INVALIDO", motivos=str(exc).splitlines()), events=log.to_list())
     log.emit("visual.brief.created", content_id=base["content_id"])
