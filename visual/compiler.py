@@ -14,8 +14,9 @@ from dataclasses import dataclass, field, asdict
 
 from composition import build_brand_plan
 from plan import canonical_hash
+from providers.base import GENERATION_MODE_TEXT_TO_IMAGE
 
-COMPILER_VERSION = "2.0"
+COMPILER_VERSION = "2.1"
 
 
 @dataclass
@@ -33,6 +34,17 @@ class CompiledVisualRequest:
     provider_parameters: dict = field(default_factory=dict)
     explanation: list = field(default_factory=list)
     metadata: dict = field(default_factory=dict)
+    # Contrato de salida text-to-image vs. image-edit (Hotfix, 16-sep-2026):
+    # compile_request() no tiene ni tendrá aquí una vía de edición — sólo
+    # compone piezas nuevas desde cero. generation_mode es SIEMPRE
+    # TEXT_TO_IMAGE en este compilador; los otros tres campos existen para
+    # que el contrato sea el mismo objeto que consume pipeline.py, nunca se
+    # heredan de una generación anterior. Ver
+    # docs/contrato-generacion-imagenes-legalmente.md.
+    generation_mode: str = GENERATION_MODE_TEXT_TO_IMAGE
+    source_image: bytes = None
+    reference_images: tuple = ()
+    edit_instruction: str = None
 
     @property
     def negative_prompt(self):
@@ -49,6 +61,7 @@ class CompiledVisualRequest:
             "d": list(self.requested_dimensions),
             "t": self.text_mode,
             "b": self.brand_mode,
+            "gm": self.generation_mode,
         })
 
 

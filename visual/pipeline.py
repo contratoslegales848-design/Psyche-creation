@@ -20,7 +20,7 @@ from inspection import NoopSemanticInspector, FAIL, NEEDS_HUMAN_REVIEW
 from memory import VisualMemory, VisualMemoryEntry
 from observability import EventLog
 from plan import GenerationPlan, REJECT
-from providers.base import NormalizedImageRequest
+from providers.base import NormalizedImageRequest, validate_generation_contract
 from providers.selection import evaluate
 from qa import structural_qa
 
@@ -52,7 +52,7 @@ class VisualRun:
         if s == "PENDIENTE_REVISION_HUMANA":
             return NEEDS_REVIEW
         if s in ("GATE_CERRADO", "BRIEF_INVALIDO", "PROVEEDOR_INCOMPATIBLE",
-                 "COMPOSICION_DESBORDADA"):
+                 "COMPOSICION_DESBORDADA", "CONTRATO_GENERACION_INVALIDO"):
             return BLOCKED
         return FAILED
 
@@ -144,6 +144,7 @@ def generate_visual(procedencia, brief, policy, provider, handoff=None,
         provider=caps.provider_id,
         brand_mode=compiled.brand_mode,
         text_mode=compiled.text_mode,
+        generation_mode=compiled.generation_mode,
         explanation=list(compiled.explanation),
     )
 
@@ -155,7 +156,20 @@ def generate_visual(procedencia, brief, policy, provider, handoff=None,
         aspect_ratio=params["aspect_ratio"], seed=params.get("seed"),
         requires_text_rendering=(compiled.text_mode == "NATIVE_TEXT"),
         metadata=compiled.metadata,
+        generation_mode=compiled.generation_mode,
+        source_image=compiled.source_image,
+        reference_images=compiled.reference_images,
+        edit_instruction=compiled.edit_instruction,
     )
+
+    # 2b. Contrato de salida text-to-image vs. image-edit (Hotfix,
+    # 16-sep-2026): fail-fast, nunca se adivina ni se manda una peticion
+    # ambigua a un proveedor. Ver providers/base.py::validate_generation_contract.
+    problemas_contrato = validate_generation_contract(request)
+    if problemas_contrato:
+        log.emit("visual.contract.invalid", content_id=base["content_id"], reason=problemas_contrato[:1])
+        return VisualRun(fin("CONTRATO_GENERACION_INVALIDO", motivos=problemas_contrato),
+                         compiled=compiled, events=log.to_list())
 
     # 3. Negociacion explicita: ACCEPT / ADAPT / REJECT.
     compat, notas = evaluate(request, caps)

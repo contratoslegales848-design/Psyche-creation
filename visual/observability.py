@@ -9,9 +9,9 @@ from datetime import datetime, timezone
 
 EVENTOS = (
     "visual.input.accepted", "visual.gate.rejected", "visual.brief.created",
-    "visual.prompt.compiled", "visual.provider.selected", "visual.generation.started",
-    "visual.generation.completed", "visual.generation.failed", "visual.qa.completed",
-    "visual.regeneration.created", "visual.batch.completed",
+    "visual.prompt.compiled", "visual.contract.invalid", "visual.provider.selected",
+    "visual.generation.started", "visual.generation.completed", "visual.generation.failed",
+    "visual.qa.completed", "visual.regeneration.created", "visual.batch.completed",
 )
 
 # Claves que jamas se registran, aunque alguien las pase por descuido.

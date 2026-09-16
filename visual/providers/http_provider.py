@@ -22,7 +22,10 @@ import urllib.error
 import urllib.request
 from dataclasses import dataclass, field
 
-from .base import ImageProvider, ProviderCapabilities, GenerationResult
+from .base import (
+    ImageProvider, ProviderCapabilities, GenerationResult,
+    GENERATION_MODE_TEXT_TO_IMAGE, GENERATION_MODE_IMAGE_EDIT,
+)
 
 DEFAULT_TIMEOUT = 60
 
@@ -38,10 +41,19 @@ class HttpTransportError(Exception):
 
 @dataclass
 class HttpProviderConfig:
-    """Todo lo especifico del proveedor vive aqui, no en el dominio."""
+    """Todo lo especifico del proveedor vive aqui, no en el dominio.
+
+    `endpoint` es SIEMPRE el endpoint de creacion (TEXT_TO_IMAGE) — el que
+    ya se usaba antes del Hotfix, sin cambios de comportamiento. `edit_endpoint`
+    es un endpoint DISTINTO y opcional para IMAGE_EDIT (mandato Hotfix §13:
+    "NO mezclar payloads"). Sin `edit_endpoint` configurado, una peticion
+    IMAGE_EDIT falla explicito en vez de reutilizar el endpoint de creacion
+    — nunca se adivina un endpoint que nadie declaro.
+    """
 
     provider_id: str
     endpoint: str
+    edit_endpoint: str = ""
     model: str = ""
     api_key_env: str = ""
     aspect_ratios: tuple = ("9:16", "4:5")
@@ -58,6 +70,7 @@ class HttpProviderConfig:
     field_map: dict = field(default_factory=lambda: {
         "prompt": "prompt", "negative_prompt": "negative_prompt",
         "width": "width", "height": "height", "seed": "seed", "model": "model",
+        "source_image": "source_image", "edit_instruction": "edit_instruction",
     })
 
 
@@ -126,6 +139,11 @@ class HttpImageProvider(ImageProvider):
 
     # --- traduccion ---
     def _payload(self, request):
+        """TEXT_TO_IMAGE: comportamiento identico al de antes del Hotfix —
+        nunca incluye source_image/edit_instruction, ni siquiera como null
+        (la ausencia de la clave es la señal mas clara de 'esto no es una
+        edicion'). IMAGE_EDIT: añade source_image (base64) y, si se declaro,
+        edit_instruction — nunca los dos payloads se mezclan."""
         f = self.config.field_map
         p = {f["prompt"]: request.prompt,
              f["width"]: request.width,
@@ -136,7 +154,22 @@ class HttpImageProvider(ImageProvider):
             p[f["negative_prompt"]] = request.negative_prompt
         if request.seed is not None and self.config.supports_seed:
             p[f["seed"]] = request.seed
+        if request.generation_mode == GENERATION_MODE_IMAGE_EDIT:
+            p[f["source_image"]] = base64.b64encode(request.source_image).decode("ascii")
+            if request.edit_instruction:
+                p[f["edit_instruction"]] = request.edit_instruction
         return p
+
+    def _endpoint_para(self, request):
+        if request.generation_mode == GENERATION_MODE_IMAGE_EDIT:
+            if not self.config.edit_endpoint:
+                raise HttpTransportError(
+                    "INVALID_REQUEST",
+                    f"{self.config.provider_id}: IMAGE_EDIT pedido pero no hay "
+                    "edit_endpoint configurado para este proveedor — no se reutiliza "
+                    "el endpoint de creacion (mandato Hotfix §13: nunca mezclar payloads).")
+            return self.config.edit_endpoint
+        return self.config.endpoint
 
     def _extraer_imagen(self, data):
         """Acepta las dos formas habituales: base64 embebido o URL."""
@@ -177,7 +210,8 @@ class HttpImageProvider(ImageProvider):
         self.llamadas += 1
         base = dict(provider_id=self.id, model=self.config.model, seed=request.seed)
         try:
-            data = self._transport(self.config.endpoint, self._payload(request),
+            endpoint = self._endpoint_para(request)
+            data = self._transport(endpoint, self._payload(request),
                                    self._auth_headers(), self.config.timeout)
             img = self._extraer_imagen(data)
         except HttpTransportError as exc:
