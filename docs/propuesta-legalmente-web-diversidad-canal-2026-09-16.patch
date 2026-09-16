@@ -1,0 +1,48 @@
+--- a/src/lib/editorial-engine/index.ts
++++ b/src/lib/editorial-engine/index.ts
+@@ -28,6 +28,10 @@
+
+ export type EditorialFormat = (typeof EDITORIAL_FORMATS)[number];
+
++// Universo reducido (6 tokens, repartidos en 4 canales) -- no esta conectado
++// al catalogo maestro real de direccion artistica de Psyche-creation (504
++// direcciones + 263 auxiliares, visual/policy/catalogo-maestro-v1.md).
++// Ver Psyche-creation/docs/auditoria-monotonia-visual-2026-09-16.md, Hallazgo 5.
+ export const VISUAL_GRAMMARS = [
+   "CINEMATIC_PHOTOGRAPHY",
+   "EDITORIAL_STILL_LIFE",
+--- a/src/lib/editorial-engine/channel-strategy.ts
++++ b/src/lib/editorial-engine/channel-strategy.ts
+@@ -46,7 +46,7 @@
+   "linkedin-founder": {
+     channel: "linkedin-founder",
+     preferredFormats: ["SINGLE_IMAGE", "CAROUSEL", "REEL"],
+-    visualGrammars: ["EDITORIAL_STILL_LIFE", "HISTORICAL_DOCUMENTARY", "CONCEPTUAL_SYMBOLISM"],
++    visualGrammars: ["EDITORIAL_STILL_LIFE", "HISTORICAL_DOCUMENTARY", "CONCEPTUAL_SYMBOLISM", "CLASSICAL_REINTERPRETATION"],
+     hookStyle: "A founder-level observation grounded in a source, product decision or editorial principle.",
+     visualDirection: [
+       "Use warmer copper, parchment or private-study variants only when the idea calls for authorship or reflection.",
+--- a/src/lib/editorial-engine/channel-strategy.test.ts
++++ b/src/lib/editorial-engine/channel-strategy.test.ts
+@@ -1,7 +1,7 @@
+ import assert from "node:assert/strict";
+ import test from "node:test";
+-import { getChannelStyleProfile, scoreChannelFit } from "./channel-strategy";
+-import type { EditorialCandidate } from "./index";
++import { CHANNEL_STYLE_PROFILES, getChannelStyleProfile, scoreChannelFit } from "./channel-strategy";
++import { VISUAL_GRAMMARS, type EditorialCandidate } from "./index";
+
+ const candidate: EditorialCandidate = {
+   id: "LM-CHANNEL-01",
+@@ -34,3 +34,11 @@
+   assert.ok(instagramScore > 0);
+   assert.ok(linkedinScore > 0);
+ });
++
++test("every VISUAL_GRAMMARS token is reachable from at least one channel (Hallazgo 5, 2026-09-16)", () => {
++  const usados = new Set(
++    Object.values(CHANNEL_STYLE_PROFILES).flatMap((profile) => profile.visualGrammars)
++  );
++  const sinUso = VISUAL_GRAMMARS.filter((grammar) => !usados.has(grammar));
++  assert.deepEqual(sinUso, []);
++});
