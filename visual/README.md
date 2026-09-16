@@ -104,6 +104,82 @@ python3 cli.py simulate      content/ejemplo.json --handoff h.json --out artifac
 python3 cli.py show-history  artifacts/visual LM-TEST-001
 ```
 
+## Motor de dirección artística (catálogo maestro, 16-sep-2026)
+
+Mandato "Súper Prompt" (Founder, 16-sep-2026):
+`docs/auditoria-monotonia-visual-2026-09-16.md` encontró que la variedad
+visual real de este motor estaba forzada a un puñado de valores fijos —
+una paleta de 4 colores obligatoria en cada prompt, 8 "familias" visuales
+que heredaban todas del mismo pool de color, y una línea de código que
+imprimía "azul petróleo" en el 100% de las piezas sin excepción. Esta
+sección documenta el sistema que lo reemplaza como fuente REAL de
+variedad (no elimina `families.py`/`visual-families-v1.json`: siguen
+siendo un campo estructural del brief, pero la dirección artística ya no
+depende de ellos).
+
+**Fuente canónica humana** (nunca se edita a mano el derivado):
+
+```
+policy/catalogo-maestro-v1.md      767 módulos: 504 direcciones (10 categorías,
+                                    sección 3) + 263 auxiliares (7 dimensiones,
+                                    sección 4). Documento del Founder, copia
+                                    literal.
+        ↓  catalog_parser.parse_catalogo() / generar_json()
+policy/catalogo-maestro-v1.json    DERIVADO. Se regenera, nunca se edita
+                                    directamente. Fail-closed si el parseo da
+                                    menos de 100 entradas o alguna sección
+                                    queda vacía.
+```
+
+**Pipeline de selección** (`visual_fingerprint.py`):
+
+```
+seleccionar_huella(content_id, catalogo, memoria, canal)
+   → VisualFingerprint: primary_direction, secondary_direction?, medium
+     (= la categoría real de la que salió primary_direction — nunca se
+     elige aparte), lighting, composition, camera_optics, palette,
+     materiality, realism, visual_mechanism
+   → selección por frecuencia de uso reciente (no random puro, sin
+     afinidad tema→categoría inventada — todas las categorías arrancan
+     elegibles por igual, mismo criterio fail-closed que
+     territory_explorer.coherencia())
+   → si la huella coincide en demasiadas dimensiones con la pieza
+     anterior o el historial reciente, se muta y reselecciona (hasta
+     MAX_INTENTOS_MUTACION) antes de entregarse
+```
+
+**QA de lote** (`visual_fingerprint_batch.py`): `evaluar_lote_visual()`
+exige, escalado al tamaño real del lote (base: lote de 10) — mínimo 7
+huellas realmente distintas, mínimo 5 medios/familias distintos, tope 2
+piezas por medio, cero repeticiones consecutivas en
+primary_direction/composition/lighting/palette. `generar_lote_visual()`
+regenera el lote completo hasta que pasa el QA — nunca lo rellena con
+candidatos débiles.
+
+**Llega al prompt final, no solo al metadata** (`compiler.py`):
+`compile_request(..., fingerprint=huella)` usa las 10 dimensiones de la
+huella para construir la sección de dirección artística y la paleta del
+prompt, reemplazando la paleta de marca fija y la línea incondicional de
+acento azul. Sin `fingerprint` (parámetro opcional), el comportamiento es
+compatible hacia atrás. Verificado en `test_compiler.py`.
+
+**Cómo extender el catálogo sin tocar lógica:** editar
+`policy/catalogo-maestro-v1.md` (añadir líneas `- entrada` bajo la
+sección `### N.M Nombre` correspondiente) y correr
+`python3 catalog_parser.py` para regenerar el JSON derivado. Ningún
+módulo de selección necesita cambiar: `MasterCatalog.load()` lee
+cualquier tamaño de catálogo sin límite hardcodeado.
+
+**Demostraciones y prueba de aceptación:**
+
+```bash
+cd visual && python3 demo_prueba_aceptacion_10_temas.py   # 10 temas reales -> 10 prompts, sin imágenes
+```
+
+Ver `docs/prueba-aceptacion-10-temas-2026-09-16.md` (generado por el
+comando de arriba, no escrito a mano) para un ejemplo completo con matriz
+de distancia entre las 10 huellas.
+
 ## Añadir un proveedor real
 
 1. `providers/<nombre>.py` con una clase que implemente `ImageProvider`.
