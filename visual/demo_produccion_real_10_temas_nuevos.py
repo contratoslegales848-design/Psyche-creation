@@ -22,16 +22,20 @@ Uso: `cd visual && python3 demo_produccion_real_10_temas_nuevos.py`
 import json
 from pathlib import Path
 
+import arquetipo_compositivo as arq
 import corpus_import as ci
+import direccion_causal as dcau
 import editorial
 import generator
 import market_signal as ms
 import territory_explorer as te
 import topic_classification as tc
 import universe
+import visual_distance as vdist
 import visual_fingerprint as vf
 from brief import VisualBrief, VisualPolicy
 from compiler import compile_request
+from memory import VisualMemoryEntry
 from semantic_memory import SemanticMemory
 from vacancy_radar import VacancyPosting
 from visual_fingerprint_batch import generar_lote_visual
@@ -55,11 +59,18 @@ DIRECCION_VISUAL = {
         metaphor="una firma que se disuelve en la institucion que ayudo a crear",
         acento_objeto="un sello corporativo de metal sin usar"),
     "CAND-0034": dict(  # mercantil / sociedades — regla tomada como absoluta
-        subject="unos estatutos sociales impresos con una sola clausula marcada en rojo",
-        environment="sala de juntas vacia tras una asamblea",
-        camera="35mm, plano medio sobre el documento", focal_point="la clausula marcada",
-        metaphor="una linea recta interrumpida por un unico quiebre deliberado",
-        acento_objeto="una regla de metal apoyada junto al documento"),
+        # Re-autorado (continuación motor visual, 17-sep-2026, 3ª pasada):
+        # la composición original ("sala de juntas" + documento) se
+        # concentraba en el mismo arquetipo compositivo que otras 5 piezas
+        # del lote (verificado con arquetipo_compositivo.py — Regla 3 del
+        # banco artístico anterior, "no más de 3 del mismo arquetipo").
+        # Mismo concepto jurídico, composición distinta: un objeto sellado
+        # sobre una superficie despejada, no una mesa de reunión.
+        subject="un sobre lacrado con el sello corporativo intacto, apoyado en el borde de un escritorio vacio",
+        environment="oficina de actas societarias, el resto del escritorio despejado",
+        camera="50mm, plano cerrado sobre el lacre", focal_point="el lacre sin romper",
+        metaphor="quien debe abrir el sobre es quien debe probar lo que contiene",
+        acento_objeto="una regla de metal apoyada junto al sobre"),
     "CAND-0107": dict(  # civil / donación — deber difuso en la empresa
         subject="una pila de recibos de donacion sin ninguna firma que los reclame",
         environment="oficina de finanzas corporativas al cierre del trimestre",
@@ -97,11 +108,18 @@ DIRECCION_VISUAL = {
         metaphor="una bata blanca colgada sobre una silla vacia",
         acento_objeto="un estetoscopio colgado junto a la puerta"),
     "CAND-0076": dict(  # ambiental / licencia ambiental — posición sin preparación
-        subject="dos sillas frente a frente en una mesa, solo una carpeta abierta del lado izquierdo",
-        environment="sala de negociacion con ventanales hacia un terreno en desarrollo",
-        camera="35mm, plano medio de la mesa", focal_point="la carpeta cerrada del lado derecho",
-        metaphor="un puente construido desde un solo lado del rio",
-        acento_objeto="una taza de cafe sin tocar del lado de la carpeta cerrada"),
+        # Re-autorado (continuación motor visual, 17-sep-2026, 3ª pasada):
+        # ver nota en CAND-0034 — misma causa (arquetipo "escena de
+        # escritorio" sobrerrepresentado). Se evita además reutilizar el
+        # motivo de frascos/instrumental de laboratorio ya usado por
+        # CAND-0050 en este mismo lote (ambos son "ambiental"): la nueva
+        # composición es de terreno/deslinde, no de laboratorio.
+        subject="un poste de deslinde a medio clavar en el limite de un terreno parcialmente desmontado",
+        environment="borde de un terreno en desarrollo, vegetacion cortada de un lado e intacta del otro",
+        camera="35mm, plano general bajo con el poste en primer termino",
+        focal_point="el poste a medio clavar",
+        metaphor="una obligacion que empezo a cumplirse y se detuvo a la mitad",
+        acento_objeto="una cinta de señalizacion amarilla atada al poste"),
     "CAND-0003": dict(  # civil / obligaciones — ficción televisiva vs técnica
         subject="una lupa sobre una pagina de contrato rota, marcadores de evidencia numerados al lado",
         environment="mesa de trabajo pericial con luz de lampara de escritorio",
@@ -141,9 +159,15 @@ DIRECCION_VISUAL = {
         metaphor="dos epocas del mismo oficio mirandose desde lados opuestos del cristal",
         acento_objeto="una lupa de perito apoyada sobre el tratado"),
     "CAND-0041": dict(  # laboral / representación colectiva — tratar el rastro digital como prueba
-        subject="una cadena de mensajes impresa con los nombres tachados, extendida sobre una mesa",
-        environment="sala de juntas sindical con una pantalla apagada al fondo",
-        camera="50mm, plano cenital sobre la cadena de mensajes", focal_point="la marca de tiempo visible de un mensaje",
+        # Re-autorado (continuación motor visual, 17-sep-2026, 3ª pasada):
+        # ver nota en CAND-0034 — se retira "sala de juntas" y se cierra el
+        # encuadre sobre el documento mismo, coherente con el arquetipo
+        # "documento en close-up" (ya usado por CAND-0008/0055 en este
+        # lote — sigue dentro del tope de 3, ver arquetipo_compositivo.py).
+        subject="una cadena de mensajes impresa con los nombres tachados, doblada sobre un archivador metalico",
+        environment="archivo sindical con carpetas etiquetadas por fecha al fondo",
+        camera="50mm, plano cerrado sobre el pliegue de la hoja impresa",
+        focal_point="la marca de tiempo visible de un mensaje",
         metaphor="una conversacion que dejo huella aunque nadie pensó que alguien la leeria despues",
         acento_objeto="un pendrive sin etiqueta junto a las hojas impresas"),
     "CAND-0053": dict(  # sucesorio / legítima — señalar qué cambió
@@ -199,6 +223,40 @@ def construir_brief(c, direccion, superficie):
         marca_superficie=superficie)
 
 
+def _entry_real(c, direccion, huella, superficie, significado):
+    """`VisualMemoryEntry` con datos REALES de esta pieza — no de
+    infraestructura pendiente. `scene_type`/`human_presence` reutilizan
+    `direccion_causal.derivar_significado()` (ya calculado, auditable,
+    misma disciplina que el resto del repo: nunca se fabrica un valor
+    donde no hay evidencia). `subject`/`metaphor` vienen de la autoría real
+    (`DIRECCION_VISUAL`), no de contenido PENDIENTE — a diferencia del flujo
+    automatizado de `production_run.py`, aquí SÍ hay dato real para las 8
+    dimensiones de `visual_distance.py`."""
+    return VisualMemoryEntry(
+        content_id=c.candidate_id, generation_id=f"prod-real-{c.candidate_id}",
+        visual_family=huella.primary_direction, scene_type=significado.movimiento_juridico,
+        main_subject=direccion["subject"], camera_angle=huella.camera_optics,
+        shot_distance=direccion["camera"], lighting_type=huella.lighting,
+        dominant_materials=[huella.materiality], dominant_palette=[huella.palette],
+        metaphor=direccion["metaphor"], human_presence=significado.presencia_humana,
+        brand_surface=superficie, materia=c.materia, concepto=c.concepto_nucleo)
+
+
+def _distancia_estricta_del_lote(resultados):
+    """Wiring del HOTFIX 'distancia visual y anti-monotonía' (banco
+    artístico anterior, 8-sep-2026 — Drive, Guía operativa del motor de
+    dirección artística): 8 dimensiones, mínimo 5 cambiadas, 3 vecinos más
+    cercanos. Esa regla YA estaba portada en `visual_distance.py`
+    (reconciliación con legalmente-web), pero nunca se ejercitaba con datos
+    reales — el flujo automatizado de `production_run.py` tiene
+    `metaphor`/`scene_type` deliberadamente PENDIENTE, así que siempre
+    reporta EVIDENCIA_INCOMPLETA. Este demo SÍ tiene autoría real completa:
+    aquí la regla puede validar (o rechazar) de verdad."""
+    entries = [_entry_real(r["candidato"], r["direccion"], r["huella"],
+                           r["superficie"], r["significado"]) for r in resultados]
+    return vdist.verificar_lote_contra_historia(entries, historia=())
+
+
 def ejecutar():
     seleccion, puntuaciones, rechazados, memoria, señales = construir_reserva_y_seleccion()
 
@@ -218,6 +276,7 @@ def ejecutar():
         superficie = SUPERFICIES[i % len(SUPERFICIES)]
         brief = construir_brief(c, direccion, superficie)
         compilado = compile_request(brief, POLICY, fingerprint=huella)
+        significado = dcau.derivar_significado(c)
 
         clasif_rep = tc.clasificar_repeticion(c, memoria)
         etiqueta_taxonomia, razon_taxonomia = tc.clasificar_taxonomia(c)
@@ -226,10 +285,15 @@ def ejecutar():
 
         resultados.append(dict(
             candidato=c, puntuacion=p, direccion=direccion, huella=huella, compilado=compilado,
-            brief=brief, clasif_repeticion=clasif_rep, etiqueta_taxonomia=etiqueta_taxonomia,
+            brief=brief, superficie=superficie, significado=significado,
+            clasif_repeticion=clasif_rep, etiqueta_taxonomia=etiqueta_taxonomia,
             razon_taxonomia=razon_taxonomia, origen=origen))
 
     mezcla = tc.reportar_mezcla_editorial(seleccion)
+    mezcla["distancia_estricta_lote"] = _distancia_estricta_del_lote(resultados).to_dict()
+    piezas_arquetipo = [(r["candidato"].candidate_id, r["direccion"]["subject"],
+                        r["direccion"]["environment"]) for r in resultados]
+    mezcla["arquetipo_compositivo"] = arq.verificar_diversidad_arquetipos(piezas_arquetipo).to_dict()
     return resultados, reporte_lote_visual, intentos, mezcla, rechazados, señales
 
 
@@ -338,6 +402,19 @@ def reporte_markdown(resultados, reporte_lote_visual, intentos, mezcla, rechazad
         "",
         f"**Mezcla editorial por profundidad:** {mezcla['conteo_por_profundidad']}"
         + (f" — avisos: {'; '.join(mezcla['avisos'])}" if mezcla["avisos"] else " — dentro del rango sugerido."),
+        "",
+        f"**Distancia visual estricta (8 dims, mínimo 5 cambiadas, banco artístico anterior — "
+        f"HOTFIX 8-sep-2026, ver `visual_distance.py`):** "
+        f"{'OK' if mezcla['distancia_estricta_lote']['ok'] else 'FALLA'} — "
+        f"{mezcla['distancia_estricta_lote']['total_revisadas']} comparaciones revisadas (3 vecinos "
+        "más cercanos por pieza, sólo ámbito LOTE), datos reales de este lote (no PENDIENTE_CONTENIDO)."
+        + ("" if mezcla["distancia_estricta_lote"]["ok"] else
+           " Problemas: " + "; ".join(mezcla["distancia_estricta_lote"]["problemas"])),
+        "",
+        f"**Diversidad de arquetipo compositivo (Regla 3, máx. "
+        f"{mezcla['arquetipo_compositivo']['max_por_arquetipo']}/10 del mismo, ver "
+        f"`arquetipo_compositivo.py`):** {'OK' if mezcla['arquetipo_compositivo']['ok'] else 'FALLA'} — "
+        f"{mezcla['arquetipo_compositivo']['conteo']}.",
         "",
     ]
 

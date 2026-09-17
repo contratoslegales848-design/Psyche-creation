@@ -65,6 +65,23 @@ class TestProduccionReal10TemasNuevos(unittest.TestCase):
         for r in self.resultados:
             self.assertIn(r["candidato"].candidate_id, contenido)
 
+    def test_distancia_visual_estricta_del_lote_real_pasa(self):
+        """Recuperación del motor visual anterior (3ª pasada, 17-sep-2026):
+        el HOTFIX 'distancia visual y anti-monotonía' del banco artístico
+        anterior (8 dimensiones, mínimo 5 cambiadas, 3 vecinos) estaba
+        portado en visual_distance.py pero nunca se ejercitaba con datos
+        reales — este lote SÍ tiene autoría real completa (subject/
+        metaphor/etc), así que la verificación debe poder correr y pasar,
+        no reportar evidencia incompleta."""
+        d = self.mezcla["distancia_estricta_lote"]
+        self.assertEqual(d["total_revisadas"], 30)
+        self.assertTrue(d["ok"], d["problemas"])
+
+    def test_arquetipo_compositivo_del_lote_real_no_excede_el_tope(self):
+        a = self.mezcla["arquetipo_compositivo"]
+        self.assertTrue(a["ok"], a["excedidos"])
+        self.assertEqual(sum(a["conteo"].values()), 10)
+
 
 if __name__ == "__main__":
     unittest.main()

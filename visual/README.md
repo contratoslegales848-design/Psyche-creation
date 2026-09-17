@@ -386,6 +386,79 @@ jurídica esencial.**
   regresión (compila igual, nunca bloquea, diversidad artística intacta) y
   determinismo (misma entrada → misma geometría/instrucción/veredicto).
 
+### Disciplina visual recuperada del motor anterior (Drive, 3ª pasada, 17-sep-2026)
+
+Mandato del Founder: "recuperar la disciplina visual del motor antiguo
+dentro del motor actual" — auditado contra Drive (`Guía operativa del
+motor de dirección artística`, `Bancos del motor artístico`, `Dirección
+Artística Adaptativa v1.2/v1.3`, `legalmente-generador-aleatorio.xlsx`,
+`Protocolo maestro visual v3`), todos ellos marcados **LEGACY/histórico**
+en Drive — no se restauran como motor activo (el Excel está
+explícitamente etiquetado `[USO LIMITADO — temas; no dirección
+artística]`, y `catalogo-maestro-v1.md` es copia literal del Founder que
+nunca se edita a mano, así que ninguna de sus escuelas/escenarios propios
+se mezcla con ese archivo).
+
+**Causa raíz real, no hipotética**: el HOTFIX del banco anterior
+("DISTANCIA VISUAL Y ANTI-MONOTONÍA", 8-sep-2026 — 8 dimensiones, mínimo 5
+cambiadas, comparado contra los 3 vecinos más cercanos) YA estaba portado
+en este repositorio (`visual_distance.py`, reconciliación con
+`legalmente-web`) — pero NUNCA se ejercitaba con datos reales. El flujo
+automatizado (`production_run.py`) tiene `metaphor`/`scene_type`
+deliberadamente `PENDIENTE_CONTENIDO` (correcto: son contenido creativo
+que requiere verificación jurídica y autoría humana, no infraestructura),
+así que sus 8 dimensiones nunca están completas y el mecanismo siempre
+reporta `EVIDENCIA_INCOMPLETA` — nunca llega a validar nada. Y
+`demo_produccion_real_10_temas_nuevos.py`, que SÍ tiene autoría real
+completa (`DIRECCION_VISUAL`), nunca llamaba a `visual_distance.py` en
+absoluto. El mecanismo que habría detectado "esto parece una plantilla
+repetida" existía, era correcto, y estaba desconectado del único lugar con
+datos reales para probarlo.
+
+**KEEP** (verificado, sin tocar): una escuela por pieza, integración física
+de marca, no-collage/grid, `visual_distance.py` en sí (sólo se cablea, no
+se reescribe), causal pipeline (`direccion_causal.py`), 65 familias,
+pedagogía §12, memoria fuerte, `_cuota_materia`, safe zone.
+**REJECT**: el Excel como motor activo, cualquier unión rígida
+materia→escuela (ambos bancos, el anterior y el actual, la prohíben
+explícitamente), y "3 de 5 dimensiones cambiaron" como prueba suficiente
+de variedad — el banco anterior corrigió esa misma regla en su propio
+HOTFIX por insuficiente.
+
+**ADAPT** (cableado nuevo, cero motor nuevo):
+- `demo_produccion_real_10_temas_nuevos.py::_entry_real()` construye un
+  `VisualMemoryEntry` real por pieza reutilizando datos YA calculados
+  (`huella.primary_direction/camera_optics/lighting/materiality/palette` +
+  `direccion_causal.derivar_significado()` para `scene_type`/
+  `human_presence`, ambos reutilizados, no fabricados) y
+  `_distancia_estricta_del_lote()` corre `visual_distance.
+  verificar_lote_contra_historia(entries, historia=())` sobre el lote
+  real — la primera vez que el HOTFIX de 8 dimensiones se valida con
+  datos genuinamente completos en este repositorio (30/30 comparaciones,
+  8/8 dimensiones conocidas en las 45 parejas, mínimo real 6/8 distintas
+  — nunca menos de las 5 exigidas).
+- `arquetipo_compositivo.py` (nuevo, pequeño, mismo patrón de coincidencia
+  léxica que `memoria_fuerte.py`/`safe_zone.py`): Regla 3 del banco
+  anterior ("no más de 3 piezas del mismo arquetipo compositivo — objeto
+  sobre superficie, retrato/persona frontal, documento en close-up,
+  pasillo/arquitectura central, bodegón, escena de escritorio"). Este
+  chequeo SÍ encontró algo real que `visual_distance.py` no detecta por
+  diseño (dos piezas pueden diferir en escuela/luz/material y aun así
+  compartir el mismo patrón compositivo de fondo): el lote real original
+  tenía 6/10 piezas clasificadas `ESCENA_ESCRITORIO` (dos sillas/mesa de
+  reunión). Se re-autoraron 3 (`CAND-0034`, `CAND-0076`, `CAND-0041`) con
+  composiciones genuinamente distintas — mismo concepto jurídico, otra
+  puesta en escena — hasta quedar en `{DOCUMENTO_CLOSEUP: 3,
+  ESCENA_ESCRITORIO: 3, OBJETO_SOBRE_SUPERFICIE: 2,
+  PASILLO_ARQUITECTURA_CENTRAL: 1, SIN_CLASIFICAR: 1}`, dentro del tope.
+- `arquetipo_compositivo.py` reutiliza `memory.normaliza_texto_libre()`
+  (promovida en la tarea 78, safe zone) en vez de duplicar la
+  normalización una tercera vez.
+
+**Tests**: `test_arquetipo_compositivo.py` (13, nuevo) + 2 nuevos en
+`test_produccion_real_10_temas_nuevos.py` (distancia estricta y arquetipo
+compositivo sobre el lote real, no simulado).
+
 ## Añadir un proveedor real
 
 1. `providers/<nombre>.py` con una clase que implemente `ImageProvider`.
