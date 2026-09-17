@@ -197,6 +197,34 @@ class TestAfinidadFounder(GenBase):
         ajuste, _ = generator.ajuste_afinidad_founder(c, None)
         self.assertEqual(ajuste, 0.0)
 
+    def test_memoria_fuerte_real_tambien_produce_ajuste_sin_memoria_de_ejecucion(self):
+        """Mandato Maestro §6 (17-sep-2026): memoria_fuerte (fuente #5) debe
+        poder explotarse aunque la memoria de ESTA corrida esté vacía —
+        aprender de curaduría real anterior, no sólo de la simulada."""
+        import memoria_fuerte as mf
+        memoria_fuerte = mf.cargar_memoria_fuerte()
+        c = type("C", (), {"materia": "civil", "familia_editorial": "", "necesidad": "",
+                           "angulo": "", "emocion": "", "rol_lector": ""})()
+        ajuste, razon = generator.ajuste_afinidad_founder(c, None, memoria_fuerte=memoria_fuerte)
+        self.assertGreater(ajuste, 0.0)
+        self.assertIn("memoria fuerte real", razon)
+
+    def test_memoria_fuerte_se_suma_a_la_de_ejecucion_sin_ampliar_el_techo(self):
+        """Ambas fuentes contribuyen a la MISMA acumulación, recortada al
+        mismo AJUSTE_AFINIDAD_MAX de siempre — dos fuentes no duplican el
+        techo de influencia posible."""
+        import memoria_fuerte as mf
+        m = SemanticMemory()
+        from semantic_fingerprint import SemanticFingerprint as S
+        from semantic_memory import PRESELECCIONADA
+        for _ in range(20):
+            m.record(S(content_id="p", materia="civil"), PRESELECCIONADA)
+        memoria_fuerte = mf.cargar_memoria_fuerte()
+        c = type("C", (), {"materia": "civil", "familia_editorial": "", "necesidad": "",
+                           "angulo": "", "emocion": "", "rol_lector": ""})()
+        ajuste, _ = generator.ajuste_afinidad_founder(c, m, memoria_fuerte=memoria_fuerte)
+        self.assertLessEqual(abs(ajuste), generator.AJUSTE_AFINIDAD_MAX)
+
     def test_rasgo_preferido_produce_ajuste_positivo(self):
         m = SemanticMemory()
         from semantic_fingerprint import SemanticFingerprint as S

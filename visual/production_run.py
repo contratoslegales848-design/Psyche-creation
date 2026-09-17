@@ -86,7 +86,7 @@ def producir_y_dirigir(reserva_seed, memoria, mapa, universo, materias, registro
 
     seleccion, puntuaciones, rechazados = generator.seleccionar_lote(
         reserva, memoria, mapa, universo=universo, n=n, materias=materias,
-        señales_mercado=señales_mercado)
+        señales_mercado=señales_mercado, memoria_fuerte=memoria_fuerte)
 
     catalogo_maestro = catalogo_maestro or vf.MasterCatalog.load()
     memoria_huellas = vf.FingerprintMemory()

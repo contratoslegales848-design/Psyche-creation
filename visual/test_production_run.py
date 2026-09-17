@@ -44,12 +44,33 @@ class TestBalanceExploracion(ProduccionBase):
         b = self.r["balance_exploracion"]
         self.assertEqual(b["exploitation"] + b["exploration"] + b["ninguno"], b["n"])
 
-    def test_primer_lote_en_memoria_virgen_es_mayormente_exploracion(self):
-        """Sin curaduría previa no puede haber afinidad Founder que explotar
-        — el propio generator.py lo documenta como 'territorio muy virgen'."""
+    def test_primer_lote_con_memoria_fuerte_real_ya_explota_señal_verdadera(self):
+        """Mandato Maestro §6 (17-sep-2026): memoria fuerte real (fuente #5,
+        `memoria_fuerte.py`) ya tiene curaduría real del Founder desde ANTES
+        de esta corrida — a diferencia de la memoria de ejecución (`ctx
+        ["memoria"]`, virgen en el primer lote), no hay nada sintético que
+        esperar para poder explotarla. Reemplaza el test anterior, que
+        asumía "sin curaduría previa no puede haber afinidad que explotar"
+        — premisa correcta sólo quitando memoria_fuerte (ver el siguiente
+        test), incorrecta ahora que production_run.py la conecta por
+        defecto."""
         b = self.r["balance_exploracion"]
-        self.assertEqual(b["exploitation"], 0)
+        self.assertGreater(b["exploitation"], 0)
         self.assertGreater(b["exploration"], 0)
+
+    def test_sin_ninguna_memoria_el_primer_lote_es_puramente_exploracion(self):
+        """La garantía original se conserva bajo su condición real: SIN
+        memoria de ningún tipo (ni de ejecución ni memoria_fuerte), el
+        primer lote no puede explotar nada porque no hay nada que explotar."""
+        ctx = pr.cargar_contexto()
+        from semantic_memory import SemanticMemory
+        memoria_virgen = SemanticMemory()
+        reserva, sel, pts, drafts, rech = pr.producir_y_dirigir(
+            7771, memoria_virgen, ctx["mapa"], ctx["universo"], ctx["materias"],
+            ctx["registro_familias"], memoria_fuerte=None)
+        b = pr.balance_exploracion(sel, pts)
+        self.assertEqual(b.exploitation, 0)
+        self.assertGreater(b.exploration, 0)
 
     def test_exploration_nunca_se_mide_con_novelty_sola(self):
         """El detalle debe citar 'novelty*coherencia' (opportunity), nunca

@@ -76,6 +76,7 @@ from dataclasses import dataclass, field
 
 import editorial
 import editorial_saturation
+import pedagogia
 import territory_explorer as te
 from memory import normaliza
 
@@ -126,6 +127,7 @@ class CandidateScore:
     recent_cooldown: float = 0.0
     ajuste_afinidad_founder: float = 0.0
     ajuste_senal_mercado: float = 0.0
+    ajuste_balance_pedagogico: float = 0.0
     score_compuesto: float = 0.0
     explicacion: list = field(default_factory=list)
 
@@ -180,24 +182,36 @@ def _ajuste_emocional(candidato):
     return 1.0, f"emoción {emocion!r} derivada sin fricción de necesidad+familia."
 
 
-def ajuste_afinidad_founder(candidato, memoria):
+def ajuste_afinidad_founder(candidato, memoria, memoria_fuerte=None):
     """Traduce `memoria.preferencias()` en un empujón pequeño y acotado.
 
     Suma el peso acumulado (positivo = elegido antes, negativo = descartado
     antes) en los ejes del candidato, lo escala y lo recorta a
     [-AJUSTE_AFINIDAD_MAX, +AJUSTE_AFINIDAD_MAX]. Vacío -> 0.0 exacto: el
     primer lote, antes de cualquier curaduría, no tiene nada que explotar.
+
+    `memoria_fuerte` (Mandato Maestro §6, 17-sep-2026 — fuente #5 real del
+    Contrato v4, ver `memoria_fuerte.py`) es OPCIONAL y, si se da, suma su
+    propia `preferencias()` a la misma acumulación ANTES de recortar: la
+    selección temática debe poder aprender de lo que el Founder ya aprobó/
+    publicó de verdad, no sólo de la curaduría simulada de esta corrida —
+    "aprender ≠ copiar" (mandato): el recorte sigue siendo el mismo
+    `AJUSTE_AFINIDAD_MAX` de siempre, nunca se amplía el techo de
+    influencia por tener dos fuentes en vez de una.
     """
-    if memoria is None:
+    if memoria is None and memoria_fuerte is None:
         return 0.0, "sin memoria: no hay preferencia que explotar."
-    pref = memoria.preferencias()
     acumulado, detalle = 0.0, []
-    for eje in EJES_AFINIDAD:
-        valor = normaliza(getattr(candidato, eje, "") or "")
-        peso = pref.get(eje, {}).get(valor, 0.0) if valor else 0.0
-        if peso:
-            acumulado += peso
-            detalle.append(f"{eje}={valor!r} pesa {peso:+.2f} en preferencias previas.")
+    for memo, etiqueta in ((memoria, "corrida"), (memoria_fuerte, "memoria fuerte real")):
+        if memo is None:
+            continue
+        pref = memo.preferencias()
+        for eje in EJES_AFINIDAD:
+            valor = normaliza(getattr(candidato, eje, "") or "")
+            peso = pref.get(eje, {}).get(valor, 0.0) if valor else 0.0
+            if peso:
+                acumulado += peso
+                detalle.append(f"{eje}={valor!r} pesa {peso:+.2f} en preferencias de {etiqueta}.")
     ajuste = max(-AJUSTE_AFINIDAD_MAX, min(AJUSTE_AFINIDAD_MAX, acumulado * AJUSTE_AFINIDAD_ESCALA))
     razon = "; ".join(detalle) if detalle else "sin señal previa en los ejes de este candidato."
     return round(ajuste, 4), razon
@@ -233,7 +247,8 @@ def _cuota_materia(materia, n, materias):
 
 def puntuar_candidato(candidato, memoria, mapa_territorio, universo=None,
                       lote_en_progreso=(), materias=None, n_lote=10,
-                      señales_mercado=None):
+                      señales_mercado=None, objetivo_conocimiento=pedagogia.OBJETIVO_CONOCIMIENTO_DEFAULT,
+                      memoria_fuerte=None):
     """Puntúa un candidato. Aplica los hard gates ANTES de calcular el resto:
     un candidato rechazado no necesita un ranking, necesita un motivo."""
     import universe as uni
@@ -298,13 +313,19 @@ def puntuar_candidato(candidato, memoria, mapa_territorio, universo=None,
     }
     score_base = sum(PESOS[k] * v for k, v in factores.items())
 
-    afinidad, razon_afinidad = ajuste_afinidad_founder(candidato, memoria)
+    afinidad, razon_afinidad = ajuste_afinidad_founder(candidato, memoria, memoria_fuerte=memoria_fuerte)
     explicacion.append(f"afinidad Founder (explotación acotada): {afinidad:+.4f} — {razon_afinidad}")
 
     senal_mercado, razon_senal = ajuste_senal_mercado(candidato, señales_mercado)
     explicacion.append(f"señal de mercado (acotada): {senal_mercado:+.4f} — {razon_senal}")
 
-    score_compuesto = round(max(0.0, min(1.0, score_base + afinidad + senal_mercado)), 4)
+    balance_pedagogico, razon_pedagogica = pedagogia.ajuste_balance_pedagogico(
+        candidato, lote_en_progreso, objetivo_conocimiento=objetivo_conocimiento)
+    explicacion.append(f"balance pedagógico (acotado, no cuota): {balance_pedagogico:+.4f} — "
+                       f"{razon_pedagogica}")
+
+    score_compuesto = round(max(0.0, min(
+        1.0, score_base + afinidad + senal_mercado + balance_pedagogico)), 4)
 
     return CandidateScore(
         candidate_id=candidato.candidate_id, hard_gates_pasados=True,
@@ -312,15 +333,30 @@ def puntuar_candidato(candidato, memoria, mapa_territorio, universo=None,
         territory_coverage=territorio.opportunity, utility=valor_utilidad,
         emotional_fit=emocional, recent_cooldown=cooldown,
         ajuste_afinidad_founder=afinidad, ajuste_senal_mercado=senal_mercado,
+        ajuste_balance_pedagogico=balance_pedagogico,
         score_compuesto=score_compuesto, explicacion=explicacion)
 
 
 def seleccionar_lote(candidatos, memoria, mapa_territorio, universo=None, n=10,
-                     materias=None, señales_mercado=None):
+                     materias=None, señales_mercado=None,
+                     objetivo_conocimiento=pedagogia.OBJETIVO_CONOCIMIENTO_DEFAULT,
+                     memoria_fuerte=None):
     """Selecciona iterativamente: puntúa contra el lote parcial (para que
-    `editorial_diversity` reaccione a lo ya elegido), toma el mejor
-    superviviente de los hard gates, repite. Nunca rellena con un candidato
-    rechazado aunque falten piezas para llegar a `n`."""
+    `editorial_diversity` y `ajuste_balance_pedagogico` reaccionen a lo ya
+    elegido), toma el mejor superviviente de los hard gates, repite. Nunca
+    rellena con un candidato rechazado aunque falten piezas para llegar a
+    `n`.
+
+    `objetivo_conocimiento` (mandato Maestro §3, 17-sep-2026): proporción
+    orientativa de candidatos CONOCIMIENTO_JURIDICO vs SITUACION_NARRATIVA
+    (`pedagogia.py`) — 0.70 por defecto, nunca una cuota dura: pásese
+    `None` para desactivar el ajuste, o cualquier otro valor por lote.
+
+    `memoria_fuerte` (mandato Maestro §6, 17-sep-2026 — fuente #5 real,
+    `memoria_fuerte.py`) es opcional: si se da, `ajuste_afinidad_founder()`
+    también aprende de ella para la selección temática, con el mismo techo
+    acotado de siempre — ver ese docstring.
+    """
     import universe as uni
     universo = universo or editorial.EditorialUniverse.load()
     if materias is None:
@@ -332,23 +368,28 @@ def seleccionar_lote(candidatos, memoria, mapa_territorio, universo=None, n=10,
         mejor, mejor_score = None, None
         for c in restantes:
             s = puntuar_candidato(c, memoria, mapa_territorio, universo, seleccion,
-                                  materias=materias, n_lote=n, señales_mercado=señales_mercado)
+                                  materias=materias, n_lote=n, señales_mercado=señales_mercado,
+                                  objetivo_conocimiento=objetivo_conocimiento,
+                                  memoria_fuerte=memoria_fuerte)
             if not s.hard_gates_pasados:
                 rechazados.append((c.candidate_id, s.motivo_bloqueo))
                 continue
-            # Desempate por afinidad Founder + señal de mercado. En territorio
-            # muy virgen (la fase inicial real: pocas celdas materia×familia
-            # tocadas) es normal que muchos candidatos empaten en
-            # score_compuesto=1.0 — novelty, territorio y utilidad ya tocan el
-            # techo por sí solos. Comparar sólo `score_compuesto` (recortado a
-            # [0,1] para que sea legible) dejaría ambos ajustes invisibles
-            # justo cuando más importan. `clave` usa el valor SIN recortar
-            # como desempate, nunca como criterio principal.
+            # Desempate por afinidad Founder + señal de mercado + balance
+            # pedagógico. En territorio muy virgen (la fase inicial real:
+            # pocas celdas materia×familia tocadas) es normal que muchos
+            # candidatos empaten en score_compuesto=1.0 — novelty,
+            # territorio y utilidad ya tocan el techo por sí solos.
+            # Comparar sólo `score_compuesto` (recortado a [0,1] para que
+            # sea legible) dejaría los tres ajustes invisibles justo cuando
+            # más importan. `clave` usa el valor SIN recortar como
+            # desempate, nunca como criterio principal.
             clave = (s.score_compuesto,
-                    s.score_compuesto + s.ajuste_afinidad_founder + s.ajuste_senal_mercado)
+                    s.score_compuesto + s.ajuste_afinidad_founder + s.ajuste_senal_mercado
+                    + s.ajuste_balance_pedagogico)
             mejor_clave = ((mejor_score.score_compuesto,
                            mejor_score.score_compuesto + mejor_score.ajuste_afinidad_founder
-                           + mejor_score.ajuste_senal_mercado)
+                           + mejor_score.ajuste_senal_mercado
+                           + mejor_score.ajuste_balance_pedagogico)
                           if mejor_score is not None else None)
             if mejor_clave is None or clave > mejor_clave:
                 mejor, mejor_score = c, s

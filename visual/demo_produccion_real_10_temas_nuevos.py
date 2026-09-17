@@ -126,9 +126,17 @@ def construir_reserva_y_seleccion():
     señales = ms.agrupar_por_concepto(ms.procesar_vacantes(postings))
 
     reserva = universe.build_reserve(objetivo_lote=10, seed=SEED_RESERVA, factor=14)
+    # objetivo_conocimiento=None (Mandato Maestro §3, 17-sep-2026): este lote
+    # es una referencia histórica CONGELADA del 16-sep-2026 —
+    # DIRECCION_VISUAL abajo está autorada a mano por candidate_id exacto.
+    # El ajuste de balance pedagógico (posterior a esta corrida) desplazaría
+    # la selección y rompería esa correspondencia; se desactiva explícita y
+    # deliberadamente para preservar la reproducibilidad exacta de ESTE lote
+    # ya documentado (docs/prueba-real-produccion-10-temas-2026-09-16.md),
+    # no porque el mecanismo esté desactivado en el motor real.
     seleccion, puntuaciones, rechazados = generator.seleccionar_lote(
         reserva, memoria, mapa, universo=universo, n=10, materias=materias,
-        señales_mercado=señales)
+        señales_mercado=señales, objetivo_conocimiento=None)
     return seleccion, puntuaciones, rechazados, memoria, señales
 
 
