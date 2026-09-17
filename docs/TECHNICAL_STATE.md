@@ -1,19 +1,22 @@
 # Estado técnico real de LegalMente
 
-**Fecha:** 2026-08-27 · **Base:** `origin/main` en `82f226e` + ramas `chore/phase1-technical-readiness` y `chore/phase1-p0-confidencialidad-procedencia`
-**Semáforo global: AMARILLO** (los dos P0 quedaron cerrados; el amarillo lo sostienen ahora riesgos declarados, no huecos sin control).
+**Fecha original:** 2026-08-27 · **Base original:** `origin/main` en `82f226e` + ramas `chore/phase1-technical-readiness` y `chore/phase1-p0-confidencialidad-procedencia`
+**Reconciliado:** 17-sep-2026, rama `claude/legalmente-architecture-reconciliation-xojn4i` (Mandato Maestro). Cifras marcadas **RE-VERIFICADO 17-sep** se corrieron de verdad hoy; el resto conserva su fecha y alcance originales — no se re-auditó línea por línea el subsistema jurídico completo en esta pasada, sólo se corrigió lo que el Mandato Maestro pidió explícitamente cerrar.
+**Semáforo global: AMARILLO** (los dos P0 originales quedaron cerrados; el amarillo lo sostienen ahora riesgos declarados, no huecos sin control; ver también §7 para los pendientes que siguen abiertos hoy).
 
-> **NOTA DE VIGENCIA (17-sep-2026):** este documento describe el subsistema de
-> verificación jurídica/publicación y sigue siendo la fuente correcta para ESE
-> alcance (fila "Verificación jurídica", "Gobernanza del gate de arte",
-> "Confidencialidad", "Anti-duplicados", "Separación producción/publicación").
+> **ALCANCE:** este documento describe el subsistema de verificación
+> jurídica/publicación (fila "Verificación jurídica", "Gobernanza del gate de
+> arte", "Confidencialidad", "Anti-duplicados", "Separación producción/
+> publicación") — sigue siendo la fuente correcta para ESE alcance.
 > **NO describe** el motor editorial/visual construido desde el 16-sep-2026
 > (catálogo maestro de 767 módulos, motor de conocimiento con 58 familias
-> pedagógicas, memoria fuerte real, señal de mercado, contrato TEXT_TO_IMAGE/
-> IMAGE_EDIT) — para eso, el punto de entrada real y vigente es
-> `visual/README.md` (sección "ACTUALIZACIÓN 17-sep-2026" al final). La fila
-> "Motor de generación visual" de la tabla de abajo quedó superada por esa
-> sección; no la actualices aquí, actualiza `visual/README.md`.
+> pedagógicas + capa pedagógica de balance, memoria fuerte real conectada a
+> selección temática Y dirección visual, señal de mercado, contrato
+> TEXT_TO_IMAGE/IMAGE_EDIT, compilador causal de dirección artística) — para
+> eso, el punto de entrada real y vigente es `visual/README.md` (sección
+> "ACTUALIZACIÓN 17-sep-2026") y `docs/mandato-maestro-cierre-2026-09-17.md`.
+> La fila "Motor de generación visual" de la tabla de abajo quedó superada
+> por esas dos fuentes; no la actualices aquí.
 
 Este documento describe lo que **existe y se ejecuta**, no lo que está planeado.
 Regla de lectura (`CLAUDE.md §2`): una mención en un documento no es una capacidad
@@ -34,14 +37,14 @@ real y una prueba que pasa.
 | Confidencialidad | 🟡 AMARILLO (era rojo) | Control determinista fail-closed implementado; queda el contenido identificable sin marcadores léxicos (red team B5). |
 | Pipeline de video (Remotion) | 🟢 VERDE (nuevo) | Renderiza, y ya no puede renderizar contenido publicable sin origen verificable. |
 | Anti-duplicados | 🟡 AMARILLO (nuevo) | Controles literales implementados; la paráfrasis sigue sin detectarse. |
-| Motor de generación visual | 🟢 VERDE (para su alcance) | `visual/`, 124 pruebas. Gate fail-closed, adapter canónico, familias, memoria anti-repetición, compilador explicable, dry-run, lotes, reintento selectivo, regeneración, registro. Decisión de marca aplicada (ADR 0002). |
+| Motor de generación visual | 🟢 VERDE (SUPERADO por `visual/README.md`, RE-VERIFICADO 17-sep) | Cifra de 124 pruebas está muy desactualizada: `visual/` tiene hoy **1115 tests** (suite completa fresca, `python3 -m unittest discover`, corrida real hoy), no 124 — el subsistema creció enormemente desde el 27-ago (catálogo maestro 767 módulos, motor pedagógico, memoria fuerte, compilador causal de dirección artística). Detalle real y vigente: `visual/README.md` + `docs/mandato-maestro-cierre-2026-09-17.md`, no esta fila. |
 | Composición tipográfica / marca | 🟢 VERDE (nuevo) | `visual/compositor.py`: rasterizado real con Pillow. Métrica tipográfica real, área segura, `exact_copy` inmutable (desborda antes que mutar), marca solo sobre superficie reservada declarada y plana. 33 pruebas. |
 | Adapter de proveedor real | 🟡 AMARILLO (nuevo) | `providers/http_provider.py`: adapter HTTP real con transporte inyectable, 23 pruebas, cero llamadas externas. Sin credenciales configuradas en el workspace: no se ha ejecutado contra ningún proveedor. |
-| Contrato cross-repo | 🟢 VERDE (ambos lados) | Psyche: `contract/`, Canonical Envelope v1, 8 fixtures, 12 tests. Web: consumidor estricto implementado y probado **localmente** (18 tests), entregado como serie de patches verificada en `handoff/legalmente-web/`. Falta empujarlo: escritura remota bloqueada. |
-| Motor de producción masiva | ⚫ NO CONSTRUIDO | Contrato técnico definido (`docs/contrato-motor-masivo.md`); el motor, deliberadamente, no. |
-| Documentación vs. realidad | 🟡 AMARILLO | Dos derivas detectadas (ver §5). |
-| `legalmente-web` | 🟡 AMARILLO | Prototipo honesto, pero el repositorio es **público** y `CLAUDE.md §8` lo declara privado. |
-| Publicación automatizada | ⚫ INEXISTENTE (por diseño) | Ninguna automatización publica. Es una regla, no una carencia. |
+| Contrato cross-repo | 🟢 VERDE (Psyche, RE-VERIFICADO 17-sep) | `contract/`, Canonical Envelope v1, 8 fixtures, **17 tests** (creció de 12 — no re-medido cuándo; confirmado hoy con ejecución real: `python3 -m unittest discover` en `contract/`, 17/17 OK). Lado web (18 tests, `handoff/legalmente-web/`, escritura remota bloqueada): NO re-verificado esta sesión, se conserva la cifra original del 27-ago sin reconfirmar. |
+| Motor de producción masiva | ⚫ NO CONSTRUIDO | Contrato técnico definido (`docs/contrato-motor-masivo.md`); el motor, deliberadamente, no. Sin cambios desde 27-ago. |
+| Documentación vs. realidad | 🟢 VERDE (RESUELTO 17-sep, era 🟡) | Las dos derivas de §5 quedaron cerradas — ver §5 actualizado. |
+| `legalmente-web` (visibilidad) | 🟢 VERDE (RESUELTO, ya estaba resuelto desde 31-ago) | El repositorio es público; `CLAUDE.md §8` YA lo declara público (commit `9e4bded`, 31-ago-2026) — la fila anterior de esta misma tabla describía una contradicción que ya no existe. Re-verificado hoy con `git ls-remote` anónimo real (sin credenciales), HEAD actual `3d9d298`. Ver §5. |
+| Publicación automatizada | ⚫ INEXISTENTE (por diseño) | Ninguna automatización publica. Es una regla, no una carencia. Sin cambios. |
 
 ---
 
@@ -168,16 +171,38 @@ bundle de Remotion falla con exit 1.
 
 ## 5. Derivas entre documentación y realidad
 
-1. **`CLAUDE.md §8` dice que `legalmente-web` es privado. Es público.** Reverificado
-   el 2026-08-31 por clonado anónimo (`git ls-remote` y `git clone` sin credenciales
-   funcionan; HEAD `23a9ce0`). Sigue sin corregirse. Es una afirmación de seguridad incorrecta en
-   el documento operativo, y conviene corregirla o cambiar la visibilidad — pero
-   ninguna de las dos cosas la decide una sesión técnica.
+1. **`CLAUDE.md §8` — RESUELTO, no es una deriva vigente.** Este punto describía,
+   el 27-ago-2026, que `CLAUDE.md §8` declaraba `legalmente-web` privado
+   siendo público. Esa corrección **ya se aplicó** el 2026-08-31, commit
+   `9e4bded` ("docs: corregir el hecho de visibilidad de legalmente-web en
+   CLAUDE.md §8") — el mismo día de la reverificación por clonado anónimo
+   (HEAD `23a9ce0` entonces). **Esta sección de este mismo documento quedó
+   desactualizada** después de esa corrección (no se actualizó cuando el
+   fix se aplicó) y por eso siguió listando el punto como pendiente en la
+   tabla de §1 y en §7 P1.4 — error de mantenimiento documental, corregido
+   ahora (17-sep-2026). Re-verificado hoy de forma independiente:
+   `git ls-remote https://github.com/legallmente-alt/legalmente-web.git`
+   (sin credenciales) responde con éxito, HEAD actual `3d9d298`. `CLAUDE.md`
+   §8 dice correctamente "**público**" — leído y confirmado en esta misma
+   sesión. **Ningún cambio a `CLAUDE.md` fue necesario**: ya estaba
+   correcto, sólo este documento (`TECHNICAL_STATE.md`) llevaba 17 días
+   diciendo lo contrario de sí mismo.
 2. **Nombre de paso de CI obsoleto** — decía "mantener el gate cerrado" cuando el
-   control ya comprueba coherencia. Corregido en esta rama.
+   control ya comprueba coherencia. Corregido el 27-ago (histórico, no re-verificado hoy).
 3. **Pruebas congeladas obsoletas** — dos pruebas afirmaban que los paquetes del
    piloto siguen PENDIENTE con gates CERRADO. Hacían fallar la suite ante cualquier
-   aprobación humana legítima. Sustituidas por pruebas de coherencia en esta rama.
+   aprobación humana legítima. Sustituidas por pruebas de coherencia el 27-ago
+   (histórico, no re-verificado hoy).
+4. **(nuevo, encontrado 17-sep-2026) Este mismo documento repitió el error
+   del punto 1** en un reporte ejecutivo de esta sesión, antes de esta
+   reconciliación: se afirmó "CLAUDE.md §8 dice que legalmente-web es
+   privado" citando este documento sin re-leer `CLAUDE.md` directamente.
+   Corregido en el mismo ciclo que produjo este punto — ver
+   `docs/mandato-maestro-cierre-2026-09-17.md` para la nota de corrección
+   completa. Lección operativa (ya era la regla de `CLAUDE.md §2`, reforzada
+   aquí con un ejemplo real): un documento secundario desactualizado puede
+   propagar un error aunque la fuente primaria (`CLAUDE.md`) ya esté
+   correcta — re-verificar la fuente primaria, no el documento que la cita.
 
 ---
 
@@ -217,7 +242,9 @@ decisión del fundador, no técnica.
    `PublicationDecision` existe**: la publicación sigue sin autorizarse. Ver
    `docs/production-handoff-decision-pieza-01.md` y
    `docs/real-generation-readiness.md`.
-4. Corregir la deriva de `legalmente-web` en `CLAUDE.md §8`.
+4. ~~Corregir la deriva de `legalmente-web` en `CLAUDE.md §8`.~~ **YA ESTABA
+   RESUELTO** desde el 2026-08-31 (commit `9e4bded`) — este propio documento
+   no reflejaba esa corrección hasta la reconciliación del 17-sep-2026. Ver §5.1.
 5. ~~Resolver el conflicto de marca.~~ **RESUELTO** el 2026-08-31: `NO`. Ver
    `docs/adr/0002-marca-composicion-determinista.md`. Aplicado en política 1.1.
 6. **Cerrar los PR #26 y #28 de `legalmente-web` como SUPERSEDED.** Verificado que
@@ -246,3 +273,28 @@ decisión del fundador, no técnica.
 - `docs/handoff-contracts/` — contratos externos en borrador.
 - `docs/contrato-motor-masivo.md` — dónde vive cada campo del futuro motor y por qué
   no se creó ningún modelo paralelo.
+- `visual/README.md` — punto de entrada real y vigente del motor editorial/visual
+  (catálogo maestro, motor pedagógico, memoria fuerte, compilador causal de
+  dirección artística, contrato TEXT_TO_IMAGE/IMAGE_EDIT). Este documento
+  (`TECHNICAL_STATE.md`) no cubre ese alcance.
+- `docs/mandato-maestro-cierre-2026-09-17.md` — mapa de estado y tabla
+  Drive↔código de la sesión "Mandato Maestro" (17-sep-2026): motor
+  pedagógico, memoria fuerte en selección temática, compilador causal de
+  dirección artística, auditoría de deuda técnica (resultado: limpia),
+  reconciliación de este mismo documento.
+
+## 9. Pendientes P1-P3 genuinamente abiertos hoy (no re-verificados en la reconciliación del 17-sep)
+
+Estos NO se tocaron en la sesión del 17-sep-2026 — se listan aquí para que
+quede explícito que "reconciliado" no significa "todo resuelto":
+
+- **PR #26/#28 de `legalmente-web`** (P1.6): cerrarlos como SUPERSEDED
+  requiere permisos de escritura que las sesiones de este repo no tienen
+  (cuenta distinta, `CLAUDE.md §8`). Estado sin re-verificar hoy.
+- **Detección de deriva de fuentes oficiales** (P2.5) y **detección de
+  duplicados por paráfrasis** (P2.7): sin cambios, siguen como estaban.
+- **Integraciones externas (Grok/Manus/Gemini) y agentes/hooks de Drive**
+  (P3): deliberadamente no implementados, sin cambios.
+- **Proveedor de imagen real conectado**: sigue bloqueado por falta de
+  credenciales en el workspace (motor visual, no el subsistema jurídico de
+  este documento) — ver `docs/mandato-maestro-cierre-2026-09-17.md`.

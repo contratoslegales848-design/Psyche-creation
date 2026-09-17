@@ -53,6 +53,7 @@ sugerir (eso nunca fue parte del hallazgo de monotonía).
 
 from dataclasses import dataclass, field, replace
 
+import direccion_causal as dcau
 import memoria_fuerte as mf
 import visual_fingerprint as vf
 from memory import normaliza
@@ -190,6 +191,10 @@ class VisualBriefDraft:
     # ocurre antes de generar, nunca después (mandato Hotfix memoria fuerte).
     bloqueado_memoria_fuerte: bool = False
     motivos_bloqueo_memoria_fuerte: list = field(default_factory=list)
+    # Significado (A) del compilador causal — `direccion_causal.py`. Se
+    # expone como dict (no como el dataclass Significado) para que
+    # VisualBriefDraft siga siendo serializable sin import cruzado.
+    significado: dict = field(default_factory=dict)
 
     def to_dict(self):
         from dataclasses import asdict
@@ -275,8 +280,15 @@ def draft_visual_brief(candidato, perfil_emocional, catalogo_maestro=None,
 
     catalogo_maestro = catalogo_maestro or vf.MasterCatalog.load()
     memoria_huellas = memoria_huellas if memoria_huellas is not None else vf.FingerprintMemory()
-    huella = vf.seleccionar_huella(candidato.candidate_id, catalogo=catalogo_maestro,
-                                   memoria=memoria_huellas, canal=canal)
+    # Mandato Maestro, continuación (17-sep-2026): CONCEPTO -> TENSIÓN ->
+    # SIGNIFICADO -> restricción causal del catálogo (realism/
+    # visual_mechanism) -> selección (anti-repetición/memoria) —
+    # `direccion_causal.py` reemplaza aquí la llamada ciega a
+    # `vf.seleccionar_huella()` (que elegía la huella sin leer nada del
+    # candidato). Ver ese módulo para qué se causa de verdad y qué sigue
+    # sin fabricarse (objeto_protagonista/metáfora/escena).
+    huella, significado, _ = dcau.seleccionar_direccion_causal(
+        candidato, catalogo=catalogo_maestro, memoria=memoria_huellas, canal=canal)
 
     superficie = ""
     if registro_familias is not None:
@@ -317,4 +329,5 @@ def draft_visual_brief(candidato, perfil_emocional, catalogo_maestro=None,
         autorizado=False,
         nota="Borrador pre-verificación. No autoriza producción ni sustituye brief.py.",
         bloqueado_memoria_fuerte=bool(motivos_bloqueo),
-        motivos_bloqueo_memoria_fuerte=motivos_bloqueo)
+        motivos_bloqueo_memoria_fuerte=motivos_bloqueo,
+        significado=significado.to_dict())
