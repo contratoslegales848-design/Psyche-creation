@@ -16,6 +16,33 @@ QA estructural sobre texto declarado (`subject`/`environment` del
 `VisualBrief` real), mismo patrón de coincidencia por palabras clave que
 `memoria_fuerte.py`/`safe_zone.py` — nunca visión por computadora, nunca
 se inventa una clasificación sin evidencia léxica (cae a SIN_CLASIFICAR).
+
+CONTINUACIÓN (17-sep-2026, 4ª pasada — "no cierres todavía"): el Founder
+señaló que "3 escritorios + 3 documentos" puede seguir siendo un lote
+perceptualmente monótono aunque cada arquetipo individual respete su tope.
+El banco anterior ya lo advertía en su propia Regla 9
+("Revisión del lote como portafolio", HOTFIX 8-sep-2026): "Ver las 10
+juntas y detectar familias visuales accidentales. Si 4 o más se sienten de
+la misma sesión fotográfica, misma exposición, misma paleta, misma escala
+o mismo decorado, sustituir las más débiles aunque individualmente hayan
+pasado QA." Esta sección añade DOS controles de afinidad complementarios
+(nunca sustituyen los de arriba, se suman):
+
+    `verificar_afinidad_familias()`   — agrupa arquetipos perceptualmente
+                                        cercanos (p. ej. documento-en-
+                                        close-up y escena-de-escritorio
+                                        son ambos "interior institucional
+                                        con papel") y aplica un tope
+                                        COMBINADO más estricto que la
+                                        suma de topes individuales.
+    `verificar_redundancia_ambientacion()` — eje DISTINTO del arquetipo
+                                        (composición): vocabulario de
+                                        ambientación compartido en
+                                        `environment` (p. ej. "archivo"
+                                        apareciendo en 3-4 de 10 piezas
+                                        aunque sus arquetipos individuales
+                                        sean distintos — hallazgo real de
+                                        esta pasada, ver docs).
 """
 
 from dataclasses import dataclass, field
@@ -122,3 +149,133 @@ def verificar_diversidad_arquetipos(piezas, max_por_arquetipo=MAX_POR_ARQUETIPO_
         conteo[arquetipo] = conteo.get(arquetipo, 0) + 1
         detalle[content_id] = (arquetipo, razon)
     return VerificacionArquetipos(conteo=conteo, detalle=detalle, max_por_arquetipo=max_por_arquetipo)
+
+
+# --- Afinidad entre arquetipos cercanos (Regla 9 del banco anterior) ------
+# Agrupación real, auditable contra la propia definición de cada arquetipo:
+# "documento en close-up" y "escena de escritorio" son ambos interiores
+# institucionales centrados en papel/mobiliario de oficina; "pasillo/
+# arquitectura central" comparte el mismo registro (interior formal,
+# vitrinas/archivos/corredores). "objeto sobre superficie" y "bodegón" son
+# ambos composiciones de objeto(s) aislado(s) sin escena humana ni
+# arquitectura. RETRATO_PERSONA_FRONTAL y SIN_CLASIFICAR no se agrupan: no
+# hay evidencia de que compartan registro perceptual con ningún otro.
+FAMILIAS_PERCEPTUALES = {
+    "INTERIOR_INSTITUCIONAL": (DOCUMENTO_CLOSEUP, ESCENA_ESCRITORIO, PASILLO_ARQUITECTURA_CENTRAL),
+    "OBJETO_AISLADO": (OBJETO_SOBRE_SUPERFICIE, BODEGON),
+}
+
+# Regla 9 literal: "si 4 o más se sienten de la misma sesión... sustituir
+# las más débiles". El tope de familia es ese mismo umbral — más estricto
+# que la suma de los topes individuales de sus arquetipos miembro.
+MAX_POR_FAMILIA_DEFAULT = 4
+
+
+def _familia_de(arquetipo):
+    for familia, miembros in FAMILIAS_PERCEPTUALES.items():
+        if arquetipo in miembros:
+            return familia
+    return None
+
+
+@dataclass
+class VerificacionFamilias:
+    conteo: dict = field(default_factory=dict)
+    detalle: dict = field(default_factory=dict)          # content_id -> (arquetipo, familia)
+    max_por_familia: int = MAX_POR_FAMILIA_DEFAULT
+
+    @property
+    def excedidas(self):
+        return {f: n for f, n in self.conteo.items() if n > self.max_por_familia}
+
+    @property
+    def ok(self):
+        return not self.excedidas
+
+    def to_dict(self):
+        return {"ok": self.ok, "conteo": dict(self.conteo), "excedidas": self.excedidas,
+                "detalle": {k: list(v) for k, v in self.detalle.items()},
+                "max_por_familia": self.max_por_familia}
+
+
+def verificar_afinidad_familias(piezas, max_por_familia=MAX_POR_FAMILIA_DEFAULT):
+    """Complementa `verificar_diversidad_arquetipos`: agrupa arquetipos
+    perceptualmente cercanos (`FAMILIAS_PERCEPTUALES`) y aplica un tope
+    COMBINADO — un lote puede tener 3 `DOCUMENTO_CLOSEUP` + 3
+    `ESCENA_ESCRITORIO` (ambos dentro de su propio tope de 3) y aun así
+    sentirse monótono si los 6 son "interior institucional con papel"; este
+    chequeo lo atrapa. Arquetipos sin familia declarada (retrato, sin
+    clasificar) no se agrupan ni cuentan aquí."""
+    conteo, detalle = {}, {}
+    for content_id, subject, environment in piezas:
+        arquetipo, _ = clasificar_arquetipo(subject, environment)
+        familia = _familia_de(arquetipo)
+        if familia is None:
+            continue
+        conteo[familia] = conteo.get(familia, 0) + 1
+        detalle[content_id] = (arquetipo, familia)
+    return VerificacionFamilias(conteo=conteo, detalle=detalle, max_por_familia=max_por_familia)
+
+
+# --- Redundancia de vocabulario de ambientación ---------------------------
+# Eje DISTINTO del arquetipo compositivo (cómo se compone la toma): aquí se
+# vigila QUÉ TIPO DE LUGAR describe `environment`, por vocabulario real
+# repetido — puede haber dos piezas de arquetipos distintos (una
+# DOCUMENTO_CLOSEUP, otra ESCENA_ESCRITORIO) que aun así comparten la
+# palabra "archivo"/"archivadores" en su entorno. Hallazgo real de esta
+# pasada: 4 de las 10 piezas del lote real mencionaban archivo/archivador
+# en su `environment` pese a tener arquetipos distintos.
+FAMILIAS_AMBIENTACION = {
+    "ARCHIVO": ("archivo", "archivador"),
+    "DESPACHO_OFICINA": ("despacho", "oficina"),
+    "SALA_DE_REUNION": ("sala de reuniones", "sala de juntas", "sala de negociacion",
+                        "sala de conciliacion"),
+    "LABORATORIO": ("laboratorio",),
+    "MUSEO_VITRINA": ("museo", "vitrina"),
+    "TERRENO_EXTERIOR": ("terreno", "borde de un terreno"),
+}
+
+MAX_POR_AMBIENTACION_DEFAULT = 3
+
+
+def _familia_ambientacion(environment):
+    e = _texto_libre(environment)
+    if not e:
+        return None
+    for familia, frases in FAMILIAS_AMBIENTACION.items():
+        if _contiene_alguna(e, frases):
+            return familia
+    return None
+
+
+@dataclass
+class VerificacionAmbientacion:
+    conteo: dict = field(default_factory=dict)
+    detalle: dict = field(default_factory=dict)          # content_id -> familia
+    max_por_familia: int = MAX_POR_AMBIENTACION_DEFAULT
+
+    @property
+    def excedidas(self):
+        return {f: n for f, n in self.conteo.items() if n > self.max_por_familia}
+
+    @property
+    def ok(self):
+        return not self.excedidas
+
+    def to_dict(self):
+        return {"ok": self.ok, "conteo": dict(self.conteo), "excedidas": self.excedidas,
+                "detalle": dict(self.detalle), "max_por_familia": self.max_por_familia}
+
+
+def verificar_redundancia_ambientacion(piezas, max_por_familia=MAX_POR_AMBIENTACION_DEFAULT):
+    """`piezas`: iterable de (content_id, environment). Sin coincidencia
+    léxica con `FAMILIAS_AMBIENTACION`, la pieza no cuenta contra ningún
+    tope (nunca se adivina un tipo de lugar sin evidencia textual)."""
+    conteo, detalle = {}, {}
+    for content_id, environment in piezas:
+        familia = _familia_ambientacion(environment)
+        if familia is None:
+            continue
+        conteo[familia] = conteo.get(familia, 0) + 1
+        detalle[content_id] = familia
+    return VerificacionAmbientacion(conteo=conteo, detalle=detalle, max_por_familia=max_por_familia)

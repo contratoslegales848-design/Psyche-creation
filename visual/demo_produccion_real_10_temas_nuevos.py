@@ -159,29 +159,43 @@ DIRECCION_VISUAL = {
         metaphor="dos epocas del mismo oficio mirandose desde lados opuestos del cristal",
         acento_objeto="una lupa de perito apoyada sobre el tratado"),
     "CAND-0041": dict(  # laboral / representación colectiva — tratar el rastro digital como prueba
-        # Re-autorado (continuación motor visual, 17-sep-2026, 3ª pasada):
-        # ver nota en CAND-0034 — se retira "sala de juntas" y se cierra el
-        # encuadre sobre el documento mismo, coherente con el arquetipo
-        # "documento en close-up" (ya usado por CAND-0008/0055 en este
-        # lote — sigue dentro del tope de 3, ver arquetipo_compositivo.py).
-        subject="una cadena de mensajes impresa con los nombres tachados, doblada sobre un archivador metalico",
-        environment="archivo sindical con carpetas etiquetadas por fecha al fondo",
-        camera="50mm, plano cerrado sobre el pliegue de la hoja impresa",
-        focal_point="la marca de tiempo visible de un mensaje",
+        # Re-autorado DE NUEVO (continuación motor visual, 17-sep-2026, 4ª
+        # pasada — "afinidad entre arquetipos cercanos"): la versión de la
+        # 3ª pasada seguía siendo "interior institucional" (archivo) —
+        # verificado con arquetipo_compositivo.verificar_afinidad_familias:
+        # el lote llegó a tener 7/10 en esa familia perceptual pese a que
+        # cada arquetipo individual respetaba su propio tope. Nueva
+        # composición: registro industrial/laboral, no de oficina.
+        subject="un tablon de anuncios con un aviso impreso pegado encima de uno antiguo despegado a medias",
+        environment="area de casilleros de una planta industrial, luz de tubos fluorescentes",
+        camera="50mm, plano cerrado sobre el tablon",
+        focal_point="el aviso impreso pegado encima del antiguo",
         metaphor="una conversacion que dejo huella aunque nadie pensó que alguien la leeria despues",
-        acento_objeto="un pendrive sin etiqueta junto a las hojas impresas"),
+        acento_objeto="un candado abierto colgado de un casillero cercano"),
     "CAND-0053": dict(  # sucesorio / legítima — señalar qué cambió
-        subject="dos versiones de una misma clausula testamentaria, una con una linea tachada y reescrita al margen",
-        environment="despacho notarial con archivadores sucesorios al fondo",
-        camera="35mm, plano cerrado sobre la clausula tachada", focal_point="la reescritura al margen",
+        # Re-autorado DE NUEVO (4ª pasada, "afinidad entre arquetipos
+        # cercanos" — ver nota en CAND-0041). La metáfora ya declarada
+        # ("un río que cambia de cauce sin dejar de ser el mismo río") no
+        # tenía escena propia: se autoraba sobre un despacho con
+        # archivadores. Se le da escena literal, coherente con su propia
+        # metáfora, y se sale del registro "interior institucional".
+        subject="un antiguo mojon de piedra medio hundido en la orilla de un cauce que cambio de curso",
+        environment="orilla de un rio en terreno rural, el cauce viejo visible como una depresion seca cercana",
+        camera="35mm, plano general bajo con el mojon en primer termino",
+        focal_point="el mojon medio hundido",
         metaphor="un rio que cambia de cauce sin dejar de ser el mismo rio",
-        acento_objeto="un sello notarial con fecha reciente junto al documento"),
+        acento_objeto="una fecha antigua apenas legible tallada en el mojon"),
     "CAND-0013": dict(  # familiar / tutela — mostrar la vía no contenciosa
-        subject="una mesa redonda con dos sillas enfrentadas y una tercera silla vacia a la cabecera",
-        environment="sala de conciliacion familiar con luz calida, sin simbolos judiciales visibles",
-        camera="35mm, plano medio de la mesa completa", focal_point="la silla vacia de la cabecera",
-        metaphor="un espacio construido para que nadie tenga que ganar para que el otro pierda",
-        acento_objeto="una jarra de agua con dos vasos servidos sobre la mesa"),
+        # Re-autorado DE NUEVO (4ª pasada — ver nota en CAND-0041): la
+        # mesa de conciliación era el séptimo miembro de la familia
+        # perceptual "interior institucional". Misma idea (un camino sin
+        # ganador/perdedor), escena de jardín en vez de sala de reunión.
+        subject="un sendero de jardin que se divide en dos y vuelve a unirse mas adelante, sin cerca entre ambos",
+        environment="jardin privado con luz de tarde, sin simbolos judiciales visibles",
+        camera="35mm, plano general bajo con el sendero en primer termino",
+        focal_point="el punto donde el sendero vuelve a unirse",
+        metaphor="un camino que se separa sin dejar de llevar al mismo lugar",
+        acento_objeto="una puerta de jardin abierta y sin candado junto al sendero"),
 }
 
 
@@ -294,6 +308,11 @@ def ejecutar():
     piezas_arquetipo = [(r["candidato"].candidate_id, r["direccion"]["subject"],
                         r["direccion"]["environment"]) for r in resultados]
     mezcla["arquetipo_compositivo"] = arq.verificar_diversidad_arquetipos(piezas_arquetipo).to_dict()
+    mezcla["afinidad_familias"] = arq.verificar_afinidad_familias(piezas_arquetipo).to_dict()
+    piezas_ambientacion = [(r["candidato"].candidate_id, r["direccion"]["environment"])
+                           for r in resultados]
+    mezcla["redundancia_ambientacion"] = arq.verificar_redundancia_ambientacion(
+        piezas_ambientacion).to_dict()
     return resultados, reporte_lote_visual, intentos, mezcla, rechazados, señales
 
 
@@ -415,6 +434,15 @@ def reporte_markdown(resultados, reporte_lote_visual, intentos, mezcla, rechazad
         f"{mezcla['arquetipo_compositivo']['max_por_arquetipo']}/10 del mismo, ver "
         f"`arquetipo_compositivo.py`):** {'OK' if mezcla['arquetipo_compositivo']['ok'] else 'FALLA'} — "
         f"{mezcla['arquetipo_compositivo']['conteo']}.",
+        "",
+        f"**Afinidad entre arquetipos cercanos (Regla 9 — familias perceptuales, máx. "
+        f"{mezcla['afinidad_familias']['max_por_familia']}/10 combinado):** "
+        f"{'OK' if mezcla['afinidad_familias']['ok'] else 'FALLA'} — {mezcla['afinidad_familias']['conteo']}.",
+        "",
+        f"**Redundancia de vocabulario de ambientación (eje distinto del arquetipo, máx. "
+        f"{mezcla['redundancia_ambientacion']['max_por_familia']}/10 del mismo tipo de lugar):** "
+        f"{'OK' if mezcla['redundancia_ambientacion']['ok'] else 'FALLA'} — "
+        f"{mezcla['redundancia_ambientacion']['conteo']}.",
         "",
     ]
 

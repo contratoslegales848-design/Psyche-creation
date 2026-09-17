@@ -459,6 +459,74 @@ HOTFIX por insuficiente.
 `test_produccion_real_10_temas_nuevos.py` (distancia estricta y arquetipo
 compositivo sobre el lote real, no simulado).
 
+### 4ª pasada (17-sep-2026): afinidad entre arquetipos cercanos
+
+El Founder observó, correctamente, que "3 escritorios + 3 documentos"
+puede seguir siendo un lote perceptualmente monótono aunque cada
+arquetipo individual respete su propio tope de 3. El banco anterior ya lo
+advertía en su Regla 9 ("Revisión del lote como portafolio", HOTFIX
+8-sep-2026): "Si 4 o más se sienten de la misma sesión... sustituir las
+más débiles." `arquetipo_compositivo.py` gana dos verificaciones nuevas
+(no sustituyen la Regla 3, se suman):
+
+- `verificar_afinidad_familias()` — agrupa arquetipos perceptualmente
+  cercanos (`FAMILIAS_PERCEPTUALES`: `DOCUMENTO_CLOSEUP` +
+  `ESCENA_ESCRITORIO` + `PASILLO_ARQUITECTURA_CENTRAL` = "interior
+  institucional"; `OBJETO_SOBRE_SUPERFICIE` + `BODEGON` = "objeto
+  aislado") y aplica un tope combinado (4/10, literal de la Regla 9) más
+  estricto que la suma de topes individuales.
+- `verificar_redundancia_ambientacion()` — eje DISTINTO: vocabulario
+  compartido en `environment`, no en el arquetipo. Encontró un problema
+  real que ninguno de los chequeos anteriores detectaba: 4/10 piezas
+  mencionaban "archivo"/"archivador" en su entorno pese a tener
+  arquetipos compositivos distintos entre sí.
+
+**Hallazgo real con estos dos chequeos nuevos**: el lote (ya corregido en
+la 3ª pasada para la Regla 3) tenía 7/10 piezas en la familia perceptual
+"interior institucional" — pasaba el tope individual de cada arquetipo
+pero no el combinado. Re-autoradas 3 piezas más (`CAND-0041`, `CAND-0053`,
+`CAND-0013`), cada una con una escena en un registro genuinamente distinto
+(planta industrial, orilla de un río, jardín) — dos de ellas incluso
+ligadas más de cerca a su propia metáfora ya declarada (`CAND-0053`: "un
+río que cambia de cauce" ahora tiene un río real en escena, no un
+despacho). Distribución final: arquetipo `{DOCUMENTO_CLOSEUP: 2,
+OBJETO_SOBRE_SUPERFICIE: 2, ESCENA_ESCRITORIO: 1,
+PASILLO_ARQUITECTURA_CENTRAL: 1, SIN_CLASIFICAR: 4}`; familias
+`{INTERIOR_INSTITUCIONAL: 4, OBJETO_AISLADO: 2}` (dentro del tope de 4);
+ambientación `{ARCHIVO: 2, DESPACHO_OFICINA: 1, SALA_DE_REUNION: 1,
+LABORATORIO: 1, TERRENO_EXTERIOR: 2, MUSEO_VITRINA: 1}` (ninguna por
+encima de 3). La distancia estricta de 8 dimensiones (`visual_distance.py`)
+se re-verificó sin cambios: sigue en 30/30, mínimo real 6/8.
+
+**Auditoría de los 6 mecanismos del mandato** (KEEP/ADAPT/REJECT):
+
+| Mecanismo | Estado | Evidencia |
+|---|---|---|
+| Dirección artística dominante | **KEEP** — activo | `visual_fingerprint._construir_huella()`: un solo `primary_direction` por pieza, `secondary_direction` opcional (50%), nunca se mezclan referentes en el mismo prompt. |
+| Mecanismo visual/revelación | **KEEP** — activo y causal | `visual_mechanism` restringido por `direccion_causal.py` según `necesidad` (mejor que el banco anterior: causal, no sólo anti-repetición). |
+| Composición cerrada | **KEEP** — activo estructuralmente | `policy.composicion.scene_count=1` + lista `prohibido` (collage/grid/split screen/díptico/tríptico) + un solo campo `metaphor`/`acento_objeto` en el schema (no listas) — el "no acumular símbolos" lo impone la forma del dato, no sólo una regla de texto. |
+| Combinaciones curadas | **ADAPT parcial, límite honesto** | Las 7 dimensiones auxiliares del catálogo maestro rotan independientemente por anti-repetición, sin verificar coherencia entre sí ni con la escena autorada — limitación YA documentada en `direccion_causal.py` (sólo 2/10 dimensiones son causales). Ejemplo real encontrado: `materiality="hielo"` para una escena de "placa de bronce en archivo corporativo" — incoherente, pero corregirlo de verdad exigiría fabricar afinidad material→escena que este repositorio no tiene evidencia para sostener (mismo criterio fail-closed de todo el módulo). No se fuerza. |
+| Rotación de escenario/material/medio | **ADAPT** (escenario) / **KEEP** (material, medio) | `medium`/`materiality` SÍ rotan (parte del catálogo maestro real). `escenario` (el lugar físico) NO tiene banco propio — es texto libre autorado por humano, sin anti-repetición mecanizada (no se puede inyectar un banco propio en `catalogo-maestro-v1.md`: es copia literal del Founder). Se cubre con `verificar_redundancia_ambientacion()` sobre el texto YA autorado, no con un banco nuevo. |
+| Prompt final compacto | **ADAPT** — redundancia real eliminada | `compiler.py` repetía el nombre completo de la paleta dos veces seguidas ("Paleta: X." + "el acento de color (X) debe proceder..."); ahora refiere "esa misma paleta". Confirmado que `explanation`/`metadata` (razonamiento editorial) nunca se mezclan con `positive_prompt` — están en campos separados de `CompiledVisualRequest` desde su diseño original. |
+
+**REJECT reafirmado**: el Excel (`legalmente-generador-aleatorio.xlsx`)
+sigue sin restaurarse como motor activo; ninguna unión rígida
+materia→escuela; "cambiaron 3 de 5 dimensiones" nunca es prueba suficiente
+de variedad por sí sola (por eso existen los 4 chequeos independientes:
+`visual_distance` + arquetipo + familias + ambientación).
+
+**Validación estructural vs. raster** — explícitamente separadas: (A)
+**completada**: reserva/selección/dirección de arte/prompt compilado/QA de
+9 ejes (intelectual, visual, títulos ocultos, memoria fuerte, sustancia
+pedagógica, safe zone, distancia estricta, arquetipo, afinidad de
+familias, ambientación — son 10 en realidad, contados aquí) sobre un lote
+real de 10, con datos reales de principio a fin. (B) **pendiente,
+exclusivamente por falta de proveedor de imagen**: ningún píxel real se
+generó ni se verá — no hay proveedor de imagen conectado en este entorno
+(Higgsfield permanece prohibido; ver `providers/`). La afirmación de que
+"las 10 piezas se ven distintas" se sostiene sobre el plan/prompt/escena
+declarados, nunca sobre una imagen renderizada.
+
 ## Añadir un proveedor real
 
 1. `providers/<nombre>.py` con una clase que implemente `ImageProvider`.

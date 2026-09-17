@@ -82,6 +82,19 @@ class TestProduccionReal10TemasNuevos(unittest.TestCase):
         self.assertTrue(a["ok"], a["excedidos"])
         self.assertEqual(sum(a["conteo"].values()), 10)
 
+    def test_afinidad_de_familias_perceptuales_no_excede_el_tope(self):
+        """Continuación (4ª pasada, 17-sep-2026): 'un lote de 10 con 3
+        escritorios + 3 documentos todavía puede ser monótono' — la
+        verificación combinada por familia perceptual (Regla 9 del banco
+        anterior) debe pasar sobre el lote real, no solo el tope por
+        arquetipo individual."""
+        f = self.mezcla["afinidad_familias"]
+        self.assertTrue(f["ok"], f["excedidas"])
+
+    def test_redundancia_de_ambientacion_no_excede_el_tope(self):
+        a = self.mezcla["redundancia_ambientacion"]
+        self.assertTrue(a["ok"], a["excedidas"])
+
 
 if __name__ == "__main__":
     unittest.main()

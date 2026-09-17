@@ -176,9 +176,15 @@ def compile_request(brief, policy, family=None, capabilities=None, repetition=No
     if paleta_texto:
         partes.append(f"Paleta: {paleta_texto}.")
     if brief.acento_objeto:
-        color_acento = paleta_texto or "un tono coherente con la direccion artistica declarada"
+        # Prompt compacto (recuperación motor anterior, tarea 78 continuación):
+        # antes se repetía `paleta_texto` completo aquí de nuevo ("El acento
+        # de color (X) debe proceder..." justo después de "Paleta: X.") —
+        # misma información, el doble de texto. Se refiere a la paleta ya
+        # declarada en vez de repetirla verbatim.
+        referencia_paleta = ("esa misma paleta" if paleta_texto
+                             else "un tono coherente con la direccion artistica declarada")
         partes.append(
-            f"El acento de color ({color_acento}) debe proceder de un objeto fisico real de la "
+            f"El acento de color ({referencia_paleta}) debe proceder de un objeto fisico real de la "
             f"escena: {brief.acento_objeto}."
         )
 
