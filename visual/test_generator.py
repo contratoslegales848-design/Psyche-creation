@@ -6,6 +6,7 @@ import unittest
 import corpus_import as ci
 import editorial
 import generator
+import pedagogia as ped
 import territory_explorer as te
 import universe
 from semantic_fingerprint import SemanticFingerprint as S
@@ -385,6 +386,61 @@ class TestSenalDeMercado(GenBase):
         for c, p in zip(sel, pts):
             self.assertGreaterEqual(p.score_compuesto, 0.0)
             self.assertLessEqual(p.score_compuesto, 1.0)
+
+
+class TestRutaDeAprendizajeNoSeAmontonaEnUnLote(GenBase):
+    """Continuación pedagógica (mandato §4, 17-sep-2026): 'un concepto puede
+    generar una ruta... pero la memoria debe evitar que salgan juntas de
+    forma repetitiva'. Investigación (no una hipótesis): ¿hace falta un
+    mecanismo NUEVO, o el gate de `_cuota_materia` ya existente (00 LEER
+    PRIMERO §3.A) basta? Una ruta real sobre un mismo concepto_nucleo
+    normalmente comparte una sola materia — se prueba aquí directamente
+    contra el selector real, sin inventar un segundo gate."""
+
+    def ruta(self, materia, concepto="prescripcion"):
+        familias = ("concepto", "diferencia", "elementos", "requisito", "etapa_procesal")
+        return [universe.TopicCandidate(
+            candidate_id=f"RUTA-{i}", materia=materia, familia_editorial=fam,
+            necesidad="entender", rol_lector="persona", concepto_nucleo=concepto,
+            pregunta_resuelta=f"pregunta {i} sobre {concepto}", angulo=f"angulo-{i}",
+            profundidad="media") for i, fam in enumerate(familias)]
+
+    def test_cuota_de_materia_ya_limita_cuantas_piezas_de_una_ruta_salen_juntas(self):
+        materia = next(iter(self.materias.keys()))
+        candidatos = self.ruta(materia)
+        sel, pts, rech = generator.seleccionar_lote(
+            candidatos, SemanticMemory(), self.mapa, universo=self.universo, n=10,
+            materias=self.materias)
+        tope = generator._cuota_materia(materia, 10, self.materias)
+        de_la_ruta = [c for c in sel if c.concepto_nucleo == "prescripcion"]
+        self.assertEqual(len(de_la_ruta), tope)
+        self.assertLess(len(de_la_ruta), len(candidatos),
+                        "la ruta completa (5 ángulos) NO debe salir entera en un solo lote.")
+
+    def test_los_bloqueados_por_cuota_lo_son_explicitamente_por_materia_no_por_concepto(self):
+        """No hace falta un segundo gate 'cuota de concepto_nucleo': el
+        motivo de bloqueo real ya es legible y correcto tal cual."""
+        materia = next(iter(self.materias.keys()))
+        candidatos = self.ruta(materia)
+        _, _, rech = generator.seleccionar_lote(
+            candidatos, SemanticMemory(), self.mapa, universo=self.universo, n=10,
+            materias=self.materias)
+        self.assertTrue(rech)
+        for _, motivo in rech:
+            self.assertIn("CUOTA DE MATERIA", motivo)
+
+    def test_lo_que_si_sale_junto_cubre_angulos_distintos_no_repite_el_mismo(self):
+        """La pareja que SÍ cabe en el lote (tope real: 2/10) debe ser una
+        mini-ruta legítima — ángulos distintos del mismo concepto, no el
+        mismo ángulo duplicado — verificable con `cubre_dimensiones_distintas`."""
+        materia = next(iter(self.materias.keys()))
+        candidatos = self.ruta(materia)
+        sel, _, _ = generator.seleccionar_lote(
+            candidatos, SemanticMemory(), self.mapa, universo=self.universo, n=10,
+            materias=self.materias)
+        de_la_ruta = [c for c in sel if c.concepto_nucleo == "prescripcion"]
+        self.assertGreaterEqual(len(de_la_ruta), 2)
+        self.assertTrue(ped.cubre_dimensiones_distintas(de_la_ruta))
 
 
 if __name__ == "__main__":

@@ -710,6 +710,96 @@
         "profesional"
       ],
       "profundidad_tipica": "alta"
+    },
+    "clasificacion": {
+      "funcion_editorial": "clasificar una figura jurídica en sus tipos o categorías",
+      "tension_tipica": "una etiqueta que en realidad cubre varias variantes distintas",
+      "necesidades_afines": [
+        "distinguir",
+        "entender"
+      ],
+      "roles_lector_afines": [
+        "persona",
+        "estudiante"
+      ],
+      "profundidad_tipica": "media"
+    },
+    "elementos": {
+      "funcion_editorial": "descomponer una figura jurídica en los elementos y sujetos que la integran",
+      "tension_tipica": "algo que parece uno pero se sostiene en varias piezas",
+      "necesidades_afines": [
+        "entender",
+        "aplicar"
+      ],
+      "roles_lector_afines": [
+        "estudiante",
+        "profesional"
+      ],
+      "profundidad_tipica": "media"
+    },
+    "mapa_de_materia": {
+      "funcion_editorial": "mostrar cómo se organiza una materia jurídica completa",
+      "tension_tipica": "un campo que parece disperso pero tiene una estructura",
+      "necesidades_afines": [
+        "entender",
+        "prepararse"
+      ],
+      "roles_lector_afines": [
+        "estudiante",
+        "persona"
+      ],
+      "profundidad_tipica": "alta"
+    },
+    "institucion_juridica": {
+      "funcion_editorial": "presentar una institución jurídica completa, no solo un concepto aislado",
+      "tension_tipica": "una institución conocida de nombre pero no como conjunto",
+      "necesidades_afines": [
+        "entender",
+        "prepararse"
+      ],
+      "roles_lector_afines": [
+        "estudiante",
+        "persona"
+      ],
+      "profundidad_tipica": "alta"
+    },
+    "para_recordar": {
+      "funcion_editorial": "sintetizar en forma memorable un conocimiento ya explicado",
+      "tension_tipica": "algo aprendido que se olvida si no se fija",
+      "necesidades_afines": [
+        "recordar"
+      ],
+      "roles_lector_afines": [
+        "persona",
+        "estudiante"
+      ],
+      "profundidad_tipica": "base"
+    },
+    "quiz_juridico": {
+      "funcion_editorial": "poner a prueba con una pregunta de respuesta verificable",
+      "tension_tipica": "creer que se sabe algo hasta que hay que responderlo",
+      "necesidades_afines": [
+        "aplicar",
+        "entender"
+      ],
+      "roles_lector_afines": [
+        "estudiante",
+        "persona"
+      ],
+      "profundidad_tipica": "base"
+    },
+    "relacion_figuras": {
+      "funcion_editorial": "mostrar cómo se relacionan o combinan varias figuras jurídicas",
+      "tension_tipica": "figuras que parecen independientes pero operan juntas",
+      "necesidades_afines": [
+        "entender",
+        "distinguir"
+      ],
+      "roles_lector_afines": [
+        "estudiante",
+        "profesional"
+      ],
+      "profundidad_tipica": "alta"
     }
   },
   "necesidades": {

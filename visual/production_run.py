@@ -38,6 +38,7 @@ import families
 import generator
 import memoria_fuerte as mf
 import organism
+import pedagogia as ped
 import provider_gate
 import territory_explorer as te
 import universe
@@ -209,11 +210,13 @@ class QADosEjes:
     prueba_titulos_ocultos_detalle: str = ""
     memoria_fuerte_ok: bool = True
     memoria_fuerte_detalle: dict = field(default_factory=dict)
+    sustancia_pedagogica_ok: bool = True
+    sustancia_pedagogica_detalle: dict = field(default_factory=dict)
 
     @property
     def aceptado(self):
         return (self.intelectual_ok and self.visual_ok and self.prueba_titulos_ocultos_ok
-               and self.memoria_fuerte_ok)
+               and self.memoria_fuerte_ok and self.sustancia_pedagogica_ok)
 
     def to_dict(self):
         return {"aceptado": self.aceptado, "intelectual_ok": self.intelectual_ok,
@@ -222,7 +225,9 @@ class QADosEjes:
                 "prueba_titulos_ocultos_ok": self.prueba_titulos_ocultos_ok,
                 "prueba_titulos_ocultos_detalle": self.prueba_titulos_ocultos_detalle,
                 "memoria_fuerte_ok": self.memoria_fuerte_ok,
-                "memoria_fuerte_detalle": self.memoria_fuerte_detalle}
+                "memoria_fuerte_detalle": self.memoria_fuerte_detalle,
+                "sustancia_pedagogica_ok": self.sustancia_pedagogica_ok,
+                "sustancia_pedagogica_detalle": self.sustancia_pedagogica_detalle}
 
 
 def _prueba_titulos_ocultos(drafts):
@@ -271,6 +276,21 @@ def qa_dos_ejes(seleccion, drafts, catalogo_maestro=None, historicas_visuales=()
                 "generar, no después')."),
     }
 
+    rework = {}
+    for c in seleccion:
+        aprende, razon = ped.aprendizaje_concreto(c)
+        if not aprende:
+            rework[c.candidate_id] = razon
+    sustancia_pedagogica_ok = not rework
+    sustancia_pedagogica_detalle = {
+        "rework": rework,
+        "nota": ("Mandato §7 (continuación pedagógica, 17-sep-2026): '¿la persona aprendió "
+                "algo jurídico concreto? Si NO: REWORK.' Informativo, misma disciplina que "
+                "memoria_fuerte_ok — no reescribe la pieza por sí solo, señala cuáles "
+                "necesitan reforzar concepto_nucleo/pregunta_resuelta/consecuencia/relacion "
+                "antes de aprobarse."),
+    }
+
     return QADosEjes(
         intelectual_ok=intelectual_ok,
         intelectual_detalle={"distintos_por_eje": distintos},
@@ -280,7 +300,9 @@ def qa_dos_ejes(seleccion, drafts, catalogo_maestro=None, historicas_visuales=()
         prueba_titulos_ocultos_ok=titulos_ok,
         prueba_titulos_ocultos_detalle=titulos_detalle,
         memoria_fuerte_ok=memoria_fuerte_ok,
-        memoria_fuerte_detalle=memoria_fuerte_detalle)
+        memoria_fuerte_detalle=memoria_fuerte_detalle,
+        sustancia_pedagogica_ok=sustancia_pedagogica_ok,
+        sustancia_pedagogica_detalle=sustancia_pedagogica_detalle)
 
 
 # ---------------------------------------------------------------------------

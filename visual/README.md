@@ -232,6 +232,44 @@ cuota) hacia un objetivo configurable — 70% conocimiento por defecto,
 PROGRESO. Verificado con 5 tandas reales consecutivas: 70-80% conocimiento
 sostenido, familias narrativas presentes en las 5, nunca eliminadas.
 
+**CONTINUACIÓN EJECUTIVA — prioridad pedagógica (17-sep-2026, misma fecha,
+segunda pasada; "conocimiento primero, formato después"):** el registro
+editorial creció de 58 a **65 familias** — 7 altas reales, mismo mecanismo
+(`register_familia()`/`editorial-universe-v1.json`), cubriendo ítems del
+mandato §3 sin familia previa: `clasificacion`, `elementos`,
+`mapa_de_materia`, `institucion_juridica`, `para_recordar`,
+`quiz_juridico`, `relacion_figuras`. Ninguna de las 7 es narrativa
+(`FAMILIAS_NARRATIVA` sigue siendo exactamente 5/65). `pedagogia.py` ganó:
+
+- `DIMENSIONES_CONOCIMIENTO` / `DIMENSION_POR_FAMILIA` — las 20 dimensiones
+  de conocimiento del mandato §1/§8 (qué es, elementos, requisitos,
+  clasificación... siguiente pregunta), leídas de forma auditable de la
+  `funcion_editorial` real de cada una de las 65 familias — nunca un
+  catálogo paralelo. `dimension_de_familia()` la consulta;
+  `cubre_dimensiones_distintas(candidatos)` mide si un conjunto de piezas
+  que comparten `concepto_nucleo` (una "ruta de aprendizaje", mandato §4)
+  enseña ángulos distintos o repite el mismo ángulo.
+- `aprendizaje_concreto(candidato)` — QA del mandato §7 ("¿la persona
+  aprendió algo jurídico concreto? Si NO: REWORK"), proxy estructural sobre
+  `concepto_nucleo` + `pregunta_resuelta`/`consecuencia`/`relacion`. Cablea
+  a `production_run.qa_dos_ejes()` como el quinto eje del QA,
+  `sustancia_pedagogica_ok`, mismo patrón no-exclusión-silenciosa que
+  `memoria_fuerte_ok`.
+- `formato_sugerido(profundidad, n_dimensiones_disponibles)` — sugerencia
+  (mandato §6, nunca obligación) de formato editorial cuando una pieza
+  compleja no cabe en una sola pieza simple: "nunca elimines relaciones
+  importantes, selecciona otro formato o divide la enseñanza".
+
+**Investigación cerrada, sin gate nuevo (mandato §4):** ¿hace falta un
+mecanismo separado para evitar que una ruta de aprendizaje salga entera en
+un solo lote? No — el hard gate `_cuota_materia` ya existente (una ruta
+real comparte materia) ya limita a ~2/10 cuántas piezas de una misma ruta
+salen juntas, y las que sí salen juntas cubren dimensiones distintas
+(verificado con `cubre_dimensiones_distintas`, ver
+`test_generator.py::TestRutaDeAprendizajeNoSeAmontonaEnUnLote`). Construir
+un segundo gate habría sido el "segundo motor" que el mandato prohíbe
+explícitamente.
+
 ### Memoria fuerte real — fuente #5 del Contrato v4 (`memoria_fuerte.py`)
 
 Puebla `semantic_memory.SemanticMemory` con datos REALES (no sintéticos)

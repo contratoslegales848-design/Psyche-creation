@@ -6,6 +6,7 @@ deliberadamente — se prueba que SIGAN bloqueados, no que se completen."""
 import unittest
 
 import production_run as pr
+import universe
 from art_direction import PENDIENTE_CONTENIDO
 
 # Cachea la ejecución completa (reserva ~140 x2, selección multi-factor,
@@ -170,6 +171,31 @@ class TestQADosEjes(ProduccionBase):
         ok, detalle = pr._prueba_titulos_ocultos(drafts)
         self.assertTrue(ok)
         self.assertIn("OK", detalle)
+
+    def test_sustancia_pedagogica_esta_presente_y_el_lote_real_pasa(self):
+        """Continuación pedagógica (mandato §7, 17-sep-2026): el lote de 10
+        piezas reales, generadas por el motor real (no sintéticas), ya trae
+        concepto_nucleo + al menos una señal de contenido concreto — el
+        gate no debe rechazar producción real de buena fe."""
+        qa = self.r["qa_dos_ejes"]
+        self.assertIn("sustancia_pedagogica_ok", qa)
+        self.assertTrue(qa["sustancia_pedagogica_ok"], qa["sustancia_pedagogica_detalle"])
+        self.assertEqual(qa["sustancia_pedagogica_detalle"]["rework"], {})
+
+    def test_candidato_adversarial_sin_sustancia_marca_rework(self):
+        """Caso adversarial del mandato §7: una pieza con hook llamativo
+        pero sin concepto_nucleo ni señal de enseñanza debe aparecer en
+        'rework' y tumbar sustancia_pedagogica_ok, sin tocar los otros
+        ejes del mismo lote."""
+        seleccion = list(self.r["seleccion1"])
+        drafts = list(self.r["drafts1"])
+        adversarial = universe.TopicCandidate(
+            candidate_id="ADV-COMERCIAL", familia_editorial="caso_cotidiano",
+            necesidad="entender", concepto_nucleo="", hook="¡Esto te puede pasar a ti!")
+        qa = pr.qa_dos_ejes(seleccion + [adversarial], drafts + [drafts[0]])
+        self.assertFalse(qa.sustancia_pedagogica_ok)
+        self.assertIn("ADV-COMERCIAL", qa.sustancia_pedagogica_detalle["rework"])
+        self.assertFalse(qa.aceptado)
 
 
 class TestCicloFounderYSegundoLote(ProduccionBase):

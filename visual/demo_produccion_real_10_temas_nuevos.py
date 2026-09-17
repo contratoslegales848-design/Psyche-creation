@@ -108,6 +108,56 @@ DIRECCION_VISUAL = {
         camera="50mm, plano cerrado sobre la lupa", focal_point="el desgarro del contrato bajo la lupa",
         metaphor="un reflector de serie policiaca que se apaga hasta quedar la luz plana de un laboratorio real",
         acento_objeto="un marcador de evidencia numerado junto al contrato"),
+    # Continuación pedagógica (17-sep-2026, 2ª pasada): el registro editorial
+    # creció de 58 a 65 familias (7 altas reales). Bajo la misma semilla, el
+    # candidato #N-ésimo de la reserva ahora es otro (universe.build_reserve
+    # recorre un universo más grande) — 7 de los 10 candidate_id de este lote
+    # cambiaron. No es una regresión del motor: es la consecuencia esperada
+    # de una alta editorial real. Se re-autora la dirección visual para los
+    # 7 nuevos candidate_id, con la misma disciplina (redacción creativa
+    # sobre un tema ya seleccionado por el motor, nunca infraestructura).
+    "CAND-0055": dict(  # civil / donación — recuperar el origen de una palabra
+        subject="un diccionario etimologico abierto junto a una escritura de donacion manuscrita antigua",
+        environment="archivo notarial con luz de ventana lateral",
+        camera="50mm, plano cerrado sobre las dos paginas", focal_point="la raiz de la palabra subrayada a lapiz",
+        metaphor="una palabra que atraviesa siglos y llega casi intacta hasta el documento de hoy",
+        acento_objeto="una pluma antigua apoyada entre ambos textos"),
+    "CAND-0119": dict(  # laboral / salario — estructurar un acuerdo antes del conflicto
+        subject="dos propuestas salariales impresas, una junto a la otra, con un boligrafo sin tapar entre ambas",
+        environment="sala de reuniones de recursos humanos antes de una firma",
+        camera="35mm, plano cenital sobre las dos hojas", focal_point="el espacio vacio entre las dos propuestas",
+        metaphor="dos orillas que todavia no han decidido donde poner el puente",
+        acento_objeto="una calculadora de bolsillo apagada junto a las hojas"),
+    "CAND-0050": dict(  # ambiental / principio precautorio — exponer una tensión estructural
+        subject="una balanza de laboratorio con un platillo cargado y el otro con un espacio marcado pero vacio",
+        environment="laboratorio ambiental con instrumental de medicion al fondo",
+        camera="50mm, plano medio sobre la balanza", focal_point="el platillo vacio marcado",
+        metaphor="decidir el peso de algo que todavia no se ha terminado de medir",
+        acento_objeto="un frasco de muestra sin etiquetar junto a la balanza"),
+    "CAND-0129": dict(  # salud_medico_legal / peritaje médico — entrar por una obra cultural
+        subject="un tratado antiguo de medicina legal abierto junto a un instrumental forense contemporaneo",
+        environment="vitrina de un museo de medicina legal, luz cenital controlada",
+        camera="35mm, plano medio sobre la vitrina", focal_point="la pagina ilustrada junto al instrumental moderno",
+        metaphor="dos epocas del mismo oficio mirandose desde lados opuestos del cristal",
+        acento_objeto="una lupa de perito apoyada sobre el tratado"),
+    "CAND-0041": dict(  # laboral / representación colectiva — tratar el rastro digital como prueba
+        subject="una cadena de mensajes impresa con los nombres tachados, extendida sobre una mesa",
+        environment="sala de juntas sindical con una pantalla apagada al fondo",
+        camera="50mm, plano cenital sobre la cadena de mensajes", focal_point="la marca de tiempo visible de un mensaje",
+        metaphor="una conversacion que dejo huella aunque nadie pensó que alguien la leeria despues",
+        acento_objeto="un pendrive sin etiqueta junto a las hojas impresas"),
+    "CAND-0053": dict(  # sucesorio / legítima — señalar qué cambió
+        subject="dos versiones de una misma clausula testamentaria, una con una linea tachada y reescrita al margen",
+        environment="despacho notarial con archivadores sucesorios al fondo",
+        camera="35mm, plano cerrado sobre la clausula tachada", focal_point="la reescritura al margen",
+        metaphor="un rio que cambia de cauce sin dejar de ser el mismo rio",
+        acento_objeto="un sello notarial con fecha reciente junto al documento"),
+    "CAND-0013": dict(  # familiar / tutela — mostrar la vía no contenciosa
+        subject="una mesa redonda con dos sillas enfrentadas y una tercera silla vacia a la cabecera",
+        environment="sala de conciliacion familiar con luz calida, sin simbolos judiciales visibles",
+        camera="35mm, plano medio de la mesa completa", focal_point="la silla vacia de la cabecera",
+        metaphor="un espacio construido para que nadie tenga que ganar para que el otro pierda",
+        acento_objeto="una jarra de agua con dos vasos servidos sobre la mesa"),
 }
 
 
