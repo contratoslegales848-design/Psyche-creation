@@ -180,6 +180,105 @@ Ver `docs/prueba-aceptacion-10-temas-2026-09-16.md` (generado por el
 comando de arriba, no escrito a mano) para un ejemplo completo con matriz
 de distancia entre las 10 huellas.
 
+## ACTUALIZACIÓN 17-sep-2026 — Mandato Maestro: motor de conocimiento real, memoria fuerte, contrato de generación
+
+Todo lo de abajo se construyó DESPUÉS de la sección "Motor de dirección
+artística" de arriba, sobre el mismo catálogo maestro (nunca un motor
+paralelo). Este bloque es el punto de entrada real para cualquier sesión
+que retome el trabajo — evita reconstruir la historia leyendo `docs/`
+entero.
+
+**El candidato temático real** (`universe.TopicCandidate`, no una lista
+escrita a mano) nace de `universe.build_reserve()` sobre
+`editorial.py`/`policy/editorial-universe-v1.json` (58 familias
+editoriales reales, semilla abierta — `register_familia()` la amplía sin
+tocar lógica) y pasa por `generator.seleccionar_lote()`: selección
+GREEDY iterativa, multi-factor, con 3 hard gates (repetición semántica,
+saturación editorial, cuota de materia) y factores blandos acotados que
+nunca rescatan un hard gate:
+
+```
+seleccionar_lote(reserva, memoria, mapa_territorio, universo, n=10, ...)
+   por cada candidato restante:
+      hard gates (semantic_memory.evaluar / editorial_saturation / cuota) -> RECHAZO si falla
+      score_base = Σ PESOS[factor] · factor   (novedad, diversidad de lote,
+                    territorio -- territory_explorer.py --, utilidad,
+                    ajuste emocional, cooldown)
+      + ajuste_afinidad_founder()      acotado, de memoria de esta corrida
+                                        Y de memoria_fuerte real (ver abajo)
+      + ajuste_senal_mercado()         acotado, de vacantes reales (market_signal.py)
+      + ajuste_balance_pedagogico()    acotado, ver "Motor pedagógico" abajo
+   toma el mejor superviviente, repite
+```
+
+Todos los ajustes usan el mismo patrón: pequeños, acotados a un máximo
+fijo, exactamente 0.0 sin evidencia, nunca excluyen — sólo el score. Ver
+`generator.py` (docstring completo de cada uno).
+
+### Motor pedagógico — balance conocimiento/narrativa (`pedagogia.py`)
+
+Mandato Maestro §1-3 (17-sep-2026): el Founder detectó riesgo de sesgo
+hacia situaciones humanas/narrativas. Medido primero, no asumido: la
+reserva real de candidatos ya es casi uniforme sobre las 58 familias — sin
+sesgo narrativo medible — pero SIN intervención el selector greedy converge
+a 90-100% conocimiento (narrativa es sólo 5/58 familias:
+`caso_cotidiano`, `caso_historico`, `jurista`, `historia_del_derecho`,
+`cultura_juridica` — clasificación auditable contra su propia
+`funcion_editorial`, ver `pedagogia.FAMILIAS_NARRATIVA`). El riesgo medido
+es que narrativa case desaparezca, no que domine.
+`pedagogia.ajuste_balance_pedagogico()` empuja el score (acotado, nunca
+cuota) hacia un objetivo configurable — 70% conocimiento por defecto,
+`objetivo_conocimiento=None` lo desactiva — medido contra el LOTE EN
+PROGRESO. Verificado con 5 tandas reales consecutivas: 70-80% conocimiento
+sostenido, familias narrativas presentes en las 5, nunca eliminadas.
+
+### Memoria fuerte real — fuente #5 del Contrato v4 (`memoria_fuerte.py`)
+
+Puebla `semantic_memory.SemanticMemory` con datos REALES (no sintéticos)
+de "LegalMente — Memoria fuerte: piezas validadas por el Founder y video
+real" (Drive): 12 piezas `PUBLICADA` (ranking real de Facebook +
+histórico de mayor impacto, métricas verbatim) y 4 `PRESELECCIONADA`
+(validaciones explícitas). Define también `REGLAS_RECHAZO_FOUNDER` (7
+reglas, sección 4 de esa fuente) — mecanismo SEPARADO de `SemanticMemory`
+(los rechazos son reglas negativas de texto, no huellas de piezas; ver el
+docstring del módulo para la incompatibilidad detectada y por qué no se
+forzó el dato). `memoria_fuerte.cargar_memoria_fuerte()` se carga por
+defecto en `production_run.cargar_contexto()` y alimenta:
+
+- **Selección temática** — vía `ajuste_afinidad_founder(..., memoria_fuerte=...)`.
+- **Dirección visual** — vía `art_direction.draft_visual_brief(..., memoria_fuerte=...)`,
+  que también consulta `SemanticMemory.evaluar_visual_fuerte()` (distancia
+  VISUAL contra memoria fuerte, método nuevo y additivo — `evaluar()`
+  original mide sólo tema) y los 7 rechazos, ANTES de compilar el prompt
+  final (`VisualBriefDraft.bloqueado_memoria_fuerte`/
+  `motivos_bloqueo_memoria_fuerte` — el llamador decide, nunca excepción).
+
+### Contrato TEXT_TO_IMAGE vs IMAGE_EDIT (`providers/base.py`, Hotfix 16-sep-2026)
+
+Causa raíz cerrada: `NormalizedImageRequest`/`CompiledVisualRequest` ahora
+declaran `generation_mode` (`TEXT_TO_IMAGE`/`IMAGE_EDIT`) explícito, nunca
+inferido del lenguaje del prompt. `validate_generation_contract()` bloquea
+fail-closed antes de contactar al proveedor si el contrato es
+inconsistente. Ver `docs/contrato-generacion-imagenes-legalmente.md`.
+
+### Límite honesto que sigue abierto — orden Contrato v4 §4/§5
+
+El Contrato v4 exige el orden CONCEPTO → TENSIÓN → METÁFORA → FAMILIA
+VISUAL → técnicas. `visual_fingerprint.seleccionar_huella()` (arriba) NO
+implementa ese orden algorítmicamente: elige `primary_direction` por
+anti-repetición, sin leer concepto/tensión/metáfora, porque este
+repositorio no tiene evidencia real de qué categoría "conviene" a qué
+concepto jurídico y no finge una afinidad inventada (mismo criterio
+fail-closed que `territory_explorer.coherencia()`). El orden real del
+Contrato v4 se satisface hoy en la ETAPA DE AUTORÍA humana/pipeline
+(`demo_produccion_real_10_temas_nuevos.py` autora escena/metáfora
+COMPATIBLES con la huella ya seleccionada, no al revés) — no hay ningún
+algoritmo que derive dirección artística desde el concepto jurídico
+automáticamente, y construir uno fabricaría un juicio editorial que nadie
+ha verificado. No se implementa sin autorización expresa del Founder
+(sería inventar afinidad tema→estilo, prohibido explícitamente en este
+mismo módulo).
+
 ## Añadir un proveedor real
 
 1. `providers/<nombre>.py` con una clase que implemente `ImageProvider`.

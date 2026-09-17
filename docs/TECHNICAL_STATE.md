@@ -3,6 +3,18 @@
 **Fecha:** 2026-08-27 · **Base:** `origin/main` en `82f226e` + ramas `chore/phase1-technical-readiness` y `chore/phase1-p0-confidencialidad-procedencia`
 **Semáforo global: AMARILLO** (los dos P0 quedaron cerrados; el amarillo lo sostienen ahora riesgos declarados, no huecos sin control).
 
+> **NOTA DE VIGENCIA (17-sep-2026):** este documento describe el subsistema de
+> verificación jurídica/publicación y sigue siendo la fuente correcta para ESE
+> alcance (fila "Verificación jurídica", "Gobernanza del gate de arte",
+> "Confidencialidad", "Anti-duplicados", "Separación producción/publicación").
+> **NO describe** el motor editorial/visual construido desde el 16-sep-2026
+> (catálogo maestro de 767 módulos, motor de conocimiento con 58 familias
+> pedagógicas, memoria fuerte real, señal de mercado, contrato TEXT_TO_IMAGE/
+> IMAGE_EDIT) — para eso, el punto de entrada real y vigente es
+> `visual/README.md` (sección "ACTUALIZACIÓN 17-sep-2026" al final). La fila
+> "Motor de generación visual" de la tabla de abajo quedó superada por esa
+> sección; no la actualices aquí, actualiza `visual/README.md`.
+
 Este documento describe lo que **existe y se ejecuta**, no lo que está planeado.
 Regla de lectura (`CLAUDE.md §2`): una mención en un documento no es una capacidad
 implementada. Todo lo que aparece aquí como verde está respaldado por un archivo
