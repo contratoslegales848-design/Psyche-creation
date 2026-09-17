@@ -52,33 +52,20 @@ correspondencia. Quedan disponibles para una extensión futura si aparece
 esa evidencia — no se finge que ya filtran algo que no filtran.
 """
 
-import unicodedata
 from dataclasses import dataclass, field
 
-from memory import normaliza
+from memory import normaliza, normaliza_texto_libre as _texto_libre
 from visual_fingerprint import (
     MasterCatalog, VisualFingerprint, seleccionar_huella as _seleccionar_huella_base,
 )
 
 
-def _texto_libre(s):
-    """Normalización propia para coincidencia textual sobre PROSA del
-    catálogo (valores como 'umbral/puerta', 'huella/impresión') — deliberadamente
-    distinta de `memory.normaliza()`: esa función descarta tokens con
-    puntuación pegada en vez de despuntuarlos (mismo hallazgo real que
-    `memoria_fuerte.py` ya documentó con 'teal,'), lo que aquí colapsaría
-    'umbral/puerta' a cadena vacía — y una cadena vacía es substring de
-    CUALQUIER texto, así que el filtro dejaría de filtrar en silencio (bug
-    real, encontrado y corregido durante la construcción de este módulo:
-    ver test_direccion_causal.py). Aquí "/" se trata como separador de
-    palabra, igual que "-"/"_", nunca se pierde contenido."""
-    if not s:
-        return ""
-    t = unicodedata.normalize("NFKD", str(s).strip().lower())
-    t = "".join(c for c in t if not unicodedata.combining(c))
-    for sep in ("-", "_", "/"):
-        t = t.replace(sep, " ")
-    return " ".join(t.split())
+# `_texto_libre` (bug real encontrado y corregido al construir este módulo:
+# ver test_direccion_causal.py) ahora vive en `memory.normaliza_texto_libre`
+# — promovida ahí (17-sep-2026, continuación safe zone) para que
+# `safe_zone.py` la reutilice en vez de duplicarla otra vez. El alias local
+# se conserva para no romper las llamadas `dc._texto_libre(...)` ya
+# existentes en este módulo y en sus tests.
 
 CONCRETO, INTERMEDIO, ABSTRACTO = "CONCRETO", "INTERMEDIO", "ABSTRACTO"
 

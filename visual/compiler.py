@@ -12,6 +12,7 @@ metadata y una explicacion legible de POR QUE esta peticion y no otra.
 import hashlib
 from dataclasses import dataclass, field, asdict
 
+import safe_zone as sz
 from composition import build_brand_plan
 from plan import canonical_hash
 from providers.base import GENERATION_MODE_TEXT_TO_IMAGE
@@ -45,6 +46,14 @@ class CompiledVisualRequest:
     source_image: bytes = None
     reference_images: tuple = ()
     edit_instruction: str = None
+    # Safe zone multiformato 9:16 -> 4:5 (tarea 78, 17-sep-2026): informativo,
+    # mismo patrón que `brand_plan`/`explanation` — nunca bloquea la
+    # compilación por sí solo (heurística de texto declarado, no visión por
+    # computadora: puede tener falsos positivos, ver safe_zone.py). Quien
+    # orquesta (QA de lote, demo, gate humano) decide qué hacer con
+    # `crop_safe_4_5_ok=False`, igual que con `memoria_fuerte_ok`.
+    crop_safe_4_5_ok: bool = True
+    crop_safe_4_5_detalle: dict = field(default_factory=dict)
 
     @property
     def negative_prompt(self):
@@ -108,6 +117,21 @@ def compile_request(brief, policy, family=None, capabilities=None, repetition=No
     comp = policy.data.get("composicion", {})
     explicacion = []
 
+    # Safe zone multiformato 9:16 -> 4:5 (tarea 78): sólo se calcula/instruye
+    # cuando el formato pedido declara `crop_safe_for` en la política — nunca
+    # se fuerza sobre un formato que el Founder pidió explícitamente distinto.
+    safe_zone_geometria = None
+    if fmt.get("crop_safe_for"):
+        safe_zone_geometria = sz.calcular_geometria(policy, formato_maestro=brief.formato)
+        explicacion.append(
+            f"safe zone: {brief.formato!r} declara crop_safe_for={fmt['crop_safe_for']!r}; "
+            f"área segura entre px {safe_zone_geometria.safe_top} y "
+            f"{safe_zone_geometria.safe_bottom} desde arriba.")
+    crop_safe_ok, crop_safe_reasons, crop_safe_detalle = sz.crop_safe_4_5(
+        brief, policy=policy, geometria=safe_zone_geometria)
+    if not crop_safe_ok:
+        explicacion.extend(f"safe zone 4:5: {r}" for r in crop_safe_reasons)
+
     partes = [
         f"Una sola escena. {brief.subject}.",
         f"Entorno: {brief.environment}.",
@@ -115,6 +139,9 @@ def compile_request(brief, policy, family=None, capabilities=None, repetition=No
         f"Familia visual: {brief.visual_family.replace('_', ' ')}.",
     ]
     explicacion.append(f"familia visual: {brief.visual_family}")
+
+    if safe_zone_geometria is not None:
+        partes.append(sz.instruccion_compilada(safe_zone_geometria))
 
     if fingerprint is not None:
         partes.append(_direccion_artistica_texto(fingerprint))
@@ -225,6 +252,8 @@ def compile_request(brief, policy, family=None, capabilities=None, repetition=No
     }
     if fingerprint is not None:
         metadata["visual_fingerprint"] = fingerprint.to_dict()
+    if safe_zone_geometria is not None:
+        metadata["safe_zone_geometry"] = safe_zone_geometria.to_dict()
 
     composition_intent = f"una escena, {brief.focal_point}"
     if fingerprint is not None and fingerprint.composition:
@@ -244,6 +273,8 @@ def compile_request(brief, policy, family=None, capabilities=None, repetition=No
         provider_parameters=parametros,
         explanation=explicacion,
         metadata=metadata,
+        crop_safe_4_5_ok=crop_safe_ok,
+        crop_safe_4_5_detalle=crop_safe_detalle,
     )
 
 

@@ -226,7 +226,7 @@ def ejecutar():
 
         resultados.append(dict(
             candidato=c, puntuacion=p, direccion=direccion, huella=huella, compilado=compilado,
-            clasif_repeticion=clasif_rep, etiqueta_taxonomia=etiqueta_taxonomia,
+            brief=brief, clasif_repeticion=clasif_rep, etiqueta_taxonomia=etiqueta_taxonomia,
             razon_taxonomia=razon_taxonomia, origen=origen))
 
     mezcla = tc.reportar_mezcla_editorial(seleccion)
@@ -246,6 +246,77 @@ def matriz_similitud_visual(resultados):
             fila.append(f"{d}/{k}")
         filas.append(fila)
     return filas
+
+
+# Categorías representativas del mandato ("DEMO REAL", tarea 78): una
+# figura jurídica, una pieza probatoria/procesal, una pieza conceptual. Se
+# eligen por `familia_editorial` real (no por candidate_id fijo — esos ya
+# demostraron poder desplazarse cuando el registro editorial crece), con un
+# fallback posicional si ninguna coincide en un lote futuro distinto.
+_FAMILIAS_FIGURA_JURIDICA = ("obligacion", "derecho", "requisito", "responsabilidad")
+_FAMILIAS_PROBATORIA_PROCESAL = ("carga_de_la_prueba", "evidencia_digital", "prueba",
+                                "etapa_procesal", "proceso")
+_FAMILIAS_CONCEPTUAL = ("etimologia", "concepto", "definicion_operativa", "paradoja_tension")
+
+
+def _elegir_representativo(resultados, familias, usados):
+    for r in resultados:
+        if r["candidato"].candidate_id in usados:
+            continue
+        if r["candidato"].familia_editorial in familias:
+            return r
+    for r in resultados:
+        if r["candidato"].candidate_id not in usados:
+            return r
+    return resultados[0]
+
+
+def _seccion_safe_zone(resultados):
+    usados = set()
+    seleccionados = []
+    for etiqueta, familias in (
+        ("figura jurídica", _FAMILIAS_FIGURA_JURIDICA),
+        ("pieza probatoria/procesal", _FAMILIAS_PROBATORIA_PROCESAL),
+        ("pieza conceptual", _FAMILIAS_CONCEPTUAL),
+    ):
+        r = _elegir_representativo(resultados, familias, usados)
+        usados.add(r["candidato"].candidate_id)
+        seleccionados.append((etiqueta, r))
+
+    lineas = [
+        "## Safe zone multiformato 9:16 → 4:5 (tarea 78, evidencia real)",
+        "",
+        "Regla canónica: \"9:16 visualmente amplio; 4:5 semánticamente completo\" — "
+        "`safe_zone.py`, aplicada aquí sobre 3 piezas reales de este mismo lote (no un "
+        "ejemplo aparte). PLAN/PROMPT únicamente: no se rasteriza ninguna imagen — la "
+        "evidencia es estructural, sobre el `VisualBrief` real de cada pieza.",
+        "",
+    ]
+    for etiqueta, r in seleccionados:
+        c, brief, comp = r["candidato"], r["brief"], r["compilado"]
+        geo = comp.metadata.get("safe_zone_geometry") or {}
+        detalle = comp.crop_safe_4_5_detalle
+        lineas += [
+            f"### {etiqueta}: {c.candidate_id} — {c.concepto_nucleo}",
+            "",
+            f"- **Permanece dentro del crop (elementos esenciales declarados):** "
+            f"subject={brief.subject!r}; focal_point={brief.focal_point!r}; "
+            f"metaphor={brief.metaphor!r}; acento_objeto={brief.acento_objeto!r}; "
+            f"marca_superficie={brief.marca_superficie!r}.",
+            f"- **Puede perderse arriba (0–{geo.get('crop_top', '?')}px) o abajo "
+            f"({geo.get('crop_bottom', '?')}–{geo.get('canvas_height', '?')}px) sin cambiar el "
+            f"mensaje (elementos decorativos declarados):** environment={brief.environment!r}; "
+            f"camera={brief.camera!r}.",
+            f"- **Por qué el mensaje sigue íntegro:** ningún elemento esencial depende de la "
+            "extensión superior/inferior — el concepto jurídico, el objeto/documento focal, la "
+            "metáfora y la marca viven, por declaración estructural, en `subject`/`focal_point`/"
+            "`metaphor`/`acento_objeto`/`marca_superficie`, nunca en `environment`/`camera` "
+            "(ver `safe_zone.CAMPOS_ESENCIALES`/`CAMPOS_DECORATIVOS`).",
+            f"- **`crop_safe_4_5()`:** {'PASS' if comp.crop_safe_4_5_ok else 'FAIL'} "
+            f"({'sin coincidencias de riesgo en campos esenciales' if comp.crop_safe_4_5_ok else detalle.get('campos_esenciales_en_riesgo')}).",
+            "",
+        ]
+    return lineas
 
 
 def reporte_markdown(resultados, reporte_lote_visual, intentos, mezcla, rechazados, señales):
@@ -309,8 +380,12 @@ def reporte_markdown(resultados, reporte_lote_visual, intentos, mezcla, rechazad
             f"{r['clasif_repeticion'].motivo}",
             "13. **Comprobación visual anti-repetición:** ver matriz de distancia al final del "
             f"documento; huella incluida en el QA de lote ({reporte_lote_visual.veredicto}).",
+            f"14. **Safe zone 4:5 (tarea 78):** {'OK' if comp.crop_safe_4_5_ok else 'FALLA'} — "
+            f"{'ningún campo esencial declara una zona de riesgo.' if comp.crop_safe_4_5_ok else '; '.join(comp.crop_safe_4_5_detalle.get('campos_esenciales_en_riesgo', {}))}",
             "",
         ]
+
+    lineas += _seccion_safe_zone(resultados)
 
     lineas += ["## Matriz de distancia visual entre las 10 huellas (dimensiones distintas / conocidas)", ""]
     ids = [r["candidato"].candidate_id.replace("CAND-", "") for r in resultados]

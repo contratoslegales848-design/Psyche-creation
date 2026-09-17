@@ -1,9 +1,15 @@
 {
-  "policy_version": "1.1",
+  "policy_version": "1.2",
   "descripcion": "Politica visual ejecutable de LegalMente. Solo contiene reglas que un programa puede comprobar. Las reglas de criterio (que escuela artistica toca, que metafora) viven en la skill legalmente-visual-system y NO se duplican aqui.",
   "formatos": {
-    "VERTICAL_9_16": {"width": 1080, "height": 1920, "aspect_ratio": "9:16", "full_bleed": true},
+    "VERTICAL_9_16": {"width": 1080, "height": 1920, "aspect_ratio": "9:16", "full_bleed": true,
+      "crop_safe_for": "SOCIAL_4_5"},
     "SOCIAL_4_5": {"width": 1080, "height": 1350, "aspect_ratio": "4:5", "full_bleed": true}
+  },
+  "safe_zone": {
+    "nota": "Regla canonica (Founder, 17-sep-2026, tarea 78): '9:16 visualmente amplio; 4:5 semanticamente completo'. Toda pieza maestra VERTICAL_9_16 debe seguir siendo semantica y visualmente completa si se le aplica un recorte CENTRAL SOCIAL_4_5. NO es 'generar dos versiones': el asset maestro sigue siendo 9:16 -- lo que cambia es que el contenido indispensable vive dentro de una safe zone interior al area que sobrevive al recorte. El recorte se calcula SIEMPRE a partir de los formatos ya declarados arriba (formatos.VERTICAL_9_16 / formatos.SOCIAL_4_5), nunca con numeros propios repetidos aqui.",
+    "padding_interno_ratio": 0.06,
+    "nota_padding": "6% del alto del crop 4:5 como margen interno adicional, a cada lado (arriba y abajo). No se asume que Facebook (u otra superficie) recorte exactamente igual en todos los contenedores -- por eso el margen es deliberadamente conservador y no coincide con el borde exacto del crop."
   },
   "composicion": {
     "scene_count": 1,

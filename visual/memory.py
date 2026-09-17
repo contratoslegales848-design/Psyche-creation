@@ -52,6 +52,28 @@ def normaliza(texto):
     return " ".join(c for c in t.split() if c.isalnum() or " " in c)
 
 
+def normaliza_texto_libre(texto):
+    """Normalización sobre PROSA libre (valores con '/', frases con
+    puntuación pegada) — deliberadamente distinta de `normaliza()`: esa
+    función descarta cualquier token con puntuación pegada en vez de
+    despuntuarlo (hallazgo real, primero documentado en `memoria_fuerte.py`
+    con 'teal,' y luego en `direccion_causal.py` con 'umbral/puerta'), lo
+    que puede colapsar un token a cadena vacía — y una cadena vacía es
+    substring de CUALQUIER texto, así que un filtro basado en `normaliza()`
+    puede dejar de filtrar en silencio. Aquí "/", "-", "_" y ":" se tratan
+    como separadores de palabra: nunca se pierde contenido. Promovida a este
+    módulo (17-sep-2026, continuación safe zone) para que
+    `direccion_causal.py` y `safe_zone.py` compartan una sola fuente de
+    verdad en vez de duplicar la misma normalización dos veces."""
+    if not texto:
+        return ""
+    t = unicodedata.normalize("NFKD", str(texto).strip().lower())
+    t = "".join(c for c in t if not unicodedata.combining(c))
+    for sep in ("-", "_", "/", ":"):
+        t = t.replace(sep, " ")
+    return " ".join(t.split())
+
+
 @dataclass
 class VisualMemoryEntry:
     """Huella de una generacion. Se registra al aceptarse el asset, no antes."""

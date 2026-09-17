@@ -299,23 +299,92 @@ inferido del lenguaje del prompt. `validate_generation_contract()` bloquea
 fail-closed antes de contactar al proveedor si el contrato es
 inconsistente. Ver `docs/contrato-generacion-imagenes-legalmente.md`.
 
-### Límite honesto que sigue abierto — orden Contrato v4 §4/§5
+### Orden causal Contrato v4 §4/§5 — RESUELTO (`direccion_causal.py`, continuación Mandato Maestro, 17-sep-2026)
 
-El Contrato v4 exige el orden CONCEPTO → TENSIÓN → METÁFORA → FAMILIA
-VISUAL → técnicas. `visual_fingerprint.seleccionar_huella()` (arriba) NO
-implementa ese orden algorítmicamente: elige `primary_direction` por
-anti-repetición, sin leer concepto/tensión/metáfora, porque este
-repositorio no tiene evidencia real de qué categoría "conviene" a qué
-concepto jurídico y no finge una afinidad inventada (mismo criterio
-fail-closed que `territory_explorer.coherencia()`). El orden real del
-Contrato v4 se satisface hoy en la ETAPA DE AUTORÍA humana/pipeline
-(`demo_produccion_real_10_temas_nuevos.py` autora escena/metáfora
-COMPATIBLES con la huella ya seleccionada, no al revés) — no hay ningún
-algoritmo que derive dirección artística desde el concepto jurídico
-automáticamente, y construir uno fabricaría un juicio editorial que nadie
-ha verificado. No se implementa sin autorización expresa del Founder
-(sería inventar afinidad tema→estilo, prohibido explícitamente en este
-mismo módulo).
+**Corrección de esta misma sección** (quedó desactualizada tras resolverse
+el gap, sin corregirse en su momento — lección operativa registrada en
+`docs/TECHNICAL_STATE.md`): el orden CONCEPTO → TENSIÓN → IDEA → METÁFORA →
+ESCENA → DIRECCIÓN ARTÍSTICA que pedía el Contrato v4 YA está implementado
+algorítmicamente, sin fabricar una tabla "concepto=estilo" (explícitamente
+prohibida por el mandato que cerró este gap). `direccion_causal.
+seleccionar_direccion_causal()` deriva un `Significado` determinista y
+auditable de cada `TopicCandidate` (concepto, tensión, movimiento jurídico,
+grado de abstracción, contraste — cada uno citando qué campo real lo causó),
+restringe SÓLO 2 de las 10 dimensiones del catálogo maestro (`realism`,
+`visual_mechanism`) al subconjunto causalmente compatible con ese
+significado, y reutiliza sin cambios el motor de anti-repetición de
+`visual_fingerprint.seleccionar_huella()` sobre esa vista filtrada. Las
+otras 8 dimensiones (incluida la biblioteca de 504 `primary_direction`)
+siguen rotando por anti-repetición pura — límite honesto documentado en el
+propio módulo, no un oversight. `art_direction.draft_visual_brief()` llama
+a este compilador en vez de la selección ciega anterior. Demostración:
+`python3 demo_reconciliation.py` y `test_direccion_causal.py` (24 tests,
+incluida la prueba de que la materia NO determina el estilo y de que
+cambiar la tensión sí puede cambiar la dirección visual con la materia
+constante).
+
+### Safe zone multiformato 9:16 → 4:5 (`safe_zone.py`, tarea 78, 17-sep-2026)
+
+**Regla canónica: "9:16 visualmente amplio; 4:5 semánticamente completo".**
+Toda pieza maestra `VERTICAL_9_16` (1080×1920) debe seguir siendo semántica
+y visualmente completa si se le aplica un recorte CENTRAL `SOCIAL_4_5`
+(1080×1350) — Facebook u otra superficie puede hacerlo sin avisar. **Esto
+NO es "generar dos versiones"**: el asset maestro sigue siendo 9:16; lo que
+cambia es que el contenido indispensable vive dentro de una safe zone
+interior al área que sobrevive al recorte, y la extensión superior/inferior
+se usa activamente como expansión artística (atmósfera, profundidad),
+nunca como excusa para centrar todo y vaciar el fondo. **Una pieza 9:16 no
+pasa producción si al recortarse centralmente a 4:5 pierde información
+jurídica esencial.**
+
+- **Geometría** (`legalmente-visual-policy-v1.json`, sección `formatos` +
+  `safe_zone` nuevas): `VERTICAL_9_16` declara `crop_safe_for:
+  "SOCIAL_4_5"`; el recorte central elimina 285px arriba y 285px abajo
+  (mismo ancho, alto reducido simétricamente), y la safe zone real añade un
+  padding interno del 6% (`safe_zone.padding_interno_ratio`, también en la
+  política) porque distintas superficies no garantizan recortar
+  exactamente igual — el margen es deliberadamente conservador, nunca el
+  borde exacto del crop. `safe_zone.calcular_geometria(policy)` deriva
+  todo esto de los formatos YA declarados; ningún número de canvas/crop se
+  repite aparte.
+- **Clasificación esencial/decorativo**: reutiliza los campos YA
+  declarados de `brief.VisualBrief` — `subject`/`focal_point`/`metaphor`/
+  `acento_objeto` (y `marca_superficie` cuando la integración física de
+  marca es obligatoria) son esenciales por su propio significado; `
+  environment`/`camera`/`negative_space`/`key_light`/`brightness_intent`
+  son atmósfera/puesta en escena y pueden vivir en la extensión que el
+  recorte elimina.
+- **Compilación** (`compiler.compile_request()`): cuando el formato pedido
+  declara `crop_safe_for`, el prompt compilado incluye una instrucción
+  determinista (derivada de la geometría real, nunca texto libre inventado
+  cada vez) — "componer nativamente para 9:16 completo... pero mantener
+  todo el contenido esencial dentro del área central segura... usar las
+  extensiones sólo para atmósfera". `CompiledVisualRequest` gana
+  `crop_safe_4_5_ok`/`crop_safe_4_5_detalle` — informativo, mismo patrón
+  que `memoria_fuerte_ok`: nunca bloquea la compilación por sí solo, quien
+  orquesta decide.
+- **QA** (`safe_zone.crop_safe_4_5()`): sin visión por computadora — no hay
+  bounding boxes reales para la escena que genera el proveedor de imagen
+  (mismo límite honesto que `compositor.py` declara para la superficie de
+  marca). El QA opera sobre la representación semántica REAL que el sistema
+  sí controla: el texto declarado de cada campo del brief, con patrones de
+  riesgo de zona (mismo patrón de coincidencia que
+  `memoria_fuerte.REGLAS_RECHAZO_FOUNDER`, vía la normalización compartida
+  `memory.normaliza_texto_libre()`). Un campo ESENCIAL que declara una
+  ubicación de riesgo (extremo superior, extremo inferior, fuera del
+  recorte) falla; el mismo texto en un campo decorativo nunca falla — ahí
+  es exactamente donde debe vivir.
+- **Evidencia real**: `demo_produccion_real_10_temas_nuevos.py` documenta,
+  sobre 3 piezas reales del mismo lote (una figura jurídica, una pieza
+  probatoria/procesal, una pieza conceptual), qué permanece dentro del
+  crop, qué puede perderse arriba/abajo y por qué el mensaje sigue íntegro
+  — ver `docs/prueba-real-produccion-10-temas-2026-09-16.md`, sección
+  "Safe zone multiformato 9:16 → 4:5".
+- **Tests**: `test_safe_zone.py` (26) — geometría, contenido crítico
+  (PASS/FAIL adversarial), formatos (9:16 declara compatibilidad sin
+  forzar un segundo asset; `SOCIAL_4_5` nativo no aplica la regla),
+  regresión (compila igual, nunca bloquea, diversidad artística intacta) y
+  determinismo (misma entrada → misma geometría/instrucción/veredicto).
 
 ## Añadir un proveedor real
 
