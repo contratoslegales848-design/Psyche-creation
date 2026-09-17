@@ -159,9 +159,93 @@ el Índice maestro v18. Esa adenda:
    RESULTADO → DECISIÓN, igual que los demás registros de Bitácora del
    proyecto.
 
+## ACTUALIZACIÓN 17-sep-2026 — brecha resuelta en código, pendiente de merge
+
+Autorización del Founder (16-sep-2026): "construir el wiring real de
+memoria fuerte al selector... sólo construcción y prueba en la rama
+actual — NO autoriza merge, deploy ni publicación." La brecha descrita
+abajo (sección "Brecha detectada", conservada tal cual para trazabilidad)
+queda **RESUELTA EN CÓDIGO, PENDIENTE DE MERGE**:
+
+1. `visual/memoria_fuerte.py` (nuevo) — puebla `SemanticMemory` con las 12
+   piezas PUBLICADA de las secciones 1 y 2 de la fuente #5 (métricas reales
+   verbatim en `titulo_original`/`metricas`) y las 4 piezas PRESELECCIONADA
+   de la sección 5. Define `REGLAS_RECHAZO_FOUNDER` (7 reglas, una por cada
+   rechazo de la sección 4) y `verificar_rechazos_founder()` — mecanismo
+   SEPARADO de `SemanticMemory` (ver "Incompatibilidad detectada" abajo).
+2. `visual/semantic_memory.py` — nuevo método additivo
+   `SemanticMemory.evaluar_visual_fuerte()`: distancia VISUAL (no sólo de
+   tema) contra memoria fuerte únicamente. `evaluar()` no se modificó.
+3. `visual/art_direction.py::draft_visual_brief()` — nuevos parámetros
+   `memoria_fuerte`/`reglas_rechazo_founder`; nuevos campos
+   `bloqueado_memoria_fuerte`/`motivos_bloqueo_memoria_fuerte` en
+   `VisualBriefDraft`. Nunca lanza excepción — el llamador decide, mismo
+   patrón que `validate_generation_contract()`/`negotiate()`
+   (`providers/base.py`, Hotfix contrato de generación del 16-sep-2026).
+4. `visual/production_run.py` — `cargar_contexto()` carga memoria fuerte
+   real por defecto; `producir_y_dirigir()`/`ejecutar()` la propagan;
+   `QADosEjes` gana `memoria_fuerte_ok`/`memoria_fuerte_detalle`.
+
+### Incompatibilidad detectada (según lo pedido: documentar antes de forzar el dato)
+
+Los 7 rechazos de la sección 4 NO son huellas de piezas generadas — son
+reglas negativas en lenguaje natural sin materia/concepto/necesidad.
+Forzarlos en `MemoryEntry`/`SemanticFingerprint` habría sido incorrecto:
+`SemanticMemory.evaluar()` pondera EJES_SEMANTICOS (materia, concepto,
+necesidad...) y nunca calculó `distancia_visual()` — un rechazo sin esos
+datos sólo habría contribuido "sin dato" y jamás habría disparado un
+bloqueo, dando una falsa sensación de cobertura. Extensión mínima elegida:
+`ReglaRechazoFounder` + `verificar_rechazos_founder()`, coincidencia
+textual determinista contra los campos libres de la huella visual real —
+mecanismo separado, no una extensión forzada del esquema de huella. Detalle
+completo en el docstring de `visual/memoria_fuerte.py`.
+
+### Límite honesto encontrado durante la implementación
+
+`escena`/`objeto_protagonista` siguen `PENDIENTE_CONTENIDO` en la etapa de
+`draft_visual_brief()` (se redactan después, sobre una pieza ya verificada
+— sin cambios por este Hotfix). La comparación de "arquitectura/escena/
+objeto de marca" contra memoria fuerte sólo puede ejecutarse HOY sobre lo
+que el borrador ya conoce en ese punto: dirección artística, medio,
+material, composición, cámara e iluminación — no sobre escena/objeto de
+marca concretos. También: `verificar_rechazos_founder()` reutiliza
+`memory.normaliza()`, que descarta (no despuntúa) tokens con puntuación
+pegada — riesgo real pero acotado de falso negativo, nunca de falso
+positivo nuevo; documentado en el docstring del módulo.
+
+### Verificación real (no sólo unitaria)
+
+Barrido de 150 candidatos reales (`universe.build_reserve(seed=555,
+factor=15)`) contra la memoria fuerte real: **0 falsos positivos**. Caso
+adversarial verificado con la propia herramienta de rechazos: `"fotografía
+de hora dorada sin dominante sepia"` (frase real del catálogo maestro) NO
+dispara el rechazo de sepia — de no corregirse, habría sido un falso
+positivo real sobre dirección artística legítima. Suite completa
+(`python3 -m unittest discover -p "test_*.py"`) verificada en verde tras el
+cambio — ver commits de esta incorporación para el conteo exacto.
+
+### Tests añadidos
+
+`visual/test_memoria_fuerte.py` (23 tests: ingestión, detección de tema
+normal, caso límite de materia compartida, `evaluar_visual_fuerte()`, 7
+reglas de rechazo una por una + caso de negación) y una nueva clase en
+`visual/test_art_direction.py`
+(`TestMemoriaFuerteEnDraftVisualBrief`, 6 tests: normal sin memoria fuerte,
+normal con memoria fuerte poblada, límite de repetición de tema real,
+adversarial de rechazo explícito, desactivación explícita, y prueba de que
+nunca lanza excepción).
+
+### Estado
+
+CONSTRUIDO Y PROBADO en la rama `claude/legalmente-architecture-reconciliation-xojn4i`.
+**NO MERGE. NO DEPLOY. NO PUBLICACIÓN** — exactamente como autorizó el
+Founder. El siguiente paso ejecutable es la revisión y decisión de merge
+del Founder.
+
 ## Brecha detectada — bloqueador abierto (no implementado)
 
-**No implementar sin autorización expresa de merge/deploy.** Diseño
+**HISTÓRICO — ver "ACTUALIZACIÓN 17-sep-2026" arriba para el estado
+vigente.** Se conserva sin editar por trazabilidad. Diseño
 propuesto únicamente para que quede documentado qué haría falta, no como
 instrucción de ejecución:
 

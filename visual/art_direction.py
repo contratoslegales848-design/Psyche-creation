@@ -51,8 +51,9 @@ correcta para UNA cosa distinta, no visual: qué superficie física de marca
 sugerir (eso nunca fue parte del hallazgo de monotonía).
 """
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 
+import memoria_fuerte as mf
 import visual_fingerprint as vf
 from memory import normaliza
 
@@ -181,6 +182,14 @@ class VisualBriefDraft:
     metafora: str = ""    # PENDIENTE_CONTENIDO deliberado
     autorizado: bool = False
     nota: str = ""
+    # Memoria fuerte (fuente #5, Contrato v4) — ver memoria_fuerte.py.
+    # El CALLER debe comprobar este campo ANTES de compilar el prompt final:
+    # draft_visual_brief() nunca lanza excepción ni detiene la generación por
+    # sí solo (mismo patrón que validate_generation_contract()/negotiate()):
+    # devuelve el problema para que quien orquesta decida, y así el bloqueo
+    # ocurre antes de generar, nunca después (mandato Hotfix memoria fuerte).
+    bloqueado_memoria_fuerte: bool = False
+    motivos_bloqueo_memoria_fuerte: list = field(default_factory=list)
 
     def to_dict(self):
         from dataclasses import asdict
@@ -226,7 +235,8 @@ def verificar_diversidad_de_estilos(drafts, catalogo_maestro=None, n_esperado=No
 
 def draft_visual_brief(candidato, perfil_emocional, catalogo_maestro=None,
                        memoria_huellas=None, canal="", registro_familias=None,
-                       memoria_visual=None, evitar_familias=()):
+                       memoria_visual=None, evitar_familias=(),
+                       memoria_fuerte=None, reglas_rechazo_founder=None):
     """Construye el borrador. `perfil_emocional` es el dict que ya trae el
     candidato (`candidato.perfil_emocional`, poblado por emotion.py) — no se
     vuelve a derivar aquí: una capa posterior nunca reinfiere lo que una
@@ -243,6 +253,23 @@ def draft_visual_brief(candidato, perfil_emocional, catalogo_maestro=None,
     `superficie_marca_sugerida` ahora (un eje de marca, no de monotonía
     visual) — se aceptan por compatibilidad, y son opcionales: sin ellos,
     `superficie_marca_sugerida` queda vacía en vez de forzar un valor.
+
+    `memoria_fuerte` (`semantic_memory.SemanticMemory`, normalmente
+    `memoria_fuerte.cargar_memoria_fuerte()`) y `reglas_rechazo_founder`
+    (`memoria_fuerte.REGLAS_RECHAZO_FOUNDER` por defecto) son el wiring de
+    la fuente #5 del Contrato v4 (Hotfix memoria fuerte, 16-sep-2026): antes
+    de que el llamador compile el prompt final, este borrador ya trae
+    `bloqueado_memoria_fuerte`/`motivos_bloqueo_memoria_fuerte` poblados si
+    el candidato repite tema o puesta en escena de una pieza APROBADA/
+    PUBLICADA/PRESELECCIONADA, o si su dirección artística reproduce un
+    rechazo explícito del Founder (sección 4 de la fuente). `memoria_fuerte`
+    es opcional (`None` desactiva la comparación contra piezas reales — no
+    hay memoria fuerte que consultar sin ella); los 7 rechazos SÍ se
+    verifican siempre por defecto, porque son reglas de diseño permanentes,
+    no una memoria que dependa de estar poblada. Este método NUNCA lanza
+    excepción ni detiene nada por sí solo: el llamador debe comprobar
+    `bloqueado_memoria_fuerte` antes de seguir (mismo patrón que
+    `validate_generation_contract()`/`negotiate()` en providers/base.py).
     """
     funcion, razon = derivar_funcion_visual(candidato.familia_editorial, candidato.necesidad)
 
@@ -256,6 +283,22 @@ def draft_visual_brief(candidato, perfil_emocional, catalogo_maestro=None,
         familia_marca = elegir_familia_visual(registro_familias, memoria_visual, evitar_familias)
         superficie = (familia_marca.brand_surface_preferences[0]
                      if familia_marca.brand_surface_preferences else "")
+
+    motivos_bloqueo = list(mf.verificar_rechazos_founder(huella, perfil_emocional,
+                                                         reglas_rechazo_founder))
+    if memoria_fuerte is not None:
+        huella_comparacion = replace(
+            candidato.fingerprint(), direccion_artistica=huella.primary_direction,
+            material=huella.materiality, composicion=perfil_emocional.get("composicion", ""),
+            camara=perfil_emocional.get("camara", ""), iluminacion=perfil_emocional.get("luz", ""))
+        veredicto_tema = memoria_fuerte.evaluar(huella_comparacion)
+        if veredicto_tema.bloquea:
+            motivos_bloqueo.append(f"tema ya en memoria fuerte: {veredicto_tema.motivo} "
+                                   f"(fuente: {mf.citar_fuente()})")
+        veredicto_escena = memoria_fuerte.evaluar_visual_fuerte(huella_comparacion)
+        if veredicto_escena.bloquea:
+            motivos_bloqueo.append(f"puesta en escena ya en memoria fuerte: "
+                                   f"{veredicto_escena.motivo} (fuente: {mf.citar_fuente()})")
 
     return VisualBriefDraft(
         content_id=candidato.candidate_id, visual_function=funcion, razon_funcion=razon,
@@ -272,4 +315,6 @@ def draft_visual_brief(candidato, perfil_emocional, catalogo_maestro=None,
         ritmo=perfil_emocional.get("ritmo", ""),
         escena=PENDIENTE_CONTENIDO, metafora=PENDIENTE_CONTENIDO,
         autorizado=False,
-        nota="Borrador pre-verificación. No autoriza producción ni sustituye brief.py.")
+        nota="Borrador pre-verificación. No autoriza producción ni sustituye brief.py.",
+        bloqueado_memoria_fuerte=bool(motivos_bloqueo),
+        motivos_bloqueo_memoria_fuerte=motivos_bloqueo)

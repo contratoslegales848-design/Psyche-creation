@@ -178,6 +178,42 @@ class SemanticMemory:
                                         f"(umbral {self.umbral}).", d.valor)
         return peor
 
+    def evaluar_visual_fuerte(self, fingerprint):
+        """¿La dirección visual del candidato repite la puesta en escena de
+        una pieza ya en memoria fuerte (APROBADA/PUBLICADA/PRESELECCIONADA)?
+
+        Distinto de `evaluar()`: `evaluar()` mide equivalencia de TEMA
+        (`distancia_semantica()`, EJES_SEMANTICOS) — nunca tocó los ejes
+        visuales. Este método mide equivalencia de PUESTA EN ESCENA
+        (`distancia_visual()`, EJES_VISUALES) y sólo contra memoria fuerte:
+        memoria corta/histórica de estilo ya la cubre `visual_fingerprint.py`
+        (cooldown de huella reciente del catálogo maestro), que no es una
+        señal "positiva" — mezclarla aquí confundiría "ya se generó" con
+        "el Founder ya lo aprobó".
+
+        Extensión añadida por la incorporación de la fuente #5 (memoria
+        fuerte real, ver `memoria_fuerte.py`) — additiva, no cambia el
+        comportamiento de `evaluar()`.
+        """
+        fuertes = [e for e in self._entries if e.estado in MEMORIA_FUERTE]
+        if not fuertes:
+            return Veredicto(False, "memoria fuerte vacía: nada con que comparar.", 1.0)
+
+        peor = Veredicto(False, "ninguna pieza de memoria fuerte es visualmente equivalente.", 1.0)
+        for e in fuertes:
+            d = fingerprint.distancia_visual(e.fp())
+            if not d.comparable:
+                continue
+            if d.valor < self.umbral:
+                cid = e.fingerprint.get("content_id", "?")
+                motivo = (f"repite arquitectura/escena/objeto de marca de {cid!r}, ya en "
+                          f"memoria fuerte como {e.estado} (distancia visual {d.valor}).")
+                return Veredicto(True, motivo, d.valor, cid, e.estado)
+            if d.valor < peor.distancia:
+                peor = Veredicto(False, f"lo más parecido en memoria fuerte está a distancia "
+                                        f"visual {d.valor} (umbral {self.umbral}).", d.valor)
+        return peor
+
     # --- aprendizaje desde la curaduría del fundador -----------------------
     def registrar_seleccion(self, seleccionados, descartados, lote_id=""):
         """La selección humana es FEEDBACK, no permiso previo (Handoff §5).

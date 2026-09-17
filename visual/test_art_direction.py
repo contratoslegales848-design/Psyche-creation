@@ -10,6 +10,7 @@ import unittest
 import art_direction as ad
 import emotion
 import families
+import memoria_fuerte as mf
 import universe
 import visual_fingerprint as vf
 from memory import VisualMemory, VisualMemoryEntry
@@ -206,6 +207,106 @@ class TestDiversidadDeEstilos(unittest.TestCase):
     def test_sin_ninguna_fuente_lanza_error_explicito(self):
         with self.assertRaises(ValueError):
             ad.verificar_diversidad_de_estilos([self.draft("x")], n_esperado=1)
+
+
+class TestMemoriaFuerteEnDraftVisualBrief(unittest.TestCase):
+    """Hotfix memoria fuerte (autorización del Founder, 16-sep-2026) —
+    integración de la fuente #5 en `draft_visual_brief()`. Casos normal,
+    límite y adversarial (Contrato v4 §8)."""
+
+    def setUp(self):
+        self.registro = families.VisualFamilyRegistry.load()
+        self.catalogo = vf.MasterCatalog.load()
+
+    def candidato(self, **kw):
+        base = dict(candidate_id="X", materia="civil", submateria="s",
+                   familia_editorial="mito", necesidad="corregir", rol_lector="persona",
+                   angulo="a", contexto_funcional="c", profundidad="base", formato="frase",
+                   concepto_nucleo="n", relacion="r", pregunta_resuelta="p")
+        base.update(kw)
+        return universe.TopicCandidate(**base)
+
+    def test_normal_sin_memoria_fuerte_no_cambia_el_comportamiento_previo(self):
+        """`memoria_fuerte=None` (por omisión) preserva el comportamiento de
+        antes del Hotfix: nunca bloquea por tema/escena repetidos, sólo por
+        los 7 rechazos permanentes del Founder (que sí corren por defecto)."""
+        c = self.candidato()
+        perfil = emotion.derivar(necesidad=c.necesidad, familia_editorial=c.familia_editorial)
+        d = ad.draft_visual_brief(c, perfil.to_dict(), self.catalogo, registro_familias=self.registro)
+        self.assertIsInstance(d.bloqueado_memoria_fuerte, bool)
+        self.assertIsInstance(d.motivos_bloqueo_memoria_fuerte, list)
+
+    def test_normal_memoria_fuerte_poblada_no_bloquea_un_candidato_distinto(self):
+        memoria = mf.cargar_memoria_fuerte()
+        c = self.candidato(concepto_nucleo="un concepto jurídico sin relación con la fuente #5")
+        perfil = emotion.derivar(necesidad=c.necesidad, familia_editorial=c.familia_editorial)
+        d = ad.draft_visual_brief(c, perfil.to_dict(), self.catalogo, registro_familias=self.registro,
+                                  memoria_fuerte=memoria)
+        self.assertFalse(d.bloqueado_memoria_fuerte, d.motivos_bloqueo_memoria_fuerte)
+
+    def test_limite_repetir_tema_de_pieza_publicada_bloquea_antes_de_compilar(self):
+        """Caso límite: el candidato reproduce el tema exacto de una pieza
+        real ya PUBLICADA (servidumbre de paso, MF-01) — debe bloquearse
+        ANTES de que el llamador compile el prompt final, nunca después."""
+        # angulo/contexto_funcional/rol_lector/pregunta_resuelta/relacion se
+        # dejan vacíos porque la fuente #5 no los declara para MF-01 (sólo
+        # título y cifras reales, ver memoria_fuerte.py) — dejar el default
+        # del helper ("a"/"c"/"persona"/"p"/"r") compararía datos reales
+        # contra datos inventados por este test, no una repetición honesta.
+        memoria = mf.cargar_memoria_fuerte()
+        c = self.candidato(materia="civil", submateria="servidumbres",
+                           concepto_nucleo="servidumbre de paso frente a propiedad",
+                           familia_editorial="", necesidad="", angulo="",
+                           contexto_funcional="", rol_lector="", pregunta_resuelta="",
+                           relacion="")
+        perfil = emotion.derivar(necesidad=c.necesidad, familia_editorial=c.familia_editorial)
+        d = ad.draft_visual_brief(c, perfil.to_dict(), self.catalogo, registro_familias=self.registro,
+                                  memoria_fuerte=memoria)
+        self.assertTrue(d.bloqueado_memoria_fuerte)
+        self.assertTrue(any("memoria fuerte" in m for m in d.motivos_bloqueo_memoria_fuerte))
+        self.assertTrue(any(mf.FUENTE_DOCUMENTO_URL in m for m in d.motivos_bloqueo_memoria_fuerte))
+
+    def test_adversarial_reproducir_rechazo_explicito_bloquea_sin_necesidad_de_memoria_fuerte(self):
+        """Caso adversarial (Contrato v4 §8): un candidato cuya dirección
+        reproduce un rechazo explícito de la sección 4 debe rechazarse antes
+        de generar — incluso sin pasar `memoria_fuerte` (los 7 rechazos son
+        reglas de diseño permanentes, no memoria de piezas)."""
+        c = self.candidato()
+        # Perfil emocional crafteado para reproducir RECHAZO-7 (collage/grid
+        # multipanel) de forma determinista, sin depender de qué huella real
+        # elija el catálogo maestro para este content_id.
+        perfil_dict = emotion.derivar(necesidad=c.necesidad, familia_editorial=c.familia_editorial).to_dict()
+        perfil_dict["composicion"] = "formato collage tipo grid multipanel"
+        d = ad.draft_visual_brief(c, perfil_dict, self.catalogo, registro_familias=self.registro)
+        self.assertTrue(d.bloqueado_memoria_fuerte)
+        self.assertTrue(any("RECHAZO-7" in m for m in d.motivos_bloqueo_memoria_fuerte), d.motivos_bloqueo_memoria_fuerte)
+
+    def test_adversarial_se_puede_desactivar_explicitamente_reglas_de_rechazo(self):
+        """`reglas_rechazo_founder=()` desactiva la verificación — opción
+        explícita para el llamador, nunca el comportamiento por omisión."""
+        c = self.candidato()
+        perfil_dict = emotion.derivar(necesidad=c.necesidad, familia_editorial=c.familia_editorial).to_dict()
+        perfil_dict["composicion"] = "formato collage tipo grid multipanel"
+        d = ad.draft_visual_brief(c, perfil_dict, self.catalogo, registro_familias=self.registro,
+                                  reglas_rechazo_founder=())
+        self.assertFalse(d.bloqueado_memoria_fuerte)
+
+    def test_nunca_lanza_excepcion_el_llamador_decide(self):
+        """Mismo patrón que validate_generation_contract()/negotiate(): el
+        bloqueo se reporta, nunca se lanza como excepción."""
+        memoria = mf.cargar_memoria_fuerte()
+        c = self.candidato(materia="civil", submateria="servidumbres",
+                           concepto_nucleo="servidumbre de paso frente a propiedad",
+                           familia_editorial="", necesidad="", angulo="",
+                           contexto_funcional="", rol_lector="", pregunta_resuelta="",
+                           relacion="")
+        perfil = emotion.derivar(necesidad=c.necesidad, familia_editorial=c.familia_editorial)
+        try:
+            d = ad.draft_visual_brief(c, perfil.to_dict(), self.catalogo, registro_familias=self.registro,
+                                      memoria_fuerte=memoria)
+        except Exception as e:  # noqa: BLE001 — la prueba es justamente que NO debe lanzar
+            self.fail(f"draft_visual_brief() lanzó una excepción en vez de reportar el bloqueo: {e}")
+        self.assertTrue(d.bloqueado_memoria_fuerte)
 
 
 if __name__ == "__main__":

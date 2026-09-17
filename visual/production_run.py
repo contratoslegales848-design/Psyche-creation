@@ -36,6 +36,7 @@ import corpus_import as ci
 import editorial
 import families
 import generator
+import memoria_fuerte as mf
 import organism
 import provider_gate
 import territory_explorer as te
@@ -66,11 +67,19 @@ def draft_a_entry_visual(candidato, draft):
 
 
 def producir_y_dirigir(reserva_seed, memoria, mapa, universo, materias, registro_familias,
-                       n=10, factor_reserva=14, catalogo_maestro=None, señales_mercado=None):
+                       n=10, factor_reserva=14, catalogo_maestro=None, señales_mercado=None,
+                       memoria_fuerte=None):
     """Reserva real ≥ RESERVA_MINIMA (factor=14, n=10 -> 140) → selección
     multi-factor (territorio ya incluido en el score, no aparte) → dirección
     de arte acumulando huella visual (catálogo maestro, Parte XII) entre
-    piezas del mismo lote."""
+    piezas del mismo lote.
+
+    `memoria_fuerte` (fuente #5 del Contrato v4, ver `memoria_fuerte.py`) se
+    consulta dentro de `draft_visual_brief()` — cada draft de este lote ya
+    trae `bloqueado_memoria_fuerte`/`motivos_bloqueo_memoria_fuerte` antes de
+    que exista ningún prompt compilado (Hotfix memoria fuerte, autorización
+    del Founder, 16-sep-2026). `None` desactiva la comparación contra piezas
+    reales; por omisión (`ejecutar()`/`cargar_contexto()`) se carga real."""
     reserva = universe.build_reserve(objetivo_lote=n, seed=reserva_seed, factor=factor_reserva)
     assert len(reserva) >= RESERVA_MINIMA, (
         f"reserva de {len(reserva)} < mínimo exigido {RESERVA_MINIMA}: sube factor_reserva.")
@@ -86,7 +95,8 @@ def producir_y_dirigir(reserva_seed, memoria, mapa, universo, materias, registro
     for c in seleccion:
         d = draft_visual_brief(c, c.perfil_emocional, catalogo_maestro,
                                memoria_huellas=memoria_huellas,
-                               registro_familias=registro_familias, memoria_visual=memoria_visual)
+                               registro_familias=registro_familias, memoria_visual=memoria_visual,
+                               memoria_fuerte=memoria_fuerte)
         drafts.append(d)
         memoria_visual.record(draft_a_entry_visual(c, d))
     return reserva, seleccion, puntuaciones, drafts, rechazados
@@ -197,17 +207,22 @@ class QADosEjes:
     visual_detalle: dict = field(default_factory=dict)
     prueba_titulos_ocultos_ok: bool = False
     prueba_titulos_ocultos_detalle: str = ""
+    memoria_fuerte_ok: bool = True
+    memoria_fuerte_detalle: dict = field(default_factory=dict)
 
     @property
     def aceptado(self):
-        return self.intelectual_ok and self.visual_ok and self.prueba_titulos_ocultos_ok
+        return (self.intelectual_ok and self.visual_ok and self.prueba_titulos_ocultos_ok
+               and self.memoria_fuerte_ok)
 
     def to_dict(self):
         return {"aceptado": self.aceptado, "intelectual_ok": self.intelectual_ok,
                 "intelectual_detalle": self.intelectual_detalle, "visual_ok": self.visual_ok,
                 "visual_detalle": self.visual_detalle,
                 "prueba_titulos_ocultos_ok": self.prueba_titulos_ocultos_ok,
-                "prueba_titulos_ocultos_detalle": self.prueba_titulos_ocultos_detalle}
+                "prueba_titulos_ocultos_detalle": self.prueba_titulos_ocultos_detalle,
+                "memoria_fuerte_ok": self.memoria_fuerte_ok,
+                "memoria_fuerte_detalle": self.memoria_fuerte_detalle}
 
 
 def _prueba_titulos_ocultos(drafts):
@@ -244,6 +259,18 @@ def qa_dos_ejes(seleccion, drafts, catalogo_maestro=None, historicas_visuales=()
 
     titulos_ok, titulos_detalle = _prueba_titulos_ocultos(drafts)
 
+    bloqueados = [d.content_id for d in drafts if d.bloqueado_memoria_fuerte]
+    memoria_fuerte_ok = not bloqueados
+    memoria_fuerte_detalle = {
+        "bloqueados": bloqueados,
+        "motivos": {d.content_id: d.motivos_bloqueo_memoria_fuerte
+                   for d in drafts if d.bloqueado_memoria_fuerte},
+        "nota": ("informativo — misma disciplina que el resto de este QA: no vuelve a "
+                "generar ni descarta por sí solo; señala qué pieza debe regenerarse o "
+                "descartarse antes de compilar su prompt final (mandato: 'antes de "
+                "generar, no después')."),
+    }
+
     return QADosEjes(
         intelectual_ok=intelectual_ok,
         intelectual_detalle={"distintos_por_eje": distintos},
@@ -251,7 +278,9 @@ def qa_dos_ejes(seleccion, drafts, catalogo_maestro=None, historicas_visuales=()
         visual_detalle={"diversidad_estilos": detalle_estilos,
                         "distancia_visual_estricta": verificacion.to_dict()},
         prueba_titulos_ocultos_ok=titulos_ok,
-        prueba_titulos_ocultos_detalle=titulos_detalle)
+        prueba_titulos_ocultos_detalle=titulos_detalle,
+        memoria_fuerte_ok=memoria_fuerte_ok,
+        memoria_fuerte_detalle=memoria_fuerte_detalle)
 
 
 # ---------------------------------------------------------------------------
@@ -266,15 +295,21 @@ def cargar_contexto():
     mapa = te.construir_mapa(regs, materias=materias, universo=universo)
     memoria = SemanticMemory()
     ci.importar(memoria, regs)
+    # Memoria fuerte real (fuente #5, Contrato v4) — deliberadamente una
+    # instancia SEPARADA de `memoria` (memoria de ejecución/corpus histórico
+    # arriba): mezclarlas confundiría "esto ya se contó en esta corrida" con
+    # "esto ya lo aprobó el Founder de verdad" (ver memoria_fuerte.py).
+    memoria_fuerte = mf.cargar_memoria_fuerte()
     return {"regs": regs, "enr": enr, "universo": universo, "materias": materias,
-            "registro_familias": registro_familias, "mapa": mapa, "memoria": memoria}
+            "registro_familias": registro_familias, "mapa": mapa, "memoria": memoria,
+            "memoria_fuerte": memoria_fuerte}
 
 
 def ejecutar(seed_lote1=9101, seed_lote2=9102, elegidos_idx=(0, 4, 8)):
     ctx = cargar_contexto()
     reserva1, sel1, pts1, drafts1, rechazados1 = producir_y_dirigir(
         seed_lote1, ctx["memoria"], ctx["mapa"], ctx["universo"], ctx["materias"],
-        ctx["registro_familias"])
+        ctx["registro_familias"], memoria_fuerte=ctx["memoria_fuerte"])
 
     balance = balance_exploracion(sel1, pts1)
     briefs = [construir_brief(c, d) for c, d in zip(sel1, drafts1)]
@@ -290,7 +325,7 @@ def ejecutar(seed_lote1=9101, seed_lote2=9102, elegidos_idx=(0, 4, 8)):
 
     reserva2, sel2, pts2, drafts2, rechazados2 = producir_y_dirigir(
         seed_lote2, ctx["memoria"], ctx["mapa"], ctx["universo"], ctx["materias"],
-        ctx["registro_familias"])
+        ctx["registro_familias"], memoria_fuerte=ctx["memoria_fuerte"])
 
     fp1 = [c.fingerprint() for c in sel1]
     fp2 = [c.fingerprint() for c in sel2]
