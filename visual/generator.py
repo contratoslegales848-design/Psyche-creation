@@ -110,6 +110,20 @@ AJUSTE_AFINIDAD_ESCALA = 0.03
 AJUSTE_SENAL_MERCADO_MAX = 0.08
 PESO_DEMANDA = {"ALTA": 1.0, "MEDIA": 0.5, "BAJA": 0.0}
 
+# Balance de materia ENTRE tandas (hallazgo real, 18-sep-2026 — Founder:
+# "actualiza temas ya que se repiten"): `_cuota_materia` ya es un hard gate
+# que limita la concentración DENTRO de un mismo lote (máx 2 de una materia
+# en 10), pero no dice nada sobre tandas sucesivas. Simulación real de 5
+# tandas (semillas 9000-9004, `universe.build_reserve` + `seleccionar_lote`
+# + `memoria_fuerte` real) mostró que `ajuste_afinidad_founder` trata la
+# muestra fija de `memoria_fuerte` (16 piezas curadas reales, concentradas en
+# sólo 4 materias: historia_del_derecho, civil, penal, procesal) como una
+# entrada CONSTANTE en cada tanda — a diferencia de `memoria` (la corrida),
+# que sí se reinicia por tanda. Resultado: esas 4 materias agotaron su cupo
+# en las 5/5 tandas (10/10 exacto, cero varianza) mientras ~10 materias
+# reales del mismo seed quedaron crónicamente infrarrepresentadas.
+AJUSTE_BALANCE_MATERIAS_MAX = 0.06
+
 
 @dataclass
 class CandidateScore:
@@ -128,6 +142,7 @@ class CandidateScore:
     ajuste_afinidad_founder: float = 0.0
     ajuste_senal_mercado: float = 0.0
     ajuste_balance_pedagogico: float = 0.0
+    ajuste_balance_materias: float = 0.0
     score_compuesto: float = 0.0
     explicacion: list = field(default_factory=list)
 
@@ -145,6 +160,8 @@ class CandidateScore:
                 "recent_cooldown": self.recent_cooldown,
                 "ajuste_afinidad_founder": self.ajuste_afinidad_founder,
                 "ajuste_senal_mercado": self.ajuste_senal_mercado,
+                "ajuste_balance_pedagogico": self.ajuste_balance_pedagogico,
+                "ajuste_balance_materias": self.ajuste_balance_materias,
                 "score_compuesto": self.score_compuesto,
                 "explicacion": list(self.explicacion)}
 
@@ -240,6 +257,47 @@ def ajuste_senal_mercado(candidato, señales_mercado):
     return ajuste, razon
 
 
+def ajuste_balance_materias(candidato, historial_materias=()):
+    """Empujón pequeño y acotado que contrarresta la concentración de
+    MATERIA entre tandas sucesivas — nunca dentro de un mismo lote, eso ya
+    lo cubre `_cuota_materia` como hard gate; esto es el desvío que sólo se
+    ve mirando varias tandas seguidas (ver constante `AJUSTE_BALANCE_MATERIAS_MAX`
+    arriba para el hallazgo real que motivó esto).
+
+    `historial_materias` es una secuencia plana de materias (`str`) elegidas
+    en tandas RECIENTES anteriores a la actual — el llamador decide cuántas
+    tandas de historial mantener; este módulo no impone una ventana. Vacío
+    (el caso por defecto, y toda la suite existente antes de este cambio)
+    -> 0.0 exacto, mismo criterio que `ajuste_afinidad_founder` y
+    `ajuste_balance_pedagogico`: sin evidencia de desvío entre tandas, no
+    hay nada que corregir.
+
+    El reparto equitativo se calcula sólo sobre las materias que YA
+    aparecieron en el historial (no sobre el catálogo completo de materias
+    posibles, que este módulo no conoce sin acoplarse a `universe.py`): una
+    materia que nunca apareció en el historial no tiene fila en el reparto,
+    así que su candidato recibe automáticamente el empujón máximo positivo
+    — exactamente el caso que había que corregir.
+    """
+    if not historial_materias:
+        return 0.0, "sin historial de materias entre tandas: no hay desvío que corregir."
+    total = len(historial_materias)
+    vistas = [normaliza(m) for m in historial_materias if normaliza(m)]
+    if not vistas:
+        return 0.0, "historial de materias sin materia identificable: no hay desvío que corregir."
+    n_distintas = len(set(vistas))
+    reparto_equitativo = len(vistas) / n_distintas
+    mat = normaliza(getattr(candidato, "materia", "") or "")
+    conteo = sum(1 for m in vistas if m == mat)
+    desvio = (reparto_equitativo - conteo) / reparto_equitativo
+    ajuste = max(-AJUSTE_BALANCE_MATERIAS_MAX,
+                min(AJUSTE_BALANCE_MATERIAS_MAX, desvio * AJUSTE_BALANCE_MATERIAS_MAX))
+    razon = (f"materia {candidato.materia!r} aparece {conteo}/{total} en el historial "
+            f"reciente entre tandas (reparto equitativo ~{reparto_equitativo:.1f} sobre "
+            f"{n_distintas} materias vistas); ajuste {ajuste:+.4f}.")
+    return round(ajuste, 4), razon
+
+
 def _cuota_materia(materia, n, materias):
     base = materias.get(materia, {}).get("cuota_max_por_lote_10", 2)
     return max(1, round(base * n / 10.0))
@@ -248,7 +306,7 @@ def _cuota_materia(materia, n, materias):
 def puntuar_candidato(candidato, memoria, mapa_territorio, universo=None,
                       lote_en_progreso=(), materias=None, n_lote=10,
                       señales_mercado=None, objetivo_conocimiento=pedagogia.OBJETIVO_CONOCIMIENTO_DEFAULT,
-                      memoria_fuerte=None):
+                      memoria_fuerte=None, historial_materias=()):
     """Puntúa un candidato. Aplica los hard gates ANTES de calcular el resto:
     un candidato rechazado no necesita un ranking, necesita un motivo."""
     import universe as uni
@@ -324,8 +382,12 @@ def puntuar_candidato(candidato, memoria, mapa_territorio, universo=None,
     explicacion.append(f"balance pedagógico (acotado, no cuota): {balance_pedagogico:+.4f} — "
                        f"{razon_pedagogica}")
 
+    balance_materias, razon_materias = ajuste_balance_materias(candidato, historial_materias)
+    explicacion.append(f"balance de materia entre tandas (acotado, no cuota): "
+                       f"{balance_materias:+.4f} — {razon_materias}")
+
     score_compuesto = round(max(0.0, min(
-        1.0, score_base + afinidad + senal_mercado + balance_pedagogico)), 4)
+        1.0, score_base + afinidad + senal_mercado + balance_pedagogico + balance_materias)), 4)
 
     return CandidateScore(
         candidate_id=candidato.candidate_id, hard_gates_pasados=True,
@@ -334,13 +396,14 @@ def puntuar_candidato(candidato, memoria, mapa_territorio, universo=None,
         emotional_fit=emocional, recent_cooldown=cooldown,
         ajuste_afinidad_founder=afinidad, ajuste_senal_mercado=senal_mercado,
         ajuste_balance_pedagogico=balance_pedagogico,
+        ajuste_balance_materias=balance_materias,
         score_compuesto=score_compuesto, explicacion=explicacion)
 
 
 def seleccionar_lote(candidatos, memoria, mapa_territorio, universo=None, n=10,
                      materias=None, señales_mercado=None,
                      objetivo_conocimiento=pedagogia.OBJETIVO_CONOCIMIENTO_DEFAULT,
-                     memoria_fuerte=None):
+                     memoria_fuerte=None, historial_materias=()):
     """Selecciona iterativamente: puntúa contra el lote parcial (para que
     `editorial_diversity` y `ajuste_balance_pedagogico` reaccionen a lo ya
     elegido), toma el mejor superviviente de los hard gates, repite. Nunca
@@ -356,6 +419,13 @@ def seleccionar_lote(candidatos, memoria, mapa_territorio, universo=None, n=10,
     `memoria_fuerte.py`) es opcional: si se da, `ajuste_afinidad_founder()`
     también aprende de ella para la selección temática, con el mismo techo
     acotado de siempre — ver ese docstring.
+
+    `historial_materias` (hallazgo real, 18-sep-2026 — "temas se repiten"):
+    secuencia plana de materias elegidas en tandas anteriores. Vacío por
+    defecto -> comportamiento idéntico al de antes de este parámetro. El
+    llamador que orquesta varias tandas (p.ej. `production_run.py`) es quien
+    decide qué ventana de historial mantener; este módulo sólo lo traduce en
+    un ajuste acotado vía `ajuste_balance_materias()`.
     """
     import universe as uni
     universo = universo or editorial.EditorialUniverse.load()
@@ -370,26 +440,28 @@ def seleccionar_lote(candidatos, memoria, mapa_territorio, universo=None, n=10,
             s = puntuar_candidato(c, memoria, mapa_territorio, universo, seleccion,
                                   materias=materias, n_lote=n, señales_mercado=señales_mercado,
                                   objetivo_conocimiento=objetivo_conocimiento,
-                                  memoria_fuerte=memoria_fuerte)
+                                  memoria_fuerte=memoria_fuerte,
+                                  historial_materias=historial_materias)
             if not s.hard_gates_pasados:
                 rechazados.append((c.candidate_id, s.motivo_bloqueo))
                 continue
             # Desempate por afinidad Founder + señal de mercado + balance
-            # pedagógico. En territorio muy virgen (la fase inicial real:
-            # pocas celdas materia×familia tocadas) es normal que muchos
-            # candidatos empaten en score_compuesto=1.0 — novelty,
-            # territorio y utilidad ya tocan el techo por sí solos.
-            # Comparar sólo `score_compuesto` (recortado a [0,1] para que
-            # sea legible) dejaría los tres ajustes invisibles justo cuando
-            # más importan. `clave` usa el valor SIN recortar como
-            # desempate, nunca como criterio principal.
+            # pedagógico + balance de materia entre tandas. En territorio muy
+            # virgen (la fase inicial real: pocas celdas materia×familia
+            # tocadas) es normal que muchos candidatos empaten en
+            # score_compuesto=1.0 — novelty, territorio y utilidad ya tocan
+            # el techo por sí solos. Comparar sólo `score_compuesto`
+            # (recortado a [0,1] para que sea legible) dejaría los ajustes
+            # invisibles justo cuando más importan. `clave` usa el valor SIN
+            # recortar como desempate, nunca como criterio principal.
             clave = (s.score_compuesto,
                     s.score_compuesto + s.ajuste_afinidad_founder + s.ajuste_senal_mercado
-                    + s.ajuste_balance_pedagogico)
+                    + s.ajuste_balance_pedagogico + s.ajuste_balance_materias)
             mejor_clave = ((mejor_score.score_compuesto,
                            mejor_score.score_compuesto + mejor_score.ajuste_afinidad_founder
                            + mejor_score.ajuste_senal_mercado
-                           + mejor_score.ajuste_balance_pedagogico)
+                           + mejor_score.ajuste_balance_pedagogico
+                           + mejor_score.ajuste_balance_materias)
                           if mejor_score is not None else None)
             if mejor_clave is None or clave > mejor_clave:
                 mejor, mejor_score = c, s

@@ -69,7 +69,7 @@ def draft_a_entry_visual(candidato, draft):
 
 def producir_y_dirigir(reserva_seed, memoria, mapa, universo, materias, registro_familias,
                        n=10, factor_reserva=14, catalogo_maestro=None, señales_mercado=None,
-                       memoria_fuerte=None):
+                       memoria_fuerte=None, historial_materias=()):
     """Reserva real ≥ RESERVA_MINIMA (factor=14, n=10 -> 140) → selección
     multi-factor (territorio ya incluido en el score, no aparte) → dirección
     de arte acumulando huella visual (catálogo maestro, Parte XII) entre
@@ -80,14 +80,21 @@ def producir_y_dirigir(reserva_seed, memoria, mapa, universo, materias, registro
     trae `bloqueado_memoria_fuerte`/`motivos_bloqueo_memoria_fuerte` antes de
     que exista ningún prompt compilado (Hotfix memoria fuerte, autorización
     del Founder, 16-sep-2026). `None` desactiva la comparación contra piezas
-    reales; por omisión (`ejecutar()`/`cargar_contexto()`) se carga real."""
+    reales; por omisión (`ejecutar()`/`cargar_contexto()`) se carga real.
+
+    `historial_materias` (hallazgo real, 18-sep-2026 — "temas se repiten",
+    ver `generator.ajuste_balance_materias()`): secuencia plana de materias
+    elegidas en tandas anteriores a esta. Vacío por defecto — un llamador
+    que orquesta varias tandas seguidas (p.ej. un futuro runner multi-tanda)
+    es quien acumula esta lista entre llamadas; este módulo sólo la reenvía."""
     reserva = universe.build_reserve(objetivo_lote=n, seed=reserva_seed, factor=factor_reserva)
     assert len(reserva) >= RESERVA_MINIMA, (
         f"reserva de {len(reserva)} < mínimo exigido {RESERVA_MINIMA}: sube factor_reserva.")
 
     seleccion, puntuaciones, rechazados = generator.seleccionar_lote(
         reserva, memoria, mapa, universo=universo, n=n, materias=materias,
-        señales_mercado=señales_mercado, memoria_fuerte=memoria_fuerte)
+        señales_mercado=señales_mercado, memoria_fuerte=memoria_fuerte,
+        historial_materias=historial_materias)
 
     catalogo_maestro = catalogo_maestro or vf.MasterCatalog.load()
     memoria_huellas = vf.FingerprintMemory()

@@ -527,6 +527,108 @@ generó ni se verá — no hay proveedor de imagen conectado en este entorno
 "las 10 piezas se ven distintas" se sostiene sobre el plan/prompt/escena
 declarados, nunca sobre una imagen renderizada.
 
+## 5ª pasada — 18-sep-2026: feedback directo del Founder sobre piezas reales
+
+Tres hallazgos reales, no hipotéticos, reportados por el Founder tras
+revisar imágenes producidas ("el texto se ve mal centrado en Facebook",
+"la estructura debe informar, no ser tan simple", "los temas se repiten").
+
+**1. Centrado de texto — bug real, no de diseño.** `composition.py`
+declaraba `TypographyPlan.alignment` desde el diseño original del módulo,
+pero `compositor.compose()` **nunca lo leía** al dibujar: siempre pintaba
+desde el borde izquierdo del área segura sin importar lo que dijera el
+plan (confirmado con `grep -rn "alignment"` — el campo sólo aparecía en su
+propia declaración, en ningún otro archivo, ni en tests). Corregido en dos
+puntos: `compositor.py` ahora mide el ancho de cada línea renderizada y
+calcula `xx` según `alignment` (`center`/`right`/`left`) en vez de un
+`draw.text` fijo; y el *default* de `alignment` pasa de `"left"` a
+`"center"` (criterio ya usado por la mayoría de piezas reales aprobadas en
+`memoria_fuerte.py`, y el que mejor funciona en el feed vertical de
+Facebook/Instagram).
+
+**2. "La estructura debe informar, no ser tan simple".** `layout_type` se
+calculaba y se guardaba en el plan tipográfico, pero no cambiaba nada del
+resultado — dato puramente decorativo. Ahora decide algo real: nuevo mapa
+`ALINEACION_POR_LAYOUT` en `composition.py` — contenido enumerado o
+explicado (`LIST_ITEM`, `EXPLAINER`: listados, consecuencias paso a paso)
+se alinea a la izquierda porque se lee mejor así; una cita/concepto/mito de
+una sola idea (`SHORT_QUOTE`, `LONG_QUOTE`, `LEGAL_CONCEPT`, `COMPARISON`,
+`MYTH`, `AUTHOR_IDEA`) se centra, como una pieza de póster. Determinista y
+auditable por `layout_type` — no una preferencia inventada pieza por pieza.
+
+**3. "Los temas se repiten" — causa raíz encontrada y corregida.**
+Simulación real de 5 tandas consecutivas (semillas 9000-9004,
+`universe.build_reserve` + `generator.seleccionar_lote` + `memoria_fuerte`
+real) mostró que `ajuste_afinidad_founder` trata la muestra fija de
+`memoria_fuerte` (16 piezas curadas reales, concentradas en sólo 4
+materias: `historia_del_derecho`, `civil`, `penal`, `procesal`) como una
+entrada **constante en cada tanda simulada** — a diferencia de `memoria`
+(la corrida), que sí se reinicia por tanda. Resultado real antes de la
+corrección: esas 4 materias agotaban su cupo en **5/5 tandas** (10/10
+exacto, cero varianza) mientras sólo 13 materias distintas se tocaban en
+total sobre 50 piezas, y el resto del catálogo real de materias quedaba
+crónicamente infrarrepresentado. `_cuota_materia` (hard gate ya existente)
+no lo evita porque limita concentración **dentro** de un lote, no
+**entre** tandas sucesivas.
+
+Corrección: nueva función `generator.ajuste_balance_materias()`, mismo
+patrón exacto que `pedagogia.ajuste_balance_pedagogico()` — acotada
+(`AJUSTE_BALANCE_MATERIAS_MAX = 0.06`), simétrica, y exactamente `0.0` sin
+evidencia (`historial_materias` vacío, el caso por defecto: cero cambio de
+comportamiento para cualquier llamador existente que no lo pase). Nunca
+excluye — sólo empuja. Wireada como parámetro opcional en
+`puntuar_candidato()`/`seleccionar_lote()` y reenviada, también opcional,
+por `production_run.py::producir_y_dirigir()` para que un futuro
+orquestador multi-tanda pueda acumular el historial real entre llamadas.
+
+Comparativo real de la misma simulación de 5 tandas, ANTES/DESPUÉS de
+encadenar `historial_materias` entre tandas:
+
+| | ANTES (sin historial) | DESPUÉS (con historial encadenado) |
+|---|---|---|
+| Materias distintas tocadas (de 50 piezas) | 13 | 26 |
+| Concentración máxima de una sola materia | `civil`: 10/50 | `civil`: 8/50 |
+| `civil`+`penal`+`historia_del_derecho`+`procesal` | 40/50 (80%) | 24/50 (48%) |
+| Materias reales con 0 apariciones en las 5 tandas | ~15 | 0 |
+
+El ajuste es deliberadamente pequeño (nunca fuerza reparto exactamente
+igualitario — sería una cuota, y el mandato la prohíbe para este eje): las
+4 materias sobrerrepresentadas siguen apareciendo, sólo dejan de
+monopolizar el lote.
+
+**Validación**: 8 tests nuevos (`test_generator.py::TestBalanceMateriasEntreTandas`),
+incluyendo el comparativo directo sobre un lote real (`test_seleccionar_lote_con_historial_favorece_materias_ausentes`)
+y la regresión explícita de que el comportamiento por defecto no cambia
+para ningún llamador que no pase `historial_materias`. `test_generator.py`
+completo: 46/46 en verde (antes 38/38).
+
+**4. "Que se vea el contenido artístico, las variantes más importantes, no
+lo que no sirve" — auditoría de catálogo, con evidencia, sin purgar a
+ciegas.** Dos verificaciones reales sobre el catálogo maestro (504
+direcciones + 7 dimensiones auxiliares):
+
+- *Cobertura real de uso*: simulación de 200 piezas consecutivas sobre
+  `visual_fingerprint._construir_huella()` con la memoria de anti-
+  repetición real (`FingerprintMemory`, ventana de 20) — 167/504
+  direcciones tocadas, uso máximo de una sola dirección: 3 veces, mínimo:
+  1. Sin concentración anómala (a diferencia del hallazgo de materia
+  arriba): el mecanismo de "elegir la de menor frecuencia reciente"
+  reparte el catálogo de verdad. **No hay deuda real que corregir aquí.**
+- *Código muerto*: búsqueda de funciones públicas (no `_privadas`)
+  definidas en todo `visual/` y nunca referenciadas fuera de su propia
+  definición. Resultado: sólo 2 candidatas en todo el módulo —
+  `SourceVerificationSummary.any_unverified` (`source_verification.py`) y
+  `RouteState.nodos_visitados` (`route_engine.py`), ambas propiedades/
+  métodos de una sola línea, de solo lectura, sin efectos secundarios, y
+  parte de la superficie pública normal de sus clases (no hay evidencia de
+  que estén rotas o abandonadas — sólo de que ningún llamador interno las
+  usa todavía). **No se eliminan**: el riesgo de romper un consumidor
+  externo no verificado por eliminar dos accesores triviales es mayor que
+  el beneficio de "depurar" dos líneas. La deuda real de este módulo
+  siempre ha sido la ya documentada explícitamente (`PENDIENTE_VERIFICACION`,
+  `NO_DISPONIBLE_EN_ESTA_ETAPA`, límites honestos en `direccion_causal.py`
+  y en la tabla KEEP/ADAPT/REJECT arriba) — no código muerto oculto.
+
 ## Añadir un proveedor real
 
 1. `providers/<nombre>.py` con una clase que implemente `ImageProvider`.

@@ -335,5 +335,119 @@ class TestHeuristicasDeImagen(unittest.TestCase):
         self.assertEqual(run.receipt.semantic_qa["state"], inspection.NEEDS_HUMAN_REVIEW)
 
 
+def _bbox_horizontal_por_fila(png_bytes_data, y, bg):
+    """(izquierda, derecha) del primer/último pixel distinto del fondo en
+    la fila `y`, o None si la fila está vacía."""
+    from PIL import Image
+    import io
+    img = Image.open(io.BytesIO(png_bytes_data))
+    px = img.load()
+    izquierda = derecha = None
+    for x in range(img.width):
+        if px[x, y] != bg:
+            if izquierda is None:
+                izquierda = x
+            derecha = x
+    return None if izquierda is None else (izquierda, derecha)
+
+
+class TestAlineacionDeTexto(unittest.TestCase):
+    """Bug real corregido (18-sep-2026, reportado por el Founder: 'el texto
+    debe estar centrado para que se vea bien en Facebook'). `alignment`
+    existía en `TypographyPlan` desde el principio pero `compose()` nunca
+    lo leía al dibujar — siempre pintaba desde el borde izquierdo del área
+    segura sin importar lo que dijera el plan. Invariante geométrico, no
+    snapshot: el punto medio de cada línea de texto debe coincidir con el
+    punto medio del área segura, no con su borde izquierdo."""
+
+    def _fondo(self, rgb=(30, 20, 18)):
+        return rgb
+
+    def test_el_default_del_plan_es_center(self):
+        p = plan()
+        self.assertEqual(p.alignment, "center")
+
+    def test_texto_centrado_cae_cerca_del_centro_del_area_segura(self):
+        bg = self._fondo()
+        p = plan(texto="EL DEPOSITO NO ES RENTA ADELANTADA", autor="LegalMente")
+        r = compositor.compose(raw(), p, BRAND, surface())
+        sx, sy, sw, sh = p.safe_area
+        centro_area = sx + sw / 2
+        anchos_y_centros = []
+        for y in range(sy, sy + sh, 4):
+            bbox = _bbox_horizontal_por_fila(r.composed_bytes, y, bg)
+            if bbox is None:
+                continue
+            izquierda, derecha = bbox
+            anchos_y_centros.append((derecha - izquierda, (izquierda + derecha) / 2, y))
+        self.assertTrue(anchos_y_centros, "no se midió ninguna fila con texto real.")
+        # Sólo las filas con el grueso real de una línea (no el borde
+        # superior/inferior de un glifo, que da un bbox angosto y sesgado)
+        ancho_maximo = max(a for a, _, _ in anchos_y_centros)
+        filas_solidas = [(a, c, y) for a, c, y in anchos_y_centros if a >= ancho_maximo * 0.5]
+        self.assertTrue(filas_solidas)
+        for ancho, centro_linea, y in filas_solidas:
+            # Tolerancia generosa por antialiasing/kerning real de la
+            # fuente — lo que se prueba es que NO está pegado al borde
+            # izquierdo (que sería el bug original: centro_linea muy por
+            # encima de centro_area, como si la línea arrancara en sx).
+            self.assertLess(abs(centro_linea - centro_area), sw * 0.15,
+                            f"fila y={y}: centro de línea {centro_linea} lejos del "
+                            f"centro del área segura {centro_area} (ancho {sw}).")
+
+    def test_texto_izquierda_explicito_pega_al_borde_izquierdo(self):
+        """Contraprueba: `alignment='left'` explícito sigue funcionando —
+        el bug no era que 'left' rompiera, era que 'center'/cualquier otro
+        valor se ignoraba siempre. Confirma que el nuevo código SÍ lee
+        `alignment` en vez de ignorarlo en todos los casos."""
+        from dataclasses import replace
+        bg = self._fondo()
+        p = replace(plan(texto="TEXTO CORTO", autor="LegalMente"), alignment="left")
+        r = compositor.compose(raw(), p, BRAND, surface())
+        sx, sy, sw, sh = p.safe_area
+        centro_area = sx + sw / 2
+        encontro_pegado_a_la_izquierda = False
+        for y in range(sy, sy + sh, 4):
+            bbox = _bbox_horizontal_por_fila(r.composed_bytes, y, bg)
+            if bbox is None:
+                continue
+            izquierda, _ = bbox
+            if izquierda - sx < sw * 0.05:
+                encontro_pegado_a_la_izquierda = True
+                break
+        self.assertTrue(encontro_pegado_a_la_izquierda,
+                        "con alignment='left' al menos una línea debe empezar pegada "
+                        "al borde izquierdo del área segura.")
+
+
+class TestLayoutInformaLaAlineacion(unittest.TestCase):
+    """'La estructura debe informar, no ser tan simple' (Founder,
+    18-sep-2026): `layout_type` se calculaba pero no cambiaba nada del
+    resultado. Ahora decide la alineación: contenido enumerado/explicado
+    se lee mejor a la izquierda; una idea única (cita/concepto/mito)
+    funciona mejor centrada."""
+
+    def test_listado_es_izquierda(self):
+        p = plan(texto="Primero. Segundo. Tercero. Cuarto punto de la lista.", ct="listado")
+        self.assertEqual(p.layout_type, "LIST_ITEM")
+        self.assertEqual(p.alignment, "left")
+
+    def test_consecuencia_es_izquierda_por_ser_explainer(self):
+        p = plan(texto="Si ocurre esto entonces se sigue aquello como consecuencia directa",
+                 ct="consecuencia")
+        self.assertEqual(p.layout_type, "EXPLAINER")
+        self.assertEqual(p.alignment, "left")
+
+    def test_maxima_sigue_siendo_centro(self):
+        p = plan(ct="maxima")
+        self.assertEqual(p.layout_type, "SHORT_QUOTE")
+        self.assertEqual(p.alignment, "center")
+
+    def test_concepto_es_centro(self):
+        p = plan(texto="La buena fe es un principio general del derecho", ct="concepto")
+        self.assertEqual(p.layout_type, "LEGAL_CONCEPT")
+        self.assertEqual(p.alignment, "center")
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

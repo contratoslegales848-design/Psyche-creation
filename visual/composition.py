@@ -1,13 +1,16 @@
 """Planes de composicion posterior: tipografia y marca.
 
-Estado honesto: estos son CONTRATOS EJECUTABLES + PLANES DETERMINISTAS. El
-rasterizado real NO esta implementado — el repositorio no tiene Pillow ni
-ninguna dependencia de imagen, y fabricar un rasterizador tipografico a mano
-seria peor que declarar el limite.
+Este modulo construye el PLAN determinista (contrato ejecutable); el
+rasterizado real lo ejecuta `compositor.py` con Pillow (ADR 0003) — nota
+corregida 18-sep-2026: el docstring anterior decia "el rasterizado real NO
+esta implementado... el repositorio no tiene Pillow", cierto cuando se
+escribio pero desactualizado desde que `compositor.py` se construyo. Sigue
+siendo cierto que ESTE modulo (composition.py) no dibuja nada — solo
+calcula el plan que `compositor.compose()` ejecuta.
 
-Lo que si es real y probado aqui: el plan que un compositor (Canva, script con
-Pillow, o quien sea) debe ejecutar, y la garantia de que `exact_copy` no se
-altera jamas para hacer caber el texto.
+Lo que si es real y probado aqui: el plan que el compositor debe ejecutar,
+y la garantia de que `exact_copy` no se altera jamas para hacer caber el
+texto.
 """
 
 from dataclasses import dataclass, field, asdict
@@ -25,6 +28,36 @@ SAFE_AREA_RATIO = 0.08
 
 # Tamaño minimo legible en movil, en px sobre el lienzo de 1080 de ancho.
 MIN_READABLE_PX = 34
+
+ALINEACIONES_VALIDAS = ("left", "center", "right")
+
+# Corrección (18-sep-2026): el campo existía pero `compositor.compose()`
+# nunca lo leía al dibujar — siempre pintaba desde el borde izquierdo del
+# área segura, sin importar lo que dijera `alignment`. Reportado por el
+# Founder: el texto se ve mal centrado en Facebook. Se cambia el default a
+# "center" (legible y equilibrado en el feed vertical de Facebook/
+# Instagram, mismo criterio de la mayoría de piezas ya aprobadas en
+# `memoria_fuerte.py`) Y se hace que `compose()` lo respete de verdad — ver
+# ese módulo.
+
+# "La estructura debe informar, no ser tan simple" (Founder, 18-sep-2026):
+# `layout_type` se calculaba y se guardaba en el plan, pero no cambiaba
+# NADA del resultado — puro dato decorativo. Ahora sí decide algo real: el
+# tipo de contenido determina la alineación. Contenido enumerado/explicado
+# (listados, explicaciones paso a paso) se lee mejor alineado a la
+# izquierda; una cita/concepto/mito de una sola idea funciona mejor
+# centrado, como una pieza de póster. Determinista y auditable, no una
+# preferencia inventada por pieza.
+ALINEACION_POR_LAYOUT = {
+    "LIST_ITEM": "left",
+    "EXPLAINER": "left",
+    "SHORT_QUOTE": "center",
+    "LONG_QUOTE": "center",
+    "LEGAL_CONCEPT": "center",
+    "COMPARISON": "center",
+    "MYTH": "center",
+    "AUTHOR_IDEA": "center",
+}
 
 
 class ExactCopyViolation(ValueError):
@@ -46,7 +79,7 @@ class TypographyPlan:
     layout_type: str
     canvas: tuple
     safe_area: tuple                 # (x, y, w, h)
-    alignment: str = "left"
+    alignment: str = "center"
     blocks: list = field(default_factory=list)
     minimum_readable_size: int = MIN_READABLE_PX
     line_break_strategy: str = "PALABRA_COMPLETA"
@@ -136,7 +169,9 @@ def build_typography_plan(exact_copy, author, width, height, content_type="", co
         blocks.append(TextBlock("CONTEXT", context, "sans_caption", MIN_READABLE_PX,
                                 safe[2], _wrap(context, 60)))
 
-    plan = TypographyPlan(layout, (width, height), safe, blocks=blocks, warnings=warnings)
+    alineacion = ALINEACION_POR_LAYOUT.get(layout, "center")
+    plan = TypographyPlan(layout, (width, height), safe, alignment=alineacion,
+                          blocks=blocks, warnings=warnings)
     assert_exact_copy_preserved(exact_copy, plan)
     return plan
 

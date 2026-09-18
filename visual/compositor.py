@@ -214,11 +214,23 @@ def compose(raw_bytes, typography_plan, brand_plan=None, reserved_surface=None,
         bloques_render.append((b, font, lineas, size, y))
         y += alto + int(size * 0.5)
 
+    alineacion = getattr(typography_plan, "alignment", "center")
     for b, font, lineas, size, top in bloques_render:
         color = (252, 250, 242) if b.role == "QUOTE" else (197, 160, 89)
         yy = top
         for linea in lineas:
-            draw.text((sx, yy), linea, font=font, fill=color)
+            # Corrección (18-sep-2026): `alignment` existía en el plan pero
+            # nunca se leía aquí — siempre se dibujaba desde `sx` (borde
+            # izquierdo), sin importar lo que declarara el plan. El
+            # Founder reportó que el texto se ve mal centrado en Facebook.
+            ancho_linea = measure(linea, font)[0]
+            if alineacion == "center":
+                xx = sx + max(0, (sw - ancho_linea) // 2)
+            elif alineacion == "right":
+                xx = sx + max(0, sw - ancho_linea)
+            else:
+                xx = sx
+            draw.text((xx, yy), linea, font=font, fill=color)
             yy += int(size * 1.32)
 
     # --- marca ---

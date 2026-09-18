@@ -323,6 +323,80 @@ class TestExplotacionEnLote(GenBase):
                         "una materia descartada nunca debe volverse un hard gate")
 
 
+class TestBalanceMateriasEntreTandas(GenBase):
+    """Hallazgo real (18-sep-2026, Founder: "temas se repiten"): simulación
+    de 5 tandas reales (semillas 9000-9004) mostró que `ajuste_afinidad_founder`
+    trataba la muestra fija de `memoria_fuerte` como constante en cada tanda,
+    haciendo que las mismas 4 materias (de 16 piezas curadas reales)
+    agotaran su cupo en 5/5 tandas mientras ~10 materias reales quedaban
+    crónicamente infrarrepresentadas. `ajuste_balance_materias()` es el
+    contrapeso, acotado, entre tandas."""
+
+    def _cand(self, materia):
+        return type("C", (), {"materia": materia, "candidate_id": "x"})()
+
+    def test_sin_historial_el_ajuste_es_exactamente_cero(self):
+        """Misma disciplina que ajuste_afinidad_founder/ajuste_balance_pedagogico:
+        sin evidencia de desvío entre tandas, no hay nada que corregir."""
+        ajuste, razon = generator.ajuste_balance_materias(self._cand("civil"), ())
+        self.assertEqual(ajuste, 0.0)
+        self.assertIn("sin historial", razon.lower())
+
+    def test_materia_sobrerrepresentada_recibe_ajuste_negativo(self):
+        historial = ["civil"] * 8 + ["penal"] * 1 + ["ambiental"] * 1
+        ajuste, razon = generator.ajuste_balance_materias(self._cand("civil"), historial)
+        self.assertLess(ajuste, 0.0)
+        self.assertIn("civil", razon)
+
+    def test_materia_nunca_vista_recibe_el_ajuste_positivo_maximo(self):
+        """El caso central del hallazgo: una materia real que el historial
+        reciente nunca eligió debe recibir el empujón máximo a favor."""
+        historial = ["civil"] * 5 + ["penal"] * 5
+        ajuste, _ = generator.ajuste_balance_materias(self._cand("laboral"), historial)
+        self.assertEqual(ajuste, generator.AJUSTE_BALANCE_MATERIAS_MAX)
+
+    def test_materia_en_su_reparto_equitativo_da_ajuste_cero(self):
+        historial = ["civil", "penal"]
+        ajuste, _ = generator.ajuste_balance_materias(self._cand("civil"), historial)
+        self.assertEqual(ajuste, 0.0)
+
+    def test_ajuste_siempre_acotado_al_maximo_declarado(self):
+        historial = ["civil"] * 50 + ["penal"] * 1
+        ajuste, _ = generator.ajuste_balance_materias(self._cand("civil"), historial)
+        self.assertGreaterEqual(ajuste, -generator.AJUSTE_BALANCE_MATERIAS_MAX)
+        ajuste2, _ = generator.ajuste_balance_materias(self._cand("penal"), historial)
+        self.assertLessEqual(ajuste2, generator.AJUSTE_BALANCE_MATERIAS_MAX)
+
+    def test_puntuar_candidato_expone_el_ajuste_en_el_score(self):
+        c = universe.build_reserve(objetivo_lote=1, seed=1)[0]
+        historial = ["civil"] * 10
+        s = generator.puntuar_candidato(c, SemanticMemory(), self.mapa, self.universo,
+                                        historial_materias=historial)
+        self.assertNotEqual(s.ajuste_balance_materias, 0.0)
+
+    def test_puntuar_candidato_sin_historial_da_ajuste_cero_como_antes(self):
+        """Regresión: el parámetro nuevo no cambia el comportamiento por
+        defecto de ningún llamador existente que no lo pase."""
+        c = universe.build_reserve(objetivo_lote=1, seed=1)[0]
+        s = generator.puntuar_candidato(c, SemanticMemory(), self.mapa, self.universo)
+        self.assertEqual(s.ajuste_balance_materias, 0.0)
+
+    def test_seleccionar_lote_con_historial_favorece_materias_ausentes(self):
+        """Comparativo directo: con `historial_materias` cargado hacia
+        'civil', un lote real debe seleccionar proporcionalmente menos
+        'civil' que el mismo lote sin historial (mismo seed, misma reserva)."""
+        reserva = universe.build_reserve(objetivo_lote=10, seed=9000, factor=14)
+        sin_hist, _, _ = generator.seleccionar_lote(
+            list(reserva), SemanticMemory(), self.mapa, n=10, materias=self.materias)
+        historial_civil = ["civil"] * 30
+        con_hist, _, _ = generator.seleccionar_lote(
+            list(reserva), SemanticMemory(), self.mapa, n=10, materias=self.materias,
+            historial_materias=historial_civil)
+        civiles_sin = sum(1 for c in sin_hist if c.materia == "civil")
+        civiles_con = sum(1 for c in con_hist if c.materia == "civil")
+        self.assertLessEqual(civiles_con, civiles_sin)
+
+
 class TestSenalDeMercado(GenBase):
     """Parte VI del mandato "Fase post-implementación" (16-sep-2026): ajuste
     acotado por demanda profesional real, mismo patrón que la afinidad del
