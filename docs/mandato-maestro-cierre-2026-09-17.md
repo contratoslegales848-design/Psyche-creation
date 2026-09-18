@@ -19,7 +19,7 @@ Drive↔código (§13) que el mandato exige por separado.
 | Memoria fuerte (fuente #5, Contrato v4) | 🟢 ACTIVO (extendido esta ejecución) | Ya conectada a dirección visual (sesión previa); esta ejecución la conecta también a **selección temática** (`ajuste_afinidad_founder`) |
 | Generador multi-factor + hard gates | 🟢 ACTIVO | `generator.py`, sin regresión (76 tests) |
 | Contrato TEXT_TO_IMAGE/IMAGE_EDIT | 🟢 ACTIVO | Hotfix 16-sep-2026, sin cambios esta ejecución |
-| Orden CONCEPTO→TENSIÓN→METÁFORA→DIRECCIÓN ARTÍSTICA (Contrato v4 §4) | 🟢 RESUELTO (continuación, ver §16) | `visual/direccion_causal.py`, wireado en `art_direction.py` — ver §13 tabla, fila 1 (actualizada) |
+| Orden CONCEPTO→TENSIÓN→METÁFORA→DIRECCIÓN ARTÍSTICA (Contrato v4 §4) | 🟢 RESUELTO (continuación, ver §16); ampliado 18-sep-2026 | `visual/direccion_causal.py`, wireado en `art_direction.py` — ver §13 tabla, fila 1 (actualizada). La tabla real CONCEPTO→DIRECCIÓN con evidencia empírica de memoria fuerte (2 de los 4 eslabones que describe el mandato — tensión y metáfora no tienen evidencia real, ver docstring) cierra la parte alcanzable del hallazgo "8/10 dimensiones siguen rotando por anti-repetición pura": ver `docs/concepto-direccion-tabla-real-2026-09-18.md` |
 | `legalmente-web` (visibilidad, `CLAUDE.md §8`) | 🟢 RESUELTO — sin cambio necesario | `CLAUDE.md` ya decía "público" (commit `9e4bded`, 31-ago-2026); la contradicción era de `TECHNICAL_STATE.md`, no de `CLAUDE.md`. Ver §16. |
 | `legalmente-story-engine`, 6 agentes, 4 hooks | ⚫ NO IMPLEMENTADO (confirmado, sin cambio) | `docs/TECHNICAL_STATE.md` §3 |
 | Proveedor de imagen real | ⚫ BLOQUEADO EXTERNAMENTE | Sin credenciales en el workspace; Higgsfield prohibido por CLAUDE.md |

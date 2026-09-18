@@ -40,6 +40,19 @@ biblioteca abierta completa — filtrarlas también exigiría el mismo tipo de
 afinidad inventada que este módulo evita a propósito. Es una causalidad
 PARCIAL, real y auditable, no una causalidad total fingida.
 
+CONCEPTO -> DIRECCIÓN ARTÍSTICA con evidencia real (autorización del
+Founder, 18-sep-2026, ver `concepto_direccion.py`): cuando el llamador
+pasa `tabla_concepto_direccion` (por defecto `None`, desactivado -- mismo
+patrón que `memoria_fuerte` en `art_direction.py`), este módulo consulta
+si el `concepto_nucleo` del candidato se parece a uno de los 4 conceptos
+reales de `memoria_fuerte.py` que documentan dirección artística con
+rendimiento verificado. Si hay parecido real Y esa dirección histórica
+comparte vocabulario real con el catálogo maestro, las 10 dimensiones de
+`primary_direction`/`secondary_direction` se restringen a esas entradas
+ANTES de la selección por anti-repetición -- la misma disciplina que ya
+aplica a `realism`/`visual_mechanism`, ahora extendida a la biblioteca de
+504 direcciones, pero sólo donde hay evidencia real, nunca por defecto.
+
 QUÉ NO SE FABRICA (honestidad declarada, no oculta): `objeto_protagonista`,
 `metáfora` y `escena` siguen `PENDIENTE_CONTENIDO` — son contenido
 creativo/editorial concreto sobre una pieza verificada, no infraestructura
@@ -148,6 +161,11 @@ class Significado:
     razon_abstraccion: str = ""
     contraste: str = ""            # reportado, no wireado a ningún filtro hoy
     objeto_protagonista: str = ""  # PENDIENTE_CONTENIDO deliberado
+    # Evidencia real de concepto_direccion.py -- vacío/0.0 cuando no se pasó
+    # tabla_concepto_direccion o no hubo coincidencia real (el caso normal).
+    evidencia_concepto_id: str = ""
+    evidencia_concepto_similitud: float = 0.0
+    evidencia_concepto_direccion_artistica: str = ""
 
     def to_dict(self):
         from dataclasses import asdict
@@ -203,13 +221,41 @@ def _valores_permitidos_mecanismo(catalogo, significado):
     return permitidos or None
 
 
-def _catalogo_causal(catalogo, significado):
+def _agrupar_por_categoria(pares):
+    agrupado = {}
+    for categoria, entrada in pares:
+        agrupado.setdefault(categoria, []).append(entrada)
+    return agrupado
+
+
+def _catalogo_causal(catalogo, significado, evidencia_concepto=None):
     """Vista del catálogo con realism/visual_mechanism restringidos por
-    significado — las otras 8 dimensiones (incluida la biblioteca de 504
-    direcciones) quedan intactas y abiertas: no hay evidencia real para
+    significado, y -- sólo si hay evidencia real de concepto (ver
+    `concepto_direccion.py`) -- primary_direction/secondary_direction
+    también. Sin evidencia (el caso por defecto), las 8 dimensiones
+    restantes quedan intactas y abiertas: no hay evidencia real para
     restringirlas sin fabricar afinidad."""
     aux = dict(catalogo.auxiliares)
+    direcciones = catalogo.direcciones
     explicacion = []
+
+    if evidencia_concepto is not None:
+        import concepto_direccion as cdir
+        informadas = cdir.direcciones_informadas_por_evidencia(catalogo, evidencia_concepto)
+        if informadas:
+            direcciones = _agrupar_por_categoria(informadas)
+            explicacion.append(
+                f"primary_direction/secondary_direction restringidas a {len(informadas)} "
+                f"entradas del catálogo maestro con vocabulario real compartido con la "
+                f"dirección artística histórica de {evidencia_concepto.content_id!r} "
+                f"({evidencia_concepto.direccion_artistica!r}, fuente: memoria fuerte real, "
+                f"rendimiento {evidencia_concepto.rendimiento}).")
+        else:
+            explicacion.append(
+                f"concepto parecido a {evidencia_concepto.content_id!r} en memoria fuerte "
+                f"(dirección artística histórica: {evidencia_concepto.direccion_artistica!r}), "
+                "pero esa descripción no comparte vocabulario real con el catálogo maestro -- "
+                "no se restringe primary_direction/secondary_direction, sólo se deja constancia.")
 
     permitidos_realism = _valores_permitidos_realism(significado)
     if permitidos_realism:
@@ -237,22 +283,51 @@ def _catalogo_causal(catalogo, significado):
             f"{significado.movimiento_juridico!r} no tiene palabras clave declaradas o ninguna "
             "coincidió en el catálogo real.")
 
-    return MasterCatalog(catalogo.direcciones, aux), explicacion
+    return MasterCatalog(direcciones, aux), explicacion
 
 
-def seleccionar_direccion_causal(candidato, catalogo=None, memoria=None, canal="", **kw):
+def seleccionar_direccion_causal(candidato, catalogo=None, memoria=None, canal="",
+                                 tabla_concepto_direccion=None, **kw):
     """CONCEPTO -> TENSIÓN -> MOVIMIENTO/GRADO DE ABSTRACCIÓN (significado,
     real) -> RESTRICCIÓN del catálogo (realism + visual_mechanism, por
-    coincidencia textual auditable) -> SELECCIÓN (anti-repetición + memoria,
-    reutilizando `visual_fingerprint.seleccionar_huella()` sin duplicar su
-    lógica). Devuelve (VisualFingerprint, Significado, explicación combinada).
+    coincidencia textual auditable; primary_direction/secondary_direction
+    también si hay evidencia real de concepto) -> SELECCIÓN (anti-repetición
+    + memoria, reutilizando `visual_fingerprint.seleccionar_huella()` sin
+    duplicar su lógica). Devuelve (VisualFingerprint, Significado,
+    explicación combinada).
+
+    `tabla_concepto_direccion` (`concepto_direccion.py`, autorización del
+    Founder 18-sep-2026): por defecto `None` — desactivado, mismo patrón
+    que `memoria_fuerte` en `art_direction.py`. Si se pasa (normalmente
+    `concepto_direccion.TABLA_CONCEPTO_DIRECCION`), se busca si el
+    concepto del candidato se parece a uno de los conceptos reales con
+    dirección artística documentada; si hay parecido Y vocabulario real
+    compartido con el catálogo, se restringe `primary_direction`/
+    `secondary_direction` a esas entradas. Sin parecido real, cero cambio
+    de comportamiento.
 
     `**kw` se reenvía a `seleccionar_huella()` (memoria, canal, umbrales de
     mutación) — mismo contrato, nunca lanza excepción por sí solo.
     """
     catalogo = catalogo or MasterCatalog.load()
     significado = derivar_significado(candidato)
-    catalogo_causal, explicacion_filtro = _catalogo_causal(catalogo, significado)
+
+    evidencia_concepto, similitud_concepto = None, 0.0
+    if tabla_concepto_direccion:
+        import concepto_direccion as cdir
+        evidencia_concepto, similitud_concepto = cdir.buscar_evidencia_concepto(
+            candidato.concepto_nucleo, tabla=tabla_concepto_direccion)
+    significado.evidencia_concepto_similitud = similitud_concepto
+    if evidencia_concepto is not None:
+        significado.evidencia_concepto_id = evidencia_concepto.content_id
+        significado.evidencia_concepto_direccion_artistica = evidencia_concepto.direccion_artistica
+
+    catalogo_causal, explicacion_filtro = _catalogo_causal(catalogo, significado, evidencia_concepto)
+    if tabla_concepto_direccion and evidencia_concepto is None:
+        explicacion_filtro = ([f"sin evidencia real de concepto: mejor similitud {similitud_concepto} "
+                              f"por debajo del umbral {cdir.UMBRAL_COINCIDENCIA_CONCEPTO} -- "
+                              "primary_direction/secondary_direction sin restricción."]
+                              + explicacion_filtro)
     huella = _seleccionar_huella_base(candidato.candidate_id, catalogo=catalogo_causal,
                                       memoria=memoria, canal=canal, **kw)
     huella.explanation = list(explicacion_filtro) + list(huella.explanation)

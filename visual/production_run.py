@@ -69,7 +69,8 @@ def draft_a_entry_visual(candidato, draft):
 
 def producir_y_dirigir(reserva_seed, memoria, mapa, universo, materias, registro_familias,
                        n=10, factor_reserva=14, catalogo_maestro=None, señales_mercado=None,
-                       memoria_fuerte=None, historial_materias=()):
+                       memoria_fuerte=None, historial_materias=(),
+                       tabla_concepto_direccion=None):
     """Reserva real ≥ RESERVA_MINIMA (factor=14, n=10 -> 140) → selección
     multi-factor (territorio ya incluido en el score, no aparte) → dirección
     de arte acumulando huella visual (catálogo maestro, Parte XII) entre
@@ -86,7 +87,14 @@ def producir_y_dirigir(reserva_seed, memoria, mapa, universo, materias, registro
     ver `generator.ajuste_balance_materias()`): secuencia plana de materias
     elegidas en tandas anteriores a esta. Vacío por defecto — un llamador
     que orquesta varias tandas seguidas (p.ej. un futuro runner multi-tanda)
-    es quien acumula esta lista entre llamadas; este módulo sólo la reenvía."""
+    es quien acumula esta lista entre llamadas; este módulo sólo la reenvía.
+
+    `tabla_concepto_direccion` (`concepto_direccion.py`, autorización del
+    Founder 18-sep-2026): opcional, se reenvía tal cual a
+    `draft_visual_brief()` para cada pieza del lote. `None` por defecto —
+    `cargar_contexto()`/`ejecutar()` la cargan real
+    (`concepto_direccion.TABLA_CONCEPTO_DIRECCION`), mismo patrón que
+    `memoria_fuerte`."""
     reserva = universe.build_reserve(objetivo_lote=n, seed=reserva_seed, factor=factor_reserva)
     assert len(reserva) >= RESERVA_MINIMA, (
         f"reserva de {len(reserva)} < mínimo exigido {RESERVA_MINIMA}: sube factor_reserva.")
@@ -104,7 +112,8 @@ def producir_y_dirigir(reserva_seed, memoria, mapa, universo, materias, registro
         d = draft_visual_brief(c, c.perfil_emocional, catalogo_maestro,
                                memoria_huellas=memoria_huellas,
                                registro_familias=registro_familias, memoria_visual=memoria_visual,
-                               memoria_fuerte=memoria_fuerte)
+                               memoria_fuerte=memoria_fuerte,
+                               tabla_concepto_direccion=tabla_concepto_direccion)
         drafts.append(d)
         memoria_visual.record(draft_a_entry_visual(c, d))
     return reserva, seleccion, puntuaciones, drafts, rechazados
@@ -329,16 +338,22 @@ def cargar_contexto():
     # arriba): mezclarlas confundiría "esto ya se contó en esta corrida" con
     # "esto ya lo aprobó el Founder de verdad" (ver memoria_fuerte.py).
     memoria_fuerte = mf.cargar_memoria_fuerte()
+    # Tabla CONCEPTO -> DIRECCIÓN ARTÍSTICA con evidencia real (autorización
+    # del Founder, 18-sep-2026, ver concepto_direccion.py) — misma fuente #5
+    # que memoria_fuerte, cargada real por defecto en producción.
+    import concepto_direccion as cdir
     return {"regs": regs, "enr": enr, "universo": universo, "materias": materias,
             "registro_familias": registro_familias, "mapa": mapa, "memoria": memoria,
-            "memoria_fuerte": memoria_fuerte}
+            "memoria_fuerte": memoria_fuerte,
+            "tabla_concepto_direccion": cdir.TABLA_CONCEPTO_DIRECCION}
 
 
 def ejecutar(seed_lote1=9101, seed_lote2=9102, elegidos_idx=(0, 4, 8)):
     ctx = cargar_contexto()
     reserva1, sel1, pts1, drafts1, rechazados1 = producir_y_dirigir(
         seed_lote1, ctx["memoria"], ctx["mapa"], ctx["universo"], ctx["materias"],
-        ctx["registro_familias"], memoria_fuerte=ctx["memoria_fuerte"])
+        ctx["registro_familias"], memoria_fuerte=ctx["memoria_fuerte"],
+        tabla_concepto_direccion=ctx["tabla_concepto_direccion"])
 
     balance = balance_exploracion(sel1, pts1)
     briefs = [construir_brief(c, d) for c, d in zip(sel1, drafts1)]
@@ -354,7 +369,8 @@ def ejecutar(seed_lote1=9101, seed_lote2=9102, elegidos_idx=(0, 4, 8)):
 
     reserva2, sel2, pts2, drafts2, rechazados2 = producir_y_dirigir(
         seed_lote2, ctx["memoria"], ctx["mapa"], ctx["universo"], ctx["materias"],
-        ctx["registro_familias"], memoria_fuerte=ctx["memoria_fuerte"])
+        ctx["registro_familias"], memoria_fuerte=ctx["memoria_fuerte"],
+        tabla_concepto_direccion=ctx["tabla_concepto_direccion"])
 
     fp1 = [c.fingerprint() for c in sel1]
     fp2 = [c.fingerprint() for c in sel2]

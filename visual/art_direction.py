@@ -241,7 +241,8 @@ def verificar_diversidad_de_estilos(drafts, catalogo_maestro=None, n_esperado=No
 def draft_visual_brief(candidato, perfil_emocional, catalogo_maestro=None,
                        memoria_huellas=None, canal="", registro_familias=None,
                        memoria_visual=None, evitar_familias=(),
-                       memoria_fuerte=None, reglas_rechazo_founder=None):
+                       memoria_fuerte=None, reglas_rechazo_founder=None,
+                       tabla_concepto_direccion=None):
     """Construye el borrador. `perfil_emocional` es el dict que ya trae el
     candidato (`candidato.perfil_emocional`, poblado por emotion.py) — no se
     vuelve a derivar aquí: una capa posterior nunca reinfiere lo que una
@@ -275,6 +276,19 @@ def draft_visual_brief(candidato, perfil_emocional, catalogo_maestro=None,
     excepción ni detiene nada por sí solo: el llamador debe comprobar
     `bloqueado_memoria_fuerte` antes de seguir (mismo patrón que
     `validate_generation_contract()`/`negotiate()` en providers/base.py).
+
+    `tabla_concepto_direccion` (`concepto_direccion.py`, autorización del
+    Founder 18-sep-2026) es opcional, mismo patrón que `memoria_fuerte`:
+    `None` (por defecto) desactiva la tabla CONCEPTO -> DIRECCIÓN
+    ARTÍSTICA con evidencia real -- `dcau.seleccionar_direccion_causal()`
+    se comporta exactamente igual que antes de que existiera. Se reenvía
+    tal cual, nunca se reinterpreta aquí. IMPORTANTE: esta tabla sólo
+    puede influir en QUÉ direcciones del catálogo se consideran ANTES de
+    seleccionar -- corre antes que `verificar_rechazos_founder()` y que la
+    comparación contra `memoria_fuerte` de más abajo, que siguen operando
+    sobre la huella ya elegida sin ningún cambio. Una dirección informada
+    por evidencia que resulte coincidir con un rechazo del Founder o con
+    una pieza ya en memoria fuerte se bloquea igual que cualquier otra.
     """
     funcion, razon = derivar_funcion_visual(candidato.familia_editorial, candidato.necesidad)
 
@@ -288,7 +302,8 @@ def draft_visual_brief(candidato, perfil_emocional, catalogo_maestro=None,
     # candidato). Ver ese módulo para qué se causa de verdad y qué sigue
     # sin fabricarse (objeto_protagonista/metáfora/escena).
     huella, significado, _ = dcau.seleccionar_direccion_causal(
-        candidato, catalogo=catalogo_maestro, memoria=memoria_huellas, canal=canal)
+        candidato, catalogo=catalogo_maestro, memoria=memoria_huellas, canal=canal,
+        tabla_concepto_direccion=tabla_concepto_direccion)
 
     superficie = ""
     if registro_familias is not None:

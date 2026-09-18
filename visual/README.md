@@ -629,6 +629,24 @@ direcciones + 7 dimensiones auxiliares):
   `NO_DISPONIBLE_EN_ESTA_ETAPA`, límites honestos en `direccion_causal.py`
   y en la tabla KEEP/ADAPT/REJECT arriba) — no código muerto oculto.
 
+**5. Tabla real CONCEPTO → DIRECCIÓN ARTÍSTICA (autorización del Founder,
+18-sep-2026, ver `docs/concepto-direccion-tabla-real-2026-09-18.md`).**
+Cierra la parte alcanzable del gap documentado arriba ("8/10 dimensiones
+siguen rotando por anti-repetición pura, incluida la biblioteca de 504
+direcciones"): `concepto_direccion.py` construye una tabla real de 2
+eslabones (CONCEPTO → DIRECCIÓN, no los 4 que describe el Contrato v4 §4 —
+la fuente real no documenta tensión ni metáfora para ninguna pieza) desde
+las 4/16 piezas de memoria fuerte que sí documentan dirección artística con
+rendimiento verificado. Cuando el concepto de un candidato se parece
+realmente a uno de esos 4 Y la dirección histórica comparte vocabulario
+real con el catálogo, `direccion_causal.py` restringe
+`primary_direction`/`secondary_direction` a esas entradas; sin evidencia
+real (el caso de casi cualquier candidato nuevo), cero cambio de
+comportamiento. Nunca gana a una regla de rechazo del Founder ni a un
+bloqueo de memoria fuerte — ambos corren después, sobre la huella ya
+elegida, sin ningún cambio (`test_concepto_direccion.py::TestAdversarial`).
+23 tests nuevos.
+
 ## Añadir un proveedor real
 
 1. `providers/<nombre>.py` con una clase que implemente `ImageProvider`.
