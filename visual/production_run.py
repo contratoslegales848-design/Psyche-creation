@@ -47,6 +47,7 @@ import territory_explorer as te
 import universe
 import visual_distance as vdist
 import visual_fingerprint as vf
+import visual_fingerprint_batch as vfb
 from art_direction import PENDIENTE_CONTENIDO, draft_visual_brief, verificar_diversidad_de_estilos
 from memory import VisualMemory, VisualMemoryEntry
 from semantic_memory import SemanticMemory
@@ -126,7 +127,16 @@ def producir_y_dirigir(reserva_seed, memoria, mapa, universo, materias, registro
     `draft_visual_brief()` para cada pieza del lote. `None` por defecto —
     `cargar_contexto()`/`ejecutar()` la cargan real
     (`concepto_direccion.TABLA_CONCEPTO_DIRECCION`), mismo patrón que
-    `memoria_fuerte`."""
+    `memoria_fuerte`.
+
+    Devuelve `(reserva, seleccion, puntuaciones, drafts, rechazados, huellas)`
+    -- `huellas` (hallazgo real, 18-sep-2026, 3ª pasada) son los
+    `VisualFingerprint` reales de las `n` piezas, en el mismo orden que
+    `seleccion`, leídos de vuelta de `memoria_huellas` una vez que
+    `draft_visual_brief()` las registra ahí (bug corregido en la misma
+    pasada: antes nunca se registraban, así que la anti-repetición interna
+    de `visual_fingerprint.seleccionar_huella()` nunca se ejercitaba dentro
+    de un lote real)."""
     reserva = universe.build_reserve(objetivo_lote=n, seed=reserva_seed, factor=factor_reserva)
     assert len(reserva) >= RESERVA_MINIMA, (
         f"reserva de {len(reserva)} < mínimo exigido {RESERVA_MINIMA}: sube factor_reserva.")
@@ -148,7 +158,9 @@ def producir_y_dirigir(reserva_seed, memoria, mapa, universo, materias, registro
                                tabla_concepto_direccion=tabla_concepto_direccion)
         drafts.append(d)
         memoria_visual.record(draft_a_entry_visual(c, d))
-    return reserva, seleccion, puntuaciones, drafts, rechazados
+    huellas_por_id = {e.content_id: e.fingerprint for e in memoria_huellas.recientes()}
+    huellas = [huellas_por_id.get(c.candidate_id) for c in seleccion]
+    return reserva, seleccion, puntuaciones, drafts, rechazados, huellas
 
 
 # ---------------------------------------------------------------------------
@@ -296,7 +308,18 @@ def _prueba_titulos_ocultos(drafts):
     return ok, detalle
 
 
-def qa_dos_ejes(seleccion, drafts, catalogo_maestro=None, historicas_visuales=()):
+def qa_dos_ejes(seleccion, drafts, catalogo_maestro=None, historicas_visuales=(), huellas=None):
+    """`huellas` (hallazgo real, 18-sep-2026, 3ª pasada de seguimiento):
+    lista opcional de `VisualFingerprint` reales del lote, en el mismo
+    orden que `seleccion` -- las devuelve ahora `producir_y_dirigir()` tras
+    corregir el bug de `memoria_huellas` nunca registrada. Con ellas se
+    ejecuta `visual_fingerprint_batch.evaluar_lote_visual()` (huellas
+    distintas entre sí, medios sin sobreexplotar, sin repetición
+    consecutiva, distancia mínima entre piezas consecutivas) -- probado y
+    correcto desde su construcción, pero sin efecto real hasta ahora
+    porque nunca llegaban huellas completas y correctamente registradas
+    desde el flujo real. Sin `huellas` (compatibilidad con llamadores
+    anteriores), este chequeo se omite -- nunca se fabrica evidencia."""
     fps = [c.fingerprint() for c in seleccion]
 
     ejes_intelectuales = ("materia", "familia_editorial", "necesidad", "angulo", "emocion")
@@ -309,6 +332,11 @@ def qa_dos_ejes(seleccion, drafts, catalogo_maestro=None, historicas_visuales=()
         drafts, catalogo_maestro, n_esperado=len(seleccion))
     entries = [draft_a_entry_visual(c, d) for c, d in zip(seleccion, drafts)]
     verificacion = vdist.verificar_lote_contra_historia(entries, historia=list(historicas_visuales))
+
+    lote_visual_qa = None
+    if huellas is not None and all(h is not None for h in huellas):
+        lote_visual_qa = vfb.evaluar_lote_visual(huellas, objetivo=len(seleccion))
+        ok_estilos = ok_estilos and lote_visual_qa.aceptado
 
     titulos_ok, titulos_detalle = _prueba_titulos_ocultos(drafts)
 
@@ -344,7 +372,9 @@ def qa_dos_ejes(seleccion, drafts, catalogo_maestro=None, historicas_visuales=()
         intelectual_detalle={"distintos_por_eje": distintos},
         visual_ok=ok_estilos,
         visual_detalle={"diversidad_estilos": detalle_estilos,
-                        "distancia_visual_estricta": verificacion.to_dict()},
+                        "distancia_visual_estricta": verificacion.to_dict(),
+                        "lote_visual_qa": (lote_visual_qa.to_dict() if lote_visual_qa is not None
+                                          else "sin huellas reales: chequeo omitido, no fabricado.")},
         prueba_titulos_ocultos_ok=titulos_ok,
         prueba_titulos_ocultos_detalle=titulos_detalle,
         memoria_fuerte_ok=memoria_fuerte_ok,
@@ -393,7 +423,7 @@ def ejecutar(seed_lote1=9101, seed_lote2=9102, elegidos_idx=(0, 4, 8)):
     # herede la corrección.
     historial_materias = [r.get("materia", "") for r in
                           list(mf.PIEZAS_PUBLICADAS) + list(mf.PIEZAS_PRESELECCIONADAS)]
-    reserva1, sel1, pts1, drafts1, rechazados1 = producir_y_dirigir(
+    reserva1, sel1, pts1, drafts1, rechazados1, huellas1 = producir_y_dirigir(
         seed_lote1, ctx["memoria"], ctx["mapa"], ctx["universo"], ctx["materias"],
         ctx["registro_familias"], memoria_fuerte=ctx["memoria_fuerte"],
         tabla_concepto_direccion=ctx["tabla_concepto_direccion"],
@@ -401,7 +431,7 @@ def ejecutar(seed_lote1=9101, seed_lote2=9102, elegidos_idx=(0, 4, 8)):
 
     balance = balance_exploracion(sel1, pts1)
     briefs = [construir_brief(c, d) for c, d in zip(sel1, drafts1)]
-    qa = qa_dos_ejes(sel1, drafts1)
+    qa = qa_dos_ejes(sel1, drafts1, huellas=huellas1)
 
     for c in sel1:
         provider_gate.verificar_proveedor_permitido("generic-http-image-v1")
@@ -411,7 +441,7 @@ def ejecutar(seed_lote1=9101, seed_lote2=9102, elegidos_idx=(0, 4, 8)):
     elegidos_ids = [sel1[i].candidate_id for i in elegidos_idx if i < len(sel1)]
     resumen_curaduria = organism.registrar_curaduria(lote1, elegidos_ids, ctx["memoria"])
 
-    reserva2, sel2, pts2, drafts2, rechazados2 = producir_y_dirigir(
+    reserva2, sel2, pts2, drafts2, rechazados2, huellas2 = producir_y_dirigir(
         seed_lote2, ctx["memoria"], ctx["mapa"], ctx["universo"], ctx["materias"],
         ctx["registro_familias"], memoria_fuerte=ctx["memoria_fuerte"],
         tabla_concepto_direccion=ctx["tabla_concepto_direccion"],
@@ -433,6 +463,7 @@ def ejecutar(seed_lote1=9101, seed_lote2=9102, elegidos_idx=(0, 4, 8)):
         "briefs": [b.to_dict() for b in briefs], "qa_dos_ejes": qa.to_dict(),
         "elegidos_ids": elegidos_ids, "resumen_curaduria": resumen_curaduria,
         "reserva2_size": len(reserva2), "seleccion2_size": len(sel2), "puntuaciones2": pts2,
+        "huellas1": huellas1, "huellas2": huellas2,
         "no_repeticion_semantica_inmediata": len(repite),
         "materias_descartadas_reaparecen": f"{len(reaparecen)}/{len(materias_descartadas)}",
         "afinidad_heredada": f"{len(con_afinidad)}/{len(sel2)}",

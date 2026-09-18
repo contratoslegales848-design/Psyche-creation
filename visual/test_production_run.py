@@ -66,7 +66,7 @@ class TestBalanceExploracion(ProduccionBase):
         ctx = pr.cargar_contexto()
         from semantic_memory import SemanticMemory
         memoria_virgen = SemanticMemory()
-        reserva, sel, pts, drafts, rech = pr.producir_y_dirigir(
+        reserva, sel, pts, drafts, rech, huellas = pr.producir_y_dirigir(
             7771, memoria_virgen, ctx["mapa"], ctx["universo"], ctx["materias"],
             ctx["registro_familias"], memoria_fuerte=None)
         b = pr.balance_exploracion(sel, pts)
@@ -311,6 +311,55 @@ class TestBalanceDeMateriaEntreLosDosLotesReales(unittest.TestCase):
         con_balance = [p for p in r["puntuaciones2"] if p.ajuste_balance_materias != 0]
         self.assertTrue(con_balance,
                         "el lote 2 real no recibió ningún ajuste de balance de materia")
+
+
+class TestHuellaVisualRealmenteRegistradaEnProduccion(unittest.TestCase):
+    """Hallazgo real (18-sep-2026, 3ª pasada): `producir_y_dirigir()` creaba
+    `memoria_huellas` una sola vez para las 10 piezas del lote, pero nunca
+    llamaba `.record()` tras cada `draft_visual_brief()` -- la
+    anti-repetición real de `visual_fingerprint.seleccionar_huella()`
+    (probada y correcta desde su construcción) veía la memoria siempre
+    vacía dentro de un lote real. Confirmado empíricamente antes del fix:
+    dos piezas del mismo lote real (semilla 9101) terminaban con idéntico
+    `primary_direction` ('stippling científico')."""
+
+    def test_producir_y_dirigir_devuelve_huellas_reales_completas(self):
+        ctx = pr.cargar_contexto()
+        _, sel, _, drafts, _, huellas = pr.producir_y_dirigir(
+            9101, ctx["memoria"], ctx["mapa"], ctx["universo"], ctx["materias"],
+            ctx["registro_familias"], memoria_fuerte=ctx["memoria_fuerte"],
+            tabla_concepto_direccion=ctx["tabla_concepto_direccion"],
+            señales_mercado=ctx["señales_mercado"])
+        self.assertEqual(len(huellas), len(sel))
+        self.assertTrue(all(h is not None for h in huellas),
+                        "producir_y_dirigir() no devolvió huella real para alguna pieza")
+
+    def test_las_diez_huellas_reales_de_un_lote_son_realmente_distintas(self):
+        """El caso concreto que probó el bug: sin el fix, primary_direction
+        se repetía dentro del mismo lote porque la memoria nunca veía nada
+        de lo ya elegido."""
+        ctx = pr.cargar_contexto()
+        _, sel, _, drafts, _, huellas = pr.producir_y_dirigir(
+            9101, ctx["memoria"], ctx["mapa"], ctx["universo"], ctx["materias"],
+            ctx["registro_familias"], memoria_fuerte=ctx["memoria_fuerte"],
+            tabla_concepto_direccion=ctx["tabla_concepto_direccion"],
+            señales_mercado=ctx["señales_mercado"])
+        direcciones = [h.primary_direction for h in huellas]
+        self.assertEqual(len(set(direcciones)), len(direcciones),
+                         f"primary_direction repetido dentro del mismo lote real: {direcciones}")
+
+    def test_qa_dos_ejes_ejecuta_evaluar_lote_visual_con_huellas_reales(self):
+        r = _resultado()
+        lote_visual_qa = r["qa_dos_ejes"]["visual_detalle"]["lote_visual_qa"]
+        self.assertIsInstance(lote_visual_qa, dict,
+                              "sin huellas reales, se omitió el chequeo en vez de fabricarlo")
+        self.assertEqual(lote_visual_qa["telemetria"]["huellas_distintas"], 10)
+
+    def test_sin_huellas_qa_dos_ejes_omite_el_chequeo_en_vez_de_fabricarlo(self):
+        r = _resultado()
+        qa_sin_huellas = pr.qa_dos_ejes(r["seleccion1"], r["drafts1"])
+        self.assertEqual(qa_sin_huellas.visual_detalle["lote_visual_qa"],
+                         "sin huellas reales: chequeo omitido, no fabricado.")
 
 
 if __name__ == "__main__":

@@ -304,6 +304,19 @@ def draft_visual_brief(candidato, perfil_emocional, catalogo_maestro=None,
     huella, significado, _ = dcau.seleccionar_direccion_causal(
         candidato, catalogo=catalogo_maestro, memoria=memoria_huellas, canal=canal,
         tabla_concepto_direccion=tabla_concepto_direccion)
+    # Bug real encontrado 18-sep-2026 (3ª pasada de seguimiento): nada
+    # registraba la huella recién elegida en `memoria_huellas` -- cada
+    # llamada de este método dentro de un mismo lote (production_run.py
+    # reutiliza la misma instancia de `FingerprintMemory` para las 10
+    # piezas) veía la memoria vacía, así que la anti-repetición real de
+    # `seleccionar_huella()` (probada y correcta) nunca se ejercitaba en
+    # producción real -- confirmado empíricamente: dos piezas de un lote
+    # real terminaban con el mismo `primary_direction`. El contrato de
+    # `FingerprintMemory`/`seleccionar_huella()` siempre esperó que quien
+    # llama registre después de elegir (mismo patrón que
+    # `visual_fingerprint_batch.generar_lote_visual()` ya hacía
+    # correctamente) -- faltaba aquí.
+    memoria_huellas.record(candidato.candidate_id, huella, canal=canal)
 
     superficie = ""
     if registro_familias is not None:

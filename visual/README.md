@@ -697,6 +697,59 @@ evidencia real, correctamente todavía sin aplicar al gate de producción.
 32/32 en `test_production_run.py`, suite completa de `visual/` sin
 regresiones.
 
+## 7ª pasada — 18-sep-2026 (3ª): la anti-repetición de huella visual nunca se ejercitaba dentro de un lote real
+
+Tercera pasada de seguimiento, exclusivamente sobre capacidades que YA
+EXISTEN y no llegan al flujo real. Hallazgo más serio de las tres pasadas
+del día: `art_direction.draft_visual_brief()` recibe `memoria_huellas`
+(`visual_fingerprint.FingerprintMemory`) y la reenvía a
+`direccion_causal.seleccionar_direccion_causal()` para que la
+anti-repetición real de `visual_fingerprint.seleccionar_huella()` compare
+la huella nueva contra lo ya elegido — pero **nada llamaba
+`memoria_huellas.record(...)` después de elegir cada huella**. Dentro de
+un mismo lote real de 10 piezas, `production_run.producir_y_dirigir()`
+crea `memoria_huellas` una sola vez y la reutiliza en las 10 llamadas a
+`draft_visual_brief()`, así que cada pieza se elegía con la memoria
+siempre vacía: la mutación por proximidad excesiva de `seleccionar_huella()`
+(probada, correcta) nunca se activaba de verdad en producción.
+
+**Confirmado empíricamente antes del fix**: lote real (semilla 9101), dos
+piezas con `primary_direction="stippling científico"` idéntico. Después
+del fix, el mismo lote: 10/10 direcciones distintas.
+
+**Corrección**: `draft_visual_brief()` ahora llama
+`memoria_huellas.record(candidato.candidate_id, huella, canal=canal)`
+justo después de elegir la huella — mismo contrato que
+`visual_fingerprint_batch.generar_lote_visual()` ya cumplía correctamente
+(por eso sus tests siempre pasaron: nunca ejercitaban el camino roto de
+`draft_visual_brief()`).
+
+**Aprovechado al mismo tiempo**: con la memoria corregida,
+`producir_y_dirigir()` ahora puede devolver las huellas reales completas
+del lote (antes se calculaban y se descartaban). `qa_dos_ejes()` las usa,
+cuando existen, para ejecutar `visual_fingerprint_batch.evaluar_lote_visual()`
+— probado y correcto desde su construcción, pero sin ningún llamador real
+hasta ahora (sólo `generar_lote_visual()`, usado por el demo, no por
+`production_run.py`). Sin huellas (compatibilidad retro), el chequeo se
+omite explícitamente, nunca se fabrica. Resultado real, no hipotético: con
+la semilla que usa `test_production_run.py` (5551/5552), el lote real
+**falla** este chequeo nuevo — `dibujo grabado y estampa` aparece 3 veces
+(tope 2 para un lote de 10) — evidencia real de sobreexplotación de medio
+que antes nadie veía.
+
+**Revisado y descartado explícitamente (no era un bug, mismo criterio que
+la pasada anterior)**: `compiler.compile_request()` — nunca se llama desde
+`production_run.py` porque exige `brief.subject`/`brief.environment`/
+`brief.metaphor`, contenido de escena que en producción real sigue
+`PENDIENTE_CONTENIDO` por diseño. Compilar ahí exigiría fabricar esa
+escena. Correcto tal como está: la compilación real ocurre después de la
+verificación jurídica y la autoría humana de escena, no en esta etapa.
+
+**Validación**: `producir_y_dirigir()` gana un 6º valor de retorno
+(`huellas`); `qa_dos_ejes()` gana el parámetro opcional `huellas`. 4 tests
+nuevos (`TestHuellaVisualRealmenteRegistradaEnProduccion`). 36/36 en
+`test_production_run.py`, suite completa de `visual/` sin regresiones.
+
 ## Añadir un proveedor real
 
 1. `providers/<nombre>.py` con una clase que implemente `ImageProvider`.
