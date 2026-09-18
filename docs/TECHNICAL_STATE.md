@@ -329,3 +329,73 @@ decisión del fundador, no técnica.
 - **Proveedor de imagen real conectado**: sigue bloqueado por falta de
   credenciales en el workspace (motor visual, no el subsistema jurídico de
   este documento) — ver `docs/mandato-maestro-cierre-2026-09-17.md`.
+
+## 10. Seguimiento del proyecto — 18-sep-2026
+
+Auditoría integral pedida por el Founder ("da seguimiento al estado actual
+del proyecto"): repo, Drive, PRs abiertos, bitácoras, `TECHNICAL_STATE.md`,
+documentación, TODOs, demos, módulos y tests. Objetivo: cerrar pendientes
+reales con lo ya construido, sin reinventar arquitectura.
+
+**Hallazgo principal: dos PRs abiertos desde antes de esta sesión, nunca
+reconciliados con el trabajo posterior.**
+
+1. **PR #16 — `feat/source-freshness-e-inventario`** (construido
+   31-ago-2026, 337 tests propios, declarado "NO MERGE" en su momento
+   porque era una entrega de validación pendiente de reconciliar, nunca
+   fusionado desde entonces). Contenido: exactamente lo que el red-team
+   (B1, "mayor consecuencia de lo que queda") y
+   `docs/contrato-motor-masivo.md` §4 pedían como prioridad — vigencia de
+   fuentes offline/fail-closed y un inventario materializado y
+   regenerable. **Integrado hoy** a esta rama (commit `30a9ae5`): cero
+   conflictos de código (el PR nunca tocó `visual/` ni la skill jurídica
+   existente), sólo conflictos de documentación, resueltos a mano.
+   Inventario regenerado tras 18 días de deriva real
+   (`python3 scripts/inventory.py build`). 358 tests, todos en verde.
+2. **PR #34 — `claude/convergencia-superset`** (`MERGE_CANDIDATE`
+   deliberado, 837 tests, `mergeable_state: clean` contra `main`,
+   90 archivos, +15.637/-86 líneas, 3-4-sep-2026). Repara bugs
+   semánticos reales del motor de candidatos (una capa jurisdiccional que
+   el código emitía como `CAPA_A_TRANSVERSAL` contradiciendo su propia
+   documentación; `INVENTORY_CANONICAL` declarado falsamente sin haber
+   leído nunca Drive — 24/24 candidatos salían "novedad global" sin
+   comprobarlo; el registro de fuentes oficiales de 26 a 31 entradas) y
+   converge 44 commits divergidos de `main` con 33 commits propios de
+   `main`, sin perder trabajo de ningún lado. **NO se integra hoy**: el
+   propio PR declara explícitamente "Requiere al fundador" — fusionarlo,
+   fechas del INAI contra el DOF, registrar `curia.europa.eu`, decidir
+   sobre 4 piezas mono-país, depositar PDFs oficiales en Drive. Absorber
+   90 archivos de contenido jurídico y registro de fuentes sin esas
+   decisiones del fundador excedería la autorización de esta sesión
+   ("puedes... sin volver al Founder por decisiones intermedias" no cubre
+   decisiones que el propio autor del PR marcó como del fundador). Queda
+   documentado aquí para que el fundador lo revise como su propia
+   decisión — ver el PR para el detalle completo.
+3. **Paquete Drive "01 — Implementación técnica pendiente (no activa)"**
+   (`delivery-art-direction-2026-09-16.zip` + 4 documentos, cuenta
+   `legallmente-alt`, bloqueado de publicarse en este repo por permisos
+   cruzados de cuenta). Describe una huella visual de 10 dimensiones
+   (`primary_direction`, `secondary_direction`, `medium`, `lighting`,
+   `palette`, `composition`, `materiality`, `camera_optics`, `realism`,
+   `visual_mechanism`) y un catálogo de 780 direcciones — **ya construido
+   de forma independiente y más avanzada** en este repo
+   (`visual_fingerprint.VisualFingerprint`, exactamente esas 10
+   dimensiones; catálogo maestro real de 504 direcciones vía
+   `catalog_parser.py`/`policy/catalogo-maestro-v1.md`; más
+   `direccion_causal.py`, `concepto_direccion.py`,
+   `arquetipo_compositivo.py`, `safe_zone.py`, ninguno presente en el
+   paquete de Drive de 16-sep). El propio Drive ya etiqueta el plan
+   asociado como "[REFERENCIA TÉCNICA — no ejecutar como canon]" — la
+   etiqueta "pendiente" de los otros archivos de esa carpeta está
+   desactualizada: la capacidad que describen ya existe, por una vía
+   distinta y más completa. No se modifica Drive (fuera de autorización).
+
+**Clasificación de todo lo demás revisado** (ver también §9 arriba y
+`docs/mandato-maestro-cierre-2026-09-17.md`): B5 (contenido identificable
+sin marcadores léxicos) y C4/P2.7 (paráfrasis) siguen correctamente
+diferidos — el propio red-team dice que B5 no se cierra con más regex, y
+P2.7 está gated explícitamente a cuando el volumen lo justifique, que hoy
+no se cumple (4 piezas piloto). El inventario "a escala de cientos de
+piezas" de `contrato-motor-masivo.md` §4.1 tampoco corresponde todavía por
+la misma razón — la infraestructura para construirlo ya existe (PR #16,
+integrado hoy), falta el volumen que lo justifique, no el mecanismo.
