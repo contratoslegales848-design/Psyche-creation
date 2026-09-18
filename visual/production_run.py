@@ -29,13 +29,16 @@ composición/cámara/luz/material/superficie de marca (dirección de arte sin
 carga jurídica propia), QA de dos ejes, y el ciclo de aprendizaje Founder.
 """
 
+import json
 from dataclasses import dataclass, field
+from pathlib import Path
 
 import corpus_enrichment as ce
 import corpus_import as ci
 import editorial
 import families
 import generator
+import market_signal as ms
 import memoria_fuerte as mf
 import organism
 import pedagogia as ped
@@ -47,6 +50,35 @@ import visual_fingerprint as vf
 from art_direction import PENDIENTE_CONTENIDO, draft_visual_brief, verificar_diversidad_de_estilos
 from memory import VisualMemory, VisualMemoryEntry
 from semantic_memory import SemanticMemory
+from vacancy_radar import VacancyPosting
+
+# Señal de mercado real (Parte VI del mandato "Fase post-implementación",
+# 16-sep-2026) -- hallazgo real, 18-sep-2026 ("da seguimiento", 2ª pasada):
+# `market_signal.py` estaba construido, probado y usado en
+# `demo_produccion_real_10_temas_nuevos.py` (30 vacantes reales de Indeed,
+# `corpus/vacantes-16-sep-2026.json`), pero `cargar_contexto()` -- el
+# camino de producción real -- nunca lo cargaba: `generator.ajuste_senal_mercado()`
+# existía y estaba wireado en `seleccionar_lote()`, pero con `señales_mercado`
+# siempre en `None` en producción, así que el ajuste era 0.0 en todas las
+# corridas reales. Corregido: se carga real por defecto, mismo patrón que
+# `memoria_fuerte`/`tabla_concepto_direccion`.
+VACANTES_REALES_PATH = Path(__file__).resolve().parent.parent / "corpus" / "vacantes-16-sep-2026.json"
+
+
+def cargar_señales_mercado_reales(path=None):
+    """Vacantes reales -> señales agrupadas por concepto. Mismo pipeline que
+    ya demostró `demo_produccion_real_10_temas_nuevos.py`, no reimplementado.
+    Sin el archivo de vacantes (entorno sin ese corpus) -> () exacto, igual
+    criterio que `memoria_fuerte=None`: sin evidencia, sin ajuste, nunca una
+    excepción que detenga la producción real por una señal opcional."""
+    path = path or VACANTES_REALES_PATH
+    if not path.is_file():
+        return ()
+    data = json.loads(path.read_text(encoding="utf-8"))
+    postings = [VacancyPosting(titulo=v["titulo"], empresa=v.get("empresa", ""),
+                               ubicacion=v.get("ubicacion", ""), publicado=v.get("publicado", ""),
+                               url=v.get("url", "")) for v in data.get("vacantes", [])]
+    return ms.agrupar_por_concepto(ms.procesar_vacantes(postings))
 
 RESERVA_MINIMA = 120
 
@@ -345,15 +377,27 @@ def cargar_contexto():
     return {"regs": regs, "enr": enr, "universo": universo, "materias": materias,
             "registro_familias": registro_familias, "mapa": mapa, "memoria": memoria,
             "memoria_fuerte": memoria_fuerte,
-            "tabla_concepto_direccion": cdir.TABLA_CONCEPTO_DIRECCION}
+            "tabla_concepto_direccion": cdir.TABLA_CONCEPTO_DIRECCION,
+            "señales_mercado": cargar_señales_mercado_reales()}
 
 
 def ejecutar(seed_lote1=9101, seed_lote2=9102, elegidos_idx=(0, 4, 8)):
     ctx = cargar_contexto()
+    # Balance de materia entre tandas (hallazgo real, 18-sep-2026, ver
+    # generator.ajuste_balance_materias()): `producir_y_dirigir()` ya acepta
+    # `historial_materias`, pero este ciclo real de dos lotes nunca lo
+    # pasaba -- el mismo bug de fondo que motivó el ajuste (memoria_fuerte
+    # sesgando cada tanda por igual) seguía sin corregirse aquí. Se siembra
+    # con las materias reales de memoria_fuerte (la causa raíz encontrada)
+    # y se acumula con lo que el lote 1 realmente elige, para que el lote 2
+    # herede la corrección.
+    historial_materias = [r.get("materia", "") for r in
+                          list(mf.PIEZAS_PUBLICADAS) + list(mf.PIEZAS_PRESELECCIONADAS)]
     reserva1, sel1, pts1, drafts1, rechazados1 = producir_y_dirigir(
         seed_lote1, ctx["memoria"], ctx["mapa"], ctx["universo"], ctx["materias"],
         ctx["registro_familias"], memoria_fuerte=ctx["memoria_fuerte"],
-        tabla_concepto_direccion=ctx["tabla_concepto_direccion"])
+        tabla_concepto_direccion=ctx["tabla_concepto_direccion"],
+        señales_mercado=ctx["señales_mercado"], historial_materias=historial_materias)
 
     balance = balance_exploracion(sel1, pts1)
     briefs = [construir_brief(c, d) for c, d in zip(sel1, drafts1)]
@@ -370,7 +414,9 @@ def ejecutar(seed_lote1=9101, seed_lote2=9102, elegidos_idx=(0, 4, 8)):
     reserva2, sel2, pts2, drafts2, rechazados2 = producir_y_dirigir(
         seed_lote2, ctx["memoria"], ctx["mapa"], ctx["universo"], ctx["materias"],
         ctx["registro_familias"], memoria_fuerte=ctx["memoria_fuerte"],
-        tabla_concepto_direccion=ctx["tabla_concepto_direccion"])
+        tabla_concepto_direccion=ctx["tabla_concepto_direccion"],
+        señales_mercado=ctx["señales_mercado"],
+        historial_materias=historial_materias + [c.materia for c in sel1])
 
     fp1 = [c.fingerprint() for c in sel1]
     fp2 = [c.fingerprint() for c in sel2]
@@ -386,7 +432,7 @@ def ejecutar(seed_lote1=9101, seed_lote2=9102, elegidos_idx=(0, 4, 8)):
         "rechazados1": len(rechazados1), "balance_exploracion": balance.to_dict(),
         "briefs": [b.to_dict() for b in briefs], "qa_dos_ejes": qa.to_dict(),
         "elegidos_ids": elegidos_ids, "resumen_curaduria": resumen_curaduria,
-        "reserva2_size": len(reserva2), "seleccion2_size": len(sel2),
+        "reserva2_size": len(reserva2), "seleccion2_size": len(sel2), "puntuaciones2": pts2,
         "no_repeticion_semantica_inmediata": len(repite),
         "materias_descartadas_reaparecen": f"{len(reaparecen)}/{len(materias_descartadas)}",
         "afinidad_heredada": f"{len(con_afinidad)}/{len(sel2)}",

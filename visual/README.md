@@ -647,6 +647,56 @@ bloqueo de memoria fuerte — ambos corren después, sobre la huella ya
 elegida, sin ningún cambio (`test_concepto_direccion.py::TestAdversarial`).
 23 tests nuevos.
 
+## 6ª pasada — 18-sep-2026 (2ª): herramientas ya construidas, nunca conectadas al camino real
+
+Segunda pasada de seguimiento ("da seguimiento desde el estado actual"):
+no auditoría nueva, sólo revisar si las herramientas ya construidas de
+verdad llegan al camino de producción real (`production_run.ejecutar()`),
+o si se quedaron en demos/pruebas aisladas. Dos hallazgos reales, ambos
+corregidos por wiring, no por reconstrucción:
+
+**1. Motor de investigación (`market_signal.py`) nunca se cargaba en
+producción.** El módulo existía, estaba probado y se usaba en
+`demo_produccion_real_10_temas_nuevos.py` (30 vacantes reales de Indeed,
+`corpus/vacantes-16-sep-2026.json`) — pero `production_run.cargar_contexto()`,
+el camino real, nunca lo cargaba: `señales_mercado` llegaba `None` a
+`generator.seleccionar_lote()` en toda corrida real, así que
+`ajuste_senal_mercado` era 0.0 siempre. Corregido: nueva función
+`cargar_señales_mercado_reales()` (mismo pipeline ya probado por el demo,
+no reimplementado), cargada real por defecto en `cargar_contexto()`, mismo
+patrón que `memoria_fuerte`/`tabla_concepto_direccion`. Verificado: el lote
+1 real ahora trae 5/10 piezas con ajuste de señal de mercado real > 0.
+
+**2. Balance de materia entre tandas (`generator.ajuste_balance_materias()`,
+5ª pasada) nunca llegaba al ciclo real de dos lotes.** `producir_y_dirigir()`
+ya aceptaba `historial_materias`, pero `ejecutar()` — el ciclo real que
+produce lote 1 y lote 2 — nunca lo pasaba en ninguna de sus dos llamadas:
+el mismo sesgo de `memoria_fuerte` que motivó el ajuste (documentado en la
+5ª pasada) seguía sin corregirse en la corrida real, sólo en la simulación
+de diagnóstico. Corregido: `ejecutar()` siembra `historial_materias` con
+las materias reales de `memoria_fuerte` (la causa raíz encontrada) para el
+lote 1, y lo acumula con lo que el lote 1 realmente elige para el lote 2.
+`pts2` (antes calculado pero descartado) ahora se expone en el resultado
+de `ejecutar()` para que esto sea auditable.
+
+**Revisado y descartado explícitamente (no era un bug)**: intentar wirear
+`arquetipo_compositivo.verificar_diversidad_arquetipos()`/
+`verificar_afinidad_familias()`/`verificar_redundancia_ambientacion()` al
+`qa_dos_ejes()` real. Esas funciones clasifican por `subject`/`environment`
+— campos de escena que en `demo_produccion_real_10_temas_nuevos.py` están
+autorados a mano (por eso el demo puede probarlas) pero que en
+`VisualBriefDraft` real siguen `PENDIENTE_CONTENIDO` por diseño (escena y
+metáfora son contenido creativo que exige verificación jurídica y autoría
+humana antes de existir, ver `art_direction.py`). Wirearlas ahí habría
+exigido fabricar texto de escena — exactamente lo que este módulo evita en
+todos sus demás mecanismos. Siguen siendo QA estructural válido sobre
+evidencia real, correctamente todavía sin aplicar al gate de producción.
+
+**Validación**: 5 tests nuevos (`test_production_run.py`:
+`TestSenalDeMercadoRealEnProduccion`, `TestBalanceDeMateriaEntreLosDosLotesReales`),
+32/32 en `test_production_run.py`, suite completa de `visual/` sin
+regresiones.
+
 ## Añadir un proveedor real
 
 1. `providers/<nombre>.py` con una clase que implemente `ImageProvider`.

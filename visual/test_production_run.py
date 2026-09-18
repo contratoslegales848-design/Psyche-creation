@@ -270,5 +270,48 @@ class TestEmotionalProfileCausalSobreLos10Reales(ProduccionBase):
                             "y dejar de tratarlo como límite pendiente.")
 
 
+class TestSenalDeMercadoRealEnProduccion(unittest.TestCase):
+    """Hallazgo real (18-sep-2026, 2ª pasada de seguimiento): `market_signal.py`
+    estaba construido y probado (`demo_produccion_real_10_temas_nuevos.py`),
+    pero `cargar_contexto()` -- el camino de producción real -- nunca lo
+    cargaba, así que `ajuste_senal_mercado` era 0.0 en toda corrida real."""
+
+    def test_cargar_contexto_trae_señales_de_mercado_reales(self):
+        ctx = pr.cargar_contexto()
+        self.assertTrue(ctx["señales_mercado"], "cargar_contexto() no trajo ninguna señal real")
+
+    def test_al_menos_una_pieza_del_lote_real_recibe_ajuste_de_senal_de_mercado(self):
+        r = _resultado()
+        con_senal = [p for p in r["puntuaciones1"] if p.ajuste_senal_mercado > 0]
+        self.assertTrue(con_senal,
+                        "ninguna pieza del lote real de producción recibió señal de mercado "
+                        "real -- la señal existe pero no llegó a puntuar_candidato()")
+
+    def test_sin_archivo_de_vacantes_no_rompe_nada(self):
+        from pathlib import Path
+        señales = pr.cargar_señales_mercado_reales(path=Path("/no/existe/vacantes.json"))
+        self.assertEqual(señales, ())
+
+
+class TestBalanceDeMateriaEntreLosDosLotesReales(unittest.TestCase):
+    """Hallazgo real (18-sep-2026, 2ª pasada): `producir_y_dirigir()` ya
+    aceptaba `historial_materias` (ver generator.ajuste_balance_materias()),
+    pero `ejecutar()` -- el ciclo real de dos lotes -- nunca lo pasaba en
+    ninguna de sus dos llamadas: el mismo sesgo de memoria_fuerte que
+    motivó el ajuste seguía sin corregirse en la corrida real."""
+
+    def test_el_lote_1_ya_recibe_el_sesgo_real_de_memoria_fuerte_como_historial(self):
+        r = _resultado()
+        con_balance = [p for p in r["puntuaciones1"] if p.ajuste_balance_materias != 0]
+        self.assertTrue(con_balance,
+                        "el lote 1 real no recibió ningún ajuste de balance de materia")
+
+    def test_el_lote_2_hereda_lo_que_el_lote_1_realmente_eligio(self):
+        r = _resultado()
+        con_balance = [p for p in r["puntuaciones2"] if p.ajuste_balance_materias != 0]
+        self.assertTrue(con_balance,
+                        "el lote 2 real no recibió ningún ajuste de balance de materia")
+
+
 if __name__ == "__main__":
     unittest.main()
