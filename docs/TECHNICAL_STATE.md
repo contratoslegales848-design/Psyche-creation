@@ -2,6 +2,7 @@
 
 **Fecha original:** 2026-08-27 · **Base original:** `origin/main` en `82f226e` + ramas `chore/phase1-technical-readiness` y `chore/phase1-p0-confidencialidad-procedencia`
 **Reconciliado:** 17-sep-2026, rama `claude/legalmente-architecture-reconciliation-xojn4i` (Mandato Maestro). Cifras marcadas **RE-VERIFICADO 17-sep** se corrieron de verdad hoy; el resto conserva su fecha y alcance originales — no se re-auditó línea por línea el subsistema jurídico completo en esta pasada, sólo se corrigió lo que el Mandato Maestro pidió explícitamente cerrar.
+**Integrado 18-sep-2026:** el PR #16 (`feat/source-freshness-e-inventario`, construido 31-ago-2026, nunca fusionado) traía vigencia de fuentes offline (`check-source-freshness.py`) e inventario materializado (`inventory.py`), 337 pruebas propias — exactamente lo que §7 P2.5/P2.6 y el red-team B1 pedían como prioridad de cierre. Se auditó, se confirmó que sigue vigente y compatible con todo lo construido después, y se fusionó a esta rama (ver "seguimiento del proyecto — 18-sep-2026" al final de este documento para el detalle completo).
 **Semáforo global: AMARILLO** (los dos P0 originales quedaron cerrados; el amarillo lo sostienen ahora riesgos declarados, no huecos sin control; ver también §7 para los pendientes que siguen abiertos hoy).
 
 > **ALCANCE:** este documento describe el subsistema de verificación
@@ -36,12 +37,15 @@ real y una prueba que pasa.
 | Enlace verificación → renderizado | 🟢 VERDE (nuevo) | Cada artefacto declara procedencia; sin ella el bundle de Remotion falla. Verificado de punta a punta. |
 | Confidencialidad | 🟡 AMARILLO (era rojo) | Control determinista fail-closed implementado; queda el contenido identificable sin marcadores léxicos (red team B5). |
 | Pipeline de video (Remotion) | 🟢 VERDE (nuevo) | Renderiza, y ya no puede renderizar contenido publicable sin origen verificable. |
-| Anti-duplicados | 🟡 AMARILLO (nuevo) | Controles literales implementados; la paráfrasis sigue sin detectarse. |
-| Motor de generación visual | 🟢 VERDE (SUPERADO por `visual/README.md`, RE-VERIFICADO 17-sep) | Cifra de 124 pruebas está muy desactualizada: `visual/` tiene hoy **1115 tests** (suite completa fresca, `python3 -m unittest discover`, corrida real hoy), no 124 — el subsistema creció enormemente desde el 27-ago (catálogo maestro 767 módulos, motor pedagógico, memoria fuerte, compilador causal de dirección artística). Detalle real y vigente: `visual/README.md` + `docs/mandato-maestro-cierre-2026-09-17.md`, no esta fila. |
-| Composición tipográfica / marca | 🟢 VERDE (nuevo) | `visual/compositor.py`: rasterizado real con Pillow. Métrica tipográfica real, área segura, `exact_copy` inmutable (desborda antes que mutar), marca solo sobre superficie reservada declarada y plana. 33 pruebas. |
+| Anti-duplicados | 🟡 AMARILLO (v2, integrado 18-sep) | Cinco colisiones deterministas (`content_id`, id de composición, huella normalizada de frase, casilla materia/submateria/concepto, `FINGERPRINT_IDENTICO`); la paráfrasis sigue sin detectarse. |
+| Vigencia de fuentes | 🟡 AMARILLO (nuevo, integrado 18-sep — era B1, máxima prioridad del red-team) | `check-source-freshness.py`: libro mayor + control offline fail-closed, deriva el veredicto sin tocar el claim packet. Abierto: nadie avisa desde fuera de que una norma cambió (riesgo residual C6, ver `docs/red-team-cadena-editorial.md`). |
+| Inventario materializado | 🟢 VERDE (nuevo, integrado 18-sep) | `scripts/inventory.py`: índice determinista y regenerable desde artefactos reales (nunca autoridad); `check` detecta que está obsoleto y falla. |
+| Motor de generación visual | 🟢 VERDE (SUPERADO por `visual/README.md`, RE-VERIFICADO 17-sep) | Cifra de 124 pruebas está muy desactualizada: `visual/` tiene hoy **1234 tests** (suite completa fresca, `python3 -m unittest discover`, corrida real 18-sep), no 124 — el subsistema creció enormemente desde el 27-ago (catálogo maestro 767 módulos, motor pedagógico, memoria fuerte, compilador causal de dirección artística, tabla concepto→dirección con evidencia real). Detalle real y vigente: `visual/README.md` + `docs/mandato-maestro-cierre-2026-09-17.md`, no esta fila. |
+| Composición tipográfica / marca | 🟢 VERDE (nuevo) | `visual/compositor.py`: rasterizado real con Pillow. Métrica tipográfica real, área segura, `exact_copy` inmutable (desborda antes que mutar), marca solo sobre superficie reservada declarada y plana, alineación de texto real (centro/izquierda/derecha, corregido 18-sep). |
 | Adapter de proveedor real | 🟡 AMARILLO (nuevo) | `providers/http_provider.py`: adapter HTTP real con transporte inyectable, 23 pruebas, cero llamadas externas. Sin credenciales configuradas en el workspace: no se ha ejecutado contra ningún proveedor. |
+| Métricas | 🟡 AMARILLO (nuevo, integrado 18-sep) | `DUE_FOR_MEASUREMENT` consultable vía inventario (publicada + sin medir + 7 días cumplidos); las cifras siguen tecleándose a mano, sin lectura automatizada de ninguna plataforma. |
 | Contrato cross-repo | 🟢 VERDE (Psyche, RE-VERIFICADO 17-sep) | `contract/`, Canonical Envelope v1, 8 fixtures, **17 tests** (creció de 12 — no re-medido cuándo; confirmado hoy con ejecución real: `python3 -m unittest discover` en `contract/`, 17/17 OK). Lado web (18 tests, `handoff/legalmente-web/`, escritura remota bloqueada): NO re-verificado esta sesión, se conserva la cifra original del 27-ago sin reconfirmar. |
-| Motor de producción masiva | ⚫ NO CONSTRUIDO | Contrato técnico definido (`docs/contrato-motor-masivo.md`); el motor, deliberadamente, no. Sin cambios desde 27-ago. |
+| Motor de producción masiva | ⚫ NO CONSTRUIDO | Contrato técnico definido (`docs/contrato-motor-masivo.md`) más la infraestructura mínima (vigencia + inventario, integrada 18-sep); el motor en sí, deliberadamente, no. |
 | Documentación vs. realidad | 🟢 VERDE (RESUELTO 17-sep, era 🟡) | Las dos derivas de §5 quedaron cerradas — ver §5 actualizado. |
 | `legalmente-web` (visibilidad) | 🟢 VERDE (RESUELTO, ya estaba resuelto desde 31-ago) | El repositorio es público; `CLAUDE.md §8` YA lo declara público (commit `9e4bded`, 31-ago-2026) — la fila anterior de esta misma tabla describía una contradicción que ya no existe. Re-verificado hoy con `git ls-remote` anónimo real (sin credenciales), HEAD actual `3d9d298`. Ver §5. |
 | Publicación automatizada | ⚫ INEXISTENTE (por diseño) | Ninguna automatización publica. Es una regla, no una carencia. Sin cambios. |
@@ -62,22 +66,30 @@ real y una prueba que pasa.
 - `scripts/confidentiality_rules.py` — **nuevo**: control determinista de
   confidencialidad. Doce indicadores sobre los campos publicables del claim; si
   alguno dispara, la revisión humana deja de ser opcional.
-- `scripts/validate-content-provenance.py` (en la raíz) — **nuevo**: procedencia de
-  los artefactos de `content/` y controles anti-duplicados.
+- `scripts/validate-content-provenance.py` (en la raíz) — procedencia de los
+  artefactos de `content/` y controles anti-duplicados.
+- `scripts/check-source-freshness.py` — **nuevo**: vigencia de fuentes. Offline y
+  sin reloj de red; deriva el veredicto sin tocar el claim packet.
+- `scripts/inventory.py` (en la raíz) — **nuevo**: inventario materializado,
+  determinista y regenerable, con consultas y anti-duplicados v2.
 - `references/official-source-registry.json` — 22 organismos oficiales.
 - `fixtures/` — 10 positivas, 46 negativas.
 - `publication/fixtures/` — 2 cadenas válidas, 14 inválidas, 1 claim packet sintético.
 
-**Pruebas: 499, todas en verde** (Psyche). Más 23 del consumidor de web, locales.
+**Pruebas: 358, todas en verde** (Psyche — skill jurídica + scripts de raíz + contrato cross-repo; corrida real, no estimada, 18-sep-2026 tras integrar vigencia de fuentes + inventario). Más 23 del consumidor de web, locales.
 | Suite | Pruebas |
 |---|---|
 | `test_validate_claim_packet` | 147 |
 | `test_check_pilot_governance` | 37 |
 | `test_validate_publication_chain` | 41 |
 | `test_confidentiality_rules` | 20 |
+| `test_check_source_freshness` | 31 (nuevo, integrado 18-sep) |
 | `test_validate_content_provenance` | 30 |
-| `visual/` (5 suites) | 207 |
-| `contract/test_canonical_envelope` | 12 |
+| `test_inventory` | 31 (nuevo, integrado 18-sep) |
+| `test_check_unittest_main_guard_position` | 4 |
+| `contract/test_canonical_envelope` | 17 |
+| **Total de esta tabla** | **358** |
+| `visual/` (suite completa) | 1234 (RE-VERIFICADO 18-sep; contado aparte, ver `visual/README.md` — no se suma al 358 de arriba, que es sólo el alcance jurídico/publicación de esta sección) |
 
 ### 2.2 Los cuatro estados no equivalentes
 
@@ -252,11 +264,15 @@ decisión del fundador, no técnica.
    Requiere permisos de escritura que las sesiones de este repo no tienen.
 
 **P2 — cuando el piloto esté medido**
-5. Detección de deriva de fuentes oficiales, fuera del validador (ver ADR 0001).
-   Es ahora el riesgo abierto de mayor consecuencia.
-6. Inventario materializado y planificación de cobertura para el motor masivo
-   (ver `docs/contrato-motor-masivo.md` §4).
-7. Detección de duplicados por paráfrasis, cuando el volumen lo justifique.
+5. ~~Inventario materializado.~~ Implementado.
+6. Vigilancia activa de cambios normativos: un proceso de research **con red y
+   fuera del validador** que marque fuentes para revisión. Es ahora el riesgo
+   abierto de mayor consecuencia (red team C6): el libro mayor solo sabe lo que un
+   humano escribió en él.
+7. Planificación de cobertura sobre el inventario (qué casillas de
+   `materia/submateria/concepto` faltan).
+8. Ingesta automatizada de métricas: hoy las cifras se teclean.
+9. Detección de duplicados por paráfrasis, cuando el volumen lo justifique.
 
 **P3 — no ahora**
 7. Integraciones externas (Grok/Manus/Gemini): los contratos están en borrador
@@ -282,17 +298,32 @@ decisión del fundador, no técnica.
   pedagógico, memoria fuerte en selección temática, compilador causal de
   dirección artística, auditoría de deuda técnica (resultado: limpia),
   reconciliación de este mismo documento.
+- `.claude/skills/legalmente-legal-verification/references/README-vigencia.md` — el
+  libro mayor de vigencia y por qué el veredicto se deriva en vez de almacenarse
+  (integrado 18-sep-2026, ver §9).
+- `inventory/README.md` — el índice derivado, sus consultas y sus límites
+  (integrado 18-sep-2026, ver §9).
 
-## 9. Pendientes P1-P3 genuinamente abiertos hoy (no re-verificados en la reconciliación del 17-sep)
-
-Estos NO se tocaron en la sesión del 17-sep-2026 — se listan aquí para que
-quede explícito que "reconciliado" no significa "todo resuelto":
+## 9. Pendientes P1-P3 genuinamente abiertos hoy
 
 - **PR #26/#28 de `legalmente-web`** (P1.6): cerrarlos como SUPERSEDED
   requiere permisos de escritura que las sesiones de este repo no tienen
   (cuenta distinta, `CLAUDE.md §8`). Estado sin re-verificar hoy.
-- **Detección de deriva de fuentes oficiales** (P2.5) y **detección de
-  duplicados por paráfrasis** (P2.7): sin cambios, siguen como estaban.
+- **Detección de deriva de fuentes oficiales** (P2.5): **parcialmente
+  cerrada 18-sep-2026** — el PR #16 (`feat/source-freshness-e-inventario`,
+  construido 31-ago-2026, nunca fusionado hasta hoy) traía
+  `check-source-freshness.py` (libro mayor offline, fail-closed, 31 tests)
+  y se integró a esta rama tras confirmar que sigue vigente. Sigue abierto
+  lo que el propio PR ya declaraba como límite estructural: nadie avisa
+  desde fuera de que una fuente cambió — el libro mayor sólo sabe lo que
+  un humano investigó y escribió en él (riesgo C6 de
+  `docs/red-team-cadena-editorial.md`).
+- **Inventario materializado** (`docs/contrato-motor-masivo.md` §4.1):
+  **cerrado 18-sep-2026** por la misma integración — `scripts/inventory.py`,
+  31 tests, determinista y regenerable desde artefactos reales.
+- **Detección de duplicados por paráfrasis** (P2.7): sin cambios, sigue
+  fuera de alcance sin motor semántico — declarado explícitamente, no
+  disimulado (ver `test_la_parafrasis_NO_se_detecta_y_queda_declarado`).
 - **Integraciones externas (Grok/Manus/Gemini) y agentes/hooks de Drive**
   (P3): deliberadamente no implementados, sin cambios.
 - **Proveedor de imagen real conectado**: sigue bloqueado por falta de
