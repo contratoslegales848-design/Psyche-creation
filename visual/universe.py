@@ -113,10 +113,18 @@ def _elige(rng, secuencia, preferidas=()):
     return rng.choice(sorted(opciones))
 
 
-def generar_candidato(rng, universo, materias, idx, materia=None):
+def generar_candidato(rng, universo, materias, idx, materia=None, familia=None):
+    """`familia` (hallazgo real, mandato "Revisa y mejora el generador de
+    imágenes", 19-sep-2026): opcional, fuerza la familia editorial del
+    candidato en vez de dejarla a `_elige` uniforme sobre las 65. Existe
+    porque un banco maestro de producción continua necesita GARANTIZAR las
+    puertas editoriales que el Founder nombró (mito, diferencia, concepto,
+    pasos prácticos, errores frecuentes, derechos, obligaciones, casos), no
+    sólo esperarlas por azar sobre un universo de 65 familias. `None`
+    preserva el comportamiento exacto de antes (`build_reserve` no la usa)."""
     mat = materia or _elige(rng, sorted(materias))
     sub = rng.choice(sorted(materias[mat]["submaterias"]))
-    fam_nombre = _elige(rng, universo.names())
+    fam_nombre = familia if familia else _elige(rng, universo.names())
     fam = universo.get(fam_nombre)
 
     nec = _elige(rng, sorted(universo.necesidades), fam.necesidades_afines)

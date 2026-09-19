@@ -8,6 +8,7 @@ Estados ("00 LEER PRIMERO" §7):
 
     GENERADA → PRESELECCIONADA → APROBADA → PUBLICADA
     DESCARTADA es independiente.
+    ENTREGADO es independiente (ver más abajo).
 
 Fuerza de la señal (Handoff §4):
 
@@ -43,8 +44,21 @@ PRESELECCIONADA = "PRESELECCIONADA"
 APROBADA = "APROBADA"
 PUBLICADA = "PUBLICADA"
 DESCARTADA = "DESCARTADA"
+# ENTREGADO (mandato "Revisa y mejora el generador de imágenes", 19-sep-2026,
+# requisito 4: "Una vez utilizado, regístralo como ENTREGADO y bloquéalo para
+# futuras generaciones"): un candidato que salió del motor real y quedó
+# incluido en un banco exportado (`banco_maestro.py`) — no una pieza que el
+# Founder ya vio y aprobó (eso es PRESELECCIONADA/APROBADA/PUBLICADA) ni sólo
+# "se generó en una corrida" (eso es GENERADA, cooldown corto). Se le da la
+# MISMA permanencia que HISTORICA porque el requisito es explícito: "bloquéalo
+# para futuras generaciones", no "evita repetirlo un rato". Deliberadamente
+# NO entra en MEMORIA_FUERTE: que algo se haya entregado en un banco no es una
+# señal de gusto del Founder, igual que HISTORICA no lo es (ver docstring de
+# MEMORIA_FUERTE más abajo) — mezclarlo sesgaría `preferencias()` con volumen
+# de producción, no con preferencia real.
+ENTREGADO = "ENTREGADO"
 
-ESTADOS = (HISTORICA, GENERADA, PRESELECCIONADA, APROBADA, PUBLICADA, DESCARTADA)
+ESTADOS = (HISTORICA, GENERADA, PRESELECCIONADA, APROBADA, PUBLICADA, DESCARTADA, ENTREGADO)
 
 # Ventana de cooldown por estado, en número de registros recientes.
 # El descarte tiene la ventana más corta a propósito (ver docstring).
@@ -54,6 +68,10 @@ COOLDOWN = {
     # las últimas 40 de 174 piezas y volvía a "descubrir" las otras 134 como
     # nuevas — exactamente el defecto que esta fase venía a cerrar.
     HISTORICA: 100000,
+    # Mismo argumento que HISTORICA: un banco maestro crece sin límite fijo
+    # ("sostener la producción continua"), así que su ventana de bloqueo tiene
+    # que cubrir TODO lo entregado hasta ahora, no sólo lo reciente.
+    ENTREGADO: 100000,
     PUBLICADA: 200,
     APROBADA: 200,
     PRESELECCIONADA: 100,
@@ -145,7 +163,7 @@ class SemanticMemory:
 
         peor = Veredicto(False, "ningún registro reciente es semánticamente equivalente.", 1.0)
         for estado in (PUBLICADA, APROBADA, PRESELECCIONADA, HISTORICA,
-                       GENERADA, DESCARTADA):
+                       ENTREGADO, GENERADA, DESCARTADA):
             ventana = [e for e in self._entries if e.estado == estado][:COOLDOWN[estado]]
             if not ventana:
                 continue
@@ -166,6 +184,11 @@ class SemanticMemory:
                     motivo = (f"equivalente a {cid!r}, que LegalMente YA CONTÓ "
                               f"(corpus histórico, distancia {d.valor}). No es una "
                               "señal de gusto del Founder: es memoria de lo producido.")
+                elif estado == ENTREGADO:
+                    motivo = (f"equivalente a {cid!r}, ya ENTREGADO en un banco maestro previo "
+                              f"(distancia {d.valor}). Bloqueado para futuras generaciones "
+                              "(mandato 19-sep-2026, requisito 4) — cambiar palabras no lo "
+                              "convierte en un tema nuevo.")
                 elif estado in MEMORIA_FUERTE:
                     motivo = (f"equivalente a {cid!r}, ya en memoria fuerte como {estado} "
                               f"(distancia {d.valor}). Señal positiva: ya se contó bien.")

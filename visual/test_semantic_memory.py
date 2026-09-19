@@ -6,7 +6,7 @@ from pathlib import Path
 
 from semantic_memory import (
     SemanticMemory, SemanticMemoryError, GENERADA, PRESELECCIONADA, APROBADA,
-    PUBLICADA, DESCARTADA, HISTORICA, COOLDOWN, MEMORIA_FUERTE, ESTADOS,
+    PUBLICADA, DESCARTADA, HISTORICA, ENTREGADO, COOLDOWN, MEMORIA_FUERTE, ESTADOS,
 )
 from semantic_fingerprint import SemanticFingerprint
 
@@ -32,7 +32,7 @@ class TestEstados(unittest.TestCase):
     def test_estados_canonicos(self):
         self.assertEqual(set(ESTADOS),
                          {HISTORICA, GENERADA, PRESELECCIONADA, APROBADA,
-                          PUBLICADA, DESCARTADA})
+                          PUBLICADA, DESCARTADA, ENTREGADO})
 
     def test_historica_no_es_señal_de_gusto_del_founder(self):
         """Que algo se produjera en el pasado no significa que se eligiera."""

@@ -750,6 +750,114 @@ verificación jurídica y la autoría humana de escena, no en esta etapa.
 nuevos (`TestHuellaVisualRealmenteRegistradaEnProduccion`). 36/36 en
 `test_production_run.py`, suite completa de `visual/` sin regresiones.
 
+## 8ª pasada — 19-sep-2026: banco maestro (motor real, no el Excel legacy)
+
+Mandato del Founder: "Revisa y mejora el generador de imágenes de
+LegalMente [...] Actualiza el Excel maestro con suficientes prompts nuevos
+para sostener la producción continua", con 7 requisitos numerados
+(categorías, comparación contra historial, registro ENTREGADO, detección
+de duplicados por parafraseo, variedad real, sólo instrucciones vigentes) y
+4 entregables (Excel maestro, historial anti-repetición consolidado,
+clasificación disponible/utilizado/bloqueado, prueba de generación).
+
+**Conflicto detectado antes de generar nada**: el pedido literal choca con
+dos cosas ya establecidas. (1) CLAUDE.md §6 prohíbe producir un banco
+grande nuevo de temas/prompts mientras el lote piloto activo no se haya
+publicado ni medido, salvo orden expresa del fundador — confirmado que no
+existe ningún `PublicationDecision` en el repo. (2) El único "Excel
+maestro" real en Drive es `legalmente-generador-aleatorio.xlsx`, etiquetado
+por el propio Drive `[USO LIMITADO — temas; no dirección artística]`: el
+motor legacy que este mismo repo ya reemplazó por el motor combinatorio
+real (`universe.py`/`editorial.py`/`generator.py`/`semantic_memory.py`).
+Se preguntó al Founder en vez de asumir una interpretación; su respuesta
+("Usar el motor real, no el Excel legacy") resuelve ambos puntos a la vez:
+fija el alcance (motor real, exportado a Excel/CSV, nunca reactivar el
+Excel legacy como motor) y cuenta como la autorización expresa que exige
+CLAUDE.md §6.
+
+**Construido, `visual/banco_maestro.py`**:
+
+- **Estado `ENTREGADO`** (`semantic_memory.py`, requisito 4 literal): nuevo
+  estado, additivo — no reemplaza ni reinterpreta GENERADA/PRESELECCIONADA/
+  APROBADA/PUBLICADA/DESCARTADA/HISTORICA. Misma permanencia de bloqueo que
+  HISTORICA (ventana de 100000 registros: "bloquéalo para futuras
+  generaciones" es explícito, no un cooldown corto). Deliberadamente FUERA
+  de `MEMORIA_FUERTE`: que algo se entregara en un banco no es que el
+  Founder lo haya aprobado — mezclarlo sesgaría `preferencias()` con
+  volumen de producción en vez de con gusto real, mismo argumento que ya
+  aplica a HISTORICA.
+- **`universe.generar_candidato()`** gana un parámetro opcional `familia`
+  (por defecto `None`, preserva el comportamiento exacto de `build_reserve`)
+  para poder GARANTIZAR las categorías que nombró el Founder en vez de
+  dejarlas a elección uniforme entre las 65 familias del universo abierto.
+- **Mapa de categorías** (`CATEGORIAS_FOUNDER`): las 8 categorías del
+  mandato (mitos jurídicos, diferencias, conceptos, pasos prácticos,
+  errores frecuentes, derechos, obligaciones, casos) mapeadas a familias
+  editoriales YA REGISTRADAS en `policy/editorial-universe-v1.json` —
+  ninguna se inventa; verificado con un test que compara contra el
+  registro real. El resto del universo (57 familias) entra como
+  `otros_formatos_ya_definidos` (requisito 2, "...y otros formatos ya
+  definidos en el sistema"): limitar el banco a sólo 8 familias habría
+  violado el requisito 6 (variedad real de ángulos/hooks/narrativas).
+- **`cargar_memoria_historial_completo()`**: combina, en una sola
+  `SemanticMemory` (requisito 3, "historial COMPLETO de piezas
+  entregadas"), el corpus histórico real (174 piezas, `corpus_import.py`,
+  HISTORICA), la memoria fuerte real (16 piezas, `memoria_fuerte.py`,
+  PUBLICADA/PRESELECCIONADA) y todo lo que el banco maestro ya entregó en
+  corridas anteriores (`ENTREGADO`, persistido en
+  `corpus/banco-maestro-memoria.json`, `SemanticMemory.save/load` — mismo
+  mecanismo de persistencia ya usado por `semantic_memory.py`, no uno
+  nuevo). Cada fuente se reconstruye fresca desde su propio origen y sólo
+  se fusiona para comparar — mismo patrón deliberado que ya usa
+  `memoria_fuerte.py` (nunca se persiste el corpus dentro del archivo del
+  banco).
+- **`construir_banco()`**: genera una reserva más grande que el objetivo
+  (`factor_reserva`), audita cada candidato contra el historial completo
+  ANTES de aceptarlo (`SemanticMemory.evaluar()`, ya calibrado 1.0 precisión
+  / 0.96 recall contra el corpus real — reutilizado, no reinventado), y
+  además contra lo YA aceptado en esta misma corrida
+  (`semantic_fingerprint.mas_similar()`/`equivalente_a()`, requisito 5:
+  "cambiar palabras no convierte un tema repetido en uno nuevo" — el mismo
+  mecanismo de equivalencia por solapamiento de tokens que ya resuelve el
+  parafraseo en todo el resto del sistema). Los primeros `objetivo`
+  candidatos que pasan la auditoría quedan `ENTREGADO` (utilizados,
+  bloqueados para el futuro); el resto de la reserva que también pasa
+  queda `DISPONIBLE` (validado, listo para la próxima corrida sin
+  regenerarse) en vez de descartarse — clasificación explícita de los tres
+  estados que pide el mandato (disponible/utilizado/bloqueado).
+- **Exportación** (`exportar_banco()`): "Excel maestro actualizado"
+  (`openpyxl`, tres hojas — ENTREGADO/DISPONIBLE/BLOQUEADO, cada una con su
+  motivo cuando aplica) y CSV equivalente como respaldo si `openpyxl` no
+  está disponible en el entorno.
+
+**Prueba de generación real** (`demo_banco_maestro.py`, sin datos
+fabricados): objetivo 80 sobre una reserva de 240, las 9 puertas editoriales
+cubiertas casi exactamente parejas (8–9 cada una), 26 materias distintas,
+**0 pares semánticamente equivalentes** entre los 80 entregados, **0**
+entregados que repitieran el historial previo a la corrida (verificado con
+una copia del historial capturada ANTES de persistir, para no comparar los
+entregados contra sí mismos). Segunda corrida con la misma semilla: **0**
+solapamiento de `candidate_id`, **0** equivalentes semánticos con la
+primera corrida, y los 80 candidatos que sí coincidían con la primera
+corrida quedaron bloqueados citando explícitamente `ENTREGADO` — prueba
+directa de que "bloquéalo para futuras generaciones" (requisito 4)
+funciona de verdad, no sólo en teoría.
+
+**Límite honesto**: el banco produce temas/prompts (`TopicCandidate`,
+infraestructura editorial), nunca imágenes — sigue sin proveedor de imagen
+real (decisión previa del usuario) y todo candidato permanece
+`NO_VERIFICADO` con `proxima_accion="legalmente-legal-verification"`
+(CLAUDE.md §4): ningún banco de este módulo sustituye la verificación
+jurídica humana ni abre ningún gate de publicación (CLAUDE.md §6).
+
+**Validación**: `test_banco_maestro.py` (25 tests: estado ENTREGADO,
+mapa de categorías contra el registro real, generación categorizada,
+construcción normal/adversarial, persistencia y bloqueo entre corridas,
+exportación CSV/Excel), más casos añadidos a `test_semantic_memory.py`
+(ESTADOS incluye ENTREGADO) y `test_editorial_universe.py` (`familia`
+explícita en `generar_candidato`). Suite completa de `visual/` sin
+regresiones.
+
 ## Añadir un proveedor real
 
 1. `providers/<nombre>.py` con una clase que implemente `ImageProvider`.

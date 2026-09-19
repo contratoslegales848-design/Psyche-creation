@@ -154,6 +154,24 @@ class TestCandidatos(unittest.TestCase):
         for eje in ("metafora", "escena", "composicion", "direccion_artistica"):
             self.assertEqual(getattr(fp, eje), "")
 
+    def test_familia_explicita_se_respeta(self):
+        """`familia` (hallazgo real, banco maestro 19-sep-2026): permite
+        forzar la familia editorial en vez de dejarla a elección uniforme —
+        sin romper el comportamiento por defecto de `build_reserve`."""
+        u = editorial.EditorialUniverse.load()
+        _, materias = universe.cargar_materias()
+        rng = __import__("random").Random(1)
+        c = universe.generar_candidato(rng, u, materias, 0, familia="mito")
+        self.assertEqual(c.familia_editorial, "mito")
+
+    def test_familia_none_preserva_el_comportamiento_por_defecto(self):
+        u = editorial.EditorialUniverse.load()
+        _, materias = universe.cargar_materias()
+        a = universe.generar_candidato(__import__("random").Random(5), u, materias, 0)
+        b = universe.generar_candidato(__import__("random").Random(5), u, materias, 0,
+                                       familia=None)
+        self.assertEqual(a.to_dict(), b.to_dict())
+
 
 class TestSeleccion(unittest.TestCase):
     def lote(self, seed=7, n=10):
