@@ -79,7 +79,7 @@ def brief_desde(vi, policy, fams):
         environment="entorno segun familia visual",
         camera=fams.get(familia).camera_tendencies[0],
         focal_point="objeto principal",
-        acento_frio_objeto="objeto de vidrio azul petroleo",
+        acento_objeto="objeto de vidrio o metal con reflejo real",
         marca_superficie=fams.get(familia).brand_surface_preferences[0],
     )
 

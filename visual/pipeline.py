@@ -20,7 +20,7 @@ from inspection import NoopSemanticInspector, FAIL, NEEDS_HUMAN_REVIEW
 from memory import VisualMemory, VisualMemoryEntry
 from observability import EventLog
 from plan import GenerationPlan, REJECT
-from providers.base import NormalizedImageRequest
+from providers.base import NormalizedImageRequest, validate_generation_contract
 from providers.selection import evaluate
 from qa import structural_qa
 
@@ -52,7 +52,7 @@ class VisualRun:
         if s == "PENDIENTE_REVISION_HUMANA":
             return NEEDS_REVIEW
         if s in ("GATE_CERRADO", "BRIEF_INVALIDO", "PROVEEDOR_INCOMPATIBLE",
-                 "COMPOSICION_DESBORDADA"):
+                 "COMPOSICION_DESBORDADA", "CONTRATO_GENERACION_INVALIDO"):
             return BLOCKED
         return FAILED
 
@@ -70,7 +70,7 @@ def _entry_desde_brief(content_id, brief, generation_id="", taxonomia=None):
         visual_family=brief.visual_family, scene_type=brief.environment,
         main_subject=brief.subject, camera_angle=brief.camera,
         metaphor=brief.metaphor, brand_surface=brief.marca_superficie,
-        secondary_objects=[brief.acento_frio_objeto] if brief.acento_frio_objeto else [],
+        secondary_objects=[brief.acento_objeto] if brief.acento_objeto else [],
         materia=str(tax.get("materia") or ""), concepto=str(tax.get("concepto") or ""))
 
 
@@ -97,7 +97,8 @@ def generate_visual(procedencia, brief, policy, provider, handoff=None,
                     claim_packet=None,
                     allow_regeneration=False,
                     exact_copy="", author="", content_type="", families_version="",
-                    reserved_surface=None, compose_asset=True, taxonomia=None):
+                    reserved_surface=None, compose_asset=True, taxonomia=None,
+                    fingerprint=None):
     """Ejecuta el pipeline. Con dry_run=True no se llama al proveedor (0 llamadas)."""
     log = EventLog()
     base = _receipt_base(procedencia, brief, policy, families_version)
@@ -126,7 +127,7 @@ def generate_visual(procedencia, brief, policy, provider, handoff=None,
     caps = provider.capabilities()
     try:
         compiled = compile_request(brief, policy, family=family, capabilities=caps,
-                                   repetition=repetition)
+                                   repetition=repetition, fingerprint=fingerprint)
     except ValueError as exc:
         return VisualRun(fin("BRIEF_INVALIDO", motivos=str(exc).splitlines()), events=log.to_list())
     log.emit("visual.brief.created", content_id=base["content_id"])
@@ -143,6 +144,7 @@ def generate_visual(procedencia, brief, policy, provider, handoff=None,
         provider=caps.provider_id,
         brand_mode=compiled.brand_mode,
         text_mode=compiled.text_mode,
+        generation_mode=compiled.generation_mode,
         explanation=list(compiled.explanation),
     )
 
@@ -154,7 +156,20 @@ def generate_visual(procedencia, brief, policy, provider, handoff=None,
         aspect_ratio=params["aspect_ratio"], seed=params.get("seed"),
         requires_text_rendering=(compiled.text_mode == "NATIVE_TEXT"),
         metadata=compiled.metadata,
+        generation_mode=compiled.generation_mode,
+        source_image=compiled.source_image,
+        reference_images=compiled.reference_images,
+        edit_instruction=compiled.edit_instruction,
     )
+
+    # 2b. Contrato de salida text-to-image vs. image-edit (Hotfix,
+    # 16-sep-2026): fail-fast, nunca se adivina ni se manda una peticion
+    # ambigua a un proveedor. Ver providers/base.py::validate_generation_contract.
+    problemas_contrato = validate_generation_contract(request)
+    if problemas_contrato:
+        log.emit("visual.contract.invalid", content_id=base["content_id"], reason=problemas_contrato[:1])
+        return VisualRun(fin("CONTRATO_GENERACION_INVALIDO", motivos=problemas_contrato),
+                         compiled=compiled, events=log.to_list())
 
     # 3. Negociacion explicita: ACCEPT / ADAPT / REJECT.
     compat, notas = evaluate(request, caps)

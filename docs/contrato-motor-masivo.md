@@ -22,7 +22,8 @@ reparten entre ellas.
 | `SITUACION_HUMANA` | `content/*.json` → `taxonomia.situacion_humana` | **añadido** |
 | `CONTENT_TYPE` | `content/*.json` → `taxonomia.content_type` | **añadido** |
 | `JURISDICTION_LAYER` | `claim.alcance`, replicado y **verificado** en `procedencia.jurisdiction_layer` | ya existía |
-| `SOURCE_STATE` | `claim.fuentes[].verificacion_fuente` + `registro_oficial_id` | ya existía |
+| `SOURCE_STATE` | libro mayor `source-freshness.json`, derivado por claim | **añadido** |
+| `TERRITORY` | `claim.jurisdiccion` + `jurisdicciones_revisadas[].pais` | ya existía |
 | `EDITORIAL_STATUS` | `claim.estado` + `claim.revision_humana.estado` | ya existía |
 | `VISUAL_STATUS` | `claim.gate_arte` + `ProductionHandoff.status` | ya existía |
 | `PUBLICATION_STATUS` | `PublicationDecision.decision` + `PublicationRecord.status` | ya existía |
@@ -68,22 +69,28 @@ PublicationRecord ──► MeasurementRecord (+7 días) ──► Learning
 Cada flecha ya está verificada por código. Lo que el motor masivo añadirá es
 **volumen y planificación**, no eslabones nuevos.
 
-## 4. Lo que el motor necesitará y todavía no existe
+## 4. Estado de la infraestructura del motor
 
-1. **Un inventario consultable.** Hoy la unicidad se comprueba archivo a archivo en
-   `validate-content-provenance.py`. A escala de cientos de piezas hará falta un
-   índice materializado (un JSON generado, no una base de datos nueva) con
-   `content_id`, taxonomía, huella y estados.
-2. **Planificación de cobertura.** Qué casillas de `materia/submateria/concepto`
-   están cubiertas y cuáles no. Es un informe sobre el inventario, no un sistema.
-3. **Detección de paráfrasis.** El control actual es literal (ver §5). Solo merece
-   la pena cuando el volumen lo justifique, y probablemente fuera del validador.
-4. **Ingesta de métricas.** Hoy las cifras se teclean. Sin lectura automatizada, el
-   bucle de aprendizaje no escala.
+1. **Inventario consultable** — ✅ **implementado** el 2026-08-27
+   (`scripts/inventory.py`, `inventory/README.md`). JSON generado determinísticamente
+   desde los artefactos, sin base de datos nueva y sin autoridad propia.
+2. **Vigencia de fuentes** — ✅ **implementada** (`scripts/check-source-freshness.py`).
+   No estaba en la lista original y resultó ser prioritaria: sin ella, una norma
+   derogada seguiría sosteniendo un claim aprobado.
+3. **Planificación de cobertura** — pendiente. Es un informe sobre el inventario
+   (qué casillas de `materia/submateria/concepto` faltan), no un sistema nuevo.
+4. **Detección de paráfrasis** — pendiente. El control actual es literal (§5). Solo
+   merece la pena cuando el volumen lo justifique, y probablemente fuera del validador.
+5. **Ingesta de métricas** — pendiente. Hoy las cifras se teclean. Sin lectura
+   automatizada, el bucle de aprendizaje no escala.
+6. **Vigilancia activa de cambios normativos** — pendiente y **no es código de
+   validación**: exige red, y el validador no la tendrá. Sería un proceso de research
+   separado que marque fuentes para revisión en el libro mayor.
 
 ## 5. Anti-duplicados: qué se detecta y qué no
 
-Implementado, determinista y barato:
+Implementado, determinista y barato. En `validate-content-provenance.py` (por
+artefacto) y en `inventory.py` (sobre el índice completo):
 
 | Control | Detecta |
 |---|---|
@@ -91,9 +98,11 @@ Implementado, determinista y barato:
 | `id` de composición único | colisión en el renderizador |
 | huella normalizada de la frase | la misma pieza con otro ID, salvo mayúsculas, tildes y signos |
 | casilla `materia/submateria/concepto` | el mismo concepto producido dos veces |
+| `publication_url` única | dos piezas apuntando a la misma publicación |
 
-**No** detecta paráfrasis ni reformulación semántica: eso exigiría un motor
-semántico, y hoy no lo hay. Se declara como límite, no se disimula.
+**No** detecta paráfrasis ni reformulación semántica: eso exigiría embeddings o un
+motor semántico, y hoy no lo hay. Se declara como límite, no se disimula — y hay una
+prueba que lo fija por escrito para que nadie suponga lo contrario.
 
 ## 6. Lo que el contrato NO autoriza
 

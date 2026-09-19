@@ -96,6 +96,61 @@ class TestTraduccion(unittest.TestCase):
         self.assertNotIn("negative_prompt", capturado)
 
 
+class TestContratoTextToImageVsEdit(unittest.TestCase):
+    """Hotfix (16-sep-2026) §13: TEXT_TO_IMAGE e IMAGE_EDIT nunca comparten
+    endpoint ni payload."""
+
+    def test_text_to_image_nunca_incluye_source_image_ni_edit_instruction(self):
+        capturado = {}
+
+        def t(url, payload, headers, timeout):
+            capturado.update(url=url, payload=payload)
+            return {"data": [{"b64_json": B64}]}
+
+        HttpImageProvider(cfg(edit_endpoint="https://ejemplo.invalid/v1/edits"),
+                          transport=t).generate(req())
+        self.assertEqual(capturado["url"], "https://ejemplo.invalid/v1/images")
+        self.assertNotIn("source_image", capturado["payload"])
+        self.assertNotIn("edit_instruction", capturado["payload"])
+
+    def test_image_edit_usa_el_endpoint_de_edicion_y_lleva_source_image(self):
+        capturado = {}
+
+        def t(url, payload, headers, timeout):
+            capturado.update(url=url, payload=payload)
+            return {"data": [{"b64_json": B64}]}
+
+        edit_req = NormalizedImageRequest(
+            "LM-TEST-002", "ajustar la iluminacion", "", 1080, 1920, "9:16",
+            generation_mode="IMAGE_EDIT", source_image=PNG, edit_instruction="aclarar la escena")
+        HttpImageProvider(cfg(edit_endpoint="https://ejemplo.invalid/v1/edits",
+                              supports_editing=True), transport=t).generate(edit_req)
+        self.assertEqual(capturado["url"], "https://ejemplo.invalid/v1/edits")
+        self.assertEqual(capturado["payload"]["source_image"], B64)
+        self.assertEqual(capturado["payload"]["edit_instruction"], "aclarar la escena")
+
+    def test_image_edit_sin_edit_endpoint_configurado_falla_explicito(self):
+        def t(url, payload, headers, timeout):
+            raise AssertionError("no debe llegar a llamar al transporte")
+
+        edit_req = NormalizedImageRequest(
+            "LM-TEST-003", "ajustar la iluminacion", "", 1080, 1920, "9:16",
+            generation_mode="IMAGE_EDIT", source_image=PNG)
+        result = HttpImageProvider(cfg(supports_editing=True), transport=t).generate(edit_req)
+        self.assertFalse(result.ok)
+        self.assertIn("INVALID_REQUEST", result.error)
+        self.assertIn("edit_endpoint", result.error)
+
+    def test_negotiate_rechaza_image_edit_si_el_proveedor_no_lo_soporta(self):
+        from providers.base import negotiate
+        edit_req = NormalizedImageRequest(
+            "LM-TEST-004", "ajustar", "", 1080, 1920, "9:16",
+            generation_mode="IMAGE_EDIT", source_image=PNG)
+        caps = HttpImageProvider(cfg(supports_editing=False)).capabilities()
+        problemas = negotiate(edit_req, caps)
+        self.assertTrue(any("IMAGE_EDIT" in p for p in problemas))
+
+
 class TestRespuestas(unittest.TestCase):
     def test_base64_embebido(self):
         r = HttpImageProvider(cfg(), transport=transporte_ok).generate(req())

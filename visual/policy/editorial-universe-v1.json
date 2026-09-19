@@ -1,0 +1,870 @@
+{
+  "registry_version": "1.0",
+  "nota": "Semilla canónica, NUNCA techo. Fuente: Drive 'Capa canónica de diversidad editorial y universo temático v1' §2 y §11, y '00 LEER PRIMERO' §4. El registro admite altas (register_familia) por contrato: una familia nueva es legítima si es distinguible, útil, verificable y no duplica semánticamente otra. Ninguna entrada de este archivo es una afirmación jurídica: son ejes EDITORIALES de selección. La verdad jurídica sigue viniendo de legalmente-legal-verification.",
+  "familias_editoriales": {
+    "duda_frecuente": {
+      "funcion_editorial": "resolver una pregunta que la gente repite",
+      "tension_tipica": "incertidumbre cotidiana",
+      "necesidades_afines": [
+        "entender",
+        "decidir"
+      ],
+      "roles_lector_afines": [
+        "persona"
+      ],
+      "profundidad_tipica": "base"
+    },
+    "asesoria_orientacion": {
+      "funcion_editorial": "orientar sobre qué observar y cuándo preguntar",
+      "tension_tipica": "no saber qué preguntar",
+      "necesidades_afines": [
+        "prepararse",
+        "decidir"
+      ],
+      "roles_lector_afines": [
+        "persona",
+        "empresa"
+      ],
+      "profundidad_tipica": "base"
+    },
+    "concepto": {
+      "funcion_editorial": "nombrar y delimitar una idea jurídica",
+      "tension_tipica": "confusión de vocabulario",
+      "necesidades_afines": [
+        "entender"
+      ],
+      "roles_lector_afines": [
+        "persona",
+        "estudiante"
+      ],
+      "profundidad_tipica": "base"
+    },
+    "definicion_operativa": {
+      "funcion_editorial": "definir en términos utilizables",
+      "tension_tipica": "abstracción sin uso",
+      "necesidades_afines": [
+        "entender",
+        "aplicar"
+      ],
+      "roles_lector_afines": [
+        "estudiante",
+        "profesional"
+      ],
+      "profundidad_tipica": "media"
+    },
+    "diferencia": {
+      "funcion_editorial": "distinguir dos figuras cercanas",
+      "tension_tipica": "dos cosas que parecen una",
+      "necesidades_afines": [
+        "distinguir",
+        "entender"
+      ],
+      "roles_lector_afines": [
+        "persona",
+        "estudiante"
+      ],
+      "profundidad_tipica": "media"
+    },
+    "confusion_habitual": {
+      "funcion_editorial": "corregir una mezcla frecuente de conceptos",
+      "tension_tipica": "creencia mezclada",
+      "necesidades_afines": [
+        "distinguir"
+      ],
+      "roles_lector_afines": [
+        "persona"
+      ],
+      "profundidad_tipica": "base"
+    },
+    "mito": {
+      "funcion_editorial": "desmontar una creencia extendida sin fundamento",
+      "tension_tipica": "creencia falsa arraigada",
+      "necesidades_afines": [
+        "corregir",
+        "entender"
+      ],
+      "roles_lector_afines": [
+        "persona"
+      ],
+      "profundidad_tipica": "base"
+    },
+    "error_frecuente": {
+      "funcion_editorial": "mostrar un error que la gente comete",
+      "tension_tipica": "acción equivocada repetida",
+      "necesidades_afines": [
+        "prevenir",
+        "corregir"
+      ],
+      "roles_lector_afines": [
+        "persona",
+        "empresa"
+      ],
+      "profundidad_tipica": "base"
+    },
+    "creencia_popular": {
+      "funcion_editorial": "examinar lo que 'todo el mundo dice'",
+      "tension_tipica": "cultura popular vs norma",
+      "necesidades_afines": [
+        "distinguir"
+      ],
+      "roles_lector_afines": [
+        "persona"
+      ],
+      "profundidad_tipica": "base"
+    },
+    "costumbre_juridica": {
+      "funcion_editorial": "distinguir costumbre de norma",
+      "tension_tipica": "práctica tomada por ley",
+      "necesidades_afines": [
+        "distinguir"
+      ],
+      "roles_lector_afines": [
+        "persona",
+        "profesional"
+      ],
+      "profundidad_tipica": "media"
+    },
+    "ley_regla": {
+      "funcion_editorial": "exponer qué establece una regla",
+      "tension_tipica": "desconocimiento de la regla",
+      "necesidades_afines": [
+        "entender"
+      ],
+      "roles_lector_afines": [
+        "persona",
+        "estudiante"
+      ],
+      "profundidad_tipica": "base"
+    },
+    "excepcion": {
+      "funcion_editorial": "mostrar dónde la regla no aplica",
+      "tension_tipica": "regla tomada como absoluta",
+      "necesidades_afines": [
+        "distinguir",
+        "prevenir"
+      ],
+      "roles_lector_afines": [
+        "estudiante",
+        "profesional"
+      ],
+      "profundidad_tipica": "media"
+    },
+    "requisito": {
+      "funcion_editorial": "enumerar qué se exige",
+      "tension_tipica": "faltar un requisito",
+      "necesidades_afines": [
+        "prepararse"
+      ],
+      "roles_lector_afines": [
+        "persona",
+        "empresa"
+      ],
+      "profundidad_tipica": "base"
+    },
+    "prohibicion": {
+      "funcion_editorial": "señalar qué no se permite",
+      "tension_tipica": "límite desconocido",
+      "necesidades_afines": [
+        "prevenir"
+      ],
+      "roles_lector_afines": [
+        "persona",
+        "empresa"
+      ],
+      "profundidad_tipica": "base"
+    },
+    "derecho": {
+      "funcion_editorial": "hacer visible una facultad",
+      "tension_tipica": "no saber que se tiene un derecho",
+      "necesidades_afines": [
+        "entender",
+        "reclamar"
+      ],
+      "roles_lector_afines": [
+        "persona"
+      ],
+      "profundidad_tipica": "base"
+    },
+    "obligacion": {
+      "funcion_editorial": "hacer visible un deber",
+      "tension_tipica": "deber ignorado",
+      "necesidades_afines": [
+        "entender",
+        "cumplir"
+      ],
+      "roles_lector_afines": [
+        "persona",
+        "empresa"
+      ],
+      "profundidad_tipica": "base"
+    },
+    "consecuencia": {
+      "funcion_editorial": "mostrar el efecto de una conducta",
+      "tension_tipica": "acción sin previsión de efecto",
+      "necesidades_afines": [
+        "prevenir",
+        "decidir"
+      ],
+      "roles_lector_afines": [
+        "persona",
+        "empresa"
+      ],
+      "profundidad_tipica": "media"
+    },
+    "riesgo": {
+      "funcion_editorial": "nombrar una exposición concreta",
+      "tension_tipica": "riesgo invisible",
+      "necesidades_afines": [
+        "prevenir"
+      ],
+      "roles_lector_afines": [
+        "empresa",
+        "profesional"
+      ],
+      "profundidad_tipica": "media"
+    },
+    "senal_de_alerta": {
+      "funcion_editorial": "enseñar a reconocer una señal temprana",
+      "tension_tipica": "daño detectado tarde",
+      "necesidades_afines": [
+        "prevenir",
+        "detectar"
+      ],
+      "roles_lector_afines": [
+        "persona",
+        "empresa"
+      ],
+      "profundidad_tipica": "base"
+    },
+    "que_hacer": {
+      "funcion_editorial": "ordenar una actuación",
+      "tension_tipica": "parálisis ante un hecho",
+      "necesidades_afines": [
+        "actuar"
+      ],
+      "roles_lector_afines": [
+        "persona"
+      ],
+      "profundidad_tipica": "base"
+    },
+    "que_no_hacer": {
+      "funcion_editorial": "evitar un agravamiento",
+      "tension_tipica": "empeorar la posición propia",
+      "necesidades_afines": [
+        "prevenir"
+      ],
+      "roles_lector_afines": [
+        "persona"
+      ],
+      "profundidad_tipica": "base"
+    },
+    "primeros_pasos": {
+      "funcion_editorial": "secuenciar el arranque",
+      "tension_tipica": "no saber por dónde empezar",
+      "necesidades_afines": [
+        "actuar",
+        "prepararse"
+      ],
+      "roles_lector_afines": [
+        "persona"
+      ],
+      "profundidad_tipica": "base"
+    },
+    "checklist": {
+      "funcion_editorial": "convertir conocimiento en verificación",
+      "tension_tipica": "olvidar un punto crítico",
+      "necesidades_afines": [
+        "prepararse"
+      ],
+      "roles_lector_afines": [
+        "persona",
+        "empresa"
+      ],
+      "profundidad_tipica": "media"
+    },
+    "documento_clave": {
+      "funcion_editorial": "explicar un documento que decide",
+      "tension_tipica": "documento firmado sin leer",
+      "necesidades_afines": [
+        "prepararse",
+        "distinguir"
+      ],
+      "roles_lector_afines": [
+        "persona",
+        "empresa"
+      ],
+      "profundidad_tipica": "media"
+    },
+    "clausula_bajo_lupa": {
+      "funcion_editorial": "examinar una cláusula concreta",
+      "tension_tipica": "cláusula que cambia el riesgo",
+      "necesidades_afines": [
+        "distinguir",
+        "prevenir"
+      ],
+      "roles_lector_afines": [
+        "empresa",
+        "profesional"
+      ],
+      "profundidad_tipica": "alta"
+    },
+    "contrato_bajo_lupa": {
+      "funcion_editorial": "analizar la arquitectura de un contrato",
+      "tension_tipica": "contrato como plantilla ciega",
+      "necesidades_afines": [
+        "prepararse"
+      ],
+      "roles_lector_afines": [
+        "empresa",
+        "profesional"
+      ],
+      "profundidad_tipica": "alta"
+    },
+    "proceso": {
+      "funcion_editorial": "mostrar el recorrido de un asunto",
+      "tension_tipica": "proceso opaco",
+      "necesidades_afines": [
+        "entender",
+        "prepararse"
+      ],
+      "roles_lector_afines": [
+        "persona",
+        "estudiante"
+      ],
+      "profundidad_tipica": "media"
+    },
+    "etapa_procesal": {
+      "funcion_editorial": "aislar un momento del proceso",
+      "tension_tipica": "momento crítico desconocido",
+      "necesidades_afines": [
+        "prepararse"
+      ],
+      "roles_lector_afines": [
+        "estudiante",
+        "profesional"
+      ],
+      "profundidad_tipica": "alta"
+    },
+    "prueba": {
+      "funcion_editorial": "explicar qué acredita un hecho",
+      "tension_tipica": "hecho cierto sin prueba",
+      "necesidades_afines": [
+        "prepararse",
+        "prevenir"
+      ],
+      "roles_lector_afines": [
+        "persona",
+        "profesional"
+      ],
+      "profundidad_tipica": "media"
+    },
+    "carga_de_la_prueba": {
+      "funcion_editorial": "mostrar a quién toca probar",
+      "tension_tipica": "expectativa invertida",
+      "necesidades_afines": [
+        "distinguir"
+      ],
+      "roles_lector_afines": [
+        "estudiante",
+        "profesional"
+      ],
+      "profundidad_tipica": "alta"
+    },
+    "responsabilidad": {
+      "funcion_editorial": "atribuir el deber de responder",
+      "tension_tipica": "daño sin responsable claro",
+      "necesidades_afines": [
+        "entender"
+      ],
+      "roles_lector_afines": [
+        "persona",
+        "empresa"
+      ],
+      "profundidad_tipica": "media"
+    },
+    "plazo_prescripcion": {
+      "funcion_editorial": "hacer visible el tiempo jurídico",
+      "tension_tipica": "derecho perdido por tiempo",
+      "necesidades_afines": [
+        "prevenir",
+        "actuar"
+      ],
+      "roles_lector_afines": [
+        "persona"
+      ],
+      "profundidad_tipica": "media"
+    },
+    "autoridad_competente": {
+      "funcion_editorial": "identificar ante quién se acude",
+      "tension_tipica": "puerta equivocada",
+      "necesidades_afines": [
+        "actuar"
+      ],
+      "roles_lector_afines": [
+        "persona"
+      ],
+      "profundidad_tipica": "base"
+    },
+    "caso_cotidiano": {
+      "funcion_editorial": "narrar una situación reconocible",
+      "tension_tipica": "abstracción sin rostro",
+      "necesidades_afines": [
+        "entender"
+      ],
+      "roles_lector_afines": [
+        "persona"
+      ],
+      "profundidad_tipica": "base"
+    },
+    "caso_historico": {
+      "funcion_editorial": "narrar un caso documentado",
+      "tension_tipica": "olvido del origen",
+      "necesidades_afines": [
+        "entender",
+        "recordar"
+      ],
+      "roles_lector_afines": [
+        "estudiante",
+        "persona"
+      ],
+      "profundidad_tipica": "media"
+    },
+    "historia_del_derecho": {
+      "funcion_editorial": "mostrar cómo nació una institución",
+      "tension_tipica": "regla sin memoria",
+      "necesidades_afines": [
+        "entender",
+        "recordar"
+      ],
+      "roles_lector_afines": [
+        "estudiante"
+      ],
+      "profundidad_tipica": "media"
+    },
+    "jurista": {
+      "funcion_editorial": "retratar a quien pensó una idea",
+      "tension_tipica": "doctrina sin autor",
+      "necesidades_afines": [
+        "recordar"
+      ],
+      "roles_lector_afines": [
+        "estudiante",
+        "profesional"
+      ],
+      "profundidad_tipica": "media"
+    },
+    "doctrina": {
+      "funcion_editorial": "exponer una construcción teórica",
+      "tension_tipica": "teoría inaccesible",
+      "necesidades_afines": [
+        "entender"
+      ],
+      "roles_lector_afines": [
+        "estudiante",
+        "profesional"
+      ],
+      "profundidad_tipica": "alta"
+    },
+    "maxima_aforismo": {
+      "funcion_editorial": "transmitir una máxima verificable",
+      "tension_tipica": "frase viral sin origen",
+      "necesidades_afines": [
+        "recordar"
+      ],
+      "roles_lector_afines": [
+        "persona",
+        "estudiante"
+      ],
+      "profundidad_tipica": "base"
+    },
+    "etimologia": {
+      "funcion_editorial": "recuperar el origen de una palabra",
+      "tension_tipica": "palabra vaciada de sentido",
+      "necesidades_afines": [
+        "recordar",
+        "entender"
+      ],
+      "roles_lector_afines": [
+        "persona",
+        "estudiante"
+      ],
+      "profundidad_tipica": "base"
+    },
+    "rareza_juridica": {
+      "funcion_editorial": "mostrar una anomalía que enseña",
+      "tension_tipica": "estructura invisible",
+      "necesidades_afines": [
+        "entender",
+        "recordar"
+      ],
+      "roles_lector_afines": [
+        "persona",
+        "estudiante"
+      ],
+      "profundidad_tipica": "media"
+    },
+    "comparacion_sistemas": {
+      "funcion_editorial": "contrastar ordenamientos",
+      "tension_tipica": "falsa universalización",
+      "necesidades_afines": [
+        "distinguir"
+      ],
+      "roles_lector_afines": [
+        "estudiante",
+        "profesional"
+      ],
+      "profundidad_tipica": "alta"
+    },
+    "criminalistica_forense": {
+      "funcion_editorial": "explicar cómo se reconstruye un hecho",
+      "tension_tipica": "ficción televisiva vs técnica",
+      "necesidades_afines": [
+        "entender",
+        "distinguir"
+      ],
+      "roles_lector_afines": [
+        "persona",
+        "estudiante"
+      ],
+      "profundidad_tipica": "media"
+    },
+    "medicina_legal": {
+      "funcion_editorial": "explicar el puente entre cuerpo y prueba",
+      "tension_tipica": "peritaje incomprendido",
+      "necesidades_afines": [
+        "entender"
+      ],
+      "roles_lector_afines": [
+        "estudiante",
+        "profesional"
+      ],
+      "profundidad_tipica": "alta"
+    },
+    "evidencia_digital": {
+      "funcion_editorial": "tratar el rastro digital como prueba",
+      "tension_tipica": "rastro perdido o inválido",
+      "necesidades_afines": [
+        "prepararse",
+        "prevenir"
+      ],
+      "roles_lector_afines": [
+        "persona",
+        "empresa"
+      ],
+      "profundidad_tipica": "media"
+    },
+    "herramienta_practica": {
+      "funcion_editorial": "entregar una estructura utilizable",
+      "tension_tipica": "conocimiento sin aplicación",
+      "necesidades_afines": [
+        "aplicar",
+        "prepararse"
+      ],
+      "roles_lector_afines": [
+        "persona",
+        "empresa"
+      ],
+      "profundidad_tipica": "media"
+    },
+    "prevencion": {
+      "funcion_editorial": "evitar que el conflicto nazca",
+      "tension_tipica": "conflicto evitable",
+      "necesidades_afines": [
+        "prevenir"
+      ],
+      "roles_lector_afines": [
+        "persona",
+        "empresa"
+      ],
+      "profundidad_tipica": "base"
+    },
+    "negociacion": {
+      "funcion_editorial": "estructurar un acuerdo antes del conflicto",
+      "tension_tipica": "posición sin preparación",
+      "necesidades_afines": [
+        "prepararse",
+        "acordar"
+      ],
+      "roles_lector_afines": [
+        "empresa",
+        "profesional"
+      ],
+      "profundidad_tipica": "media"
+    },
+    "conciliacion_mediacion": {
+      "funcion_editorial": "mostrar la vía no contenciosa",
+      "tension_tipica": "litigio como único camino",
+      "necesidades_afines": [
+        "decidir",
+        "acordar"
+      ],
+      "roles_lector_afines": [
+        "persona",
+        "empresa"
+      ],
+      "profundidad_tipica": "media"
+    },
+    "reparacion": {
+      "funcion_editorial": "mostrar cómo se repara un daño",
+      "tension_tipica": "daño sin restitución",
+      "necesidades_afines": [
+        "reclamar"
+      ],
+      "roles_lector_afines": [
+        "persona"
+      ],
+      "profundidad_tipica": "media"
+    },
+    "cumplimiento_compliance": {
+      "funcion_editorial": "ordenar el deber de una organización",
+      "tension_tipica": "deber difuso en la empresa",
+      "necesidades_afines": [
+        "cumplir",
+        "prevenir"
+      ],
+      "roles_lector_afines": [
+        "empresa",
+        "profesional"
+      ],
+      "profundidad_tipica": "alta"
+    },
+    "incumplimiento": {
+      "funcion_editorial": "mostrar la ruptura de un deber",
+      "tension_tipica": "ruptura sin consecuencia prevista",
+      "necesidades_afines": [
+        "entender",
+        "reclamar"
+      ],
+      "roles_lector_afines": [
+        "persona",
+        "empresa"
+      ],
+      "profundidad_tipica": "media"
+    },
+    "actualizacion_normativa": {
+      "funcion_editorial": "señalar qué cambió",
+      "tension_tipica": "conocimiento envejecido",
+      "necesidades_afines": [
+        "actualizar"
+      ],
+      "roles_lector_afines": [
+        "profesional"
+      ],
+      "profundidad_tipica": "alta"
+    },
+    "interpretacion": {
+      "funcion_editorial": "mostrar cómo se lee una norma",
+      "tension_tipica": "texto leído literalmente",
+      "necesidades_afines": [
+        "entender",
+        "distinguir"
+      ],
+      "roles_lector_afines": [
+        "estudiante",
+        "profesional"
+      ],
+      "profundidad_tipica": "alta"
+    },
+    "lenguaje_juridico_explicado": {
+      "funcion_editorial": "traducir un tecnicismo",
+      "tension_tipica": "muro de vocabulario",
+      "necesidades_afines": [
+        "entender"
+      ],
+      "roles_lector_afines": [
+        "persona"
+      ],
+      "profundidad_tipica": "base"
+    },
+    "paradoja_tension": {
+      "funcion_editorial": "exponer una tensión estructural",
+      "tension_tipica": "legalidad vs realidad",
+      "necesidades_afines": [
+        "reflexionar"
+      ],
+      "roles_lector_afines": [
+        "estudiante",
+        "profesional"
+      ],
+      "profundidad_tipica": "alta"
+    },
+    "cultura_juridica": {
+      "funcion_editorial": "entrar por una obra cultural",
+      "tension_tipica": "el Derecho como algo ajeno",
+      "necesidades_afines": [
+        "entender",
+        "reflexionar"
+      ],
+      "roles_lector_afines": [
+        "persona"
+      ],
+      "profundidad_tipica": "base"
+    },
+    "pregunta_avanzada": {
+      "funcion_editorial": "abrir una cuestión de profundidad",
+      "tension_tipica": "techo de comprensión",
+      "necesidades_afines": [
+        "reflexionar"
+      ],
+      "roles_lector_afines": [
+        "profesional"
+      ],
+      "profundidad_tipica": "alta"
+    },
+    "clasificacion": {
+      "funcion_editorial": "clasificar una figura jurídica en sus tipos o categorías",
+      "tension_tipica": "una etiqueta que en realidad cubre varias variantes distintas",
+      "necesidades_afines": [
+        "distinguir",
+        "entender"
+      ],
+      "roles_lector_afines": [
+        "persona",
+        "estudiante"
+      ],
+      "profundidad_tipica": "media"
+    },
+    "elementos": {
+      "funcion_editorial": "descomponer una figura jurídica en los elementos y sujetos que la integran",
+      "tension_tipica": "algo que parece uno pero se sostiene en varias piezas",
+      "necesidades_afines": [
+        "entender",
+        "aplicar"
+      ],
+      "roles_lector_afines": [
+        "estudiante",
+        "profesional"
+      ],
+      "profundidad_tipica": "media"
+    },
+    "mapa_de_materia": {
+      "funcion_editorial": "mostrar cómo se organiza una materia jurídica completa",
+      "tension_tipica": "un campo que parece disperso pero tiene una estructura",
+      "necesidades_afines": [
+        "entender",
+        "prepararse"
+      ],
+      "roles_lector_afines": [
+        "estudiante",
+        "persona"
+      ],
+      "profundidad_tipica": "alta"
+    },
+    "institucion_juridica": {
+      "funcion_editorial": "presentar una institución jurídica completa, no solo un concepto aislado",
+      "tension_tipica": "una institución conocida de nombre pero no como conjunto",
+      "necesidades_afines": [
+        "entender",
+        "prepararse"
+      ],
+      "roles_lector_afines": [
+        "estudiante",
+        "persona"
+      ],
+      "profundidad_tipica": "alta"
+    },
+    "para_recordar": {
+      "funcion_editorial": "sintetizar en forma memorable un conocimiento ya explicado",
+      "tension_tipica": "algo aprendido que se olvida si no se fija",
+      "necesidades_afines": [
+        "recordar"
+      ],
+      "roles_lector_afines": [
+        "persona",
+        "estudiante"
+      ],
+      "profundidad_tipica": "base"
+    },
+    "quiz_juridico": {
+      "funcion_editorial": "poner a prueba con una pregunta de respuesta verificable",
+      "tension_tipica": "creer que se sabe algo hasta que hay que responderlo",
+      "necesidades_afines": [
+        "aplicar",
+        "entender"
+      ],
+      "roles_lector_afines": [
+        "estudiante",
+        "persona"
+      ],
+      "profundidad_tipica": "base"
+    },
+    "relacion_figuras": {
+      "funcion_editorial": "mostrar cómo se relacionan o combinan varias figuras jurídicas",
+      "tension_tipica": "figuras que parecen independientes pero operan juntas",
+      "necesidades_afines": [
+        "entender",
+        "distinguir"
+      ],
+      "roles_lector_afines": [
+        "estudiante",
+        "profesional"
+      ],
+      "profundidad_tipica": "alta"
+    }
+  },
+  "necesidades": {
+    "entender": "comprender qué es algo antes de actuar",
+    "distinguir": "separar dos cosas que se confunden",
+    "prevenir": "evitar un daño o una pérdida futura",
+    "prepararse": "llegar listo a una decisión o conversación",
+    "decidir": "elegir entre caminos con consecuencias distintas",
+    "actuar": "saber qué hacer ahora y ante quién",
+    "reclamar": "exigir lo que corresponde",
+    "corregir": "deshacer una creencia o práctica equivocada",
+    "cumplir": "satisfacer un deber propio",
+    "detectar": "reconocer una señal a tiempo",
+    "acordar": "construir un acuerdo sostenible",
+    "recordar": "conservar y transmitir conocimiento",
+    "aplicar": "convertir conocimiento en estructura utilizable",
+    "actualizar": "saber qué cambió y qué queda afectado",
+    "reflexionar": "pensar una tensión sin respuesta única"
+  },
+  "roles_lector": {
+    "persona": "alguien que vive la situación en primera persona",
+    "estudiante": "alguien que construye estructura conceptual",
+    "profesional": "alguien que necesita profundidad, fuente y trazabilidad",
+    "empresa": "alguien que decide por una organización"
+  },
+  "angulos": {
+    "definitorio": "qué es",
+    "contrastivo": "en qué se diferencia",
+    "causal": "por qué ocurre",
+    "consecuencial": "qué pasa después",
+    "procedimental": "cómo se hace",
+    "probatorio": "cómo se acredita",
+    "preventivo": "cómo se evita",
+    "historico": "de dónde viene",
+    "critico": "qué falla en la práctica",
+    "comparado": "cómo cambia según el sistema",
+    "narrativo": "a quién le pasó",
+    "etimologico": "qué significaba la palabra"
+  },
+  "contextos_funcionales": {
+    "antes_de_firmar": "momento previo a obligarse",
+    "antes_de_pagar": "momento previo a desprenderse de dinero",
+    "antes_de_denunciar": "momento previo a activar a la autoridad",
+    "antes_de_demandar": "momento previo al litigio",
+    "durante_el_conflicto": "conflicto ya abierto",
+    "despues_del_dano": "daño ya producido",
+    "vida_cotidiana": "sin conflicto, por cultura jurídica",
+    "ejercicio_profesional": "uso técnico en el trabajo",
+    "decision_de_empresa": "decisión organizacional",
+    "aprendizaje": "estudio y construcción de estructura"
+  },
+  "profundidades": {
+    "base": "cultura jurídica general",
+    "media": "concepto trabajado con relaciones",
+    "alta": "profundidad técnica con fuente y matices"
+  },
+  "formatos_editoriales": {
+    "frase": "una afirmación memorable",
+    "concepto": "una idea delimitada",
+    "diferencia": "dos columnas conceptuales",
+    "listado": "enumeración ordenada",
+    "consecuencia": "cadena causa-efecto",
+    "historia": "relato con giro",
+    "pregunta": "interrogación que abre",
+    "proceso": "secuencia de etapas",
+    "documento": "pieza sobre un objeto documental"
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "id": "demo-civil-002",
+  "titulo": "Qué se devuelve en un préstamo",
+  "frase": "Devolver «otro tanto» y devolver «lo mismo» no son la misma obligación.",
+  "remate": "Derecho civil comparado",
+  "marca": "LegalMente",
+  "imagen": "assets/images/ejemplo.jpg",
+  "audio": null,
+  "duracionSegundos": 10,
+  "procedencia": {
+    "modo": "GOBERNADO",
+    "content_id": "LM-DEMO-CIVIL-002",
+    "publicable": true,
+    "handoff_id": "HO-DEMO-002",
+    "piece_id": "pub-fixture-comodato",
+    "claims": [
+      {
+        "claim_id": "pub-fixture-claim-1",
+        "approved_claim_hash": "ad11199d278c913ce1c5eb3cf94d5d52cdb2c3eb19878818fff2b3fffffad465"
+      }
+    ],
+    "jurisdiction_layer": "CAPA_A_TRANSVERSAL",
+    "production_status": "APROBADO_QA"
+  },
+  "taxonomia": {
+    "materia": "Civil",
+    "submateria": "Contratos",
+    "concepto": "Qué se devuelve en un préstamo",
+    "situacion_humana": "Te devuelven algo distinto de lo que prestaste",
+    "content_type": "SITUACION"
+  }
+}

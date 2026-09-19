@@ -1,0 +1,121 @@
+{
+  "schema_version": "1.0",
+  "estado": "CANDIDATO_PENDIENTE_REVISION_FOUNDER",
+  "aviso": "Las etiquetas de este conjunto las asignó el agente leyendo el significado de cada guion del corpus. NO son ground truth humano. Cualquier precision/recall calculado sobre él es una medida CONTRA EL CRITERIO DEL AGENTE, no contra el criterio del Founder, y no debe presentarse como certeza estadística. Revisar y corregir antes de usarlo para fijar un umbral definitivo.",
+  "etiquetas": {
+    "EQUIVALENTE": "misma pregunta jurídica; el motor DEBE bloquear",
+    "MUY_PROXIMO": "vecinas; zona gris, el motor puede bloquear o no",
+    "RELACIONADO_DISTINTO": "misma materia, pregunta distinta; el motor NO debe bloquear",
+    "DISTINTO": "sin relación; el motor NO debe bloquear"
+  },
+  "pares": [
+    {
+      "a": "LM-026",
+      "b": "LM-027",
+      "etiqueta": "EQUIVALENTE",
+      "razon": "ambas distinguen depósito de fianza: es la misma pregunta con dos titulares"
+    },
+    {
+      "a": "LM-046",
+      "b": "LM-008",
+      "etiqueta": "MUY_PROXIMO",
+      "razon": "ambas sobre valor probatorio de prueba forense, pero una es mito y otra listado"
+    },
+    {
+      "a": "LM-054",
+      "b": "LM-055",
+      "etiqueta": "MUY_PROXIMO",
+      "razon": "ambas separan una etapa penal de su consecuencia presunta; preguntas distintas pero vecinas"
+    },
+    {
+      "a": "LM-002",
+      "b": "LM-003",
+      "etiqueta": "MUY_PROXIMO",
+      "razon": "acto administrativo no conocido por el destinatario; difieren en notificación vs condición"
+    },
+    {
+      "a": "LM-018",
+      "b": "LM-019",
+      "etiqueta": "MUY_PROXIMO",
+      "razon": "garantía legal: duración frente a alcance. Vecinas, no idénticas"
+    },
+    {
+      "a": "LM-151",
+      "b": "LM-152",
+      "etiqueta": "RELACIONADO_DISTINTO",
+      "razon": "ambas de marcas, pero confusión de signos y falta de registro son problemas distintos"
+    },
+    {
+      "a": "LM-063",
+      "b": "LM-050",
+      "etiqueta": "RELACIONADO_DISTINTO",
+      "razon": "ambas de datos personales; borrado frente a minimización son deberes distintos"
+    },
+    {
+      "a": "LM-077",
+      "b": "LM-079",
+      "etiqueta": "RELACIONADO_DISTINTO",
+      "razon": "sucesión: testamento no hallado frente a herencia sin testamento"
+    },
+    {
+      "a": "LM-009",
+      "b": "LM-012",
+      "etiqueta": "RELACIONADO_DISTINTO",
+      "razon": "ambas sobre el perito; identidad frente a límites de su dictamen"
+    },
+    {
+      "a": "LM-116",
+      "b": "LM-115",
+      "etiqueta": "RELACIONADO_DISTINTO",
+      "razon": "despido: tipo frente a consecuencia económica"
+    },
+    {
+      "a": "LM-001",
+      "b": "LM-124",
+      "etiqueta": "DISTINTO",
+      "razon": "silencio administrativo frente a teletrabajo: materias y necesidades sin relación"
+    },
+    {
+      "a": "LM-125",
+      "b": "LM-098",
+      "etiqueta": "DISTINTO",
+      "razon": "literatura jurídica frente a arrendamiento de larga duración"
+    },
+    {
+      "a": "LM-083",
+      "b": "LM-046",
+      "etiqueta": "DISTINTO",
+      "razon": "mito fiscal frente a mito forense: sólo comparten ser mitos"
+    },
+    {
+      "a": "LM-134",
+      "b": "LM-064",
+      "etiqueta": "DISTINTO",
+      "razon": "anatomía de una firma frente a grabación sin aviso"
+    },
+    {
+      "a": "LM-147",
+      "b": "LM-021",
+      "etiqueta": "DISTINTO",
+      "razon": "principios jurídicos generales frente a retirada de oferta al consumidor"
+    },
+    {
+      "a": "LM-013",
+      "b": "LM-168",
+      "etiqueta": "DISTINTO",
+      "razon": "odontología forense frente a constitución de sociedad"
+    },
+    {
+      "a": "LM-092",
+      "b": "LM-129",
+      "etiqueta": "DISTINTO",
+      "razon": "habitación de hotel frente a corpus delicti"
+    },
+    {
+      "a": "LM-061",
+      "b": "LM-170",
+      "etiqueta": "DISTINTO",
+      "razon": "derecho a la defensa frente a construir sin permiso"
+    }
+  ]
+}

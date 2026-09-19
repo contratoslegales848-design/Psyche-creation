@@ -59,6 +59,40 @@ se revisó; bloquear exige revisor y motivo, porque bloquear también es una dec
 con responsable. Fixtures: `bad-47`, `bad-48`, `bad-49`.
 Límite declarado: los indicadores son un **suelo**, no un techo — ver B5.
 
+**A12. Sostener un claim aprobado con una fuente derogada o sustituida.**
+El libro mayor de vigencia bloquea el claim: `SUPERSEDED`/`REPEALED` → veredicto
+BLOQUEADO; `NEEDS_REVIEW`, sin registrar o `UNKNOWN` sobre una norma → REQUIERE
+REVISIÓN. El veredicto se **deriva y nunca se escribe en el claim**: hacerlo
+cambiaría su hash e invalidaría en silencio la aprobación firmada. Pruebas:
+`test_fuente_superseded_exige_revision`, `test_fuente_repealed_exige_revision`,
+`test_unknown_falla_cerrado_cuando_la_vigencia_es_necesaria`,
+`test_el_veredicto_nunca_se_escribe_en_el_claim`.
+
+**A13. Cambiar la URL de una fuente para heredar su vigencia comprobada.**
+El `source_id` se deriva de la URL canonicalizada: una URL nueva **es otra fuente**,
+sin vigencia heredada. Enlazarlas exige `supersedes`/`superseded_by` simétricos y sin
+ciclos. Prueba: `test_url_cambiada_deja_de_emparejar`.
+
+**A14. Registrar dos veces la misma fuente, o atribuirla al país equivocado.**
+`canonical_url` es única en el libro mayor —dos entradas serían dos verdades sobre
+la misma vigencia— y cada entrada se contrasta contra el registro de organismos:
+hostname por frontera real de subdominio, jurisdicción y tipo entre los que ese
+organismo admite. Pruebas: `test_url_canonica_duplicada_es_error`,
+`test_pais_incorrecto_para_el_organismo_es_error`,
+`test_hostname_que_no_pertenece_al_organismo_es_error`.
+
+**A15. Inventario obsoleto que muestra un estado que ya no es cierto.**
+El índice es determinista y **no depende del reloj**; `inventory.py check` lo
+regenera y compara. Si discrepa de los artefactos, falla — y los artefactos mandan.
+Pruebas: `test_check_detecta_un_inventario_obsoleto`,
+`test_el_inventario_almacenado_no_depende_del_reloj`.
+
+**A16. Registrar dos veces la misma publicación, o medir la pieza equivocada.**
+`PUBLICACION_YA_REGISTRADA` detecta dos piezas apuntando a la misma URL publicada;
+la cadena post-aprobación ya exigía que una medición corresponda a una publicación
+existente de ese `content_id` y esa plataforma. Pruebas:
+`test_publicacion_ya_registrada_se_detecta`, `test_medicion_sin_publicacion_falla`.
+
 **A11. Renderizar como pieza publicable un JSON sin ningún claim packet detrás.**
 *(Era C2, la cadena cortada.)* Cada artefacto de `content/` declara su procedencia
 en uno de tres modos, sin modo por defecto. `src/content.ts` falla cerrado sobre la
@@ -71,10 +105,18 @@ canónico del claim, y que la capa jurisdiccional no se reetiquete al pasar a ar
 
 ## B. Vectores parcialmente mitigados
 
-**B1. Fuente oficial que cambió después de consultarse.**
-No hay verificación de deriva: el validador no tiene red por diseño. Solo constan
-`fecha_consulta`, `fecha_comprobacion` y `vigencia_comprobada`, que son declaraciones
-humanas fechadas. Un cambio normativo posterior **no se detecta**. Ver ADR 0001.
+**B1. Fuente oficial que cambió después de consultarse.** *(Parcialmente cerrado
+el 2026-08-27.)* Existe ahora un libro mayor de vigencia
+(`references/source-freshness.json`) y un control offline: una fuente marcada
+`SUPERSEDED` o `REPEALED` bloquea el claim que sostiene, una `NEEDS_REVIEW` o
+`UNKNOWN` donde hace falta vigencia lo manda a revisión, y el plazo de revisión
+vencido degrada un `CURRENT` automáticamente. Fail-closed sobre claims con gate
+ABIERTO; advertencia con el gate cerrado. Ver `A12` y `references/README-vigencia.md`.
+Lo que sigue abierto es lo que ningún control offline puede cerrar: **nadie avisa
+desde fuera**. Si un humano no investiga y no actualiza el libro mayor, una norma
+derogada sigue marcada `CURRENT` hasta que venza su plazo. El control convierte
+"nadie se entera nunca" en "nadie se entera hasta la fecha de revisión", que es una
+mejora real y una garantía limitada. Ver también ADR 0001.
 
 **B2. Un humano firma sin haber leído.**
 El sistema comprueba que la firma **conste y esté completa**, no que haya habido
@@ -128,12 +170,19 @@ La cadena registra decisiones; no controla las cuentas. Alguien con acceso a la
 plataforma publica sin pasar por aquí. El repositorio es un registro de
 responsabilidad, no un control de acceso — y debe leerse así.
 
-**C4. Duplicados por paráfrasis.** *(Parcialmente cerrado.)*
-Ya se detecta el `content_id` repetido, el id de composición repetido, la misma
-frase con otro ID salvo mayúsculas, tildes y signos, y la casilla de taxonomía
-`materia/submateria/concepto` ocupada dos veces. Sigue abierto lo semántico: dos
-piezas que dicen lo mismo con palabras distintas pasan. Detectarlo exigiría un
-motor semántico y hoy no lo hay.
+**C4. Duplicados por paráfrasis.** *(Lo literal, cerrado; lo semántico, abierto.)*
+Se detectan cinco colisiones deterministas: `content_id` repetido, composición
+repetida, casilla `materia/submateria/concepto` ocupada dos veces, huella
+normalizada idéntica y publicación ya registrada. Sigue abierto lo semántico: dos
+piezas que dicen lo mismo con palabras distintas pasan los cinco. Exigiría
+embeddings o un motor semántico, que no se construye todavía. Hay una prueba que
+fija el límite por escrito (`test_la_parafrasis_NO_se_detecta_y_queda_declarado`)
+para que nadie suponga una cobertura que no existe.
+
+**C6. Nadie avisa desde fuera de que una norma cambió.**
+Lo que queda de B1, y el límite estructural de todo control offline. El libro mayor
+solo sabe lo que un humano escribió en él. La vigilancia activa de boletines
+oficiales sería un proceso aparte, con red, fuera del validador — y no existe.
 
 **C5. Las métricas son autodeclaradas.**
 `MeasurementRecord` exige coherencia interna (no inventar claves) y una `source`,
@@ -154,12 +203,15 @@ plataforma.
 
 ## E. Prioridad sugerida de cierre
 
-1. **B1 (deriva de fuentes oficiales)** — mayor consecuencia de lo que queda: una
-   norma derogada sostiene una afirmación falsa sin que nada avise. Ver ADR 0001.
+1. **C6 (vigilancia activa de cambios normativos)** — lo que queda de B1. No se
+   cierra con más lógica offline: exige un proceso de research con red, separado
+   del validador, que marque fuentes para revisión.
 2. **B5 (contenido identificable sin marcadores léxicos)** — no se cierra con más
    expresiones regulares; se cierra con disciplina de revisión y, quizá, con
    evidencia adjunta de qué se leyó.
 3. **B3/B4 (autodeclaración)** — mitigable con evidencia adjunta, no con más lógica.
 4. **C4 (duplicados por paráfrasis)** — relevante solo al escalar el volumen.
 
-Cerrados el 2026-08-27: C1 (ahora A10) y C2 (ahora A11).
+Cerrados el 2026-08-27: C1 (ahora A10), C2 (ahora A11), y los vectores de vigencia,
+inventario y duplicación registrados como A12–A16. B1 queda parcialmente cerrado;
+lo que resta es C6.

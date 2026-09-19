@@ -1,0 +1,27 @@
+{
+  "id": "demo-cita-001",
+  "titulo": "Dormientibus non succurrit ius",
+  "frase": "El derecho no favorece a quien duerme sobre sus derechos",
+  "remate": "Máxima del Derecho Romano",
+  "marca": "LegalMente",
+  "imagen": "assets/images/ejemplo.jpg",
+  "audio": null,
+  "duracionSegundos": 10,
+  "procedencia": {
+    "modo": "NO_APLICA",
+    "content_id": "LM-DEMO-CITA-001",
+    "publicable": true,
+    "jurisdiction_layer": "NO_APLICA",
+    "motivo_no_aplica": "CITA_HISTORICA",
+    "justificacion_no_aplica": "Máxima del derecho romano de dominio histórico: no enuncia una regla vigente de ningún ordenamiento, por lo que no hay afirmación jurídica que verificar contra fuente oficial.",
+    "autorizado_por": "REVISOR_FICTICIO_SOLO_PRUEBA",
+    "fecha_autorizacion": "2026-08-27"
+  },
+  "taxonomia": {
+    "materia": "Historia del derecho",
+    "submateria": "Máximas romanas",
+    "concepto": "Dormientibus non succurrit ius",
+    "situacion_humana": "Dejar pasar el tiempo y perder el derecho",
+    "content_type": "MAXIMA"
+  }
+}

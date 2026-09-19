@@ -18,3 +18,7 @@ venv/
 # Raiz de runtime persistente del pipeline visual (receipts/assets/registro).
 # Nunca se comitea: ver visual/runtime_config.py.
 /.runtime/
+
+# PNG de ejemplo generados por visual/demo_composicion_formato.py — reproducibles,
+# no se comitean.
+/visual/out-demo-composicion/

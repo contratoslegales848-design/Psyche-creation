@@ -1,0 +1,1297 @@
+BANCO DE PROMPTS DE IMAGEN — LEGALMENTE
+
+DOCUMENTO 1 DE 2 — SISTEMA Y CATALOGO DE GUIONES
+
+Version 3 (2026-09-08). Sustituye a la v2 (109) y a la v1 (300).
+
+(El documento 2 contiene la tabla de los 174 prompts, LM-001 a LM-174.)
+
+  
+
+HISTORIAL DE VERSIONES, PARA QUE SE ENTIENDA EL NUMERO
+
+v1: 300 prompts sobre solo 61 temas, repetidos 4,9 veces cada uno. La
+
+    cobertura anunciada medía las cinco dimensiones visuales y nunca medía
+
+    el contenido: variedad en la capa equivocada.
+
+v2: 109 prompts sobre 109 temas. Se corrigió la medición y se escribieron
+
+    guiones hasta que ningún tema se repitiera.
+
+v3: 174 prompts sobre 174 temas. Se ampliaron los temas más flacos.
+
+Un banco no puede tener más piezas que temas. El generador produce
+
+exactamente un prompt por guion y falla si se le pide más.
+
+  
+
+Generado por scripts/generar-banco-prompts.mjs desde el motor artistico real
+
+y los guiones reales del repositorio. Determinista: re-ejecutarlo produce
+
+este mismo banco. GENERAR NUNCA EQUIVALE A PUBLICAR.
+
+  
+
+COMO ESTA VINCULADO TODO
+
+Cada prompt encadena: GUION -\> TEMA -\> CARRIL ARTISTICO -\> ESCUELA -\>
+
+ESCENARIO -\> MECANISMO DE REVELACION -\> OBJETO DE MARCA -\> ENCUADRE -\> PALETA.
+
+El TEMA decide el carril (A pictorico / B fotografico). El CARRIL decide el
+
+banco de escuelas. La anti-repeticion garantiza que ningun prompt repita mas
+
+de 2 de las cinco dimensiones respecto al anterior.
+
+  
+
+COBERTURA VERIFICADA (medida por el generador, no estimada)
+
+  174 prompts | 174 guiones | 174 temas | 174 metaforas distintas
+
+  174 combinaciones visuales unicas | repeticion media por guion = 1
+
+  Escuelas artisticas: 45/46   Escenarios: 15/15   Mecanismos: 8/8
+
+  Objetos de integracion de marca: 15/15   Encuadres: 10/10
+
+  Canales: 18/18   Temas del catalogo: 24/24
+
+  Tema mas repetido: contratos, 9,77% (tope 12%)
+
+  "Banco verificado: 0 problemas."
+
+  
+
+\=== COMO ARMAR EL PROMPT COMPLETO ===
+
+1\. Busca la fila del prompt (LM-001 .. LM-174) en el DOCUMENTO 2.
+
+2\. Toma la METAFORA de su guion en el CATALOGO de abajo.
+
+3\. Sustituye en la PLANTILLA. El bloque invariante es identico en los 174,
+
+   por eso se declara aqui una sola vez.
+
+  
+
+\--- PLANTILLA ---
+
+{METAFORA}. Escuela: {ESCUELA} (una sola escuela; no mezclar con ninguna otra
+
+referencia). Escenario: {ESCENARIO}. Mecanismo de revelacion (el fenomeno
+
+fisico que hace visible la idea): {MECANISMO}. La marca LegalMente esta
+
+integrada fisicamente en la escena como {OBJETO\_MARCA} - nunca como logotipo
+
+flotante, marca de agua ni cartel. Encuadre: {ENCUADRE}. Paleta institucional
+
+dominante: {PALETA}. Una sola fuente de luz dramatica, justificada dentro de
+
+la escena. El objeto de marca ({OBJETO\_MARCA}) debe leerse como parte discreta
+
+y elegante del escenario - integrado con la misma luz y textura que el resto
+
+de la escena, nunca resaltado ni aislado artificialmente. Composicion
+
+equilibrada y ordenada: eje de simetria claro o proporcion deliberada (regla
+
+de tercios), horizontes y lineas estructurales alineados, sin elementos
+
+flotantes ni recortados en los bordes - acabado editorial pulido, coherente
+
+con el resto de la serie LegalMente. Evitar por completo: balanza de la
+
+justicia; mazo de juez; persona sola frente a un edificio de columnas; libros
+
+o pergaminos apilados sobre escritorio de madera oscura; objeto forense sobre
+
+pergamino. Obra de arte pura, sin ningun texto, letra, palabra, numero,
+
+tipografia visible en la imagen.
+
+  
+
+\--- PROMPT NEGATIVO (identico para los 174) ---
+
+texto, letras, palabras, tipografía, logotipo flotante, marca de agua, cartel, firma, subtítulos, watermark, caption, composición caótica, desequilibrada, inclinada, recortada en los bordes, elementos flotantes sin anclaje, objeto de marca destacado o resaltado de forma artificial, balanza de la justicia, mazo de juez, persona sola frente a un edificio de columnas, libros o pergaminos apilados sobre escritorio de madera oscura, objeto forense sobre pergamino, mezclar varias escuelas o referentes artísticos en la misma imagen
+
+  
+
+PALETA INSTITUCIONAL
+
+  nogal profundo \#2B1B17 / \#1E1412    marfil editorial \#FCFAF2 / \#F4EFE1
+
+  azul petroleo \#0F2537 / \#16324F     laton viejo \#C5A059 / \#B38F4D
+
+ASPECTOS  9:16 = 1080x1920 (feed y carrusel)   4:5 = 1080x1350 (LinkedIn)   1:1 = 1080x1080
+
+  
+
+REGLAS QUE NO SE NEGOCIAN
+
+\- Una sola escuela por imagen. Nunca mezclar referentes.
+
+\- Una sola fuente de luz dramatica, justificada dentro de la escena.
+
+\- La marca vive DENTRO de la escena como objeto real. Nunca logo flotante.
+
+\- Cero texto en la imagen: el texto lo pone el motor de render.
+
+\- La imagen resultante es ARTE BASE, no la pieza final.
+
+  
+
+\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#
+
+CATALOGO DE GUIONES Y SUS METAFORAS (174)
+
+\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#
+
+  
+
+\--- TEMA: ADMINISTRATIVO ---
+
+  
+
+\[administrativo-concepto-silencio-administrativo\]  SILENCIO ADMINISTRATIVO
+
+  METAFORA: Una ventanilla de atención con la persiana a medio bajar, ni cerrada ni abierta, mientras un reloj de pared cercano marca una hora exacta ya pasada.
+
+  
+
+\[el-acto-que-nadie-notifico\]  NUNCA TE ENTERASTE
+
+  METAFORA: Una cédula de papel pegada con cinta en el marco exterior de una puerta cerrada, despegada por una esquina y ondulada por la humedad de varias noches.
+
+  
+
+\[el-permiso-condicionado-que-nadie-leyo\]  TE LO DIERON CON CONDICIONES
+
+  METAFORA: Un documento oficial fotografiado por su reverso, con un anexo grapado en la esquina superior y la grapa todavía brillante frente al papel amarillento.
+
+  
+
+\[la-multa-que-nunca-se-cobro\]  TAMBIÉN A ELLOS SE LES ACABA EL TIEMPO
+
+  METAFORA: Un sello de fecha estampado sobre papel donde los dígitos del año aparecen completos y los del día se han desvanecido hasta ser ilegibles.
+
+  
+
+\[la-responsabilidad-que-no-se-delega\]  LO HIZO OTRO, RESPONDES TÚ
+
+  METAFORA: Un organigrama impreso y enmarcado donde todas las casillas tienen texto salvo una, en el segundo nivel, dejada completamente en blanco.
+
+  
+
+\[presto-el-coche-llego-la-multa\]  MANEJABA OTRO
+
+  METAFORA: Un espejo retrovisor interior fotografiado en macro, con el reflejo de un rostro fuera de foco que no corresponde a la posición del conductor.
+
+  
+
+\[quien-controla-el-plazo-negocia\]  EL TIEMPO NO ES UN DETALLE
+
+  METAFORA: El mecanismo interno de un reloj de estación con la carcasa retirada, fotografiado en macro con un solo engranaje recibiendo la luz mientras el resto queda en sombra.
+
+  
+
+\--- TEMA: CIENCIAS-FORENSES ---
+
+  
+
+\[diez-pruebas-forenses-que-deciden-casos\]  10 PRUEBAS FORENSES QUE DECIDEN UN CASO
+
+  METAFORA: Diez frascos de vidrio numerados en fila sobre una mesa de metal, cada uno con un contenido distinto y una etiqueta en blanco; solo el frasco que la luz atraviesa de lleno revela su contenido con nitidez.
+
+  
+
+\[diferencia-perito-testigo\]  PERITO VS. TESTIGO
+
+  METAFORA: Dos lupas de forma idéntica sobre la misma mesa: una enfoca una huella dejada al paso, la otra enfoca un instrumento de medición junto a ella — cada una mira algo distinto en la misma escena.
+
+  
+
+\[el-testigo-honesto-que-recuerda-mal\]  NO MINTIÓ
+
+  METAFORA: Un retrato fotográfico impreso en tres capas de papel translúcido ligeramente desplazadas entre sí, iluminado por detrás para que los tres contornos se lean a la vez.
+
+  
+
+\[la-declaracion-del-que-tambien-es-parte\]  DICE LA VERDAD QUE LE CONVIENE
+
+  METAFORA: Una lente óptica circular con un tratamiento de color muy tenue en una de sus caras, apoyada sobre una hoja de texto que se lee ligeramente distinta a través de ella.
+
+  
+
+\[lo-que-el-perito-no-puede-decir\]  EL PERITO NO DECIDE
+
+  METAFORA: Un micrómetro de precisión cerrado sobre una pieza metálica, con la escala perfectamente legible y ninguna anotación alrededor sobre qué significa la medida.
+
+  
+
+\[situacion-odontologia-forense\]  LO QUE UNA DENTADURA PUEDE CONFIRMAR
+
+  METAFORA: Dos moldes de yeso idénticos en apariencia colocados uno junto al otro bajo una luz rasante, hasta que solo uno encaja perfectamente en la marca dejada sobre una tercera superficie.
+
+  
+
+\--- TEMA: CONSUMIDOR ---
+
+  
+
+\[comparacion-garantia-vs-devolucion\]  GARANTÍA VS. DEVOLUCIÓN
+
+  METAFORA: Un objeto roto sobre un mostrador con dos caminos posibles marcados por la luz: uno lleva hacia una herramienta de reparación, el otro hacia una bolsa de monedas — dos salidas distintas para el mismo problema, nunca la misma.
+
+  
+
+\[consumidor-consejo-producto-defectuoso-online\]  TE VENDIERON ALGO DEFECTUOSO EN LÍNEA
+
+  METAFORA: Una caja de envío abierta con un objeto roto adentro, y junto a ella una impresión en papel de una conversación de chat todavía visible en la pantalla de un dispositivo apagado.
+
+  
+
+\[el-consumidor-que-no-era-consumidor\]  LA MISMA COMPRA, OTRA PROTECCIÓN
+
+  METAFORA: Dos cajas de embalaje idénticas apiladas una sobre otra, con etiquetas de destino distintas pegadas en la misma posición exacta de cada una.
+
+  
+
+\[el-descuento-que-no-era-descuento\]  EL PRECIO ANTERIOR NUNCA EXISTIÓ
+
+  METAFORA: Una etiqueta de precio adherida sobre otra, con la de abajo asomando por un borde y el adhesivo levantándose ligeramente en la esquina.
+
+  
+
+\[el-plazo-de-la-garantia-legal\]  LA DEL FABRICANTE NO ES LA ÚNICA
+
+  METAFORA: Dos tarjetas impresas del mismo tamaño superpuestas con un ligero desfase, de modo que se ven los bordes de ambas y el texto solo de la de arriba.
+
+  
+
+\[la-garantia-que-solo-cubria-defectos\]  NO TODO ROTO SE REPARA
+
+  METAFORA: Dos fragmentos de una misma pieza cerámica sobre fondo neutro: uno con el borde limpio de una fractura por impacto, otro con una fisura interna visible que nació desde dentro.
+
+  
+
+\[la-letra-chica-que-si-se-lee\]  NO TODO LO IMPRESO OBLIGA
+
+  METAFORA: Una hoja impresa donde el cuerpo tipográfico disminuye progresivamente hacia el borde inferior, fotografiada con luz rasante que hace visible el relieve de la tinta solo arriba.
+
+  
+
+\[la-oferta-que-no-podia-retirarse\]  EL PRECIO PUBLICADO OBLIGA
+
+  METAFORA: Un cartel de precio escrito a mano colgado en el interior de un escaparate, fotografiado desde la calle con el reflejo de la acera cruzando el cristal.
+
+  
+
+\[lo-que-debe-una-aerolinea\]  NO COMPRASTE UN ASIENTO
+
+  METAFORA: Macrofotografía de un pase de abordar impreso en papel térmico, con la hora de salida nítida y el resto de los caracteres empezando a desvanecerse por el calor.
+
+  
+
+\[pasos-reclamar-garantia-producto\]  CÓMO RECLAMAR UNA GARANTÍA
+
+  METAFORA: Un recibo de papel que empieza a desvanecerse por un extremo, mientras una mano lo protege bajo un cristal justo antes de que la tinta desaparezca del todo.
+
+  
+
+\--- TEMA: CONTRATOS ---
+
+  
+
+\[claridad-en-contratos\]  ANTES DE FIRMAR UN CONTRATO
+
+  METAFORA: Un documento extendido sobre una superficie, con parte del texto todavía borroso como si la tinta no hubiera terminado de fijarse; solo las líneas ya nítidas son legibles, el resto exige esperar y mirar antes de tocarlo.
+
+  
+
+\[clausula-en-la-pagina-cuarenta\]  LA PÁGINA 40 DE 41
+
+  METAFORA: Una pila de hojas vista exactamente de canto sobre una mesa oscura, todas idénticas salvo una que recibe de lleno un haz de luz lateral y aparece más gruesa que el resto.
+
+  
+
+\[depositos-que-no-son-lo-mismo\]  ANTICIPO, ARRAS O PENA
+
+  METAFORA: Tres sobres de papel idénticos alineados sobre una mesa de mármol frío, cada uno con un peso visiblemente distinto marcado por cómo se hunde el papel en su centro.
+
+  
+
+\[depositos-vs-fianzas\]  DEPÓSITO VS. FIANZA
+
+  METAFORA: Dos llaves de formas distintas colgadas del mismo gancho: una vuelve siempre a la mano que la entregó, la otra pertenece a quien nunca la pidió pero responde por la puerta si falla.
+
+  
+
+\[el-anticipo-que-no-se-devolvia\]  NINGUNO TUVO LA CULPA
+
+  METAFORA: Un sobre de papel a medio abrir sobre una mesa, con el contenido todavía dentro y el borde rasgado deteniéndose exactamente a la mitad.
+
+  
+
+\[el-contrato-mas-corto-que-funciono\]  UNA LÍNEA BASTÓ
+
+  METAFORA: Una tarjeta pequeña con dos renglones manuscritos, sola en el centro de una mesa larga completamente vacía, iluminada por una lámpara baja que deja el resto de la madera en penumbra.
+
+  
+
+\[el-contrato-que-se-cumplio-solo-a-medias\]  HIZO LA MITAD
+
+  METAFORA: Una jarra de vidrio grueso llena exactamente hasta la mitad sobre una superficie clara, con la línea del líquido perfectamente horizontal y su sombra proyectada en el fondo.
+
+  
+
+\[el-silencio-tambien-responde\]  NO CONTESTAR FUE UNA RESPUESTA
+
+  METAFORA: Un buzón metálico cerrado con un sobre asomando a medias por la ranura, fotografiado de frente con la pintura descascarada justo alrededor de la abertura.
+
+  
+
+\[historia-founder-demo\]  UNA SITUACIÓN CONTADA EN PRIMERA PERSONA
+
+  METAFORA: Una silla vacía frente a un escritorio con un documento a medio firmar, iluminada como si alguien acabara de levantarse a media conversación — la historia se cuenta desde el lugar de quien todavía tiene algo que decir.
+
+  
+
+\[la-clausula-penal-que-era-excesiva\]  LO PACTAMOS ASÍ
+
+  METAFORA: Una pesa de plomo demasiado grande apoyada sobre el platillo de una balanza pequeña, deformando visiblemente el brazo metálico que la sostiene.
+
+  
+
+\[la-obra-que-quedo-a-medias\]  PARÓ Y NADIE QUISO SEGUIR
+
+  METAFORA: Varillas de acero saliendo verticalmente de una losa de concreto sin continuar hacia arriba, fotografiadas a contraluz contra un cielo uniforme y vacío.
+
+  
+
+\[linkedin-consecuencia-clausula-terminacion-no-revisada\]  LO QUE CUESTA NO REVISAR LA CLÁUSULA DE TERMINACIÓN
+
+  METAFORA: Una puerta con bisagras visibles en un extremo, pero sin ninguna manija ni cerradura en el otro — se puede empujar para entrar, pero nadie diseñó cómo se sale.
+
+  
+
+\[linkedin-nda-antes-de-firmar\]  ANTES DE FIRMAR UN NDA
+
+  METAFORA: Una caja con cerradura de tiempo, de esas que no abren hasta cierta hora — pero con una grieta lateral apenas visible por donde el contenido podría filtrarse antes de que el plazo termine.
+
+  
+
+\[mito-contrato-sin-papel\]  SIN PAPEL FIRMADO, NO HAY CONTRATO
+
+  METAFORA: Dos manos que se estrechan en el aire, y de ese apretón de manos surge, como sombra proyectada sobre la pared detrás, la silueta de un documento sellado que nadie sostiene físicamente.
+
+  
+
+\[narrativa-catorce-contratos-antes-del-desayuno\]  ¿CUÁNTOS CONTRATOS FIRMASTE HOY?
+
+  METAFORA: Una mesa de desayuno vista desde arriba al amanecer, con los objetos ordinarios de una mañana dispuestos en fila como piezas de un inventario, cada uno proyectando una sombra larga y precisa.
+
+  
+
+\[narrativa-podra-no-es-debera\]  PODRÁ NO ES DEBERÁ
+
+  METAFORA: Macrofotografía de dos palabras impresas en tipografía de plomo sobre papel de algodón, una de ellas ligeramente hundida en la fibra y la otra apenas rozándola.
+
+  
+
+\[pasos-antes-de-firmar\]  ANTES DE FIRMAR, REVISA
+
+  METAFORA: Una pluma detenida justo antes de tocar el papel, mientras cuatro sellos de cera distintos, todavía sin usar, esperan en fila sobre la mesa — el orden en que se aplican importa tanto como el gesto final.
+
+  
+
+\--- TEMA: CRIMINALISTICA ---
+
+  
+
+\[concepto-cadena-de-custodia\]  CADENA DE CUSTODIA
+
+  METAFORA: Una serie de sellos de cera idénticos alineados sobre una misma cinta que sostiene un sobre cerrado; el sexto sello, a media cinta, aparece agrietado y sin firma, y ahí la cinta se ve más delgada.
+
+  
+
+\[consejo-preservar-escena-del-hecho\]  LO PRIMERO QUE SE PROTEGE EN UNA ESCENA
+
+  METAFORA: Una cinta delgada que rodea un círculo de objetos dispersos sobre el suelo, cada uno con su propia sombra alargada por una sola fuente de luz baja, ninguno movido de su lugar.
+
+  
+
+\[la-copia-que-no-era-el-original\]  TRAJO UNA COPIA
+
+  METAFORA: Una fotocopia sobre una mesa donde se ve la sombra impresa de una grapa que no está en el papel, junto al hueco de la grapa real ausente.
+
+  
+
+\[lo-que-una-fecha-cambia-en-un-documento\]  DICE UNA FECHA Y NO LA PRUEBA
+
+  METAFORA: Un matasellos circular impreso a medias sobre la unión de un sello postal y el papel del sobre, con la tinta cruzando ambas superficies sin interrupción.
+
+  
+
+\[lo-que-una-fotografia-prueba\]  LA FOTO NO DICE CUÁNDO
+
+  METAFORA: Una copia fotográfica en papel sujeta por una pinza de laboratorio, con el encuadre cortado justo donde algo entra en cuadro y ya no se ve qué es.
+
+  
+
+\[mito-huella-dactilar-infalible\]  LA HUELLA QUE NUNCA MIENTE
+
+  METAFORA: Una lupa suspendida sobre una superficie pulida donde dos huellas parciales se superponen a medias, y solo donde ambas coinciden exactamente la imagen deja de temblar y se enfoca.
+
+  
+
+\[pregunta-una-sola-prueba-condena\]  ¿UNA SOLA PRUEBA PUEDE CONDENAR A ALGUIEN?
+
+  METAFORA: Varias llaves distintas suspendidas en el aire, cada una lanzando su propia sombra hacia el mismo punto en la pared; solo donde todas las sombras se superponen exactas aparece la forma de una cerradura completa.
+
+  
+
+\--- TEMA: DATOS ---
+
+  
+
+\[concepto-consentimiento-informado-datos\]  CONSENTIMIENTO INFORMADO
+
+  METAFORA: Una puerta de vidrio esmerilado con una manija que solo gira si antes se levanta un pestillo visible al tacto — nunca se abre por accidente, hace falta un gesto deliberado.
+
+  
+
+\[el-consentimiento-que-caduca\]  DIJISTE QUE SÍ UNA VEZ
+
+  METAFORA: Un interruptor de palanca metálico montado en una placa de baquelita, fotografiado en macro justo en la posición intermedia donde no está ni arriba ni abajo.
+
+  
+
+\[el-dato-que-nunca-debio-pedirse\]  PIDIERON MÁS DE LO NECESARIO
+
+  METAFORA: Un formulario impreso donde las primeras casillas están llenas y las últimas quedan vacías, con la luz cayendo exactamente sobre el renglón donde el papel deja de tener sentido.
+
+  
+
+\[el-dato-que-viajo-a-otro-pais\]  TUS DATOS TAMBIÉN CRUZAN FRONTERAS
+
+  METAFORA: Un precinto de aduana metálico cerrado sobre el pasador de un contenedor, con el número grabado nítido y el metal marcado por la herramienta que lo selló.
+
+  
+
+\[la-firma-electronica-que-no-era-la-misma\]  NO TODAS LAS FIRMAS PESAN IGUAL
+
+  METAFORA: Dos improntas de sello sobre el mismo papel, una apenas superficial y otra profundamente hundida en la fibra, iluminadas por una luz rasante que revela el relieve de ambas.
+
+  
+
+\[la-huella-digital-que-dejas-al-comprar\]  CADA DATO SOLO NO DICE NADA
+
+  METAFORA: Limaduras de hierro dispersas sobre una lámina de cristal, con un imán aproximándose por debajo justo en el instante en que empiezan a formar un contorno reconocible.
+
+  
+
+\--- TEMA: DERECHO-PENAL ---
+
+  
+
+\[declarar-no-es-confesar\]  CALLAR NO ES ADMITIR
+
+  METAFORA: Un micrófono de mesa antiguo con el interruptor visiblemente en apagado, iluminado desde arriba de modo que su sombra cae larga sobre una superficie vacía.
+
+  
+
+\[detenido-no-es-condenado\]  UNA MEDIDA NO ES UNA CONCLUSIÓN
+
+  METAFORA: Un cerrojo de madera basta, no de metal, atravesado en el marco de una puerta de tablones, con la veta clara mostrando que fue tallado deprisa.
+
+  
+
+\[la-prueba-que-se-obtuvo-mal\]  ERA VERDAD Y NO SIRVIÓ
+
+  METAFORA: Una caja de cartón sellada con cinta cuyo precinto aparece cortado limpiamente y vuelto a pegar, con el corte visible solo bajo luz rasante.
+
+  
+
+\[penal-mito-detenido-es-culpable\]  SI TE DETIENEN, YA ERES CULPABLE
+
+  METAFORA: Una puerta con un cerrojo temporal de madera, no de metal — cierra el paso por ahora, pero cualquiera puede ver que no es el cerrojo final de la casa.
+
+  
+
+\--- TEMA: DERECHOS-HUMANOS ---
+
+  
+
+\[constitucional-concepto-accion-de-amparo\]  ACCIÓN DE AMPARO
+
+  METAFORA: Una puerta de emergencia con una barra roja discreta, distinta de las demás puertas comunes del mismo pasillo, que solo se usa cuando ninguna otra salida responde a tiempo.
+
+  
+
+\[el-derecho-a-ser-oido-antes\]  ANTES DE QUITARTE ALGO
+
+  METAFORA: Una silla de madera vacía colocada frente a un escritorio también vacío en una sala amplia, con la luz entrando por detrás de la silla y no del escritorio.
+
+  
+
+\[el-derecho-que-no-se-puede-renunciar\]  LO FIRMASTE Y NO VALE
+
+  METAFORA: Un renglón de contrato tachado con una sola línea de tinta que no llega a ocultar el texto debajo, fotografiado en macro con la fibra del papel visible bajo el trazo.
+
+  
+
+\[pregunta-derecho-a-la-defensa\]  ¿PUEDES DEFENDERTE SIN ABOGADO?
+
+  METAFORA: Una puerta entreabierta que cualquiera puede empujar, pero junto a ella una segunda puerta, más pesada, con una manija reforzada que solo cede con ayuda — ambas llevan al mismo lugar, no con la misma facilidad.
+
+  
+
+\--- TEMA: DIGITAL ---
+
+  
+
+\[digital-concepto-responsable-del-tratamiento\]  RESPONSABLE DEL TRATAMIENTO
+
+  METAFORA: Una llave maestra colgada de un solo gancho en una pared con decenas de puertas numeradas alrededor, cada puerta con una cerradura distinta que solo esa llave puede abrir.
+
+  
+
+\[el-dato-que-pediste-borrar\]  LO BORRARON DE UN LADO
+
+  METAFORA: Una placa de vidrio con emulsión fotográfica parcialmente raspada, donde el área limpia deja pasar la luz y los bordes conservan restos visibles de la imagen anterior.
+
+  
+
+\[el-video-que-grabaste-sin-avisar\]  DEPENDE DE SI ESTABAS AHÍ
+
+  METAFORA: Un pequeño testigo luminoso rojo encendido en la penumbra, reflejado dos veces en una superficie de vidrio, sin que se distinga cuál reflejo es el original.
+
+  
+
+\[la-informacion-que-dejo-de-ser-secreta\]  ERA SECRETO HASTA QUE NADIE LO CUIDÓ
+
+  METAFORA: Una carpeta de cartón sin ninguna etiqueta ni marca, apoyada en un estante entre otras carpetas todas claramente rotuladas y ordenadas.
+
+  
+
+\[la-notificacion-por-correo-electronico\]  TE LO AVISARON Y NO LO VISTE
+
+  METAFORA: Una impresión en papel de una bandeja de correo con todas las líneas legibles salvo una, tapada por la sombra de algo fuera de cuadro.
+
+  
+
+\[mito-firma-electronica-no-vale\]  LA FIRMA ELECTRÓNICA NO VALE IGUAL
+
+  METAFORA: Un sello de cera y un pulso de luz que traza el mismo contorno sobre dos superficies distintas — una de papel, otra de vidrio — dejando una marca idéntica en ambas.
+
+  
+
+\[narrativa-un-mensaje-tambien-obliga\]  ERA SOLO UN MENSAJE
+
+  METAFORA: Una pantalla apagada apoyada en una mesa de madera, reflejando la ventana de la habitación con tal nitidez que el reflejo parece el verdadero documento.
+
+  
+
+\--- TEMA: DUE-DILIGENCE ---
+
+  
+
+\[firmar-no-es-el-momento-decisivo\]  LA FIRMA ES EL FINAL
+
+  METAFORA: Un cuaderno de notas abierto y muy anotado junto a una pluma todavía cerrada, con la luz cayendo sobre las páginas manuscritas y dejando la pluma en penumbra.
+
+  
+
+\[la-carta-de-intencion-que-si-obligaba\]  ERA SOLO UNA CARTA
+
+  METAFORA: Una hoja membretada apoyada sobre una carpeta cerrada, con el pie de página iluminado y el encabezado en penumbra, exactamente al revés de como se leería.
+
+  
+
+\[linkedin-due-diligence-inmobiliario\]  ANTES DE ADQUIRIR, VERIFICA ESTO
+
+  METAFORA: Cuatro capas de un plano arquitectónico superpuestas sobre una misma propiedad, cada una translúcida sobre la anterior, y solo donde las cuatro coinciden sin sombra queda un punto de luz limpia.
+
+  
+
+\[linkedin-mito-due-diligence-rapida\]  LA DUE DILIGENCE EXPRÉS SALE MÁS CARA
+
+  METAFORA: Una grieta fina en un muro, apenas visible, cubierta apresuradamente con una capa de pintura fresca que ya empieza a resquebrajarse por el mismo punto.
+
+  
+
+\[lo-que-se-perdio-por-no-inventariar\]  COMPRÓ LA EMPRESA Y NO LA MARCA
+
+  METAFORA: Un estante de madera lleno de cajas etiquetadas y perfectamente alineadas, con dos huecos exactos en medio donde el polvo dibuja el contorno de lo que estuvo ahí.
+
+  
+
+\--- TEMA: FAMILIA ---
+
+  
+
+\[concepto-patria-potestad\]  PATRIA POTESTAD
+
+  METAFORA: Dos manos adultas sosteniendo, con cuidado y sin apretar, un nido con un huevo intacto — el gesto es de sostén, no de posesión.
+
+  
+
+\[el-acuerdo-verbal-entre-hermanos\]  LO ARREGLAMOS EN FAMILIA
+
+  METAFORA: Una mesa de comedor larga rodeada de sillas de distintas épocas y alturas, todas ligeramente separadas de la mesa como si acabaran de levantarse.
+
+  
+
+\[el-menor-que-tambien-opina\]  TAMBIÉN HAY QUE PREGUNTARLE
+
+  METAFORA: Una silla infantil de madera colocada frente a una mesa de altura adulta, con la luz de una ventana cayendo justo sobre el asiento vacío y no sobre la mesa.
+
+  
+
+\[el-testamento-que-nadie-encontro\]  EXISTÍA Y NO APARECIÓ
+
+  METAFORA: Un cajón de escritorio de madera entreabierto unos centímetros, con papeles amontonados visibles al fondo y una franja de luz que no alcanza a iluminarlos.
+
+  
+
+\[familia-pregunta-abuelo-puede-pedir-custodia\]  ¿PUEDE UN ABUELO PEDIR LA CUSTODIA?
+
+  METAFORA: Dos manos de distinta edad sosteniendo juntas el mismo paraguas sobre una tercera figura más pequeña, ninguna de las dos manos soltando el mango.
+
+  
+
+\[historia-herencia-sin-testamento\]  CUANDO NADIE DEJÓ TESTAMENTO
+
+  METAFORA: Una mesa familiar con varios juegos de manos alrededor de un mismo objeto heredado, ninguna firma visible en ningún papel — el reparto lo dicta un orden que nadie en la mesa escribió.
+
+  
+
+\[la-donacion-que-tenia-condiciones\]  TE LO DOY, PERO
+
+  METAFORA: Una mano abierta sobre una mesa con una pequeña llave y un papel doblado apoyados juntos en la palma, iluminados por una sola luz lateral.
+
+  
+
+\[la-herencia-aceptada-sin-inventario\]  HAY UNA FORMA DE DECIR QUE SÍ
+
+  METAFORA: Una balanza de dos platos con documentos doblados en ambos lados, ligeramente inclinada, y una lista escrita a mano apoyada en el fiel central.
+
+  
+
+\[la-herencia-que-tambien-trae-deudas\]  HEREDAR NO ES SOLO RECIBIR
+
+  METAFORA: Una caja de hojalata abierta sobre una mesa de cocina, con papeles doblados ocupando todo el fondo y ningún objeto de valor visible entre ellos.
+
+  
+
+\--- TEMA: FISCAL ---
+
+  
+
+\[fiscal-mito-no-declarar-es-multa-menor\]  NO DECLARAR ES SOLO UNA MULTA PEQUEÑA
+
+  METAFORA: Una gota de tinta que cae sobre un papel y, en vez de detenerse, sigue expandiéndose lentamente en círculos concéntricos cada vez más grandes.
+
+  
+
+\[la-deuda-fiscal-que-crece-sola\]  EMPEZÓ SIENDO UNA OMISIÓN PEQUEÑA
+
+  METAFORA: Una gota de tinta cayendo sobre papel secante y expandiéndose en círculos concéntricos irregulares, fotografiada cenitalmente en el momento en que el tercer círculo se forma.
+
+  
+
+\[la-devolucion-que-llego-tarde\]  ERA TU DINERO Y SE VENCIÓ
+
+  METAFORA: Un reloj de pared institucional al que le falta la manecilla de los minutos, fotografiado de frente con la sombra de la manecilla ausente todavía marcada en la esfera decolorada.
+
+  
+
+\[la-factura-que-no-ampara-nada\]  ESTABA PERFECTAMENTE EMITIDA
+
+  METAFORA: Un comprobante impreso perfectamente centrado sobre una superficie oscura, con todos sus datos nítidos salvo un recuadro central donde el papel quedó en blanco.
+
+  
+
+\--- TEMA: INMOBILIARIO ---
+
+  
+
+\[el-arrendamiento-que-siguio-solo\]  VENCIÓ HACE OCHO MESES
+
+  METAFORA: Un calendario de pared con los meses del año arrancados hasta cierto punto y los restantes intactos, colgado de un clavo que ya dejó su marca de óxido.
+
+  
+
+\[el-muro-que-es-de-los-dos\]  MEDIANERÍA
+
+  METAFORA: Una sección transversal de muro fotografiada a ras de suelo, con dos texturas de aplanado distintas encontrándose en una junta central perfectamente vertical.
+
+  
+
+\[historia-cliente-arrendamiento\]  CUANDO EL CASERO NO DEVUELVE EL DEPÓSITO
+
+  METAFORA: Un juego de llaves dejado sobre el umbral de una puerta ya cerrada, con una nota doblada debajo que nadie ha recogido todavía — la salida ya ocurrió, lo pendiente es lo que queda por resolver.
+
+  
+
+\[inmobiliario-tecnicismo-servidumbre\]  SERVIDUMBRE
+
+  METAFORA: Un sendero de piedra que atraviesa dos jardines separados por una misma cerca baja, con una placa discreta incrustada en el suelo justo donde el sendero cruza el límite.
+
+  
+
+\[la-casa-que-se-vendio-dos-veces\]  DOS COMPRADORES, UNA CASA
+
+  METAFORA: Dos carpetas de documentos idénticas apoyadas una junto a otra sobre un mostrador de mármol, con una sola diferencia visible: el sello de recepción fechado en una de ellas.
+
+  
+
+\[la-habitacion-de-hotel-no-es-tuya\]  PAGASTE LA NOCHE, NO EL SILENCIO
+
+  METAFORA: Una franja de luz de pasillo entrando por la rendija inferior de una habitación a oscuras, cortada exactamente por dos sombras de pies detenidos del otro lado.
+
+  
+
+\[la-servidumbre-que-nacio-del-uso\]  PASARON TANTOS AÑOS QUE YA ERA UN DERECHO
+
+  METAFORA: Un sendero de tierra compactada atravesando un prado, con la hierba crecida a ambos lados y el paso marcado con un ancho constante hasta perderse de vista.
+
+  
+
+\[linkedin-consejo-adquisiciones-inmobiliarias\]  ANTES DE CERRAR UNA ADQUISICIÓN INMOBILIARIA
+
+  METAFORA: Un pergamino enrollado que, al desenrollarse capa por capa, revela debajo otro pergamino más antiguo con una firma distinta — y solo al final aparece un sello que confirma cuál es el original.
+
+  
+
+\[lo-que-el-condominio-si-puede-decidir\]  HASTA DÓNDE MANDA LA ASAMBLEA
+
+  METAFORA: Un pasillo interior con una hilera de puertas idénticas, todas cerradas salvo una entreabierta, y la luz del corredor deteniéndose exactamente en su umbral.
+
+  
+
+\[que-compras-en-preventa\]  ¿QUÉ COMPRAS REALMENTE EN PREVENTA?
+
+  METAFORA: Una llave dorada suspendida en el aire frente a una puerta dibujada solo en planos arquitectónicos transparentes, sin muro ni marco físico todavía construido alrededor.
+
+  
+
+\[terreno-antes-de-comprar\]  ANTES DE COMPRAR UN TERRENO
+
+  METAFORA: Un mapa de terreno extendido bajo tierra con raíces y tuberías invisibles marcadas solo cuando la luz atraviesa el papel desde abajo — lo que hay debajo importa tanto como los límites dibujados encima.
+
+  
+
+\[veinte-anos-pagando-renta\]  VIVIÓ AHÍ DOS DÉCADAS
+
+  METAFORA: Una fachada envejecida con dos timbres montados a distinta altura, uno con la pintura intacta y otro desgastado por el uso, bajo una luz de tarde muy rasante.
+
+  
+
+\--- TEMA: INTERNACIONAL ---
+
+  
+
+\[dos-paises-una-misma-operacion\]  ¿QUÉ LEY MANDA AQUÍ?
+
+  METAFORA: Dos relojes de pared idénticos colgados en la misma pared marcando horas distintas, con una sola fuente de luz lateral que alarga la sombra de uno sobre el otro.
+
+  
+
+\[dos-versiones-del-mismo-contrato\]  AMBAS PARTES TENÍAN RAZÓN
+
+  METAFORA: Dos columnas de texto impresas en hojas separadas y superpuestas a contraluz, coincidiendo en el trazado general pero desalineadas en un párrafo central.
+
+  
+
+\[el-acuerdo-que-no-se-registro\]  VÁLIDO ENTRE USTEDES DOS
+
+  METAFORA: Un libro registral cerrado sobre un mostrador, con un sobre sellado apoyado encima que nunca llegó a abrirse, ambos bajo la misma luz lateral.
+
+  
+
+\[internacional-concepto-tratado-vs-ley-interna\]  TRATADO INTERNACIONAL Y LEY INTERNA
+
+  METAFORA: Dos engranajes de tamaño distinto girando juntos sobre el mismo eje, uno marcado con símbolos de un país y el otro con símbolos compartidos entre varios, ninguno girando sin mover al otro.
+
+  
+
+\--- TEMA: JUICIOS ---
+
+  
+
+\[comparacion-fiscal-defensor\]  FISCAL VS. DEFENSOR
+
+  METAFORA: Dos atriles idénticos enfrentados en un salón vacío, cada uno con una vela encendida; ninguna de las dos llamas es más grande que la otra, aunque el viento las incline en direcciones opuestas.
+
+  
+
+\[el-plazo-que-corre-sin-avisar\]  NADIE TE AVISA CUANDO EMPIEZA
+
+  METAFORA: Un reloj de arena a media caída sobre una repisa de piedra, con la arena superior formando ya un embudo cónico y la inferior aún sin llenar la base.
+
+  
+
+\[el-plazo-que-vencia-en-dia-inhabil\]  NO TODOS LOS DÍAS CUENTAN
+
+  METAFORA: Un calendario de pared con la mayoría de los días tachados a mano y algunos, sin patrón evidente, dejados intactos y ligeramente más blancos que el resto del papel.
+
+  
+
+\[ganar-mas-caro-que-perder\]  GANÓ Y SALIÓ PERDIENDO
+
+  METAFORA: Dos columnas de monedas apiladas sobre una misma superficie de piedra, casi de la misma altura, con la sombra de la más alta cayendo por completo sobre la otra.
+
+  
+
+\[historia-el-testigo-que-cambio-de-version\]  EL TESTIGO QUE CAMBIÓ DE VERSIÓN
+
+  METAFORA: Dos siluetas idénticas proyectadas por la misma persona sobre paredes opuestas de una sala, iluminadas por dos fuentes de luz distintas — ninguna sombra coincide exactamente con la otra.
+
+  
+
+\[la-medida-que-se-pidio-tarde\]  GANÓ CONTRA UN PATRIMONIO VACÍO
+
+  METAFORA: Una bodega industrial completamente vacía con marcas rectangulares en el piso donde estuvieron los estantes, iluminada por tragaluces altos.
+
+  
+
+\[la-prueba-que-llego-despues-del-cierre\]  LA ENCONTRÓ UN DÍA TARDE
+
+  METAFORA: Una puerta corrediza metálica completamente cerrada con un sobre de papel apoyado contra su base, en el suelo, del lado de afuera.
+
+  
+
+\[la-sentencia-que-nadie-ejecuto\]  GANÓ Y NO COBRÓ
+
+  METAFORA: Un documento grueso encuadernado con broche metálico, apoyado de canto sobre un escritorio vacío, con la luz revelando que ninguna de sus hojas ha sido pasada.
+
+  
+
+\[lo-que-se-pierde-al-no-contestar-una-demanda\]  NO FUE Y ESO TAMBIÉN CONTÓ
+
+  METAFORA: Una silla de madera vacía colocada frente a un estrado elevado en una sala amplia, con la luz cenital cayendo únicamente sobre el asiento.
+
+  
+
+\[narrativa-tenia-razon-y-perdio\]  TENÍA RAZÓN Y PERDIÓ
+
+  METAFORA: Una balanza de laboratorio antigua sobre una mesa desnuda, con un plato cargado de piedras y el otro completamente vacío, la luz cayendo justo sobre el plato que no tiene nada.
+
+  
+
+\[pasos-dentro-de-un-juicio-penal\]  QUÉ PASA DENTRO DE UN JUICIO PENAL
+
+  METAFORA: Cuatro puertas idénticas en un mismo pasillo largo, cada una entreabierta un poco más que la anterior, y solo por la última entra luz de día completo.
+
+  
+
+\[quien-guarda-el-original-tiene-ventaja\]  NO GANA POR TENERLO
+
+  METAFORA: Un archivero metálico de varios cajones con uno solo abierto unos centímetros, del que escapa una franja de luz interior imposible en un mueble cerrado.
+
+  
+
+\--- TEMA: LABORAL ---
+
+  
+
+\[consecuencia-despido-sin-liquidar\]  SI NO TE LIQUIDAN AL SALIR
+
+  METAFORA: Una balanza mecánica de taller, no de justicia, donde el peso pendiente en un platillo va acumulando arena que cae de un reloj roto encima — el tiempo que pasa sin pagar se convierte físicamente en más peso.
+
+  
+
+\[diferencia-despido-justificado-injustificado\]  DESPIDO JUSTIFICADO VS. INJUSTIFICADO
+
+  METAFORA: Una puerta con dos cerraduras distintas en el mismo marco: una se abre con una llave que encaja exactamente, la otra queda forzada y torcida en el ojo de la cerradura.
+
+  
+
+\[la-clausula-de-no-competencia-sin-limites\]  NO PODRÁS TRABAJAR EN NADA
+
+  METAFORA: Un mapa antiguo extendido sobre una mesa donde el papel muestra los relieves y ríos con detalle pero ninguna línea divisoria trazada.
+
+  
+
+\[la-jornada-que-nadie-registro\]  SIN REGISTRO, LA DUDA NO ES TUYA
+
+  METAFORA: Un reloj checador de pared con su ranura vacía y el casillero lateral completamente sin tarjetas, todavía enchufado y con el mecanismo en marcha.
+
+  
+
+\[la-orden-verbal-que-nadie-dio\]  ALGUIEN LO MANDÓ Y NADIE FIRMÓ
+
+  METAFORA: Un radio de dos vías apagado apoyado sobre una mesa de trabajo metálica, con la antena extendida y el altavoz orientado hacia una silla vacía.
+
+  
+
+\[la-renuncia-que-firmo-al-salir\]  FIRMÓ PARA PODER IRSE
+
+  METAFORA: Un bolígrafo apoyado en diagonal sobre un mostrador alto, con una hoja debajo de la que solo se ve el borde inferior asomando.
+
+  
+
+\[laboral-tecnicismo-indemnizacion\]  INDEMNIZACIÓN
+
+  METAFORA: Una balanza de taller mecánico, no de justicia, donde un peso metálico exacto se coloca en un platillo vacío hasta que la aguja vuelve a marcar el centro.
+
+  
+
+\[listado-derechos-al-firmar-contrato-trabajo\]  10 COSAS QUE DEBE TENER TU CONTRATO DE TRABAJO
+
+  METAFORA: Diez llaves de tamaños distintos colgadas en un tablero de taller, cada una con su gancho numerado; solo el gancho vacío al final de la fila espera todavía su llave.
+
+  
+
+\[seis-anos-pagados-en-efectivo\]  TRABAJÓ SEIS AÑOS Y CASI NO EXISTE
+
+  METAFORA: Una pila de sobres de papel manila sin ninguna marca ni sello, apilados con los bordes desalineados sobre una repisa metálica bajo luz fría.
+
+  
+
+\[trabajar-desde-casa-sigue-siendo-trabajar\]  ¿A QUÉ HORA TERMINASTE?
+
+  METAFORA: Una lámpara de escritorio encendida en una habitación con la ventana completamente oscura detrás, y una segunda taza vacía junto a la primera.
+
+  
+
+\--- TEMA: LITERATURA-JURIDICA ---
+
+  
+
+\[cita-el-proceso-kafka\]  LA LITERATURA Y EL PROCESO
+
+  METAFORA: Una puerta institucional enorme, entreabierta apenas lo suficiente para que pase una sola hoja de papel en blanco, sin ninguna mano visible sosteniéndola desde el otro lado.
+
+  
+
+\[el-expediente-que-nadie-abrio\]  NUNCA DIJERON QUE NO
+
+  METAFORA: Un expediente grueso atado con cordel sobre un estante alto, con el polvo acumulado marcando con nitidez el contorno de otro expediente que estuvo al lado.
+
+  
+
+\[el-juicio-que-duro-mas-que-el-conflicto\]  EL PLEITO SOBREVIVIÓ A TODOS
+
+  METAFORA: Un reloj de arena de madera muy desgastada por el uso en sus dos bases, apoyado de lado sobre una repisa, con la arena repartida a partes iguales sin caer.
+
+  
+
+\[el-personaje-que-nunca-tuvo-abogado\]  SE DEFENDIÓ SOLO
+
+  METAFORA: Un banco de madera largo y vacío en una sala de techo alto, con una única franja de luz de ventana cayendo justo en el extremo donde nadie está sentado.
+
+  
+
+\[tecnicismo-corpus-delicti\]  CORPUS DELICTI
+
+  METAFORA: Un objeto cotidiano roto sobre un atril de madera, iluminado como una pieza de museo, con una etiqueta en blanco todavía sin escribir colgando de un hilo junto a él.
+
+  
+
+\--- TEMA: MIGRACION ---
+
+  
+
+\[el-arraigo-que-nadie-documento\]  LLEVABA AÑOS AHÍ
+
+  METAFORA: Una pila de recibos de papel ordenados por fecha con una pinza metálica, donde faltan visiblemente los del centro y el hueco deja ver la superficie de abajo.
+
+  
+
+\[el-documento-que-caduca-antes-del-cierre\]  ERA VÁLIDO CUANDO LO PEDISTE
+
+  METAFORA: Un sello de goma entintado apoyado sobre papel, con la fecha impresa nítida en un extremo y difuminada en el otro por una presión desigual.
+
+  
+
+\[la-visa-no-es-el-permiso-de-trabajo\]  ENTRAR NO ES PODER TRABAJAR
+
+  METAFORA: Un sello de entrada estampado en una página de pasaporte, fotografiado en macro con la tinta perfectamente nítida en la mitad izquierda y ausente en la derecha.
+
+  
+
+\[migracion-consejo-antes-de-solicitar-visa-trabajo\]  ANTES DE SOLICITAR UNA VISA DE TRABAJO
+
+  METAFORA: Un pasaporte abierto sobre una mesa junto a un mapa parcialmente doblado, con una sola ruta marcada a mano que cruza una frontera dibujada apenas con una línea punteada.
+
+  
+
+\--- TEMA: OBLIGACIONES ---
+
+  
+
+\[anatomia-de-una-firma\]  UNA FIRMA NO PRUEBA QUIÉN ERES
+
+  METAFORA: Macrofotografía extrema de tinta asentada sobre la fibra de un papel de algodón, donde se distinguen las hebras individuales y el punto exacto en que el pigmento las saturó.
+
+  
+
+\[civil-concepto-obligacion-dar-hacer-no-hacer\]  DAR, HACER O NO HACER
+
+  METAFORA: Tres manos distintas sobre una misma mesa: una entrega un objeto, otra moldea uno con esfuerzo visible, la tercera se mantiene quieta y cerrada sobre sí misma sin tocar nada.
+
+  
+
+\[el-acta-que-no-se-levanto\]  TODOS LO VIERON Y NADIE LO ESCRIBIÓ
+
+  METAFORA: Una libreta abierta en una página completamente en blanco sobre una superficie de trabajo con marcas de uso alrededor, todavía con el lápiz apoyado en el pliegue.
+
+  
+
+\[el-domicilio-que-quedo-desactualizado\]  AVISARON DONDE TÚ DIJISTE
+
+  METAFORA: Un buzón metálico de pared con correspondencia sobresaliendo por la ranura y amarilleada por el sol, junto a una placa de números despintada.
+
+  
+
+\[el-letrero-que-no-exime\]  NO NOS HACEMOS RESPONSABLES
+
+  METAFORA: Un letrero esmaltado antiguo atornillado a un muro de concreto, fotografiado de frente y perfectamente centrado, con el esmalte saltado justo en el borde inferior.
+
+  
+
+\[el-pago-a-quien-no-debia-cobrar\]  PAGÓ Y SIGUIÓ DEBIENDO
+
+  METAFORA: Un recibo de papel con dos firmas superpuestas en el mismo renglón, una encima de otra, con la tinta de la segunda todavía más brillante que la primera.
+
+  
+
+\[la-cuenta-conjunta-que-no-era-mitad-y-mitad\]  ESTABA A NOMBRE DE LOS DOS
+
+  METAFORA: Una caja de seguridad pequeña con dos cerraduras distintas en el mismo frente, una con la llave puesta y la otra vacía, ambas bajo la misma luz.
+
+  
+
+\[la-deuda-que-cambio-de-acreedor\]  AHORA LE DEBES A OTRO
+
+  METAFORA: Un sobre postal con la dirección original tachada y otra escrita encima a mano, fotografiado en plano cenital con ambas direcciones legibles.
+
+  
+
+\[la-maleta-que-nadie-reclamo\]  DEJÓ DE SER SUYA SIN HACER NADA
+
+  METAFORA: Una maleta de cuero antigua sola en el centro de una sala vacía de techo alto, bajo una única luz cenital que dibuja su sombra como un círculo cerrado.
+
+  
+
+\[la-mora-que-empieza-sin-reclamo\]  ¿DESDE CUÁNDO DEBE?
+
+  METAFORA: Una campana de mostrador de latón fotografiada en macro, con el pulsador hundido a medio recorrido y el badajo interior todavía sin tocar la cúpula.
+
+  
+
+\[narrativa-firmo-como-aval-sin-saberlo\]  LE DIJERON QUE ERA UN REQUISITO
+
+  METAFORA: El pie de un documento fotografiado a ras de mesa, donde el último renglón queda iluminado y todo lo escrito encima se pierde en penumbra.
+
+  
+
+\--- TEMA: PRINCIPIOS ---
+
+  
+
+\[concepto-buena-fe\]  BUENA FE
+
+  METAFORA: Dos manos que se sueltan tras un apretón, pero una de ellas continúa terminando una tarea que ya no era exigible por escrito — el gesto sobrevive al papel que lo originó.
+
+  
+
+\[cumplio-la-letra-y-fue-mala-fe\]  HIZO EXACTAMENTE LO PACTADO
+
+  METAFORA: Una regla metálica de precisión apoyada sobre una superficie visiblemente alabeada, tocándola solo en dos puntos, con la luz revelando el hueco de aire entre ambas.
+
+  
+
+\[diez-principios-juridicos\]  10 PRINCIPIOS JURÍDICOS QUE DEBERÍAS CONOCER
+
+  METAFORA: Diez columnas de piedra de distinta altura sosteniendo, todas juntas, una sola losa horizontal; si se retira cualquiera de ellas la losa se inclina visiblemente.
+
+  
+
+\[el-error-que-invalida-el-consentimiento\]  NO TODO ERROR ANULA
+
+  METAFORA: Dos piezas mecánicas casi idénticas colocadas lado a lado sobre fieltro, con una diferencia de diámetro tan pequeña que solo la sombra la revela.
+
+  
+
+\[la-buena-fe-del-que-compro-sin-saber\]  COMPRÓ SIN SABER NADA
+
+  METAFORA: Un libro de registro de gran formato abierto sobre un atril inclinado, con una página perfectamente legible y la siguiente todavía sin pasar, bajo luz cenital.
+
+  
+
+\--- TEMA: PROPIEDAD-INTELECTUAL ---
+
+  
+
+\[la-foto-es-tuya-el-permiso-no\]  TÚ APRETASTE EL BOTÓN
+
+  METAFORA: Una tira de negativos fotográficos extendida sobre una mesa de luz encendida, con un solo fotograma tapado por una máscara opaca recortada a la medida exacta de una figura.
+
+  
+
+\[la-marca-parecida-que-si-confunde\]  NO ERA IGUAL Y SE CONFUNDÍA
+
+  METAFORA: Dos improntas tipográficas de la misma palabra sobre papel, con diferencias mínimas de grosor y espaciado, fotografiadas juntas bajo luz uniforme.
+
+  
+
+\[la-marca-que-nadie-registro\]  LLEVABA DIEZ AÑOS USÁNDOLA
+
+  METAFORA: Un rótulo comercial pintado a mano sobre madera, descolorido de forma desigual por el sol, con una zona intacta donde estuvo colgado algo que ya no está.
+
+  
+
+\[la-obra-de-un-empleado-de-quien-es\]  LO HIZO EN HORARIO DE TRABAJO
+
+  METAFORA: Un boceto técnico sobre papel con dos caligrafías distintas anotando en los márgenes, una a lápiz y otra a tinta, sin que ninguna tape a la otra.
+
+  
+
+\[la-obra-derivada-que-no-pidio-permiso\]  SE PARECÍA DEMASIADO
+
+  METAFORA: Una hoja de papel vegetal apoyada sobre un dibujo original, con el calco terminado en la mitad superior y la inferior todavía en blanco, ambas capas visibles a contraluz.
+
+  
+
+\[propiedad-intelectual-diferencia-marca-patente\]  MARCA VS. PATENTE
+
+  METAFORA: Dos sellos de metal distintos junto a la misma prensa: uno graba un símbolo repetible sobre cualquier superficie, el otro imprime el corte exacto de un mecanismo que solo existe una vez.
+
+  
+
+\--- TEMA: RIESGOS-PENALES-CONTRACTUALES ---
+
+  
+
+\[el-cheque-que-se-fue-en-blanco\]  LO FIRMÓ SIN LLENARLO
+
+  METAFORA: Una línea impresa completamente vacía sobre papel de seguridad, con la textura de la trama de fondo perfectamente nítida y ningún trazo encima.
+
+  
+
+\[el-que-callo-un-defecto-al-vender\]  LO SABÍA Y NO LO DIJO
+
+  METAFORA: Una superficie de muro con dos capas de pintura visibles en un corte lateral, la superior claramente más reciente y cubriendo una irregularidad de la inferior.
+
+  
+
+\[el-tercero-que-nadie-invito\]  EL DINERO PASÓ POR OTRA MANO
+
+  METAFORA: Una cadena metálica tendida sobre una mesa donde todos los eslabones son idénticos salvo uno, visiblemente más nuevo y de otro metal, justo en el centro del tramo iluminado.
+
+  
+
+\[incumplimiento-contractual-vs-penal\]  INCUMPLIR NO ES LO MISMO QUE DEFRAUDAR
+
+  METAFORA: Una línea trazada con tiza blanca en el piso de piedra de un mismo salón dividido en dos mitades idénticas, la misma mesa y la misma silla repetidas en ambos lados, pero la luz que entra por la ventana toca solo uno de los dos lados.
+
+  
+
+\[la-garantia-que-el-vendedor-dio-de-mas\]  PROMETIÓ ALGO QUE NO EXISTÍA
+
+  METAFORA: Un folleto impreso a todo color sobre una mesa de metal desnuda, con el papel curvándose por los bordes y una sola esquina levantada que deja ver la mesa vacía debajo.
+
+  
+
+\--- TEMA: SOCIETARIO ---
+
+  
+
+\[el-acuerdo-de-junta-que-nadie-anoto\]  TODOS ESTUVIERON DE ACUERDO
+
+  METAFORA: Un libro de actas encuadernado abierto por una página completamente en blanco, con las anteriores visiblemente escritas y el canto mostrando el grosor de lo ya usado.
+
+  
+
+\[el-poder-que-sobrevivio-a-su-motivo\]  SE FUE Y SEGUÍA PUDIENDO FIRMAR
+
+  METAFORA: Una caja de madera abierta con varios sellos de caucho alineados en su interior, uno de ellos con el mango claramente más gastado que los demás.
+
+  
+
+\[el-que-firmo-por-la-empresa-y-quedo-obligado\]  FIRMÓ CON SU NOMBRE
+
+  METAFORA: Un renglón de firma sobre papel con el trazo completo y ningún texto impreso ni escrito debajo de él, rodeado de espacio en blanco.
+
+  
+
+\[la-empresa-que-firmo-sin-poder\]  EL CARGO NO ERA LA FACULTAD
+
+  METAFORA: Un sello de latón presionado sobre papel fuera de su matriz grabada, dejando una impresión desplazada e incompleta junto a la marca limpia de la matriz vacía.
+
+  
+
+\[la-sociedad-que-nunca-repartio-utilidades\]  GANABA Y NO REPARTÍA
+
+  METAFORA: Una llave de paso metálica en posición cerrada sobre una tubería que muestra condensación abundante en el tramo anterior y ninguna en el posterior.
+
+  
+
+\[linkedin-facultades-para-firmar\]  ¿QUIÉN PUEDE FIRMAR POR LA EMPRESA?
+
+  METAFORA: Un sello de latón que solo deja una marca legible cuando se alinea exactamente con una matriz grabada debajo de él — girado unos grados, la misma presión no imprime nada.
+
+  
+
+\[linkedin-listado-documentos-apoderado\]  5 DOCUMENTOS QUE TODO APODERADO DEBE TENER A LA MANO
+
+  METAFORA: Cinco sellos de cera distintos alineados sobre una misma carpeta cerrada, cada uno con una cinta que lo une a la siguiente; solo cuando los cinco están intactos la carpeta puede abrirse sin romper nada.
+
+  
+
+\[mercantil-consejo-antes-de-constituir-sociedad\]  ANTES DE CONSTITUIR UNA SOCIEDAD
+
+  METAFORA: Los planos de una casa todavía sin construir, extendidos sobre una mesa, con una puerta trasera ya dibujada en el plano aunque la construcción apenas empiece por el frente.
+
+  
+
+\[narrativa-socio-que-desaparecio\]  SE FUE Y SIGUE SIENDO DUEÑO DE LA MITAD
+
+  METAFORA: Una mesa de juntas larga con dos sillas enfrentadas, una ocupada por la sombra de alguien fuera de cuadro y la otra perfectamente vacía, iluminadas por una sola ventana lateral.
+
+  
+
+\--- TEMA: USO-DE-SUELO ---
+
+  
+
+\[construir-primero-y-preguntar-despues\]  REGULARIZAR SALE MÁS CARO
+
+  METAFORA: Una cimbra de madera todavía puesta sobre concreto recién colado, con una franja de luz marcando la junta exacta entre lo ya fraguado y lo que aún está húmedo.
+
+  
+
+\[el-permiso-que-se-pide-tarde\]  DESPUÉS DE COMPRAR YA NO ES TRÁMITE
+
+  METAFORA: Un plano catastral extendido sobre una mesa de luz, con un solo polígono resaltado desde abajo mientras el resto del papel permanece opaco.
+
+  
+
+\[escritura-no-es-licencia\]  TENER ESCRITURA NO ES TENER PERMISO
+
+  METAFORA: Un documento enmarcado y colgado en una pared exterior de piedra, frente a un terreno vacío al aire libre; entre el documento y el terreno hay una verja de hierro cerrada con un candado, aunque no hay muro que la sostenga.
+
+  
+
+\[la-licencia-que-no-se-transmite\]  COMPRÓ EL LOCAL Y EL PERMISO NO VINO
+
+  METAFORA: Una placa metálica atornillada a un muro exterior con dos de los cuatro tornillos retirados, dejando los orificios vacíos perfectamente visibles.
+
+  
+
+\[la-obra-que-invadio-un-metro\]  UN METRO CAMBIA TODO
+
+  METAFORA: Un hilo de albañil tensado entre dos estacas sobre tierra removida, con la sombra del hilo cayendo unos centímetros a un lado de una marca de cal ya trazada.
+
+  

@@ -28,6 +28,7 @@ STATUS = (
     "GENERACION_FALLIDA",
     "QA_FALLIDO",
     "COMPOSICION_DESBORDADA",
+    "CONTRATO_GENERACION_INVALIDO",
     "PENDIENTE_REVISION_HUMANA",
 )
 
@@ -56,6 +57,7 @@ class GenerationReceipt:
     seed: int = None
     text_mode: str = ""
     brand_mode: str = ""
+    generation_mode: str = ""
     brand_plan: dict = field(default_factory=dict)
     typography_plan: dict = field(default_factory=dict)
     composition: dict = field(default_factory=dict)

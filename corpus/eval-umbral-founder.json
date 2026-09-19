@@ -1,0 +1,212 @@
+{
+  "schema_version": "1.0",
+  "estado": "GROUND_TRUTH_FOUNDER",
+  "fuente_original": "/home/user/Psyche-creation/corpus/eval-umbral-candidato.json",
+  "fecha_incorporacion": "2026-09-14T21:54:41.539627+00:00",
+  "opciones": {
+    "A": "BLOQUEAR",
+    "B": "COEXISTIR",
+    "C": "DISTINTA",
+    "D": "SIN_INFO"
+  },
+  "pares": [
+    {
+      "par_id": 1,
+      "a": "LM-026",
+      "b": "LM-027",
+      "agent_label": "EQUIVALENTE",
+      "founder_label": "B",
+      "founder_label_mapped": "COEXISTIR",
+      "founder_razon": "ambas distinguen depósito de fianza: es la misma pregunta con dos titulares",
+      "fecha": "2026-09-14T21:54:41.539627+00:00",
+      "cambio": "CORRIGE_AGENTE"
+    },
+    {
+      "par_id": 2,
+      "a": "LM-046",
+      "b": "LM-008",
+      "agent_label": "MUY_PROXIMO",
+      "founder_label": "B",
+      "founder_label_mapped": "COEXISTIR",
+      "founder_razon": "ambas sobre valor probatorio de prueba forense, pero una es mito y otra listado",
+      "fecha": "2026-09-14T21:54:41.539627+00:00",
+      "cambio": "SIN_COMPARAR"
+    },
+    {
+      "par_id": 3,
+      "a": "LM-054",
+      "b": "LM-055",
+      "agent_label": "MUY_PROXIMO",
+      "founder_label": "B",
+      "founder_label_mapped": "COEXISTIR",
+      "founder_razon": "ambas separan una etapa penal de su consecuencia presunta; preguntas distintas pero vecinas",
+      "fecha": "2026-09-14T21:54:41.539627+00:00",
+      "cambio": "SIN_COMPARAR"
+    },
+    {
+      "par_id": 4,
+      "a": "LM-002",
+      "b": "LM-003",
+      "agent_label": "MUY_PROXIMO",
+      "founder_label": "B",
+      "founder_label_mapped": "COEXISTIR",
+      "founder_razon": "acto administrativo no conocido por el destinatario; difieren en notificación vs condición",
+      "fecha": "2026-09-14T21:54:41.539627+00:00",
+      "cambio": "SIN_COMPARAR"
+    },
+    {
+      "par_id": 5,
+      "a": "LM-018",
+      "b": "LM-019",
+      "agent_label": "MUY_PROXIMO",
+      "founder_label": "B",
+      "founder_label_mapped": "COEXISTIR",
+      "founder_razon": "garantía legal: duración frente a alcance. Vecinas, no idénticas",
+      "fecha": "2026-09-14T21:54:41.539627+00:00",
+      "cambio": "SIN_COMPARAR"
+    },
+    {
+      "par_id": 6,
+      "a": "LM-151",
+      "b": "LM-152",
+      "agent_label": "RELACIONADO_DISTINTO",
+      "founder_label": "B",
+      "founder_label_mapped": "COEXISTIR",
+      "founder_razon": "ambas de marcas, pero confusión de signos y falta de registro son problemas distintos",
+      "fecha": "2026-09-14T21:54:41.539627+00:00",
+      "cambio": "CONFIRMA_AGENTE"
+    },
+    {
+      "par_id": 7,
+      "a": "LM-063",
+      "b": "LM-050",
+      "agent_label": "RELACIONADO_DISTINTO",
+      "founder_label": "B",
+      "founder_label_mapped": "COEXISTIR",
+      "founder_razon": "ambas de datos personales; borrado frente a minimización son deberes distintos",
+      "fecha": "2026-09-14T21:54:41.539627+00:00",
+      "cambio": "CONFIRMA_AGENTE"
+    },
+    {
+      "par_id": 8,
+      "a": "LM-077",
+      "b": "LM-079",
+      "agent_label": "RELACIONADO_DISTINTO",
+      "founder_label": "B",
+      "founder_label_mapped": "COEXISTIR",
+      "founder_razon": "sucesión: testamento no hallado frente a herencia sin testamento",
+      "fecha": "2026-09-14T21:54:41.539627+00:00",
+      "cambio": "CONFIRMA_AGENTE"
+    },
+    {
+      "par_id": 9,
+      "a": "LM-009",
+      "b": "LM-012",
+      "agent_label": "RELACIONADO_DISTINTO",
+      "founder_label": "B",
+      "founder_label_mapped": "COEXISTIR",
+      "founder_razon": "ambas sobre el perito; identidad frente a límites de su dictamen",
+      "fecha": "2026-09-14T21:54:41.539627+00:00",
+      "cambio": "CONFIRMA_AGENTE"
+    },
+    {
+      "par_id": 10,
+      "a": "LM-116",
+      "b": "LM-115",
+      "agent_label": "RELACIONADO_DISTINTO",
+      "founder_label": "B",
+      "founder_label_mapped": "COEXISTIR",
+      "founder_razon": "despido: tipo frente a consecuencia económica",
+      "fecha": "2026-09-14T21:54:41.539627+00:00",
+      "cambio": "CONFIRMA_AGENTE"
+    },
+    {
+      "par_id": 11,
+      "a": "LM-001",
+      "b": "LM-124",
+      "agent_label": "DISTINTO",
+      "founder_label": "C",
+      "founder_label_mapped": "DISTINTA",
+      "founder_razon": "silencio administrativo frente a teletrabajo: materias y necesidades sin relación",
+      "fecha": "2026-09-14T21:54:41.539627+00:00",
+      "cambio": "CONFIRMA_AGENTE"
+    },
+    {
+      "par_id": 12,
+      "a": "LM-125",
+      "b": "LM-098",
+      "agent_label": "DISTINTO",
+      "founder_label": "C",
+      "founder_label_mapped": "DISTINTA",
+      "founder_razon": "literatura jurídica frente a arrendamiento de larga duración",
+      "fecha": "2026-09-14T21:54:41.539627+00:00",
+      "cambio": "CONFIRMA_AGENTE"
+    },
+    {
+      "par_id": 13,
+      "a": "LM-083",
+      "b": "LM-046",
+      "agent_label": "DISTINTO",
+      "founder_label": "C",
+      "founder_label_mapped": "DISTINTA",
+      "founder_razon": "mito fiscal frente a mito forense: sólo comparten ser mitos",
+      "fecha": "2026-09-14T21:54:41.539627+00:00",
+      "cambio": "CONFIRMA_AGENTE"
+    },
+    {
+      "par_id": 14,
+      "a": "LM-134",
+      "b": "LM-064",
+      "agent_label": "DISTINTO",
+      "founder_label": "C",
+      "founder_label_mapped": "DISTINTA",
+      "founder_razon": "anatomía de una firma frente a grabación sin aviso",
+      "fecha": "2026-09-14T21:54:41.539627+00:00",
+      "cambio": "CONFIRMA_AGENTE"
+    },
+    {
+      "par_id": 15,
+      "a": "LM-147",
+      "b": "LM-021",
+      "agent_label": "DISTINTO",
+      "founder_label": "C",
+      "founder_label_mapped": "DISTINTA",
+      "founder_razon": "principios jurídicos generales frente a retirada de oferta al consumidor",
+      "fecha": "2026-09-14T21:54:41.539627+00:00",
+      "cambio": "CONFIRMA_AGENTE"
+    },
+    {
+      "par_id": 16,
+      "a": "LM-013",
+      "b": "LM-168",
+      "agent_label": "DISTINTO",
+      "founder_label": "C",
+      "founder_label_mapped": "DISTINTA",
+      "founder_razon": "odontología forense frente a constitución de sociedad",
+      "fecha": "2026-09-14T21:54:41.539627+00:00",
+      "cambio": "CONFIRMA_AGENTE"
+    },
+    {
+      "par_id": 17,
+      "a": "LM-092",
+      "b": "LM-129",
+      "agent_label": "DISTINTO",
+      "founder_label": "C",
+      "founder_label_mapped": "DISTINTA",
+      "founder_razon": "habitación de hotel frente a corpus delicti",
+      "fecha": "2026-09-14T21:54:41.539627+00:00",
+      "cambio": "CONFIRMA_AGENTE"
+    },
+    {
+      "par_id": 18,
+      "a": "LM-061",
+      "b": "LM-170",
+      "agent_label": "DISTINTO",
+      "founder_label": "C",
+      "founder_label_mapped": "DISTINTA",
+      "founder_razon": "derecho a la defensa frente a construir sin permiso",
+      "fecha": "2026-09-14T21:54:41.539627+00:00",
+      "cambio": "CONFIRMA_AGENTE"
+    }
+  ]
+}

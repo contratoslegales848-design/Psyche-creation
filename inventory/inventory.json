@@ -1,0 +1,53 @@
+{
+  "inventory_version": "1.0",
+  "_nota": "ÍNDICE DERIVADO Y REGENERABLE. No es autoridad sobre ningún dato: si discrepa de un artefacto, el artefacto tiene razón. Sin marca de tiempo, a propósito: mismos artefactos, mismo byte, para que `check` pueda detectar que está obsoleto.",
+  "items": [
+    {
+      "content_id": "LM-EJEMPLO-TECNICO-001",
+      "composition_id": "ejemplo",
+      "materia": null,
+      "submateria": null,
+      "concepto": null,
+      "situacion_humana": null,
+      "content_type": null,
+      "jurisdiction_layer": "NO_APLICA",
+      "territory": [],
+      "modo_procedencia": "EJEMPLO_TECNICO",
+      "publicable": false,
+      "source_state": "NO_APLICA",
+      "verification_state": "NO_APLICA",
+      "production_state": "EJEMPLO_TECNICO",
+      "publication_state": "SIN_DECISION",
+      "publication_url": null,
+      "measurement_due_at": null,
+      "metrics_state": "NO_APLICA",
+      "fingerprint": "el derecho no favorece a quien duerme sobre sus derechos",
+      "learning_count": 0,
+      "artifact": "content/ejemplo.json"
+    },
+    {
+      "content_id": "LM-PIEZA-01-REALES",
+      "composition_id": "pieza-01-reales",
+      "materia": "civil",
+      "submateria": "derechos_reales",
+      "concepto": "propiedad_y_posesion",
+      "situacion_humana": "quien_ocupa_un_bien_reconociendo_dominio_ajeno",
+      "content_type": "concepto",
+      "jurisdiction_layer": "CAPA_B_VARIABLE",
+      "territory": [],
+      "modo_procedencia": "GOBERNADO",
+      "publicable": true,
+      "source_state": "CURRENT",
+      "verification_state": "APROBADO",
+      "production_state": "APROBADO_QA",
+      "publication_state": "SIN_DECISION",
+      "publication_url": null,
+      "measurement_due_at": null,
+      "metrics_state": "NO_APLICA",
+      "fingerprint": "en los ordenamientos examinados la propiedad o dominio atribuye facultades amplias de aprovechamiento goce y disposicion sobre una cosa siempre dentro de los limites establecidos por la ley la formulacion tecnica no es identica en mexico espana y argentina",
+      "learning_count": 0,
+      "artifact": "content/pieza-01-reales.json"
+    }
+  ],
+  "duplicates": []
+}

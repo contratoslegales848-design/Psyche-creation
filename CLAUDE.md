@@ -60,6 +60,35 @@ Ante un conflicto, gana el nivel más alto disponible.
 - Bloqueado por autorización pendiente: Instagram.
 - Skill operativa: `legalmente-visual-system` (sincronizada, global).
 - Skill operativa: `legalmente-legal-verification` (local de este repo, ver `.claude/skills/`).
+- Motor editorial implementado (2026-09-13, ver `docs/arquitectura-real-2026-09-13.md`):
+  huella semántica de 22 campos (`visual/semantic_fingerprint.py`), universo editorial abierto
+  de 58 familias (`visual/editorial.py`), reserva combinatoria y selección con cuotas
+  (`visual/universe.py`), motor emocional (`visual/emotion.py`), memoria semántica con estados
+  y aprendizaje desde la curaduría (`visual/semantic_memory.py`), QA de lote y telemetría
+  (`visual/batch_qa.py`), carriles LinkedIn (`visual/lanes.py`) y el ciclo vertical
+  (`visual/organism.py`). Demostración: `cd visual && python3 demo_ciclo.py`.
+  Ninguno verifica Derecho ni abre gates: producen candidatos `NO_VERIFICADO`.
+- Memoria histórica y generador multi-factor (2026-09-13, misma fuente): 174 piezas del
+  banco v3 migradas de forma idempotente (`visual/corpus_import.py`, snapshot inmutable en
+  `corpus/`), enriquecimiento de concepto/pregunta con niveles de confianza
+  (`visual/corpus_enrichment.py`), saturación editorial separada de repetición semántica
+  (`visual/editorial_saturation.py`), Territory Explorer — novelty/coverage/opportunity sobre
+  materia×familia (`visual/territory_explorer.py`), generador con tres hard gates y seis
+  factores reales (`visual/generator.py`), Founder Selection Rate por eje con muestra visible
+  (`visual/founder_metrics.py`), y la hoja de revisión Founder del umbral de equivalencia
+  (`visual/founder_review.py` — **respuesta del Founder pendiente**, ver
+  `corpus/eval-umbral-candidato.json`). Demostración: `cd visual && python3
+  demo_founder_loop.py`.
+- Reconciliación con la línea ChatGPT de `legallmente-alt/legalmente-web`
+  (2026-09-14, ver `docs/arquitectura-real-2026-09-13.md` §6 — matriz completa,
+  rama `chatgpt/image-generator-reconciliation-v2-2026-09-13`, SHA
+  `27df096e54e9ca4c5552eb26bbe60319d4ef70d5`, verificada localmente: 62/62 tests
+  reales en verde, typecheck limpio). Cierra tres huecos reales encontrados:
+  emoción→visual causal probado (`visual/art_direction.py`), gate de proveedor
+  prohibido fail-closed (`visual/provider_gate.py`), distancia visual estricta de
+  8 dimensiones (`visual/visual_distance.py`). Reconciliación de ONTOLOGÍA y
+  CONTRATO, no de código: no se tocó `legalmente-web` (CLAUDE.md §8). Demostración:
+  `cd visual && python3 demo_reconciliation.py`.
 - No implementados todavía: `legalmente-story-engine`, `legalmente-confidentiality`, los 6 agentes (`legal-researcher`, `legal-auditor`, `narrative-editor`, `visual-director`, `privacy-reviewer`, `growth-analyst`), y los 4 hooks (PRE-NARRATIVA, PRE-ARTE, PRE-PUBLICACIÓN, POST-PUBLICACIÓN). No dar por hecho que existen solo porque están descritos en Drive.
 
 ## 8. Límites entre repositorios
